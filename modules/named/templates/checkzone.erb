@@ -1,0 +1,60 @@
+#!/bin/sh
+
+cd <%=@zone_dir%>
+CNAMEWARN=
+FAIL=
+WARN=
+for file in `find . -name 'db.*'`
+do
+    zone=${file#.*db.}
+    test $zone = root && continue
+    if ! named-checkzone $zone $file; then
+	FAIL="$FAIL $zone"
+    elif grep '^[^;]*\.com$' $file; then
+	WARN="$WARN $zone"
+    elif grep '^[^;]*\.fr$' $file; then
+	WARN="$WARN $zone"
+    elif grep '^[^;]*\.arpa$' $file; then
+	WARN="$WARN $zone"
+    fi >/dev/null 2>&1
+    for name in `awk '/^[^;]*CNAME/{if ($3 == "CNAME") { print $4; } else { print $3; }}' $file | sort -u`
+    do
+	if ! grep "^[ 	]*$name[ 	]" $file >/dev/null; then
+	    if echo $name | grep '\.$' >/dev/null; then
+		eval `echo $name | sed 's|\([^\.]*\)\.\(.*\)\.|short=\1 domain=\2|'`
+		if test -e db.$domain >/dev/null; then
+		    if grep "^[ 	]*$short[ 	]" db.$domain >/dev/null; then
+			continue #kfinethx
+		    fi
+		else
+		    continue #fixme: recursive domain subdivision
+		fi
+	    fi
+	    echo "a wild CNAME appears: $name [$file]"
+	    CNAMEWARN=yep
+	fi
+    done
+done
+
+if test "$WARN"; then
+    echo warnings on$WARN
+    echo lines ending in '.fr|.com|.arpa' never looks good
+fi >&2
+
+if test "$FAIL"; then
+    echo failed on$FAIL
+    exit 1
+fi
+
+if test "$CNAMEWARN"; then
+    echo CNAME to check
+    exit 2
+fi
+
+if ! named-checkconf; then
+    exit 3
+fi
+
+echo "everything's clear!"
+
+exit 0

@@ -1,0 +1,16 @@
+additional_classes:
+  - Sabnzbd
+
+# Apache
+apache_mod_proxy_http: true
+
+# OpenSSH
+ssh_password_authentication: true
+ssh_tcp_wrappers:
+  - 10.42.0.0/15
+  - 127.0.0.1/32
+
+# OSSEC
+ossec_app_directories:
+  /home/sabnzbd/downloads/complete:
+    restrict: ".php|.exe|.bat|.com|.msi|.js|.py|.sh|.html"

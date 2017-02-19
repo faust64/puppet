@@ -1,0 +1,73 @@
+#!/bin/sh
+# $Id: new_svn_repository.sh 3221 2014-01-24 12:41:48Z mabes $
+# Create new SVN repository
+# Usage : new_svn_repository project-name
+
+usage()
+{
+
+	cat << EOF
+
+Usage:  ${0##*/} [OPTIONS] project-name
+Creates a new SVN repository for project-name
+
+Options :
+	-h, --help              this help
+
+Required :
+	project-name
+
+EOF
+}
+
+if test -x /usr/bin/id && test `id -u` -ne 0; then
+    echo "${0##*/} error: Must be run as root!" 1>&2
+    exit 1
+elif test $# -ne 1; then
+    usage
+    exit 1
+elif test -d /home/svn/$1; then
+    echo "The Project $1 already exists!"  1>&2
+    exit 1
+fi
+
+test -d /tmp/svn_temp && rm -rf /tmp/svn_temp
+mkdir -p /tmp/svn_temp/trunk
+mkdir -p /tmp/svn_temp/branches
+mkdir -p /tmp/svn_temp/tags
+
+svnadmin create --fs-type=fsfs /home/svn/$1
+if test $? != 0; then
+    echo "svnadmin create error!!"
+    exit 1
+fi
+
+cd /tmp/svn_temp
+svn import . file:///home/svn/$1 --message 'Initial repository layout'
+
+cat >/home/svn/$1/hooks/pre-commit <<\EOF
+#!/bin/sh
+# Pre-commit hook that prevents empty log messages
+
+REPOS="$1"
+TXN="$2"
+
+# Make sure that the log message contains some text.
+SVNLOOK=/usr/bin/svnlook
+if ! $SVNLOOK log -t "$TXN" "$REPOS" | grep -q "[a-zA-Z0-9]" ; then
+    echo "Commit denied by SVN server : you must provide a commit log message" >&2
+    exit 1
+fi
+
+# Insert additional tests below
+set -e
+if [ -x "`command -v redmine_hook`" ] ; then
+    redmine_hook "$REPOS" "$TXN"
+fi
+
+exit 0
+EOF
+
+chmod +x /home/svn/$1/hooks/pre-commit
+chown -R www-data:www-data /home/svn/$1
+echo "https://$(hostname -f)/svn/$1"

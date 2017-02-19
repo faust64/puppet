@@ -1,0 +1,10 @@
+[global_config]
+[profiles]
+    [[default]]
+<% if @bgcolor != false -%>	background_color = "<%=@bgcolor%>"
+<% end -%>	copy_on_selection = True
+<% if @fgcolor != false -%>	foreground_color = "<%=@fgcolor%>"
+<% end -%><% if @font != false -%>	font = <%=@font%>
+<% end -%>	scrollback_lines = <%=@history%>
+<% if @font != false -%>	use_system_font = False
+<% end -%>	visible_bell = True

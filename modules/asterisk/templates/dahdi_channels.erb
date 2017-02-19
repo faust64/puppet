@@ -1,0 +1,7 @@
+<% @channels.each do |span, chan| -%>; <%=span%>
+<% if chan['group'] =~ /[0-9]/ -%>group = <%=chan['group']%>
+<% end -%><% if chan['context'] =~ /[a-zA-Z]/ -%>context = <%=chan['context']%>
+<% end -%><% if chan['signalling'] =~ /[a-z]/ -%>signalling = <%=chan['signalling']%>
+<% end -%><% if chan['switchtype'] =~ /[a-z]/ -%>switchtype = <%=chan['switchtype']%>
+<% end -%>channel => <%=chan['channels'].join(',')%>
+<% end -%>

@@ -1,0 +1,22 @@
+set limit { states <%=@pf_state_limit%> table-entries <%=@pf_table_entries%> tables <%=@pf_tables%> frags <%=@pf_frags_limit%> }
+set ruleset-optimization none
+set timeout src.track <%=@pf_sourcetrack_timeout%>
+set skip on { lo<% if @skip_gre == true -%> gre<% end -%> }
+set state-policy <%=@pf_state_policy%>
+match in from $ext_net to any scrub (no-df random-id min-ttl 64 reassemble tcp max-mss <%=@pf_max_mss%>)<% if @can_set_tos -%> set tos reliability<% end -%>
+
+<% @main_networks.each do |nic| -%><% if nic['gw'] =~ /[0-9]\.[0-9]/ -%>match out on <%=nic['name']%> all scrub (no-df random-id min-ttl 64 reassemble tcp max-mss <%=@pf_max_mss%>)<% if @can_set_tos -%> set tos reliability<% end -%>
+
+<% end -%><% end -%>block drop in quick from $apipa_net
+block drop in quick from $classDnE_net
+block drop in quick to $classDnE_net
+anchor fail2ban
+anchor 'relayd/*'
+anchor 'ftp-proxy/*'
+pass out
+<% @main_networks.each do |nic| -%><% if nic['gw'] =~ /[0-9]*\.[0-9]*/ and (nic['carpaddr'] =~ /[0-9]*\.[0-9]*/ or nic['addr'] =~ /[0-9]*\.[0-9]*/) -%>block drop in quick on <%=nic['name']%> from <staticbl>
+<% end -%><% end -%>
+block drop in quick inet6
+block drop in quick from <ossec_fwtable> to any
+block drop out from any to <ossec_fwtable>
+block return-icmp in log

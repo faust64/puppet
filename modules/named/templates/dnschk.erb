@@ -1,0 +1,33 @@
+#!/bin/sh
+
+ZONES="<% @zones.each do |dom| -%><%=dom%>
+<% end -%>"
+
+for zone in $ZONES
+do
+    for entry in `dig -tAXFR $zone | awk '/[ 	]A[ 	]/{print $5}' | sort -u`
+    do
+	host=`dig -x $entry +short @127.0.0.1`
+	if test -n "$host"; then
+	    addr=`dig $host +short @127.0.0.1`
+	    if test "$addr" = "$entry"; then
+		echo "ok\t$entry -> $host -> $addr"
+	    elif test -n "$addr"; then
+		echo "fail\t$entry -> $host -> $addr"
+	    else
+		echo "fail\t$entry -> $host -> NA"
+	    fi
+	fi
+    done
+    for file in `find <%=@zone_dir%> -name "db.$zone"`
+    do
+	for record in `awk '/^[ 	]*[a-zA-Z0-9][a-zA-Z0-9]*[	][IN 	]*A[ 	]*/{if ($2 == "IN"){print $4}else{print $3}}' $file`
+	do
+	    if ! host $record 127.0.0.1 >/dev/null 2>&1; then
+		echo "fail\tPTR $record"
+	    else
+		echo "ok\tPTR $record"
+	    fi
+	done
+    done
+done

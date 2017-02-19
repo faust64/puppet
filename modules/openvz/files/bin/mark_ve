@@ -1,0 +1,13 @@
+#!/bin/sh
+
+. /etc/virtual.conf
+
+c=`/bin/hostname -f`
+for ve in `/usr/sbin/vzlist -H -a -o name`
+do
+    if ! /bin/grep "^$c$" $VZ_STORAGE/$ve/parent >/dev/null 2>&1; then
+	echo $c >$VZ_STORAGE/$ve/parent
+    fi
+done
+
+exit 0

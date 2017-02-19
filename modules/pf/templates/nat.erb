@@ -1,0 +1,11 @@
+<% @main_networks.each do |nic| -%><% if nic['gw'] =~ /[0-9]*\.[0-9]*/ and (nic['carpaddr'] =~ /[0-9]*\.[0-9]*/ or nic['addr'] =~ /[0-9]*\.[0-9]*/) -%><% if nic['visio'] =~ /[0-9]*\.[0-9]*/ and @visio_ip != false -%>match out on <%=nic['name']%> from <%=@visio_ip%> to $ext_net nat-to <%=nic['visio']%>
+<% end -%><% if nic['gatessh'] =~ /[0-9]*\.[0-9]*/ and @ssh_ip != false -%>match out on <%=nic['name']%> from <%=@ssh_ip%> to $ext_net nat-to <%=nic['gatessh']%>
+<% end -%><% if nic['reverse'] =~ /[0-9]*\.[0-9]*/ and @reverse_ip != false -%><% @reverse_ip.each do |reverse| -%>match out on <%=nic['name']%> from $reverse_ip to $ext_net nat-to <%=nic['reverse']%>
+<% end -%><% end -%><% if nic['asterisk'] =~ /[0-9]*\.[0-9]*/ and @asterisk_ip != false -%>match out on <%=nic['name']%> from $asterisk_ip to $ext_net nat-to <%=nic['asterisk']%>
+<% end -%><% if nic['mx'] =~ /[0-9]*\.[0-9]*/ and @mail_mx != false -%>match out on <%=nic['name']%> from $mail_ip to $ext_net nat-to <%=nic['mx']%>
+<% end -%>match out on <%=nic['name']%> from <private_networks> to $ext_net nat-to <% if nic['carpaddr'] =~ /[0-9]*\.[0-9]*/ -%><%=nic['carpaddr']%><% else -%><%=nic['addr']%><% end -%>
+
+<% if nic['addr'] =~ /[0-9]\.[0-9]/ or nic['carpaddr'] =~ /[0-9]*\.[0-9]/ -%>pass out quick from any to carp<%=nic['carpvhid']%>:network
+<% if nic['carpaddr'] =~ /[0-9]*\.[0-9]*/ -%>pass out quick from <%=nic['carpaddr']%> route-to ( <%=nic['name']%> <%=nic['gw']%> )
+<% end -%><% if nic['addr'] =~ /[0-9]*\.[0-9]*/ -%>pass out quick from <%=nic['addr']%> route-to ( <%=nic['name']%> <%=nic['gw']%> )
+<% end -%><% end -%><% end -%><% end -%>

@@ -1,0 +1,5 @@
+[slapd*]
+env.doldaps true
+<% if @user != false -%>env.binddn <%=@user%>
+<% if @pass != false -%>env.bindpw <%=@pass%>
+<% end -%><% end -%>env.server <%=@fqdn%>

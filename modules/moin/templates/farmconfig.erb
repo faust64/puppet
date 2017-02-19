@@ -1,0 +1,21 @@
+# -*- coding: iso-8859-1 -*-
+wikis = [ ("mywiki", r".*"), ]
+
+from MoinMoin.config import multiconfig, url_prefix_static
+
+class FarmConfig(multiconfig.DefaultConfig):
+    superuser = [ <% if @superuser != false -%><% @superuser.keys.each do |su| -%>u"<%=su%>", <% end -%><% end -%>]
+    navi_bar = [
+        u'RecentChanges',
+        u'FindPage',
+        u'HelpContents',
+    ]
+    theme_default = 'modern'
+    language_default = 'en'
+    page_category_regex = ur'(?P<all>Category(?P<key>\S+))'
+    page_dict_regex = ur'(?P<all>(?P<key>\S+)Dict)'
+    page_group_regex = ur'(?P<all>(?P<key>\S+)Group)'
+    page_template_regex = ur'(?P<all>(?P<key>\S+)Template)'
+    show_hosts = 1
+    show_interwiki = 1
+    logo_string = u''

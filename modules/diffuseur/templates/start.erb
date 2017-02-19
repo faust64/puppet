@@ -1,0 +1,126 @@
+#!/bin/sh
+
+CONFIG_TEMPLATE=$HOME/.flumotion/configuration.xml
+CONFIG_CALL=$HOME/.flumotion/current-configuration.xml
+CONFIG_PLANET=<%=@conf_dir%>/managers/default/planet.xml
+CONFIG_ADMIN=<%=@conf_dir%>/workers/admin.xml
+CARDSOUND=`grep Samson /proc/asound/cards | head -n 1 | awk '{print $1}'`
+
+usage()
+{
+    cat << EOF
+Usage:  ${0##*/} [OPTIONS]
+Initiate web conferences
+
+Options :
+	-h --help		This usage
+	-c --codir		Codir conference
+	-r --random		Quick Random conference
+	-m --meeting		Timestamped conf call
+	-k --kill		Kill the current conf call
+	-i --interactive	Display a nice CLI
+
+Example: ${0##*/} --random
+EOF
+}
+
+stopflumotion()
+{
+    echo Kill in progress ...
+    pkill -f /usr/bin/flumotion-
+    pkill vlc
+    sleep 3
+    if test `pgrep -cf /usr/bin/flumotion-` -gt 0; then
+	echo Error: process is still launched
+    else
+	echo The process is shut down
+    fi
+}
+
+climode()
+{
+    while true
+    do
+	clear
+	cat <<EOF
+Welcome to UTGB streaming. Please select an entry:
+[1] Random conference
+[2] Meeting
+[3] Codir conference
+EOF
+	read CHOICE
+	echo "Loading the conference ..."
+	echo "(Please close the other terminal before re-runing the script)"
+	case $CHOICE in
+	    1)	xterm -e "${PWD}/${0##*/} -r"	;;
+	    2)	xterm -e "${PWD}/${0##*/} -m"	;;
+	    3)	xterm -e "${PWD}/${0##*/} -c"	;;
+	esac
+    done
+}
+
+devicescheck()
+{
+    ISMIC=`lsusb | grep -c "Samson.*microphone"`
+    ISCAM=`lsusb | grep -c "Logitech.*Webcam"`
+
+    if test $ISMIC -eq 0; then
+	echo "The microphone is $(tput bold; tput setaf 1)NOT DETECTED"'!'
+    else
+	echo "The microphone is $(tput bold; tput setaf 2)detected"'!'
+    fi
+    tput sgr0
+    if test $ISCAM -eq 0; then
+	echo "The camera is $(tput bold;tput setaf 1)NOT DETECTED"'!'
+    else
+	echo "The camera is $(tput bold; tput setaf 2)detected"'!'
+    fi
+    tput sgr0
+}
+
+while getopts ":hcrmki" option
+do
+    case "$option" in
+	c|codir)
+	    devicescheck
+	    NUM=codir
+	    ;;
+	k|kill)
+	    stopflumotion
+	    exit 0
+	    ;;
+	i|interactive)
+	    devicescheck
+	    climode
+	    exit 0
+	    ;;
+	m|meeting)
+	    devicescheck
+	    NUM=reunion-`date +%d%m%y`
+	    ;;
+	r|random)
+	    devicescheck
+	    NUM=`pwgen 10 -Bn 1`
+	    ;;
+	*)
+	    usage
+	    exit 0
+	    ;;
+    esac
+done
+
+if test $# -lt 1; then
+    echo Error: too few arguments.
+    usage
+    exit 1
+fi
+
+stopflumotion >/dev/null
+sed -e "s(/.*.ogg(/$NUM.ogg(" -e "s/hw:.*</hw:$CARDSOUND</" $CONFIG_TEMPLATE >$CONFIG_CALL
+flumotion-manager $CONFIG_CALL >/dev/null 2>&1 &
+flumotion-manager $CONFIG_PLANET $CONFIG_CALL >/dev/null 2>&1 &
+flumotion-worker $CONFIG_ADMIN >/dev/null 2>&1 &
+
+echo -e "\n ===== URL a communiquer ===== \n URL a communiquer au participant : \n http://icecast.<domain>:8000/$NUM.ogg"
+echo "Connexion in progress"
+sleep 25 && vlc -f "http://icecast.<%=@domain%>:8000/$NUM.ogg"

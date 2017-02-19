@@ -1,0 +1,6 @@
+[general]
+#include voicemail_defaults.conf
+
+[default]
+<% @extensions.each do |exten, exthash| -%><% if exthash['vmmail'] and exthash['vmmail'] =~ /[a-zA-Z0-9]*@[a-zA-Z0-9]*\.[a-zA-Z0-9]/ -%><%=exten%> => <% if exthash['vmpass'] =~ /[0-9]/ -%><%=exthash['vmpass']%><% else -%>1234<% end -%>,<%=exthash['lastname']%> <%=exthash['firstname']%>,<%=exthash['vmmail']%>,,attach=yes|saycid=no|envelope=yes|delete=no
+<% end -%><% end -%>

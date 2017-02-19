@@ -1,0 +1,10 @@
+nagios_no_parent: false
+physical_parent: oizis.adm.intra.unetresgrossebite.com
+
+# Asterisk
+asterisk_external_ip: 78.193.67.92
+asterisk_local_routes:
+  default:
+    routes:
+      - free
+asterisk_localnet: 10.42.0.0/15

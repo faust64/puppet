@@ -1,0 +1,7 @@
+listen on 127.0.0.1 port 25
+<% if @kernel == "OpenBSD" and @kernelversion == "5.4" -%>table aliases db:<%=@alias_dir%>/aliases.db
+<% elsif @kernel == "OpenBSD" and @kernelversion == "5.8" -%>table aliases db:/etc/mail/aliases.db
+<% elsif @kernel == "OpenBSD" and @kernelversion == "6.0" -%>table aliases file:/etc/mail/aliases
+<% elsif @kernel != "OpenBSD" or @kernelversion != "4.9" -%>map aliases source db "<%=@alias_dir%>/aliases.db"
+<% end -%>accept for a<% if @kernel == "OpenBSD" and ( @kernelversion == "4.9" or @kernelversion == "5.2" ) -%>ll<% else -%>ny <% if @kernelversion != "5.8" and @kernelversion != "6.0" -%>alias <aliases> <% end -%><% end -%>relay<% if @mail_ip != false -%><% @mail_ip.each do |host| -%> via <% if @kernelversion == "5.4" or @kernelversion == "5.8" or @kernelversion == "6.0" -%>smtp://<% end -%><%=host%><% break -%><% end -%><% end -%><% if @masquerade != false and ( @kernel != "OpenBSD" or @kernelversion != "4.9" ) -%> as "@<%=@masquerade%>"<% end -%>
+

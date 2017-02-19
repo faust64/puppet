@@ -1,0 +1,90 @@
+#!/bin/sh
+
+Prg=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+ret=UNKNOWN
+TMPFILE=/tmp/$Prg.$$
+DO_HYPERVISORS=false
+DO_VIRTUALS=false
+
+while getopts a:HVh OPT
+do
+    case $OPT in
+	a)	export ONE_AUTH=$OPTARG	;;
+	H)	DO_HYPERVISORS=true	;;
+	V)	DO_VIRTUALS=true	;;
+	h)
+	    usage
+	    exit $UNKNOWN
+	    ;;
+    esac
+done
+
+if $DO_HYPERVISORS; then
+    eval hoston=0 hostoff=0 hostfail=0
+    ret=OK
+
+    onehost list --csv | grep -v ^ID,NAME, >$TMPFILE
+    while read line
+    do
+	name=`echo "$line" | awk -F, '{print $2}'`
+	if echo "$line" | grep 'off$' >/dev/null; then
+	    hostoff=`expr $hostoff + 1`
+	    msg="$msg $name off,"
+	elif echo "$line" | grep 'on$' >/dev/null; then
+	    hoston=`expr $hoston + 1`
+	else
+	    hostfail=`expr $hostfail + 1`
+	    msg="$msg $name FAIL,"
+	    ret=CRITICAL
+	fi
+    done <$TMPFILE
+
+    hosttotal=`expr $hoston + $hostoff + $hostfail`
+    perfdata=" | $hoston,$hostoff,$hostfail,$hosttotal"
+fi
+if $DO_VIRTUALS; then
+    test "$ret" = UNKNOWN && ret=OK
+    test -z "$perfdata" && perfdata=" |" || perfdata="$perfdata;"
+    eval vmson=0 vmsoff=0 vmsfail=0 vmspend=0 vmssus=0 vmsukn=0 vmsundep=0 vmshyper=0
+
+    onevm list --csv | grep -v ^ID,USER,GROUP, >$TMPFILE
+    while read line
+    do
+	name=`echo "$line" | awk -F, '{print $4}'`
+	stat=`echo "$line" | awk -F, '{print $5}'`
+	case "$stat" in
+	    runn)		vmson=`expr $vmson + 1`		;;
+	    pend)		vmspend=`expr $vmspend + 1`	;;
+	    stop|shut)	vmsoff=`expr $vmsoff + 1`	;;
+	    save|susp|poff)	vmssus=`expr $vmssus + 1`	;;
+	    hold|unde)	vmsundep=`expr $vmsundep + 1`	;;
+	    unkn)		vmssus=`expr $vmssus + 1`	;;
+	    boot|migr|prol|epil|snap|hotp)
+		vmshyper=`expr $vmshyper + 1`
+		ret=WARNING
+		;;
+	    default)
+		vmsfail=`expr $vmsfail + 1`
+		msg="$msg $name FAIL,"
+		ret=WARNING
+		;;
+	esac
+    done <$TMPFILE
+
+    vmstotal=`expr $vmson + $vmsoff + $vmsfail + $vmspend + $vmssus + $vmsukn + $vmsundep + $vmshyper`
+    perfdata="$perfdata$vmson,$vmspend,$vmshyper,$vmsoff,$vmsundep,$vmssus,$vmsukn,$vmsfail,$vmstotal"
+fi
+
+if test "$msg"; then
+    msg=`echo "$msg" | sed 's|,$||'`
+fi
+
+rm -f $TMPFILE
+
+echo "$ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

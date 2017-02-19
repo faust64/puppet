@@ -1,0 +1,14 @@
+<%=@log_dir%>/*_log
+{
+    compress
+    copytruncate
+    daily
+    delaycompress
+    missingok
+    notifempty
+    rotate 7
+    sharedscripts
+    postrotate
+	/etc/init.d/cups restart >/dev/null 2>&1 || true
+    endscript
+}

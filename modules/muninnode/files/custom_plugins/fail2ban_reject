@@ -1,0 +1,46 @@
+#!/bin/sh
+
+list_block()
+{
+    /sbin/iptables -L -vnx | grep -A1000 fail2ban | grep REJECT | awk '{print $8 " " $2}' | while read ip volume
+    do
+	echo reject_`echo $ip | sed 's|\.|_|g'`.value $volume
+    done
+}
+
+config()
+{
+    echo 'graph_title Traffic rejected by fail2ban'
+    echo 'graph_info This graph shows the amount of traffic rejected thanks to fail2ban'
+    echo 'graph_category network'
+    echo 'graph_vlabel Traffic in bytes'
+    echo 'graph_args --base 1000 -l 0'
+    /sbin/iptables -L -vnx | grep -A1000 fail2ban | grep REJECT | awk '{print $8 " " $2}' | while read ip volume
+    do
+	echo reject_`echo $ip | sed 's|\.|_|g'`.label from $ip
+	echo reject_`echo $ip | sed 's|\.|_|g'`.draw STACK
+    done
+}
+
+autoconf()
+{
+    if /sbin/iptables -L -vnx 2>/dev/null | grep fail2ban >/dev/null; then
+	echo yes
+    else
+	echo no
+    fi
+}
+
+case $1 in
+    config)
+	config
+	;;
+    autoconf)
+	autoconf
+	;;
+    *)
+	list_block
+	;;
+esac
+
+exit 0

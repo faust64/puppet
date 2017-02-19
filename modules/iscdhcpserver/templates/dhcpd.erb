@@ -1,0 +1,112 @@
+ddns-updates			on;
+ddns-update-style		interim;
+ddns-domainname			"dhcp.<%=@domain%>.";
+ddns-rev-domainname		"in-addr.arpa.";
+ignore				client-updates;
+deny				duplicates;
+option domain-search		"<%=@search.split(" ").join('", "')%>";
+default-lease-time		432000;
+max-lease-time			604800;
+log-facility			local7;
+include				"<%=@dhcp_conf_dir%>/rndc.key";
+#update-conflict-detection	false;
+authoritative;
+
+option space PXE;
+option PXE.mtftp-ip code 1 = ip-address;
+option PXE.mtftp-cport code 2 = unsigned integer 16;
+option PXE.mtftp-sport code 3 = unsigned integer 16;
+option PXE.mtftp-tmout code 4 = unsigned integer 8;
+option PXE.mtftp-delay code 5 = unsigned integer 8;
+option PXE.discovery-control code 6 = unsigned integer 8;
+option PXE.discovery-mcast-addr code 7 = ip-address;
+
+<% if @dhcp_ip[1] -%>
+failover peer "dhcp-failover"
+{
+    <% if @ipaddress == @dhcp_ip[0] -%>primary<% else -%>secondary<% end -%>;
+    address			<%=@ipaddress%>;
+    port			647;
+    peer address		<% if @ipaddress == @dhcp_ip[0] -%><%=@dhcp_ip[1]%><% else -%><%=@dhcp_ip[0]%><% end -%>;
+    peer port			647;
+    max-response-delay		30;
+    max-unacked-updates		10;
+    load balance max seconds	3;
+    mclt			1800;
+<% if @ipaddress == @dhcp_ip[0] -%>
+    split			128;
+<% end -%>}
+<% end -%>
+if substring(option vendor-class-identifier,0,4) = "MSFT"
+{
+    option domain-name-servers	<% if @ad_ip != false -%><% @ad_ip.each do |host| -%><%=host%>, <% break -%><% end -%><% end -%><% @dns_ip.each do |host| -%><%=host%>, <% end -%><%=@dns_ip[0]%>;
+}
+else
+{
+    option domain-name-servers	<% @dns_ip.each do |host| -%><%=host%>, <% end -%><%=@dns_ip[0]%>;
+}
+
+class "pxeclt1"
+{
+    match if option vendor-class-identifier = "d-i";
+}
+class "pxeclt2"
+{
+    match if substring(option vendor-class-identifier, 0, 9) = "PXEClient";
+    option vendor-class-identifier "PXEClient";
+    vendor-option-space PXE;
+    option PXE.mtftp-ip 0.0.0.0;
+}
+class "pxeclt3"
+{
+    match if substring(option vendor-class-identifier, 0, 9) = "Etherboot";
+}
+class "pxeclt4"
+{
+    match if exists user-class and option user-class = "iPXE";
+}
+
+zone dhcp.<%=@domain%>.
+{
+    primary			<%=@dns_ip[0]%>;
+    key				rndc-key;
+}
+
+<% @local_networks[@mydomain].each do |net| -%><% vlanname = net['name'] -%><% if @all_networks[vlanname]['dhcp'] == true -%><% if net['netid'] =~ /[0-9]/ -%><% netid = net['netid'].to_i -%><% else -%><% netid = @all_networks[vlanname]['netid'].to_i -%><% end -%><% if net['netmsk'].to_i > 0 -%><% netmsk = net['netmsk'].to_i -%><% else -%><% netmsk = @all_networks[vlanname]['netmsk'].to_i -%><% end -%><% if netmsk == 24 -%><% iterate = [ 0 ] -%><% elsif netmsk == 23 -%><% iterate = [ 0, 1 ] -%><% elsif netmsk == 22 -%><% iterate = [ 0, 1, 2, 3 ] -%><% elsif netmsk == 21 -%><% iterate = [ 0, 1, 2, 3, 4, 5, 6, 7 ] -%><% elsif netmsk == 20 -%><% iterate = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ] -%><% elsif netmsk == 19 -%><% iterate = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31 ] -%><% elsif netmsk == 18 -%><% iterate = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63 ] -%><% elsif netmsk == 17 -%><% iterate = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127 ] -%><% elsif netmsk == 16 -%><% iterate = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 ] -%><% end -%><% iterate.each do |increment| -%><% rnetid = netid + increment.to_i -%>zone <%=rnetid%>.<%=@office_netids[@mydomain]%>.10.in-addr.arpa.
+{
+    primary			<%=@dns_ip[0]%>;
+    key				rndc-key;
+}
+
+<% end %>subnet 10.<%=@office_netids[@mydomain]%>.<%=netid%>.0 netmask <%=@netmask_correspondance[netmsk]%>
+{
+    option routers		10.<%=@office_netids[@mydomain]%>.<%=netid%>.1;
+<% if @pxe_ip != false -%>    filename			"pxelinux.0";
+    next-server			<%=@pxe_ip%>;
+<% end %>    pool
+    {
+<% if netmsk == 24 -%><% netstop = netid -%><% elsif netmsk == 23 -%><% netstop = netid + 1 -%><% elsif netmsk == 22 -%><% netstop = netid + 3 -%><% elsif netmsk == 21 -%><% netstop = netid + 7 -%><% elsif netmsk == 20 -%><% netstop = netid + 15 -%><% elsif netmsk == 19 -%><% netstop = netid + 31 -%><% elsif netmsk == 18 -%><% netstop = netid + 63 -%><% elsif netmsk == 17 -%><% netstop = netid + 127 -%><% elsif netmsk == 16 -%><% netstop = 32 -%><% end -%>	range			10.<%=@office_netids[@mydomain]%>.<%=netid%>.10 10.<%=@office_netids[@mydomain]%>.<%=netstop%>.150;
+	option domain-name	"dhcp.<%=@all_networks[vlanname]['dns']%>.<%=@mydomain%> <%=@all_networks[vlanname]['dns']%>.<%=@mydomain%>";
+	deny			dynamic bootp clients;
+	deny			members of "pxeclt1";
+	deny			members of "pxeclt2";
+	deny			members of "pxeclt3";
+	deny			members of "pxeclt4";
+<% if @dhcp_ip[1] -%>
+	failover peer		"dhcp-failover";
+<% end -%>
+    }
+    pool
+    {
+	range			10.<%=@office_netids[@mydomain]%>.<%=netstop%>.151 10.<%=@office_netids[@mydomain]%>.<%=netstop%>.254;
+	option domain-name	"<%=@all_networks[vlanname]['dns']%>.<%=@mydomain%>";
+	allow			members of "pxeclt1";
+	allow			members of "pxeclt2";
+	allow			members of "pxeclt3";
+	allow			members of "pxeclt4";
+	max-lease-time		1800;
+    }
+}
+
+<% end -%><% end -%><% if @dhcp_has_static == true -%>include	"<%=@dhcp_conf_dir%>/dhcpd.static";
+<% end %>include	"<%=@dhcp_conf_dir%>/dhcpd.local";

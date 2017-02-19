@@ -1,0 +1,54 @@
+#!/bin/sh
+
+TMPFILE=/tmp/asls.$$
+VERBOSE=false
+
+if test "$1" = -v -o "$1" = --verbose; then
+    VERBOSE=true
+    shift
+fi
+if test -z "$1"; then
+    echo "missing argument" >&2
+    exit 1
+elif echo $1 | grep '^[0-9]*$' >/dev/null; then
+    origAS=AS$1
+else
+    if echo $1 | grep / >/dev/null; then
+	net=`echo $1 | sed 's|/.*||'`
+    else
+	net=$1
+    fi
+    origAS=`whois $net 2>/dev/null | grep AS[0-9] | tail -1 | cut -d: -f2 | sed 's|,||'`
+    if test -z "$origAS"; then
+	wget "http://www.tcpiputils.com/browse/ip-address/$net" -O $TMPFILE >/dev/null 2>&1
+	origAS=AS`grep /browse/as/ $TMPFILE | sed 's|.*/browse/as/\([0-9]*\).*|\1|'`
+	rm -f $TMPFILE
+    fi
+fi
+
+if ! echo "$origAS" | grep [0-9] >/dev/null; then
+    echo "Unable to lookup AS for $1" >&2
+    exit 2
+fi
+
+for AS in $origAS
+do
+    if $VERBOSE; then
+	wget "http://www.cidr-report.org/cgi-bin/as-report/as-report?as=$AS&view=2.0" -O $TMPFILE >/dev/null 2>&1
+	name=`grep "<h3>Name</h3>" $TMPFILE | sed 's|.*<ul>\(.*\)</ul>.*|\1|'`
+    else
+	name=
+    fi
+    wget "http://www.cidr-report.org/cgi-bin/as-report/as-report?as=$AS&view=2.0&v=4&filter=pass" -O $TMPFILE >/dev/null 2>&1
+    if test "$name"; then
+	grep href $TMPFILE | sed 's|.*>\([^<]*\)<.*|\1|' | grep '[0-9]' | while read line
+	    do
+		printf "%s: %s\n" "$name" "$line"
+	    done
+    else
+	grep href $TMPFILE | sed 's|.*>\([^<]*\)<.*|\1|' | grep '[0-9]'
+    fi
+done
+rm -f $TMPFILE
+
+exit 0

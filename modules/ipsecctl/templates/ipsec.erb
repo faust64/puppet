@@ -1,0 +1,2 @@
+<% if @ipsec_tunnels != false -%><% @ipsec_tunnels.each do |remote, remotehash| -%><% if remotehash['remotegw'] =~ /[0-9]\.[0-9]/ and remotehash['remotenet'] =~ /[0-9]\.[0-9]/ and remotehash['passphrase'] != "" -%>include "/etc/ipsec.d/<%=remote%>"
+<% end -%><% end -%><% end -%>

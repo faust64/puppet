@@ -1,0 +1,27 @@
+additional_classes:
+  - Pixelserver
+  - Unbound
+  - Openvpn
+  - Fail2ban
+
+# Apache
+apache_listen_ports:
+  plain: 80
+  ssl: false
+
+# Fail2ban
+#fail2ban_do_unbound: true
+
+# OpenVPN
+contact_alerts_openvpn: root@unetresgrossebite.com
+openvpn_collectd: true
+
+# Rsyslog
+rsyslog_discard_local_write: false
+
+# Sysctl
+ip_forwarding: 1
+
+# Unbound
+unbound_do_dnssec: true
+unbound_do_public: true

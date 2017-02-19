@@ -1,0 +1,62 @@
+#!/bin/sh
+
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+LOCK=/tmp/riak_commit_lock
+LOGFILE=/var/log/cluster_commit
+MAX_LOOP=6
+TIMESTEP=`shuf -i 5-15 -n 1 2>&1 || echo 10`
+
+wait_for_lock()
+{
+    while test -s "$LOCK"
+    do
+	sleep $TIMESTEP
+    done
+}
+
+acquire_lock()
+{
+    echo $$ >$LOCK
+}
+
+check_lock()
+{
+    local pid
+
+    pid=$$
+    sleep $TIMESTEP
+    grep "^$pid$" $LOCK >/dev/null 2>&1
+}
+
+commit_plan()
+{
+    local ret
+    echo " --- PLAN:"
+    riak-admin cluster plan 2>&1
+    echo " --- COMMIT:"
+    riak-admin cluster commit 2>&1
+    ret=$?
+    rm -f $LOCK
+    return $ret
+}
+
+cnt=0
+while test "$cnt" -lt $MAX_LOOP
+do
+    cnt=`expr $cnt + 1`
+    wait_for_lock
+    if acquire_lock; then
+	if commit_plan | while read line; do echo `date`: "$line"; done >>$LOGFILE 2>&1; then
+	    echo done
+	    rm -f $LOCK
+	    exit 0
+	else
+	    echo commit failed, trying again "($cnt/$MAX_LOOP)"
+	fi
+    fi
+done
+echo failed >&2
+
+rm -f $LOCK
+exit 1

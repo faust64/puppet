@@ -1,0 +1,34 @@
+#!/bin/sh
+
+DEST=<%=@contact%>
+HOST=<%=@fqdn%>
+
+free=`df / | awk '/\//{print $5}'`
+nfree=`expr "$free" : '\([0-9]*\)'`
+
+if test "$nfree" -ge 90; then
+    alert="Automatically purging old logs from $HOST (quota used: $free)"
+    subject="[WARNING] "
+    for file in `find <%=@store_dir%> -mtime +1 -type f`
+    do
+	list="$list
+* $file purged"
+	rm -f $file
+    done
+
+    free=`df / | awk '/\//{print $5}'`
+    nfree=`expr "$free" : '\([0-9]*\)'`
+    if test "$nfree" -ge 95; then
+	alert="Automatic purge didn't freed enough space on $HOST (quota used: $free)"
+	subject="[CRITICAL] "
+    fi
+elif test "$nfree" -ge 70; then
+    alert="$HOST has $free of its quota used"
+    subject="[WARNING] "
+fi
+
+if test "$alert"; then
+    echo "$alert$list" | mail -s "$subject$HOST quota" $DEST
+fi
+
+exit 0

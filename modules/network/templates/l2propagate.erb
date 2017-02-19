@@ -1,0 +1,96 @@
+#!/bin/sh
+
+pass=<%=@swpass%>
+ret=0
+tot=0
+user=<%=@swuser%>
+TMPFILE=/tmp/`basename $0`.$$
+
+if test "$1"; then
+    dome=$1
+fi
+
+for remote in <% @switches.each do |sw| -%><% if sw['host'] -%><%=sw['host']%>:<% if sw['prompt'] -%><%=sw['prompt']%><% else -%>console<% end -%>:<% if sw['range'] -%><%=sw['range']%><% else -%>1-24<% end -%><% end -%> <% end -%>
+
+do
+    eval `echo $remote | sed 's|^\([^:]*\):\([^:]*\):\(.*\)|device=\1 console=\2 range=\3|'`
+    test -z "$device" -o -z "$console" -o -z "$range" && continue
+    for file in /etc/filter.*.conf
+    do
+	nic=`echo $file | sed 's|.*filter\.\([^.]*\)\.conf|\1|'`
+	echo $nic | grep vlan >/dev/null || continue
+	vid=`echo $nic | sed 's|vlan||'`
+	if test $vid -gt 0; then
+	    if test "$dome"; then
+		if $vid != $dome; then
+		    continue
+		fi
+	    fi
+	    cat <<EOF >$TMPFILE
+#!/usr/bin/expect
+#!/bin/sh
+
+spawn ssh $user@$device
+expect {
+    "Password:" { send "$pass\r" }
+    timeout { exit }
+}
+
+expect "$console> "
+send "enable\r"
+expect {
+    "Password:" { send "$pass\r" }
+    timeout{ exit }
+}
+
+expect "$console# "
+send "configure\r"
+expect "$console(config)# "
+send "no mac access-list vlan$vid\r"
+expect "$console(config)# "
+send "mac access-list vlan$vid\r"
+expect "$console(config-mac-al)# "
+EOF
+	    awk '/pass in/{print $6}' /etc/filter.vlan$vid.conf | while read mac
+	    do
+		cat <<EOF
+send "permit $mac 00:00:00:00:00:00 any vlan $vid\r"
+expect "$console(config-mac-al)# "
+EOF
+	    done >>$TMPFILE
+	    cat <<EOF >>$TMPFILE
+send "deny any any vlan $vid\r"
+expect "$console(config-mac-al)# "
+send "permit any any\r"
+expect "$console(config-mac-al)# "
+send "exit\r"
+expect "$console(config)# "
+send "interface range ethernet g$range\r"
+expect "$console(config-if)# "
+send "service-acl input vlan$vid\r"
+expect "$console(config-if)# "
+send "exit\r"
+expect "$console(config)# "
+send "exit\r"
+expect "$console# "
+send "copy running-config startup-config\r"
+expect "Overwrite file [startup-config] ?[Yes/press any key for no]...."
+send "y"
+expect "$console# "
+send "exit\r"
+EOF
+	    chmod +x $TMPFILE
+	    if ! $TMPFILE; then
+		ret=`expr $ret + 1`
+	    fi
+	    tot=`expr $tot + 1`
+	fi
+    done
+done
+rm -f $TMPFILE
+
+if test "$ret" -gt 0; then
+    echo $ret failed out of $tot
+fi
+
+exit $ret

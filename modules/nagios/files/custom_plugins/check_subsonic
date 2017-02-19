@@ -1,0 +1,29 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+if test -e /var/subsonic/subsonic.properties; then
+    subport=`awk -F= '/^Port=/{print $2}' /var/subsonic/subsonic.properties`
+fi
+test -z "$subport" && subport=4040
+
+if ! ps ax | grep 'java .*-Dsubsonic' >/dev/null; then
+    ret=CRITICAL
+    msg=" - subsonic not running"
+    perfdata=" | 0"
+elif ! netstat -plant | grep ":$subport[ 	].*LISTEN" >/dev/null; then
+    ret=CRITICAL
+    msg=" - subsonic not listening on $subport"
+    prefdata=" | 0"
+else
+    ret=OK
+    perfdata=" | 1"
+fi
+
+echo "$PRG $ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

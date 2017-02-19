@@ -1,0 +1,16 @@
+menu background boot-screens/splash.png
+include boot-screens/stdmenu.cfg
+menu hshift 19
+menu width 40
+menu margin 0
+
+menu title OMSA Systems
+    menu title OMSA Systems
+	menu label OMSA Systems
+	menu exit
+<% @distribs.each do |dist| -%><% [ "x86_64" ].each do |arch| -%>    label -
+	menu label OMSA <%=dist%> <%=arch%>
+	kernel installers/omsa<%=dist%>/<%=arch%>/linux
+	append initrd=installers/omsa<%=dist%>/<%=arch%>/initrd.img
+<% end -%><% end -%>
+menu end

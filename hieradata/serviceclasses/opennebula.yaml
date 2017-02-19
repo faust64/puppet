@@ -1,0 +1,79 @@
+additional_classes:
+  - Iscsiinitiator
+  - Kvm
+  - Qemu
+  - Libvirt
+  - Opennebula
+
+# Collectd
+collectd_default_plugins:
+  cpu: false
+  disk: false
+  df:
+    MountPoint:
+      - /
+    FSType:
+      - rootfs
+      - tmpfs
+    IgnoreSelected: true
+  interface:
+    Interface:
+      - bond0
+      - br0
+      - br4
+      - br7
+      - br8
+      - br11
+      - br42
+  load: false
+  memory: false
+  processes: false
+  tcpconns: false
+  users: false
+
+# KVM
+kvm_collectd: true
+
+# Libvirt
+libvirt_runtime_group: oneadmin
+libvirt_runtime_user: oneadmin
+
+# Nagios
+nagios_load_crit_threshold: "8.0,8.0,8.0"
+nagios_load_warn_threshold: "7.7,7.7,7.7"
+nagios_no_parent: false
+nagios_partitions_watchlist:
+  root: /
+  images: /var/lib/libvirt/images
+nagios_procs_crit: 3000
+nagios_procs_warn: 2500
+nagios_runprocs_crit: 800
+nagios_runprocs_warn: 600
+nagios_smart_disks:
+  - sda
+
+# NTP
+ntp_update_minute: 23
+
+# OpenNebula
+nebula_class: compute
+nebula_datastore0: nebula.ceph.intra.unetresgrossebite.com
+
+# OpenSSH
+ssh_tcp_wrappers:
+  - 10.42.42.0/24
+  - 10.42.242.0/24
+  - 10.42.46.0/24
+  - 127.0.0.1/32
+
+# Qemu
+qemu_has_kvm: true
+
+# Racktables
+racktables_object_id: 4
+
+# SNMP
+snmp_sysservices: 4
+
+# Sysctl
+do_martians: false

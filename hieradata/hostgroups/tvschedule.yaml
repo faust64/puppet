@@ -1,0 +1,10 @@
+additional_classes:
+  - Sickbeard
+# - Sonarr
+
+# Apache
+apache_mod_proxy_http: true
+apache_rsyslog: true
+
+# Nginx
+nginx_rsyslog: true

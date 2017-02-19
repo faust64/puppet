@@ -1,0 +1,433 @@
+access_class: closed
+
+# Accounts
+generic_contact: samuel@unetresgrossebite.com
+
+# AIDE
+aide_contact: root@unetresgrossebite.com
+
+# Apache
+apache_allow_privates:
+  - 10.42.0.0/15
+apache_searchgroup: ou=groups,dc=unetresgrossebite,dc=com
+apache_searchuser: ou=users,dc=unetresgrossebite,dc=com
+apache_serveradmin: admin@unetresgrossebite.com
+
+# Apt
+apt_contact: samuel@unetresgrossebite.com
+
+# Apt-cacher
+apt_cacher: apt.vms.intra.unetresgrossebite.com
+
+# Asterisk
+asterisk_aastra_directory: annuaire.unetresgrossebite.com
+asterisk_fax_from: noreply@unetresgrossebite.com
+asterisk_fax_to: samuel@unetresgrossebite.com
+
+# Auditd
+auditd_contact: root@unetresgrossebite.com
+
+# Bacula
+bacula_backuped_by: unetresgrossebite
+bacula_director_host: bacula.unetresgrossebite.com
+
+# Backups
+backup_contact: admin@unetresgrossebite.com
+
+# Btsync
+btsync_shared_folders:
+  /home/faust/wat:
+    peers:
+      - 10.43.1.6
+      - 10.42.42.42
+  /var/www/modeles:
+    peers:
+      - 10.42.44.254
+  /var/www:
+    peers:
+      - 10.42.44.254
+
+# ClamAV
+clamav_contact: samuel@unetresgrossebite.com
+
+# Fail2ban
+fail2ban_contact: samuel@unetresgrossebite.com
+fail2ban_ignoreips:
+  - 10.42.42.0/24
+  - 5.79.79.159
+  - 5.135.4.208/29
+  - 5.135.190.108/32
+  - 10.42.44.20
+  - 37.48.71.168
+  - 37.59.45.201
+  - 51.254.93.64/29
+  - 62.210.188.140
+  - 78.193.67.92
+  - 95.211.136.210/31
+  - 95.211.136.212
+  - 95.211.205.36
+  - 176.31.250.180/32
+  - 188.165.212.140
+  - 127.0.0.1/8
+
+# Git
+git_gitmaster_mail: samuel@unetresgrossebite.com
+git_gitmaster_name: Samuel MARTIN MORO
+gitlab_searchuser: ou=users,dc=unetresgrossebite,dc=com
+
+# HAproxy
+haproxy_munin: true
+
+# Icecast
+icecast_upstream: reverse.unetresgrossebite.com
+
+# Icinga
+contact_alerts_icinga: alertes-monitoring@unetresgrossebite.com
+contact_domain: unetresgrossebite.com
+
+# Ipsecctl
+contact_alerts_ipsecctl: alertes-firewalls@unetresgrossebite.com
+
+# Jesred
+jesred_regexpr:
+  - "(.*)archive.ubuntu.com/ubuntu"
+  - "security.ubuntu.com/ubuntu"
+  - "ftp.debian.org/debian"
+  - "security.debian.org/debian"
+  - "repository.unetresgrossebite.com/debian"
+  - "debian.unetresgrossebite.com/debian"
+jesred_rewrite_for:
+  - 10.42.0.0/15
+
+# Letsencrypt
+letsencrypt_contact: samuel@unetresgrossebite.com
+
+# Mail - general
+contact_alerts: alertes@unetresgrossebite.com
+mail_recipient: root@unetresgrossebite.com
+
+# Moin
+moin_mail_from: noreply@unetresgrossebite.com
+
+# Mrtg
+mrtg_collect: unetresgrossebite.com
+mrtg_monitor: unetresgrossebite.com
+
+# Munin-node
+munin_sensors:
+  - temp
+
+# Nagios
+nagios_contact_escalate: admins
+nagios_contact_groups:
+  admins:
+    members:
+      - faust
+  devel:
+    members:
+      - notme
+nagios_contacts:
+  faust:
+    alias: Samuel
+    email: alertes-monitoring@unetresgrossebite.com
+  notme:
+    alias: Devels
+    email: faust@unetresgrossebite.com
+  root:
+    alias: Charlie
+    doslack: true
+    email: root@unetresgrossebite.com
+nagios_no_parent: true
+
+# Named
+named_contact: admin@unetresgrossebite.com
+named_master: 10.42.44.100
+named_zones_check:
+  - emma-earth.com
+  - emma-earth.fr
+  - emma-earth.net
+  - emma-earth.org
+  - undomaine.42
+  - unetresgrossebite.com
+  - intra.unetresgrossebite.com
+  - leaseweb.unetresgrossebite.com
+  - adm.intra.unetresgrossebite.com
+  - ceph.intra.unetresgrossebite.com
+  - faust.intra.unetresgrossebite.com
+  - friends.intra.unetresgrossebite.com
+  - plaristote.intra.unetresgrossebite.com
+  - sip.intra.unetresgrossebite.com
+  - surv.intra.unetresgrossebite.com
+  - users.intra.unetresgrossebite.com
+  - vms.intra.unetresgrossebite.com
+  - wifi.intra.unetresgrossebite.com
+
+# Nginx
+nginx_rsyslog: true
+
+# NTP
+ntp_method: DCF
+
+# OpenDKIM
+opendkim_sign_domains:
+  - emma-earth.fr
+  - undomaine.42
+  - unetresgrossebite.com
+opendkim_trusted_hosts:
+  - 5.135.4.214/32
+  - 10.42.0.0/15
+  - 37.48.71.168/32
+  - 78.193.67.92/32
+
+# OpenLDAP
+openldap_contact: admin@unetresgrossebite.com
+openldap_ldap_slave: sso.unetresgrossebite.com
+openldap_ldap_suffix: dc=unetresgrossebite,dc=com
+openldap_ssp_mail_from: admin@unetresgrossebite.com
+openldap_web_front: false
+
+# Opennebula
+nebula_searchuser: ou=users,dc=unetresgrossebite,dc=com
+
+# OpenSMTPD
+mail_masquerade: unetresgrossebite.com
+
+# OpenSSH
+ssh_keys_database:
+  samuel.martin.moro@unetresgrossebite.com:
+    credential: interne
+    key: AAAAB3NzaC1kc3MAAACBAN1OCCEg9d83n1OB+69vymo0LxFUIqGjpvOMr7Ed9GqUae6uBN+fLLO4wkykfb6vExPpr0IfC6qzIUgHILj5O03uov4tQpW1EjHB4pEQnoNQH4rxCEgc9CA9PtaoTsm/TIX/oTJARypvR90MH1QQbAGaXI0gyGq7Lcj4rNrLavUzAAAAFQCa0865igpyFN7U+108p1kISAeZvQAAAIBQ91x6jfR10cFqDufctTLVwVBhPlaSA6PquMsdhcKSiMbpDf1uMuow4jruTbWYiv+JA5tysoN6aBOHKBcs5z2aSFQ8pIXLOpmc42mVjMfFp4+IccMsNRAOQ1I2a8f3g17SqiDpW/nRpP77zte2Qt3ShtuYbxPoFPP0Uep7YP98ggAAAIA5Xa5/uDNtrLN6E6ce3mxqiS3+pcrW/fZf4QsnjbogWNCxiY61QnBda1i7N176xonQ9eSyNqARoV8PGy7rGtPFBqrchk9+5nCpFB+lRdfDM2Semv2hlv2N2wwMuS6R6IOxaNh15HALDU6dcGy51fjFaYJ2pCY3TAv1DAQevqyo0Q==
+    pentagram: faust
+  syn@loulou.faust.intra.unetresgrossebite.com:
+    credential: interne
+    key: AAAAB3NzaC1kc3MAAACBALWHgyyZyqqu+WCFLxwYrc4Grt7IauxVL3nL1O5eK2PEFdwJK5KfBoywXx6N3dB7FXOPqyXuzgTzavNcVHHj7TfuUyjysE2w9ZzB90rU49/L3X+V49tiQJ3a0JqB75v13I02NnsviF+ZDH+RETlNLILLJbnN+BKlYc5ZmcPrVVIhAAAAFQDQRs5Vou9C7OdKXbQPHeS7bEaiDQAAAIBdsBzY7KsaxCHi+MYrwt+sg7P1CFW8luQVbfZwnSuCkZ2aSKOlR/CKm4fXmUlVA6t7Dewocvs7SN0LMV1Ya/dMccvE2nJF1qptnr3I8pmazaC/yfCCmmERMGLJjNiWnXf0aR7yVwj34u8zLp+9shGEkhigHe34ZicWtG542rHqnQAAAIEApxCFUJiF5dTd9lfZQNhaT4aH+B7yRAH2cz9Tn3DRaqYf2igN4hPUy+SmKCx2/V6VvXdFJVy89aaV9BXYLA9kWYVQS7LeMUnXgpwHm7hWUz81WNzWvvK9YW1IZ7tKBe5e7OXz2GnnE8lZTli7xJ4jTBspNZR7pj/mxXWl5c/2jaE=
+    pentagram: freelance
+  syn@peerio.com:
+    credential: interne
+    key: AAAAB3NzaC1yc2EAAAADAQABAAAEAQDDLROwfk5blsWutgHe5sh2fcl6lwxAR2BaXHiGHARtg1Rzw5zXllzbgt+cFB9gPnrGVp4tTWNwMA/7o4H+B7fx67P+5D/01w2mgOH87f4G48AyImSxhjcyiWR+FYyouXI2GEfKo4x96Fuj5+Hlk3HSEJ/p5Le/Igkv9MrSulatncH4z9JYFdy4kNKNEiD6g2l3tyzuIr1Ay8JtMAo4xcimySFU50cFiA1atqSRUYAk5HVn8qEzhnYsTjReo4CHcRmoO0YLLx8Khndk9Xq+HRnfHsM4nUMYWKCyARcX6UW3fKSEg919nWU2JTnKmdSu01lQy+b/oFxH0SOw2li9Z0dZzvI91x2v77g1xKIWCl5h/+XLP8tQS66U6fkbiLcRfGps3pVQ9MQj6PPojrPdRJZtgPnDubmJffjdrMD43fBlmMYG1lgFaJH3SA2SqSDP/LPKFUfwUmi5XXymi/N/eVoGpmyDfMpm9PWWL6a2jMAXeHnnVqawuGRbkL+Fdj5l+8iuVT/17fLGcBDkQiBYFC0CzLmbMRdMcIxP77qupUAV5eIRQr2l2TBe82OhB/ALYFT7NBkH9WrKZ9lxi1wt4inSdtVaEV1lHvlHSXtQqhgWDu6yOY5nDycavW8xH2TrCef005s6fTNslKOBCuQy70oo7lRnFe0ZtXWTfe3cRSizPpWNfLewDu1MAui9zPl9+0LMlOiajw6pOubGySKRlUXUXbu63xB8vvTc04ksbhrSoWGMd0XAvdv8fF6Z5cfRrTrZdaiiKsBeOG/hndtnRyJq8y6mENhaO9RhPj/BOLY9Vqqh5tcM3/+wPspyA21iEYteCPqcSsw8Q8xlsO3dPZumejEnv1Zjjiu2AlFSmHXjhRUNX1IrOQsMoktUAu33Nm6OpsSVAAin6KqH23I77KpHZZxsF888+zZkQFdLh8JNVTm+sv/N1o5hZ6IOPoQSKUb82waZGnIJWOv2B/5JkHb0Iu5OSlSRENCsdUtKC6mF7eNeJ/+BgspV/T5Xi74SiOE4f6wmw27tslZ1ghuLqZJuGlBSnWrm1kxibC315frqA4vsvDcP/Oc3x6e1L8bSt6kXyGeUWn8a17VcjyL9Cxv503DQfoXXe0mgaWC+5Uxzj5LFDbjMo+wyG0tF+g45nZ2TI7sfxvTxiojrLLYXW4t51A5mjwOFurNQaur2N/TxeK1+jd2DTzuaTLdP3frpW2qz8WxCViUJ8I+mWgKUkOvUi+kevrQLArsuaorj97tnJPw7GcAUCqCvnHyoCtU8Juepa0q3sXfMeKcPnBzrRg1bR1D+RTqnbRsBzT24KUBLM5FpIp5tE5YUY3WVR0DzSQg4nqV/XBVMkCc/zipsBCfp
+    pentagram: syn
+    type: ssh-rsa
+ssh_tcp_wrappers:
+  - 10.42.42.0/24
+  - 10.42.242.0/24
+  - 127.0.0.1/32
+
+# OpenSSL
+pki_contact: samuel@unetresgrossebite.com
+pki_master: pki.adm.intra.unetresgrossebite.com
+pki_nocontact: noreply@unetresgrossebite.com
+pki_public: pki.unetresgrossebite.com
+
+# OpenVPN
+contact_alerts_openvpn: alertes-firewalls@unetresgrossebite.com
+openvpn_default_filter: "(&(!(pwdAccountLockedTime=000001010000Z))(&(memberOf=cn=access-openvpn,ou=groups,dc=unetresgrossebite,dc=com)(uid=$X509_0_CN)))"
+openvpn_gateway: vpn.unetresgrossebite.com
+openvpn_searchuser: ou=users,dc=unetresgrossebite,dc=com
+
+# OpenVZ
+openvz_contact: admin@unetresgrossebite.com
+openvz_nas_host: nas.adm.intra.unetresgrossebite.com
+openvz_nas_root: /goinfre
+
+# OSSEC
+ossec_contact: root@unetresgrossebite.com
+ossec_mail_from: noreply@unetresgrossebite.com
+#ossec_manager: 10.42.242.156 / was destroyed and never re-created
+ossec_manager: false
+ossec_whitelist:
+  - 127.0.0.1
+  - 10.42.42.42
+
+# OwnCloud
+owncloud_domains:
+  0: owncloud.unetresgrossebite.com
+owncloud_mail_domain: unetresgrossebite.com
+
+# Pakiti
+pakiti_admins:
+  - faust
+pakiti_upstream: pakiti.vms.intra.unetresgrossebite.com
+
+# Patchdashboard
+do_patchdashboard: true
+patchdashboard_upstream: patchdashboard.unetresgrossebite.com
+
+# Peerio
+peerio_apt_repo: https://repository.unetresgrossebite.com/backend
+peerio_apt_repo_key_author: samuel@peerio.com
+
+# PF
+contact_alerts_pf: alertes-firewalls@unetresgrossebite.com
+munin_ip:
+  - 10.42.242.203
+  - 10.42.242.206
+sip_providers:
+  - 83.136.160.0/21
+  - 84.14.241.0/24
+  - 91.121.129.0/24
+  - 212.27.52.0/24
+
+# Puppet
+puppet_apt_repo: https://repository.unetresgrossebite.com/debian
+puppet_apt_repo_key_author: samuel@unetresgrossebite.com
+puppet_http_repo: https://repository.unetresgrossebite.com
+puppetmaster: puppet.unetresgrossebite.com
+
+# Racktables
+do_racktables: true
+munin_vhost_name:
+  - munin.unetresgrossebite.com
+racktables_ldap_suffix: ou=user,dc=unetresgrossebite,dc=com
+
+# Riak
+riak_ciphers:
+  - ECDHE-RSA-AES128-GCM-SHA256
+  - ECDHE-ECDSA-AES128-GCM-SHA256
+  - ECDHE-RSA-AES256-GCM-SHA384
+  - ECDHE-ECDSA-AES256-GCM-SHA384
+  - DHE-RSA-AES128-GCM-SHA256
+  - DHE-DSS-AES128-GCM-SHA256
+  - DHE-DSS-AES256-GCM-SHA384
+  - DHE-RSA-AES256-GCM-SHA384
+  - ECDHE-RSA-AES128-SHA256
+  - ECDHE-ECDSA-AES128-SHA256
+  - ECDHE-RSA-AES128-SHA
+  - ECDHE-ECDSA-AES128-SHA
+  - ECDHE-RSA-AES256-SHA384
+  - ECDHE-ECDSA-AES256-SHA384
+  - ECDHE-RSA-AES256-SHA
+  - ECDHE-ECDSA-AES256-SHA
+  - DHE-RSA-AES128-SHA256
+  - DHE-RSA-AES128-SHA
+  - DHE-DSS-AES128-SHA256
+  - DHE-RSA-AES256-SHA256
+riak_contact: samuel@unetresgrossebite.com
+riak_munin: true
+
+# Rsyslog / syslog
+contact_alerts_rsyslog: alertes-logging@unetresgrossebite.com
+rsyslog_discard_local_write: true
+rsyslog_hub: 10.42.44.16
+
+# Sabnzbd
+sabnzbd_email_reports: sabnzbd@unetresgrossebite.com
+sabnzbd_nntp_timeout: 120
+sabnzbd_nntp_host: ssl-eu.astraweb.com
+
+# Samba
+samba_contact: admin@unetresgrossebite.com
+samba_ldap_suffix: dc=unetresgrossebite,dc=com
+
+# Saslauthd
+saslauthd_search_base: ou=users,dc=unetresgrossebite,dc=com
+saslauthd_search_filter: "(|(cn=%u)(|(mail=%u)(mail=%u@unetresgrossebite.com)))"
+
+# Selfoss
+selfoss_db_backend: mysql
+
+# Sendmail
+sendmail_accept_domains:
+  - emma-earth.com
+  - emma-earth.fr
+  - emma-earth.net
+  - emma-earth.org
+  - undomaine.42
+  - unetresgrossebite.com
+  - intra.unetresgrossebite.com
+  - leaseweb.unetresgrossebite.com
+  - adm.intra.unetresgrossebite.com
+  - ceph.intra.unetresgrossebite.com
+  - faust.intra.unetresgrossebite.com
+  - friends.intra.unetresgrossebite.com
+  - plaristote.intra.unetresgrossebite.com
+  - sip.intra.unetresgrossebite.com
+  - surv.intra.unetresgrossebite.com
+  - users.intra.unetresgrossebite.com
+  - vms.intra.unetresgrossebite.com
+  - wifi.intra.unetresgrossebite.com
+
+# SickBeard
+sickbeard_contact: samuel@unetresgrossebite.com
+
+# Spamassassin
+spamassassin_contact: root@unetresgrossebite.com
+
+# Squid
+squid_exceptions:
+  - .emma-earth.com
+  - .emma-earth.fr
+  - .emma-earth.net
+  - .emma-earth.org
+  - .undomaine.42
+  - .unetresgrossebite.com
+  - localhost
+
+# Subsonic
+subsonic_alerts: root@unetresgrossebite.com
+subsonic_searchuser: ou=users,dc=unetresgrossebite,dc=com
+subsonic_sync_bwlimit: 100
+
+# Terminator
+terminator_background: "#080808"
+terminator_font: "Monospace 7"
+terminator_foreground: "#cfcfcf"
+terminator_history: 1000000
+
+# Peerio
+peerio_contact: samuel@unetresgrossebite.com
+
+# TFTPD
+pxe_ip: 10.42.44.100
+pxe_packages_repository: repository.unetresgrossebite.com
+pxe_reference_repository: netserv.vms.intra.unetresgrossebite.com
+
+# Thruk
+thruk_admin_contact: admin@unetresgrossebite.com
+thruk_home_link: http://unetresgrossebite.com
+
+# Transmission
+transmission_contact: samuel@unetresgrossebite.com
+
+# Unbound
+#FIXME: defined in intra/firewall
+unbound_forwarders:
+  emma-earth.com:
+    - 10.42.44.100
+  emma-earth.fr:
+    - 10.42.44.100
+  emma-earth.net:
+    - 10.42.44.100
+  emma-earth.org:
+    - 10.42.44.100
+  undomaine.42:
+    - 10.42.44.100
+  unetresgrossebite.com:
+    - 10.42.44.100
+#/FIXME
+unbound_recurse_networks:
+  - 10.42.0.0/16
+  - 10.43.0.0/23
+
+# Vlist
+vlist_contact: admin@unetresgrossebite.com
+vlist_hosts_list:
+  oneiroi.adm.intra.unetresgrossebite.com: interne
+
+# WiFi Management
+wifimgr_contact: admin@unetresgrossebite.com
+
+# Xorg
+x11vnc_contact: admin@unetresgrossebite.com
+
+# WebServers
+csp_report: https://peerio.report-uri.io/r/default/csp/enforce
+#csp_report: https://unetresgrossebite.report-uri.io/r/default/csp/enforce
+csp_sources:
+  - unetresgrossebite.com
+  - intra.unetresgrossebite.com
+  - leaseweb.unetresgrossebite.com
+hpkp_report: false
+public_key_pins: false
+
+dns_search: intra.unetresgrossebite.com unetresgrossebite.com
+root_domain: unetresgrossebite.com

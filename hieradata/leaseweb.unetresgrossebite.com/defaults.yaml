@@ -1,0 +1,58 @@
+physical_parent: hypnos.leaseweb.unetresgrossebite.com
+apt_cacher: false
+
+# Autofs
+modeles_nas: hypnos.leaseweb.unetresgrossebite.com
+modeles_path: /media/backups
+modeles_nfs_opts: fstype=nfs4,ro,soft,intr
+
+# Nagios
+nagios_no_parent: false
+nagios_hostgroups:
+  - cpanel
+  - customer
+  - debian
+  - linux
+  - peerio
+  - ubuntu
+nagios_ip:
+  - 10.42.242.202
+  - 10.42.242.203
+  - 10.43.1.11
+
+# OpenLDAP
+openldap_ldap_slave: ns2.leaseweb.unetresgrossebite.com
+
+# OpenSSH
+ssh_tcp_wrappers:
+  - 10.42.42.0/24
+  - 10.42.242.0/24
+  - 78.193.67.92/32
+  - 127.0.0.1/32
+
+# OpenVZ
+vz_default_bridge: xenbr0
+vz_default_gateway: 10.43.1.1
+vz_default_netmask: 255.255.255.0
+
+# Pakiti
+pakiti_site_id: 3
+
+# PF
+dns_ip:
+  - 10.43.1.5
+  - 10.43.1.3
+ldap_ip:
+  - 10.43.1.3
+mail_ip:
+  - 10.42.44.20
+  - 10.43.1.4
+mail_mx: 10.43.1.4
+reverse_ip:
+  - 10.43.1.2
+snmp_ip:
+  - 10.42.242.203
+  - 10.42.242.205
+  - 10.42.242.206
+
+dns_search: leaseweb.unetresgrossebite.com intra.unetresgrossebite.com unetresgrossebite.com

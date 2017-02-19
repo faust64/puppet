@@ -1,0 +1,31 @@
+#!/bin/sh
+
+case "$1" in
+    start)
+	if ps ax | grep 'os[s]ec-authd.*1515' >/dev/null; then
+	    echo Already running >&2
+	    exit 1
+	fi
+	<%=@conf_dir%>/bin/ossec-authd -p1515 ><%=@conf_dir%>/logs/authd.log 2>&1 &
+	;;
+    status)
+	if ps ax | grep 'ossec-au[t]hd.*1515' >/dev/null; then
+	    echo running
+	else
+	    echo stopped
+	    exit 3
+	fi
+	;;
+    stop)
+	pid=`ps ax | awk '/ossec-[a]uthd.*1515/{print $1}'`
+	if test "$pid" -ge 0 2>/dev/null; then
+	    kill "$pid" || kill -9 "$pid"
+	    exit $?
+	else
+	    echo "not running" >&2
+	    exit 1
+	fi
+	;;
+esac
+
+exit 0

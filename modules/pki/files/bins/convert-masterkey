@@ -1,0 +1,8 @@
+#!/usr/bin/env python
+
+import fileinput
+import sys
+
+data = open(sys.argv[1]).read()
+
+print "".join(data.split("MK dump:")[1].split()).decode("hex")

@@ -1,0 +1,2 @@
+<% if @sign != false -%><% @sign.each do |dom| -%>default._domainkey.<%=dom%> <%=dom%>:default:<%=@conf_dir%>/dkim.d/keys/<%=dom%>/default.private
+<% end -%><% end -%>

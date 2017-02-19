@@ -1,0 +1,5 @@
+#!/bin/sh
+
+wget --no-check-certificate "https://lilina.leaseweb.unetresgrossebite.com/?method=update&cron" -O- >/dev/null
+
+exit 0

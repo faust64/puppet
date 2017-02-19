@@ -1,0 +1,70 @@
+server {
+    listen <%=@listen_ports['plain']%>;
+    server_name <% if @aliases != false -%><% @aliases.each do |dname| -%><%=dname%> <% end -%><% end -%><%=@name%>;
+    server_tokens off;
+    error_log <%=@log_dir%>/error-<%=@name%>.log;
+    access_log <%=@log_dir%>/access-<%=@name%>.log main;
+<% if @csp_name != false and @csp_policies[@csp_name] =~ /self/ -%>    add_header Content-Security-Policy "default-src 'self'<% if @csp_sources != false -%> http://*.<%=@csp_sources.join(' http://*.')%> https://*.<%=@csp_sources.join(' https://*.')%><% end -%> <%=@csp_policies[@csp_name]%><% if @csp_report != false -%> report-uri <%=@csp_report%><% end -%>";
+<% end -%><% if @deny_frames == true -%>    add_header X-Frame-Options DENY;
+<% end -%><% if @nosniff == true -%>    add_header X-Content-Type-Options nosniff;
+<% end -%><% if @xss_protection == true -%>    add_header X-XSS-Protection "1; mode=block";
+<% end -%><% if @listen_ports['ssl'] != false -%><% if @nohttpsrewrite == true -%>    root <%=@app_root%>/;
+<% if @with_php_fpm != false -%>    location ~ [^/]\.php(/|$) {
+	fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+	if (!-f $document_root$fastcgi_script_name) {
+	    return 404;
+	}
+	fastcgi_pass unix:/var/run/php5-fpm.<%=@with_php_fpm%>.sock;
+<% if @noerrors == false -%>	fastcgi_intercept_errors on;
+<% end -%>	fastcgi_index index.php;
+	include fastcgi_params;
+    }
+<% end -%>    location / {
+<% if @autoindex -%>	autoindex on;
+<% else -%>	try_files $uri $uri/<% if @with_php_fpm -%> /index.php<% end -%> /index.html =404;
+<% if @with_php_fpm != false -%>	index index.php;
+<% end -%><% end -%>    }
+<% if @noerrors == false -%>    include <%=@conf_dir%>/errors.conf;
+<% end -%><% else -%>    rewrite ^/(.*) https://<%=@name%>/$1;
+<% end -%>}
+
+server {
+    listen <%=@listen_ports['ssl']%>;
+    server_name <% if @aliases != false -%><% @aliases.each do |dname| -%><%=dname%> <% end -%><% end -%><%=@name%>;
+    server_tokens off;
+    error_log <%=@log_dir%>/ssl-error-<%=@name%>.log;
+    access_log <%=@log_dir%>/ssl-access-<%=@name%>.log main;
+<% if @csp_name != false and @csp_policies[@csp_name] =~ /self/ -%>    add_header Content-Security-Policy "default-src 'self'<% if @csp_sources != false -%> https://*.<%=@csp_sources.join(' https://*.')%><% end -%> <%=@csp_policies[@csp_name]%><% if @csp_report != false -%> report-uri <%=@csp_report%><% end -%>";
+<% end -%><% if @stricttransport != false -%>    add_header Strict-Transport-Security "<%=@stricttransport%>";
+<% end -%><% if @public_key_pins != false -%>    add_header Public-Key Pins 'pin-sha256="<%=@public_key_pins.join('"; pin-sha256="')%>"; max-age=<%=@hpkp_max_age%>; includeSubDomains<% if @hpkp_report != false -%>; report-uri="<%=@hpkp_report%>"<% end -%>';
+<% end -%><% if @deny_frames == true -%>    add_header X-Frame-Options DENY;
+<% end -%><% if @nosniff == true -%>    add_header X-Content-Type-Options nosniff;
+<% end -%><% if @xss_protection == true -%>    add_header X-XSS-Protection "1; mode=block";
+<% end -%>    ssl on;
+    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+<% if 0 == 1 -%># Require nginx 1.5.9
+    ssl_session_tickets off;
+<% end -%>    ssl_certificate <%=@conf_dir%>/ssl/server-full.crt;
+    ssl_certificate_key <%=@conf_dir%>/ssl/server.key;
+    ssl_dhparam /etc/nginx/ssl/dh.pem;
+<% end -%>    root <%=@app_root%>/;
+<% if @with_php_fpm != false -%>    location ~ [^/]\.php(/|$) {
+	fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+	if (!-f $document_root$fastcgi_script_name) {
+	    return 404;
+	}
+	fastcgi_pass unix:/var/run/php5-fpm.<%=@with_php_fpm%>.sock;
+<% if @noerrors == false -%>	fastcgi_intercept_errors on;
+<% end -%>	fastcgi_index index.php;
+	include fastcgi_params;
+    }
+<% end -%>    location / {
+<% if @autoindex -%>	autoindex on;
+<% else -%>	try_files $uri $uri/<% if @with_php_fpm -%> /index.php<% end -%> /index.html =404;
+<% if @with_php_fpm != false -%>	index index.php;
+<% end -%><% end -%>    }
+<% if @noerrors == false -%>    include <%=@conf_dir%>/errors.conf;
+<% end -%>}

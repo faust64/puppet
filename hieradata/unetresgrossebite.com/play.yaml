@@ -1,0 +1,40 @@
+additional_classes:
+  - Fail2ban
+  - Firehol
+
+physical_parent: gaia.unetresgrossebite.com
+
+# Firehol
+firehol_interfaces:
+  - name: eth0
+    description: WAN
+    protection: strong
+    allow:
+      - server icmp accept
+      - server http accept
+      - server https accept
+      - server custom openssh "tcp/1022" default accept
+      - server custom munin "tcp/4949" default accept src "$office_networks"
+      - server custom nrpe "tcp/5666" default accept src "$office_networks"
+      - client all accept
+
+# Letsencrypt
+letsencrypt_renew_day: 21
+letsencrypt_renew_hour: 22
+letsencrypt_renew_min: 54
+
+# Nagios
+nagios_partitions_watchlist:
+  root: /
+  music: /var/music
+
+# OpenLDAP
+openldap_ldap_slave: repository.unetresgrossebite.com
+
+# PF
+dns_ip:
+  - 95.211.205.36
+  - 188.165.212.140
+
+# Subsonic
+subsonic_do_flac: true

@@ -1,0 +1,13 @@
+nagios_no_parent: false
+physical_parent: oizis.adm.intra.unetresgrossebite.com
+
+# Nagios
+nagios_partitions_watchlist:
+  root: /
+  syslog: /var/log
+
+# Rsyslog / syslog
+rsyslog_collect:
+  - 10.42.0.0/15
+#rsyslog_to_ossec: true
+rsyslog_hub: false

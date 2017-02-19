@@ -1,0 +1,79 @@
+Origin: UTGB
+Label: UneTresGrosseBite
+Codename: lenny
+Architectures: i386 amd64
+Components: main
+Description: UTGB APT-deb repository
+SignWith: 67F0B406
+DebOverride: override.lenny
+DscOverride: override.lenny
+
+Origin: UTGB
+Label: UneTresGrosseBite
+Codename: squeeze
+Architectures: i386 amd64
+Components: main
+Description: UTGB APT-deb repository
+SignWith: 67F0B406
+DebOverride: override.squeeze
+DscOverride: override.squeeze
+
+Origin: UTGB
+Label: UneTresGrosseBite
+Codename: wheezy
+Architectures: i386 amd64
+Components: main
+Description: UTGB APT-deb repository
+SignWith: 67F0B406
+DebOverride: override.wheezy
+DscOverride: override.wheezy
+
+Origin: UTGB
+Label: UneTresGrosseBite
+Codename: jessie
+Architectures: i386 amd64
+Components: main
+Description: UTGB APT-deb repository
+SignWith: 67F0B406
+DebOverride: override.jessie
+DscOverride: override.jessie
+
+Origin: UTGB
+Label: UneTresGrosseBite
+Codename: stretch
+Architectures: i386 amd64
+Components: main
+Description: UTGB APT-deb repository
+SignWith: 67F0B406
+DebOverride: override.stretch
+DscOverride: override.stretch
+
+Origin: UTGB
+Label: UneTresGrosseBite
+Codename: precise
+Architectures: i386 amd64
+Components: main
+Description: UTGB APT-deb repository
+SignWith: 67F0B406
+DebOverride: override.precise
+DscOverride: override.precise
+
+Origin: UTGB
+Label: UneTresGrosseBite
+Codename: saucy
+Architectures: i386 amd64
+Components: main
+Description: UTGB APT-deb repository
+SignWith: 67F0B406
+DebOverride: override.saucy
+DscOverride: override.saucy
+
+Origin: UTGB
+Label: UneTresGrosseBite
+Codename: trusty
+Architectures: i386 amd64
+Components: main
+Description: UTGB APT-deb repository
+SignWith: 67F0B406
+DebOverride: override.trusty
+DscOverride: override.trusty

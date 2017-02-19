@@ -1,0 +1,33 @@
+#!/usr/bin/env python
+# vim: set ft=python
+
+import libvirt
+import sys
+import time
+
+# Try to connect to libvirt
+conn = libvirt.open("qemu:///system")
+if conn == None:
+    print 'Failed to open connection to the hypervisor'
+    sys.exit(1)
+
+# Ask each domain to shutdown cleanly
+domain_id_list = conn.listDomainsID()
+for domain_id in domain_id_list:
+    result = conn.lookupByID(domain_id).shutdown()
+
+# Wait for the shutdown to complete (200 sec)
+for waittime in range(1,200,10) :
+    if len(conn.listDomainsID()) == 0:
+	break
+    time.sleep(10)
+
+# Look for remaining domains
+if len(conn.listDomainsID()) > 0:
+    domain_id_list = conn.listDomainsID()
+    print "Some domains could not stop "	
+    for domain_id in domain_id_list:
+	print conn.lookupByID(domain_id).name()
+    sys.exit(2)
+
+sys.exit(0)

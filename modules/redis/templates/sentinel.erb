@@ -1,0 +1,8 @@
+port <%=@sentinel_port%>
+loglevel notice
+logfile "/var/log/redis/sentinel.log"
+sentinel monitor <%=@sentinel_name%> <%=@slaveof%> <%=@listen_port%> <%=@quorum%>
+<% if @repl_pass -%>sentinel auth-pass <%=@sentinel_name%> <%=@repl_pass%>
+<% end -%>sentinel down-after-milliseconds <%=@sentinel_name%> <%=@down_timeout%>000
+sentinel parallel-syncs <%=@sentinel_name%> 1
+sentinel failover-timeout <%=@sentinel_name%> <%=@failover_timeout%>000

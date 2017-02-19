@@ -1,0 +1,201 @@
+[DEFAULT]
+bantime    = 600
+backend    = auto
+destemail  = <%=@contact%>
+ignoreip   = <% if @ignore != false -%><%=@ignore.join(" ")%><% else -%>127.0.0.0/8<% end -%>
+
+maxretry   = <%=@maxretry%>
+mta        = sendmail
+<% if @kernel == "Linux" -%>banaction  = iptables-multiport
+<% else -%>banaction  = pf-drop-all
+<% end -%>chain      = INPUT
+protocol   = tcp
+action_    = %(banaction)s[name=%(__name__)s, port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
+action_mw  = %(banaction)s[name=%(__name__)s, port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
+	     %(mta)s-whois[name=%(__name__)s, dest="%(destemail)s", protocol="%(protocol)s", chain="%(chain)s"]
+<% if @slack_hook != false -%>action_slack = %(banaction)s[name=%(__name__)s, port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
+	      slack[name=%(__name__)s, dest="%(destemail)s", protocol="%(protocol)s", chain="%(chain)s"]
+	     %(mta)s-whois-lines[name=%(__name__)s, dest="%(destemail)s", logpath=%(logpath)s, chain="%(chain)s"]
+action = %(action_slack)s
+<% else -%>action_mwl = %(banaction)s[name=%(__name__)s, port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
+	     %(mta)s-whois-lines[name=%(__name__)s, dest="%(destemail)s", logpath=%(logpath)s, chain="%(chain)s"]
+action     = %(action_mwl)s
+<% end -%><% if @do_ssh == true -%>
+
+[ssh]
+enabled  = true
+port     = <%=@ssh_port%>
+filter   = sshd
+logpath  = /var/log/authlog
+maxretry = <%=@maxretry%>
+
+[ssh-ddos]
+enabled  = true
+port     = <%=@ssh_port%>
+filter   = sshd-ddos
+logpath  = /var/log/authlog
+maxretry = <%=@maxretry%>
+<% end -%><% if @do_pam == true -%>
+
+[pam-generic]
+enabled   = true
+filter    = pam-generic
+port      = all
+<% if @kernel == "Linux" -%>banaction = iptables-allports
+<% else -%>banaction = pf-drop-all
+<% end -%>port      = anyport
+logpath   = /var/log/authlog
+maxretry  = <%=@maxretry%>
+<% end -%><% if @do_xinetd == true -%>
+
+[xinetd-fail]
+enabled   = true
+filter    = xinetd-fail
+port      = all
+<% if @kernel == "Linux" -%>banaction = iptables-multiport-log
+<% else -%>banaction = pf-drop-all
+<% end -%>logpath   = /var/log/daemon
+maxretry  = <%=@maxretry%>
+<% end -%><% if @do_asterisk == true -%>
+
+[asterisk]
+bantime  = 86400
+enabled  = true
+filter   = asterisk
+findtime = 21600
+action   = iptables-allports[name=asterisk,protocol=all]
+logpath  = /var/log/asterisk/messages
+maxretry = <%=@maxretry%>
+<% end -%><% if @do_mail == true -%>
+
+[postfix]
+enabled  = true
+bantime  = 86400
+<% if @srvtype == "mail" -%>port     = smtp,ssmtp
+<% else -%>port     = smtp,ssmtp
+<% end -%>filter   = postfix
+logpath  = /var/log/maillog
+
+<% if @srvtype == "mail" -%>[sasl]
+enabled  = true
+bantime  = 86400
+port     = smtp,ssmtp,imap2,imap3,imaps,pop3,pop3s
+filter   = sasl
+logpath  = /var/log/maillog
+<% end -%><% end -%><% if @do_named == true -%>
+
+[named-refused-udp]
+enabled  = true
+port     = domain
+protocol = udp
+filter   = named-refused
+logpath  = <%=@named_log%>/security.log
+
+[named-refused-tcp]
+enabled  = true
+filter   = named-refused
+logpath  = <%=@named_log%>/security.log
+port     = domain
+protocol = tcp
+<% end -%><% if @do_openvpn != false -%>
+
+[openvpn]
+enabled  = true
+filter   = openvpn
+logpath  = /var/log/openvpn-<%=@do_openvpn%>.log
+maxretry = <%=@maxretry%>
+port     = 1194
+protocol = tcp
+<% end -%><% if @do_unbound != false -%>
+
+[unbound]
+bantime  = 86400
+enabled  = true
+filter   = unbound
+findtime = 86400
+logpath  = /var/log/syslog
+maxretry = <%=@maxretry%>
+port     = 53
+protocol = udp
+<% end -%><% if @do_cpanel != false -%>
+
+[wpaccess]
+action   = csf-ip-deny[name=wpaccess]
+bantime  = -1
+enabled  = true
+filter   = wpaccess
+logpath  = /home/*/access-logs/*
+maxretry = <%=@maxretry%>
+port     = http,https
+<% end -%><% if @do_wordpress != false -%>
+
+[wordpress-hard]
+enabled  = true
+bantime  = -1
+filter   = wordpress-hard
+logpath  = /var/log/authlog
+maxretry = <%=@maxretry%>
+port     = http,https
+
+[wordpress-soft]
+enabled  = true
+bantime  = -1
+filter   = wordpress-soft
+logpath  = /var/log/authlog
+maxretry = <%=@maxretry%>
+port     = http,https
+<% end -%><% if @web_logs != false -%>
+[web-auth]
+enabled  = true
+port     = http,https
+filter   = apache-auth
+logpath  = <%=@web_logs%>
+maxretry = <%=@maxretry%>
+
+<% end -%><% if @do_webnoscript != false and @web_logs != false -%>
+
+[web-scripts]
+enabled  = true
+bantime  = 86400
+filter   = apache-noscript
+logpath  = <%=@web_logs%>
+maxretry = <%=@maxretry%>
+port     = http,https
+<% end -%><% if @do_weboverflow != false and @web_logs != false -%>
+
+[web-overflow]
+enabled  = true
+bantime  = 86400
+filter   = apache-overflows
+logpath  = <%=@web_logs%>
+maxretry = <%=@maxretry%>
+port     = http,https
+<% end -%><% if @do_webabuses != false and @web_logs != false -%>
+
+[web-abuses]
+enabled  = true
+bantime  = 86400
+filter   = web-abuses
+logpath  = <%=@web_logs%>
+maxretry = <%=@maxretry%>
+port     = http,https
+<% end -%><% if @do_badbots != false and @web_logs != false -%>
+
+[web-badbots]
+enabled  = true
+bantime  = 86400
+filter   = apache-badbots
+logpath  = <%=@web_logs%>
+maxretry = <%=@maxretry%>
+port     = http,https
+<% end -%>
+
+[recidivist]
+<% if @kernel == "Linux" -%>action   = iptables-allports[name=recidivist]
+<% else -%>action   = pf-drop-all
+<% end -%>bantime  = -1
+enabled  = true
+filter   = recidivist
+findtime = 604800
+logpath  = /var/log/fail2ban.log
+maxretry = <%=@maxretry%>

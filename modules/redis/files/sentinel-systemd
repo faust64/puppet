@@ -1,0 +1,15 @@
+# redis-sentinel
+[Unit]
+Description=redis-sentinel
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/sbin/redissentinelservice start
+ExecReload=/usr/local/sbin/redissentinelservice restart
+ExecStop=/usr/local/sbin/redissentinelservice stop
+TimeoutStopSec=5
+KillMode=mixed
+
+[Install]
+WantedBy=multi-user.target

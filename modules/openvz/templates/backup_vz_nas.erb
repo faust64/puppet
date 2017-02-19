@@ -1,0 +1,80 @@
+#!/bin/sh
+
+test -f /etc/virtual.conf && . /etc/virtual.conf
+
+OK_ADDRESS=${OK_ADDRESS:-"<%=@contact%>"}
+ALERT_ADDRESS=${ALERT_ADDRESS:-"<%=@contact%>"}
+REMOTE=${NAS:-<%=@nas_host%>}
+DIR_REMOTE_BACKUP=${DIR_REMOTE_BACKUP:-"<%=@nas_root%>/archive-vm/vz"}
+DIR_CONF=/etc/vz
+VZ_CMD=/usr/sbin/vzctl
+MESSAGE="Archiving: $1 `date`"
+SUBJECT="REPORT"
+DEST=$OK_ADDRESS
+
+error()
+{
+    echo "Error: $@" >&2
+    exit 1
+}
+
+if test -z "$1"; then
+    error Usage: $0 ve_name
+elif test -e $DIR_CONF/conf/$1.conf; then
+    eval `grep '^NAME=' $DIR_CONF/conf/$1.conf | sed 's|^NAME|VZ_NAME|'`
+    VID=$1
+elif test -e $DIR_CONF/names/$1; then
+    VZ_NAME=$1
+    VID=`basename $(readlink $DIR_CONF/names/$1) | sed 's|\.conf||'`
+else
+    error Unknown VE $1
+fi
+VZ_REL_ROOT=`grep '^VE_PRIVATE=' $DIR_CONF/names/$VZ_NAME | sed 's|.*/var/lib/vz/private/\([^"]*\)"|\1|'`
+
+cd $VZ_STORAGE
+if ! test -d $VZ_REL_ROOT; then
+    error Unable to find $VZ_REL_ROOT
+fi
+
+echo "=> Checking $VZ_NAME status <="
+if vzlist -n | grep ' $VZ_NAME'; then
+    echo "=> Stopping $VZ_NAME <="
+    if ! $VZ_CMD stop $VZ_NAME; then
+	MESSAGE="$MESSAGE\nPROBLEM while stopping VM $VZ_NAME"
+	DEST="$ALERT_ADDRESS $DEST"
+	SUBJECT=WARNING
+    fi
+else
+    echo "$VZ_NAME is not started"
+fi
+
+echo "=> Archiving $VZ_NAME <="
+if ! tar --numeric-owner -czf $VZ_NAME.tgz $VZ_REL_ROOT; then
+    MESSAGE="$MESSAGE\nPROBLEM while archiving"
+    DEST="$ALERT_ADDRESS $DEST"
+    SUBJECT=WARNING
+elif ! tar -tf $VZ_NAME.tgz >/dev/null 2>&1; then
+    MESSAGE="$MESSAGE\nPROBLEM archive corrupted"
+    DEST="$ALERT_ADDRESS $DEST"
+    SUBJECT=CRITICAL
+elif ! rsync -q $VZ_NAME.tgz $REMOTE:$DIR_REMOTE_BACKUP/; then
+    MESSAGE="$MESSAGE\nPROBLEM syncing archive to $REMOTE"
+    DEST="$ALERT_ADDRESS $DEST"
+    SUBJECT=WARNING
+else
+    rm -f $VZ_NAME.tgz
+    MESSAGE="$MESSAGE\nNOTICE $VZ_NAME local data have not been purged: please re-check and do it manually"
+fi
+
+cd $DIR_CONF
+rm -f name/$VZ_NAME
+cd conf
+mv $VID.conf $VID.conf.archived
+
+echo "=> Finished archiving <="
+MESSAGE="$MESSAGE\n`date`"
+
+echo $MESSAGE | mailx -s "[$SUBJECT] backup $REMOTE" $DEST
+echo $MESSAGE
+
+exit 0

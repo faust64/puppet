@@ -1,0 +1,28 @@
+#!/bin/sh
+
+<% if @contact != false -%>CONTACT=<%=@contact%>
+<% end -%><% if @kernel == "Linux" -%>HOSTNAME=`hostname -f`
+<% else -%>HOSTNAME=`hostname`
+<% end -%>TMPFILE=/tmp/aide.$$
+
+PATH="/usr/local/sbin:/usr/sbin:/sbin:$PATH"
+export PATH
+
+RANDOM_NUMBER=`od -An -N2 -d /dev/random`
+WAIT_TIME=`expr 1 + $RANDOM_NUMBER % \( 240 - 1 \)`
+sleep $WAIT_TIME
+aide -c <%=@conf_dir%>/aide.conf -C >$TMPFILE 2>&1
+
+if test -s $TMPFILE; then
+    if grep 'All files match AIDE database. Looks okay' $TMPFILE >/dev/null; then
+	SUBJECT=REPORT
+    else
+	SUBJECT=WARNING
+    fi
+    cat $TMPFILE<% if @contact != false -%> | mail -s "[$SUBJECT] AIDE on $HOSTNAME" $CONTACT<% end -%>
+
+fi
+
+rm -f $TMPFILE
+
+exit 0

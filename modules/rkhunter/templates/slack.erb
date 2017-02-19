@@ -1,0 +1,17 @@
+#!/bin/sh
+
+HOOK_URL=<%=@hook%>
+HOSTNAME=`hostname -f`
+
+rkhunter --cronjob --update --quiet
+
+if grep Warning: <%=@log_dir%>/rkhunter.log; then
+    grep -A1 Warning: <%=@log_dir%>/rkhunter.log | while read line
+	do
+	    /usr/local/bin/slack $HOOK_URL "WARNING: $HOSTNAME - $line"
+	done
+else
+    /usr/local/bin/slack $HOOK_URL "REPORT: $HOSTNAME completed scan with nothing to report"
+fi
+
+exit 0

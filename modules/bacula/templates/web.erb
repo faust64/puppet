@@ -1,0 +1,15 @@
+<?php
+$config['show_inactive_clients'] = true;
+$config['hide_empty_pools'] = false;
+$config['jobs_per_page'] = 25;
+$config['language'] = 'en_US';
+
+// MySQL bacula catalog
+$config[0]['label'] = 'UTGB';
+$config[0]['host'] = 'localhost';
+$config[0]['login'] = 'bacula';
+$config[0]['password'] = '<%=@mysql_pass%>';
+$config[0]['db_name'] = 'bacula';
+$config[0]['db_type'] = 'mysql';
+$config[0]['db_port'] = '3306';
+?>

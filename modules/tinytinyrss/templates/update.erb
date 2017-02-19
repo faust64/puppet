@@ -1,0 +1,10 @@
+#!/bin/sh
+
+RUSER=<%=@runtime_user%>
+WEBROOT=<%=@web_root%>/ttrss
+
+if test -d $WEBROOT; then
+    su -l $RUSER -s /bin/sh -c "php $WEBROOT/update.php --feeds --quiet"
+fi
+
+exit 0

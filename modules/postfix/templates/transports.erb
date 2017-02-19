@@ -1,0 +1,4 @@
+<% @local_domains.each do |dom| -%><%=dom%>	smtp<% if @routeto != false -%>:<%=@routeto%><% end -%>
+
+<% end -%><% if @mail_mx == @ipaddress -%>*	smtp
+<% end -%>

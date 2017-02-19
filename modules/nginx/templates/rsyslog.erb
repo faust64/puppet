@@ -1,0 +1,33 @@
+<% if @version >= 7 -%>input(type="imfile"
+      File="<%=@log_dir%>/error.log"
+      statefile="<%=@log_dir%>/.error.log"
+      Tag="nginx-error: "
+      Severity="error"
+      Facility="local6")
+
+input(type="imfile"
+<% if @hostname == "reverse" -%>      File="<%=@log_dir%>/proxy.log"
+      statefile="<%=@log_dir%>/.proxy.log"
+      Tag="nginx-proxy: "
+<% else -%>      File="<%=@log_dir%>/access.log"
+      statefile="<%=@log_dir%>/.access.log"
+      Tag="nginx-access: "
+<% end -%>      Severity="info"
+      Facility="local6")
+<% else -%>$InputFileName <%=@log_dir%>/error.log
+$InputFileTag nginx-error:
+$InputFileStateFile nginx-error
+$InputFileSeverity error
+$InputFileFacility local6
+$InputRunFileMonitor
+
+<% if @hostname == "reverse" -%>$InputFileName <%=@log_dir%>/proxy.log
+$InputFileTag nginx-proxy:
+$InputFileStateFile nginx-proxy
+<% else -%>$InputFileName <%=@log_dir%>/access.log
+$InputFileTag nginx-access:
+$InputFileStateFile nginx-access
+<% end -%>$InputFileSeverity info
+$InputFileFacility local6
+$InputRunFileMonitor
+<% end -%>

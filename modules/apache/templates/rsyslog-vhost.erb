@@ -1,0 +1,57 @@
+<% if @rsyslog_version >= 7 -%>input(type="imfile"
+      File="<%=@log_dir%>/access-<%=@name%>.log"
+      statefile="<%=@log_dir%>/.access-<%=@name%>.log"
+      Tag="apache-<%=@name%>: "
+      Severity="info"
+      Facility="local6")
+
+input(type="imfile"
+      File="<%=@log_dir%>/error-<%=@name%>.log"
+      statefile="<%=@log_dir%>/.error-<%=@name%>.log"
+      Tag="apache-error-<%=@name%>: "
+      Severity="error"
+      Facility="local6")
+<% if @listen_ports['ssl'] != false -%>
+
+input(type="imfile"
+      File="<%=@log_dir%>/ssl-access-<%=@name%>.log"
+      statefile="<%=@log_dir%>/.ssl-access-<%=@name%>.log"
+      Tag="apache-<%=@name%>: "
+      Severity="info"
+      Facility="local6")
+
+input(type="imfile"
+      File="<%=@log_dir%>/ssl-error-<%=@name%>.log"
+      statefile="<%=@log_dir%>/.ssl-error-<%=@name%>.log"
+      Tag="apache-error-<%=@name%>: "
+      Severity="error"
+      Facility="local6")
+<% end -%><% else -%>$InputFileName <%=@log_dir%>/access-<%=@name%>.log
+$InputFileTag apache-<%=@name%>:
+$InputFileStateFile apache-<%=@name%>
+$InputFileSeverity info
+$InputFileFacility local6
+$InputRunFileMonitor
+
+$InputFileName <%=@log_dir%>/error-<%=@name%>.log
+$InputFileTag apache-<%=@name%>:
+$InputFileStateFile apache-error-<%=@name%>
+$InputFileSeverity error
+$InputFileFacility local6
+$InputRunFileMonitor
+<% if @listen_ports['ssl'] != false -%>
+
+$InputFileName <%=@log_dir%>/ssl-access-<%=@name%>.log
+$InputFileTag apache-<%=@name%>:
+$InputFileStateFile apache-<%=@name%>
+$InputFileSeverity info
+$InputFileFacility local6
+$InputRunFileMonitor
+
+$InputFileName <%=@log_dir%>/ssl-error-<%=@name%>.log
+$InputFileTag apache-<%=@name%>:
+$InputFileStateFile apache-error-<%=@name%>
+$InputFileSeverity error
+$InputFileFacility local6
+$InputRunFileMonitor
+<% end -%><% end -%>

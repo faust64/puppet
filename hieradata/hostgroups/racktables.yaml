@@ -1,0 +1,34 @@
+additional_classes:
+  - Racktables
+
+# Apache
+apache_mod_action: true
+apache_mod_php: true
+apache_mod_status: true
+apache_mpm: prefork
+apache_munin: false
+apache_rsyslog: true
+
+# MySQL
+mysql_charset: utf8
+mysql_keep_backup: /media/backups
+mysql_munin: true
+
+# Nginx
+nginx_rsyslog: true
+
+# PHP
+php_mod_curl: true
+php_mod_json: true
+php_mod_gd: true
+php_mod_ldap: true
+php_mod_mysql: true
+php_mod_snmp: true
+
+# Racktables
+# /!\ WARNING /!\
+# before switching auth backend
+# go to Configuration/Permissions, add a few rules such as as:
+# allow {$username_${you_ldap_cn}}
+#racktables_auth_backend: local
+racktables_auth_backend: httpd

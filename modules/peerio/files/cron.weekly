@@ -1,0 +1,32 @@
+#!/bin/sh
+
+STATUSES="failed completed"
+if getent passwd peerioadmin >/dev/null 2>&1; then
+    dir=`echo ~peerioadmin`
+else
+    dir=/var/lib/pm2
+fi
+
+if test -d $dir -a -x /usr/share/peerio-server/admin/bin/kuemanager; then
+    test -s $dir/.profile && . $dir/.profile
+    test -s $dir/.bash_profile && . $dir/.bash_profile
+    . /var/lib/pm2/.profile
+    if echo "$RUN_WORKERS" | grep background >/dev/null 2>&1; then
+	cd /usr/share/peerio-server
+	if test "$REDIS_HOSTS"; then
+	    for host in $REDIS_HOSTS
+	    do
+		echo info | redis-cli -h $host | grep ^role:master >/dev/null || continue
+		rangestop=`echo info | redis-cli -h $host | awk -F= '/^db0:keys=/{print $2}' | cut -d, -f1`
+	    done
+	    test "$rangestop" -a "$rangestop" -gt 0 >/dev/null 2>&1 || rangestop=50000
+	    for status in $STATUSES
+	    do
+		echo removing $status on `date +%Y/%m/%d-%H:%M:%S`
+		./admin/bin/kuemanager remove $rangestop $status
+	    done >/var/log/peerio-server/jobs_removal.log 2>&1
+	fi
+    fi
+fi
+
+exit 0

@@ -1,0 +1,9 @@
+# PF
+mail_mx: 10.42.44.20
+
+# Postfix
+postfix_networks:
+  - 10.42.0.0/15
+
+# Spamassassin
+spamassassin_require_score: "0.5"

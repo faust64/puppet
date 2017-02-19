@@ -1,0 +1,40 @@
+zone "." {
+    type	hint;
+<% if @operatingsystem == "OpenBSD" -%>    file	"<%=@runtime_conf_dir%>/root.hint";
+};
+
+zone "localhost" {
+    type	master;
+    file	"standard/localhost";
+};
+
+zone "127.in-addr.arpa" {
+    type	master;
+    file	"standard/loopback";
+};
+
+zone "1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa" {
+    type	master;
+    file	"standard/loopback6.arpa";
+<% else -%>    file	"<%=@runtime_conf_dir%>/db.root";
+};
+
+zone "localhost" {
+    type	master;
+    file	"<%=@runtime_conf_dir%>/db.local";
+};
+
+zone "127.in-addr.arpa" {
+    type	master;
+    file	"<%=@runtime_conf_dir%>/db.127";
+};
+
+zone "0.in-addr.arpa" {
+    type	master;
+    file	"<%=@runtime_conf_dir%>/db.0";
+};
+
+zone "255.in-addr.arpa" {
+    type	master;
+    file	"<%=@runtime_conf_dir%>/db.255";
+<% end -%>};

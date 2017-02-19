@@ -1,0 +1,49 @@
+additional_classes:
+# - lilina
+# - miniflux
+  - selfoss
+  - tinytinyrss
+
+# Apache
+apache_listen_ports:
+  plain: 80
+  ssl: 443
+apache_mod_expires: true
+apache_mod_headers: true
+apache_mod_php: true
+
+# MySQL
+mysql_provider: mariadb
+
+# PHP
+php_mod_gd: true
+php_mod_json: true
+php_mod_ldap: true
+php_mod_ldap_pecl: true
+php_mod_mbstring: true
+php_mod_mysql: true
+php_mod_xml: true
+
+## Lilina
+#apache_mod_php: true
+#php_mod_curl: true
+#php_mod_mbstring: true
+#php_mod_xml: true
+## miniflux
+#apache_mod_php: true
+#php_mod_sqlite: true
+#php_mod_xml: true
+## selfoss
+#apache_mod_expires: true
+#apache_mod_headers: true
+#apache_mod_php: true
+#php_mod_gd: true
+#php_mod_json: true
+#php_mod_mysql: true
+## tinytinyrss
+#apache_mod_php: true
+#php_mod_ldap: true
+#php_mod_ldap_pecl: true
+#php_mod_mbstring: true
+#php_mod_mysql: true
+#php_mod_xml: true

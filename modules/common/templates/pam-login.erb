@@ -1,0 +1,39 @@
+<% if @kernel == "Linux" -%>auth		required	pam_tally2.so onerr=fail audit silent deny=5 unlock_time=900
+<% if @operatingsystem == "Debian" or @operatingsystem == "Ubuntu" -%>auth		optional	pam_faildelay.so delay=3000000
+auth		[success=ok new_authtok_reqd=ok ignore=ignore user_unknown=bad default=die] pam_securetty.so
+auth		requisite	pam_nologin.so
+session		[success=ok ignore=ignore module_unknown=ignore default=bad] pam_selinux.so close
+session		required	pam_env.so readenv=1
+session		required	pam_env.so readenv=1 envfile=/etc/default/locale
+@include common-auth
+auth		optional	pam_group.so
+session		required	pam_limits.so
+session		optional	pam_lastlog.so
+session		optional	pam_motd.so motd=/run/motd.dynamic
+session		optional	pam_motd.so
+session		optional	pam_mail.so standard
+@include common-account
+@include common-session
+@include common-password
+session		[success=ok ignore=ignore module_unknown=ignore default=bad] pam_selinux.so open
+<% elsif @operatingsystem == "CentOS" or @operatingsystem == "RedHat" -%>auth [user_unknown=ignore success=ok ignore=ignore default=bad] pam_securetty.so
+auth		include		system-auth
+account		required	pam_nologin.so
+account		include		system-auth
+password	include		system-auth
+session		required	pam_selinux.so close
+session		required	pam_loginuid.so
+session		optional	pam_console.so
+session		required	pam_selinux.so open
+session		required	pam_namespace.so
+session		optional	pam_keyinit.so force revoke
+session		include		system-auth
+-session	optional	pam_ck_connector.so
+<% end -%><% elsif @kernel == "FreeBSD" -%>auth		sufficient	pam_self.so		no_warn
+auth		include		system
+account		requisite	pam_securetty.so
+account		required	pam_nologin.so
+account		include		system
+session		include		system
+password	include		system
+<% end -%>

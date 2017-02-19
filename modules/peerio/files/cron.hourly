@@ -1,0 +1,16 @@
+#!/bin/sh
+
+if test -s /usr/share/peerio-shark/script/misc/zendesk_priority.js; then
+    test -s /var/lib/pm2/.profile && . /var/lib/pm2/.profile
+    test -s /var/lib/pm2/.bash_profile && . /var/lib/pm2/.bash_profile
+    if test "$ZENDESK_ACCOUNT" -a "$ZENDESK_API_EMAIL" -a "$ZENDESK_API_KEY"; then
+	cd /usr/share/peerio-shark
+	(
+	    echo starting on `date +"%Y/%m/%d - %H:%M:%S"`
+	    /usr/local/nodejs/bin/node ./script/misc/zendesk_priority.js
+	    echo done on `date +"%Y/%m/%d - %H:%M:%S"`
+	) >>/tmp/zendesk_prio 2>&1
+    fi
+fi
+
+exit 0

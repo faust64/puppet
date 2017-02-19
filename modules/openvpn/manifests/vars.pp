@@ -1,0 +1,42 @@
+class openvpn::vars {
+    $ad_ip                   = hiera("ad_ip")
+    $all_openvpns            = hiera("openvpn_database")
+    $contact_alerts          = hiera("contact_alerts")
+    $contact_alerts_openvpn  = hiera("contact_alerts_openvpn")
+    $dns_ip                  = hiera("dns_ip")
+    $dns_push                = hiera("dns_push")
+    $ldap_slave              = hiera("openldap_ldap_slave")
+    $munin_monitored         = hiera("openvpn_munin")
+    $munin_probes            = hiera("openvpn_munin_probes")
+    $netids                  = hiera("office_netids")
+    $netmask_map             = hiera("netmask_correspondance")
+    $office_netid            = $netids[$domain]
+    $openvpn_auth_source     = hiera("openvpn_auth_source")
+    $openvpn_base_suffix     = hiera("openldap_ldap_suffix")
+    $openvpn_conf_dir        = hiera("openvpn_conf_dir")
+    $openvpn_default_filter  = hiera("openvpn_default_filter")
+    $openvpn_keepalive       = hiera("openvpn_keepalive")
+    $openvpn_ldap_passphrase = hiera("openvpn_ldap_passphrase")
+    $openvpn_mute            = hiera("openvpn_mute")
+    $openvpn_push_default    = hiera("openvpn_push_default")
+    $openvpn_push_networks   = hiera("openvpn_push_networks")
+    $openvpn_searchuser      = hiera("openvpn_searchuser")
+    $openvpn_script_security = hiera("openvpn_script_security")
+    $openvpn_verbosity       = hiera("openvpn_verbosity")
+    $ovpn_networks           = hiera("active_openvpns")
+    $rotate                  = hiera("openvpn_rotate")
+    $rsyslog_conf_dir        = hiera("rsyslog_conf_dir")
+    $rsyslog_service_name    = hiera("rsyslog_service_name")
+    $rsyslog_version         = hiera("rsyslog_version")
+    $runtime_group           = hiera("openvpn_runtime_group")
+    $runtime_homedir         = hiera("openvpn_runtime_homedir")
+    $runtime_shell           = hiera("openvpn_runtime_shell")
+    $runtime_user            = hiera("openvpn_runtime_user")
+    $with_collectd           = hiera("openvpn_collectd")
+
+    if ($contact_alerts_openvpn) {
+	$alerts = $contact_alerts_openvpn
+    } else {
+	$alerts = $contact_alerts
+    }
+}

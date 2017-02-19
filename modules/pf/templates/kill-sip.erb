@@ -1,0 +1,23 @@
+
+#!/bin/sh
+
+export PATH=/sbin:/usr/bin
+<% @asterisks.each do |host| -%>asterisk=<%=host%>
+<% break -%><% end -%>
+peers="<% @sip_trunks.each do |sip, siphash| -%><% if siphash['host'] =~ /[a-z0-9]\.[a-z0-9]/ -%><%=siphash['host']%> <% end -%><% end -%>"
+
+for me in fw-alt fw-sip fw
+do
+    mefqdn=$me.<%=@short_domain%>.unetresgrossebite.com
+    if host $mefqdn >/dev/null 2>&1; then
+	for peer in $peers
+	do
+	    sudo pfctl -k $asterisk -k $peer
+	    sudo pfctl -k $peer -k $asterisk
+	    sudo pfctl -k $mefqdn -k $peer
+	    sudo pfctl -k $peer -k $mefqdn
+	done
+    fi
+done
+
+exit 0

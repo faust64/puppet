@@ -1,0 +1,51 @@
+<VirtualHost *:<%=@listen_ports['plain']%>>
+    ServerName <%=@name%>
+<% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
+<% end -%><% end -%>    ServerAdmin <%=@server_admin%>
+    ErrorLog <%=@log_dir%>/error-<%=@name%>.log
+    LogLevel warn
+    CustomLog <%=@log_dir%>/access-<%=@name%>.log combined
+<% if @listen_ports['ssl'] != false -%>    RewriteEngine On
+    RewriteRule ^/(.*) https://<%=@name%>/$1 [L,R]
+</VirtualHost>
+<VirtualHost *:<%=@listen_ports['ssl']%>>
+    ServerName <%=@name%>
+<% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
+<% end -%><% end -%>    ServerAdmin <%=@server_admin%>
+    ErrorLog <%=@log_dir%>/ssl-error-<%=@name%>.log
+    LogLevel warn
+<% if @stricttransport != false -%>    Header always set Strict-Transport-Security "<%=@stricttransport%>"
+<% end -%><% if @deny_frames == "remote" -%>    Header always set X-Frame-Options SAMEORIGIN
+<% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
+<% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
+<% end -%>    CustomLog <%=@log_dir%>/ssl-access-<%=@name%>.log combined
+    Include ssl.conf
+<% end -%>    DocumentRoot <%=@app_root%>
+    <Directory <%=@app_root%>>
+	Options FollowSymLinks MultiViews
+	AllowOverride None
+<% if @listen_ports['ssl'] != false and (@vhostldapauth == true or @vhostldapauth == "pubonly") -%>	Include authldap.conf
+<% if @vhostldapauth == "pubonly" -%>	Include allow.conf
+<% end -%><% elsif @version == "2.2" -%>	Order allow,deny
+	Allow from all
+<% else -%>	Require all granted
+<% end -%>    </Directory>
+    Alias /rhel/ /var/www/rhel/
+    Alias /rpm3 /var/www/rhel/3.9-32b
+    Alias /rpm39-32 /var/www/rhel/3.9-32b
+    Alias /rpm4 /var/www/rhel/4.7-64b
+    Alias /rpm47-64 /var/www/rhel/4.7-64b
+    Alias /rpm52 /var/www/rhel/5.2-32b
+    Alias /rpm53 /var/www/rhel/5.3-32b
+    Alias /rpm54-64 /var/www/rhel/5.4-64b
+    Alias /rpm55-64 /var/www/rhel/5.5-64b
+    Alias /rpm56-32 /var/www/rhel/5.6-32b
+    Alias /rpm56-64 /var/www/rhel/5.6-64b
+    Alias /rpm6-64 /var/www/rhel/6.0-64b
+    Alias /rpm60-64 /var/www/rhel/6.0-64b
+    Alias /rpm61-64 /var/www/rhel/6.1-64b
+    Alias /rpm63-64 /var/www/rhel/6.3-64b
+    Alias /rpm64-64 /var/www/rhel/6.4-64b
+    Alias /rpm65-64 /var/www/rhel/6.5-64b
+    Alias /rpm66-64 /var/www/rhel/6.6-64b
+</VirtualHost>

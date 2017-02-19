@@ -1,0 +1,15 @@
+PIDFILE=<%=@run_dir%>/unbound.pid
+RESOLVCONF=false
+RESOLVCONF_FORWARDERS=true
+ROOT_TRUST_ANCHOR_FILE=<%=@var_dir%>/root.key
+ROOT_TRUST_ANCHOR_UPDATE=true
+UNBOUND_ENABLE=true
+
+if ! test -d <%=@run_dir%>; then
+    mkdir -p <%=@run_dir%>
+    chown <%=@runtime_user%>:<%=@runtime_group%> <%=@run_dir%>
+fi
+<% if @do_public == true -%>#if ! test -f <%=@conf_dir%>/blocklist.conf; then
+#    /usr/local/sbin/blocklist_gen
+#fi
+<% end -%>

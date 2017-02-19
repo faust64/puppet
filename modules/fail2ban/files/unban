@@ -1,0 +1,45 @@
+#!/bin/sh
+
+from=all
+hosts=""
+VERBOSE=false
+
+while test "$1"
+do
+    if test "$1" = '-v' -o "$1" = '--verbose'; then
+	shift
+	VERBOSE=true
+	continue
+    elif test "$1" = from; then
+	shift
+	from="$@"
+	break
+    fi
+    hosts="$hosts $1"
+    shift
+done
+
+if test "$from" = all; then
+    from=`fail2ban-client status | grep 'Jail list' | sed -e 's|^[^:]*:[ \t]*||' -e 's|,||g'`
+fi
+
+for jail in $from
+do
+    for target in $hosts
+    do
+	match=`echo $target | sed 's|\.|\\.|g'`
+	if fail2ban-client status $jail | grep -E "[^0-9]$match($|[ \t])" >/dev/null; then
+	    if fail2ban-client set $jail unbanip $target >/dev/null 2>&1; then
+		if $VERBOSE; then
+		    echo "removed $target from $jail"
+		fi
+	    else
+		echo "failed removing $target from $jail" >&2
+	    fi
+	elif $VERBOSE; then
+	    echo "host $target not found in $jail"
+	fi
+    done
+done
+
+exit 0

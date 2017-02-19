@@ -1,0 +1,24 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+ret=OK
+
+if ! ps ax | grep -i 'r[a]dius' >/dev/null; then
+    ret=CRITICAL
+    msg="freeradius not running"
+    perfdata=0
+else
+    perfdata=1
+fi
+
+test -z "$ret" && ret=OK
+test "$msg" && msg=" -$msg"
+test "$perfdata" && perfdata=" | $perfdata"
+
+echo "$ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

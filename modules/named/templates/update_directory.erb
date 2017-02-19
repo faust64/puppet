@@ -1,0 +1,31 @@
+#!/bin/sh
+
+export PATH=/usr/sbin:/sbin:/usr/bin:/bin
+
+DOMAIN=dhcp.<%=@domain%>
+DHCP_ZONE=<%=@zone_dir%>/dynamic/db.$DOMAIN
+<% if @contact != false -%>DEST=<%=@contact%>
+<% end -%>
+if ! grep '^_ldap' $DHCP_ZONE; then
+    if rndc freeze $DOMAIN; then
+	(
+	    echo '$TTL 108000	; 1 mounth'
+	    echo "_ldap._tcp		SRV	0 0 389	<%=@ldap_slave%>."
+	) >>$DHCP_ZONE
+	if ! rndc thaw $DOMAIN; then
+	    echo "Failed to unfreeze $DOMAIN"<% if @contact != false -%> | mail -s "[CRITICAL] frozen DHCP zone" $DEST
+<% else -%>
+<% end -%>	    exit 2
+	fi
+	echo "$DOMAIN succesfully updated"<% if @contact != false -%> | mail -s "[REPORT] Updating DHCP zone" $DEST
+<% else -%>
+<% end -%>
+    else
+	echo "Failed to freeze $DOMAIN"<% if @contact != false -%> | mail -s "[ERROR] unable to freeze DHCP zone" $DEST
+<% else -%>
+<% end -%>	exit 1
+    fi
+fi<% if @contact !- false -%> >/dev/null 2>&1
+<% else -%>
+<% end -%>
+exit 0

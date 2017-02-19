@@ -1,0 +1,31 @@
+Director {
+    Name = <%=@director_host%>-dir
+    Password = <%=@storage_pass%>
+}
+
+Storage {
+    Maximum Concurrent Jobs = <%=@max_concurrent_jobs%>
+    Name = <%=@fqdn%>-sd
+    Pid Directory = "<%=@run_dir%>"
+    SDAddress = <%=@bind_addr%>
+    SDPort = <%=@storage_port%>
+    WorkingDirectory = "<%=@work_dir%>"
+}
+
+Device {
+    AlwaysOpen = no
+    Archive Device = <%=@archive_device%>
+    Automatic Mount = yes
+    Device Type = File
+    LabelMedia = yes
+    Media Type = File
+    Name = FileStorage
+    Random Access = yes
+    RemovableMedia = no
+}
+
+Messages {
+    Name = Standard
+    director = <%=@director_host%>-dir = all, !skipped, !restored
+    syslog = all, !skipped
+}

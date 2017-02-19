@@ -1,0 +1,37 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+if test -d /etc/init.d; then
+    if ! /etc/init.d/rsyslog status >/dev/null; then
+	ret=CRITICAL
+	msg=" - rsyslog not running"
+	perfdata=" | 0"
+    fi
+else
+    if ! /etc/rc.d/rsyslog status; then
+	ret=CRITICAL
+	msg=" - rsyslog not running"
+	perfdata=" | 0"
+    fi
+fi
+#FIXME (?)
+#if test -z "$msg"; then
+#    if ! netstat -lan | grep '[:\.]514[ 	]*ESTABLISHED' >/dev/null; then
+#	ret=WARNING
+#	msg=" - not retransmitting to rsyslog proxy"
+#	perfdata=" | 0"
+#    fi
+#fi
+if test -z "$msg"; then
+    ret=OK
+    perfdata=" | 1"
+fi
+
+echo "$PRG $ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

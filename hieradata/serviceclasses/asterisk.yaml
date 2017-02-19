@@ -1,0 +1,56 @@
+additional_classes:
+# - Bacula
+  - Asterisk
+  - Fail2ban
+
+# Asterisk
+asterisk_conference_rooms:
+  sip.intra.unetresgrossebite.com:
+    "26631":
+      description: Conference Room 1
+#     did: "141405991"
+#     pinuser: "4242"
+#     pinadmin: "42424242"
+    "26632":
+      description: Conference Room 2
+    "26633":
+      description: Conference Room 3
+    "26634":
+      description: Conference Room 4
+asterisk_munin: true
+asterisk_ring_groups:
+  sip.intra.unetresgrossebite.com:
+    "601":
+#     did: "0954032334"
+      description: Debordement accueil
+      fallback: ext-group,602
+      members:
+        - "4244"
+    "602":
+      description: Accueil
+      fallback: ext-group,601
+      members:
+        - "4242"
+      ringtime: "30"
+
+# Bacula
+#bacula_file_daemon_fileset:
+#  - /etc/asterisk
+#  - /var/spool/asterisk/voicemail
+
+# Fail2ban
+fail2ban_do_asterisk: true
+
+# Nagios
+nagios_iconimage: utgb/asterisk.png
+nagios_iconimagealt: asterisk
+nagios_statusmapimage: utgb/asterisk.gd2
+
+# PHP
+php_is_cli: true
+
+# OSSEC
+ossec_app_directories:
+  /etc/asterisk: false
+  /var/www:
+    restrict: ".php|.js|.py|.sh|.html"

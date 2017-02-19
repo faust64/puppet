@@ -1,0 +1,29 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+perfdata=0
+res=OK
+
+if test -s /etc/default/opendkim; then
+    PORT=`awk -F= '/^[ \t]*SOCKET=/{print $2}' /etc/default/opendkim 2>/dev/null | sed 's|.*inet:\([0-9]*\)@.*|\1|'`
+fi
+if test -z "$PORT"; then
+    msg=" - no opendkim"
+    res=$UNKNOWN
+elif ! ps ax | grep '/[o]pendkim ' >/dev/null; then
+    msg=" - opendkim not running"
+    res=$CRITICAL
+elif ! netstat -lant 2>/dev/null | grep "127.0.0.1:$PORT.*LISTEN" >/dev/null; then
+    msg=" - opendkim not listening on :$PORT"
+    res=$WARNING
+else
+    perfdata="| 1"
+fi
+
+echo "$res$msg$perfdata"
+eval res=\$$res
+exit $res

@@ -1,0 +1,10 @@
+additional_classes:
+  - Riakcs
+
+riak_bucket_types: false
+riak_do_fullsync: false
+riak_listen: 10.255.125.16
+riak_enterprise: false
+riak_register: false
+riak_security: false
+riak_ssl: false

@@ -1,0 +1,40 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+us=`/sbin/ifconfig carp1 | grep -A4 MASTER | awk '/[ 	]inet[ 	]/{print $2}'`
+
+while test "$1"
+do
+    if test x$1 = x-s; then
+	src=$2
+    elif test x$1 = x-d; then
+	dst=$2
+    else
+	echo UNKNOWN - unknown option
+	exit $UNKNOWN
+    fi
+    shift 2
+done
+
+if test x$src = x -o x$dst = x; then
+    ret=UNKNOWN
+    str=" - missing argument"
+elif test x$us = x; then
+    ret=OK
+    str=" - BACKUP"
+elif ! ping -c 2 -w 3 -S $src $dst; then
+    ret=CRITICAL
+elif ! ping -c 2 -w 1 -S $src $dst; then
+    ret=WARNING
+else
+    ret=OK
+fi >/dev/null 2>&1
+
+echo "LINK $ret$str"
+eval ret=\$$ret
+exit $ret

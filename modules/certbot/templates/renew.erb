@@ -1,0 +1,187 @@
+#!/bin/sh
+
+DEST=<%=@contact%>
+<% if @slack_hook != false -%>HOOK_URL=<%=@slack_hook%>
+<% end -%>if test -x /bin/systemctl; then
+    SYSTEMCTL=true
+else
+    SYSTEMCTL=false
+fi
+APACHE_SSL=<%=@apache_dir%>/ssl
+NGINX_SSL=<%=@nginx_dir%>/ssl
+POSTFIX_SSL=<%=@postfix_dir%>/ssl
+
+if grep 'Listen 443' <%=@apache_dir%>/ports.conf >/dev/null 2>&1; then
+    APACHE_HOOK=true
+else
+    APACHE_HOOK=false
+fi
+if grep -RE 'listen[ \t]*443' <%=@nginx_dir%>/sites-enabled >/dev/null 2>&1; then
+    NGINX_HOOK=true
+    if test -x /etc/init.d/bm-nginx; then
+	NGINXNAME=bm-nginx
+    else
+	NGINXNAME=nginx
+    fi
+else
+    NGINX_HOOK=false
+fi
+cd /etc/letsencrypt/live
+ls | while read CN
+    do
+	test "$CN" = certbot.log && continue
+	if $NGINX_HOOK; then
+	    if $SYSTEMCTL; then
+		if ! systemctl stop $NGINXNAME; then
+		    FAILED="$FAILED stopping $NGINXNAME"
+		fi
+	    elif ! service $NGINXNAME stop; then
+		FAILED="$FAILED stopping $NGINXNAME"
+	    fi
+	fi
+	if $APACHE_HOOK; then
+	    if $SYSTEMCTL; then
+		if ! systemctl stop <%=@apache_service_name%>; then
+		    FAILED="$FAILED stopping apache"
+		fi
+	    elif ! service <%=@apache_service_name%> stop; then
+		FAILED="$FAILED stopping apache"
+	    fi
+	fi
+	for try in 1 2 3
+	do
+	    aliases=`openssl x509 -text -noout -in /etc/letsencrypt/live/$CN/cert.pem | grep DNS: | sed -e 's|DNS:||g' -e 's| ||g' -e 's|,| --domain |g'`
+	    test -z "$aliases" && aliases=$CN
+	    if certbot certonly --standalone --text --email $DEST --agree-tos --domain $aliases --renew-by-default; then
+		report="`echo $aliases | sed 's|--domain|\&|g'`"
+		if test -x /usr/local/bin/slack -a "$HOOK_URL"; then
+		    /usr/local/bin/slack $HOOK_URL "REPORT: successfully renewed $report"
+		elif test -x /usr/bin/mail; then
+		    echo successfully renewed $report | mail -s "[REPORT] LetsEncrypt for $CN"
+		else
+		    echo successfully renewed $report
+		fi
+		break
+	    fi
+	    if test "$try" -eq 3; then
+		if test -x /usr/local/bin/slack -a "$HOOK_URL"; then
+		    /usr/local/bin/slack $HOOK_URL "WARNING: failed to renew $CN"
+		elif test -x /usr/bin/mail; then
+		    echo failed to renew $CN | mail -s "[WARNING] LetsEncrypt for $CN"
+		else
+		    echo failed to renew $CN
+		fi
+		if $NGINX_HOOK; then
+		    if $SYSTEMCTL; then
+			if ! systemctl start $NGINXNAME; then
+			    FAILED="$FAILED starting $NGINXNAME"
+			fi
+		    elif ! service $NGINXNAME start; then
+			FAILED="$FAILED starting $NGINXNAME"
+		    fi
+		fi
+		if $APACHE_HOOK; then
+		    if $SYSTEMCTL; then
+			if ! systemctl start <%=@apache_service_name%>; then
+			    FAILED="$FAILED starting apache"
+			fi
+		    elif ! service <%=@apache_service_name%> start; then
+			FAILED="$FAILED starting apache"
+		    fi
+		fi
+		exit 1
+	    fi
+	    sleep 10
+	done
+    done
+
+if test -L $APACHE_SSL/server.crt; then
+    if realpath $APACHE_SSL/server.crt | grep /letsencrypt/ >/dev/null; then
+	DEPENDENT_SERVICES="$DEPENDENT_SERVICES <%=@apache_service_name%>"
+    fi
+    (
+	cd $APACHE_SSL
+	cat server.crt dh.pem >dhserver.crt
+	cat server-full.crt dh.pem >dhserver-full.crt
+	chown root:root dhserver.crt dhserver-full.crt
+	chmod 0644 dhserver.crt dhserver-full.crt
+    )
+fi
+if test -L $NGINX_SSL/server.crt; then
+    if realpath $NGINX_SSL/server.crt | grep /letsencrypt/ >/dev/null; then
+	DEPENDENT_SERVICES="$DEPENDENT_SERVICES $NGINXNAME"
+    fi
+    (
+	cd $NGINX_SSL
+	cat server.crt dh.pem >dhserver.crt
+	cat server-full.crt dh.pem >dhserver-full.crt
+	chown root:root dhserver.crt dhserver-full.crt
+	chmod 0644 dhserver.crt dhserver-full.crt
+    )
+fi
+if test -s /etc/ssl/certs/bm_cert.pem; then
+    cd /etc/letsencrypt/live
+    ls | while read CN
+	do
+	    test "$CN" = certbot.log && continue
+	    if test -s /etc/letsencrypt/live/$CN/privkey.pem -a -s /etc/letsencrypt/live/$CN/fullchain.pem; then
+		cat /etc/letsencrypt/live/$CN/privkey.pem /etc/letsencrypt/live/$CN/fullchain.pem >/etc/ssl/certs/bm_cert.pem
+		break
+	    fi
+	done
+    DEPENDENT_SERVICES="$DEPENDENT_SERVICES bm-nginx postfix"
+elif test -L $POSTFIX_SSL/server.crt; then
+    if realpath $POSTFIX_SSL/server.crt | grep /letsencrypt/ >/dev/null; then
+	DEPENDENT_SERVICES="$DEPENDENT_SERVICES postfix"
+    fi
+fi
+for service in $DEPENDENT_SERVICES
+do
+    if $SYSTEMCTL; then
+	if systemctl status $service; then
+	    if ! systemctl reload $service; then
+		if ! systemctl restart $service; then
+		    FAILED="$FAILED $service"
+		fi
+	    fi
+	elif ! systemctl restart $service; then
+	    FAILED="$FAILED $service"
+	fi
+    elif service $service status; then
+	if ! service $service reload; then
+	    if ! service $service restart; then
+		FAILED="$FAILED $service"
+	    fi
+	fi
+    elif ! service $service restart; then
+	FAILED="$FAILED $service"
+    fi
+done
+
+if test -x /usr/local/bin/slack -a "$HOOK_URL"; then
+    if test "$FAILED"; then
+	/usr/local/bin/slack $HOOK_URL "CRITICAL: failed reloading$FAILED on `hostname -f`"
+    else
+	/usr/local/bin/slack $HOOK_URL "REPORT: successfully reloaded $DEPENDENT_SERVICES on `hostname -f`"
+    fi
+elif test -x /usr/bin/mail; then
+    if test "$FAILED"; then
+	echo failed reloading$FAILED | mail -s "[CRITICAL] LetsEncrypt certificates" $DEST
+    else
+	echo successfully reloaded $DEPENDENT_SERVICES | mail -s "[REPORT] LetsEncrypt certificates" $DEST
+    fi
+else
+    if test "$FAILED"; then
+	echo renewed certificates, then failed reloading$FAILED >&2
+    else
+	echo renewed certificates and reloaded $DEPENDENT_SERVICES
+    fi
+fi
+
+if test -z "$FAILED"; then
+    if test -s /etc/letsencrypt/propagate.conf -a -x /usr/local/sbin/le_push; then
+	/usr/local/sbin/le_push
+    fi
+fi
+
+exit 0

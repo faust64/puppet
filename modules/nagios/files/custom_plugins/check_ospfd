@@ -1,0 +1,49 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+PATH="/usr/local/sbin:/usr/sbin:/sbin:$PATH"
+export PATH
+ret=OK
+str=
+yo=`/sbin/ifconfig carp1 | grep -A4 MASTER | awk '/[ 	]inet[ 	]/{print $2;exit;}'`
+if test -z "$yo"; then
+    ret=OK
+    str=" - BACKUP"
+elif ! ps ax | awk '/ospf[d]: /{print $6" "$7}' | grep 'parent'; then
+    ret=CRITICAL
+    str=" - no root process"
+elif ! ps ax | awk '/ospf[d]: /{print $6" "$7}' | grep 'route'; then
+    ret=CRITICAL
+    str=" - no RDE engine"
+elif ! ps ax | awk '/ospf[d]: /{print $6" "$7}' | grep 'ospf'; then
+    ret=WARNING
+    str=" - no OSPF engine"
+elif ! test -S /var/run/ospfd.sock; then
+    ret=CRITICAL
+    str=" - no socket"
+fi >/dev/null 2>&1
+if test "$yo"; then
+    cpl=$(sudo ospfctl show nei 2>/dev/null | \
+	  awk '/^[0-9]/{print $1" "$3" "$6}' | \
+	  while read host state nic
+	  do
+	      echo $state | grep FULL >/dev/null && continue
+	      str="$str - $host@$nic is $state"
+	  done)
+    test "$ret" = OK -a "$cpl" && ret=WARNING
+    str="$str$cpl"
+    nroutes=`sudo ospfctl show rib 2>/dev/null | awk 'BEG{cnt=0}/^[0-9]/{cnt=cnt+1}END{print cnt}'`
+    test -z "$nroutes" && nroutes=0
+    test "$nroutes" = 0 -a "$ret" = OK && ret=WARNING
+    perfdata=" | $nroutes"
+    str=" - $nroutes received routes$str"
+fi
+
+echo "$ret$str$perfdata"
+eval ret=\$$ret
+exit $ret

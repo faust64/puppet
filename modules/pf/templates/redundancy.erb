@@ -1,0 +1,7 @@
+<% @local_networks[@domain].each do |nic| -%><% if nic['rootif'] =~ /[a-z]*[0-9]*/ -%>pass in quick on <%=nic['name']%> inet proto $c
+<% end -%><% end -%><% @main_networks.each do |nic| -%><% if nic['carpaddr'] =~ /[0-9]*\.[0-9]*/ -%>pass in quick on <%=nic['name']%> inet proto $c
+<% end -%><% if nic['pfsync'] == true -%>pass in quick on <%=nic['name']%> inet proto $s
+pass in quick on <%=nic['name']%> inet proto $t from <% if @sasyncd_peer -%><%=@sasyncd_peer%><% else -%>any<% end -%> to <%=nic['addr']%> port isakmp
+<% if nic['dedicatedsync'] == true -%>pass in quick on <%=nic['name']%> inet proto $t
+<% end -%><% if @sasyncd_peer -%>pass in quick on <%=nic['name']%> inet proto $i from <%=@sasyncd_peer%> to <%=nic['addr']%>
+<% end -%><% end -%><% end -%>

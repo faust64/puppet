@@ -1,0 +1,41 @@
+<% if 0 == 1 %>[main]
+logdir = /var/log/puppet
+vardir = <%=@puppet_var_dir%>
+ssldir = <%=@puppet_var_dir%>/ssl
+rundir = <%=@puppet_run_dir%>
+factpath = $vardir/lib/facter
+pluginsync = true
+
+[<%=@puppet_tag%>]
+server = <%=@puppet_master%>
+reports = tagmail,store,log
+report = true
+report_serialization_format = pson
+runinterval = <%=@puppet_run_itv%>
+splaylimit = <%=@puppet_run_itv%>
+rrdinterval = <%=@puppet_run_itv%>
+puppetport = 8139
+listen = true
+configtimeout = 300
+<% if @fqdn == @puppet_master -%>[master]
+ssl_client_header = SSL_CLIENT_S_DN
+ssl_client_verify_header = SSL_CLIENT_VERIFY
+reports = store,puppetdb
+eporturl = http://<%=@puppet_master%>:3000/reports/upload
+storeconfigs = true
+storeconfigs_backend = puppetdb
+<% end -%><% else %><% if @fqdn == @puppet_master -%>[master]
+vardir = /opt/puppetlabs/server/data/puppetserver
+logdir = /var/log/puppetlabs/puppetserver
+rundir = /var/run/puppetlabs/puppetserver
+pidfile = /var/run/puppetlabs/puppetserver/puppetserver.pid
+codedir = /etc/puppetlabs/code
+storeconfigs = true
+storeconfigs_backend = puppetdb
+reports = store,puppetdb
+<% else %>[main]
+certname = <%=@fqdn%>
+server = <%=@puppet_master%>
+environment = production
+runinterval = 1h
+<% end %><% end %>

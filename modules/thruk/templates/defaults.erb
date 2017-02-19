@@ -1,0 +1,2 @@
+STARTTIMEOUT=<%=@start_timeout%>
+STARTURL="http<% if @listen_ports['ssl'] != false -%>s<% end -%>://thruk.<%=@domain%>/thruk/cgi-bin/remote.cgi?startup"

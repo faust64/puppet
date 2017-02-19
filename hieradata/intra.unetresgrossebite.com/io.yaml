@@ -1,0 +1,88 @@
+hostid: 3
+jumeau: zeus
+nagios_no_parent: true
+
+# BGPD
+bgp_router_id: 10.42.242.3
+
+# Ifstated
+ifstated_alt_gateway: false
+ifstated_peer: 10.42.44.5
+
+# Munin / Munin-Node
+munin_node_listenaddr: 10.42.242.3
+
+# Nagios
+nagios_icmp_proof: 8.8.8.8
+nagios_listenaddr: 10.42.242.3
+
+# Networks
+#gre_tunnels:
+#  "0":
+#    description: "LeaseWeb via ADSL"
+#    innerlocal: 192.168.255.2
+#    innerremote: 192.168.255.255
+#    local: 172.16.42.2
+#    remote: 172.16.42.43
+#  "1":
+#    description: "LeaseWeb via SDSL"
+#    innerlocal: 192.168.255.6
+#    innerremote: 192.168.255.254
+#    local: 10.42.242.3
+#    remote: 10.43.1.1
+net_ifs:
+  - name: em1
+    mtu: 9008
+  - name: em2
+    mtu: 9008
+  - name: em3
+    mtu: 9008
+  - name: vlan1000
+    asterisk: 78.193.67.92
+    bcast: 78.193.67.255
+    carpaddr: 78.193.67.92
+    carpvhid: 1
+    gw: 78.193.67.254
+    mx: 78.193.67.92
+    netmsk: 255.255.255.0
+    reverse: 78.193.67.92
+    rootif: em0
+    routes:
+      - net: 212.27.38.0/24
+        wat: to free
+      - net: 212.27.52.0/24
+        wat: to free
+      - net: 159.203.22.84/32
+        wat: pki.digitalocean
+      - net: 54.170.0.0/13
+        wat: amazon-us-east-1
+    sipout: true
+    vid: 1000
+    vpn: 78.193.67.92
+  - name: vlan1003
+    addr: 192.168.10.200
+    bcast: 192.168.10.255
+    carpaddr: 192.168.10.254
+    carpvhid: 12
+    default: true
+    gw: 192.168.10.1
+    netmsk: 255.255.255.0
+    rootif: em0
+    vid: 1003
+  - name: trunk0
+    addr: 172.16.42.2
+    bcast: 172.16.42.7
+    netmsk: 255.255.255.248
+    pfsync: true
+    proof: 10.42.242.9
+    trunkopts: trunkport em1 trunkport em2 trunkport em3
+    trunkproto: lacp
+
+# OSPF
+ospf_router_id: 10.42.242.3
+
+# SAsyncd
+sasyncd_peer: 172.16.42.4
+
+# SNMP
+snmp_listenaddr: 10.42.242.3

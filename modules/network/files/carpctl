@@ -1,0 +1,34 @@
+#!/bin/sh
+
+usage()
+{
+    echo "Usage: $0 [advbase xx|advskew yy|state MASTER|...]"
+    echo "       $0 xx:yy[:[MASTER|BACKUP]"
+    exit 1
+}
+
+if test -z "$1"; then
+    usage >&2
+elif echo "$1" | grep -E '^([0-9][0-9]*):([0-9][0-9]*)' >/dev/null; then
+    eval `echo "$1" | sed 's|^\([0-9][0-9]*\):\([0-9][0-9]*\):*.*|base=\1 skew=\2|'`
+    if echo "$1" | grep -i ':MASTER'; then
+	state=" state MASTER"
+    elif echo "$1" | grep -i ':BACKUP'; then
+	state=" state BACKUP"
+    fi >/dev/null
+    cmd="advbase $base advskew $skew$state"
+elif test "$1" = down -o "$1" = up -o "$1" = destroy; then
+    cmd="$1"
+elif test "$2"; then
+    cmd="$@"
+else
+    usage
+fi
+
+for i in /etc/hostname.carp*
+do
+    itf=${i#/etc/hostname.}
+    /sbin/ifconfig $itf $cmd
+done
+
+exit $?

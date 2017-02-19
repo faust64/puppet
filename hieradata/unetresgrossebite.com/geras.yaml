@@ -1,0 +1,36 @@
+additional_classes:
+  - Fail2ban
+
+# Collectd
+with_collectd: false
+
+# LinuxCounter
+lico_update_day: 1
+lico_update_hour: 15
+lico_update_min: 16
+
+# Munin-Node
+munin_node_listenaddr: 37.59.45.201
+
+# Nagios
+nagios_listenaddr: 37.59.45.201
+nagios_md_raid:
+  - md1
+  - md2
+nagios_no_parent: true
+nagios_partitions_watchlist:
+  root: /
+nagios_smart_disks:
+  - sda
+  - sdb
+
+# OpenVZ/Xen/KVM
+vz_default_gateway: 37.59.45.201
+
+# PF
+dns_ip:
+  - 127.0.0.1
+  - 188.165.212.140
+
+# SNMP
+snmp_listenaddr: 37.59.45.201

@@ -1,0 +1,5 @@
+[general]
+persistentmembers = yes
+[default]
+<% if @queues -%><% @queues.each do |exten, exthash| -%>#include queues.conf.d/<%=exten%>.conf
+<% end -%><% end -%>

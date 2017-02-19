@@ -1,0 +1,32 @@
+<% if 0 == 1 -%># since 5.x:
+#ES_HOME=/usr/share/elasticsearch
+#JAVA_HOME=
+#CONF_DIR=/etc/elasticsearch
+#DATA_DIR=/var/lib/elasticsearch
+#LOG_DIR=/var/log/elasticsearch
+#PID_DIR=/var/run/elasticsearch
+#ES_JAVA_OPTS=
+#RESTART_ON_UPGRADE=true
+#ES_USER=elasticsearch
+#ES_GROUP=elasticsearch
+#MAX_OPEN_FILES=65536
+#MAX_LOCKED_MEMORY=unlimited
+#MAX_MAP_COUNT=262144
+<% elsif 0 == 1 -%>#legacy unused tunables:
+#ES_HEAP_SIZE=2g
+#ES_HEAP_NEWSIZE=
+#ES_DIRECT_SIZE=
+#MAX_OPEN_FILES=65535
+#MAX_LOCKED_MEMORY=unlimited
+#MAX_MAP_COUNT=262144
+#ES_JAVA_OPTS=
+#RESTART_ON_UPGRADE=true
+<% end -%><% if @version == "5.x" -%>ES_STARTUP_SLEEP_TIME=5
+<% else -%>ES_USER=elasticsearch
+ES_GROUP=elasticsearch
+LOG_DIR=/var/log/elasticsearch
+DATA_DIR=/var/lib/elasticsearch
+WORK_DIR=/tmp/elasticsearch
+CONF_DIR=/etc/elasticsearch
+CONF_FILE=$CONF_DIR/elasticsearch.yml
+<% end -%>

@@ -1,0 +1,15 @@
+# nodejs
+[Unit]
+Description=PKI distributor
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/sbin/nodejsservice start
+ExecReload=/usr/local/sbin/nodejsservice restart
+ExecStop=/usr/local/sbin/nodejsservice stop
+TimeoutStopSec=5
+KillMode=mixed
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,41 @@
+#!/bin/sh
+
+export PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
+
+<% if @contact -%>DEST=<%=@contact%>
+<% end -%><% if @slack_hook != false -%>HOOK_URL=<%=@slack_hook%>
+<% end -%>HOSTNAME=`hostname -f`
+TMPFILE=/tmp/dpkg-dist_removed
+drop=false
+notify=false
+if test "$1" = remove; then
+    drop=true
+elif test "$1" = cron; then
+    notify=true
+fi
+
+find /etc -name '*.dpkg-dist' >$TMPFILE
+if test -s $TMPFILE; then
+    if $notify; then
+        if test "$HOOK_URL" -a -x /usr/local/bin/slack; then
+	    while read line
+	    do
+		/usr/local/bin/slack $HOOK_URL "WARNING: inactive new configuration on $HOSTNAME - $line"
+	    done <$TMPFILE
+	elif test "$DEST"; then
+	    cat $TMPFILE | mail -s"[WARNING] inactive new configurations on $HOSTNAME" $DEST
+	else
+	    cat $TMPFILE
+	fi
+    elif $drop; then
+	while read line
+	do
+	    test -e "$line" && rm -f "$line"
+	done <$TMPFILE
+    else
+	cat $TMPFILE
+    fi
+fi
+rm -f $TMPFILE
+
+exit 0

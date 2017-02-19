@@ -1,0 +1,14 @@
+/var/log/tor/*log
+{
+    compress
+    create 0640 <%=@runtime_user%> <%=@gid_adm%>
+    daily
+    delaycompress
+    missingok
+    notifempty
+    rotate 3
+    sharedscripts
+    postrotate
+	service tor reload >/dev/null 2>&1 || true
+    endscript
+}

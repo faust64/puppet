@@ -1,0 +1,38 @@
+#!/bin/sh
+
+DEST=<%=@contact%>
+<% if @slack_hook -%>HOOK_URL=<%=@slack_hook%>
+<% end -%>HOSTNAME=`hostname -f`
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+for try in 1 2 3
+do
+    if /usr/sbin/riak ping >/dev/null 2>&1; then
+	echo "riak healthy"
+	exit 0
+    fi
+    echo "riak appears to be down (try: $try)" >&2
+done
+
+echo "stopping riak, for hygiene purposes"
+/etc/init.d/riak stop >/dev/null 2>&1
+
+echo "starting riak"
+if ! /etc/init.d/riak start; then
+    if test -x /usr/local/bin/slack -a "$HOOK_URL"; then
+	/usr/local/bin/slack $HOOK_URL "[CRITICAL] failed recovering riak on $HOSTNAME"
+    elif test -x /usr/bin/mail -a "$DEST"; then
+	echo "failed recovering riak" | /usr/bin/mail -s "[CRITICAL] $HOSTNAME" $DEST
+    else
+	echo "failed recovering riak" >&2
+    fi
+    exit 1
+elif test -x /usr/local/bin/slack -a "$HOOK_URL"; then
+    /usr/local/bin/slack $HOOK_URL "[WARNING] riak started back on $HOSTNAME"
+elif test -x /usr/bin/mail -a "$DEST"; then
+    echo "started riak back" | /usr/bin/mail -s "[WARNING] $HOSTNAME" $DEST
+else
+    echo "started riak back"
+fi
+
+exit 0

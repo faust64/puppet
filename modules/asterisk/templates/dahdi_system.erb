@@ -1,0 +1,7 @@
+<% @channels.each do |span, chan| -%>span=<%=span%>
+bchan=<%=chan['channels'].join(',')%>
+dchan=<%=chan['control']%>
+echocanceller=oslec,<%=chan['channels'].join(',')%>
+<% end -%>
+loadzone = <%=@locale%>
+defaultzone = <%=@locale%>

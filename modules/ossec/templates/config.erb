@@ -1,0 +1,81 @@
+<ossec_config>
+<% if @manager != false -%>  <client>
+    <server-ip><%=@manager%></server-ip>
+  </client>
+<% else -%>  <global>
+<% if @whitelist != false -%><% @whitelist.each do |remote| -%>    <white_list><%=remote%></white_list>
+<% end -%><% end -%>    <email_notification><% if @contact != false -%>yes<% else -%>no<% end -%></email_notification>
+<% if @contact != false -%>    <email_to><%=@contact%></email_to>
+    <smtp_server><%=@mail_relay%></smtp_server>
+    <email_from><%=@mail_from%></email_from>
+<% end -%>  </global>
+<% if @rules != false -%>  <rules>
+<% @rules.each do |rule| -%>    <include><%=rule%>.xml</include>
+<% end -%>  </rules>
+<% end -%><% end -%>  <syscheck>
+    <frequency><%=@frequency%></frequency>
+<% if @check_directories != false -%>    <directories<% if @realtime == true -%> realtime="yes"<% end -%><% if @report_changes == true -%> report_changes="yes"<% end -%> check_all="yes"><%=@check_directories.join(',')%></directories>
+<% end -%><% if @app_directories != false -%><% @app_directories.keys.each do |dir| -%>    <directories<% if @app_directories[dir] != false -%><% @app_directories[dir].keys.each do |key| -%><% if @app_directories[dir][key] == true -%><% say = "yes" -%><% elsif @app_directories[dir][key] == false -%><% say = "no" -%><% else -%><% say = @app_directories[dir][key] -%><% end -%> <%=key%>="<%=say%>"<% end -%><% end -%> check_all="yes"><%=dir%></directories>
+<% end -%><% end -%><% if @ignore != false -%><% @ignore.each do |what| -%>    <ignore><%=what%></ignore>
+<% end -%><% end -%>
+  </syscheck>
+  <rootcheck>
+    <rootkit_files><%=@conf_dir%>/etc/shared/rootkit_files.txt</rootkit_files>
+    <rootkit_trojans><%=@conf_dir%>/etc/shared/rootkit_trojans.txt</rootkit_trojans>
+  </rootcheck>
+<% if @manager == false -%>  <remote>
+    <connection>syslog</connection>
+    <allowed-ips>127.0.0.1</allowed-ips>
+    <allowed-ips><%=@ipaddress%></allowed-ips>
+    <port>1513</port>
+  </remote>
+  <remote>
+    <connection>secure</connection>
+    <port>1514</port>
+  </remote>
+  <alerts>
+    <log_alert_level>1</log_alert_level>
+    <email_alert_level>7</email_alert_level>
+  </alerts>
+  <command>
+    <name>host-deny</name>
+    <executable>host-deny.sh</executable>
+    <expect>srcip</expect>
+    <timeout_allowed>yes</timeout_allowed>
+  </command>
+  <command>
+    <name>firewall-drop</name>
+    <executable>firewall-drop.sh</executable>
+    <expect>srcip</expect>
+    <timeout_allowed>yes</timeout_allowed>
+  </command>
+  <command>
+    <name>disable-account</name>
+    <executable>disable-account.sh</executable>
+    <expect>user</expect>
+    <timeout_allowed>yes</timeout_allowed>
+  </command>
+<% if @slack_hook != false -%>  <command>
+    <name>slack-notify</name>
+    <executable>ossec-slack.sh</executable>
+    <expect></expect>
+    <timeout_allowed>no</timeout_allowed>
+  </command>
+  <active-response>
+    <command>slack-notify</command>
+    <location>server</location>
+    <level>6</level>
+  </active-response>
+<% end -%>  <active-response>
+    <command>host-deny</command>
+    <location>local</location>
+    <level>6</level>
+    <timeout>600</timeout>
+  </active-response>
+  <active-response>
+    <command>firewall-drop</command>
+    <location>local</location>
+    <level>6</level>
+    <timeout>600</timeout>
+  </active-response>
+<% end -%></ossec_config>

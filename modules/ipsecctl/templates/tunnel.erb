@@ -1,0 +1,8 @@
+<% if @icmpproof != false -%>#remoteproof=<%=@icmpproof%>
+<% end -%>ike esp from { <%=@localdomain%> } to { <%=@remotedomain%> } \
+    local <%=@localgateway%> peer <%=@remotegateway%> \
+    main  auth hmac-<%=@hashp1%> enc <%=@encp1%><% if @dhgroup != false -%> group <%=@dhgroup%><% end -%> \
+    quick auth hmac-<%=@hashp2%> enc <%=@encp2%><% if @pfsgroup != false -%> group <%=@pfsgroup%><% end -%> \
+    psk "<%=@passphrase%>"<% if @tagged != false -%> \
+    tag <%=@tagged%><% else -%><% end -%>
+

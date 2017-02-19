@@ -1,0 +1,390 @@
+__version__ = 19
+__encoding__ = utf-8
+[misc]
+queue_complete = ""
+https_port = 9090
+folder_rename = 1
+allow_64bit_tools = 1
+rss_rate = 60
+https_key = server.key
+cleanup_list = .nfo, .nzb, .sfv, .md5sum, .jpg, .png
+cache_limit = ""
+par_option = ""
+web_color = Default
+replace_spaces = 0
+web_color2 = gold
+dirscan_speed = 5
+enable_filejoin = 1
+create_group_folders = 0
+api_key = <%=@api_key%>
+no_penalties = 0
+bandwidth_limit = 0
+dirscan_dir = downloads/queue
+disable_api_key = 0
+email_to = <%=@contact%>,
+<% if @password != false -%>password = <%=@password%>
+<% else -%>password = ""
+<% end -%>permissions = ""
+auto_disconnect = 1
+movie_extra_folder = 0
+enable_date_sorting = 0
+replace_dots = 1
+movie_sort_extra = -cd%1
+ionice = -c2 -n4
+enable_unzip = 1
+download_free = ""
+port = 8081
+email_dir = ""
+email_full = 0
+log_dir = logs
+admin_dir = admin
+nzb_backup_dir = ""
+tv_sort_countries = 1
+date_categories = tv
+ssl_type = v23
+date_sort_string = ""
+schedlines = ,
+host = 127.0.0.1
+ignore_samples = 0
+enable_tsjoin = 1
+auto_browser = 0
+pause_on_post_processing = 1
+enable_unrar = 1
+email_account = ""
+email_server = <%=@mail_host%>
+config_lock = 0
+tv_sort_string = %sn/%0sx%0e %en.%ext
+dirscan_priority = 0
+<% if @password != false and @username != false -%>username = <%=@username%>
+<% else -%>username = ""
+<% end -%>download_dir = downloads/incomplete
+size_limit = ""
+enable_par_cleanup = 1
+safe_postproc = 1
+cache_dir = cache
+complete_dir = downloads/complete
+replace_illegal = 1
+par2_multicore = 0
+warned_old_queue = 0
+language = en
+check_new_rel = 1
+enable_https = 0
+no_dupes = 0
+top_only = 1
+quick_check = 1
+movie_sort_string = ""
+email_from = <%=@contact%>
+web_dir2 = Plush
+dirscan_script = None
+email_endjob = 1
+tv_categories = ,
+unpack_check = 1
+send_group = 0
+refresh_rate = 1
+movie_categories = movies,
+script_dir = bin
+email_pwd = ""
+ignore_wrong_unrar = 0
+nice = -n 19
+enable_movie_sorting = 0
+https_cert = server.cert
+fail_on_crc = 1
+auto_sort = 0
+dirscan_opts = 3
+web_dir = Glitter
+queue_complete_pers = 1
+enable_tv_sorting = 1
+folder_max_length = 256
+password_file = ""
+ignore_unrar_dates = 0
+never_repair = 0
+rss_filenames = 0
+use_pickle = 0
+pre_script = None
+sfv_check = 0
+email_rss = 0
+allow_streaming = 0
+api_warnings = 1
+pause_on_pwrar = 1
+login_realm = SABnzbd
+nzb_key = <%=@nzb_key%>
+ampm = 0
+win_menu = 1
+local_range = ""
+movie_rename_limit = 100M
+rating_enable = 0
+enable_recursive = 1
+pre_check = 0
+rating_feedback = 1
+randomize_server_ip = 0
+osx_speed = 1
+quota_period = m
+quota_day = ""
+https_chain = ""
+warn_empty_nzb = 1
+history_limit = 50
+quota_size = ""
+wait_ext_drive = 5
+ipv6_servers = 1
+show_sysload = 2
+sanitize_safe = 0
+req_completion_rate = 100.2
+fsys_type = 0
+allow_incomplete_nzb = 0
+uniconfig = 1
+enable_meta = 1
+quota_resume = 0
+rating_api_key = ""
+wait_for_dfolder = 0
+warn_dupl_jobs = 1
+fail_hopeless = 0
+no_ipv6 = 0
+new_nzb_on_failure = 0
+nomedia_marker = ""
+max_art_opt = 0
+keep_awake = 1
+unwanted_extensions = ,
+max_art_tries = 3
+osx_menu = 1
+rss_odd_titles = nzbindex.nl/, nzbindex.com/, nzbclub.com/
+prio_sort_list = ,
+empty_postproc = 0
+rating_host = www.oznzb.com
+web_watchdog = 0
+action_on_unwanted_extensions = 0
+flat_unpack = 0
+start_paused = 0
+overwrite_files = 0
+notified_new_skin = 1
+rating_filter_enable = 0
+inet_exposure = 0
+selftest_host = self-test.sabnzbd.org
+load_balancing = 2
+rating_filter_abort_video = 0
+enable_7zip = 1
+rating_filter_pause_audio = 0
+rating_filter_pause_encrypted_confirm = 0
+warned_old_queue9 = 0
+enable_https_verification = 0
+ipv6_hosting = 0
+enable_bonjour = 1
+enable_all_par = 0
+rating_filter_pause_encrypted = 0
+queue_limit = 20
+rating_filter_abort_encrypted_confirm = 0
+rating_filter_pause_spam_confirm = 0
+rating_filter_abort_keywords = ""
+rating_filter_abort_encrypted = 0
+rating_filter_pause_keywords = ""
+rating_filter_abort_spam_confirm = 0
+no_series_dupes = 0
+rating_filter_abort_downvoted = 0
+rating_filter_pause_downvoted = 0
+rating_filter_abort_audio = 0
+bandwidth_max = ""
+local_ranges = ,
+rating_filter_pause_spam = 0
+backup_for_duplicates = 1
+sched_converted = 1
+script_can_fail = 0
+bandwidth_perc = 0
+rating_filter_pause_video = 0
+api_logging = 1
+rating_filter_abort_spam = 0
+allow_duplicate_files = 0
+fail_hopeless_jobs = 1
+fixed_ports = 0
+html_login = 1
+prospective_par_download = 1
+propagation_delay = 0
+[logging]
+max_log_size = 5242880
+log_level = 1
+log_backups = 5
+enable_cherrypy_logging = 0
+log_new = 0
+[newzbin]
+username = ""
+https = 1
+bookmark_rate = 60
+bookmarks = 0
+password = ""
+unbookmark = 1
+url = www.newzbin2.es
+[nzbmatrix]
+username = ""
+apikey = ""
+del_bookmark = 1
+[categories]
+<% [ "tv", "unknown", "resources", "apps", "movies", "consoles", "books", "games", "anime", "music", "pda", "emulation" ].each do |cat| -%>[[<%=cat%>]]
+priority = -100
+pp = ""
+name = <%=cat%>
+script = Default
+newzbin = <%=cat.upcase%>
+dir = <%=cat.upcase%>
+<% end -%>
+[[jose]]
+priority = -100
+pp = ""
+name = jose
+script = Default
+newzbin = jose
+dir = jose
+[[*]]
+priority = 0
+pp = 3
+name = *
+script = post_process_all
+newzbin = ""
+dir = ""
+[servers]
+[[<%=@nntp_host%>:<%=@nntp_port%>]]
+<% if @nntp_user != false -%>username = <%=@nntp_user%>
+<% end -%>priority = 0
+enable = 1
+displayname = <%=@nntp_host%>:<%=@nntp_port%>
+name = <%=@nntp_host%>:<%=@nntp_port%>
+<% if @nntp_port == 443 -%>ssl_type = t1
+<% end -%>notes = ""
+connections = <%=@nntp_max_conn%>
+<% if @nntp_port == 443 -%>ssl = 1
+<% else -%>ssl = 0
+<% end -%>host = <%=@nntp_host%>
+timeout = <%=@nntp_timeout%>
+send_group = 0
+<% if @nntp_user != false and @nntp_pass != false -%>password = <%=@nntp_pass%>
+<% end -%>optional = 0
+port = <%=@nntp_port%>
+categories = Default,
+retention = 0
+[growl]
+growl_enable = 0
+ntfosd_enable = 1
+growl_server = ""
+notify_classes = startup, download, pp, complete, other
+ncenter_enable = 0
+growl_password = ""
+growl_prio_disk_full = 1
+growl_prio_other = 0
+growl_prio_download = 0
+growl_prio_startup = 1
+growl_prio_failed = 1
+growl_prio_queue_done = 1
+growl_prio_warning = 0
+growl_prio_error = 0
+growl_prio_complete = 1
+growl_prio_pp = 0
+growl_prio_new_login = 0
+<% if @rss_source != false -%>[rss]
+<% @rss_source.keys.each do |src| -%>[[<%=src%>]]
+pp = ""
+enable = 1
+name = <%=src%>
+script = None
+uri = <%=@rss_source[src]%>
+cat = tv
+priority = -100
+filter0 = "", "", "", A, *, -100, 1
+<% end -%><% end -%>[nzbxxx]
+username = ""
+apikey = ""
+[ncenter]
+ncenter_prio_download = 0
+ncenter_prio_warning = 0
+ncenter_prio_queue_done = 1
+ncenter_prio_startup = 1
+ncenter_prio_failed = 1
+ncenter_prio_disk_full = 1
+ncenter_prio_error = 0
+ncenter_enable = 0
+ncenter_prio_complete = 1
+ncenter_prio_pp = 0
+ncenter_prio_other = 0
+ncenter_prio_new_login = 0
+[pushover]
+pushover_prio_error = -2
+pushover_enable = 0
+pushover_prio_complete = 1
+pushover_prio_warning = -2
+pushover_prio_startup = -2
+pushover_prio_queue_done = -1
+pushover_prio_other = -2
+pushover_prio_pp = -2
+pushover_prio_disk_full = 1
+pushover_device = ""
+pushover_token = ""
+pushover_prio_failed = 1
+pushover_prio_download = -2
+pushover_userkey = ""
+pushover_prio_new_login = -3
+[prowl]
+prowl_prio_disk_full = 1
+prowl_prio_error = -3
+prowl_prio_download = -3
+prowl_enable = 0
+prowl_prio_failed = 1
+prowl_prio_pp = -3
+prowl_apikey = ""
+prowl_prio_startup = -3
+prowl_prio_warning = -3
+prowl_prio_other = -3
+prowl_prio_complete = 0
+prowl_prio_queue_done = 0
+prowl_prio_new_login = -3
+[acenter]
+acenter_prio_warning = 0
+acenter_prio_disk_full = 1
+acenter_prio_error = 0
+acenter_prio_failed = 1
+acenter_prio_startup = 0
+acenter_prio_queue_done = 1
+acenter_enable = 0
+acenter_prio_complete = 1
+acenter_prio_download = 0
+acenter_prio_pp = 0
+acenter_prio_other = 0
+acenter_prio_new_login = 0
+[ntfosd]
+ntfosd_prio_queue_done = 1
+ntfosd_enable = 1
+ntfosd_prio_error = 0
+ntfosd_prio_startup = 1
+ntfosd_prio_complete = 1
+ntfosd_prio_pp = 0
+ntfosd_prio_warning = 0
+ntfosd_prio_other = 0
+ntfosd_prio_disk_full = 1
+ntfosd_prio_download = 0
+ntfosd_prio_failed = 1
+ntfosd_prio_new_login = 0
+[pushbullet]
+pushbullet_prio_download = 0
+pushbullet_prio_queue_done = 0
+pushbullet_enable = 0
+pushbullet_prio_complete = 1
+pushbullet_prio_warning = 0
+pushbullet_device = ""
+pushbullet_prio_failed = 1
+pushbullet_prio_other = 0
+pushbullet_apikey = ""
+pushbullet_prio_disk_full = 1
+pushbullet_prio_pp = 0
+pushbullet_prio_startup = 0
+pushbullet_prio_error = 0
+pushbullet_prio_new_login = 0
+[nscript]
+nscript_prio_warning = 0
+nscript_prio_complete = 1
+nscript_prio_other = 0
+nscript_prio_queue_done = 1
+nscript_prio_failed = 1
+nscript_prio_pp = 0
+nscript_prio_new_login = 0
+nscript_script = ""
+nscript_prio_download = 0
+nscript_prio_error = 0
+nscript_prio_startup = 1
+nscript_parameters = ""
+nscript_enable = 0
+nscript_prio_disk_full = 1

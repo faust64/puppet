@@ -1,0 +1,56 @@
+#!/bin/sh
+
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+PRG=`basename $0`
+
+crit=1600
+days=0
+timestr=`uptime`
+warn=1200
+
+while test "$1"
+do
+    if test "$1" = "-w"; then
+	warn="$2"
+    elif test "$1" = "-c"; then
+	crit="$2"
+    elif test "$1" = "-h"; then
+	echo "Usage:"
+	echo "$PRG [-c crit] [-w warn]"
+	exit $UNKNOWN
+    else
+	echo "UNKNOWN - Unhandled argument"
+	exit $UNKNOWN
+    fi
+    shift 2
+done
+
+if ! test 0$crit -gt 0 >/dev/null 2>&1; then
+    echo "UNKNOWN - Malformated argument"
+    exit $UNKNOWN
+elif ! test 0$warn -gt 0 >/dev/null 2>&1; then
+    echo "UNKNOWN - Malformated argument"
+    exit $UNKNOWN
+fi
+
+ret=OK
+if echo "$timestr" | grep ' up [0-9] min, ' >/dev/null; then
+    ret=WARNING
+    info=" - host have just rebooted"
+elif echo "$timestr" | grep ' up [0-9]* day[s], ' >/dev/null; then
+    days=`expr "$timestr" : '.* up \([0-9]*\) day[s]*, .*'`
+    if test "$days" -ge $crit; then
+	ret=CRITICAL
+    elif test "$days" -ge $warn; then
+	ret=WARNING
+    fi
+    info=" - Uptime is $days days"
+    prefdata=" | $days,$warn,$crit"
+fi
+
+echo "$ret$info$perfdata"
+eval ret=\$$ret
+exit $ret

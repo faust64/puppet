@@ -1,0 +1,108 @@
+server {
+    listen <%=@listen_ports['plain']%>;
+    server_name <%=@name%>;
+    server_tokens off;
+    error_log <%=@log_dir%>/error-<%=@name%>.log;
+    access_log <%=@log_dir%>/access-<%=@name%>.log main;
+<% if @deny_frames == true -%>    add_header X-Frame-Options DENY;
+<% end -%><% if @nosniff == true -%>    add_header X-Content-Type-Options nosniff;
+<% end -%><% if @listen_ports['ssl'] != false -%>    rewrite ^/(.*) https://<%=@name%>/$1;
+}
+
+server {
+    listen <%=@listen_ports['ssl']%>;
+    server_name <%=@name%>;
+    server_tokens off;
+    error_log <%=@log_dir%>/ssl-error-<%=@name%>.log;
+    access_log <%=@log_dir%>/ssl-access-<%=@name%>.log main;
+    ssl on;
+    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+<% if @stricttransport != false -%>    add_header Strict-Transport-Security "<%=@stricttransport%>";
+<% end -%><% if @deny_frames == true -%>    add_header X-Frame-Options DENY;
+<% end -%><% if @nosniff == true -%>    add_header X-Content-Type-Options nosniff;
+<% end -%><% if 0 == 1 -%># Require nginx 1.5.9
+    ssl_session_tickets off;
+<% end -%>    ssl_certificate <%=@conf_dir%>/ssl/server-full.crt;
+    ssl_certificate_key <%=@conf_dir%>/ssl/server.key;
+    ssl_dhparam /etc/nginx/ssl/dh.pem;
+<% end -%>    root <%=@app_root%>;
+    location / {
+	autoindex on;
+    }
+    location /rhel/ {
+	alias /var/www/rhel/;
+	autoindex on;
+    }
+    location /rpm3/ {
+	alias /var/www/rhel/3.9-32b;
+	autoindex on;
+    }
+    location /rpm39-32/ {
+	alias /var/www/rhel/3.9-32b;
+	autoindex on;
+    }
+    location /rpm4/ {
+	alias /var/www/rhel/4.7-64b;
+	autoindex on;
+    }
+    location /rpm47-64/ {
+	alias /var/www/rhel/4.7-64b;
+	autoindex on;
+    }
+    location /rpm52/ {
+	alias /var/www/rhel/5.2-32b;
+	autoindex on;
+    }
+    location /rpm53/ {
+	alias /var/www/rhel/5.3-32b;
+	autoindex on;
+    }
+    location /rpm54-64/ {
+	alias /var/www/rhel/5.4-64b;
+	autoindex on;
+    }
+    location /rpm55-64/ {
+	alias /var/www/rhel/5.5-64b;
+	autoindex on;
+    }
+    location /rpm56-32/ {
+	alias /var/www/rhel/5.6-32b;
+	autoindex on;
+    }
+    location /rpm56-64/ {
+	alias /var/www/rhel/5.6-64b;
+	autoindex on;
+    }
+    location /rpm6-64/ {
+	alias /var/www/rhel/6.0-64b;
+	autoindex on;
+    }
+    location /rpm60-64/ {
+	alias /var/www/rhel/6.0-64b;
+	autoindex on;
+    }
+    location /rpm61-64/ {
+	alias /var/www/rhel/6.1-64b;
+	autoindex on;
+    }
+    location /rpm63-64/ {
+	alias /var/www/rhel/6.3-64b;
+	autoindex on;
+    }
+    location /rpm64-64/ {
+	alias /var/www/rhel/6.4-64b;
+	autoindex on;
+    }
+    location /rpm65-64/ {
+	alias /var/www/rhel/6.5-64b;
+	autoindex on;
+    }
+    location /rpm66-64/ {
+	alias /var/www/rhel/6.6-64b;
+	autoindex on;
+    }
+<% if @noerrors == false -%>    include <%=@conf_dir%>/errors.conf;
+<% end -%>}

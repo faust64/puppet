@@ -1,0 +1,132 @@
+#!/bin/sh
+
+ACTFILE=/tmp/.activehaproxy.$$
+CFGFILE=<%=@conf_dir%>/haproxy.cfg
+DEBUG=false
+DWNFILE=/tmp/.downhaproxy.$$
+FORCE=false
+HASFILE=/tmp/.hashaproxy.$$
+MAXUPDATE=75 #75%
+MINLEFT=3
+SKTFILE=<%=@stats_socket%>
+TIMEOUT=2
+TMPFILE=/tmp/.chkhaproxy.$$
+
+while test "$1"
+do
+    case "$1" in
+	-c) CFGFILE=$2; shift	;;
+	-f) FORCE=true		;;
+	-M) MAXUPDATE=$2; shift	;;
+	-m) MINLEFT=$2; shift	;;
+	-s) SKTFILE=$2; shift	;;
+	-t) TIMEOUT=$2; shift	;;
+	-v) DEBUG=true		;;
+    esac
+    shift
+done
+
+apply_config()
+{
+    cat $ACTFILE $DWNFILE | while read line
+    do
+	echo "$line" | socat stdio "$SKTFILE" | grep -vE ^$
+    done
+}
+
+check_tcp()
+{
+    echo ELHO | nc -n -w$TIMEOUT "$1" "$2" >/dev/null 2>&1
+}
+
+maybe_active()
+{
+    if echo 'show stat' | socat stdio "$SKTFILE" | grep ^$1,$2, | grep ,MAINT, >/dev/null; then
+	echo "enable server $1/$2" >>$ACTFILE
+    else
+	echo "has server $1/$2" >>$HASFILE
+    fi
+}
+
+prevent_wipe_config()
+{
+    if $FORCE; then
+	return 0
+    fi
+    all=`awk '/[ 	]*server/{}END{print NR}' "$CFGFILE"`	# total
+    active=`awk '{}END{print NR}' "$ACTFILE"`			# to be activated
+    down=`awk '{}END{print NR}' "$DWNFILE"`			# to be removed
+    diff=`expr $active + $down`					# amount of changes
+    here=`awk '{}END{print NR}' "$HASFILE"`			# currently processing requests
+    ratio=`expr $diff '*' 100 / $all`				# changes in %
+    remain=`expr $all - $down`					# won't proceed if we have too few
+    if $DEBUG; then						#      workers seen as running
+	echo "modifying $ratio% [have:$here add:$active rem:$down]"
+    fi
+    if test "$remain" -lt "$MINLEFT"; then
+	echo bailing out
+	if $DEBUG; then
+	    echo left with $remain active backends, should have at least $MINLEFT
+	fi >&2
+	return 1
+    elif test "$ratio" -gt "$MAXUPDATE"; then
+	echo bailing out
+	if $DEBUG; then
+	    echo should not update more than $MAXUPDATE%, trying to update $ratio%
+	    echo if you are sure, you may add -f to your command
+	fi >&2
+	return 1
+    fi
+
+    return 0
+}
+
+shouldbe_inactive()
+{
+    if echo 'show stat' | socat stdio "$SKTFILE" | grep ^$1,$2, | grep -v ,MAINT, >/dev/null; then
+	echo "disable server $1/$2" >>$DWNFILE
+    fi
+}
+
+if ! test -r "$CFGFILE"; then
+    echo "can't read haproxy configuration file"
+    exit 1
+elif ! test -S "$SKTFILE"; then
+    echo "can't access haproxy socket"
+    exit 2
+elif ! which socat >/dev/null 2>&1; then
+    echo "socat not in PATH"
+    exit 3
+elif ! which nc >/dev/null 2>&1; then
+    echo "nc not in PATH"
+    exit 4
+fi >&2
+
+>$ACTFILE
+>$DWNFILE
+>$HASFILE
+grep -E '^(backend|[ 	]*server)[ 	]' "$CFGFILE" >$TMPFILE
+backend=
+while read line
+do
+    if echo "$line" | grep ^backend; then
+	backend=`echo "$line" | awk '{print $2}'`
+	continue
+    fi >/dev/null
+    eval `echo "$line" | awk '{print $2" "$3}' | sed 's|^\([^ \t]*\)[ \t]*\([^:]*\):\(.*\)$|server=\1 host=\2 port=\3|'`
+    (
+	if check_tcp $host $port; then
+	    maybe_active $backend $server
+	else
+	    shouldbe_inactive $backend $server
+	fi
+    ) >/dev/null 2>&1 &
+done <$TMPFILE
+sleep `expr $TIMEOUT '*' 2`
+if prevent_wipe_config; then
+    apply_config
+fi
+
+rm -f $TMPFILE $ACTFILE $DWNFILE $HASFILE
+
+exit 0

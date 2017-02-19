@@ -1,0 +1,70 @@
+<VirtualHost *:<%=@listen_ports['plain']%>>
+    ServerName <%=@name%>
+<% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
+<% end -%><% end -%>    ServerAdmin <%=@server_admin%>
+    ErrorLog <%=@log_dir%>/error-<%=@name%>.log
+    LogLevel warn
+    CustomLog <%=@log_dir%>/access-<%=@name%>.log combined
+<% if @csp_name != false and @csp_policies[@csp_name] =~ /self/ -%>    Header set Content-Security-Policy "default-src 'self'<% if @csp_sources != false -%> http://*.<%=@csp_sources.join(' http://*.')%> https://*.<%=@csp_sources.join(' https://*.')%><% end -%> <%=@csp_policies[@csp_name]%><% if @csp_report != false -%> report-uri <%=@csp_report%><% end -%>"
+<% end -%><% if @deny_frames == "remote" -%>    Header always set X-Frame-Options SAMEORIGIN
+<% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
+<% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
+<% end -%><% if @xss_protection == true -%>    Header always set X-Xss-Protection "1; mode=block"
+<% end -%><% if @listen_ports['ssl'] != false -%>    RewriteEngine On
+    RewriteRule ^/(.*) https://<%=@name%>/$1 [L,R]
+</VirtualHost>
+<VirtualHost *:<%=@listen_ports['ssl']%>>
+    ServerName <%=@name%>
+<% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
+<% end -%><% end -%>    ServerAdmin <%=@server_admin%>
+    ErrorLog <%=@log_dir%>/ssl-error-<%=@name%>.log
+    LogLevel warn
+<% if @csp_name != false and @csp_policies[@csp_name] =~ /self/ -%>    Header set Content-Security-Policy "default-src 'self'<% if @csp_sources != false -%> https://*.<%=@csp_sources.join(' https://*.')%><% end -%> <%=@csp_policies[@csp_name]%><% if @csp_report != false -%> report-uri <%=@csp_report%><% end -%>"
+<% end -%><% if @stricttransport != false -%>    Header always set Strict-Transport-Security "<%=@stricttransport%>"
+<% end -%><% if @deny_frames == "remote" -%>    Header always set X-Frame-Options SAMEORIGIN
+<% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
+<% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
+<% end -%><% if @xss_protection == true -%>    Header always set X-Xss-Protection "1; mode=block"
+<% end -%>    CustomLog <%=@log_dir%>/ssl-access-<%=@name%>.log combined
+    Include ssl.conf
+<% end -%>    DocumentRoot <%=@app_root%>
+    RewriteEngine On
+    RewriteRule ^/$ http<% if @listen_ports['ssl'] != false -%>s<% end -%>://<%=@fqdn%>/Wiki
+<% if @version == "2.2" -%>    ScriptAlias /Wiki <%=@app_root%>/wiki/moin.cgi
+    ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+    Alias /moin_static194/ /usr/share/moin/htdocs/
+<% else -%>    WSGIScriptAlias /Wiki <%=@app_root%>/wiki/moin.wsgi
+    WSGIDaemonProcess moin user=<%=scope.lookupvar('apache::vars::runtime_user')%> group=<%=scope.lookupvar('apache::vars::runtime_group')%> processes=<%=@wsgi_child%> threads=<%=@wsgi_threads%> maximum-requests=<%=@wsgi_max%> umask=<%=@wsgi_umask%>
+    WSGIProcessGroup moin
+    WSGIErrorOverride On
+    Alias /moin_static198/ /usr/share/moin/htdocs/
+<% end -%>    Alias /wiki /usr/share/moin/htdocs
+    <Directory />
+	Options -FollowSymLinks
+	AllowOverride None
+<% if @listen_ports['ssl'] != false and (@vhostldapauth == true or @vhostldapauth == "pubonly") -%>	Include authldap.conf
+<% if @vhostldapauth == "pubonly" -%>	Include allow.conf
+<% end -%><% else -%><% if @version == "2.2" -%>	Order allow,deny
+	Allow from all
+<% else -%>	Require all granted
+<% end -%><% end -%>    </Directory>
+<% if @version == "2.4" -%>    <Directory "/usr/share/moin">
+	Options All
+	AllowOverride All
+	Require all granted
+    </Directory>
+<% end -%>    <Directory <%=@app_root%>>
+	Options FollowSymLinks MultiViews
+	AllowOverride None
+<% if @listen_ports['ssl'] != false and (@vhostldapauth == true or @vhostldapauth == "pubonly") -%>	Include authldap.conf
+<% elsif @version == "2.2" -%>	Order allow,deny
+	Allow from all
+<% else -%>	Require all granted
+<% end -%>    </Directory>
+<% if @version == "2.2" -%>   <Directory /usr/lib/cgi-bin>
+	AllowOverride None
+	Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+	Order allow,deny
+	Allow from all
+    </Directory>
+<% end -%></VirtualHost>

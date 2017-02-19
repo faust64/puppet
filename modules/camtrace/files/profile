@@ -1,0 +1,4 @@
+alias thr='test -f /var/run/scamd.pid && threads -w 3 -c "`tput clear`" `cat /var/run/scamd.pid`'
+alias psl="ps wwaxro f,pid,ppid,uid,pcpu,time,start,vsz,tty,command | awk 'NR < 2 || \$1 ~ \"[012389ab]\$\"'"
+alias ejcd='cdcontrol eject'
+alias disk='`test \`id -u\` -ne 0 && echo sudo` smartctl -iH /dev/`sysctl -n kern.disks`'

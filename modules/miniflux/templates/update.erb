@@ -1,0 +1,17 @@
+#!/bin/sh
+
+RUSER=<%=@runtime_user%>
+WEBROOT=<%=@web_root%>/miniflux
+DBROOT=$WEBROOT/data
+
+if test -d $DBROOT; then
+    find $DBROOT -name '*.sqlite' |
+	while read file
+	do
+	    test -f $file || continue
+	    db=`basename $file`
+	    su -l $RUSER -s /bin/sh -c "php $WEBROOT/cronjob.php --database=$db"
+	done
+fi
+
+exit 0

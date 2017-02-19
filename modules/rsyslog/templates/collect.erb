@@ -1,0 +1,22 @@
+<% if @do_relp -%><% if @do_tls -%>module(load="imrelp")
+input(type="imrelp" port="6969" tls="on" tls.caCert="<%=@conf_dir%>/rsyslog.tls/server-chain.crt" tls.myCert="<%=@conf_dir%>/rsyslog.tls/server.crt" tls.myPrivKey="<%=@conf_dir%>/rsyslog.tls/server.key" tls.authmode="name" tls.permittedPeer=["<%=@collect.join('","')%>"])
+<% else -%>$ModLoad imrelp
+$InputRELPServerRun 6969
+<% end -%><% end -%><% if @do_tcp -%><% if @do_tls -%>$DefaultNetstreamDriver gtls
+$DefaultNetstreamDriverCAFile <%=@conf_dir%>/rsyslog.tls/server-chain.crt
+$DefaultNetstreamDriverCertFile <%=@conf_dir%>/rsyslog.tls/server.crt
+$DefaultNetstreamDriverKeyFile <%=@conf_dir%>/rsyslog.tls/server.key
+<% end -%>$ModLoad imtcp
+<% if @do_tls -%>$InputTCPServerStreamDriverMode 1
+$InputTCPServerStreamDriverAuthMode x509/name
+<% end -%>$InputTCPServerRun 514
+$AllowedSender TCP, <%=@collect.join(" ")%> 127.0.0.1
+
+<% end -%><% if @do_udp -%><% if @do_tls -%># fixme
+<% else -%>$ModLoad imudp
+$UDPServerRun 514
+$AllowedSender UDP, <%=@collect.join(" ")%> 127.0.0.1
+
+<% end -%><% end -%><% if @do_not_store == false -%>$template RemoteStore, "<%=@store_dir%>/%HOSTNAME%/%timegenerated:1:10:date-rfc3339%"
+:source, !isequal, "localhost" -?RemoteStore
+<% end -%>:source, isequal, "last" ~

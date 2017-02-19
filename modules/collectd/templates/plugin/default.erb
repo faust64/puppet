@@ -1,0 +1,6 @@
+<% scope.lookupvar('collectd::vars::plugins').keys.each do |plugin| -%>LoadPlugin <%=plugin%>
+<% if scope.lookupvar('collectd::vars::plugins')[plugin] != false -%><Plugin <%=plugin%>>
+<% scope.lookupvar('collectd::vars::plugins')[plugin].keys.each do |key| -%><% if scope.lookupvar('collectd::vars::plugins')[plugin][key] == true or scope.lookupvar('collectd::vars::plugins')[plugin][key] == false -%><% quote = "" -%><% else -%><% quote = '"' -%><% end -%><% if quote != "" -%><% scope.lookupvar('collectd::vars::plugins')[plugin][key].each do |val| -%>    <%=key%> <%=quote%><%=val%><%=quote%>
+<% end -%><% else -%>    <%=key%> <%=quote%><%=scope.lookupvar('collectd::vars::plugins')[plugin][key]%><%=quote%>
+<% end -%><% end -%></Plugin>
+<% end -%><% end -%>

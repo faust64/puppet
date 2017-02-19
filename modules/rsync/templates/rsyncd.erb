@@ -1,0 +1,10 @@
+hosts allow = 127.0.0.1<% if @remotes != false -%><% @remotes.each do |host| -%> <%=host%><% end -%><% end -%>
+
+<% if @shares != false -%>
+<% @shares.each do |share| -%><% if share['name'] =~ /[a-zA-Z]/ and share['path'] =~ /[a-zA-Z]/ -%>[<%=share['name']%>]
+    path = <%=share['path']%>
+<% if share['comment'] =~ /[a-zA-Z]/ -%>    comment = <%=share['comment']%>
+<% end -%>    read only = yes
+<% if share['user'] =~ /[a-zA-Z]/ -%><% shareasuser = share['user'] -%><% else -%><% shareasuser = "nobody" -%><% end -%>    uid = <%=shareasuser%>
+<% if share['group'] =~ /[a-zA-Z]/ -%><% shareasgroup = share['group'] -%><% else -%><% shareasgroup = "nobody" -%><% end -%>    gid = <%=shareasgroup%>
+<% end -%><% end -%><% end -%>

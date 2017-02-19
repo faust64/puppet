@@ -1,0 +1,21 @@
+#!/bin/sh
+
+DIRS="
+<% @dir_map.each do |dir| -%><%=dir%>
+<% end -%>"
+
+for mapping in $DIRS
+do
+    eval `echo $mapping | sed 's|\([^:]*\):\([^:]*\):\([^:]*\):\([^:]*\):\(.*\)|dir=\1 myuid=\2 mygid=\3 dirperm=\4 fileperm=\5|'`
+    if test "$myuid" -a "$mygid"; then
+	chown -R $myuid:$mygid $dir
+    elif test "$myuid"; then
+	chown -R $myuid $dir
+    elif test "$mygid"; then
+	chown -R :$mygid $dir
+    fi
+    find $dir/* -type d -exec chmod $dirperm {} \;
+    find $dir/* -type f -exec chmod $fileperm {} \;
+done
+
+exit 0

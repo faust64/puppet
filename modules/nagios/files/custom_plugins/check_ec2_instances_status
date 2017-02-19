@@ -1,0 +1,43 @@
+#!/bin/sh
+
+PRG=`basename $0`
+DIVERT=`echo $0 | sed 's|ec2_instances_|ec2_instance_|'`
+OK=0
+UNKNOWN=3
+res=UNKNOWN
+
+test "$1" = --environ && shift
+if test "$1"; then
+    BRANCH=$1
+else
+    BRANCH=production
+fi
+case "$BRANCH" in
+    productiondr) REGION=us-west-2 ;;
+    *) REGION=us-east-1 ;;
+esac
+DIR=
+for d in icinga2 shinken alignac icinga nagios3 nagios
+do
+    if test -d /etc/$d/ec2.d; then
+	DIR=/etc/$d/ec2.d
+    fi
+done
+
+if test -z "$DIR"; then
+    msg=" - missing ec2 instances lists"
+elif test -r $DIR/$BRANCH.list; then
+    list=`sed 's|.*i-\([a-zA-Z0-9]*\).*|i-\1|' $DIR/$BRANCH.list | awk /^i/ | xargs echo`
+    if test "$list"; then
+	exec $DIVERT --region $REGION --instance-ids $list
+    else
+	res=OK
+	msg=" - empty env $BRANCH"
+    fi
+else
+    msg=" - undefined env $BRANCH"
+fi
+
+echo "$res$msg"
+eval res=\$$res
+exit $res

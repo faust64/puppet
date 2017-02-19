@@ -1,0 +1,161 @@
+#!/bin/sh
+
+LDAPAUTH=<% if @ldap != false -%>tru<% else -%>fals<% end -%>e
+PWGEN=/usr/bin/pwgen
+HTPASSWD=/usr/bin/htpasswd
+CONFDIR=<%=@apache_conf_dir%>/sites-available/
+PASSDIR=<%=@apache_conf_dir%>/htpasswd
+APACHECTL=/usr/sbin/apache2ctl
+ENSITE=/usr/sbin/a2ensite
+IIS=0
+
+if test -x /bin/dnsdomainname; then
+    DOMAIN=`dnsdomainname`
+else
+    DOMAIN=<%=@domain%>
+fi
+
+if ! $LDAPAUTH; then
+    if ! test -x $PWGEN; then
+	echo "pwgen is not installed, or binary not found"
+	exit 1
+    elif ! test -x $HTPASSWD; then
+	echo "htpasswd is not installed, or binary not found"
+	exit 2
+    elif ! test -d $PASSDIR; then
+	echo "Folder $PASSDIR does not exist"
+	exit 3
+    fi
+fi
+if ! test -x $APACHECTL; then
+    echo "apachectl is not installed, or binary not found"
+    exit 4
+elif ! test -x $ENSITE; then
+    echo "a2ensite is not installed, or binary not found"
+    exit 5
+elif ! test -d $CONFDIR; then
+    echo "Folder $CONFDIR does not exist"
+    exit 6
+fi
+
+if ! test "$1"; then
+    echo "usage: $0 [--iis] reverse_name [URL] [PASSW]"
+    echo " Create an external access http://reverse_name.<%=@rdomain%>/"
+    echo " URL: optional parameter, to proxify requests to a specific VM addr (http://vm_name.local.domain/)"
+    exit 7
+fi
+
+if test $1 = --iis; then
+    IIS=y
+    shift
+fi
+NAME=$1
+URL=http://$NAME.$DOMAIN/
+
+if test "$2"; then
+    if test ${2#${2%?}} != "/"; then
+	URL="$2/"
+    else
+	URL=$2
+    fi
+fi
+
+if ! $LDAPAUTH; then
+    if test "$3"; then
+	PASS=$3
+    else
+	PASS=`pwgen -nc`
+    fi
+fi
+
+if test -f $CONFDIR/$NAME; then
+    echo "VirtualHost $NAME already exists" >&2
+    exit 1
+fi
+
+case "$DOMAIN" in
+    'dedibox.<%=@rdomain%>'|'leaseweb.<%=@rdomain%>')
+	ALIAS=$DOMAIN
+	;;
+    *)
+	ALIAS=intra.<%=@rdomain%>
+	;;
+esac
+
+cat <<EOF >$CONFDIR/$NAME
+<VirtualHost *:80>
+    ServerName			$NAME.<%=@rdomain%>
+    ServerAlias			$NAME.$ALIAS
+    ServerAdmin			<%=@admin%>
+EOF
+if test -e <%=@apache_conf_dir%>/ssl/server.key; then
+    cat <<EOF >>$CONFDIR/NAME
+    RewriteEngine		On
+    RewriteRule		^/(.*)	https://$NAME.<%=@rdomain%>/\$1 [L,R]
+</VirtualHost>
+<VirtualHost *:443>
+    ServerName			$NAME.<%=@rdomain%>
+    ServerAlias			$NAME.$ALIAS
+    ServerAdmin			<%=@admin%>
+    SSLEngine			On
+    SSLCertificateFile		<%=@apache_conf_dir%>/ssl/server.crt
+    SSLCertificateChainFile	<%=@apache_conf_dir%>/ssl/server-chain.crt
+    SSLCertificateKeyFile	<%=@apache_conf_dir%>/ssl/server.key
+EOF
+fi
+
+if test "$IIS" = y; then
+cat <<EOF >>$CONFDIR/$NAME
+    SetEnv			force-proxy-request-1.0 1
+    SetEnv			proxy-nokeepalive 1
+EOF
+fi
+
+cat <<EOF >>$CONFDIR/$NAME
+    ProxyPass		/	$URL
+    ProxyPassReverse	/	$URL
+    ProxyPreserveHost		On
+    <Location />
+	AuthName		"Restricted access"
+EOF
+if $LDAPAUTH; then
+cat <<EOF >>$CONFDIR/$NAME
+	AuthType		Basic
+	AuthBasicProvider	ldap
+	AuthzLDAPAuthoritative	On
+	AuthLDAPURL		"ldaps://<%=@ldap%>/<%=@userbase%>?uid?sub?(objectClass=*)" NONE
+EOF
+else
+    cat <<EOF >>$CONFDIR/$NAME
+	AuthUserFile		$PASSDIR/$NAME.htpasswd
+	AuthType		Basic
+EOF
+fi
+
+cat <<EOF >>$CONFDIR/$NAME
+	Require			valid-user
+	Order			allow,deny
+	Include			allow.conf
+	Satisfy			any
+    </Location>
+</VirtualHost>
+EOF
+
+$HTPASSWD -b -c $PASSDIR/$NAME.htpasswd $NAME $PASS >/dev/null 2>&1
+$HTPASSWD -b -c -p $PASSDIR/$NAME.clear $NAME $PASS >/dev/null 2>&1
+
+if ! $ENSITE $NAME >/dev/null 2>&1; then
+    echo "Unable to enable $NAME, rollback!" >&2
+    rm -f $PASSDIR/$NAME.clear $PASSDIR/$NAME.htpasswd $CONFDIR/$NAME $CONFDIR/../sites-available/$NAME
+    exit 1
+elif ! $APACHECTL configtest >/dev/null 2>&1; then
+    echo "Syntax error, rollback !" >&2
+    rm -f $PASSDIR/$NAME.clear $PASSDIR/$NAME.htpasswd $CONFDIR/$NAME $CONFDIR/../sites-available/$NAME
+    exit 1
+elif ! $APACHECTL graceful; then
+    echo "Configuration reload failed. WARNING!" >&2
+fi
+echo "http://$NAME.<%=@rdomain%>/"
+echo "$NAME:$PASS"
+
+exit 0

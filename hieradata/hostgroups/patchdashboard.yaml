@@ -1,0 +1,35 @@
+additional_classes:
+  - Patchdashboard
+
+# Apache
+apache_listen_ports:
+  plain: 80
+  ssl: 443
+apache_mod_headers: true
+apache_mod_php: true
+apache_mod_proxy_http: true
+apache_mpm: prefork
+apache_munin: true
+apache_rsyslog: true
+
+# ClamAV
+clamav_scan_dir:
+  - /usr/share/patchdashboard
+
+# Fail2ban
+fail2ban_do_badbots: true
+fail2ban_do_web_abuses: true
+
+# MySQL
+mysql_keep_backup: /media/backups
+mysql_munin: true
+
+# Nginx
+nginx_rsyslog: true
+
+# PHP
+php_mod_gd: true
+php_mod_mcrypt: true
+php_mod_mysql: true
+php_mod_xmlrpc: true
+php_with_dev: true

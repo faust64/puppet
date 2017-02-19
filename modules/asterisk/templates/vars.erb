@@ -1,0 +1,92 @@
+[globals]
+CFDEVSTATE = TRUE
+QUEDEVSTATE = TRUE
+FMDEVSTATE = TRUE
+DNDDEVSTATE = TRUE
+INTERCOMCODE = nointercom
+CALLFILENAME = ""
+DIAL_OPTIONS = Ttr
+TRUNK_OPTIONS =
+DIAL_OUT = default ;was 9?
+FAX =
+INCOMING = group-all
+NULL = ""
+OPERATOR =
+OPERATOR_XTN =
+PARKNOTIFY = SIP/200
+RECORDEXTEN = ""
+RINGTIMER = 15
+DIRECTORY = last
+AFTER_INCOMING =
+IN_OVERRIDE = forcereghours
+REGTIME = 7:55-17:05
+REGDAYS = mon-fri
+DIRECTORY_OPTS =
+DIALOUTIDS = 1
+VM_PREFIX = *
+VM_OPTS =
+VM_GAIN =
+VM_DDTYPE = u
+TIMEFORMAT = kM
+TONEZONE = <%=@locale%>
+ALLOW_SIP_ANON = no
+VMX_CONTEXT = from-internal
+VMX_PRI = 1
+VMX_TIMEDEST_CONTEXT =
+VMX_TIMEDEST_EXT = dovm
+VMX_TIMEDEST_PRI = 1
+VMX_LOOPDEST_CONTEXT =
+VMX_LOOPDEST_EXT = dovm
+VMX_LOOPDEST_PRI = 1
+VMX_OPTS_TIMEOUT =
+VMX_OPTS_LOOP =
+VMX_OPTS_DOVM =
+VMX_TIMEOUT = 2
+VMX_REPEAT = 1
+VMX_LOOPS = 1
+TRANSFER_CONTEXT = from-internal-xfer
+MIXMON_FORMAT = wav
+MIXMON_DIR =
+MIXMON_POST =
+RECORDING_STATE = ENABLED
+ASTETCDIR = <%=@conf_dir%>
+ASTMODDIR = <%=@lib_dir%>/modules
+ASTVARLIBDIR = <%=@var_dir%>
+ASTAGIDIR = <%=@var_dir%>/agi-bin
+ASTSPOOLDIR = <%=@spool_dir%>
+ASTRUNDIR = <%=@run_dir%>
+ASTLOGDIR = /var/log/asterisk
+CWINUSEBUSY = true
+<% @extensions.each do |exten, exthash| -%><% if exthash['provpass'] -%>PROVISIONING_<%=exten%>_PASS = <%=exthash['provpass']%>
+<% end -%><% end -%>
+
+<% if @iax_trunks != false -%><% @iax_trunks.each do |trunk, trunkhash| -%>OUT_<%=trunk%> = IAX/<%=trunk%>
+OUTCID_<%=trunk%> =<% if trunkhash['cid'] =~ /[0-9]/ -%> <%=trunkhash['cid']%><% end -%>
+
+OUTMAXCHANS_<%=trunk%> =<% if trunkhash['maxchans'] =~ /[0-9]/ -%> <%=trunkhash['maxchans']%><% end -%>
+
+OUTFAIL_<%=trunk%> =<% if trunkhash['fail'] =~ /[a-z]/ -%> <%=trunkhash['fail']%><% end -%>
+
+OUTPREFIX_<%=trunk%> =<% if trunkhash['prefix'] =~ /[0-9]/ -%> <%=trunkhash['prefix']%><% end -%>
+
+OUTDISABLE_<%=trunk%> = <% if trunkhash['disable'] == true -%>on<% else -%>off<% end -%>
+
+OUTKEEPCID_<%=trunk%> =<% if trunkhash['keepcid'] == "no" or trunkhash['keepcid'] == "off" -%> off<% end -%>
+
+FORCEDOUTCID_<%=trunk%> =<% if trunkhash['forcecid'] =~ /[0-9]/ -%> <%=trunkhash['forcecid']%><% end -%>
+<% end -%><% end -%>
+<% if @sip_trunks != false -%><% @sip_trunks.each do |trunk, trunkhash| -%>OUT_<%=trunk%> = SIP/<%=trunk%>
+OUTCID_<%=trunk%> =<% if trunkhash['cid'] =~ /[0-9]/ -%> <%=trunkhash['cid']%><% end -%>
+
+OUTMAXCHANS_<%=trunk%> =<% if trunkhash['maxchans'] =~ /[0-9]/ -%> <%=trunkhash['maxchans']%><% end -%>
+
+OUTFAIL_<%=trunk%> =<% if trunkhash['fail'] =~ /[a-z]/ -%> <%=trunkhash['fail']%><% end -%>
+
+OUTPREFIX_<%=trunk%> =<% if trunkhash['prefix'] =~ /[0-9]/ -%> <%=trunkhash['prefix']%><% end -%>
+
+OUTDISABLE_<%=trunk%> = <% if trunkhash['disable'] == true -%>on<% else -%>off<% end -%>
+
+OUTKEEPCID_<%=trunk%> =<% if trunkhash['keepcid'] == "no" or trunkhash['keepcid'] == "off" -%> off<% end -%>
+
+FORCEDOUTCID_<%=trunk%> =<% if trunkhash['forcecid'] =~ /[0-9]/ -%> <%=trunkhash['forcecid']%><% end -%>
+<% end -%><% end -%>

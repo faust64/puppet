@@ -1,0 +1,6 @@
+<% if @with_feh -%>feh --bg-fill <%=@home_dir%>/<%=@username%>/.config/openbox/webserver-background.png
+<% end -%><% if @dm == "slim" -%>slim -r
+<% end -%><% if @with_nitrogen -%>nitrogen --restore &
+<% end -%><% if @with_unclutter -%>uncluter &
+<% end -%><% if @autostart -%><%=@autostart%>
+<% end -%>

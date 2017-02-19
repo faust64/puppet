@@ -1,0 +1,56 @@
+menu background boot-screens/splash.png
+include boot-screens/stdmenu.cfg
+menu hshift 19
+menu width 40
+menu margin 0
+
+menu title Debian Systems
+    menu title Debian Systems
+	menu label Debian Systems
+	menu exit
+<% @distribs.each do |dist| -%><% [ "amd64", "i386" ].each do |arch| -%><% if dist == "squeeze" -%>   label -
+	menu label <%=dist%> <%=arch%> (OpenVZ auto part.)
+	kernel installers/<%=dist%>/<%=arch%>/linux
+	append vga=normal auto=true priority=critical netcfg/choose_interface=eth0 netcfg/wireless_essid= netcfg/wireless_wep= preseed/locale=<%=@locale_long%> interface=auto kbd-chooser/method=<%=@locale%> preseed/url=http://pxe.<%=@domain%>/preseed/<%=dist%>_server-openvz-auto.preseed console-setup/ask_detect=false console-keymaps-at/keymap=<%=@locale%> debian-installer/keymap=<%=@locale%> initrd=installers/<%=dist%>/<%=arch%>/initrd.gz --
+<% end -%>    label -
+	menu label <%=dist%> <%=arch%> (KVM auto part.)
+	kernel installers/<%=dist%>/<%=arch%>/linux
+	append vga=normal auto=true priority=critical<% if dist == "squeeze" -%> netcfg/choose_interface=eth0 netcfg/wireless_essid= netcfg/wireless_wep=<% end -%> preseed/locale=<%=@locale_long%> interface=auto kbd-chooser/method=<%=@locale%> preseed/url=http://pxe.<%=@domain%>/preseed/<%=dist%>_server-kvm-auto.preseed console-setup/ask_detect=false console-keymaps-at/keymap=<%=@locale%> debian-installer/keymap=<%=@locale%> initrd=installers/<%=dist%>/<%=arch%>/initrd.gz --
+    label -
+	menu label <%=dist%> <%=arch%> (Xen auto part.)
+	kernel installers/<%=dist%>/<%=arch%>/linux
+	append vga=normal auto=true priority=critical<% if dist == "squeeze" -%> netcfg/choose_interface=eth0 netcfg/wireless_essid= netcfg/wireless_wep=<% end -%> preseed/locale=<%=@locale_long%> interface=auto kbd-chooser/method=<%=@locale%> preseed/url=http://pxe.<%=@domain%>/preseed/<%=dist%>_server-xen-auto.preseed console-setup/ask_detect=false console-keymaps-at/keymap=<%=@locale%> debian-installer/keymap=<%=@locale%> initrd=installers/<%=dist%>/<%=arch%>/initrd.gz --
+    label -
+	menu label <%=dist%> <%=arch%> (generic server auto part.)
+	kernel installers/<%=dist%>/<%=arch%>/linux
+	append vga=normal auto=true priority=critical<% if dist == "squeeze" -%> netcfg/choose_interface=eth0 netcfg/wireless_essid= netcfg/wireless_wep=<% end -%> preseed/locale=<%=@locale_long%> interface=auto kbd-chooser/method=<%=@locale%> preseed/url=http://pxe.<%=@domain%>/preseed/<%=dist%>_server-auto.preseed console-setup/ask_detect=false console-keymaps-at/keymap=<%=@locale%> debian-installer/keymap=<%=@locale%> initrd=installers/<%=dist%>/<%=arch%>/initrd.gz --
+<% if dist == "squeeze" -%>    label -
+	menu label <%=dist%> <%=arch%> (OpenVZ man part.)
+	kernel installers/<%=dist%>/<%=arch%>/linux
+	append vga=normal auto=true priority=critical netcfg/choose_interface=eth0 netcfg/wireless_essid= netcfg/wireless_wep= preseed/locale=<%=@locale_long%> interface=auto kbd-chooser/method=<%=@locale%> preseed/url=http://pxe.<%=@domain%>/preseed/<%=dist%>_server-openvz.preseed console-setup/ask_detect=false console-keymaps-at/keymap=<%=@locale%> debian-installer/keymap=<%=@locale%> initrd=installers/<%=dist%>/<%=arch%>/initrd.gz --
+<% end -%>    label -
+	menu label <%=dist%> <%=arch%> (KVM man part.)
+	kernel installers/<%=dist%>/<%=arch%>/linux
+	append vga=normal auto=true priority=critical<% if dist == "squeeze" -%> netcfg/choose_interface=eth0 netcfg/wireless_essid= netcfg/wireless_wep=<% end -%> preseed/locale=<%=@locale_long%> interface=auto kbd-chooser/method=<%=@locale%> preseed/url=http://pxe.<%=@domain%>/preseed/<%=dist%>_server-kvm.preseed console-setup/ask_detect=false console-keymaps-at/keymap=<%=@locale%> debian-installer/keymap=<%=@locale%> initrd=installers/<%=dist%>/<%=arch%>/initrd.gz --
+    label -
+	menu label <%=dist%> <%=arch%> (Xen man part.)
+	kernel installers/<%=dist%>/<%=arch%>/linux
+	append vga=normal auto=true priority=critical<% if dist == "squeeze" -%> netcfg/choose_interface=eth0 netcfg/wireless_essid= netcfg/wireless_wep=<% end -%> preseed/locale=<%=@locale_long%> interface=auto kbd-chooser/method=<%=@locale%> preseed/url=http://pxe.<%=@domain%>/preseed/<%=dist%>_server-xen.preseed console-setup/ask_detect=false console-keymaps-at/keymap=<%=@locale%> debian-installer/keymap=<%=@locale%> initrd=installers/<%=dist%>/<%=arch%>/initrd.gz --
+    label -
+	menu label <%=dist%> <%=arch%> (generic server man part.)
+	kernel installers/<%=dist%>/<%=arch%>/linux
+	append vga=normal auto=true priority=critical<% if dist == "squeeze" -%> netcfg/choose_interface=eth0 netcfg/wireless_essid= netcfg/wireless_wep=<% end -%> preseed/locale=<%=@locale_long%> interface=auto kbd-chooser/method=<%=@locale%> preseed/url=http://pxe.<%=@domain%>/preseed/<%=dist%>_server.preseed console-setup/ask_detect=false console-keymaps-at/keymap=<%=@locale%> debian-installer/keymap=<%=@locale%> initrd=installers/<%=dist%>/<%=arch%>/initrd.gz --
+    label -
+	menu label <%=dist%> <%=arch%> (Desktop auto part.)
+	kernel installers/<%=dist%>/<%=arch%>/linux
+	append vga=normal auto=true priority=critical<% if dist == "squeeze" -%> netcfg/choose_interface=eth0 netcfg/wireless_essid= netcfg/wireless_wep=<% end -%> preseed/locale=<%=@locale_long%> interface=auto kbd-chooser/method=<%=@locale%> preseed/url=http://pxe.<%=@domain%>/preseed/<%=dist%>_desktop-auto.preseed console-setup/ask_detect=false console-keymaps-at/keymap=<%=@locale%> debian-installer/keymap=<%=@locale%> initrd=installers/<%=dist%>/<%=arch%>/initrd.gz --
+    label -
+	menu label <%=dist%> <%=arch%> (Desktop man part.)
+	kernel installers/<%=dist%>/<%=arch%>/linux
+	append vga=normal auto=true priority=critical<% if dist == "squeeze" -%> netcfg/choose_interface=eth0 netcfg/wireless_essid= netcfg/wireless_wep=<% end -%> preseed/locale=<%=@locale_long%> interface=auto kbd-chooser/method=<%=@locale%> preseed/url=http://pxe.<%=@domain%>/preseed/<%=dist%>_desktop.preseed console-setup/ask_detect=false console-keymaps-at/keymap=<%=@locale%> debian-installer/keymap=<%=@locale%> initrd=installers/<%=dist%>/<%=arch%>/initrd.gz --
+    label -
+	menu label <%=dist%> <%=arch%>
+	kernel installers/<%=dist%>/<%=arch%>/linux
+	append vga=normal auto locale=<%=@locale_long%><% if dist == "squeeze" -%> netcfg/choose_interface=eth0 netcfg/wireless_essid= netcfg/wireless_wep=<% end -%> console-setup/ask_detect=false console-keymaps-at/keymap=<%=@locale%> debian-installer/keymap=<%=@locale%> initrd=installers/<%=dist%>/<%=arch%>/initrd.gz --
+<% end -%><% end -%>
+menu end

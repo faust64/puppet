@@ -1,0 +1,36 @@
+additional_classes:
+  - Cups
+
+nagios_no_parent: false
+no_linprocfs: true
+physical_parent: nikea.adm.intra.unetresgrossebite.com
+with_collectd: false
+
+# Cups
+cups_nagios_printers:
+  - hermes
+cups_permissions:
+  /:
+    Allow: from 10.42/15
+    Order: allow,deny
+  /admin:
+    Allow: from 10.42.42/24
+    Order: allow,deny
+  /admin/conf:
+    Allow: from 10.42.42/24
+    AuthType: Default
+    Order: allow,deny
+    Require: user @SYSTEM
+    Satisfy: any
+cups_public: true
+
+# FreeBSD
+freebsd_with_dbus: true
+
+# LinuxCounter
+lico_update_day: 1
+lico_update_hour: 15
+lico_update_min: 8
+
+# Racktables
+racktables_object_id: 4

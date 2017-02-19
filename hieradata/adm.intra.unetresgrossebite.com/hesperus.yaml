@@ -1,0 +1,12 @@
+nagios_no_parent: false
+no_linprocfs: true
+physical_parent: nikea.adm.intra.unetresgrossebite.com
+with_collectd: false
+
+# LinuxCounter
+lico_update_day: 1
+lico_update_hour: 15
+lico_update_min: 6
+
+# Racktables
+racktables_object_id: 4

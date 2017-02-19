@@ -1,0 +1,46 @@
+#!/bin/sh
+
+MRTG_ROOT=/var/www/mrtg
+BASE_URL="http://mrtg.example.com/cgi-bin/14all.cgi?log="
+
+cd $MRTG_ROOT
+for node in `find . -name '*.cfg' | sed 's|\./[^/]*/\([^.]*\).cfg|\1|'`
+do
+    for probe in `grep '^Target\[' $node/$node.cfg | sed 's|^Target.\([^_]*_[0-9]*\).*|\1|'`
+    do
+	basefile="$BASE_URL$probe&cfg=$node.cfg&png="
+	sfx=
+	for period in daily weekly monthly yearly
+	do
+	    check=false
+	    case $period in
+		daily)
+		    check=true
+		    ;;
+		weekly)
+		    check1=`date +%w`
+		    test "$check1" = 0 && check=true
+		    ;;
+		monthly)
+		    check1=`date +%d`
+		    test "$check1" = "01" && check=true
+		    ;;
+		yearly)
+		    check1=`date +%m`
+		    check2=`date +%d`
+		    test "$check1$check2" = "0101" && check=true
+		    ;;
+	    esac
+	    if $check; then
+		outdir=$MRTG_ROOT/vortex/`echo $probe | cut -d_ -f1`/`date +%y`
+		out=$outdir/$probe-`date +%y%m%d`-$period.png
+		if ! test -s $out; then
+		    test -d $outdir || mkdir -p $outdir
+		    wget "$basefile$period$sfx" -O $out
+		fi
+	    fi
+	done
+    done
+done
+
+exit 0

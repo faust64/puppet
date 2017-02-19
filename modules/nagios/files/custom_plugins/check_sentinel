@@ -1,0 +1,57 @@
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+use Getopt::Long qw(:config gnu_getopt);
+use Redis;
+use Nagios::Plugin;
+
+my $VERSION="0.1";
+my $np;
+
+$np = Nagios::Plugin->new(usage => "Usage: %s [--host|-H <host>] [--port|-p <port>] [ -c|--critical=<threshold> ] [ -w|--warning=<threshold>] [-?|--usage] [-V|--version] [-h|--help] [-v|--verbose] [-t|--timeout=<timeout>]",
+	version => $VERSION,
+	blurb => "This plugin checks the availability of a sentinel server, expecting that at least a master is being monitored, and that we haven't entered tilt mode.",
+	license => "Diverted from check_redis (Remi Paulmier), for Peerio",
+	shortname => "CHECK_REDIS_SENTINEL"
+    );
+
+$np->add_arg(spec => 'host|H=s',
+	help => q(Check the host indicated in STRING),
+	required => 0,
+	default => 'localhost'
+    );
+
+$np->add_arg(spec => 'port|p=i',
+	help => q(Use the TCP port indicated in INTEGER),
+	required => 0,
+	default => 26379
+    );
+
+$np->getopts;
+my $ng = $np->opts;
+alarm $ng->timeout;
+my $host = $ng->get('host');
+my $port = $ng->get('port');
+my $verbose = $ng->get('verbose');
+my $redis;
+eval { $redis = Redis->new( server => "$host:$port", debug => 0); };
+if ($@) { $np->nagios_exit( CRITICAL, "Can't connect to $host:$port" ); }
+my $info = $redis->info();
+my $code = CRITICAL;
+my $msg = "Redis instance is not configured as a sentinel";
+
+$redis->ping || $np->nagios_exit( CRITICAL, "Can't ping server $host:$port" );
+
+if (defined $info->{'sentinel_masters'}) {
+    if (not $info->{'sentinel_tilt'} eq '0') {
+	$msg  = "Sentinel has entered TILT mode";
+    } elsif ($info->{'sentinel_masters'} eq '0') {
+	$msg  = "Sentinel is not monitoring anyone";
+    } else {
+	$code = OK;
+	$msg  = sprintf "Monitoring %s master(s)", $info->{'sentinel_masters'};
+    }
+}
+
+$np->nagios_exit($code, $msg);

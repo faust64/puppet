@@ -1,0 +1,6 @@
+<%=@nagios_user%>	ALL=NOPASSWD:	/usr/sbin/riak-admin cluster plan
+<%=@nagios_user%>	ALL=NOPASSWD:	/usr/sbin/riak-admin test
+<%=@nagios_user%>	ALL=NOPASSWD:	/usr/sbin/riak-admin status
+<%=@nagios_user%>	ALL=NOPASSWD:	/usr/sbin/riak ping
+<% if @enterprise -%><%=@nagios_user%>	ALL=NOPASSWD:	/usr/lib/nagios/plugins/check_riak_repl
+<% end -%>

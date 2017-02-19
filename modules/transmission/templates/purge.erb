@@ -1,0 +1,45 @@
+#!/bin/sh
+
+DO_PURGE=false
+TMPFILE=/tmp/purge.$$
+
+transmission-remote -l | grep -vE '^(ID|Sum)' | sed -e 's|\*||g' -e 's|[()"]*||g' -e "s|'||g" | while read torrent
+    do
+	if echo "$torrent" | grep 'None[ \t]*Unknown' >/dev/null; then
+	    eval `echo "$torrent" | sed 's|^[ \t]*\([0-9]*\)[ \t]*\([0-9]*\)%[ \t]*None[ \t]*Unknown[ \t]*\([0-9\.]*\)[ \t]*\([0-9\.]*\)[ \t]*\([0-9\.]*\)[ \t]*\([^ \t]*\)[ \t]*\(.*\)|id=\1 completion=\2 size=0 localstatus=Unknown up=\3 down=\4 ratio=\5 netstatus=\6 name="\7" warn=true|'`
+	else
+	    eval `echo "$torrent" | sed 's|^[ \t]*\([0-9]*\)[ \t]*\([0-9]*\)%[ \t]*\([0-9\.]*\) [KMGT]*B[ \t]*\([^ \t]*\)[ \t]*\([0-9\.]*\)[ \t]*\([0-9\.]*\)[ \t]*\([0-9\.]*\)[ \t]*\([^ \t]*\)[ \t]*\(.*\)|id=\1 completion=\2 size=\3 localstatus=\4 up=\5 down=\6 ratio=\7 netstatus=\8 name="\9" warn=false|'`
+	fi
+	if $warn; then
+	    if test "$id" -gt 0; then
+		if transmission-remote -t$id -i | grep "Tracker gave an error: Unregistered torrent" >/dev/null; then
+		    if $DO_PURGE; then
+			if transmission-remote -t$id --remove-and-delete >/dev/null; then
+			    echo "Purged $name"
+			else
+			    echo "Failed to purge $name"
+			fi
+		    elif transmission-remote -t$id -r >/dev/null; then
+			echo "Removed $name"
+		    else
+			echo "Failed to remove $name"
+		    fi
+		else
+		    echo "Failing $name:"
+		    transmission-remote -t$id -i
+		fi
+	    fi
+	fi
+    done >$TMPFILE 2>&1
+
+<% if @contact != false -%>if grep ^Failed $TMPFILE >/dev/null; then
+    SUBJECT=WARNING
+else
+    SUBJECT=REPORT
+fi
+<% end -%>if test -s $TMPFILE; then
+    cat $TMPFILE<% if @contact != false -%> | mail -s "[$SUBJECT]" <%=@contact%><% end -%>
+
+fi
+
+exit 0

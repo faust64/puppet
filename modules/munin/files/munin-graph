@@ -1,0 +1,5 @@
+#!/bin/sh
+
+/usr/share/munin/munin-limits $@
+nice /usr/share/munin/munin-html $@ || exit 1
+nice /usr/share/munin/munin-graph --cron $@ || exit 1

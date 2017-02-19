@@ -1,0 +1,21 @@
+additional_classes:
+  - Mrtg
+nagios_no_parent: false
+physical_parent: oneiroi.adm.intra.unetresgrossebite.com
+root_domain: intra.unetresgrossebite.com
+
+# Apache
+apache_mod_php: true
+apache_mpm: prefork
+
+# Munin
+munin_collect_domains:
+  - adm.intra.unetresgrossebite.com
+  - faust.intra.unetresgrossebite.com
+  - intra.unetresgrossebite.com
+  - sip.intra.unetresgrossebite.com
+  - vms.intra.unetresgrossebite.com
+
+# PHP
+php_pear: true
+php_mod_gd: true

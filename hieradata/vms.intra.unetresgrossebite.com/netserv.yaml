@@ -1,0 +1,48 @@
+physical_parent: nemesis.ceph.intra.unetresgrossebite.com
+
+additional_classes:
+  - Iscdhcpserver
+  - Squid
+  - Aptcacherng
+  - Tftpd
+
+# Isc-dhcp-server
+dhcpd_collect_static_leases:
+  - adm.intra.unetresgrossebite.com
+  - ceph.intra.unetresgrossebite.com
+  - sip.intra.unetresgrossebite.com
+  - surv.intra.unetresgrossebite.com
+  - vms.intra.unetresgrossebite.com
+  - intra.unetresgrossebite.com
+
+# Nagios
+nagios_no_parent: false
+
+# Named
+named_gen_domains:
+  - unetresgrossebite.com
+  - undomaine.42
+  - emma-earth.com
+  - emma-earth.fr
+  - emma-earth.net
+  - emma-earth.org
+  - 42.10.in-addr.arpa
+  - 43.10.in-addr.arpa
+named_master: false
+named_sshfp_domains:
+  - adm.intra.unetresgrossebite.com
+  - ceph.intra.unetresgrossebite.com
+  - leaseweb.unetresgrossebite.com
+
+# OpenLDAP
+openldap_ldap_slave: false
+
+# OSSEC
+ossec_app_directories:
+  /usr/share/dnsgen: false
+
+# Squid
+squid_wat_do: cache
+
+# TFTPD
+pxe_reference_repository: false

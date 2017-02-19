@@ -1,0 +1,33 @@
+#!/bin/sh
+
+Prg=`basename $0`
+test "$2" && VERBOSE=y
+
+if test -z "$1"; then
+    echo "$Prg: usage"
+    echo "	amount: count mails in queue"
+    echo "	frozen: count frozen mails in queue"
+    echo "	clean: clean frozen mails from queue"
+    echo "	clear: empty mail queue"
+elif test "$1" = amount; then
+    tot=`mailq | awk '/^[ 	]*[0-9]*[hmds][ 	]*[0-9\.KMB]*[ 	]/{}END{print NR - 1}'`
+    test "$VERBOSE" && echo "queue holds $tot mails" || echo $tot
+elif test "$1" = frozen; then
+    tot=`mailq | awk 'BEGIN{n=0}/ \*\*\* frozen \*\*\*/{n++}END{print n}'`
+    test "$VERBOSE" && echo "queue holds $tot frozen mails" || echo $tot
+elif test "$1" = clean; then
+    for kickme in `mailq | awk '/ \*\*\* frozen \*\*\*/{print $3}'`
+    do
+	postsuper -d $kickme
+    done >/dev/null 2>&1
+elif test "$1" = clear; then
+    for kickme in `mailq | awk '/^[ 	]*[0-9]*[hmds][ 	]*[0-9\.KMB]*[ 	]/{print $3}'`
+    do
+	postsuper -d $kickme
+    done >/dev/null 2>&1
+else
+    echo "$Prg: unrecognized option \`$1'" >&2
+    exit 1
+fi
+
+exit 0

@@ -1,0 +1,16 @@
+menu background boot-screens/splash.png
+include boot-screens/stdmenu.cfg
+menu hshift 19
+menu width 40
+menu margin 0
+
+menu title OpenBSD Systems
+    menu title OpenBSD Systems
+	menu label OpenBSD Systems
+	menu exit
+<% @distribs.each do |dist| -%><% [ "amd64", "i386" ].each do |arch| -%>    label -
+	menu label <%=dist%> <%=arch%>
+	kernel memdisk
+	append initrd=installers/openbsd-<%=dist%>/<%=arch%>/bsd.rd
+<% end -%><% end -%>
+menu end

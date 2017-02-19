@@ -1,0 +1,20 @@
+[<%=@name%>]
+group = <%=@runtime_group%>
+user = <%=@runtime_user%>
+listen = <%=@socket%>
+listen.group = <%=@listen_group%>
+listen.mode = 0660
+listen.owner = <%=@listen_user%>
+pm = dynamic
+pm.max_children = 5
+pm.start_servers = 2
+pm.min_spare_servers = 1
+pm.max_spare_servers = 3
+pm.max_requests = 500
+pm.status_path = /mystatus
+ping.path = /myping
+ping.response = pong
+access.log = /var/log/php-fpm/<%=@name%>.access.log
+slowlog = /var/log/php-fpm/<%=@name%>.slow.log
+request_slowlog_timeout = 20
+chdir = <%=@root_dir%>

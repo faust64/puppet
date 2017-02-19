@@ -1,0 +1,7 @@
+tries = 10
+passive_ftp = off
+waitretry = 3
+<% if @cache_ip != false -%><% @cache_ip.each do |host| -%>http_proxy = http://<%=host%>:3128/
+https_proxy = http://<%=host%>:3128/
+use_proxy = on
+<% break -%><% end -%><% end -%>header = From: <%=@fqdn%> <root@<%=@fqdn%>>

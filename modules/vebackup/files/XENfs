@@ -1,0 +1,45 @@
+#!/bin/sh
+
+test -d /etc/xen/conf || exit 1
+
+BACKUP_SPOOL=/media/backups
+BACKUP_WORK=/tmp/backup.$$
+test -d $BACKUP_SPOOL && mkdir -p $BACKUP_POOL
+test -d $BACKUP_WORK && mkdir -p $BACKUP_WORK
+
+cd /etc/xen/conf
+for vm in *.conf
+do
+    for disk in $(cat $vm | grep phy: | sed "s|'phy:|\n|g" | grep /dev | sed 's|.*/dev/\([^,]*\),xvd.*|\1|g')
+    do
+	if echo "$disk" | grep mapper; then
+	    vg=`echo $disk | cut -d/ -f2 | cut -d- -f1`
+	    lv=`echo $disk | sed -e "s|mapper/$vg-||" -e "s|--|-|"`
+	else
+	    eval `echo $disk | sed 's|\([^/]*\)/\(.*\)|vg=\1 lv=\2|'`
+	fi
+	if lvcreate -nbackup$lv -s -L10G $disk; then
+	    snapdate=`date +%Y%m%d`
+	    if mount /dev/$vg/backup$lv $BACKUP_WORK; then
+		(
+		    cd $BACKUP_WORK
+		    if ! tar -czf $BACKUP_SPOOL/$lv-$snapdate.tar.gz .; then
+			echo "failed tar-ing $lv: not enough space?" >&2
+		    fi
+		)
+		umount $BACKUP_WORK
+	    else
+		echo "couldn't mount snapshot of $lv: unknown filesystem?" >&2
+	    fi
+	    if ! lvremove -f /dev/$vg/backup$lv; then
+		echo "failed removing snapshot for $lv: still mounted?" >&2
+	    fi
+	else
+	    echo "failed taking snapshot for $lv: does disk exist?" >&2
+	fi
+    done
+done
+
+rmdir $BACKUP_WORK
+
+exit 0

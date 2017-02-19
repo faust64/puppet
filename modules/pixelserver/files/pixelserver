@@ -1,0 +1,43 @@
+#!/usr/bin/perl -Tw
+# pixelserver, displaying some invisible pixel
+
+use IO::Socket::INET;
+
+$crlf  = "\015\012";
+$pixel = pack("C*",
+	      qw(71  73 70 56 57 97  1  0  1  0 128  0  0 255 255 255  0  0  0
+		 33 249  4  1  0  0  0  0 44  0   0  0  0   1   0   1  0  0  2
+		  2  68  1  0 59));
+
+$SIG{CHLD} = 'IGNORE';
+$sock      = new IO::Socket::INET(LocalHost => '127.0.0.1',
+				  LocalPort => '9999',
+				  Proto     => 'tcp',
+				  Listen    => 30,
+				  ReuseAddr => 1);
+
+if (!defined($sock)) {
+    print "Error : cannot bind : $!\n";
+    exit(1);
+}
+
+while (1) {
+    my $new_sock = $sock->accept();
+    continue unless defined $new_sock;
+    continue unless defined $new_sock->peerhost();
+#   while (<$new_sock>) {
+#	chop; chop;
+#	if ($_ eq '') { last; }
+#   }
+    print $new_sock "HTTP/1.1 200 OK$crlf";
+    print $new_sock "Content-type: image/gif$crlf";
+    print $new_sock "Accept-ranges: bytes$crlf";
+    print $new_sock "Content-length: 43$crlf$crlf";
+    print $new_sock $pixel;
+    shutdown($new_sock,2);
+    undef($new_sock);
+}
+
+close($sock);
+
+exit(0);

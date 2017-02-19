@@ -1,0 +1,22 @@
+nagios_no_parent: false
+physical_parent: oizis.adm.intra.unetresgrossebite.com
+
+# OpenSSL
+pki_ca_expire: 3650
+pki_key_city: Paris
+pki_key_country: FR
+pki_key_expire: 3650
+pki_key_org: E.M.M.A. Earth
+pki_key_province: IDF
+pki_key_size: 8192
+pki_domains_lookup:
+  - emma-earth.fr
+  - emma-earth.net
+  - emma-earth.org
+  - emma-earth.com
+  - undomaine.42
+  - unetresgrossebite.com
+
+# OSSEC
+ossec_app_directories:
+  /home/pki: false

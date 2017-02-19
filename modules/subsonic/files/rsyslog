@@ -1,0 +1,6 @@
+input(type="imfile"
+      File="/var/subsonic/subsonic.log"
+      statefile="/var/subsonic/.subsonic.log"
+      Tag="subsonic"
+      Severity="info"
+      Facility="local7")

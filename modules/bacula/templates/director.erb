@@ -1,0 +1,145 @@
+Director {
+    DIRport = <%=@director_port%>
+    DirAddress = <%=@bind_addr%>
+    Maximum Concurrent Jobs = <%=@max_concurrent_jobs%>
+    Messages = Daemon
+    Name = <%=@fqdn%>-dir
+    Password = "<%=@director_pass%>"
+    PidDirectory = "<%=@run_dir%>"
+    QueryFile = "<%=@conf_dir%>/scripts/query.sql"
+    WorkingDirectory = "<%=@work_dir%>"
+}
+
+JobDefs {
+    Messages = Standard
+    Name = "utgb"
+    Schedule = "NightlyCycle"
+    Storage = FileStorage
+    Type = Backup
+    Write Bootstrap = "<%=@work_dir%>/%t_%c_%n_%i.bsr"
+}
+
+Storage {
+    Address = <%=@storage_host%>
+    Device = FileStorage
+    Maximum Concurrent Jobs = <%=@max_concurrent_jobs%>
+    Media Type = File
+    Name = FileStorage
+    Password = "<%=@storage_pass%>"
+    SDPort = <%=@storage_port%>
+}
+
+Schedule {
+    Name = "NightlyCycle"
+    Run = Level=Full Pool=MonthlyPool 1st tue at 04:00
+    Run = Level=Differential Pool=WeeklyPool 2nd-5th tue at 04:00
+    Run = Level=Incremental Pool=DailyPool mon,wed,thu,fri,sat,sun at 04:00
+}
+
+Messages {
+    Name = Standard
+    append = "<%=@work_dir%>/log" = all, !skipped
+    mail = <%=@contact%> = all, !skipped
+    mail on error = <%=@contact%> = all, !skipped
+    mailcommand = "<%=@work_dir%>/bsmtp -h localhost -f \"\(<%=@hostname%>-<%=@backupset%>) \<root@<%=@fqdn%>\>\" -s \"<%=@hostname%>-<%=@backupset%>: %t %e of %c %l\" %r"
+    operator = <%=@contact%> = mount
+    operatorcommand = "<%=@work_dir%>/bsmtp -h localhost -f \"\(<%=@hostname%>-<%=@backupset%>\) \<root@<%=@fqdn%>\>\" -s \"<%=@hostname%>-<%=@backupset%>: Intervention needed for %j\" %r"
+    console = all, !skipped, !saved
+}
+
+Messages {
+    Name = Daemon
+    append = "<%=@work_dir%>/log" = all, !skipped
+    catalog = all, !skipped, !saved
+    console = all, !skipped, !saved
+    mail = <%=@contact%> = all, !skipped
+    mailcommand = "<%=@work_dir%>/bsmtp -h localhost -f \"\(<%=@hostname%>-<%=@backupset%>) \<root@<%=@fqdn%>\>\" -s \"<%=@hostname%>-<%=@backupset%> daemon message\" %r"
+}
+
+Pool {
+    Label Format = "HDD-<%=@backupset.upcase%>-${Year}-${Month:p/2/0/r}-${Day:p/2/0/r}"
+    Name = MonthlyPool
+    Pool Type = Backup
+    Recycle = no
+    Volume Retention = 3 years
+    Volume Use Duration = 6 days
+}
+
+Pool {
+    AutoPrune = yes
+    Label Format = "HDD-<%=@backupset.upcase%>-W"
+    Name = WeeklyPool
+    Pool Type = Backup
+    Recycle = yes
+    Recycle Oldest Volume = yes
+    Volume Retention = 34 days
+    Volume Use Duration = 6 days
+}
+
+Pool {
+    AutoPrune = yes
+    Label Format = "HDD-<%=@backupset.upcase%>-D"
+    Name = DailyPool
+    Pool Type = Backup
+    Recycle = yes
+    Volume Retention = 13 days
+    Volume Use Duration = 23 hours
+}
+
+Catalog {
+    Name = MyCatalog
+    dbname = "bacula"
+    dbuser = "bacula"
+    dbpassword = "<%=@mysql_pass%>"
+}
+
+Console {
+    CommandACL = status, .status
+    Name = <%=@fqdn%>-mon
+    Password = "<%=@director_pass%>"
+}
+
+Job {
+    Client = <%=@fqdn%>-fd
+    FileSet = "Catalog"
+    JobDefs = "utgb"
+    Name = "Backup-catalog"
+    Pool = MonthlyPool
+    Priority = 100
+    Run After Job = "<%=@conf_dir%>/scripts/delete_catalog_backup"
+<% if @run_after_failed -%>    Run After Failed Job = "<%=@run_after_failed%>"
+<% end -%><% if @slack_hook -%>    Run After Failed Job = "/usr/local/bin/slack <%=@slack_hook%> \"WARNING: catalog backup failed\""
+<% end -%><% if @run_after -%>    Run After Job = "<%=@run_after%>"
+<% end -%><% if @slack_hook -%>    Run After Job = "/usr/local/bin/slack <%=@slack_hook%> \'REPORT: catalog successfully backed up\""
+<% end -%>    Run Before Job = "<%=@conf_dir%>/scripts/make_catalog_backup bacula bacula <%=@mysql_pass%>"
+<% if @run_before -%>    Run Before Job = "<%=@run_before%>"
+<% end -%>}
+
+Job {
+    Client = <%=@fqdn%>-fd
+    FileSet = "Files-<%=@fqdn%>"
+    Messages = Standard
+    Name = "Restore-files"
+    Pool = MonthlyPool
+    Storage = FileStorage
+    Type = Restore
+    Where = /tmp/bacula-restores
+}
+
+FileSet {
+    Name = "Catalog"
+    Include {
+	Options {
+	    signature = MD5
+	    compression = GZIP
+	}
+	File = <%=@work_dir%>/bacula.sql
+    }
+}
+
+# Jobs
+    @|"sh -c 'for f in $(find <%=@conf_dir%>/jobs.d/ -type f); do echo @$f; done'"
+# FileSet
+    @|"sh -c 'for f in $(find <%=@conf_dir%>/filesets.d/ -type f); do echo @$f; done'"
+# Clients
+    @|"sh -c 'for f in $(find <%=@conf_dir%>/clients.d/ -type f); do echo @$f; done'"

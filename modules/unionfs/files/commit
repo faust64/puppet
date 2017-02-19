@@ -1,0 +1,77 @@
+#!/bin/sh
+
+maybebabe()
+{
+    if ! $hasmods; then
+	if mount -o remount,rw /; then
+	    hasmods=true
+	else
+	    return 1
+	fi
+    fi
+}
+
+commit=true
+hasmods=false
+ignorere='(^/var/(agentx|lib/(postfix|puppet)|log|spool)|/(\.dbus|\.config))'
+
+if test x$1 = x-check x--check x-c; then
+    commit=false
+fi
+for path in `awk '/^mount_unionfs[ 	]/{print $2}' /etc/fstab`
+do
+    if echo $path | grep -E "$ignorere"; then
+	continue
+    fi >/dev/null
+    for directory in `find ${path}_rw -type d`
+    do
+	if echo $directory | grep "${path}_rw/.unionfs" >/dev/null; then
+	    continue
+	fi
+	target=`echo $directory | sed "s|${path}_rw/|${path}_org/|"`
+	if test -d "$target"; then
+	    eval `stat --printf="sowner=%u sgroup=%g smode=%a" $directory`
+	    eval `stat --printf="downer=%u dgroup=%g dmode=%a" $target`
+	    if test "$sowner" != "$downer" -o "$sgroup" != "$dgroup"; then
+		if maybebabe; then
+		    if $commit; then
+			chown $sowner:$sgroup $target
+		    fi
+		    echo "[$sowner:$sgroup] > $target"
+		fi
+	    fi
+	    if test "$smode" != "$dmode"; then
+		if maybebabe; then
+		    if $commit; then
+			chmod $smode $target
+		    fi
+		    echo "[$smode] > $target"
+		fi
+	    fi
+	else
+	    if maybebabe; then
+		if $commit; then
+		    cp -rp $directory $target
+		fi
+		echo "[copy] $directory $target"
+	    fi
+	fi
+    done
+    for file in `find ${path}_rw -type f -o -type l`
+    do
+	dest=`echo $file | sed "s|${path}_rw/|${path}_org/|"`
+	if ! cmp $file $dest 2>/dev/null; then
+	    if maybebabe; then
+		if $commit; then
+		    cp -p $file $dest
+		fi
+		echo "[copy] $file $dest"
+	    fi
+	fi
+    done
+done
+if $hasmods; then
+    mount -o remount,ro /
+fi
+
+exit $?

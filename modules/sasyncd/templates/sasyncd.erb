@@ -1,0 +1,7 @@
+control none
+group <%=@sasyncd_group%>
+interface <%=@sasyncd_interface%>
+listen on <% @main_networks.each do |nic| -%><% if nic['pfsync'] == true and nic['addr'] =~ /[0-9]\.[0-9]/ -%><%=nic['addr']%>
+<% break -%><% end -%><% end -%>
+<% if @sasyncd_peer -%>peer <%=@sasyncd_peer%>
+<% end -%>sharedkey <%=@sasyncd_sharedkey%>

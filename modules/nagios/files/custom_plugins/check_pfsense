@@ -1,0 +1,134 @@
+#!/bin/sh
+
+Prg=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+ret=UNKNOWN
+community="public"
+target="127.0.0.1"
+query="firmware"
+port=1
+
+      OID_MOUNTPOINT=".1.3.6.1.2.1.25.2.3.1.3"
+       OID_FSBLKSIZE=".1.3.6.1.2.1.25.2.3.1.4"
+     OID_FSBLKAMOUNT=".1.3.6.1.2.1.25.2.3.1.5"
+       OID_FSBLKUSED=".1.3.6.1.2.1.25.2.3.1.6"
+	   OID_PROCS=".1.3.6.1.2.1.25.1.6.0"
+	   OID_USERS=".1.3.6.1.2.1.25.1.5.0"
+	  OID_STATES=".1.3.6.1.4.1.12325.1.200.1.3.1.0"
+
+usage()
+{
+    echo "Usage: $Prg -H host -C community -t query"
+    echo "  query: diskusage [-d disknbr]"
+    echo "  query: processes"
+    echo "  query: states"
+    echo "  query: users"
+}
+
+if test -z "$1"; then
+    usage
+    exit $UNKNOWN
+fi
+
+while getopts H:C:t:d:h OPT
+do
+    case $OPT in
+	H) target=$OPTARG	;;
+	C) community=$OPTARG	;;
+	t) query=$OPTARG	;;
+	d) disk=$OPTARG		;;
+	h)
+	    usage
+	    exit $UNKNOWN
+	    ;;
+    esac
+done
+
+if test $query = diskusage; then
+    for i in `seq 1 100`
+    do
+	test "$disk" && i=$disk
+	mpt=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_MOUNTPOINT.$i | sed 's|"||g'`
+	echo "$mpt" | grep UMA && break
+	echo "$mpt" | grep MALLOC && break
+	bsz=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_FSBLKSIZE.$i`
+	tsz=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_FSBLKAMOUNT.$i`
+	usz=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_FSBLKUSED.$i`
+	tsz=`expr $tsz '*' $bsz`
+	usz=`expr $usz '*' $bsz`
+	free=`expr $tsz - $usz`
+	if echo "$mpt" | grep '^/,'; then
+	    if test `expr $free '*' 20` -lt $tsz; then
+		ret=CRITICAL
+	    elif test `expr $free '*' 10` -lt $usz; then
+		ret=WARNING
+	    elif test $tsz -ge 0 -a $usz -ge 0; then
+		ret=OK
+	    fi
+	fi
+	for val in free usz tsz
+	do
+	    unit=b
+	    eval i=\$$val
+	    while :
+	    do
+		case $unit in
+		    b)	unit=k	;;
+		    k)	unit=M	;;
+		    M)	unit=G	;;
+		    G)	unit=T	;;
+		    T)	unit=P	;;
+		    P)	unit=E	;;
+		    E)	unit=Z	;;
+		    *)	break	;;
+		esac
+		if test `expr $i / 1024` -lt 1024; then
+		    i="`expr $i / 1024`.`expr $i % 1024`"
+		    break
+		fi
+		i=`expr $i / 1024`
+	    done
+	    eval $val=$i$unit
+	done
+	test "$msg" && msg="$msg,"
+	msg="$msg $mpt usage: $free/$usz/$tsz (free/used/tot)"
+	test "$disk" && break
+    done
+elif test $query = users; then
+    res=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_USERS`
+    if test $res -gt 5; then
+	ret=CRITICAL
+    elif test $res -gt 3; then
+	ret=WARNING
+    elif test $res -ge 0; then
+	ret=OK
+    fi
+    msg=" $res active sessions"
+elif test $query = processes; then
+    res=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_PROCS`
+    if test $res -gt 200; then
+	ret=CRITICAL
+    elif test $res -gt 150; then
+	ret=WARNING
+    elif test $res -ge 10; then
+	ret=OK
+    fi
+    msg=" $res processes"
+elif test $query = states; then
+    res=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_STATES`
+    if test $res -gt 20000; then
+	ret=CRITICAL
+    elif test $res -gt 15000; then
+	ret=WARNING
+    elif test $res -gt 20; then
+	ret=OK
+    fi
+    msg=" $res states"
+fi >/dev/null 2>&1
+
+echo $ret$msg$pefdata
+eval ret=\$$ret
+exit $ret

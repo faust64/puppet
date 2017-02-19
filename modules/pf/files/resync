@@ -1,0 +1,30 @@
+#!/bin/sh
+
+CONFIGURATION=/etc/pf.conf
+for src in rc.conf rc.conf.local
+do
+    if test -e /etc/$src; then
+	if grep pf_rules /etc/$src; then
+	    CONFIGURATION=`grep pf_rules /etc/$src | sed 's|^[^/]*\([^"#]*\).*$|\1|'`
+	fi
+    fi
+done >/dev/null
+alias echo='echo -en'
+
+echo "    [ reloading PacketFilter rulset ]\nChecking global configuration: "
+if ! pfctl -nf $CONFIGURATION >/dev/null; then
+    echo "[ WARNING ]\n"
+    exit 42
+else
+    echo "[   OK    ]\n"
+fi
+
+echo "Applying new ruleset:          "
+if ! pfctl -f $CONFIGURATION >/dev/null; then
+    echo "[ WARNING ]\n"
+    exit 21
+else
+    echo "[   OK    ]\n"
+fi
+
+exit 0

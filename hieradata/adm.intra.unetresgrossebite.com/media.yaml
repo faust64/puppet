@@ -1,0 +1,32 @@
+nagios_no_parent: false
+physical_parent: oizis.adm.intra.unetresgrossebite.com
+
+# Fstab
+tmp_fs: ext4
+tmp_target_device: /dev/xvdb1
+
+# Munin-Node
+munin_node_listenaddr: 10.42.242.210
+vps_with_munin: true
+
+# Nagios
+nagios_listenaddr: 10.42.242.210
+nagios_load_crit_threshold: "10.0,10.0,10.0"
+nagios_load_warn_threshold: "8.0,8.0,8.0"
+nagios_partitions_watchlist:
+  root: /
+  goinfre: /goinfre
+  tmp: /tmp
+
+# Packages
+apache_web_root: /goinfre/packages
+packages_is_apache: false
+packages_do_nfs: false
+
+# Subsonic
+subsonic_do_flac: true
+subsonic_sync_bwlimit: 5000
+subsonic_sync_directories:
+  - Lossless
+  - Main
+  - Videos

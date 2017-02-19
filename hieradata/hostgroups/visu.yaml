@@ -1,0 +1,50 @@
+additional_classes:
+  - Matchbox
+
+# Accounts
+generic_group: pi
+generic_groups: pi
+generic_user: pi
+
+# Browser
+preferred_browser: chromium
+
+# Fstab
+fstab_mountpoint:
+  boot:
+    dev: /dev/mmcblk0p5
+    fmt: vfat
+    mount: /boot
+    opts: defaults
+    pass: 2
+  root:
+    dev: /dev/mmcblk0p6
+    mount: /
+    fmt: ext4
+    opts: defaults,noatime,ro
+    pass: 1
+  tmp:
+    dev: tmpfs
+    genericdev: true
+    mount: /tmp
+    fmt: tmpfs
+    opts: defaults,size=25M
+fstab_root_ro: true
+
+# Locales
+locale_LOCALE: C
+
+# Nagios
+nagios_load_crit_threshold: "2.2,2.2,2.2"
+nagios_load_warn_threshold: "2.0,2.0,2.0"
+nagios_no_parent: false
+
+# Puppet
+#a week
+puppet_run_interval: 604800
+
+# Racktables
+racktables_object_id: 4
+
+# Xorg
+xorg_with_audio: true

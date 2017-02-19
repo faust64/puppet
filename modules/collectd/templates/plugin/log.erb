@@ -1,0 +1,6 @@
+LoadPlugin logfile
+<Plugin logfile>
+    LogLevel "info"
+    File "<%=scope.lookupvar('collectd::vars::log_dir')%>/collectd.log"
+    Timestamp true
+</Plugin>

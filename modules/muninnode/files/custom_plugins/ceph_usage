@@ -1,0 +1,41 @@
+#!/bin/sh
+# Based on a probe from Mate Gabri <mate@gabri.hu>
+# GPLv2
+
+WARNING_LEVEL=${warning_level:-"80"}
+CRITICAL_LEVEL=${critical_level:-"90"}
+POOLS=`rados lspools`
+test -z "$POOLS" && exit 0
+
+if test "$1" = autoconf; then
+    echo yes
+    exit 0
+elif test "$1" = config; then
+    echo 'graph_title CEPH capacity'
+    echo 'graph_category ceph'
+    echo 'graph_vlabel TB'
+    echo 'graph_info CEPH cluster capacity'
+    echo 'graph_args --base 1000 -l 0'
+    CAPACITY=$(expr `rados df | awk '/^[ \t]*total space/{print $3}'` '*' 1024)
+    WARNING=$(echo "scale=2;$CAPACITY * ($WARNING_LEVEL/100)" | bc -l | cut -d '.' -f 1)
+    CRITICAL=$(echo "scale=2;$CAPACITY * ($CRITICAL_LEVEL/100)" | bc -l | cut -d '.' -f 1)
+    echo "capacity.label Capacity"
+    echo "used.label Raw used"
+    echo "used.draw AREA"
+    echo "used.warning $WARNING"
+    echo "used.critical $CRITICAL"
+    for pool in $POOLS
+    do
+        echo "${pool}.label $pool usage"
+        echo "${pool}.draw AREA"
+    done
+else
+    echo capacity.value $(expr `rados df | awk '/^[ \t]*total space/{print $3}'` '*' 1024)
+    echo used.value $(expr `rados df | awk '/^[ \t]*total used/{print $3}'` '*' 1024)
+    for pool in $POOLS
+    do
+	echo ${pool}.value $(expr `rados -p $pool df | awk "/^$pool[ \t]*/{print \\$2}"` '*' 1024)
+    done
+fi
+
+exit 0

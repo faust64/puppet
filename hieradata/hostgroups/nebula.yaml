@@ -1,0 +1,5 @@
+# MySQL
+mysql_provider: mariadb
+
+# OpenNebula
+nebula_db_backend: mysql

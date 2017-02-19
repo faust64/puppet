@@ -1,0 +1,38 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+TMPFILE=/tmp/.check_riak.$$
+PATH="/usr/local/sbin:/usr/sbin:/sbin:$PATH"
+export PATH
+
+ret=UNKNOWN
+if test "$1" -a -s "$1/.backup_report"; then
+    mark="$1/.backup_report"
+else
+    mark=/var/lib/riak/.backup_report
+fi
+
+if test `date +%H` -lt 4; then
+    match=`date +%Y%m%d --date yesterday`
+else
+    match=`date +%Y%m%d`
+fi
+if ! test -r "$mark"; then
+    msg=" - no backup log"
+elif grep ^$match:KO$ "$mark" >/dev/null; then
+    ret=CRITICAL
+    msg=" - backup not sent"
+elif grep ^$match:OK$ "$mark" >/dev/null; then
+    ret=OK
+    msg=" - $match OK"
+else
+    msg=" - no backup logged today"
+fi
+
+echo "$PRG $ret$msg"
+eval ret=\$$ret
+exit $ret

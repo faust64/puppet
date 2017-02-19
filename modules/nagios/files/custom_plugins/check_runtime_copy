@@ -1,0 +1,36 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+perfdata=0
+res=UNKNOWN
+
+case "$1" in
+    inferno|nuts|server|shark)
+	srcdir=/usr/share/peerio-$1
+	runtime=/var/lib/peerio-$1
+	;;
+    electron)
+	srcdir=/usr/share/electron-release-server
+	runtime=/var/lib/electron-release-server
+	;;
+esac
+
+if test "$srcdir" -a "$runtime"; then
+    if diff --exclude=.tmp --exclude=views -urNi $srcdir $runtime >/dev/null 2>&1; then
+	res=OK
+	msg=" - $runtime consistent"
+    else
+	res=WARNING
+	msg=" - $srcdir and $runtime holds mismatching copies"
+    fi
+else
+    msg=" - unknown service '$1'"
+fi
+
+echo "$res$msg"
+eval res=\$$res
+exit $res

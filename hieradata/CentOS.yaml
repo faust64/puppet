@@ -1,0 +1,83 @@
+download_cmd: wget
+gid_adm: adm
+gid_zero: root
+service_dir: /etc/init.d
+
+# Apache
+apache_conf_dir: /etc/httpd
+apache_conf_file: httpd.conf
+apache_error_dir: /var/www/html/error
+apache_icons_dir: /var/www/html/icons
+apache_log_dir: /var/log/httpd
+apache_modules_dir: /usr/lib/httpd/modules
+apache_run_dir: /var/run/httpd
+apache_runtime_group: apache
+apache_runtime_user: apache
+apache_service_name: httpd
+apache_web_root: /var/www/html
+
+# Asterisk
+asterisk_data_dir: /var/lib/asterisk
+
+# Bacula
+bacula_work_dir: /var/spool/bacula
+bacula_run_dir: /var/run
+
+# Memcache
+memcache_runtime_user: memcached
+
+# MySQL
+mysql_conf_dir: /etc
+mysql_include_dir: /etc/mysql.d
+mysql_service_name: mysqld
+
+# Nagios
+nagios_hostgroup: centos-servers
+nagios_iconimage: utgb/centos.png
+nagios_iconimagealt: centos
+nagios_run_dir: /var/run/nrpe
+nagios_statusmapimage: utgb/centos.gd2
+
+# Named
+named_conf_dir: /etc/named
+named_service_name: named
+
+# OpenLDAP
+openldap_conf_dir: /etc/slapd
+
+# OpenVZ
+openvz_modules:
+  - autofs4
+  - ipt_LOG
+  - ipt_REDIRECT
+  - ipt_REJECT
+  - ipt_conntrack
+  - ipt_helper
+  - ipt_length
+  - ipt_limit
+  - ipt_multiport
+  - ipt_state
+  - ipt_tcpmss
+  - ipt_ttl
+  - ipt_tos
+  - iptable_mangle
+  - iptable_nat
+  - nf_conntrack
+  - nf_conntrack_ftp
+  - nf_conntrack_irc
+  - nf_nat
+  - nfsd
+  - xt_comment
+  - xt_state
+
+# PHP - usual suspects
+#php_mod_curl: true
+#php_mod_fileinfo: true
+#php_mod_json: true
+#php_mod_phar: true
+
+# Rsync
+rsync_service_name: xinetd
+
+# SNMP
+snmp_conf_dir: /etc/snmp

@@ -1,0 +1,9 @@
+[Definition]
+
+actionstart = /sbin/pfctl -a fail2ban -t fail2ban -Ts || /sbin/pfctl -a fail2ban -f <%=@conf_dir%>/pf-anchor.conf
+actionstop = /sbin/pfctl -a fail2ban -F rules
+actioncheck = /sbin/pfctl -s info | grep Enabled
+actionban = /sbin/pfctl -a fail2ban -t fail2ban -T add <ip> && /sbin/pfctl -k <ip>
+actionunban = /sbin/pfctl -a fail2ban -t fail2ban -T delete <ip>
+
+[Init]

@@ -1,0 +1,20 @@
+#!/bin/sh
+
+export PATH=/sbin:/usr/sbin:/usr/local/sbin:/bin:/usr/bin:/usr/local/bin
+
+if ! test -p /var/run/isakmpd.fifo; then
+    pkill isakmpd
+fi >/dev/null
+if ! ps ax | grep '[i]sakmpd: '; then
+    . /etc/rc.conf
+    . /etc/rc.conf.local
+    if echo $isakmpd_flags | grep 'S'; then
+	if ! ifconfig carp42 | grep MASTER; then
+	    exit 0
+	fi
+    fi
+    isakmpd $isakmpd_flags
+    ipsecctl -f /etc/ipsec.conf
+fi >/dev/null
+
+exit $?

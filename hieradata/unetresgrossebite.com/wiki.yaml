@@ -1,0 +1,34 @@
+additional_classes:
+  - Bacula
+  - Fail2ban
+  - Firehol
+
+# Bacula
+bacula_file_daemon_fileset:
+  - /etc/letsencrypt
+  - /media/backups
+
+# Firehol
+firehol_interfaces:
+  - name: eth0
+    description: WAN
+    protection: strong
+    allow:
+      - server icmp accept
+      - server http accept
+      - server https accept
+      - server custom openssh "tcp/1022" default accept
+      - server custom munin "tcp/4949" default accept src "$office_networks"
+      - server custom nrpe "tcp/5666" default accept src "$office_networks"
+      - server custom baculadir "tcp/9102" default accept src "$office_networks"
+      - client all accept
+
+# Letsencrypt
+letsencrypt_renew_day: 21
+letsencrypt_renew_hour: 22
+letsencrypt_renew_min: 34
+
+# PF
+dns_ip:
+  - 188.165.212.140
+  - 37.59.45.201

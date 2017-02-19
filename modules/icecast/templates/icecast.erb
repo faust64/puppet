@@ -1,0 +1,55 @@
+<icecast>
+    <limits>
+	<clients><%=@max_clients%></clients>
+	<sources><%=@max_sources%></sources>
+	<threadpool>5</threadpool>
+	<queue-size>524288</queue-size>
+	<client-timeout>30</client-timeout>
+	<header-timeout>15</header-timeout>
+	<source-timeout>10</source-timeout>
+	<burst-on-connect>1</burst-on-connect>
+	<burst-size>65535</burst-size>
+    </limits>
+    <authentication>
+<% if @upstream == false -%>	<source-password><%=@relay_user%></source-password>
+	<relay-password><%=@relay_pass%></relay-password>
+<% end -%>	<admin-user><%=@admin_user%></admin-user>
+	<admin-password><%=@admin_pass%></admin-password>
+    </authentication>
+    <hostname><%=@hostname%></hostname>
+    <listen-socket>
+	<port>8000</port>
+    </listen-socket>
+<% if @upstream -%>    <mount>
+	<mount-name>/codir.ogg</mount-name>
+	<authentication type="htpasswd">
+	    <option name="filename" value="<%=@conf_dir%>/myauth"/>
+	    <option name="allow_duplicate_users" value="1"/>
+	</authentication>
+	<max-listeneres>50</max-listeneres>
+    </mount>
+    <master-server><%=@upstream%></master-server>
+    <master-server-port>8001</master-server-port>
+    <master-update-interval>10</master-update-interval>
+    <master-password><%=@relay_pass%></master-password>
+<% else -%>    <listen-socket>
+	<port>8001</port>
+    </listen-socket>
+<% end -%>    <fileserve>1</fileserve>
+    <paths>
+	<basedir><%=@share_dir%></basedir>
+	<logdir><%=@log_dir%></logdir>
+	<webroot><%=@share_dir%>/web</webroot>
+	<adminroot><%=@share_dir%>/admin</adminroot>
+	<alias source="/" dest="/status.xsl"/>
+    </paths>
+    <logging>
+	<accesslog>access.log</accesslog>
+	<errorlog>error.log</errorlog>
+	<loglevel>3</loglevel>
+	<logsize>10000</logsize>
+    </logging>
+    <security>
+	<chroot>0</chroot>
+    </security>
+</icecast>

@@ -1,0 +1,14 @@
+client localhost {
+	ipaddr = 127.0.0.1
+	secret = <%=@default_passphrase%>
+	require_message_authenticator = no
+	nastype = other
+}<% if @authorized_clients != false -%><% @authorized_clients.each do |apname, ap| -%><% if ap['addr'] =~ /[0-9]\.[0-9]/ and ap['name'] =~ /[a-z]/ -%>
+
+client <%=ap['addr']%> {
+    secret = <% if ap['passphrase'] =~ /[a-z]/ -%><%=ap['passphrase']%><% else %><%=@default_passphrase%><% end -%>
+
+    shortname = <%=ap['name']%>
+    require_message_authenticator = no
+    nastype = other
+}<% end -%><% end -%><% end -%>

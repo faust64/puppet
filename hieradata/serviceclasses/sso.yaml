@@ -1,0 +1,17 @@
+additional_classes:
+  - Openldap
+  - Apache
+
+# Apache
+apache_listen_ports:
+  plain: 80
+  ssl: 443
+apache_mod_authldap: true
+apache_mod_php: true
+apache_mod_status: true
+apache_mpm: prefork
+apache_munin: false
+
+# PHP
+php_mod_mcrypt: true
+php_mod_ldap: true

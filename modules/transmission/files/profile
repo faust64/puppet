@@ -1,0 +1,4 @@
+#!/bin/sh
+
+alias pause='transmission-remote  -t all --stop'
+alias resume='transmission-remote  -t all --start'

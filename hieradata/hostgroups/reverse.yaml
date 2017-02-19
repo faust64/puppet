@@ -1,0 +1,21 @@
+additional_classes:
+  - Reverse
+
+# AIDE
+with_aide: true
+
+# Apache
+apache_collectd: true
+apache_debugs: true
+apache_keepalive: "On"
+apache_listen_ports:
+  plain: 80
+  ssl: 443
+apache_mod_authldap: true
+apache_mod_proxy_http: true
+apache_mod_security: true
+apache_munin: true
+apache_rsyslog: true
+
+# Auditd
+with_auditd: true

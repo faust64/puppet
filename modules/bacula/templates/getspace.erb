@@ -1,0 +1,12 @@
+#!/bin/sh
+
+export PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
+
+ls <%=@archive_device%>/* >/dev/null 2>&1
+if test "$1" = left; then
+    ls <%=@archive_device%>/ >/dev/null 2>&1 && df -P -B1073741824 <%=@archive_device%> | awk '/\//{print $4}'
+elif test "$1" = total; then
+    ls <%=@archive_device%>/ >/dev/null 2>&1 && df -P -B1073741824 <%=@archive_device%> | awk '/\//{print $2}'
+fi
+
+exit 0

@@ -1,0 +1,15 @@
+<%=@log_dir%>/*.log
+{
+    compress
+    create 640 <%=@runuser%> <%=@rungroup%>
+    daily
+    delaycompress
+    missingok
+    notifempty
+    rotate <%=@rotate%>
+    sharedscripts
+    postrotate
+<% if @kernel == "Linux" -%>	service <%=@srvname%> reload >/dev/null 2>&1
+<% else -%>	/etc/rc.d/<%=@srvname%> restart >/dev/null 2>&1
+<% end -%>    endscript
+}

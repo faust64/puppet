@@ -1,0 +1,17 @@
+#/bin/sh
+
+DEST=<%=@contact%>
+TMPFILE=/tmp/list.$$
+find /home/pki/ssl -name "*.crt" | grep -v '/revoked/' >$TMPFILE
+next_month=$(date -d "now + 1 month" +%s)
+while read file
+do
+    exp=$(date -d "$(openssl x509 -in "$file" -noout -text | grep After | cut -f2- -d":")" +%s)
+    test $exp -le $next_month || continue
+    echo "$file expires \c"
+    perl -MPOSIX -e "print strftime('%d/%m/%Y', localtime($exp))"
+    echo .
+done <$TMPFILE | mail -s "[REPORT] expired/expiring certificates" $DEST
+rm -f $TMPFILE
+
+exit 0

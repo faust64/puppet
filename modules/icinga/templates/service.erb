@@ -1,0 +1,11 @@
+define service {
+    contacts			<%=@contacts%>
+    check_interval		<%=@check_interval%>
+    max_check_attempts		<%=@max_check_attempts%>
+    name			<%=@name%>-service
+    notification_interval	<%=@notification_interval%>
+    notification_period		<%=@timeperiod%>
+    register			0
+    retry_interval		<%=@retry_check_interval%>
+    use				<%=@inherits%>-service
+}

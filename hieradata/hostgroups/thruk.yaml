@@ -1,0 +1,10 @@
+additional_classes:
+  - Thruk
+
+# Apache
+apache_mod_headers: true
+apache_mod_fcgid: true
+
+# Thruk
+thruk_start_timeout: 45
+thruk_with_icinga: true

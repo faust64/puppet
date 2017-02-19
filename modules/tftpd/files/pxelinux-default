@@ -1,0 +1,3 @@
+DEFAULT vesamenu.c32
+ui vesamenu.c32
+include boot-screens/main.cfg

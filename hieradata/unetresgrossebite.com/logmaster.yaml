@@ -1,0 +1,64 @@
+additional_classes:
+  - Elasticsearch
+  - Fail2ban
+  - Firehol
+  - Kibana
+  - Logstash
+
+nagios_no_parent: true
+physical_parent: false
+racktables_object_id: 4
+
+# Elasticsearch
+elasticsearch_listen_addr: 5.135.176.165
+elasticsearch_number_of_replicas: 0
+
+# Firehol
+firehol_interfaces:
+  - name: eth0
+    description: WAN
+    protection: strong
+    allow:
+      - server icmp accept
+      - server http accept
+      - server https accept
+      - server custom openssh "tcp/1022" default accept
+      - server custom logstashsyslog "udp/1514" default accept src "$office_networks"
+      - server custom syslogstunnel "tcp/4269" default accept src "$office_networks"
+      - server custom munin "tcp/4949" default accept src "$office_networks"
+      - server custom nrpe "tcp/5666" default accept src "$office_networks"
+      - server custom logstashweb "udp/6969" default accept src "$office_networks"
+      - server custom elasticsearch "tcp/9200" default accept src "$office_networks"
+      - client all accept
+
+# Letsencrypt
+letsencrypt_renew_day: 22
+letsencrypt_renew_hour: 22
+letsencrypt_renew_min: 54
+
+# LinuxCounter
+lico_update_day: 1
+lico_update_hour: 15
+lico_update_min: 30
+
+# Logstash
+logstash_output:
+  elasticsearch:
+    hosts: 
+      - 5.135.176.165
+    index: bigbrother
+
+# Nagios
+nagios_partitions_watchlist:
+  root: /
+  elasticsearch: /var/lib/elasticsearch
+  syslog: /var/log
+nagios_smart_disks:
+  - sda
+
+# Rsyslog
+rsyslog_collect:
+  - "*.unetresgrossebite.com"
+  - "*.emma-earth.com"
+rsyslog_hub: false
+rsyslog_logstash_target: 5.135.176.165

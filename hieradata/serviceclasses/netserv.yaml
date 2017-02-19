@@ -1,0 +1,6 @@
+additional_classes:
+  - Named
+  - Openldap
+
+# Bind
+rndc_conf_dir: /etc/bind

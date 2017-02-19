@@ -1,0 +1,43 @@
+server inner-tunnel {
+    listen {
+	ipaddr = 127.0.0.1
+	port = 18120
+	type = auth
+    }
+    authorize {
+	mschap
+	suffix
+	update control {
+	    Proxy-To-Realm := LOCAL
+	}
+	eap {
+	    ok = return
+	}
+	ldap
+	expiration
+	logintime
+    }
+    authenticate {
+	Auth-Type MS-CHAP {
+	    mschap
+	}
+	unix
+	Auth-Type LDAP {
+	    ldap
+	}
+	eap
+    }
+    session {
+	radutmp
+    }
+    post-auth {
+	Post-Auth-Type REJECT {
+	    attr_filter.access_reject
+	}
+    }
+    pre-proxy {
+    }
+    post-proxy {
+	eap
+    }
+}

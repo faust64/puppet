@@ -1,0 +1,14 @@
+additional_classes:
+  - Openbox
+  - Flumotion
+
+# Accounts
+generic_groups:
+  - users
+  - flumotion
+
+# Flumotion
+flumotion_forwarder_host: icecast.unetresgrossebite.com
+
+# Openbox
+openbox_autostart_cmd: 'xterm -e ~/start-conference.sh -i'

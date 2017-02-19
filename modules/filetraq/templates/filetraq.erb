@@ -1,0 +1,71 @@
+#!/bin/sh
+
+diffoder=newold
+diffopts="-p -C1"
+file=<%=@conf_dir%>/filetraq.conf
+backupdir=<%=@backup_dir%>
+includedir=<%=@conf_include%>
+
+if test "$1" != ""; then
+    if test "$1" = "--help"; then
+	echo "FileTraq version 0.2"
+	echo "Syntax: $0 [filelist] [backupdir]";
+	echo "If no filelist is specified, default is $file."
+	echo "If no backupdir is specified, default is $backupdir."
+	exit
+    fi
+    if ! test -r $1; then
+	echo "Filelist $1 does not exist or cannot be read."
+	exit
+    fi
+    file=$1
+fi
+
+if test "$2" != ""; then
+    if [ ! -d $2 ]; then
+	echo "Backupdir $2 is not a directory."
+	exit
+    fi
+    backupdir=$2
+fi
+
+if ls $includedir | grep '[a-z]' >/dev/null; then
+    input="$file $includedir/*"
+else
+    input=$file
+fi
+
+for entry in `cat $input | cut -d "#" -f 1`
+do
+    for name in `find<% if @kernel != "Linux" -%> -H<% end -%> $entry -<% if @kernel == "Linux" -%>x<% end -%>type f 2>&1`
+    do
+	if test "$name" = "find:"; then
+	    echo "File not found, or pattern didn't match any files: $entry"
+	    break
+	else
+	    backup=$backupdir/`echo $name \
+		| sed -e 's/^\/\(.*\)$/\1/' -e 's|/|\.|g'`
+	    if test ! -e $backup; then
+		echo "Creating first backup of $name."
+		cp -pRLf $name $backup
+	    else
+		if test "$difforder" = oldnew; then
+		    diff $diffopts $backup $name
+		else
+		    diff $diffopts $name $backup
+		fi
+		ret=$?
+		if test $ret = 1; then
+		    cp -pRLf $backup $backup.`date +%m.%d.%y__%H.%M`
+		    cp -pRLf $name $backup
+		elif test $ret = 2; then
+		    echo "Recording changes in binary file $name in backupdir"
+		    cp -pRLf $backup $backup.`date +%m.%d.%y__%H.%M`
+		    cp -pRLf $name $backup
+		fi
+	    fi
+	fi
+    done
+done
+
+exit $?

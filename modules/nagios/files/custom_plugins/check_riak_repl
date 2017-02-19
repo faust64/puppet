@@ -1,0 +1,78 @@
+#!/bin/sh
+
+VALUE=`date +%s`
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+PATH="/usr/local/sbin:/usr/sbin:/sbin:$PATH"
+export PATH
+ret=UNKNOWN
+ 
+test -s /etc/nagios/riak.cfg && . /etc/nagios/riak.cfg
+if test -z "$LEFT_NODE"; then
+    LEFT_NODE=`riak-admin cluster status | awk '/(C).*valid/{print $3}' | cut -d@ -f2`
+fi
+if test -z "$RIGHT_NODE"; then
+    RIGHT_NODE=`riak-repl status | awk -F, '/socket,\[{peername,/{print $3}' | cut -d: -f1 | sed 's|"||'`
+fi
+if test -z "`riak-repl connections 2>/dev/null | grep :9080`"; then
+    msg=" - replication not configured"
+elif test -z "$LEFT_NODE" -o -z "$RIGHT_NODE"; then
+    msg=" - failed identifying a node in each cluster"
+else
+    if test "$RIAK_CA"; then
+	PROTO=https
+	OPTS="--cacert $RIAK_CA"
+    else
+	PROTO=http
+	OPTS=
+    fi
+    if test "$LOCAL_USER"; then
+	if test "$LOCAL_PASS"; then
+	    AUTHSTR="$LOCAL_USER:$LOCAL_PASS@"
+	else
+	    AUTHSTR="$LOCAL_USER@"
+	fi
+    else
+	AUTHSTR=
+    fi
+    if test "$LEFT_NODE" = "`hostname -f`"; then
+	msg=" - only running on $LEFT_NODE"
+	ret=OK
+    elif /sbin/ifconfig | grep $LEFT_NODE >/dev/null 2>&1; then
+	msg=" - only running on $LEFT_NODE"
+	ret=OK
+    elif ! curl $OPTS -s -X PUT -d "$VALUE" $PROTO://$AUTHSTR$LEFT_NODE:8098/riak/replCheck/c1; then
+	msg=" - failed running PUT"
+    else
+	CHECKPUT_LEFT=`curl $OPTS -s $PROTO://$AUTHSTR$LEFT_NODE:8098/riak/replCheck/c1`
+	if test "$VALUE" != "$CHECKPUT_LEFT"; then
+	    ret=CRITICAL
+	    msg=" - PUT failed ($VALUE/$CHECKPUT_LEFT)"
+	else
+	    if test "$REMOTE_USER"; then
+		if test "$REMOTE_PASS"; then
+		    AUTHSTR="$REMOTE_USER:$REMOTE_PASS@"
+		else
+		    AUTHSTR="$REMOTE_USER@"
+		fi
+	    else
+		AUTHSTR=
+	    fi
+	    CHECKREPL_RIGHT=`curl $OPTS -s $PROTO://$AUTHSTR$RIGHT_NODE:8098/riak/replCheck/c1`
+
+	    if test "$VALUE" != "$CHECKREPL_RIGHT"; then
+		msg=" - $LEFT_NODE to $RIGHT_NODE inconsistent ($VALUE/$CHECKREPL_RIGHT)"
+	    else
+		msg=" - $LEFT_NODE to $RIGHT_NODE consistent"
+		ret=OK
+	    fi
+	fi
+    fi
+fi
+
+echo "$PRG $ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

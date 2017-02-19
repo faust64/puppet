@@ -1,0 +1,59 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+PATH="/usr/local/sbin:/usr/sbin:/sbin:$PATH"
+export PATH
+ret=OK
+us=`/sbin/ifconfig carp1 | grep -A4 MASTER | awk '/[ 	]inet[ 	]/{print $2}'`
+str=
+if test x$us = x; then
+    ret=OK
+    str=" - BACKUP"
+else
+    if ! ps ax | awk '/relay[d]: /{print $6" "$7}' | grep 'parent'; then
+	ret=CRITICAL
+	str=" - no root process"
+    elif test `uname -r` = 4.9; then
+	if ! ps ax | awk '/relay[d]: /{print $6" "$7}' | grep 'pf update'; then
+	    ret=CRITICAL
+	    str=" - no pf update engine"
+	elif ! ps ax | awk '/relay[d]: /{print $6" "$7}' | grep 'host check'; then
+	    ret=WARNING
+	    str=" - no host checker"
+	elif ! ps ax | awk '/relay[d]: /{print $6" "$7}' | grep 'socket relay'; then
+	    ret=CRITICAL
+	    str=" - no socket relay"
+	fi
+    else
+	if ! ps ax | awk '/relay[d]: /{print $6" "$7}' | grep 'pfe '; then
+	    ret=CRITICAL
+	    str=" - no pf update engine"
+	elif ! ps ax | awk '/relay[d]: /{print $6" "$7}' | grep 'hce '; then
+	    ret=WARNING
+	    str=" - no host checker"
+	fi
+    fi
+    str=$(sudo relayctl show hosts 2>/dev/null | \
+	  awk '/[ 	]host[ 	]/{print $3" "$5}' | \
+	  while read host status
+	  do
+	      if "x$status" = xup; then
+		  continue
+	      fi
+	      echo -n " - $host status:$status"
+	  done)
+    if test -z "$str"; then
+	prcnum=`ps ax | awk 'BEGIN{c=0}/relay[d]: /{c=c+1}END{print c}'`
+	ret=OK
+	str=" - $prcnum - all services up"
+    fi
+fi >/dev/null 2>&1
+
+echo "$ret$str"
+eval ret=\$$ret
+exit $ret

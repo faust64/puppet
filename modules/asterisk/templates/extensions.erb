@@ -1,0 +1,73 @@
+#include vars.conf
+#include apps.conf
+#include from.conf
+#include macros.conf
+#include misc.conf
+#include phoneconfig.conf
+#include pickup.conf
+<% if @conference_rooms -%><% @conference_rooms.each do |exten, exthash| -%>#include conferences.d/<%=exten%>.conf
+<% end -%><% end -%><% if @extensions -%><% @extensions.each do |exten, exthash| -%><% if exthash['did'] =~ /[0-9]/ -%>#include did.d/<%=exthash['did']%>.conf
+<% end -%><% end -%><% end -%><% if @ring_groups -%><% @ring_groups.each do |exten, exthash| -%><% if exthash['did'] =~ /[0-9]/ -%>#include did.d/<%=exthash['did']%>.conf
+<% end -%><% end -%><% end -%><% if @queues -%><% @queues.each do |exten, exthash| -%><% if exthash['did'] =~ /[0-9]/ -%>#include did.d/<%=exthash['did']%>.conf
+<% end -%><% end -%><% end -%><% if @extensions -%><% @extensions.each do |exten, exthash| -%>#include extensions.d/<%=exten%>.conf
+<% end -%><% end -%><% if @ring_groups -%><% @ring_groups.each do |exten, exthash| -%>#include groups.d/<%=exten%>.conf
+<% end -%><% end -%><% if @queues -%><% @queues.each do |exten, exthash| -%>#include queues.d/<%=exten%>.conf
+<% end -%><% end -%><% if @common_routes -%><% @common_routes.each do |route, routehash| -%><% if routehash['remote'] != @domain -%>#include routes.d/<%=route%>.conf
+<% end -%><% end -%><% end -%><% if @local_routes -%><% @local_routes.each do |route, routehash| -%>#include routes.d/<%=route%>.conf
+<% end -%><% end -%><% if @time_conditions -%><% @time_conditions.each do |cond, condhash| -%>#include timeconditions.d/<%=cond%>.conf
+<% end -%><% end -%>
+[ext-group]
+<% if @ring_groups -%><% @ring_groups.each do |exten, exthash| -%><% if exthash['did'] =~ /[0-9]/ -%>include => ext-group-<%=exten%>
+<% end -%><% end -%><% end -%>
+[ext-queues]
+<% if @queues -%><% @queues.each do |exten, exthash| -%>include => ext-queue-<%=exten%>
+<% end -%><% end -%>
+[ext-local]
+<% if @extensions -%><% @extensions.each do |exten, exthash| -%>include => ext-local-<%=exten%>
+<% end -%><% end -%>
+[ext-did-main]
+<% if @extensions -%><% @extensions.each do |exten, exthash| -%><% if exthash['did'] =~ /[0-9]/ -%>include => ext-did-<%=exten%>
+<% end -%><% end -%><% end -%><% if @ring_groups -%><% @ring_groups.each do |exten, exthash| -%><% if exthash['did'] =~ /[0-9]/ -%>include => ext-did-<%=exten%>
+<% end -%><% end -%><% end -%><% if @queues -%><% @queues.each do |exten, exthash| -%><% if exthash['did'] =~ /[0-9]/ -%>include => ext-did-<%=exten%>
+<% end -%><% end -%><% end -%>
+[ext-cf-hints]
+<% if @extensions -%><% @extensions.each do |exten, exthash| -%>include => ext-cf-hint-<%=exten%>
+<% end -%><% end -%>
+[ext-dnd-hints]
+<% if @extensions -%><% @extensions.each do |exten, exthash| -%>include => ext-dnd-hint-<%=exten%>
+<% end -%><% end -%>
+[ext-followme]
+<% if @extensions -%><% @extensions.each do |exten, exthash| -%>include => ext-followme-<%=exten%>
+<% end -%><% end -%>
+[ext-meetme]
+exten => STARTMEETME,1,ExecIf($["${MEETME_MUSIC}" != ""]?SetMusicOnHold(${MEETME_MUSIC}))
+exten => STARTMEETME,n,MeetMe(${MEETME_ROOMNUM},${MEETME_OPTS},${PIN})
+exten => STARTMEETME,n,Hangup
+exten => h,1,Hangup
+<% if @conference_rooms -%><% @conference_rooms.each do |exten, exthash| -%>include => ext-meetme-<%=exten%>
+<% end -%><% end -%>
+[fmgrps]
+<% if @extensions -%><% @extensions.each do |exten, exthash| -%>include => ext-fmgrp-<%=exten%>
+<% end -%><% end -%>
+[from-did-direct-ivr]
+<% if @extensions -%><% @extensions.each do |exten, exthash| -%>include => from-did-direct-ivr-<%=exten%>
+<% end -%><% end -%>
+[from-queue]
+<% if @queues -%><% @queues.each do |exten, exthash| -%>include => from-queue-<%=exten%>
+<% end -%><% end -%>exten => _X.,1,Set(QAGENT=${EXTEN})
+exten => _X.,n,Goto(${NODEST},1)
+
+[from-queue-exten-only]
+<% if @extensions -%><% @extensions.each do |exten, exthash| -%>include => from-queue-exten-only-<%=exten%>
+<% end -%><% end -%>
+<% if @iax_trunks -%><% @iax_trunks.each do |trunk, trunkhash| -%><% if trunkhash['context'] =~ /[a-z]/ -%><% else -%>[from-trunk-iax2-<%=trunk%>]
+exten => _X.,1,Set(GROUP()=OUT_<%=trunk%>)
+exten => _X.,n,Goto(from-trunk,${EXTEN},1)
+<% end -%><% end -%><% end -%>
+[outbound-allroutes]
+<% if @common_routes -%><% @common_routes.each do |route, routehash| -%><% if routehash['remote'] != @domain -%>include => outbound-<%=route%>
+<% end -%><% end -%><% end -%><% if @local_routes -%><% @local_routes.each do |route, routehash| -%>include => outbound-<%=route%>
+<% end -%><% end -%>
+[timeconditions]
+<% if @time_conditions -%><% @time_conditions.each do |cond, condhash| -%>include => time-condition-<%=cond%>
+<% end -%><% end -%>

@@ -1,0 +1,8 @@
+[<%=@user%>]
+<% if @allow =~ /[0-9]\.[0-9]/ -%>deny = 0.0.0.0/0.0.0.0
+permit = <%=@allow%>
+<% else -%>permit = 0.0.0.0/0.0.0.0
+<% end -%><% if @readperms -%>read = <%=@readperms.join(',')%>
+<% end -%>secret = <%=@passphrase%>
+<% if @writeperms -%>write = <%=@writeperms.join(',')%>
+<% end -%>

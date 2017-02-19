@@ -1,0 +1,63 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+perfdata=0
+res=UNKNOWN
+
+d=/
+for i in /usr/local/bin /usr/bin /bin /
+do
+    test -x $i/lpstat && d=$i && break
+done
+LPSTAT=$d/lpstat
+
+usage()
+{
+    cat >&2 <<EOF
+$PRG usage: [-h host] [-p printer]
+EOF
+}
+
+while test "$1"
+do
+    case $1 in
+	-h)
+	    host=$2
+	    shift 2
+	    ;;
+	-p)
+	    printer=$2
+	    shift 2
+	    ;;
+	-h)
+	    usage
+	    exit 0
+	    ;;
+	*)
+	    usage
+	    exit 1
+	    ;;
+    esac
+done
+if test -z "$host"; then
+    if hostname -f >/dev/null 2>&1; then
+	host=`hostname -f`
+    else
+	host=`hostname`
+    fi
+fi
+
+msg=" `$LPSTAT -h $host -p $printer`"
+case $msg in
+    *Rejecting*)			res=CRITICAL	;;
+    *Unable*|*disabled*)		res=UNKNOWN	;;
+    *idle*|*printing*)			res=OK		;;
+esac
+
+echo "$res$msg"
+eval res=\$$res
+exit $res

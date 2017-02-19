@@ -1,0 +1,19 @@
+#!/bin/sh
+
+iptables --flush
+iptables --delete-chain
+iptables --zero
+iptables --table nat --flush
+iptables --table nat --delete-chain
+iptables --table nat --zero
+iptables --policy INPUT ACCEPT
+iptables --policy FORWARD ACCEPT
+iptables --policy OUTPUT ACCEPT
+
+cd /etc/firewall
+for fl in ruleset.*
+do
+    sh $fl
+done
+
+exit 0

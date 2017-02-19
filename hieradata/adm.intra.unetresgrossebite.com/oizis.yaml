@@ -1,0 +1,30 @@
+with_collectd: false
+physical_parent: eros.adm.intra.unetresgrossebite.com,gaia.adm.intra.unetresgrossebite.com
+
+# LinuxCounter
+lico_update_day: 1
+lico_update_hour: 15
+lico_update_min: 20
+
+# Munin-Node
+munin_node_listenaddr: 10.42.242.105
+
+# Nagios
+nagios_listenaddr: 10.42.242.105
+nagios_md_raid:
+  - md1
+  - md2
+nagios_smart_disks:
+  - sda
+  - sdb
+  - sdc
+  - sdd
+  - sde
+  - sdf
+
+# SNMP
+snmp_listenaddr: 10.42.242.105
+
+# Xen
+xen_mem_max: 10240
+xen_mem_reserved: 8192

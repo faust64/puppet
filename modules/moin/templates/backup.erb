@@ -1,0 +1,30 @@
+#!/bin/sh
+
+TMPFILE=/tmp/moin.$$
+HOSTNAME=`hostname -f`
+BACKUP_DIR=/media/backups
+<% if @slack_hook != false -%>HOOK_URL=<%=@slack_hook%>
+<% end -%>backup_file=$BACKUP_DIR/moinmoin.tar.gz
+cd <%=@wiki_dir%>
+if ! test -d $BACKUP_DIR; then
+    mkdir $BACKUP_DIR
+fi
+if tar -c data | gzip -n >$backup_file 2>$TMPFILE; then
+    SUBJECT=REPORT
+else
+    SUBJECT=WARNING
+fi
+if test "$HOOK_URL" -a -x /usr/local/bin/slack; then
+    if test -s $TMPFILE; then
+	while read line
+	do
+	    /usr/local/bin/slack $HOOK_URL "$SUBJECT: moinmoin backup on $HOSTNAME - $line"
+	done <$TMPFILE
+    else
+	/usr/local/bin/slack $HOOK_URL "$SUBJECT: backup moinmoin done on $HOSTNAME"
+    fi
+fi
+
+rm -f $TMPFILE
+
+exit $?

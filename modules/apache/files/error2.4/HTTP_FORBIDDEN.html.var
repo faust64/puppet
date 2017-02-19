@@ -1,0 +1,57 @@
+Content-language: en
+Content-type: text/html; charset=UTF-8
+Body:----------en--
+<!--#set var="TITLE" value="403: Access forbidden!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 403</h1>
+<!--#if expr="v('REDIRECT_URL') =~ m:/$:" -->
+	    <p>You do not have permission to access the requested directory. Either is there no index, or the directory is read-protected.</p>
+<!--#else -->
+	    <p>You do not have permission to access the requested object. Either is it read protected, or the server is not available to access it.</p>
+<!--#endif -->
+	    <p>If you think this is a mistake, please contact admin@unetresgrossebite.com</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------en--
+
+Content-language: es
+Content-type: text/html
+Body:----------es--
+<!--#set var="TITLE" value="403: Acceso prohibido!" -->
+<!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 403</h1>
+<!--#if expr="v('REDIRECT_URL') =~ m:/$:" -->
+	    <p>Usted no tiene permiso para accessar a la direcci&oacute;n solicitada. Existe la posibilidad de que el directorio este protegido contra lectura o que no exista la documentaci&oacute;n requerida.</p>
+<!--#else -->
+	    <p>Usted no tiene permiso de accesar al objeto solicitado. Existe la posibilidad de que este protegido contra lectura o que no haya podido ser leido por el servidor.</p>
+<!--#endif -->
+	    <p>Si usted piensa que es un error, gracias ponerse en contacto con admin@unetresgrossebite.com</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------es--
+
+Content-language: fr
+Content-type: text/html; charset=UTF-8
+Body:----------fr--
+<!--#set var="CONTENT_LANGUAGE" value="fr"
+--><!--#set var="TITLE" value="403 : Acc&egrave;s interdit !"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERREUR 403</h1>
+<!--#if expr="v('REDIRECT_URL') =~ m:/$:" -->
+	    <p>Vous n'avez pas le droit d'acc&eacute;der au r&eacute;pertoire demand&eacute;. Soit il n'y a pas de document index soit le r&eacute;pertoire est prot&eacute;g&eacute;.</p>
+<!--#else -->
+	    <p>Vous n'avez pas le droit d'acc&eacute;der &agrave; l'objet demand&eacute;. Soit celui-ci est prot&eacute;g&eacute;, soit il ne peut &ecirc;tre lu par le serveur.</p>
+<!--#endif -->
+	    <p>Si vous pensez qu'il s'agit d'une erreur, merci de contacter admin@unetresgrossebite.com</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------fr--

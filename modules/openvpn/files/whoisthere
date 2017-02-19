@@ -1,0 +1,3 @@
+#!/bin/sh
+
+grep '[0-9],[a-z][a-z][a-z][a-z][a-z],' /var/log/openvpn-*status.log | sed 's|^/var/log/openvpn-\([^-]*\)-status.log\(.*\)$|\1\2|'

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+wget -q http://<%=@directory%>/Effectif.CSV -O - | \
+    awk -F\; '{if ($6 != "" && $6 != " "){print $2" "$3", "$6}}' | \
+    iconv -t utf-8 -f iso-8859-15 \
+    ><%=@srv_root%>/aastra/repertoire
+
+exit $?

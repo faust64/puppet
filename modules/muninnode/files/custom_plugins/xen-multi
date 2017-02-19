@@ -1,0 +1,216 @@
+#!/usr/bin/perl
+
+use strict;
+use Munin::Plugin;
+
+my $XEN_SKIP = $ENV{xenskip} || "";
+
+if ($ARGV[0] eq "autoconf")
+{
+    if (`which xentop`)
+    {
+	print "yes\n";
+    }
+    else
+    {
+	print "no (xentop not found)\n";
+    }
+    exit 0;
+}
+
+sub trim_label
+{
+    my ($type, $label) = @_; my $data_characters;
+    my ($graph_width, $graph_border_width, $padding_characters, $pixels_per_character) = (497,3,5,6);
+    if ($type eq 'pos') {$data_characters = 32;} elsif ($type eq 'neg') {$data_characters = 64;} else {return $label;}
+    my $available_characters = abs(($graph_width+$graph_border_width)/$pixels_per_character)-$padding_characters-$data_characters;
+    if ( $available_characters < length $label )
+    {
+	my $center = ($available_characters-2)/2;
+	$label = substr($label,0,($center)) . '..' . substr($label,-$center);
+    }
+    return $label;
+}
+
+my (%domains,$domain,@domainlist,$munindomain,$cpusecs,$cpupercent,$memk,$nettxk,$netrxk,$vbdrd,$vbdwr);
+open (XENCONF,"grep name /etc/xen/conf/* | cut -d\\' -f2 |") or die "Could not read xen hosts configuration, $!";
+while (<XENCONF>)
+{
+    ($domain,undef) = split(/\s+/);
+    $domains{$domain}{'munindomain'} = clean_fieldname($domain);
+    $domains{$domain}{'cpusecs'} = '0';
+    $domains{$domain}{'cpupercent'} = '0.0';
+    $domains{$domain}{'mem'} = 0;
+    $domains{$domain}{'nettx'} = 0;
+    $domains{$domain}{'netrx'} = 0;
+    $domains{$domain}{'vbdrd'} = 0;
+    $domains{$domain}{'vbdwr'} = 0;
+}
+close(XENCONF);
+
+open (XENTOP,"xentop -b -f -i2 |") or die "Could not execute xentop, $!";
+while (<XENTOP>)
+{
+    s/^\s+//; chomp;
+    next if /^NAME/;
+    ($domain,undef,$cpusecs,$cpupercent,$memk,undef,undef,undef,undef,undef,$nettxk,$netrxk,undef,undef,$vbdrd,$vbdwr,undef,undef,undef) = split(/\s+/);
+    $domains{$domain}{'munindomain'} = clean_fieldname($domain);
+    if ($ARGV[0] eq "")
+    {
+	$domains{$domain}{'cpusecs'} = $cpusecs;
+	$domains{$domain}{'cpupercent'} = $cpupercent;
+	$domains{$domain}{'mem'} = $memk;
+	$domains{$domain}{'nettx'} = $nettxk;
+	$domains{$domain}{'netrx'} = $netrxk;
+	$domains{$domain}{'vbdrd'} = $vbdrd;
+	$domains{$domain}{'vbdwr'} = $vbdwr;
+    }
+}
+close(XENTOP);
+
+@domainlist = sort(keys(%domains));
+
+if ($ARGV[0] eq "config")
+{
+    if ($XEN_SKIP !~ /cput/)
+    {
+	print "multigraph xen_cpu_time\n";
+	print "graph_title Xen domains CPU time\n";
+	print "graph_args --base 1000 -l 0\n";
+	print "graph_vlabel cpu seconds\n";
+	print "graph_scale no\n";
+	print "graph_category xen\n";
+	print "graph_info This graph shows CPU time for each Xen domain.\n";
+	for $domain (@domainlist)
+	{
+	    print "$domains{$domain}{'munindomain'}_cpu_time.label ".trim_label('pos',$domain)."\n";
+	    print "$domains{$domain}{'munindomain'}_cpu_time.type DERIVE\n";
+	    print "$domains{$domain}{'munindomain'}_cpu_time.cdef $domains{$domain}{'munindomain'}_cpu_time,100,*\n";
+	    print "$domains{$domain}{'munindomain'}_cpu_time.min 0\n";
+	    print "$domains{$domain}{'munindomain'}_cpu_time.draw AREASTACK\n";
+	}
+    }
+
+    if ($XEN_SKIP !~ /cpup/)
+    {
+	print "\nmultigraph xen_cpu\n";
+	print "graph_title Xen domains CPU utilization\n";
+	print "graph_args --base 1000 -l 0 --upper-limit 100\n";
+	print "graph_vlabel %\n";
+	print "graph_scale no\n";
+	print "graph_category xen\n";
+	print "graph_info This graph shows CPU utilization for each Xen domain.\n";
+	for $domain (@domainlist)
+	{
+	    print "$domains{$domain}{'munindomain'}_cpu.label ".trim_label('pos',$domain)."\n";
+	    print "$domains{$domain}{'munindomain'}_cpu.draw AREASTACK\n"
+	}
+    }
+
+    if ($XEN_SKIP !~ /mem/)
+    {
+	print "\nmultigraph xen_mem\n";
+	print "graph_title Xen domains memory usage\n";
+	print "graph_args --base 1024 -l 0\n";
+	print "graph_vlabel bytes\n";
+	print "graph_category xen\n";
+	print "graph_info This graph shows memory usage for each Xen domain.\n";
+	for $domain (@domainlist)
+	{
+	    print "$domains{$domain}{'munindomain'}_mem.label ".trim_label('pos',$domain)."\n";
+	    print "$domains{$domain}{'munindomain'}_mem.cdef $domains{$domain}{'munindomain'}_mem,1024,*\n";
+	    print "$domains{$domain}{'munindomain'}_mem.draw AREASTACK\n";
+	}
+    }
+
+    if ($XEN_SKIP !~ /net/)
+    {
+	print "\nmultigraph xen_net\n";
+	print "graph_title Xen domains network traffic\n";
+	print "graph_args --base 1000\n";
+	print "graph_vlabel bits per \${graph_period} in (-) / out (+)\n";
+	print "graph_category xen\n";
+	print "graph_info This graph shows network traffic for each Xen domain.\n";
+	for $domain (@domainlist)
+	{
+	    print "$domains{$domain}{'munindomain'}_netrx.label none\n";
+	    print "$domains{$domain}{'munindomain'}_netrx.cdef $domains{$domain}{'munindomain'}_netrx,8192,*\n";
+	    print "$domains{$domain}{'munindomain'}_netrx.type COUNTER\n";
+	    print "$domains{$domain}{'munindomain'}_netrx.graph no\n";
+	    print "$domains{$domain}{'munindomain'}_nettx.label ".trim_label('neg',$domain)."\n";
+	    print "$domains{$domain}{'munindomain'}_nettx.cdef $domains{$domain}{'munindomain'}_nettx,8192,*\n";
+	    print "$domains{$domain}{'munindomain'}_nettx.type COUNTER\n";
+	    print "$domains{$domain}{'munindomain'}_nettx.draw AREASTACK\n";
+	    print "$domains{$domain}{'munindomain'}_nettx.negative $domains{$domain}{'munindomain'}_netrx\n";
+	}
+    }
+
+    if ($XEN_SKIP !~ /disk/)
+    {
+	print "\nmultigraph xen_disk\n";
+	print "graph_title Xen domains disk IOs\n";
+	print "graph_args --base 1000\n";
+	print "graph_vlabel IOs per \${graph_period} read (-) / write (+)\n";
+	print "graph_category xen\n";
+	print "graph_info This graph shows disk IOs for each Xen domain.\n";
+	for $domain (@domainlist)
+	{
+	    print "$domains{$domain}{'munindomain'}_vbdrd.label none\n";
+	    print "$domains{$domain}{'munindomain'}_vbdrd.type COUNTER\n";
+	    print "$domains{$domain}{'munindomain'}_vbdrd.graph no\n";
+	    print "$domains{$domain}{'munindomain'}_vbdwr.label ".trim_label('neg',$domain)."\n";
+	    print "$domains{$domain}{'munindomain'}_vbdwr.type COUNTER\n";
+	    print "$domains{$domain}{'munindomain'}_vbdwr.draw AREASTACK\n";
+	    print "$domains{$domain}{'munindomain'}_vbdwr.negative $domains{$domain}{'munindomain'}_vbdrd\n";
+	}
+    }
+
+    exit 0;
+}
+
+if ($XEN_SKIP !~ /cput/)
+{
+    print "multigraph xen_cpu_time\n";
+    for $domain (@domainlist)
+    {
+	print "$domains{$domain}{'munindomain'}_cpu_time.value $domains{$domain}{'cpusecs'}\n";
+    }
+}
+
+if ($XEN_SKIP !~ /cpup/)
+{
+    print "\nmultigraph xen_cpu\n";
+    for $domain (@domainlist)
+    {
+	print "$domains{$domain}{'munindomain'}_cpu.value $domains{$domain}{'cpupercent'}\n";
+    }
+}
+
+if ($XEN_SKIP !~ /mem/)
+{
+    print "\nmultigraph xen_mem\n";
+    for $domain (@domainlist)
+    {
+	print "$domains{$domain}{'munindomain'}_mem.value $domains{$domain}{'mem'}\n";
+    }
+}
+
+if ($XEN_SKIP !~ /net/)
+{
+    print "\nmultigraph xen_net\n";
+    for $domain (@domainlist)
+    {
+	print "$domains{$domain}{'munindomain'}_nettx.value $domains{$domain}{'nettx'}\n";
+	print "$domains{$domain}{'munindomain'}_netrx.value $domains{$domain}{'netrx'}\n";
+    }
+}
+
+if ($XEN_SKIP !~ /disk/)
+{
+    print "\nmultigraph xen_disk\n";
+    for $domain (@domainlist)
+    {
+	print "$domains{$domain}{'munindomain'}_vbdrd.value $domains{$domain}{'vbdrd'}\n";
+	print "$domains{$domain}{'munindomain'}_vbdwr.value $domains{$domain}{'vbdwr'}\n";
+    }
+}

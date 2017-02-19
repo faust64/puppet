@@ -1,0 +1,8 @@
+<% if @do_ssl -%>LEFT_NODE=<%=@fqdn%>
+<% end -%><% if @local_pass -%>LOCAL_PASS=<%=@local_pass%>
+<% end -%><% if @local_user -%>LOCAL_USER=<%=@local_user%>
+<% end -%><% if @remote_pass -%>REMOTE_PASS=<%=@remote_pass%>
+<% end -%><% if @remote_user -%>REMOTE_USER=<%=@remote_user%>
+<% end -%><% if @do_ssl -%>RIAK_CA=/etc/riak/ssl/server-chain.crt
+<% end -%><% if @remote_fqdn -%>RIGHT_NODE=<%=@remote_fqdn%>
+<% end -%>

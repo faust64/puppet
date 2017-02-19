@@ -1,0 +1,5 @@
+# Apache
+apache_rsyslog: true
+
+# Nginx
+nginx_rsyslog: true

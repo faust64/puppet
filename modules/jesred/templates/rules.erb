@@ -1,0 +1,4 @@
+<% if @regexprlist != false -%><% @regexprlist.each do |regexpr| -%>regex ^http://(<%=regexpr%>/(dists|pool)/.*)$ http://<%=@apt_cacher%>:3142/\1
+<% end -%>abort .gpg
+abort ReleaseAnnouncement
+<% end -%>

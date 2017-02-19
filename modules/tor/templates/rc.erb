@@ -1,0 +1,8 @@
+SocksPort <%=@ipaddress%>:9050
+SocksPolicy accept <%=@accept%>
+SocksPolicy reject *
+Log notice file /var/log/tor/notices.log
+RunAsDaemon 1
+DataDirectory <%=@data_dir%>
+Nickname <%=@hostname%>
+ContactInfo Charlie Root <root@example.com>

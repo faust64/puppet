@@ -1,0 +1,4 @@
+if $programname startswith 'haproxy' then {
+    :msg, contains, "<%=@stats_listen%>:<%=@stats_port%> (stats/HTTP)" stop
+    <%=@logs_dir%>/haproxy.log
+}

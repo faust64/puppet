@@ -1,0 +1,6 @@
+<% if @apt_proxy != false -%>Acquire::http::Proxy "http://<%=@apt_proxy%>:<%=@apt_proxy_port%>/";
+<% end -%><% if @root_is_ro -%>DPkg {
+    Pre-Invoke { "mount -o remount,rw /"; };
+    Post-Invoke { "test ${NO_APT_REMOUNT:-no} = yes || mount -o remount,ro / || true"; };
+};
+<% end -%>aptitude::Recommends-Important "false";

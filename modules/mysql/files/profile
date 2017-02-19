@@ -1,0 +1,7 @@
+#!/bin/sh
+
+#FIXME csh
+export MYSQL_PS1="\u@\h:\d > "
+if test -e /etc/mysql/debian.cnf; then
+    alias m='mysql --defaults-extra-file=/etc/mysql/debian.cnf'
+fi

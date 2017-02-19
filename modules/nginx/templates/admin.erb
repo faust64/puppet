@@ -1,0 +1,2 @@
+<% @all_networks.each do |vlanname, vlanhash| -%><% if vlanhash['admin'] == true -%><% @local_networks.each do |officename, officetrash| -%><% @local_networks[officename].each do |rlan| -%><% if rlan['name'] == vlanname -%><% if rlan['netid'] =~ /[0-9]/ -%><% netid = rlan['netid'] -%><% else -%><% netid = vlanhash['netid'] -%><% end -%><% if rlan['netmsk'].to_i > 0 -%><% netmsk = rlan['netmsk'] -%><% else -%><% netmsk = vlanhash['netmsk'] -%><% end -%>allow	10.<%=@office_netids[officename]%>.<%=netid%>.0/<%=netmsk%>;
+<% end -%><% end -%><% end -%><% end -%><% end -%>

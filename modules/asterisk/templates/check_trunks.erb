@@ -1,0 +1,82 @@
+#!/bin/sh
+
+FMT='+%Y/%m/%d %H:%M:%S'
+
+DownTime=60 #seconds - 30 trop court pour lille
+
+RecoverIAX()
+{
+    local remote ispub
+
+    test "$1" || return 1
+    remote=$1
+    if echo $remote | grep pub >/dev/null; then
+	ispub=yep
+    fi
+    (
+	echo "[`date "$FMT"`] Disabeling $remote"
+	/usr/local/bin/trunk_edit des $remote
+	/usr/sbin/asterisk -rx 'iax2 reload'
+	echo "[`date "$FMT"`] Waiting for effective disconnection"
+	if test "$2"; then
+	    sleep 5
+	    ssh asterisk@gw /usr/local/bin/kill_state $2 <%=@ipaddress%>
+	    if test "$ispub"; then
+		ssh asterisk@gw /usr/local/bin/kill_state $2 0.0.0.0/0 #fixme: use local public SIP IP
+	    fi
+	    sleep 2
+	else
+	    sleep $DownTime
+	fi >/dev/null 2>&1
+	echo "[`date "$FMT"`] Enabeling $remote"
+	/usr/local/bin/trunk_edit act $remote
+	/usr/sbin/asterisk -rx 'iax2 reload'
+    ) &
+    sleep 2
+}
+
+RecoverSIP()
+{
+    local remote
+
+    test "$1" || return 1
+    remote=$1
+    (
+	echo "[`date "$FMT"`] Disabeling $remote"
+	/usr/local/bin/sip_edit des $remote
+	/usr/sbin/asterisk -rx 'sip reload'
+	echo "[`date "$FMT"`] Waiting for effective disconnection"
+	if test $remote = ovh; then
+	    sleep 5
+	    ssh asterisk@gw-vlan70.<%=@domain%> /usr/local/bin/kill_ovh_states
+	    sleep 2
+	else
+	    sleep $DownTime
+	fi
+	echo "[`date "$FMT"`] Enabeling $remote"
+	/usr/local/bin/sip_edit act $remote
+	/usr/sbin/asterisk -rx 'sip reload'
+    ) &
+    sleep 2
+}
+
+for asterisk in `/usr/sbin/asterisk -rx 'iax2 show peers' | awk '/[a-zA-Z]*[      ]*[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*/{if (($6 != "OK") && ($7 != "OK") && ($8 != "OK")) print $1}'`
+do
+    test -z "$iaxcontent" && content="IAX2 trunk down with (trying to recover):"
+    rip=`/usr/sbin/asterisk -rx "iax2 show peer $asterisk" | awk '/Addr->/{print $3}'`
+    if ping -c 1 $rip >/dev/null; then
+	RecoverIAX $asterisk $rip
+    fi
+done
+
+for sip in `/usr/sbin/asterisk -rx 'sip show peers' | awk '/(ovh|jaguar|keyyo)/{print $1}' | sed 's|/.*||g'`
+do
+    regstat=`/usr/sbin/asterisk -rx 'sip show registry' | grep "\.$sip\." | awk '{print $5}'`
+    trkstat=`/usr/sbin/asterisk -rx "sip show peer $sip" | awk '/[ 	]Status[ 	]/{print $3}'`
+    rip=`/usr/sbin/asterisk -rx "sip show peer $sip" | awk '/[ 	]Addr->IP[ 	]/{print $3}'`
+    if test "$regstat" != Registered -o "$trkstat" != OK; then
+	RecoverSIP $sip
+    fi
+done
+
+exit 0

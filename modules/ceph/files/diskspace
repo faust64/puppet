@@ -1,0 +1,8 @@
+#!/bin/sh
+
+for host in $(ceph osd tree | awk '/host /{print $4}'| sed 's|-[sh][sd]d||' | sort -u)
+do
+    ssh $host df -h | grep /var/lib/ceph
+done
+
+exit 0

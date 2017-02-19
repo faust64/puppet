@@ -1,0 +1,74 @@
+#!/bin/sh
+<% if @operatingsystem == "FreeBSD" -%># PROVIDE: x11vnc
+<% if @service_depends != false -%># Require: <%=@service_depends%>
+<% end -%># Keyword: shutdown
+<% end -%>
+
+for d in /usr/local/etc /etc
+do
+    test -s $d/vncvars && . $d/vncvars
+done
+
+Prg=`basename $0`
+
+case "$1" in
+    start<% if @operatingsystem == "FreeBSD" -%>|onestart<% end -%>)
+	if ! test -e $RUNPROOF; then
+	    touch $RUNPROOF
+	    /usr/local/bin/vncwrapper >/dev/null 2>&1 &
+	else
+	    echo "vncwrapper already running" >&2
+	    exit 0
+	fi
+	;;
+
+    stop<% if @operatingsystem == "FreeBSD" -%>|onestop<% end -%>)
+	if test -e $RUNPROOF; then
+	    rm -f $RUNPROOF
+	    echo "According to its state, wrapper would be gone in at most $X11_RELOAD seconds"
+	else
+	    echo "vncwrapper not running" >&2
+	fi
+	(
+	    pkill x11vnc
+	    pkill vncwrapper
+	) >/dev/null 2>&1
+	;;
+
+    restart<% if @operatingsystem == "FreeBSD" -%>|onerestart<% end -%>)
+	$0 stop
+	sleep 2
+	$0 start
+	;;
+
+    status)
+	if test -e $RUNPROOF; then
+	    echo "vncwrapper is running"
+	elif ps ax | grep '[v]ncwrapper' >/dev/null; then
+	    echo "vncwrapper *might* be running, something's wrong"
+	    echo "[ERROR] VNC wrapper having troubles on `hostname`"
+	    exit 42
+	else
+	    echo "vncwrapper is not running"
+	    exit 1
+	fi
+	;;
+
+<% if @operatingsystem == "OpenBSD" -%>    check)
+	if ps ax | grep '[v]ncwrapper' >/dev/null; then
+	    exit 0
+	exit 1
+	;;
+
+<% end -%>    usage|-h|--help)
+	usage
+	;;
+
+    *)
+	echo "unknown option \`$1'"
+	usage
+	exit 1
+	;;
+esac
+
+exit 0

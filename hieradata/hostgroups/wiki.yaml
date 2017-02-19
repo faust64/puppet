@@ -1,0 +1,16 @@
+additional_classes:
+  - Moin
+
+# Apache
+apache_listen_ports:
+  plain: 80
+  ssl: 443
+apache_mod_authldap: true
+apache_mod_cgid: true
+apache_mod_status: true
+apache_mod_wsgi: true
+apache_munin: true
+apache_rsyslog: true
+
+# Nginx
+nginx_rsyslog: true

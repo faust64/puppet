@@ -1,0 +1,18 @@
+#!/bin/sh
+
+OK=0
+CRITICAL=2
+from=$(expr `awk '/domain/{print $2}' /etc/resolv.conf` : '\([^\.]*\)')
+title="Asterisk_$from"
+
+if sudo /usr/sbin/asterisk -rx 'core show version' >/dev/null; then
+    ret=OK
+    perfdata=" | 1"
+else
+    ret=CRITICAL
+    perfdata=" | 0"
+fi
+
+echo "$title $ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

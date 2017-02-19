@@ -1,0 +1,6 @@
+input(type="imfile"
+      File="/var/log/bm-eas/user-eas-anonymous.log"
+      statefile="/var/log/bm-eas/.user-eas-anonymous.log"
+      Tag="bluemind-eas-anonymous"
+      Severity="info"
+      Facility="local7")

@@ -1,0 +1,1 @@
+iptables --table nat --append POSTROUTING --src <%=@netroot%>.0/<%=@netmsk%> --out-interface eth0 --jump MASQUERADE

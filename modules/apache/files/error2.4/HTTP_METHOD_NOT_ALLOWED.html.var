@@ -1,0 +1,42 @@
+Content-language: en
+Content-type: text/html; charset=UTF-8
+Body:----------en--
+<!--#set var="TITLE" value="405: Method not allowed!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 405</h1>
+	    <p>The <!--#echo var="REDIRECT_REQUEST_METHOD" --> method is not allowed for the requested URL.</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------en--
+
+Content-language: es
+Content-type: text/html
+Body:----------es--
+<!--#set var="TITLE" value="405: M&eacute;todo no permitido!" -->
+<!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 405</h1>
+	    <p>El <!--#echo var="REDIRECT_REQUEST_METHOD" --> m&eacute;todo utilizado por su solicitud no est&aacute; permitido por el enlace.</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------es--
+
+Content-language: fr
+Content-type: text/html; charset=UTF-8
+Body:----------fr--
+<!--#set var="CONTENT_LANGUAGE" value="fr"
+--><!--#set var="TITLE" value="405 : M&eacute;thode interdite !"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERREUR 405</h1>
+	    <p>La m&eacute;thode <!--#echo var="REDIRECT_REQUEST_METHOD" --> n'est pas utilisable pour l'URL requise.</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------fr--

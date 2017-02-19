@@ -1,0 +1,15 @@
+<%=@log_dir%>/*.log
+{
+    compress
+    daily
+    delaycompress
+    missingok
+    nocreate
+    rotate 7
+<% if @runtime_user != "root" %>    su <%=@runtime_user%> <%=@runtime_group%>
+<% end -%>    sharedscripts
+    postrotate
+	test ! -e /var/run/<%=@service_name%>.pid || /usr/sbin/<%=@service_name%> -k rotate 2>/dev/null || true
+	sleep 1
+    endscript
+}

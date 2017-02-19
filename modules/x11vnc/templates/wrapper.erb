@@ -1,0 +1,35 @@
+#!/bin/sh
+
+for d in /usr/local/etc /etc
+do
+    test -s $d/vncvars && . $d/vncvars
+done
+
+while :
+do
+    if ! test -e $RUNPROOF; then
+	break
+    elif ! ps ax | grep '[o]penbox'; then
+	echo "X server not started" | mail -s "[WARNING] x11vnc on `hostname<% if @kernel == "Linux" -%> -f<% end -%>`" $DEST
+	sleep $X11_RELOAD
+	continue
+    fi
+
+    if ! ps ax | grep '[x]11vnc'; then
+	firstiwaslike=`date +%s`
+	su <%=@service_runs_as%> -c 'x11vnc -rfbauth ~/.vncpasswd >/dev/null 2>&1 &'
+	andtheniwaslike=`date +%s`
+
+	unowatimean=`expr $andtheniwaslike - $firstiwaslike`
+	test "$unowatimean" || unowatimean=0
+	if test $unowatimean -lt 10; then
+	    echo "Having troubles restarting X11 VNC server" | \
+		mail -s "[CRITICAL] x11vnc on `hostname<% if @kernel == "Linux" -%> -f<% end -%>`" $DEST
+	    sleep $VNC_RELOAD
+	fi
+    else
+	sleep $DEFAULT_RELOAD
+    fi
+done >/dev/null 2>&1
+
+exit 0

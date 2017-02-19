@@ -1,0 +1,34 @@
+<% if @riak_master -%>listener = 0.0.0.0:8085
+<% else -%>listener = 127.0.0.1:8085
+<% end -%><% if 0 == 1 -%>ssl.certfile = /etc/riak/ssl/server.crt
+ssl.keyfile = /etc/riak/ssl/server.key
+riak_host = <%=@listener%>:8097
+<% else -%>riak_host = <%=@listener%>:8087
+<% end -%>admin.key = <%=@admin_key%>
+admin.secret = <%=@admin_secret%>
+platform_bin_dir = /usr/sbin
+platform_data_dir = /var/lib/stanchion
+platform_etc_dir = /etc/stanchion
+platform_lib_dir = /usr/lib/stanchion/lib
+platform_log_dir = /var/log/stanchion
+log.console = file
+log.console.level = info
+log.console.file = $(platform_log_dir)/console.log
+log.console.size = 10MB
+log.console.rotation = $D0
+log.console.rotation.keep = 5
+log.error.file = $(platform_log_dir)/error.log
+log.error.size = 10MB
+log.error.rotation = $D0
+log.error.rotation.keep = 5
+log.syslog = off
+log.crash = on
+log.crash.file = $(platform_log_dir)/crash.log
+log.crash.maximum_message_size = 64KB
+log.crash.size = 10MB
+log.crash.rotation = $D0
+log.crash.rotation.keep = 5
+nodename = <%=@nodename%>
+distributed_cookie = <%=@dcookie%>
+erlang.async_threads = 64
+erlang.max_ports = 65536

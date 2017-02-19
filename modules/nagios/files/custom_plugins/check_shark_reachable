@@ -1,0 +1,29 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+test -s /etc/peerio-hostnames && . /etc/peerio-hostnames
+test -z "$TMPFILE" && TMPFILE=/tmp/.check_shark.$$
+test -z "$PEERIO_SHARK_NAME" && PEERIO_SHARK_NAME=account.peerio.com
+
+if ! host $PEERIO_SHARK_NAME; then
+    res=UNKNOWN
+    msg=" - could not resolve $PEERIO_SHARK_NAME"
+elif ! curl --connect-timeout 5 https://$PEERIO_SHARK_NAME/ping >$TMPFILE; then
+    res=CRITICAL
+    msg=" - $PEERIO_SHARK_NAME unreachable for local foreground worker"
+elif ! grep success $TMPFILE; then
+    res=WARNING
+    msg=" - $PEERIO_SHARK_NAME could be unhealthy (`cat $TMPFILE`)"
+else
+    res=OK
+    msg=" - shark available"
+fi >/dev/null 2>&1
+test -f $TMPFILE && rm -f $TMPFILE
+
+echo "$res$msg"
+eval res=\$$res
+exit $res

@@ -1,0 +1,43 @@
+<VirtualHost *:<%=@listen_ports['plain']%>>
+    ServerName mrtg.<%=@domain%>
+<% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
+<% end -%><% end -%>    ServerAdmin <%=@server_admin%>
+    ErrorLog <%=@log_dir%>/error-<%=@name%>.log
+    LogLevel warn
+    CustomLog <%=@log_dir%>/access-<%=@name%>.log combined
+<% if @listen_ports['ssl'] != false -%>    RewriteEngine On
+    RewriteRule ^/(.*) https://mrtg.<%=@domain%>/$1 [L,R]
+</VirtualHost>
+<VirtualHost *:<%=@listen_ports['ssl']%>>
+    ServerName mrtg.<%=@domain%>
+<% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
+<% end -%><% end -%>    ServerAdmin <%=@server_admin%>
+    ErrorLog <%=@log_dir%>/ssl-error-<%=@name%>.log
+    LogLevel warn
+<% if @stricttransport != false -%>    Header always set Strict-Transport-Security "<%=@stricttransport%>"
+<% end -%><% if @deny_frames == "remote" -%>    Header always set X-Frame-Options SAMEORIGIN
+<% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
+<% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
+<% end -%>    CustomLog <%=@log_dir%>/ssl-access-<%=@name%>.log combined
+    Include ssl.conf
+<% end -%>    DocumentRoot /var/www/mrtg
+    <Directory />
+	Options FollowSymLinks
+	AllowOverride None
+    </Directory>
+    <Directory /var/www>
+	Options Indexes FollowSymLinks MultiViews
+	AllowOverride None
+<% if @version == "2.2" -%>	Order allow,deny
+	Allow from all
+<% else -%>	Require all granted
+<% end -%>    </Directory>
+    ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+    <Directory /usr/lib/cgi-bin>
+	AllowOverride None
+	Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+<% if @version == "2.2" -%>	Order allow,deny
+	Allow from all
+<% else -%>	Require all granted
+<% end -%>    </Directory>
+</VirtualHost>

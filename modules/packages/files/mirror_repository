@@ -1,0 +1,45 @@
+#!/bin/sh
+
+ROOT=/var/www
+
+while test "$1"
+do
+    case "$1" in
+	OpenBSD|openbsd|OPENBSD)
+	    ARCH=amd64
+	    VERS=5.8
+	    if test "$2"; then
+		if test "$2" = amd64 -o "$2" = i386; then
+		    ARCH=$2
+		    shift
+		fi
+		if echo $2 | grep -E '[0-9]\.[0-9]' >/dev/null; then
+		    VERS=$2
+		    shift
+		fi
+		if test "$2" = amd64 -o "$2" = i386; then
+		    ARCH=$2
+		    shift
+		fi
+	    fi
+	    (
+		SVERS=`echo $VERS | sed 's|\.||'`
+		mkdir -p $ROOT/openbsd/$VERS/$ARCH
+		cd $ROOT/openbsd/$VERS/$ARCH
+		if test "$SVERS" -ge 57; then
+		    FL="bsd bsd.mp bsd.rd cdboot cdbr comp$SVERS.tgz floppy$SVERS.fs game$SVERS.tgz install$SVERS.iso INSTALL.$ARCH man$SVERS.tgz pxeboot SHA256 xbase$SVERS.tgz xfont$SVERS.tgz xserv$SVERS.tgz xshare$SVERS.tgz"
+		else
+		    FL="bsd bsd.mp bsd.rd cdboot cdbr comp$SVERS.tgz etc$SVERS.tgz floppy$SVERS.fs game$SVERS.tgz install$SVERS.iso INSTALL.$ARCH man$SVERS.tgz pxeboot SHA256 xbase$SVERS.tgz xetc$SVERS.tgz xfont$SVERS.tgz xserv$SVERS.tgz xshare$SVERS.tgz"
+		fi
+		for file in $FL
+		do
+		    test -s $file && continue
+		    wget http://ftp.nluug.nl/pub/OpenBSD/$VERS/$ARCH/$file
+		done
+	    )
+	    ;;
+    esac
+    shift
+done
+
+exit 0

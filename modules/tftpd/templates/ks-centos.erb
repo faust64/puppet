@@ -1,0 +1,744 @@
+<% if @server -%>%include /tmp/pre_network
+firewall --disabled
+<% end -%>install
+url --url=http://mirrors.ircam.fr/pub/CentOS/<%=@rhelvers%>/os/<%=@rhelarch%>/<%=@use_proxy%>
+auth --<% if @rhelvers == 6 -%>use<% else -%>enable<% end -%>shadow --passalgo=sha512
+<% if @password -%>rootpw --iscrypted <%=@password%>
+<% end -%>lang <%=@locale%>.<%=@charset%>
+<% if @server -%>selinux --disabled
+keyboard us
+skipx
+<% end -%>logging --level=info
+reboot
+timezone --utc <%=@timezone%>
+<% if @autopart -%>%include /tmp/pre_bootloader
+zerombr
+clearpart --all --initlabel
+%include /tmp/pre_disk
+<% end -%>repo --name=updates --baseurl=http://mirrors.ircam.fr/pub/CentOS/<%=@rhelvers%>/updates/<%=@rhelarch%>/<%=@use_proxy%>
+%include /tmp/pre_packages
+<% if @server -%>repo --name=epel --baseurl=http://mirrors.ircam.fr/pub/fedora/epel/<%=@rhelvers%>/<%=@rhelarch%>/<%=@use_proxy%>
+%include /tmp/pre_morerepo
+<% end -%>%pre
+#!/bin/bash
+exec </dev/tty8 >/dev/tty8
+chvt 8
+echo "network --bootproto=dhcp --hostname=pxe.localdomain --noipv6" >/tmp/pre_network
+
+<% if @server %>VLAN_VMS=4
+echo "%packages --nobase" >/tmp/pre_packages
+TOVALIDATE=true
+<% if @rhelvers == 6 -%>while $TOVALIDATE
+do
+    clear
+    echo "--- Installation Type ---"
+    echo
+    echo -n "Install OpenVZ? [y/n]: "
+    read RESPONSE
+    case $RESPONSE in
+	y)
+	    OPENVZ=y
+	    TOVALIDATE=false
+	    ;;
+	n)
+	    OPENVZ=n
+	    TOVALIDATE=false
+	    ;;
+    esac
+done
+if test "$RESEPONSE" = y; then
+    KVM=n
+else
+    TOVALIDATE=true
+<% else -%>
+    OPENVZ=n
+<% end -%>    while $TOVALIDATE
+    do
+	echo -n "Install KVM? [y/n]: "
+	read RESPONSE
+	case $RESPONSE in
+	    y)
+		KVM=y
+		TOVALIDATE=false
+		;;
+	    n)
+		TOVALIDATE=false
+		;;
+	esac
+    done
+<% if @rhelvers == 6 -%>fi
+<% end -%>cat <<EOF >/tmp/pre_morerepo
+#OPENVZ $OPENVZ
+#KVM $KVM
+EOF
+
+<% if @rhelvers == 6 -%>if test "$OPENVZ" = y; then
+    cat <<EOF >>/tmp/pre_morerepo
+repo --name=openvz-kernel-rhel6 --baseurl=http://mirrors.ircam.fr/pub/OpenVZ/kernel/branches/rhel6-2.6.32/current/ --excludepkgs=vzkernel-firmware<%=@use_proxy%>
+repo --name=openvz-utils --baseurl=http://mirrors.ircam.fr/pub/OpenVZ/current/<%=@use_proxy%>
+EOF
+    cat <<EOF >>/tmp/pre_packages
+vzkernel
+kernel-firmware
+vzctl
+vzquota
+EOF
+el<% end -%>if test "$KVM" = y; then
+    cat <<EOF >>/tmp/pre_packages
+libvirt
+virt-install
+qemu-kvm
+EOF
+fi
+
+<% else -%>    echo "%packages" >/tmp/pre_packages
+    cat <<EOF >>/tmp/pre_packages
+xfce
+EOF
+<% end -%>cat <<EOF >>/tmp/pre_packages
+acpid
+bash-completion
+bind-utils
+bridge-utils
+centos-release
+cronie-anacron
+crontabs
+diffutils
+epel-release
+file
+iproute
+less
+lftp
+logrotate
+lsof
+lynx
+mailx
+man
+mtr
+nano
+ntp
+ntpdate
+openssh-clients
+openssh-server
+passwd
+screen
+strace
+sudo
+tar
+tcpdump
+telnet
+tmpwatch
+tmux
+traceroute
+<% if @rhelvers == 6 -%>vconfig
+<% end -%>vim
+wget
+which
+yum
+yum-utils
+<% if @server %>psmisc
+postfix
+at
+iftop
+iotop
+puppet
+rsync
+<% end -%>-selinux-policy-targeted
+EOF
+echo "%end" >>/tmp/pre_packages
+
+CONFIRM=no
+while test "$CONFIRM" != yes
+do
+    IFNAME=`route -n | awk '/UG[ \t]/{print $8}'`
+    MAC=`ifconfig $IFNAME | awk '/HWaddr/{print $5}'`
+    PRECONFIG=`wget -q http://<%=@fqdn%>/ks/srvlist -O - | grep -i $MAC`
+
+    if test "x$PRECONFIG" != x; then
+	eval `echo $PRECONFIG | awk '{print "HOSTNAME=" $1 " IPADDRESS=" $2 " NETMASK=" $3 " GATEWAY=" $4}'`
+	DNS=<%=@dns_one%>
+    fi
+
+<% if @server %>    if test "$HOSTNAME" -a "$IPADDRESS" -a "$NETMASK" -a "$GATEWAY"; then
+	TOVALIDATE=false
+    else
+	TOVALIDATE=true
+    fi
+    while $TOVALIDATE
+    do
+	clear
+	echo "--- IP configuration ---"
+	echo
+
+	if test -z "$PRECONFIG"; then
+	    HOSTNAME=
+	fi
+	while echo $HOSTNAME | egrep -qv ".+\..+"
+	do
+	    echo -n "Hostname (fqdn): "
+	    read HOSTNAME
+	done
+
+	if test -z "$PRECONFIG"; then
+	    IPADDRESS=
+	fi
+	while echo $IPADDRESS | egrep -qv "^((0|1[0-9]{0,2}|2[0-9]{0,1}|2[0-4][0-9]|25[0-5]|[3-9][0-9]{0,1})\.){3}(0|1[0-9]{0,2}|2[0-9]{0,1}|2[0-4][0-9]|25[0-5]|[3-9][0-9]{0,1})$"
+	do
+	    echo -n "IP address: "
+	    read IPADDRESS
+	done
+
+	if test -z "$PRECONFIG"; then
+	    NETMASK=
+	fi
+	while echo $NETMASK | egrep -qv "^((255|254|252|248|240|224|192|128|0)\.){3}(255|254|252|248|240|224|192|128|0)$"
+	do
+	    echo -n "Netmask: "
+	    read NETMASK
+	done
+
+	INVALID=true
+	while $INVALID
+	do
+	    echo -n "Gateway: "
+	    read GATEWAY
+	    eval `echo $IPADDRESS | awk -F\. '{print "ip1="$1" ip2="$2" ip3="$3" ip4="$4}'`
+	    eval `echo $NETMASK | awk -F\. '{print "ms1="$1" ms2="$2" ms3="$3" ms4="$4}'`
+	    eval `echo $GATEWAY | awk -F\. '{print "gw1="$1" gw2="$2" gw3="$3" gw4="$4}'`
+	    idx=1
+	    INVALID=false
+	    while test $idx -lt 5
+	    do
+		eval right=\$ip$idx left=\$gw$idx msk=\$ms$idx
+		rcheck=$(($right & $msk))
+		lcheck=$(($left & $msk))
+		test $rcheck -ne $lcheck && INVALID=true && break
+		idx=`expr $idx + 1`
+	    done
+	done
+
+	if test -z "$PRECONFIG"; then
+	    DNS=
+	fi
+	while echo $DNS | egrep -qv "^((0|1[0-9]{0,2}|2[0-9]{0,1}|2[0-4][0-9]|25[0-5]|[3-9][0-9]{0,1})\.){3}(0|1[0-9]{0,2}|2[0-9]{0,1}|2[0-4][0-9]|25[0-5]|[3-9][0-9]{0,1})$"
+	do
+	    echo -n "DNS: "
+	    read DNS
+	done
+
+	echo
+	echo "Hostname : $HOSTNAME"
+	echo "Address : $IPADDRESS"
+	echo "Netmask : $NETMASK"
+	echo "Gateway : $GATEWAY"
+	echo "DNS : $DNS"
+	echo -n "Is it OK ? [y/n]: "
+	read RESPONSE
+	case $RESPONSE in
+	    y) TOVALIDATE=false ;;
+	    *) PRECONFIG= ;;
+	esac
+    done
+
+    TOVALIDATE=true
+    while $TOVALIDATE
+    do
+	clear
+	echo "--- Bonding configuration ---"
+	echo
+	echo -n "Configure Bonding [y/n] ?: "
+	read BONDING
+	case $BONDING in
+	    y)
+		IFNAME=`route -n | awk '/UG[ \t]/{print $8}'`
+		IFLIST=`ifconfig -a | egrep -v "^([[:space:]]|$)" | grep Ethernet | grep -v $IFNAME | awk '{print $1}' | sed ':a;N;$!ba;s/\n/ /g' | sed -e 's/^ *//g' -e 's/ *$//g'`
+		IFLISTTMP=$IFLIST
+		IFLISTWC=`echo $IFLIST | wc -w`
+		if test "$IFLISTWC" -eq 0; then
+		    echo "You need at least 2 interfaces available for bonding."
+		    echo "Available interfaces : $IFNAME"
+		    BONDING=n
+		    echo -n "PRESS ENTER ..."
+		    read BLACKHOLE
+		    continue
+		fi
+		BOND1=$IFNAME
+		if test "$IFLISTWC" -eq 1; then
+		    BOND2=$IFLIST
+		else
+		    IFLISTTMP=$IFLIST
+		    while test "$IFLIST" = "$IFLISTTMP"
+		    do
+			echo "Bond0 Primary IF: $IFNAME"
+			echo -n "Bond0 Backup IF [$IFLIST]?: "
+			read BOND2
+			if echo $BOND2 | egrep -qv "^([[:space:]])*$"; then
+			    if ifconfig $BOND2 >/dev/null 2>&1; then
+				IFLISTTMP=`echo $IFLIST | sed -e "s/$BOND2//g"`
+			    fi
+			fi
+		    done
+		fi
+		echo
+		echo "Bond0 Primary IF: $BOND1"
+		echo "Bond0 Backup  IF: $BOND2"
+		echo -n "Is it OK ? [y/n]: "
+		read RESPONSE
+		case $RESPONSE in
+		    y) TOVALIDATE=false ;;
+		    *)  ;;
+		esac
+		;;
+	    n)  TOVALIDATE=false ;;
+	    *)  ;;
+	esac
+    done
+
+    TOVALIDATE=true
+    while $TOVALIDATE
+    do
+	clear
+	echo "--- VLAN configuration ---"
+	echo
+	echo -n "Configure VLAN ? [y/n]: "
+	read VLAN
+	case $VLAN in
+	    y)
+		while echo $VLAN | egrep -qv "^[[:digit:]]+$"
+		do
+		    echo -n "Choose the VLAN ID [1-4096]: "
+		    read VLAN
+		done
+		echo
+		echo "Vlan ID: $VLAN"
+		echo -n "Is it OK? [y/n]: "
+		read RESPONSE
+		case $RESPONSE in
+		    y) TOVALIDATE=false ;;
+		    *) ;;
+		esac
+		;;
+	    n)  VLAN=0
+		TOVALIDATE=false
+		;;
+	    *)  ;;
+	esac
+    done
+    if test "$OPENVZ" = n; then
+	TOVALIDATE=true
+	while $TOVALIDATE
+	do
+	    clear
+	    echo "--- Bridge configuration ---"
+	    echo
+	    echo -n "BRIDGE the Interface ? [y/n]: "
+	    read BRIDGE
+	    case $BRIDGE in
+		y|n) TOVALIDATE=false ;;
+		*)   ;;
+	    esac
+	done
+    else
+	BRIDGE=y
+    fi
+
+    if test "$OPENVZ" = y -o "$KVM" = y; then
+	TOVALIDATE=true
+	while $TOVALIDATE
+	do
+	    clear
+	    echo "--- VMs Vlan ($VLAN_VMS) Bridge configuration ---"
+	    echo
+	    echo -n "Configure the VMs bridge in vlan$VLAN_VMS ? [y/n]: "
+	    read PROJET
+	    case $PROJET in
+		y|n) TOVALIDATE=false ;;
+		*)   ;;
+	    esac
+	done
+    else
+	PROJET=n
+    fi
+
+    clear
+    echo "--- Summary ---"
+    echo
+    echo "Hostname: $HOSTNAME"
+    echo "Address: $IPADDRESS"
+    echo "Netmask: $NETMASK"
+    echo "Gateway: $GATEWAY"
+    echo "DNS: $DNS"
+    echo
+    if test "$BONDING" = y; then
+	echo "Bond0 Primary IF: $BOND1"
+	echo "Bond0 Backup  IF: $BOND2"
+    fi
+    echo
+    echo "Vlan ID: $VLAN"
+    echo "Bridging: $BRIDGE"
+    echo "Project Bridge: $PROJET"
+    echo
+    echo
+    echo -n "Is it OK ? [y/n]: "
+    read RESPONSE
+    case $RESPONSE in
+	y) CONFIRM=yes ;;
+	*)  ;;
+    esac
+<% else -%>    test -z "$HOSTNAME" && HOSTNAME=CentOS.localdomain
+    test -z "$IPADDESS" && IPADDRESS=DHCP
+    test -z "$NETMASK" && NETMASK=DHCP
+    test -z "$GATEWAY" && GATEWAY=DHCP
+    test -z "$DNS" && DNS=
+    BONDING=n
+    BRIDGE=n
+    PROJET=n
+    VLAN=0
+    CONFIRM=yes
+<% end -%>done
+
+cat <<EOF >>/tmp/pre_network
+#HOSTNAME $HOSTNAME
+#IPADDRESS $IPADDRESS
+#NETMASK $NETMASK
+#GATEWAY $GATEWAY
+#DNS $DNS
+#BONDING $BONDING
+EOF
+if test "$BONDING" = y; then
+    cat <<EOF >>/tmp/pre_network
+#BOND1 $BOND1
+#BOND2 $BOND2
+EOF
+fi
+cat <<EOF >>/tmp/pre_network
+#VLAN $VLAN
+#BRIDGE $BRIDGE
+#PROJET $PROJET
+EOF
+
+<% if @autopart -%>VALIDHDD=$(for i in $(fdisk -l | grep "Disk /" | grep -v mapper | sed 's|Disk /dev/\([^:]*\):.*|\1|'); do REMOVABLE=$(cat /sys/block/$i/removable); if test "$REMOVABLE" = 0; then echo $i; fi; done | sort -u)
+NBVALIDHDD=`echo $VALIDHDD | wc -w`
+VIRTNAME=
+<% if @rhelvers == 7 -%>DEFAULTFS=xfs
+<% else -%>DEFAULTFS=ext4
+<% end -%>echo "# Disk partitioning information" >/tmp/pre_disk
+if test "$NBVALIDHDD" = 1 -o "$NBVALIDHDD" = 2; then
+    DRIVE1=`echo $VALIDHDD | awk '{print $1}'`
+    echo "bootloader --location=mbr --driveorder=$DRIVE1" >>/tmp/pre_bootloader
+    echo "## Primary partitions" >>/tmp/pre_disk
+    echo "part /boot --fstype=ext4 --asprimary --size=512 --ondisk=$DRIVE1" >>/tmp/pre_disk
+    echo "part pv.01 --grow --asprimary --size=1 --ondisk=$DRIVE1" >>/tmp/pre_disk
+    if test "$NBVALIDHDD" = 2; then
+	DRIVE2=`echo $VALIDHDD | awk '{print $2}'`
+	echo "part pv.02 --grow --asprimary --size=1 --ondisk=$DRIVE2" >>/tmp/pre_disk
+    fi
+    echo "## Volume groups" >>/tmp/pre_disk
+    echo "volgroup data --pesize=4096 pv.01" >>/tmp/pre_disk
+    if test "$NBVALIDHDD" = 2; then
+	echo "volgroup backup --pesize=4096 pv.02" >>/tmp/pre_disk
+    fi
+<% if @rhelvers == 6 -%>    if grep '^#OPENVZ y' /tmp/pre_morerepo; then
+	DEFAULTFS=ext3
+	VIRTROOT=/vz
+	VIRTNAME=vz
+    el<% else -%>    <% end -%>if grep '^#KVM y' /tmp/pre_morerepo; then
+	VIRTROOT=/var/lib/libvirt/images
+	VIRTNAME=kvm
+    fi >/dev/null
+
+    cat <<EOF >>/tmp/pre_disk
+## Logical volumes for data
+logvol / --fstype=$DEFAULTFS --name=root --vgname=data --size=2048
+logvol /tmp --fstype=$DEFAULTFS --name=tmp --vgname=data --size=512
+logvol /usr --fstype=$DEFAULTFS --name=usr --vgname=data --size=4096
+logvol /var --fstype=$DEFAULTFS --name=var --vgname=data --size=3072
+EOF
+    if test -z "$VIRTNAME"; then
+	cat <<EOF >>/tmp/pre_disk
+<% if @rhelvers == 6 -%>logvol /home --fstype=$DEFAULTFS --name=home --vgname=data --size=1 --grow --percent=90
+<% else -%>logvol /home --fstype=$DEFAULTFS --name=home --vgname=data --size=1 --grow --maxsize=1000000000
+<% end -%>EOF
+    elif test "$NBVALIDHDD" = 2; then
+	cat <<EOF >>/tmp/pre_disk
+<% if @rhelvers == 6 -%>logvol $VIRTROOT --fstype=$DEFAULTFS --name=$VIRTNAME --vgname=data --size=1 --grow --percent=95
+<% else -%>logvol $VIRTROOT --fstype=$DEFAULTFS --name=$VIRTNAME --vgname=data --size=1 --grow --maxsize=1000000000
+<% end -%>## Logical volumes for backups
+logvol swap --name=swap --vgname=backup --size=4096
+<% if @rhelvers == 6 -%>logvol /media/backups --fstype=$DEFAULTFS --name=backups --vgname=backup --size=1 --grow --percent=95
+<% else -%>logvol /media/backups --fstype=$DEFAULTFS --name=backups --vgname=backup --size=1 --grow --maxsize=1000000000
+<% end -%>EOF
+    else
+	cat <<EOF >>/tmp/pre_disk
+logvol swap --name=swap --vgname=data --size=4096
+<% if @rhelvers == 6 -%>logvol $VIRTROOT --fstype=$DEFAULTFS --name=$VIRTNAME --vgname=data --size=1 --grow --percent=43
+logvol /media/backups --fstype=$DEFAULTFS --name=backups --vgname=data --size=1 --grow --percent=47
+<% else -%>logvol $VIRTROOT --fstype=$DEFAULTFS --name=$VIRTNAME --vgname=data --percent=43
+logvol /media/backups --fstype=$DEFAULTFS --name=backups --vgname=data --size=1 --grow --maxsize=1000000000
+<% end -%>EOF
+    fi
+fi
+<% end -%>
+clear
+chvt 1
+%end
+
+%post --nochroot
+#!/bin/sh
+exec </dev/tty8 >/dev/tty8
+chvt 8
+
+### Get Preconfig variable ###
+HOSTNAME=`awk '/^#HOSTNAME/{print $2}' /tmp/pre_network`
+IPADDRESS=`awk '/^#IPADDRESS/{print $2}' /tmp/pre_network`
+NETMASK=`awk '/^#NETMASK/{print $2}' /tmp/pre_network`
+GATEWAY=`awk '/^#GATEWAY/{print $2}' /tmp/pre_network`
+DNS=`awk '/^#DNS/{print $2}' /tmp/pre_network`
+BONDING=`awk '/^#BONDING/{print $2}' /tmp/pre_network`
+if test "$BONDING" = y; then
+    BOND1=`awk '/^#BOND1/{print $2}' /tmp/pre_network`
+    BOND2=`awk '/^#BOND2/{print $2}' /tmp/pre_network`
+fi
+VLAN=`awk '/^#VLAN/{print $2}' /tmp/pre_network`
+VLAN_VMS=4
+BRIDGE=`awk '/^#BRIDGE/{print $2}' /tmp/pre_network`
+PROJET=`awk '/^#PROJET/{print $2}' /tmp/pre_network`
+OPENVZ=`awk '/^#OPENVZ/{print $2}' /tmp/pre_morerepo`
+KVM=`awk '/^#KVM/{print $2}' /tmp/pre_morerepo`
+IFNAME=`route -n | awk '/UG[ \t]/{print $8}'`
+SHORTHOSTNAME=`echo $HOSTNAME | cut -d. -f1`
+DOMAIN=`echo $HOSTNAME | awk -F $SHORTHOSTNAME'.' '{print $2}'`
+if test "$IPADDRESS" = DHCP; then
+    IPDATA="BOOTPROTO=dhcp
+ONBOOT=yes"
+else
+    IPDATA="BOOTPROTO=static
+IPADDR=$IPADDRESS
+NETMASK=$NETMASK
+GATEWAY=$GATEWAY
+DNS1=$DNS
+ONBOOT=yes"
+fi
+if test "$BONDING" = y; then
+    cat <<EOF >/mnt/sysimage/etc/sysconfig/network-scripts/ifcfg-bond0
+DEVICE="bond0"
+EOF
+    if test "$BRIDGE" = n -a "$VLAN" = 0; then
+	cat <<EOF >>/mnt/sysimage/etc/sysconfig/network-scripts/ifcfg-bond0
+$IPDATA
+DOMAIN="$DOMAIN"
+EOF
+    fi
+    cat <<EOF >>/mnt/sysimage/etc/sysconfig/network-scripts/ifcfg-bond0
+NM_CONTROLLED="no"
+USERCTL="no"
+BONDING_OPTS="miimon=100 mode=1 updelay=200 downdelay=200 primary=$BOND1"
+EOF
+    if test "$BRIDGE" = y -a "$VLAN" = 0; then
+	cat <<EOF >>/mnt/sysimage/etc/sysconfig/network-scripts/ifcfg-bond0
+BRIDGE="br$VLAN"
+EOF
+    fi
+
+    BOND2MAC=`ip link show $BOND2 | awk '/ether/{print $2}'`
+    BOND2UUID=`uuidgen`
+    cat <<EOF >/mnt/sysimage/etc/sysconfig/network-scripts/ifcfg-$BOND2
+DEVICE="$BOND2"
+TYPE="Ethernet"
+BOOTPROTO="static"
+HWADDR="$BOND2MAC"
+UUID="$BOND2UUID"
+NM_CONTROLLED="no"
+USERCTL="no"
+ONBOOT="yes"
+MASTER="bond0"
+SLAVE="yes"
+EOF
+fi
+
+IFMAC=`ip link show $IFNAME | awk '/ether/{print $2}'`
+IFUUID=`uuidgen`
+cat <<EOF >/mnt/sysimage/etc/sysconfig/network-scripts/ifcfg-$IFNAME
+DEVICE="$IFNAME"
+TYPE="Ethernet"
+EOF
+if test "$BONDING" = n -a "$VLAN" = 0 -a "$BRIDGE" = n; then
+    cat <<EOF >/mnt/sysimage/etc/sysconfig/network-scripts/ifcfg-$IFNAME
+$IPDATA
+DNS1="$DNS"
+DOMAIN="$DOMAIN"
+EOF
+fi
+cat <<EOF >>/mnt/sysimage/etc/sysconfig/network-scripts/ifcfg-$IFNAME
+HWADDR="$IFMAC"
+UUID="$IFUUID"
+NM_CONTROLLED="no"
+USERCTL="no"
+EOF
+if test "$BONDING" = y; then
+    cat <<EOF >>/mnt/sysimage/etc/sysconfig/network-scripts/ifcfg-$IFNAME
+MASTER="bond0"
+SLAVE="yes"
+EOF
+elif test "$BRIDGE" = y -a "$VLAN" = 0; then
+    cat <<EOF >>/mnt/sysimage/etc/sysconfig/network-scripts/ifcfg-$IFNAME
+BRIDGE="br$VLAN"
+EOF
+fi
+if test "$BRIDGE" = y; then
+    cat <<EOF >/mnt/sysimage/etc/sysconfig/network-scripts/ifcfg-br$VLAN
+DEVICE="br$VLAN"
+TYPE="Bridge"
+$IPDATA
+DNS1="$DNS"
+DOMAIN="$DOMAIN"
+NM_CONTROLLED="no"
+USERCTL="no"
+DELAY="0"
+STP="off"
+EOF
+fi
+
+if test "$VLAN" != 0; then
+    if test "$BONDING" = y; then
+	FILE=bond0.$VLAN
+    else
+	FILE=$IFNAME.$VLAN
+    fi
+    cat <<EOF >/mnt/sysimage/etc/sysconfig/network-scripts/ifcfg-$FILE
+DEVICE="$FILE"
+VLAN="yes"
+EOF
+    if test "$BRIDGE" = n; then
+	cat <<EOF >>/mnt/sysimage/etc/sysconfig/network-scripts/ifcfg-$FILE
+$IPDATA
+DNS1="$DNS"
+DOMAIN="$DOMAIN"
+EOF
+    fi
+    cat <<EOF >>/mnt/sysimage/etc/sysconfig/network-scripts/ifcfg-$FILE
+NM_CONTROLLED="no"
+USERCTL="no"
+EOF
+    if test "$BRIDGE" = y; then
+	cat <<EOF >>/mnt/sysimage/etc/sysconfig/network-scripts/ifcfg-$FILE
+BRIDGE="br$VLAN"
+EOF
+    fi
+fi
+
+if test "$PROJET" = y; then
+    if test "$BONDING" = y; then
+	FILE=bond0.$VLAN_VMS
+    else
+	FILE=$IFNAME.$VLAN_VMS
+    fi
+    cat <<EOF >/mnt/sysimage/etc/sysconfig/network-scripts/ifcfg-$FILE
+DEVICE="$FILE"
+VLAN="yes"
+BOOTPROTO="static"
+NM_CONTROLLED="no"
+USERCTL="no"
+ONBOOT="yes"
+BRIDGE="br$VLAN_VMS"
+EOF
+    cat <<EOF >/mnt/sysimage/etc/sysconfig/network-scripts/ifcfg-br$VLAN_VMS
+DEVICE="br$VLAN_VMS"
+TYPE="Bridge"
+BOOTPROTO="static"
+NM_CONTROLLED="no"
+USERCTL="no"
+ONBOOT="yes"
+DELAY="0"
+STP="off"
+EOF
+fi
+
+IFLIST=`ifconfig -a | egrep -v "^([[:space:]]|$)" | grep Ethernet | grep -v $IFNAME | awk '{print $1}' | sed ':a;N;$!ba;s/\n/ /g' | sed -e 's/^ *//g' -e 's/ *$//g'`
+if test "$BONDING" = y; then
+    IFLISTTMP=`echo $IFLIST | sed -e "s/$BOND2//g"`
+    IFLIST=$IFLISTTMP
+fi
+for ITF in $IFLIST
+do
+    IFMAC=`ip link show $ITF | grep ether | awk '{print $2}'`
+    IFUUID=`uuidgen`
+    cat <<EOF >/mnt/sysimage/etc/sysconfig/network-scripts/ifcfg-$ITF
+DEVICE="$ITF"
+BOOTPROTO="static"
+HWADDR="$IFMAC"
+UUID="$IFUUID"
+NM_CONTROLLED="no"
+USERCTL="no"
+ONBOOT="no"
+EOF
+done
+
+echo "$IPADDRESS $HOSTNAME $SHORTHOSTNAME" >>/mnt/sysimage/etc/hosts
+cat <<EOF >/mnt/sysimage/etc/resolv.conf
+domain $DOMAIN
+search $DOMAIN
+nameserver $DNS
+EOF
+sed -i -e "s/pxe.localdomain/$HOSTNAME/g" /mnt/sysimage/etc/sysconfig/network
+chroot /mnt/sysimage/ ntpdate <%=@ntp_upstream%> >/dev/null 2>&1
+chroot /mnt/sysimage/ hwclock -w >/dev/null 2>&1
+cat <<EOF >>/mnt/sysimage/etc/sysconfig/network
+DOMAIN=$DOMAIN
+NOZEROCONF=yes
+NTPSERVERARGS=iburst
+EOF
+sed -i -e 's/centos.pool.ntp.org/<%=@ntp_upstream%> iburst/g' /mnt/sysimage/etc/ntp.conf
+chroot /mnt/sysimage/ chkconfig ntpd on
+chroot /mnt/sysimage/ chkconfig NetworkManager off
+mkdir -p /mnt/sysimage/etc/sysctl.d
+cat <<EOF >/mnt/sysimage/etc/sysctl.d/ipv6_disabled.conf
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+EOF
+sed -i -e 's/#AddressFamily any/AddressFamily inet/g' /mnt/sysimage/etc/ssh/sshd_config
+sed -i -e 's/inet_protocols = all/inet_protocols = ipv4/g' /mnt/sysimage/etc/postfix/main.cf
+
+<% if @rhelvers == 6 -%>if test "$OPENVZ" = y; then
+    cat <<EOF >/mnt/sysimage/etc/sysctl.d/openvz.conf
+net.ipv4.ip_forward = 1
+net.ipv6.conf.default.forwarding = 1
+net.ipv6.conf.all.forwarding = 1
+net.ipv4.conf.default.proxy_arp = 0
+net.ipv4.conf.all.rp_filter = 1
+kernel.sysrq = 1
+net.ipv4.conf.default.send_redirects = 1
+net.ipv4.conf.all.send_redirects = 0
+EOF
+    rm -f /mnt/sysimage/etc/vz/conf/0.conf
+    wget -P /mnt/sysimage/tmp/ http://mirrors.ircam.fr/pub/OpenVZ/RPM-GPG-Key-OpenVZ
+    chroot /mnt/sysimage/ rpm --import /tmp/RPM-GPG-Key-OpenVZ
+    wget -P /mnt/sysimage/etc/yum.repos.d/ http://mirrors.ircam.fr/pub/OpenVZ/openvz.repo
+    VZKERNELVER=`chroot /mnt/sysimage/ rpm -qa | grep "vzkernel-2" | sort -r | head -1 | sed -e 's/vzkernel-//' -e 's/\.<%=@rhelarch%>//'`
+    chroot /mnt/sysimage/ grubby --add-kernel="/boot/vmlinuz-$VZKERNELVER" --initrd="/boot/initramfs-$VZKERNELVER.img" --title="OpenVZ ($VZKERNELVER)" --copy-default --make-default
+    chroot /mnt/sysimage /bin/rpm -e kernel
+fi
+<% end -%>sed -i -e 's/ rhgb//g' /mnt/sysimage/boot/grub/grub.conf
+sed -i -e 's/^#UseDNS yes/UseDNS no/g' /mnt/sysimage/etc/ssh/sshd_config
+<% if @server -%>cat <<EOF >/mnt/sysimage/etc/puppet/puppet.conf
+[main]
+logdir=/var/log/puppet
+vardir=/var/lib/puppet
+ssldir=/var/lib/puppet/ssl
+rundir=/var/run/puppet
+factpath=$vardir/lib/facter
+pluginsync=true
+
+[agent]
+server=<%=@ppmaster%>
+reports = tagmail,store,log
+report=true
+runinterval = 21600
+splaylimit = 21600
+rrdinterval = 21600
+puppetport = 8139
+listen = true
+configtimeout = 300
+EOF
+<% end -%>chvt 1
+%end

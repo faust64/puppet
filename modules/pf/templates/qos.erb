@@ -1,0 +1,29 @@
+<% if @qos_root_if != "" and @qos_root_bandwidth != "" -%><% if @kernelversion == "5.4" -%>altq on <%=@qos_root_if%> cbq bandwidth <%=@qos_root_bandwidth%> qlimit 3701 queue { qvoip qinteractive qdata qbulk }
+queue qvoip        bandwidth  5% qlimit  200 priority 5 cbq(red)
+queue qinteractive bandwidth 35% qlimit  500 priority 4 cbq(ecn)
+queue qdata        bandwidth 50% qlimit 1000 priority 2 cbq(ecn)
+queue qbulk        bandwidth 10% qlimit 2000 priority 1 cbq(default)
+<% else -%>queue rootq on <%=@qos_root_if%> bandwidth <%=@qos_root_bandwidth%>
+queue qvoip        parent rootq bandwidth <%=@qos_bw_voip%> qlimit 200
+queue qinteractive parent rootq bandwidth <%=@qos_bw_interactive%> qlimit 500
+queue qdata        parent rootq bandwidth <%=@qos_bw_data%> qlimit 1000
+queue qbulk        parent rootq bandwidth <%=@qos_bw_bulk%> qlimit 2000 default
+<% end -%>
+match in inet to any flags A/SAFR <% if @kernelversion != "5.4" -%>set <% end -%>queue qinteractive
+match in inet to any flags FA/SAFR <% if @kernelversion != "5.4" -%>set <% end -%>queue qinteractive
+match in inet to any flags SA/SAFR <% if @kernelversion != "5.4" -%>set <% end -%>queue qinteractive
+match in inet proto $i icmp-type echoreq <% if @kernelversion != "5.4" -%>set <% end -%>queue qinteractive
+match in inet proto $i icmp-type unreach code needfrag <% if @kernelversion != "5.4" -%>set <% end -%>queue qinteractive
+match in inet proto $i <% if @kernelversion != "5.4" -%>set <% end -%>queue qdata
+match in inet proto $t to any port { ssh 222 rsync 1022 1664:1668 2200:2299 } <% if @kernelversion != "5.4" -%>set <% end -%>queue ( qinteractive qdata )
+match in inet proto $t to any port { http https 8080:8099 9200 3127:3128 } <% if @kernelversion != "5.4" -%>set <% end -%>queue qdata
+match in inet proto $u to any port { snmp snmp-trap } <% if @kernelversion != "5.4" -%>set <% end -%>queue qinteractive
+match in inet proto $t to any port { 4949 5666 } <% if @kernelversion != "5.4" -%>set <% end -%>queue qinteractive
+match in inet proto $u to any port { netbios-ns netbios-dgm } <% if @kernelversion != "5.4" -%>set <% end -%>queue qbulk
+match in inet proto $t to any port { netbios-ssn microsoft-ds } <% if @kernelversion != "5.4" -%>set <% end -%>queue qdata
+match in inet proto $tu to any port { sunrpc nfsd } <% if @kernelversion != "5.4" -%>set <% end -%>queue qdata
+match in inet proto $t to any port { 3389 5900 } <% if @kernelversion != "5.4" -%>set <% end -%>queue qinteractive
+match in inet proto $t to any port { 9101:9102 } <% if @kernelversion != "5.4" -%>set <% end -%>queue ( qinteractive qdata )
+match in inet proto $t to any port { sip:5062 } <% if @kernelversion != "5.4" -%>set <% end -%>queue qvoip
+match in inet proto $u to any port { 4569 sip:5062 10000:65535 } <% if @kernelversion != "5.4" -%>set <% end -%>queue qvoip
+<% end -%>

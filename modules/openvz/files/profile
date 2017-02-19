@@ -1,0 +1,3 @@
+#!/bin/sh
+
+alias vzlist='vzlist -o veid,name,laverage,cpuunits -s name'

@@ -1,0 +1,28 @@
+Content-language: en
+Content-type: text/html; charset=UTF-8
+Body:----------en--
+<!--#set var="TITLE" value="42: Maintenance in progress!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 42</h1>
+	    <p>This site is under maintenance. Please try again later.</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------en--
+
+Content-language: fr
+Content-type: text/html; charset=UTF-8
+Body:----------fr--
+<!--#set var="CONTENT_LANGUAGE" value="fr"
+--><!--#set var="TITLE" value="42 : Maintenance en cours !"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERREUR 42</h1>
+	    <p>Le site demand&eacute; est temporairement indisponible, en raison d'une op&eacute;ration de maintenance.</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------fr--

@@ -1,0 +1,96 @@
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+
+"""
+=head1 NAME
+
+riak_erlang_memory - Plugin to monitor the Erlang memory usage.
+
+=head1 AUTHOR
+
+Hiroaki Sano
+
+=head1 CONFIGURATION
+
+No configuration
+
+=head1 LICENSE
+
+MIT License
+
+=cut
+"""
+
+import sys
+import requests
+import os
+
+host = os.getenv('riak_host','127.0.0.1')
+port = os.getenv('riak_port',8098)
+path = os.getenv('riak_path','stats')
+proto = os.getenv('riak_proto','http')
+basic = os.getenv('riak_basic',False)
+
+def autoconf():
+    pass
+
+def get_stats():
+    if basic != False:
+        r = requests.get("{}://{}@{}:{}/{}".format(proto,basic,host,port,path), verify=False)
+    else:
+        r = requests.get("{}://{}:{}/{}".format(proto,host,port,path))
+    return r.json()
+
+def config():
+    print ('graph_title Erlang memory')
+    print ('graph_args --base 1000 -l 0')
+    print ('graph_vlabel Bytes')
+    print ('graph_category Riak')
+    print ('graph_period second')
+    print ('graph_info This graph shows the Erlang memory usage')
+
+    print ('erlang_memory_atom_used.label Atom memory usage')
+    print ('erlang_memory_atom_used.type GAUGE')
+    print ('erlang_memory_atom_used.min 0')
+    print ('erlang_memory_atom_used.info Atom memory usage')
+
+    print ('erlang_memory_binary.label Binary memory')
+    print ('erlang_memory_binary.type GAUGE')
+    print ('erlang_memory_binary.min 0')
+    print ('erlang_memory_binary.info Binary memory')
+
+    print ('erlang_memory_code.label Code memory')
+    print ('erlang_memory_code.type GAUGE')
+    print ('erlang_memory_code.min 0')
+    print ('erlang_memory_code.info Code memory')
+
+    print ('erlang_memory_ets.label ETS memory')
+    print ('erlang_memory_ets.type GAUGE')
+    print ('erlang_memory_ets.min 0')
+    print ('erlang_memory_ets.info ETS memory')
+
+    print ('erlang_memory_processes_used.label Erlang memory usage')
+    print ('erlang_memory_processes_used.type GAUGE')
+    print ('erlang_memory_processes_used.min 0')
+    print ('erlang_memory_processes_used.info Erlang memory usage')
+
+def main():
+    if len(sys.argv) > 1:
+        command = sys.argv[1]
+    else:
+        command = ''
+
+    if command == 'autoconf':
+        autoconf()
+    elif command == 'config':
+        config()
+    else:
+        ret = get_stats()
+        print ('erlang_memory_atom_used.value %s') % ret['memory_atom_used']
+        print ('erlang_memory_binary.value %s') % ret['memory_binary']
+        print ('erlang_memory_code.value %s') % ret['memory_code']
+        print ('erlang_memory_ets.value %s') % ret['memory_ets']
+        print ('erlang_memory_processes_used.value %s') % ret['memory_processes_used']
+
+if __name__ == '__main__':
+    main()

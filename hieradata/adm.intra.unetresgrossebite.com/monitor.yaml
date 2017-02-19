@@ -1,0 +1,79 @@
+nagios_no_parent: false
+physical_parent: oneiroi.adm.intra.unetresgrossebite.com
+
+# Apache
+apache_mod_expires: true
+
+# Icinga
+icinga_collect_domains:
+  - adm.intra.unetresgrossebite.com
+  - ceph.intra.unetresgrossebite.com
+  - sip.intra.unetresgrossebite.com
+  - surv.intra.unetresgrossebite.com
+  - vms.intra.unetresgrossebite.com
+  - intra.unetresgrossebite.com
+icinga_static_devices:
+  eros.adm.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.242.13
+#   host_parents: zeus.intra.unetresgrossebite.com
+    srvclass: network
+  gaia.adm.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.242.15
+#   host_parents: io.intra.unetresgrossebite.com
+    srvclass: network
+  nikea.adm.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.242.10
+    host_parents: eros.adm.intra.unetresgrossebite.com
+    srvclass: network
+# amphilogiai.adm.intra.unetresgrossebite.com:
+#   host_ipaddress: 10.42.242.17
+#   host_parents: gaia.adm.intra.unetresgrossebite.com
+#   srvclass: network
+  ponos.adm.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.242.6
+    host_parents: gaia.adm.intra.unetresgrossebite.com
+    srvclass: network
+# ate.adm.intra.unetresgrossebite.com:
+#   host_ipaddress: 10.42.242.9
+#   host_parents: androktasiai.intra.unetresgrossebite.com,makhai.intra.unetresgrossebite.com
+#   srvclass: network
+# lethe.adm.intra.unetresgrossebite.com:
+#   host_ipaddress: 10.42.242.8
+#   host_parents: gaia.adm.intra.unetresgrossebite.com
+#   srvclass: network
+# algea.adm.intra.unetresgrossebite.com:
+#   host_ipaddress: 10.42.242.7
+#   host_parents: eros.adm.intra.unetresgrossebite.com
+#   srvclass: network
+  cam1.surv.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.40.100
+    host_parents: ponos.adm.intra.unetresgrossebite.com
+    srvclass: cam
+  cam2.surv.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.40.101
+    host_parents: ponos.adm.intra.unetresgrossebite.com
+    srvclass: cam
+  gamma.sip.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.41.11
+    host_parents: nikea.adm.intra.unetresgrossebite.com
+    srvclass: phone
+  asteros.adm.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.242.11
+    host_parents: eros.adm.intra.unetresgrossebite.com
+    srvclass: ap
+  cerberus.adm.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.242.26
+    host_parents: ponos.adm.intra.unetresgrossebite.com
+    srvclass: ap
+  rhea.adm.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.242.253
+    host_parents: gaia.adm.intra.unetresgrossebite.com
+    srvclass: pdu
+  hera.adm.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.242.247
+    host_parents: eros.adm.intra.unetresgrossebite.com
+    srvclass: pdu
+  hestia.adm.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.242.246
+    host_parents: gaia.adm.intra.unetresgrossebite.com
+    srvclass: pdu

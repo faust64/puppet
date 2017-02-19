@@ -1,0 +1,91 @@
+table <private_networks> \
+{ \
+    10.0.0.0/8, \
+    169.254.0.0/24, \
+    172.16.0.0/12, \
+    192.168.0.0/16 \
+}
+
+table <adm_ip> \
+{ \
+<% if @adm_ip != false -%><% @adm_ip.sort.each do |admin| -%>    <%=admin%>, \
+<% end -%><% end -%>
+    127.0.0.1 \
+}
+
+table <ossec_fwtable> persist
+<% if @asterisk_ip != false -%>asterisk_ip = '{ <% @asterisk_ip.sort.each do |host| -%><%=host%> <% end -%>}'
+<% end -%><% if @bacula_director_ip != false and @bacula_fd_port != false -%>bdirector_ip = <%=@bacula_director_ip%>
+<% end -%><% if @bacula_storage_ip != false and @bacula_storage_port != false -%> bstorage_ip = <%=@bacula_storage_ip%>
+<% end -%><% if @bbb_ip != false -%>     bbb_ip = <%=@bbb_ip%>
+<% end -%><% if @dell_ups_mgr_ip != false -%> dupsmgr_ip = '{ <% @dell_ups_mgr_ip.each do |host| -%><%=host%> <% end -%>}'
+<% end -%><% if @dell_ups_ip != false -%>    dups_ip = '{ <% @dell_ups_ip.each do |host| -%><%=host%> <% end -%>}'
+<% end -%>    dhcp_ip = '{ <% if @dhcp_ip != false -%><% @dhcp_ip.sort.each do |host| -%><%=host%> <% end -%><% else -%>me <% end -%>}'
+     dns_ip = '{ <% if @dns_ip != false -%><% @dns_ip.sort.each do |host| -%><%=host%> <% end -%><% if @ad_ip != false -%><% @ad_ip.sort.each do |host| -%><%=host%> <% end -%><% end -%><% else -%>8.8.8.8 8.8.4.4 <% end -%>}'
+<% if @git_ip != false -%>     git_ip = <%=@git_ip%>
+<% end -%><% if @icecast_ip != false -%> icecast_ip = <%=@icecast_ip%>
+<% end -%><% if @icmp_ip != false -%>    icmp_ip = '{ <% @icmp_ip.each do |host| -%><%=host%> <% end -%>}'
+<% end -%><% if @ldap_ip != false -%>    ldap_ip = '{ <% @ldap_ip.each do |host| -%><%=host%> <% end -%>}'
+<% end -%><% if @masterldap != false -%>  ldap_host = '{ <% @masterldap.each do |host| -%><%=host%> <% end -%>}'
+<% end -%><% if @mail_mx != false -%>    mail_ip = <%=@mail_mx%>
+<% end -%><% if @munin_ip != false -%>   munin_ip = '{ <% @munin_ip.each do |host| -%><%=host%> <% end -%>}'
+<% end -%><% if @nagios_ip != false -%>  nagios_ip = '{ <% @nagios_ip.each do |host| -%><%=host%> <% end -%>}'
+<% end -%><% if @named_ip != false -%>   named_ip = '{ <%=@named_ip%> }'
+<% end -%><% if @masterns != false -%>      ns_ip = '{ <% @masterns.sort.each do |host| -%><%=host%> <% end -%>}'
+<% end -%><% if @plex_ip != false -%>    plex_ip = '{ <%=@plex_ip%> }'
+<% end -%><% if @pxe_ip != false -%>     pxe_ip = '{ <%=@pxe_ip%> }'
+<% end -%><% if @mail_ip != false -%>    smtp_ip = '{ <% if @mail_mx != false -%><%=@mail_mx%> <% end -%><% @mail_ip.sort.each do |host| -%><% if host != @mail_mx -%><%=host%> <% end -%><% end -%>}'
+<% end -%><% if @reverse_ip != false -%> reverse_ip = '{ <% @reverse_ip.sort.each do |host| -%><%=host%> <% end -%>}'
+<% end -%><% if @pubmx_ip != false -%>   pubmx_ip = '{ <% @pubmx_ip.sort.each do |host| -%><%=host%> <% end -%>}'
+<% end -%><% if @asterisk_ip != false -%>  sipsrv_ip = '{ <% if @sip_providers != false -%><% @sip_providers.sort.each do |host| -%><%=host%> <% end -%><% else -%>127.0.0.1 <% end -%>}'
+<% end -%><% if @squid_ip != false -%>   squid_ip = '{ <% @squid_ip.sort.each do |host| -%><%=host%> <% end -%>}'
+<% end -%><% if @snmp_ip != false -%>snmphost_ip = '{ <% @snmp_ip.sort.each do |host| -%><%=host%> <% end -%>}'
+<% end -%><% if @ssh_ip != false -%>     ssh_ip = '{ <% @ssh_ip.sort.each do |host| -%><%=host%> <% end -%>}'
+<% end -%><% if @syslog_ip != false -%>  syslog_ip = '{ <%=@syslog_ip%> }'
+<% end -%><% if @transmission_ip != false -%> torrent_ip = '{ <%=@transmission_ip%> }'
+<% end -%><% if @visio_clients != false -%>visioclt_ip = '{ <% @visio_clients.sort.each do |host| -%><%=host%> <% end -%>}'
+<% end -%>  vpnsrv_ip = <%=@vpnserver_ip%>
+<% if @vmwaremgr_ip != false -%>  vmwmgr_ip = '{ <% @vmwaremgr_ip.sort.each do |host| -%><%=host%> <% end -%>}'
+<% end -%><% if @xmpp_ip != false -%>    xmpp_ip = '{ <% @xmpp_ip.sort.each do |host| -%><%=host%> <% end -%>}'
+<% end -%>
+
+apipa_net = '{ 169.254.0.0/24 }'
+classDnE_net = '{ 224.0.0.0/3 }'
+ext_net = '! <private_networks>'
+interco_net = '{ 10.255.0.0/16 172.16.0.0/16 }'
+
+<% if @office_networks != false -%>table <office_net> { <% @office_networks.sort.each do |netname, net| -%><%=net%> <% end -%>}
+<% end -%><% @local_networks[@domain].each do |vlan| -%><% vlanname = vlan['name'] -%>table <<%=vlanname%>_net> { <% if vlan['netid'] =~ /[0-9]\.[0-9]*\.[0-9]/ -%><%=vlan['netid']%> <% elsif @all_networks[vlanname]['netid'] =~ /[0-9]\.[0-9]*\.[0-9]/ -%><%=@all_networks[vlanname]['netid'] -%><% elsif vlan['netid'] =~ /[0-9]\.[0-9]/ -%><%=vlan['netid']%> <% elsif @all_networks[vlanname]['netid'] =~ /[0-9]\.[0-9]/ -%><%=@all_networks[vlanname]['netid'] -%><% else -%>10.<%=@office_netid%>.<% if vlan['netid'] =~ /[0-9]/ -%><%=vlan['netid']%><% else -%><%=@all_networks[vlanname]['netid']%><% end -%><% end -%>.0/<% if vlan['netmsk'].to_i > 0 -%><%=vlan['netmsk']%><% else -%><%=@all_networks[vlanname]['netmsk']%><% end -%> }
+<% end -%><% @all_networks.each do |vlanname, vlanhash| -%>table <all<%=vlanname%>_net> { <% @local_networks.each do |office, officehash| -%><% @local_networks[office].each do |rlan| -%><% if rlan['name'] == vlanname -%><% if rlan['netid'] =~ /[0-9]\.[0-9]/ -%><%=rlan['netid']%><% elsif vlanhash['netid'] =~ /[0-9]\.[0-9]/ -%><%=vlanhash['netid']%><% else -%>10.<%=@netids[office]%>.<% if rlan['netid'] =~ /[0-9]/ -%><%=rlan['netid']%><% else -%><%=vlanhash['netid']%><% end -%><% end -%>.0/<% if rlan['netmsk'].to_i > 0 -%><%=rlan['netmsk']%><% else -%><%=vlanhash['netmsk']%><% end -%> <% end -%><% end -%><% end -%>}
+<% end -%><% @ovpn_networks[@domain].each do |ovpn| -%><% vpnname = ovpn['name'] -%><% if @all_openvpns[vpnname] != "" -%><% if @all_openvpns[vpnname]['server'] == true or ovpn['server'] == true -%>table <<%=vpnname%>_net> { <% if ovpn['netid'] =~ /[0-9]\.[0-9]/ -%><%=ovpn['netid']%><% elsif @all_openvpns[vpnname]['netid'] =~ /[0-9]\.[0-9]/ -%><%=@all_openvpns[vpnname]['netid']%><% else -%>10.<%=@office_netid%>.<% if ovpn['netid'] =~ /[0-9]/ -%><%=ovpn['netid']%><% else -%><%=@all_openvpns[vpnname]['netid']%><% end -%><% end -%>.0/<% if ovpn['netmsk'] =~ /[0-9]/ -%><%=ovpn['netmsk']%><% else -%><%=@all_openvpns[vpnname]['netmsk']%><% end -%> }
+<% end -%><% end -%><% end -%><% @all_openvpns.each do |vpnname, vpnhash| -%>table <all<%=vpnname%>_net> { <% @ovpn_networks.each do |office, officehash| -%><% if office != @domain -%><% @ovpn_networks[office].each do |rvpn| -%><% if rvpn['name'] == vpnname and (rvpn['server'] == true or vpnhash['server'] == true) -%><% if rvpn['netid'] =~ /[0-9]\.[0-9]/ -%><%=rvpn['netid']%><% elsif vpnhash['netid'] =~ /[0-9]*\.[0-9]*/ -%><%=vpnhash['netid']%><% else -%>10.<%=@netids[office]%>.<% if rvpn['netid'] =~ /[0-9]/ -%><%=rvpn['netid']%><% else -%><%=vpnhash['netid']%><% end -%><% end -%>.0/<% if rvpn['netmsk'] =~ /[0-9]/ -%><%=rvpn['netmsk']%><% else -%><%=vpnhash['netmsk']%><% end -%> <% end -%><% end -%><% end -%><% end -%>}
+<% end -%>
+table <staticbl> { <% @blacklist.sort.each do |remote| -%><%=remote%> <% end -%>}
+
+<% if @bbb_ip != false -%>        bbb_port = '{ 1935 5080 9123 }'
+<% end -%><% if @bacula_director_ip != false and @bacula_fd_port != false -%>  bacula_fd_port = <%=@bacula_fd_port%>
+<% end -%><% if @bacula_storage_ip != false and @bacula_storage_port -%>  bacula_st_port = <%=@bacula_storage_port%>
+<% end -%>default_tcp_port = '{ <% @allowed_tcp_ports.each do |port| -%><%=port%> <% end -%>}'
+default_udp_port = '{ <% @allowed_udp_ports.each do |port| -%><%=port%> <% end -%>}'
+<% if @asterisk_ip != false -%>        iax_port = 4569
+<% end -%><% if @squid_ip != false -%>      squid_port = 3128
+<% end -%><% if @pubmx_ip != false -%>   pub_mail_port = '{ smtp smtps submission imaps }'
+<% end -%><% if @asterisk_ip != false -%>    sip_tcp_port = '{ sip:5061 5962 }'
+    sip_udp_port = '{ sip 5000:65535 }'
+<% end -%>        web_port = '{ http https }'
+<% if @xmpp_ip != false -%>   xmpp_tcp_port = '{ 3748 5349 }'
+   xmpp_udp_port = '{ 3748 5349 1024:65535 }'
+<% end -%>
+
+  c = carp
+  e = esp
+  g = gre
+  i = icmp
+  m = igmp
+  n = ipencap
+  o = ospf
+  s = pfsync
+  t = tcp
+ tu = '{ tcp udp }'
+tui = '{ tcp udp icmp }'
+  u = udp

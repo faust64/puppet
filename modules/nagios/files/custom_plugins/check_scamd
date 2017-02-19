@@ -1,0 +1,29 @@
+#!/bin/sh
+
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+res=UNKNOWN
+if ! ps ax | grep scamd; then
+    msg="scamd process is not running"
+    res=CRITICAL
+elif ! ps ax | grep spacedgate; then
+    msg="spaced process is not running"
+    res=WARNING
+elif ! ps ax | grep proxydgate; then
+    msg="proxyd process is not running"
+    res=WARNING
+elif ! ps ax | grep predirgate; then
+    msg="predir process is not running"
+    res=WARNING
+else
+    res=OK
+fi >/dev/null 2>&1
+
+test "$msg" && msg=" - $msg"
+
+echo "$res$errstr"
+eval res=\$$res
+exit $res

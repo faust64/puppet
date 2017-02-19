@@ -1,0 +1,12 @@
+remote-control:
+<% if @control_enabled == false -%>
+    control-enable: no
+<% else -%>
+    control-enable: yes
+    control-interface: <%=@control_listenaddr%>
+    control-port: <%=@control_listenport%>
+    control-key-file: "<%=@conf_dir%>/nsd_control.key"
+    control-cert-file: "<%=@conf_dir%>/nsd_control.pem"
+    server-key-file: "<%=@conf_dir%>/nsd_server.key"
+    server-cert-file: "<%=@conf_dir%>/nsd_server.pem"
+<% end -%>

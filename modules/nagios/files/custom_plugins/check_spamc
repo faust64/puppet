@@ -1,0 +1,30 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+res=OK
+
+if test -z "$*"; then
+    PORT=783
+    HOST=localhost
+else
+    HOST=$1
+    PORT=$2
+fi
+
+echo test | spamc -x -d $HOST -p $PORT > /dev/null 2> /dev/null
+RC=$?
+
+if test $RC -gt 60; then
+    res=CRITICAL
+    msg=" - spamc returned $RC"
+else
+    msg=" - all fine"
+fi
+
+echo "$res$msg"
+eval res=\$$res
+exit $res

@@ -1,0 +1,265 @@
+#!/bin/bash
+# VE backup script
+#
+# This script will *pull* VM from the $REMOTE server to local data storage.
+# Configuration is done through /etc/virtual.conf. Used variables are:
+#
+# * REMOTE		hostname or IP address of the remote server to pull from
+#
+# * EXCLUDE_FROM_BACKUP list of VZ to ignore in backup. Dangerous. Use the
+#			form EXCLUDE_FROM_BACKUP="foo bar foo-boz" to *not*
+#			backup those 3 VE.
+#
+# Warning : the script will connect to $REMOTE, be sure that you can
+# ssh $REMOTE and rsync $REMOTE::
+
+# Look for variables in /etc/virtual.conf
+test -f /etc/virtual.conf && . /etc/virtual.conf
+
+#Default values are set
+OK_ADDRESS=${OK_ADDRESS:-"<%=@contact%>"}
+ALERT_ADDRESS=${ALERT_ADDRESS:-"<%=@contact%>"}
+REMOTE=<%=@jumeau%>
+DIR_REMOTE_VMS=${DIR_REMOTE_VMS:-"/var/lib/vz/private"}
+DIR_BACKUP=${DIR_BACKUP:-"/media/backups"}
+DIR_BACKUP_KVM=$DIR_BACKUP/<%=@jumeau%>/kvm
+DIR_BACKUP_XEN=$DIR_BACKUP/<%=@jumeau%>/xen
+DIR_BACKUP_VZ=$DIR_BACKUP/<%=@jumeau%>/vz
+XEN_CMD=/usr/sbin/xl
+DIR_SWAP=$DIR_BACKUP/tmp
+VIRT_BACKUP=/usr/local/sbin/XENbackup
+DIR_CONF=/etc/vz-<%=@jumeau%>
+RSYNC_VZ=${RSYNC_VZ:-"vz"}
+RSYNC_CONF=${RSYNC_CONF:-"vzconf"}
+EXCLUDE_FROM_BACKUP=${EXCLUDE_FROM_BACKUP:-""}
+VIRSH="/usr/bin/virsh -c qemu:///system"
+VZ_CMD=/usr/sbin/vzctl
+MONIT=/tmp/nagios_backups
+TMPMONIT=/tmp/nagios_backups.$$
+
+error()
+{
+    echo "Error : $1" >&2
+    exit 1
+}
+
+if test "$1" -a "$1" = test; then
+    echo "OK_ADDRESS=${OK_ADDRESS}"
+    echo "ALERT_ADDRESS=${ALERT_ADDRESS}"
+    echo "REMOTE=${REMOTE}"
+    echo "DIR_REMOTE_VMS=${DIR_REMOTE_VMS}"
+    echo "DIR_BACKUP=${DIR_BACKUP}"
+    echo "DIR_CONF=${DIR_CONF}"
+    echo "RSYNC_VZ=${RSYNC_VZ}"
+    echo "RSYNC_CONF=${RSYNC_CONF}"
+    test -d $DIR_BACKUP || error "$DIR_BACKUP is not a directory"
+    test -d $DIR_CONF || error "$DIR_BACKUP is not a directory"
+    ssh $REMOTE $VZ_CMD --version >/dev/null || error "unable to execute $VZ_CMD on $REMOTE"
+    ssh $REMOTE test -d $DIR_REMOTE_VMS || error "unable to find $DIR_REMOTE_VMS on $REMOTE"
+    rsync -q $REMOTE::$RSYNC_VZ || error "unable to connect to $REMOTE::$RSYNC_VZ"
+    rsync -q $REMOTE::$RSYNC_CONF || error "unable to connect to $REMOTE::$RSYNC_CONF"
+    if test -x /usr/bin/kvm; then
+	test -x /usr/local/bin/libvirt-shut || error "/usr/local/bin/libvirt-shut: no such file !"
+    fi
+
+    echo "CONFIG OK"
+    exit 0
+fi
+
+MESSAGE="Backing up remote: $REMOTE `date`"
+SUBJECT="REPORT"
+DEST=$OK_ADDRESS
+
+>$TMPMONIT
+(
+<% if @do_kvm == true -%>    #Backup KVM
+    echo "=> KVM Backup <="
+    if test -e /usr/bin/kvm; then
+	echo "Checking for libvirt-shut availability"
+	if test -e /usr/local/bin/libvirt-shut; then
+	    if ! ssh $REMOTE /usr/local/bin/libvirt-shut; then
+		MESSAGE="$MESSAGE\nPROBLEM while stopping: `ssh root@$REMOTE $VIRSH list`"
+		DEST="$ALERT_ADDRESS $DEST"
+		SUBJECT=WARNING
+		echo "fail:KVM:stop" >>$TMPMONIT
+	    fi >/dev/null 2>&1
+
+	    # Backing up remote KVM
+	    for KVM in `ssh root@$REMOTE $VIRSH list --all | egrep '(run)|(shut)' | awk '{print $2}'`
+	    do
+		echo "Backing up $KVM"
+		if ! ssh $REMOTE dd if=/dev/<%=@remote_kvm_vg%>/$KVM | dd of=$DIR_BACKUP_KVM/$KVM.img bs=100M >/dev/null 2>&1; then
+		    MESSAGE="$MESSAGE\nPROBLEM while backing up $KVM"
+		    DEST="$ALERT_ADDRESS $DEST"
+		    SUBJECT=WARNING
+		    echo "fail:$KVM:dd" >>$TMPMONIT
+		    echo ""
+		else
+		    echo "success:$KVM" >>$TMPMONIT
+		fi
+	    done
+	    ssh $REMOTE /etc/init.d/libvirt-bin restart
+	else
+	    MESSAGE="$MESSAGE\n/usr/local/bin/libvirt-shut missing"
+	    DEST="$ALERT_ADDRESS $DEST"
+	    SUBJECT=WARNING
+	    echo "fail:KVM:libvirt" >>$TMPMONIT
+	    echo ""
+	fi
+    else
+	echo "No KVM"
+	echo ""
+    fi
+<% end -%><% if @do_openvz == true -%>    echo "=> Cleaning backup root directory <="
+    ssh $REMOTE ls $DIR_REMOTE_VMS | egrep -v "(lost+found|vztmp)" | sort >/tmp/vm_backup_distant
+    if test -s /tmp/vm_backup_distant; then
+	ls $DIR_BACKUP_VZ | egrep -v "(lost+found|vztmp)" | sort >/tmp/vm_backup_local
+	if test -s /tmp/vm_backup_local; then
+	    diff -y /tmp/vm_backup_distant /tmp/vm_backup_local | grep ">" | awk -F ">" '{print $2}' | sed "s/\t//" >/tmp/vm_delete
+	    if test -s /tmp/vm_delete; then
+		for i in `cat /tmp/vm_delete`
+		do
+		    echo "Purging $i"
+		    rm -rf $DIR_BACKUP_VZ/$i
+		done
+	    else
+		echo "Nothing to do"
+		echo ""
+	    fi
+	else
+	    echo "vm_backup_local file is empty"
+	    echo ""
+	fi
+    else
+	echo "vm_backup_distant file is empty"
+	echo ""
+    fi
+    date
+    echo "=> Backing up VMs configurations <="
+    if ! rsync -avWx --delete --numeric-ids root@$REMOTE::$RSYNC_CONF/\* $DIR_CONF; then
+	MESSAGE="$MESSAGE\nPROBLEM while backing up VMS configurations"
+	DEST="$ALERT_ADDRESS $DEST"
+	SUBJECT=WARNING
+    fi
+    echo "=> Starting Backup <="
+    for VM in `ssh root@$REMOTE ls $DIR_REMOTE_VMS | egrep -v 'lost\+found|vztmp|*.tar.*|*.tgz|*.tbz'`
+    do
+	if echo $EXCLUDE_FROM_BACKUP | egrep -q "(^|\s)$VM(\s|$)"; then
+	    echo "$VM is \*not\* backuped as configured in /etc/virtual.conf (EXCLUDE_FROM_BACKUP)"
+	    continue
+	fi
+	echo ""
+	echo ""
+	date
+	echo "=> Checking VM $VM exists <="
+	cpt=0
+	while test $cpt -le 10
+	do
+	    ssh root@$REMOTE ls && break
+	    cpt=`expr $cpt + 1`
+	    sleep 1
+	done >/dev/null 2>&1
+	if ! ssh root@$REMOTE ls /etc/vz/{names,conf/\*.conf} | grep "$VM"; then
+	    MESSAGE="$MESSAGE\nVM $VM is not active: please *PURGE* or *ARCHIVE* /$DIR_REMOTE_VMS/$VM"
+	    DEST="$ALERT_ADDRESS $DEST"
+	    SUBJECT=WARNING
+	    echo "skip:$VM:inactive" >>$TMPMONIT
+	else
+	    echo "Test OK"
+	    echo "=> Checking VM $VM status <="
+	    if ssh root@$REMOTE "vzlist -Ho veid,name | grep ' $VM'"; then
+		echo "=> Arret de la VM $VM <="
+		if ! ssh root@$REMOTE "$VZ_CMD stop $VM"; then
+		    MESSAGE="$MESSAGE\nPROBLEM while stopping VM $VM"
+		    DEST="$ALERT_ADDRESS $DEST"
+		    SUBJECT=WARNING
+		fi
+	    else
+		echo "$VM is not started"
+	    fi
+	    cpt=0
+	    while test $cpt -le 30
+	    do
+		if ping -q -w1 -c1 $REMOTE; then
+		    break
+		fi
+		sleep 1
+		cpt=`expr $cpt + 1`
+	    done >/dev/null 2>&1
+	    date
+	    echo "=> Backing VM $VM up <="
+	    if ! rsync -avWx --delete --numeric-ids root@$REMOTE::$RSYNC_VZ/$VM $DIR_BACKUP_VZ; then
+		MESSAGE="$MESSAGE\nPROBLEM while backing VM $VM up"
+		DEST="$ALERT_ADDRESS $DEST"
+		SUBJECT=WARNING
+		echo "fail:$VM:rsync" >>$TMPMONIT
+	    else
+		echo "success:$VM" >>$TMPMONIT
+	    fi
+	    date
+	    echo "=> End of backup for VM $VM - checking for reboot <="
+	    VM_STATUS=`ssh root@$REMOTE cat /etc/vz/{names/$VM,conf/$VM.conf} 2> /dev/null | grep ONBOOT | cut -f 2 -d \"`
+	    echo VM_STATUS=$VM_STATUS
+	    if test "$VM_STATUS" = "yes"; then
+		echo "=> Starting VM $VM up <="
+		if ! ssh root@$REMOTE "$VZ_CMD start $VM >/dev/null 2>&1 &"; then
+		    MESSAGE="$MESSAGE\nPROBLEM while starting VM $VM up"
+		    DEST="$ALERT_ADDRESS $DEST"
+		    SUBJECT=WARNING
+		fi
+		cpt=0
+		while test $cpt -le 30
+		do
+		    if ping -q -w1 -c1 $REMOTE; then
+			break
+		    fi
+		    sleep 1
+		    cpt=`expr $cpt + 1`
+		done >/dev/null 2>&1
+	    fi
+	fi
+    done
+<% end -%><% if @do_xen == true -%>    if ssh $REMOTE test -x $VIRT_BACKUP >/dev/null 2>&1; then
+	for VM in `ssh $REMOTE "ls /etc/xen/conf/*.conf" | sed 's|.*/\([^/]*\)\.conf|\1|'`
+	do
+	    if echo $EXCLUDE_FROM_BACKUP | egrep -q "(^|\s)$VM(\s|$)" >/dev/null 2>&1; then
+		echo Skipping $VM @EXCLUDE_FROM_BACKUP
+		continue
+	    fi
+
+	    echo Backing $VM up
+	    if ! ssh $REMOTE $VIRT_BACKUP -cdv $VM -s $QUOTA; then
+		MESSAGE="$MESSAGE\nPROBLEM while snapshotting: $VM"
+		SUBJECT=WARNING
+		echo Failed $VM
+	    else
+		echo Fetching $VM snapshot
+		if ! rsync -avWx --delete --numeric-ids $REMOTE:$DIR_SWAP/$VM $DIR_BACKUP_XEN/; then
+		    MESSAGE="$MESSAGE\nPROBLEM while backing VM $VM up"
+		    SUBJECT=WARNING
+		    echo Failed $VM
+		else
+		    echo Cleanup $VM
+		    if ! ssh $REMOTE rm -f $DIR_SWAP/$VM/*; then
+			MESSAGE="$MESSAGE\nPROBLEM while cleaning up after $VM backup"
+			SUBJECT=WARNING
+			echo Failed cleanup $VM
+		    else
+			echo Done $VM
+		    fi
+		fi
+	    fi
+	done
+    else
+	MESSAGE="$MESSAGE\n$VIRT_BACKUP missing"
+	SUBJECT=WARNING
+	echo no $VIRT_BACKUP
+    fi
+<% end -%>    echo "=> End of backup"
+    MESSAGE="$MESSAGE\n`date`"
+    echo -e $MESSAGE | mailx -s "[$SUBJECT] backup $REMOTE" $DEST
+    echo -e $MESSAGE
+) 2>&1 | awk '{print strftime("%H:%M:%S "), $0}' | gzip -9 >/tmp/backup_ve_`date -d yesterday +%a`.log.gz
+test -s $TMPMONIT && mv $TMPMONIT $MONIT || rm -f $TMPMONIT
+
+exit 0

@@ -1,0 +1,34 @@
+# objtype_id possible values:
+# 2 PDU
+# 3 Shelf
+# 4 Server
+# 5 DiskArray
+# 6 TapeLibrary
+# 7 Router
+# 8 Network switch
+# 9 PatchPanel
+# 10 CableOrganizer
+# 11 spacer
+# 12 UPS
+# 13 Modem
+# 14 MediaConverter
+# 15 console
+# 445 KVM switch
+# 447 multiplexer
+# 798 Network security
+# 965 Wireless
+# 1055 FC switch
+# 1323 Voice/video
+# 1397 Power supply chassis
+# 1398 Power supply
+# 1502 Server chassis
+# 1503 Network chassis
+# 1504 VM
+# 1505 VM Cluster
+# 1506 VM Resource Pool
+# 1507 VM Virtual Switch
+# 1560 Rack
+# 1561 Row
+# 1562 Location
+# 1644 serial console server
+# 1787 Management interface

@@ -1,0 +1,61 @@
+test -z "$PS1" && return
+<% if @operatingsystem == "Debian" -%>test -z "$debian_chroot" -a -r /etc/debian_chroot && debian_chroot=$(cat /etc/debian_chroot)
+<% end -%>test -f /etc/bash_completion && . /etc/bash_completion
+export EDITOR=vi
+export FACTERLIB=/opt/puppetlabs/puppet/cache/lib/facter
+export HISTTIMEFORMAT="%Y/%m/%d - %H:%M:%S "
+export HISTIGNORE=ls
+export LC_CTYPE=<%=@locale%>.<%=@charset%>
+export LC_MESSAGES=<%=@locale%>.<%=@charset%>
+export LC_TIME=<%=@locale%>.<%=@charset%>
+export LESS="-R"
+export PAGER=/usr/bin/less
+export SHELL=<% if @operatingsystem == "FreeBSD" -%>/usr/local<% end -%>/bin/bash
+
+case $TERM in
+    xterm*|rxvt)
+	TITLEBAR='\[\e]0;\h:\w\a\]'
+	;;
+
+    *)
+	TITLEBAR=""
+	;;
+esac
+
+timeout()
+{
+    local time command
+
+    time=$1
+    shift
+    command="/bin/sh -c \"$@\""
+
+    expect -c "set echo \"-noecho\"; set timeout $time; spawn -noecho $command; expect timeout { exit 1 } eof { exit 0 }"
+
+    if test $? = 1; then
+        echo "Timed out after ${time} seconds" >&2
+	return 1
+    fi
+
+    return 0
+}
+
+if test -d /etc/profile.d; then
+    for config in /etc/profile.d/*
+    do
+	if ! test -e $config; then
+	    continue
+	elif ! test -r $config; then
+	    continue
+	elif ! grep '#!/bin/[ba]*sh' $config >/dev/null; then
+	    continue
+	fi
+	. $config
+    done
+fi
+if test `id -u` = 0; then
+    export PS1=$TITLEBAR'\[\e[<%=@prompt%>m\]\h:\w\[\e[$(($??7:0));37m\]\$\[\e[0;0m\] '
+else
+    export PS1=$TITLEBAR'\[\e[<%=@prompt%>m\]$USER@\h:\w\[\e[$(($??7:0));37m\]\$\[\e[0;0m\] '
+fi
+test -f ~/.mybashrc && . ~/.mybashrc

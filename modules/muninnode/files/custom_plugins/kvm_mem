@@ -1,0 +1,42 @@
+#!/bin/bash
+# -*- coding: utf-8 -*-
+# vim: set fileencoding=utf-8
+#
+# Munin plugin to show real amount of memory used by vm
+#
+# Copyright Lukasz Jozwinski based on plugin by Maxence Dunnewind, Rodolphe Quiédeville, Adrien Pujol
+#
+# License : GPLv3
+
+VMS=`virsh list | grep ^\ [0-9] | tr -s " " | cut -d " " -f3`
+
+case $1 in
+config)
+echo "graph_title KVM Virtual Machine Memory usage
+graph_vlabel Bytes
+graph_category KVM
+graph_info This graph shows the current amount of memory used by virtual machines
+graph_args --base 1024 --lower-limit 0"
+
+min=0
+for i in $VMS
+do
+echo "${i}_mem.label $i"
+echo "${i}_mem.type GAUGE"
+if [ $min = 0 ]
+then
+echo "${i}_mem.min 0"
+echo "${i}_mem.draw AREA"
+else echo "${i}_mem.draw STACK"
+fi
+min=1
+echo "${i}_mem.info memory used by virtual machine $i"
+done
+exit 0;;
+esac
+
+for i in $VMS
+do
+mem=`echo "\`virsh dommemstat $i | grep rss | tr -s " " | cut -d " " -f2\`*1024" | bc`
+echo "${i}_mem.value $mem"
+done

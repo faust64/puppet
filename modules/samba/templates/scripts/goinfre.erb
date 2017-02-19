@@ -1,0 +1,19 @@
+#!/bin/sh
+
+DEST=<%=@contact%>
+GOINFRE=/home/goinfre
+
+(
+    find $GOINFRE -atime +6 -exec rm -rvf {} \;
+    row=`find $GOINFRE -type d | wc -l`
+    lastrow=1
+    while test "$row" -ne "$lastrow"
+    do
+	find $GOINFRE -type d -exec rmdir -v {} \;
+	lastrow=$row
+	row=`find $GOINFRE -type d | wc -l`
+	test "$row" = 1 && break
+    done 2>/dev/null
+) | mail -s "[REPORT] Purging `hostname -f` goinfre" $DEST
+
+exit 0

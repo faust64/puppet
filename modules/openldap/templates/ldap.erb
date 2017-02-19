@@ -1,0 +1,5 @@
+URI		ldaps://<% if @ldap_slave != false -%><%=@ldap_slave%><% else -%><%=@fqdn%><% end -%>
+
+BASE		<%=@ldap_base%>
+TLS_CACERT	<%=@cert_dir%>/ca-auth.crt
+TLS_REQCERT	demand

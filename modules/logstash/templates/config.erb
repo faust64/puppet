@@ -1,0 +1,108 @@
+input {
+<% if @do_tcp -%>    tcp {
+	codec => json
+	port  => <%=@tcp_port%>
+	tags  => [ "syslog" ]
+    }
+<% end -%><% if @do_udp -%>    udp {
+	codec => json
+	port  => <%=@udp_port%>
+	tags  => [ "syslog" ]
+    }
+<% end -%><% if @do_relp -%>    relp {
+<% else -%>    <% if @do_tcp -%>tc<% else -%>ud<% end -%>p {
+	codec => json
+<% end -%>	port  => <%=@relp_port%>
+	tags  => [ "web" ]
+    }
+    <% if @do_tcp -%>tc<% else -%>ud<% end -%>p {
+	codec => json
+	port  => 6968
+	tags  => [ "firewall" ]
+    }
+    file {
+	path => "/tmp/logstash_check.in"
+	tags => [ "_check_logstash" ]
+    }
+}
+
+filter {
+    if "firewall" in [tags] {
+	grok {
+	    patterns_dir => "/etc/logstash/patterns"
+	    match => {
+		"message" => [
+		    "%{F2B_DATE:date} %{F2B_ACTION} %{F2B_LEVEL:level} %{F2B_JAIL:jail} %{WORD:action} %{IP:ip} %{GREEDYDATA:msg}?",
+		    "%{F2B_DATE:date} %{F2B_ACTION} %{WORD:level} %{F2B_JAIL:jail} %{WORD:action} %{IP:ip}"
+		]
+	    }
+	}
+
+	geoip {
+	    source => "ip"
+	    target => "geoip"
+	    database => "/etc/logstash/<%=@geodb%>"
+	    add_field => [ "[geoip][coordinates]", "%{[geoip][longitude]}" ]
+	    add_field => [ "[geoip][coordinates]", "%{[geoip][latitude]}" ]
+	}
+
+	mutate {
+	    convert => [ "[geoip][coordinates]", "float" ]
+	}
+    }
+    if "web" in [tags] {
+	grok {
+	    match => {
+		"message" => [
+		    "%{COMBINEDAPACHELOG}",
+		    "(?<timestamp>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}) \[%{DATA:err_severity}\] (%{NUMBER:pid:int}#%{NUMBER}: \*%{NUMBER}|\*%{NUMBER}) %{DATA:err_message}(?:, client: (?<client_ip>%{IP}|%{HOSTNAME}))(?:, server: %{IPORHOST:server})(?:, request: %{QS:request})?(?:, host: %{QS:client_ip})?(?:, referrer: \"%{URI:referrer})?",
+		    "%{DATESTAMP:timestamp} \[%{DATA:err_severity}\] %{GREEDYDATA:err_message}"
+		]
+	    }
+	}
+
+	geoip {
+	    source => "clientip"
+	    target => "geoip"
+	    database => "/etc/logstash/<%=@geodb%>"
+	    add_field => [ "[geoip][coordinates]", "%{[geoip][longitude]}" ]
+	    add_field => [ "[geoip][coordinates]", "%{[geoip][latitude]}" ]
+	}
+
+	mutate {
+	    convert => [ "[geoip][coordinates]", "float" ]
+	}
+    }
+}
+
+output {
+    if "_check_logstash" in [tags] {
+	file {
+	    path => "/tmp/logstash_check.out"
+	}
+    }
+<% if @output != false -%>    if "_check_logstash" not in [tags] and "_grokparsefailure" not in [tags] {
+<% @output.each do |driver, config| -%><% if driver == "elasticsearch" -%><% if config['aws'] and config['aws']['target'] =~ /[a-z]/ -%>	amazon_es {
+<% if config['aws']['userid'] =~ /[0-9][A-Z]/ -%>	    aws_access_key_id     => '<%=config['aws']['userid']%>'
+<% end -%><% if config['aws']['userkey'] =~ /[0-9][A-Z]/ -%>	    aws_secret_access_key => '<%=config['aws']['userkey']%>'
+<% end -%>	    hosts                 => [ "<%=config['aws']['target']%>.<% if config['aws']['region'] =~ /[a-z]/ -%><%=config['aws']['region']%><% else -%>us-east-1<% end -%>.es.amazonaws.com" ]
+	    region                => "<% if config['aws']['region'] =~ /[a-z]/ -%><%=config['aws']['region']%><% else -%>us-east-1<% end -%>"
+	    index                 => "<% if config['index'] =~ /[a-z]/ -%><%=config['index']%><% else -%>logs<% end -%>-%{+YYYY.MM.dd}"
+<% elsif config['hosts'] -%>	elasticsearch {
+<% if scope.function_versioncmp([@version, "2.0"]) < 0 -%><% if config['hosts'] -%>	    host     => [ "<%=config['hosts'].join('", "')%>" ]
+<% else -%>	    host     => [ "localhost" ]
+<% end -%>	    port     => 9200
+	    protocol => http
+<% else -%><% if config['hosts'] -%>	    hosts    => [ "<%=config['hosts'].join('", "')%>" ]
+<% else -%>	    hosts    => [ "localhost" ]
+<% end -%><% end -%>	    index    => "<% if config['index'] =~ /[a-z]/ -%><%=config['index']%><% else -%>logs<% end -%>-%{+YYYY.MM.dd}"
+<% end -%><% else -%># unknown driver <%=driver%>
+	file {
+	    path => "/var/log/stash-%{+YYYY-MM-dd}.log.gz"
+	    gzip => true
+<% end -%>	}
+<% end -%>    }
+<% end -%>    if "_grokparsefailure" in [tags] {
+	file { path => "/var/log/logstash/failed-%{+YYYY-MM-dd}.log" }
+    }
+}

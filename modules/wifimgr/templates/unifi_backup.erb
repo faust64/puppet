@@ -1,0 +1,15 @@
+#!/bin/sh
+
+TMPFILE=/tmp/`basename $0`.$$
+SUBJECT=REPORT
+DEST=<%=@contact%>
+
+. /usr/local/sbin/unifi_sh_api >$TMPFILE 2>&1
+if ! unifi_backup; then
+    SUBJECT=WARNING
+fi >>$TMPFILE 2>&1
+
+cat $TMPFILE | mail -s"[$SUBJECT] unifi backup `hostname -f`" $DEST
+rm -f $TMPFILE
+
+exit 0

@@ -1,0 +1,5 @@
+quickleave
+<% @local_networks[@domain].each do |obj| -%><% nic = obj['name'] -%><% if @all_networks[nic]['igmp'] == "upstream" or @all_networks[nic]['igmp'] =~ /[0-9]\.[0-9]/ -%>phyint <%=nic%> upstream
+<% elsif @all_networks[nic]['igmp'] == true -%>phyint <%=nic%> downstream
+<% else -%>phyint <%=nic%> disabled
+<% end -%><% end -%>phyint lo0 disabled

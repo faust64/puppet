@@ -1,0 +1,585 @@
+#!/bin/sh
+
+PARENT_NAME=`hostname -f`
+test -f /etc/virtual.conf   && . /etc/virtual.conf
+test -e "$MODEL_DIR"        || MODEL_DIR=/media/kvm
+test    "$KVM_STORAGE"      || KVM_STORAGE=data
+test -z "$DOMAIN"           && DOMAIN=`expr $PARENT_NAME : '[^\.]*.\(.*\)'`
+test -z "$APT"              && APT=apt.$DOMAIN
+test -z "$BRIDGE"           && BRIDGE=$(brctl show 2>/dev/null | grep -o "^br[0-9]" | head -1)
+test -z "$CPUMODEL"         && CPUMODEL=SandyBridge
+test -z "$QUOTA"            && QUOTA=5G
+test -z "$MAILHOST"         && MAILHOST=smtp.$DOMAIN
+test -n "$TEMPLATE"         && VZ_DIR=${TEMPLATE%/*}
+test -z "$DNS"              && DNS=`awk '/^nameserver/{print $2}' /etc/resolv.conf | tr \\n \ `
+test -z "$BRCHILD_IF"       && BRCHILD_IF=eth0
+CHROOT=/tmp/ve.$$
+
+usage()
+{
+    cat <<EOF
+Usage: ${0##*/} [OPTIONS] hostname ip source [quota] [eth-hwaddr]
+Creates a new VE from a model
+
+Options:
+	-h --help               this usage
+	-a --autostart          enable VE autostart
+	-p --nopasswd           disable root password
+	-s --start              start VE after its creation
+	-y --yes                no confirmation
+
+Required:
+	hostname                ve hostname
+	ip                      ve address
+	source                  ve source (tar.gz or directory)
+	eth-hwaddr              force virtual NIC hardware address
+EOF
+
+    if test -d "$MODEL_DIR"; then
+	echo "Available templates:"
+	ls -1 $MODEL_DIR/*
+    fi
+
+    cat <<EOF
+Variables are:
+KVM_STORAGE=$KVM_STORAGE
+QUOTA=$QUOTA
+PARENT_NAME=$PARENT_NAME
+DOMAIN=$DOMAIN
+BRIDGE=$BRIDGE
+AKEYSPATH=$AKEYSPATH
+MAILHOST=$MAILHOST
+DNS=$DNS
+APT=$APT
+EOF
+}
+
+
+###
+
+
+create_conf()
+{
+    uuid=`uuid`
+    cat <<EOF >/etc/libvirt/qemu/$VHOST.xml
+<domain type='kvm'>
+  <name>$VHOST</name>
+  <uuid>$uuid</uuid>
+  <memory unit='KiB'>2097152</memory>
+  <currentMemory unit='KiB'>2097152</currentMemory>
+  <vcpu placement='static'>1</vcpu>
+  <os>
+    <type arch='x86_64' machine='pc-i440fx-2.1'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <pae/>
+  </features>
+  <cpu mode='custom' match='exact'>
+    <model fallback='allow'>$CPUMODEL</model>
+EOF
+    if test "$CPUMODEL" = Haswell; then
+	cat <<EOF >>/etc/libvirt/qemu/$VHOST.xml
+    <feature policy='disable' name='rtm'/>
+    <feature policy='disable' name='hle'/>
+EOF
+    fi
+    cat <<EOF >>/etc/libvirt/qemu/$VHOST.xml
+  </cpu>
+  <clock offset='utc'>
+    <timer name='rtc' tickpolicy='catchup'/>
+    <timer name='pit' tickpolicy='delay'/>
+    <timer name='hpet' present='no'/>
+  </clock>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/bin/kvm</emulator>
+    <disk type='block' device='disk'>
+      <driver name='qemu' type='raw' cache='none' io='native'/>
+      <source dev='/dev/data/$VHOST-root'/>
+      <target dev='hda' bus='ide'/>
+      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+    </disk>
+    <controller type='usb' index='0' model='ich9-ehci1'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x7'/>
+    </controller>
+    <controller type='usb' index='0' model='ich9-uhci1'>
+      <master startport='0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0' multifunction='on'/>
+    </controller>
+    <controller type='usb' index='0' model='ich9-uhci2'>
+      <master startport='2'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x1'/>
+    </controller>
+    <controller type='usb' index='0' model='ich9-uhci3'>
+      <master startport='4'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x2'/>
+    </controller>
+    <controller type='pci' index='0' model='pci-root'/>
+    <controller type='ide' index='0'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x1'/>
+    </controller>
+    <interface type='bridge'>
+EOF
+    if test "$HWADDR"; then
+	cat <<EOF >>/etc/libvirt/qemu/$VHOST.xml
+      <mac address='$HWADDR'/>
+EOF
+    fi
+    cat <<EOF >>/etc/libvirt/qemu/$VHOST.xml
+      <source bridge='$BRIDGE'/>
+      <model type='rtl8139'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+    </interface>
+    <serial type='pty'>
+      <target port='0'/>
+    </serial>
+    <console type='pty'>
+      <target type='serial' port='0'/>
+    </console>
+    <input type='mouse' bus='ps2'/>
+    <input type='keyboard' bus='ps2'/>
+    <video>
+      <model type='cirrus' vram='9216' heads='1'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
+    </video>
+    <memballoon model='virtio'>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0'/>
+    </memballoon>
+  </devices>
+</domain>
+EOF
+}
+
+dummy_checks()
+{
+    if test -x /usr/bin/id -a 0`id -u` -ne 0; then
+	echo "${0##*/} error: Must be run as root"
+	exit 1
+    elif ! test -x /usr/bin/mkpasswd; then
+	echo "mkpasswd missing"
+    elif ! test -x /usr/bin/uuid; then
+	echo "uuid missing"
+	exit 1
+    elif ! test -x /usr/bin/pv; then
+	echo "pv missing"
+	exit 1
+    elif ! test -x /sbin/kpartx; then
+	echo "kpartx missing"
+	exit 1
+    elif ! test -d /dev/$KVM_STORAGE; then
+	if ! vgs | grep $KVM_STORAGE >/dev/null 2>&1; then
+	    echo "LVM $KVM_STORAGE does not exist"
+	    exit 1
+	fi
+    fi
+
+    if virsh list | grep " $VHOST " >/dev/null 2>&1; then
+	echo "Container already running" >&2
+	exit 1
+    elif test -e /dev/$KVM_STORAGE/$VHOST-root; then
+	echo "WARNING!! $VHOST already exists!"
+	if $CONFIRM; then
+	    echo -n "Do you want to proceed (not recommended)? (y/N) "
+	    read RESPONSE
+	    case $RESPONSE in
+		Y|y|yes)
+		    ;;
+		*)
+		    echo "Abort"
+		    exit 1
+		    ;;
+	    esac
+	else
+	    echo "Abort"
+	    exit 1
+	fi
+    fi
+
+    echo
+    echo "Virtual server creation:"
+    echo "nom:       $VHOST"
+    echo "ip:        $IP"
+    test -n "$BRIDGE" && echo "bridge:    $BRIDGE"
+    echo "model:     $FILEMODEL"
+    echo "quota:     $QUOTA"
+    echo "domain:    $DOMAIN"
+    echo "parent:    $PARENT_NAME"
+    echo "dns:       $DNS"
+    echo "mailhost:  $MAILHOST"
+    echo "apt:       $APT"
+    echo
+
+    if $CONFIRM; then
+        echo -n "Is this OK? (y/n) "
+	read RESPONSE
+	case $RESPONSE in
+	    Y|y|Yes|yes)
+		;;
+	    *)
+		echo "Abort on user exit."
+		exit 0
+		;;
+	esac
+    fi
+}
+
+finish()
+{
+    if mount | grep $CHROOT >/dev/null; then
+	cd /
+	sync
+	umount $CHROOT
+	rmdir $CHROOT
+    fi
+    if ! kpartx -dv /dev/$KVM_STORAGE/$VHOST-root; then
+	echo "Failed unloading VE partitions" >&2
+    fi
+
+    cd /etc/libvirt/qemu
+    if ! virsh define $VHOST.xml; then
+	echo Fail importing $VHOST into virsh >&2
+	exit 1
+    elif $AUTOSTART; then
+	if test -d /var/www/vm_manager/scripts/; then
+	    echo $VHOST >>/var/www/vm_manager/scripts/vm_start_list.txt
+	    echo $VHOST:01/12/`date +%Y` >>/var/www/vm_manager/scripts/vm_whitelist.txt
+	fi
+	virsh autostart $VHOST
+    fi
+    if $START; then
+	virsh start $VHOST
+	msg=started
+    else
+	msg=created
+    fi
+
+    echo "Server has been $msg: $VHOST.$DOMAIN (root/$PLAINTEXT_PASSWD)"
+}
+
+parse_args()
+{
+    AUTOSTART=false
+    CONFIRM=true
+    MORETODO=true
+    NOPASSWD=false
+    START=false
+
+    while $MORETODO
+    do
+	case X"$1" in
+	    X--help|X-h)
+		usage
+		shift
+		exit 0
+		;;
+	    X--autostart|X-a)
+		AUTOSTART=true
+		;;
+	    X--nopasswd|X-p)
+		NOPASSWD=true
+		;;
+	    X--start|X-s)
+		START=true
+		;;
+	    X--yes|-y)
+		CONFIRM=false
+		;;
+	    X-*|X\?*)
+		usage
+		exit 1
+		;;
+	    *)
+		MORETODO=false
+		;;
+	esac
+	$MORETODO && shift
+    done
+
+    if test $# -lt 3; then
+	echo "${0##*/} error: too few arguments."
+	usage
+	exit 1
+    elif test $# -gt 5; then
+	echo "${0##*/} error: too many arguments."
+	usage
+	exit 1
+    fi >&2
+
+    case x$1 in
+	x[a-z]*[a-z0-9])
+	    VHOST="$1"
+	    ;;
+	*)
+	    echo "${0##*/} error: $1 must be a hostname for the ve"
+	    echo 'e.g. "alpha"'
+	    exit 1
+	    ;;
+    esac >&2
+    shift
+
+    case x$1 in
+	x[0-9]*.[0-9]*.[0-9]*.[0-9]*)
+	    IP=$1
+	    ;;
+	*)
+	    echo "${0##*/} error: $1 requires a single IPv4 e.g.: \"10.1.1.1\""
+	    exit 1
+	    ;;
+    esac >&2
+    shift
+
+    if test -f ./$1; then
+	FILEMODEL=`pwd`/$1
+    elif test -f $1; then
+	FILEMODEL=$1
+    elif test -f $MODEL_DIR/$1.gz; then
+	FILEMODEL=$MODEL_DIR/$1.gz
+    else
+	echo "${0##*/} error: $1 is not a valid image"
+	exit 1
+    fi >&2
+    shift
+
+    if test "$1"; then
+	while test "$1"
+	do
+	    if echo "$1" | grep : >/dev/null; then
+		HWADDR=$1
+	    else
+		QUOTA=$1
+	    fi
+	    shift
+	done
+    fi
+}
+
+ve_conf()
+{
+    cd $CHROOT
+
+    echo $PARENT_NAME >parent
+    sed -i "s/root-[^:]*/root-$VHOST/" etc/passwd
+    if ! $NOPASSWD ; then
+	PLAINTEXT_PASSWD=$VHOST
+    else
+	PLAINTEXT_PASSWD=`</dev/urandom LANG=C tr -dc [:graph:] | head -c 10`
+    fi
+    SALT=`</dev/urandom LANG=C tr -dc [:alnum:] | head -c 16`
+    export PLAINTEXT_PASSWD
+    export SALT
+
+    NEWPASSWD=`perl -e 'print crypt("$ENV{PLAINTEXT_PASSWD}", "\\$6\\$$ENV{SALT}\\$")'`
+    sed -i "s#root:[^:]*#root:$NEWPASSWD#" etc/shadow
+
+    touch var/log/wtmp var/log/btmp
+    echo $VHOST >etc/hostname
+    echo $VHOST.$DOMAIN >etc/mailname
+    cat <<EOF >etc/hosts
+127.0.0.1	localhost
+$IP	$VHOST.$DOMAIN $VHOST
+
+::1		ip6-localhost ip6-loopback
+fe00::0		ip6-localnet
+ff00::0		ip6-mcastprefix
+ff02::1		ip6-allnodes
+ff02::2		ip6-allrouters
+ff02::3		ip6-allhosts
+EOF
+    if test -n "$AKEYSPATH"; then
+	opts=
+	if echo $AKEYSPATH | grep '^https' >/dev/null; then
+	    opts=--no-check-certificate
+	fi
+	if wget -q $opts $AKEYSPATH -O /tmp/authorized_keys; then
+	    mkdir -p root/.ssh
+	    chmod 700 root/.ssh
+	    mv /tmp/authorized_keys root/.ssh
+	else
+	    rm /tmp/authorized_keys
+	    echo "Unable to retrieve authorized_keys file from $AKEYSPATH"
+	fi
+    fi
+
+    if test -z "$DNS"; then
+	cat /etc/resolv.conf
+    else
+	echo search $DOMAIN
+	for i in $DNS
+	do
+	    echo nameserver $i
+	done
+    fi >etc/resolv.conf
+
+    if test -d etc/ssmtp; then
+	cat <<EOF >etc/ssmtp/ssmtp.conf
+root=CHANGEME
+mailhub=$MAILHOST
+rewriteDomain=$DOMAIN #tpl
+hostname=$VHOST.$DOMAIN
+FromLineOverride=YES
+EOF
+    fi
+    if test -e etc/mail/submit.cf; then
+	if grep -q '^[# 	]*DS[ 	$]' etc/mail/submit.cf; then
+	    sed -i "s|^[# 	]*DS[ 	$].*|DS $MAILHOST|" etc/mail/submit.cf
+	else
+	    echo "DS $MAILHOST" >>etc/mail/submit.cf
+	fi
+	if test -e etc/mail/submit.mc; then
+	    if grep "^[		]*FEATURE(\`msp'" etc/mail/submit.mc; then
+		sed -i "s|^[ 	]*FEATURE(\`msp'.*|FEATURE(\`msp', \`[$MAILHOST]')|" etc/mail/submit.mc
+	    else
+		echo "FEATURE(\`msp' \`[$MAILHOST]')" >>etc/mail/submit.mc
+	    fi
+	fi
+    fi
+
+    if test -f etc/debian_version; then
+	eval archives=false version=
+	if grep -q 5.[0-9] etc/debian_version; then
+	    version=lenny
+	    archives=true
+	elif grep -q 6.[0-9] etc/debian_version; then
+	    version=squeeze
+	    archives=true
+	elif grep -q 7.[0-9] etc/debian_version; then
+	    version=wheezy
+	elif grep -q 8.[0-9] etc/debian_version; then
+	    version=jessie
+	elif grep -q 9.[0-9] etc/debian_version; then
+	    version=stretch
+	fi
+
+	if test "$version"; then
+	    if $archives; then
+		cat <<EOF
+deb http://archive.debian.org/debian $version main contrib non-free
+deb http://archive.debian.org/debian-security $version/updates main contrib non-free
+EOF
+	    else
+		cat <<EOF
+deb http://ftp.debian.org/debian $version main contrib non-free
+deb http://security.debian.org $version/updates main contrib non-free
+EOF
+	    fi >etc/apt/sources.list
+	fi
+
+	if test "$BRIDGE" -a x$BRIDGE != xfalse; then
+	    cat <<EOF >etc/network/interfaces
+auto lo
+iface lo inet loopback
+
+auto $BRCHILD_IF
+iface $BRCHILD_IF inet static
+    address $IP
+    netmask $BRCHILD_NETMASK
+EOF
+	    if test "$BRCHILD_NETMASK" = 255.255.255.255; then
+		cat <<EOF >>etc/network/interfaces
+    post-up /sbin/route add $BRCHILD_GATEWAY dev $BRCHILD_IF
+    post-up /sbin/route add default gw $BRCHILD_GATEWAY
+    pre-down /sbin/route del default gw $BRCHILD_GATEWAY
+    pre-down /sbin/route del $BRCHILD_GATEWAY dev $BRCHILD_IF
+EOF
+	    else
+		cat <<EOF >>etc/network/interfaces
+    gateway $BRCHILD_GATEWAY
+EOF
+	    fi
+	fi
+    elif test -f etc/redhat-release; then
+	echo "HOSTNAME=\"$VHOST\"" >etc/sysconfig/network
+
+	if test "$BRIDGE" -a x$BRIDGE != xfalse; then
+	    cat <<EOF >etc/sysconfig/network
+NETWORKING="yes"
+HOSTNAME="$VHOST"
+GATEWAY="$BRCHILD_GATEWAY"
+EOF
+	    cat <<EOF >etc/sysconfig/network-scripts/ifcfg-$BRCHILD_IF
+DEVICE=$BRCHILD_IF
+BOOTPROTO=static
+NM_CONTROLLED=no
+ONBOOT=yes
+IPADDR=$IP
+NETMASK=$BRCHILD_NETMASK
+EOF
+	fi
+	if test -f etc/wwwacct.conf; then
+	    (
+		echo ADDR $IP
+		echo ETHDEV $BRCHILD_IF
+		echo NS ns.$DOMAIN
+		echo NS2 ns.$DOMAIN
+	    ) >>etc/wwwacct.conf
+	fi
+    fi
+}
+
+ve_disk()
+{
+    if ! test -e /dev/$KVM_STORAGE/$VHOST-root; then
+	echo "Creating LV"
+	if ! lvcreate -n$VHOST-root -L$QUOTA $KVM_STORAGE; then
+	    echo "Failed creating VE rootfs's LV"
+	    exit 1
+	fi
+	echo "Initializing filesystem"
+	if echo $FILEMODEL | grep -E '\.gz$' >/dev/null; then
+	    if ! zcat $FILEMODEL | pv | dd of=/dev/$KVM_STORAGE/$VHOST-root; then
+		echo "Failed creating VE rootfs"
+		exit 1
+	    fi
+	else
+	    if ! dd if=$FILEMODEL | pv | dd of=/dev/$KVM_STORAGE/$VHOST-root; then
+		echo "Failed creating VE rootfs"
+		exit 1
+	    fi
+	fi
+	if ! kpartx -av /dev/$KVM_STORAGE/$VHOST-root; then
+	    echo "Failed scanning VE partitions"
+	    exit 1
+	fi
+	count=10
+	while test "$count" -gt 0
+	do
+	    count=`expr $count - 1`
+	    if test -L /dev/mapper/$KVM_STORAGE-$VHOST--root1; then
+		break
+	    fi
+	    echo Waiting for $KVM_STORATE/$VHOST-root partitions to show in /dev/mapper
+	    sleep 1
+	done
+	if ! test -L /dev/mapper/$KVM_STORAGE-$VHOST--root1; then
+	    echo "Failed mapping VE partitions"
+	    kpartx -dv /dev/$KVM_STORAGE/$VHOST-root
+	    exit 1
+	elif ! tune2fs -i 360d -c 50 /dev/mapper/$KVM_STORAGE-$VHOST--root1; then
+	    echo "Unable to set e2fs max mount and total mount limits"
+	fi
+    fi
+    test -d $CHROOT || mkdir -p $CHROOT
+    if mount | grep $CHROOT >/dev/null; then
+	umount $CHROOT
+	sync
+    fi
+    if ! mount /dev/mapper/$KVM_STORAGE-$VHOST--root1 $CHROOT; then
+	echo "Failed mounting VE rootfs"
+	exit 1
+    fi
+
+    ve_conf
+}
+
+parse_args $@
+dummy_checks
+create_conf
+ve_disk
+finish
+
+exit 0

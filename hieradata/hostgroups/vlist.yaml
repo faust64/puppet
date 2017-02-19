@@ -1,0 +1,10 @@
+additional_classes:
+  - vlist
+
+# Apache
+apache_mod_authldap: true
+apache_mod_proxy_http: true
+apache_listen_ports:
+  plain: 80
+  ssl: 443
+apache_rsyslog: true

@@ -1,0 +1,7 @@
+AuthName "LDAP authentication"
+AuthType Basic
+AuthBasicProvider ldap
+<% if @version == "2.2" -%>AuthzLDAPAuthoritative On
+<% end -%>AuthLDAPURL "ldaps://<% if @ldap_slave != false -%><%=@ldap_slave%><% else -%><%=@fqdn%><% end -%>/<%=@user_base%>?uid?sub?(objectClass=*)" NONE
+<% if @version == "2.4" -%>Require users
+<% end -%>Require valid-user

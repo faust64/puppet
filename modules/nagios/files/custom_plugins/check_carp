@@ -1,0 +1,49 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+eval master=0 init=0 backup=0 bkplist= initlist=
+
+for i in /etc/hostname.carp*
+do
+    itf=${i#/etc/hostname.carp.};
+    if ifconfig $itf | grep MASTER; then
+	master=`expr $master + 1`
+    elif ifconfig $itf | grep INIT; then
+	init=`expr $init + 1`
+	initlist="$initlist $itf"
+    else
+	backup=`expr $backup + 1`
+	bkplist="$bkplist $itf"
+    fi
+done
+
+if test "$master$init$backup" = 000; then
+    ret=UNKNOWN
+    msg=" - no CARP interface to check"
+    perfdata=" | 0"
+elif test "$master" -ne 0; then
+    if test "$backup" -ne 0; then
+	ret=CRITICAL
+	msg=" - CARP$bkplist in BACKUP state"
+    elif test "$init" -ne 0; then
+	ret=WARNING
+	msg=" - CARP$initlist in INIT state"
+    else
+	ret=OK
+	msg=" - CARP is MASTER"
+    fi
+    perfdata=" | $master,$init,$backup"
+else
+    ret=OK
+    msg=" - CARP is SLAVE"
+    perfdata=" | $master,$init,$backup"
+fi
+
+echo "$PRG $ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

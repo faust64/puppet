@@ -1,0 +1,12 @@
+<planet>
+    <manager>
+	<debug>4</debug>
+	<host>localhost</host>
+	<port>49015</port>
+	<transport>ssl</transport>
+	<certificate><%=@conf_dir%>/default.pem</certificate>
+	<component name="manager-bouncer" type="htpasswdcrypt-bouncer">
+	    <property name="data"><![CDATA[user:PSfNpHTkpTx1M]]></property>
+	</component>
+    </manager>
+</planet>

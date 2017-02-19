@@ -1,0 +1,95 @@
+#!/usr/bin/env perl
+
+=head1 NAME
+
+check-logstash - Bloonix plugin to check logstash.
+
+=head1 SYNOPSIS
+
+    check-logstash [ OPTIONS ]
+    check-logstash --help
+    =head1 REPORTING BUGS
+    Please report all bugs to <support(at)bloonix.de>.
+    =head1 AUTHOR
+    Jonny Schulz <support(at)bloonix.de>.
+    =head1 POWERED BY
+    _    __ _____ _____ __  __ __ __   __
+    | |__|  |     |     |  \|  |__|\  \/  /
+    |  . |  |  |  |  |  |      |  | >    <
+    |____|__|_____|_____|__|\__|__|/__/\__\
+
+=head1 COPYRIGHT
+
+Copyright (C) 2013 by Jonny Schulz. All rights reserved.
+
+=cut
+
+use strict;
+use warnings;
+use Getopt::Long qw(:config no_ignore_case);
+
+my %exitcode   = (OK => 0, WARNING => 1, CRITICAL => 2, UNKNOWN => 3);
+my $o_in_file  = "/tmp/logstash_check.in";
+my $o_out_file = "/tmp/logstash_check.out";
+my $o_warning  = 150;
+my $o_critical = 300;
+my $o_help;
+
+GetOptions(
+    "i|in-file=s"  => \$o_in_file,
+    "o|out-file=s" => \$o_out_file,
+    "w|warning=s"  => \$o_warning,
+    "c|critical=s" => \$o_critical,
+    "h|help"       => \$o_help,
+) or exit 1;
+
+if ($o_help) {
+    print "\n$0 [ OPTIONS ]\n\n";
+    print "Options:\n\n";
+    print "-i, --in-file <file>\n";
+    print "    The logstashs input file to write events that are read by logstash.\n";
+    print "    Default: /tmp/logstash_check.in\n";
+    print "-o, --out-file <file>\n";
+    print "    The output file where logstash write the processed events from the\n";
+    print "    input file.\n";
+    print "    Default: /tmp/logstash_check.out\n";
+    print "-w, --warning <seconds>\n";
+    print "    Set a expire time in seconds. The state WARNING is returned if logstash\n";
+    print "    was not able to process new events from the input file and write them\n";
+    print "    to the output file.\n";
+    print "    Default: 150\n";
+    print "-c, --critical <seconds>\n";
+    print "    Set a expire time in seconds. The state CRITICAL is returned if logstash\n";
+    print "    was not able to process new events from the input file and write them\n";
+    print "    to the output file.\n";
+    print "    Default: 300\n\n";
+    exit 3;
+}
+
+if (open my $fh, ">>", $o_in_file) {
+    print $fh scalar localtime, " $0 ", scalar time, " write to log file\n";
+    close $fh;
+} else {
+    print "CRITICAL - unable to open '$o_in_file' for writing - $!\n";
+    exit $exitcode{CRITICAL};
+}
+
+if (!-r $o_out_file) {
+    print "CRITICAL - log file '$o_out_file' does not exists\n";
+    exit 2;
+}
+
+my $mtime  = (stat($o_out_file))[9];
+my @time   = localtime($mtime);
+my $status = "OK";
+
+if ($mtime < time - $o_critical) {
+    $status = "CRITICAL";
+} elsif ($mtime < time - $o_warning) {
+    $status = "WARNING";
+}
+
+printf "%s - last access to log file '%s' at %04d-%02d-%02d %02d:%02d:%02d\n",
+    $status, $o_out_file, $time[5] + 1900, $time[4] + 1, @time[3,2,1,0];
+
+exit $exitcode{$status};

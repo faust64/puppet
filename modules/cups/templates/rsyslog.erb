@@ -1,0 +1,13 @@
+<% if @version >= 7 -%>input(type="imfile"
+      File="<%=@log_dir%>/access_log"
+      statefile="<%=@log_dir%>/.access_log"
+      Tag="cups-access: "
+      Severity="info"
+      Facility="local7")
+<% else -%>$InputFileName <%=@log_dir%>/access_log
+$InputFileTag cups-access:
+$InputFileStateFile access_log
+$InputFileSeverity info
+$InputFileFacility local7
+$InputRunFileMonitor
+<% end -%>

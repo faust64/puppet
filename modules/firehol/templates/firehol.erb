@@ -1,0 +1,7 @@
+version 5
+office_networks="<% if @office_networks != false -%><% @office_networks.sort.each do |netname, net| -%><%=net%> <% end -%><% end -%>"
+<% if @ifs != false -%><% @ifs.each do |nic| -%>interface <%=nic['name']%> <%=nic['description']%>
+<% if nic['allow'] != false -%><% nic['allow'].each do |rule| -%><% if rule =~ /server/ or rule =~ /client/ -%>	<%=rule%>
+<% end -%><% end -%><% end -%><% end -%><% else -%>interface any world
+	client all accept
+<% end -%>

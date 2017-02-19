@@ -1,0 +1,55 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+warnthreshold=5
+critthreshold=10
+while test "$1"
+do
+    if test "$1" = "-w"; then
+	warnthreshold=$2
+    elif test "$1" = "-c"; then
+	critthreshold=$2
+    else
+	echo "unknown option \`$1'"
+	echo "usage: $PRG [-w warn] [-c crit]"
+	exit $UNKNOWN
+    fi
+    shift 2
+done
+
+if ! test "$warnthreshold" -ge 0; then
+    msg="invalid warn threshold: $warnthreshold"
+    ret=$UNKNOWN
+elif ! test "$critthreshold" -ge 0; then
+    msg="invalid crit threhold: $critthreshold"
+    ret=$UNKNOWN
+elif test $warnthreshold -ge $critthreshold; then
+    msg="warning threshold can not be >= to critical threshold!"
+    ret=$UNKNOWN
+else
+    running=`/bin/ps axwo 'stat' | awk 'BEGIN{c = 0;}/^R/{c = c + 1;}END{print c;}'`
+    if test -z "$running"; then
+	ret=UNKNOWN
+	msg="Unable to get data"
+    elif test $running -ge $critthreshold; then
+	ret=CRITICAL
+    elif test $running -ge $warnthreshold; then
+	ret=WARNING
+    else
+	ret=OK
+    fi
+    if test -z "$msg"; then
+	msg="$running running processes"
+    fi
+fi
+
+test "$msg" && msg=" - $msg"
+
+echo "$ret$msg"
+eval ret=\$$ret
+exit $ret

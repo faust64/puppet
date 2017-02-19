@@ -1,0 +1,55 @@
+server {
+    listen <%=@listen_ports['plain']%>;
+    server_name <% if @aliases != false -%><% @aliases.each do |dname| -%><%=dname%> <% end -%><% end -%><%=@name%>;
+    server_tokens off;
+    error_log <%=@log_dir%>/error-<%=@name%>.log;
+    access_log <%=@log_dir%>/access-<%=@name%>.log main;
+<% if @deny_frames == true -%>    add_header X-Frame-Options DENY;
+<% end -%><% if @nosniff == true -%>    add_header X-Content-Type-Options nosniff;
+<% end -%><% if @xss_protection == true -%>    add_header X-XSS-Protection "1; mode=block";
+<% end -%><% if @listen_ports['ssl'] != false -%><% if @app_rewrite == true %>    rewrite ^/(.*) https://<%=@name%>/$1;
+<% else -%>    location / {
+	proxy_redirect off;
+	proxy_set_header Host $host;
+	proxy_set_header X-Real-IP $remote_addr;
+	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	proxy_pass <%=@app_proto%>://127.0.0.1:<%=@app_port%>;
+    }
+<% end -%><% if @noerrors == false -%>    include <%=@conf_dir%>/errors.conf;
+<% end -%>}
+
+server {
+    listen <%=@listen_ports['ssl']%>;
+    server_name <% if @aliases != false -%><% @aliases.each do |dname| -%><%=dname%> <% end -%><% end -%><%=@name%>;
+    server_tokens off;
+    error_log <%=@log_dir%>/ssl-error-<%=@name%>.log;
+    access_log <%=@log_dir%>/ssl-access-<%=@name%>.log main;
+    ssl on;
+    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+<% if @stricttransport != false -%>    add_header Strict-Transport-Security "<%=@stricttransport%>";
+<% end -%><% if @deny_frames == true -%>    add_header X-Frame-Options DENY;
+<% end -%><% if @nosniff == true -%>    add_header X-Content-Type-Options nosniff;
+<% end -%><% if @xss_protection == true -%>    add_header X-XSS-Protection "1; mode=block";
+<% end -%><% if 0 == 1 -%># Require nginx 1.5.9
+    ssl_session_tickets off;
+<% end -%>    ssl_certificate <%=@conf_dir%>/ssl/server-full.crt;
+    ssl_certificate_key <%=@conf_dir%>/ssl/server.key;
+    ssl_dhparam /etc/nginx/ssl/dh.pem;
+<% end -%>    root <%=@app_root%>;
+    try_files $uri/index.html $uri.html $uri @sunstone;
+    location ~* \.(ico|css|js|gif|jpe?g|png)(\?[0-9]+)?$ {
+	expires 1y;
+	try_files $uri @sunstone;
+    }
+    location @sunstone {
+	proxy_redirect off;
+	proxy_set_header Host $host;
+	proxy_set_header X-Real-IP $remote_addr;
+	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	proxy_pass <%=@app_proto%>://127.0.0.1:<%=@app_port%>;
+    }
+<% if @noerrors == false -%>    include <%=@conf_dir%>/errors.conf;
+<% end -%>}

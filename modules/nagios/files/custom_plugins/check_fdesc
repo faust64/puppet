@@ -1,0 +1,53 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+lintot=`sysctl -n fs.file-max 2>/dev/null`
+lincur=`sysctl -n fs.file-nr 2>/dev/null | awk '{print $1}'`
+bsdtot=`sysctl -n kern.maxfiles 2>/dev/null`
+fbsdcur=`sysctl -n kern.openfiles 2>/dev/null`
+obsdcur=`sysctl -n kern.nfiles 2>/dev/null`
+wval=0
+cval=0
+
+if test "$lintot" -a "$bsdtot"; then
+    ret=CRITICAL
+    msg="wtf am I doing!"
+elif test "$lintot"; then
+    tot=$lintot
+    cur=$lincur
+elif test "$fbsdcur"; then
+    tot=$bsdtot
+    cur=$fbsdcur
+elif test "$obsdcur"; then
+    tot=$bsdtot
+    cur=$obsdcur
+else
+    ret=UNKNOWN
+    msg="dafuk?"
+fi
+
+if test x$ret = x; then
+    wval=`expr $tot - \( $tot / 10 \)`
+    cval=`expr $tot - \( $tot / 5 \)`
+    if test $cur -ge $cval; then
+	ret=CRITICAL
+	msg="way too many opened files"
+    elif test $cur -ge $wval; then
+	ret=WARNING
+	msg="too many opened files"
+    fi
+fi
+
+perfdata=" | $cur;$wval;$cval;$tot"
+
+test -z "$ret" && ret=OK
+test    "$msg" && msg=" - $msg"
+
+echo "$ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

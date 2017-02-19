@@ -1,0 +1,298 @@
+#!/bin/sh
+
+ACCOUNT=<%=scope.lookupvar('::msuser')%>
+ASTERISK_EXTEN=/etc/asterisk/extensions_additional.conf
+BIND_ADDR=<%=@bind_addr%>
+PASSWD=<%=scope.lookupvar('::mspw')%>
+MINLEN=8
+
+Prg=`basename $0`
+ret=0
+
+usage()
+{
+    echo "$Prg usage:"
+    echo "    $Prg [check|create|createdb|drop|dropdb|exist|existdb|update]"
+    echo "	check user password [db]	check user password, on some"
+    echo "					given DB"
+    echo "	create user password [db]	create user, with password,"
+    echo "					with specific db access"
+    echo "	createdb database		create database"
+    echo "	drop user			drop user"
+    echo "	dropdb database			drop database"
+    echo "	exist user			check user exists"
+    echo "	existdb database		check database exists"
+    echo "	repl host user pass		replicate from host"
+    echo "	update user password		set user password"
+    test "$help" && exit 0 || exit 1
+}
+
+test -z "$1" && usage
+
+while test "$1"
+do
+    case "$1" in
+	check)
+	    if ! test "$2" -a "$3"; then
+		usage
+		exit 1
+	    fi
+	    user=$2 pass=$3
+	    test "$4" && db=$4
+
+	    if test "$db"; then
+		if ! echo "show tables"		\
+		   | mysql			\
+			-u $user		\
+			-p$pass			\
+			$db			\
+		    >/dev/null 2>&1; then
+		    echo "invalid credentials [$user]" >&2
+		    ret=`expr $ret + 1`
+		fi
+	    else
+		if ! echo "show databases"	\
+		   | mysql			\
+			-u $user		\
+			-p$pass			\
+		    >/dev/null 2>&1; then
+		    echo "invalid credentials [$user:$db]" >&2
+		    ret=`expr $ret + 1`
+		fi
+	    fi
+
+	    shift 3
+	    ;;
+
+	create)
+	    if ! test "$2" -a "$3"; then
+		usage
+		exit 1
+	    fi
+	    user=$2 pass=$3
+	    test "$4" && dbs="$4"
+	    if ! echo "create user
+			  '$user'@'$BIND_ADDR'
+			  IDENTIFIED BY
+			  '$pass'"		\
+	       | mysql				\
+		    -u $ACCOUNT			\
+		    "-p$PASSWD"			\
+		>/dev/null 2>&1; then
+		echo "unable to create user $user" >&2
+		ret=`expr $ret + 1`
+	    elif test "$dbs"; then
+		for db in $dbs
+		do
+		    if ! echo "grant all privileges
+				     on $db.*
+				     to '$user'@'%'"	\
+		       | mysql				\
+			    -u $ACCOUNT			\
+			    "-p$PASSWD"			\
+			>/dev/null 2>&1; then
+			echo "unable to set privileges for $user on $db" >&2
+			ret=`expr $ret + 1`
+		    fi
+		done
+		shift 1
+	    fi
+
+	    shift 3
+	    ;;
+
+	createdb)
+	    if ! test "$2"; then
+		usage
+		exit 1
+	    fi
+	    db=$2
+	    test "$3" && init="$3"
+	    if ! echo "create database
+			  $db"			\
+	       | mysql				\
+		    -u $ACCOUNT			\
+		    "-p$PASSWD"			\
+		>/dev/null 2>&1; then
+		echo "unable to create database $db" >&2
+		ret=`expr $ret + 1`
+	    elif test "$init" -a -e "$init"; then
+		if ! cat "$init"		\
+		   | mysql			\
+			-u $ACCOUNT		\
+			"-p$PASSWD"		\
+			$db			\
+		    >/dev/null 2>&1; then
+		    echo "unable to initialize database $db" >&2
+		    ret=`expr $ret + 1`
+		fi
+	    fi
+	    test "$init" && shift
+
+	    shift 2
+	    ;;
+
+	drop)
+	    if ! test "$2"; then
+		usage
+		exit 1
+	    fi
+	    user=$2
+
+	    if test $user = root -o $user = debian-sys-maint -o $user = asteriskuser; then
+		echo "lalalaschtroumpflala" >&2
+		exit 1
+	    fi
+
+	    if ! echo "drop user '$user'@'$BIND_ADDR'"	\
+	       | mysql					\
+		    -u $ACCOUNT				\
+		    "-p$PASSWD"				\
+		>/dev/null 2>&1; then
+		echo "unable to drop user $user" >&2
+		ret=`expr $ret + 1`
+	    fi
+
+	    shift 2
+	    ;;
+
+	dropdb)
+	    if ! test "$2"; then
+		usage
+		exit 1
+	    fi
+	    db=$2
+
+	    if test $db = mysql -o $db = asterisk; then
+		echo "lalalaschtroumpflala" >&2
+		exit 1
+	    fi
+
+	    if ! echo "drop database $db"	\
+	       | mysql				\
+		    -u $ACCOUNT			\
+		    "-p$PASSWD"			\
+		>/dev/null 2>&1; then
+		echo "unable to drop database $database" >&2
+		ret=`expr $ret + 1`
+	    fi
+
+	    shift 2
+	    ;;
+
+	exist)
+	    if ! test "$2"; then
+	        usage
+		exit 1
+	    fi
+	    user=$2
+
+	    if ! echo "select User from user"	\
+	       | mysql				\
+		    -u $ACCOUNT			\
+		    "-p$PASSWD"			\
+		    mysql			\
+		    | grep "^$user\$"		\
+		>/dev/null 2>&1; then
+		echo "User $user does not exist" >&2
+		ret=`expr $ret + 1`
+	    fi
+
+	    shift 2
+	    ;;
+
+	existdb)
+	    if ! test "$2"; then
+		usage
+		exit 1
+	    fi
+	    db=$2
+
+	    if ! echo "show tables"	\
+	       | mysql			\
+		    -u $ACCOUNT		\
+		    "-p$PASSWD"		\
+		    $db			\
+		>/dev/null 2>&1; then
+		echo "database $db does not exist" >&2
+		ret=`expr $ret + 1`
+	    fi
+
+	    shift 2
+	    ;;
+
+	repl)
+	    if ! test "$2" -a "$3"; then
+		usage
+		exit 1
+	    fi
+	    host=$2 user=$3 pass=$4
+
+	    if test $user = asteriskuser -a "$ASTERISK_EXTEN" -a -e "$ASTERISK_EXTEN"; then
+		echo "please update root password instead!" >&2
+		exit $ret
+	    fi
+
+	    if ! echo "CHANGE MASTER TO
+			   MASTER_USER='$user'
+			   MASTER_PASSWORD='$pass'
+			   MASTER_HOST='$host'"	\
+	       | mysql				\
+		    -u $ACCOUNT			\
+		    "-p$PASSWD"			\
+		    mysql			\
+		>/dev/null 2>&1; then
+		echo "unable set mysql master!" >&2
+		ret=`expr $ret + 1`
+	    fi
+
+	    shift 4
+	    ;;
+
+	update)
+	    if ! test "$2" -a "$3"; then
+		usage
+		exit 1
+	    fi
+	    user=$2 pass=$3
+
+	    if test $user = asteriskuser -a "$ASTERISK_EXTEN" -a -e "$ASTERISK_EXTEN"; then
+		echo "please update root password instead!" >&2
+		exit $ret
+	    fi
+
+	    if ! echo "update    user
+			   set   password=PASSWORD(\"$pass\")
+			   where User='$user';
+		       flush privileges;"	\
+	       | mysql				\
+		    -u $ACCOUNT			\
+		    "-p$PASSWD"			\
+		    mysql			\
+		>/dev/null 2>&1; then
+		echo "unable to update $user's password!" >&2
+		ret=`expr $ret + 1`
+	    elif test $user = root -a "$ASTERISK_EXTEN" -a -e "$ASTERISK_EXTEN"; then
+		if grep '^[ 	]*AMPDBPASS[ 	]*=[ 	]*' $ASTERISK_EXTEN >/dev/null 2>&1; then
+		    echo -e "/^[ 	]*AMPDBPASS.*/s/=[ 	]*.*/= $PASSWD/\nw" | ed - $ASTERISK_EXTEN
+		fi
+		if grep '^[ 	]*AMPDBPASS[ 	]*=[ 	]*' $MYSQL_CONFIG >/dev/null 2>&1; then
+		    echo -e  "/^[    ]*AMPDBPASS.*/s/=[     ]*.*/=$PASSWD/\nw" | ed - $MYSQL_CONFIG
+		fi >/dev/null 2>&1
+	    fi
+
+	    shift 3
+	    ;;
+
+	help)
+	    help=allright
+	    usage
+	    ;;
+
+	*)
+	    usage
+	    ;;
+    esac
+done
+
+exit $ret

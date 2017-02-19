@@ -1,0 +1,54 @@
+[global]
+    workgroup = <%=@domainname%>
+    netbios name = <%=@hostname%>
+    server string = Samba <%=@domain%>
+    encrypt passwords = true
+    domain master = yes
+    domain logons = yes
+    invalid users = root
+    kernel oplocks = no
+    local master = no
+    obey pam restrictions = yes
+    os level = 90
+    preferred master = yes
+    security = user
+    log file = /var/log/samba/%m.log
+    log level = 1
+    max log size = 10000
+    syslog = 0
+    panic action = /usr/local/bin/samba_panic %d
+    passdb backend = ldapsam:ldap://<%=@ldap_slave%>/
+    ldap suffix = <%=@ldap_base%>
+    ldap user suffix = <%=@user_sfx%>
+    ldap ssl = start tls
+    ldap admin dn = <%=@binddn%>
+    ldap delete dn = no
+    ldap passwd sync = no
+    ldap debug level = 1
+    load printers = no
+    printing = bsd
+    printcap name = /dev/null
+    preserve case = yes
+    short preserve case = yes
+    socket options = TCP_NODELAY SO_RCVBUF=8192 SO_SNDBUF=8192
+<% if @veto -%>    veto files = <% @veto.each do |file| -%>/<%=file%><% end -%>/
+<% end -%>
+
+<% if @shares != false -%><% @shares.each do |share, sharehash| -%>[<%=share%>]
+<% if sharehash['label'] =~ /[a-zA-Z]/ -%>    comment = "<%=sharehash['label']%>"
+<% end -%>    path = <%=sharehash['path']%>
+    public = no
+<% if sharehash['write'] -%><% createmask = "6644" -%><% dirmask = "6755" -%>    writeable = yes
+<% else -%><% createmask = "0664" -%><% dirmask = "0775" -%><% if sharehash['writelist'] -%>    read only = yes
+<% else -%>    writeable = no
+<% end -%><% end -%><% if sharehash['writelist'] -%>    write list =<% sharehash['writelist'].each do |user| -%> <%=user%><% end -%>
+
+<% end -%>    create mask = <%=createmask%>
+    directory mask = <%=dirmask%>
+<% if sharehash['filter'] -%>    valid users =<% sharehash['filter'].each do |user| -%> <%=user%><% end -%>
+    admin users = <% sharehash['filter'].each do |user| -%><%=user%> <% end -%>
+<% end -%>
+
+<% end -%><% end -%>
+
+include = /etc/samba/smb.conf.local

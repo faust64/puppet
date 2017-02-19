@@ -1,0 +1,2 @@
+<% @bgp_database.each do |peer| -%><% @bgp_map[peer].each do |nic, status| -%><% if status != "passive" -%>pass in quick on <%=nic%> inet proto $tu from any to any port bgp
+<% end -%><% end -%><% end -%>

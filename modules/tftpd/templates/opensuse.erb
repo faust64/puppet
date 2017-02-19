@@ -1,0 +1,20 @@
+menu background boot-screens/splash.png
+include boot-screens/stdmenu.cfg
+menu hshift 19
+menu width 40
+menu margin 0
+
+menu title openSUSE Systems
+    menu title openSUSE Systems
+	menu label openSUSE Systems
+	menu exit
+<% @distribswtf.each do |dist| -%><% [ "x86_64" ].each do |arch| -%>    label -
+	menu label <%=dist%> <%=arch%>
+	kernel installers/opensuse<%=dist%>/<%=arch%>/linux
+	append initrd=installers/opensuse<%=dist%>/<%=arch%>/initrd splash=silent vga=0x314 showopts install=http://download.opensuse.org/distribution/<%=@name%>/repo/oss/
+<% end -%><% end -%><% @distribs.each do |dist| -%><% [ "x86_64", "i386" ].each do |arch| -%>    label -
+	menu label <%=dist%> <%=arch%>
+	kernel installers/opensuse<%=dist%>/<%=arch%>/linux
+	append initrd=installers/opensuse<%=dist%>/<%=arch%>/initrd splash=silent vga=0x314 showopts install=http://download.opensuse.org/distribution/<%=@name%>/repo/oss/
+<% end -%><% end -%>
+menu end

@@ -1,0 +1,17 @@
+server 1:
+    :auth_method: :simple
+    :encryption: :simple_tls
+    :host: '<%=@ldap_slave%>'
+    :port: 636
+    :base: '<%=@ldap_base%>'
+    :user_field: 'cn'
+    :group_field: 'member'
+    :mapping_generate: true
+    :mapping_timeout: 300
+    :mapping_filename: server1.yaml
+    :mapping_key: GROUP_DN
+    :mapping_default: 1
+    :search_filter: "(&(uid=@@LOGIN@@)(objectClass=inetOrgPerson))"
+
+:order:
+    - server 1

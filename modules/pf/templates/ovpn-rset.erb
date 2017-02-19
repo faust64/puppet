@@ -1,0 +1,4 @@
+<% if @aclmap != false -%><% @aclmap.each do |net| -%>pass in on <%=@root_if%> inet from <<%=@nicname%>_net> to <all<%=net%>_net>
+<% end -%><% end -%>pass in on <%=@root_if%> inet from <<%=@nicname%>_net> to <all<%=@nicmap%>_net>
+<% if @ovpn_pushd != false -%><% @ovpn_pushd.each do |routename, routedata| -%><% msk = routedata['mask'] -%><% if routedata['mask'] > 0 and routedata['netid'] =~ /[0-9]\.[0-9]/ -%>pass in on <%=@root_if%> inet proto $t from <<%=@nicname%>_net> to <%=routedata['netid']%>/<%=routedata['mask']%> port $default_tcp_port
+<% end -%><% end -%><% end -%>

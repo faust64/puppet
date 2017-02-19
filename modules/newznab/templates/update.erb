@@ -1,0 +1,46 @@
+#!/bin/sh
+
+LOCK=/tmp/updatenewz
+OUT=/tmp/grabbingbuffer.$$
+HOSTNAME=`hostname -f`
+DEST=<%=@contact%>
+<% if @slack_hook != false -%>HOOK_URL=<%=@slack_hook%>
+<% end -%>ret=0
+
+if test -s $LOCK; then
+    echo "running: `cat $LOCK`"
+    ret=1
+else
+    echo $$ >$LOCK
+    batchstt=`date +%s`
+    cd <%=@web_root%>/nnplus/misc/update_scripts/
+    echo " ---- Binaries ----"
+    php update_binaries_threaded.php
+    echo
+    echo " ---- Releases ----"
+    php update_releases.php
+    echo
+    echo " ---- Theaters ----"
+    php update_theaters.php
+    echo
+    echo " ---- TV Schedule ----"
+    php update_tvschedule.php
+    echo
+    echo " ---- DONE ----"
+    batchstp=`date +%s`
+
+    rm -f $LOCK
+fi >$OUT 2>&1
+
+if test $ret = 0; then
+    if test "$HOOK_URL" -a -x /usr/local/bin/slack; then
+	/usr/local/bin/slack $HOOK_URL "REPORT: done updating newznab database on $HOSTNAME"
+    else
+	cat $OUT | mail -s "[REPORT] updated nzb indexes $batchstt:$batchstp" $DEST
+    fi
+elif test "$HOOK_URL" -a -x /usr/local/bin/slack; then
+    /usr/local/bin/slack $HOOK_URL "WARNING: newnab database update locked on $HOSTNAME"
+fi
+rm -f $OUT
+
+exit $ret

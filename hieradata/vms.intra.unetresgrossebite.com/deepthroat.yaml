@@ -1,0 +1,26 @@
+nagios_no_parent: false
+physical_parent: nemesis.ceph.intra.unetresgrossebite.com
+
+# Nagios
+nagios_load_crit_threshold: "8.0,8.0,8.0"
+nagios_load_warn_threshold: "7.7,7.7,7.7"
+nagios_partitions_watchlist:
+  root: /
+  mails: /var/spool/cyrus
+  backups: /var/backups/bluemind
+nagios_procs_crit: 800
+nagios_procs_warn: 600
+nagios_runprocs_crit: 100
+nagios_runprocs_warn: 80
+
+# Postfix
+postfix_myhostname: deepthroat.unetresgrossebite.com
+
+# Saslauthd
+saslauthd_mech_list:
+  - PLAIN
+  - LOGIN
+
+# Spamassassin
+spamassassin_cyrus_domain_root: /var/spool/cyrus/unetresgrossebite_com/domain/u/unetresgrossebite.com
+spamassassin_cyrus_ipurge: /usr/lib/cyrus/bin/ipurge

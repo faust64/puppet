@@ -1,0 +1,31 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+eval `sudo /usr/sbin/vzlist -H -o name,laverage | sed 's|-||g' | sed 's|\([^ 	]*\)[^/]*/\([^/]*\)/.*|\1=\2|'`
+perfdata=" |"
+
+for ve in `sudo /usr/sbin/vzlist -H -o name | sed 's|-||g'`
+do
+    eval load=\$$ve
+    eval `echo $load | sed 's|0*\([0-9]*\)\.0*\([0-9]*\)|int=\1 dec=\2|'`
+    test -z "$int" && int=0
+    test -z "$dec" && dec=0
+    if test "$int" -gt 2; then
+	ret=WARN
+	test "$msg" && msg="$msg,"
+	msg="$msg$ve"
+    fi
+    perfdata="$perfdata $ve=$int.$dec"
+done
+
+test -z "$ret" && ret=OK
+test "$msg" && msg=" - $msg loads"
+
+echo "$ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

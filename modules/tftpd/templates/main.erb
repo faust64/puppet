@@ -1,0 +1,84 @@
+menu background boot-screens/splash.png
+menu hshift 19
+menu width 40
+menu margin 0
+prompt 0
+timeout 50
+totaltimeout 1200
+include boot-screens/stdmenu.cfg
+
+menu autoboot demarrage sur le disque dur dans # seconde{,s}
+
+default local
+menu title Syn's PXE
+
+label local
+    menu label ^Boot from local disk
+	menu label Booting from local disk
+	menu exit
+    localboot 0
+
+<% if @wds_ip != false -%>label WDS
+    menu label Windows Deployment Services
+    kernel pxechain.com
+    append <%=@wds_ip%>::\Boot\x64\wdsnbp.com
+
+<% end -%>label ArchLinux Systems
+    menu label ArchLinux Systems
+    kernel installers/archlinux/ipxe.lkrn
+
+menu begin CentOS Systems
+    menu label CentOS Systems
+	menu label CentOS Systems
+	menu exit
+    include boot-screens/centos.cfg
+menu end
+menu begin CoreOS Systems
+    menu label CoreOS Systems
+	menu label CoreOS Systems
+	menu exit
+    include boot-screens/coreos.cfg
+menu end
+menu begin Debian Systems
+    menu label Debian Systems
+	menu label Debian Systems
+	menu exit
+    include boot-screens/debian.cfg
+menu end
+menu begin Fedora Systems
+    menu label Fedora Systems
+	menu label Fedora Systems
+	menu exit
+    include boot-screens/fedora.cfg
+menu end
+menu begin mfsBSD Systems
+    menu label mfsBSD Systems
+	menu label mfsBSD Systems
+	menu exit
+    include boot-screens/mfsbsd.cfg
+menu end
+#FIXME
+#menu begin OpenBSD Systems
+#    menu label OpenBSD Systems
+#	menu label OpenBSD Systems
+#	menu exit
+#    include boot-screens/openbsd.cfg
+#menu end
+menu begin openSUSE Systems
+    menu label openSUSE Systems
+	menu label openSUSE Systems
+	menu exit
+    include boot-screens/opensuse.cfg
+menu end
+menu begin Ubuntu Systems
+    menu label Ubuntu Systems
+	menu label Ubuntu Systems
+	menu exit
+    include boot-screens/ubuntu.cfg
+menu end
+menu begin tools
+    menu label Utilities
+	menu label Utilities
+	menu exit
+    include boot-screens/tools.cfg
+menu end

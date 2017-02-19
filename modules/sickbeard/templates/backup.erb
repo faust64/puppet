@@ -1,0 +1,48 @@
+#!/bin/sh
+
+TMPFILE=/tmp/`basename $0`.$$
+HOSTNAME=`hostname -f`
+SUBJECT=REPORT
+BACKUP_DIR=<%=@backup_dir%>
+<% if @contact -%>DEST=<%=@contact%>
+<% end -%><% if @slack_hook != false -%>HOOK_URL=<%=@slack_hook%>
+<% end -%>FAIL=
+
+if ! test -s /usr/share/sickbeard/sickbeard.db; then
+    FAIL="sickbeard database missing"
+else
+    if ! test -d $BACKUP_DIR; then
+	if ! mkdir -p $BACKUP_DIR; then
+	    FAIL="failed creating backup directory"
+	fi
+    fi
+    if test -d $BACKUP_DIR; then
+	chown root:root $BACKUP_DIR
+	chmod 0700 $BACKUP_DIR
+	if ! tar -cf $BACKUP_DIR/sickbeard.tar \
+	    /usr/share/sickbeard/cache.db \
+	    /usr/share/sickbeard/sickbeard.db \
+	    /etc/sickbeard/config.ini; then
+	    FAIL="creating backup"
+	fi
+    fi
+fi
+
+test "$FAIL" && SUBJECT=WARNING
+if test "$HOOK_URL" -a -x /usr/local/bin/slack; then
+    if test "$FAIL"; then
+	/usr/local/bin/slack $HOOK_URL "$SUBJECT: backup sickbeard on $HOSTNAME - $FAIL"
+    else
+	/usr/local/bin/slack $HOOK_URL "$SUBJECT: backup sickbeard done on $HOSTNAME"
+    fi
+elif test "$DEST"; then
+    test "$FAIL" && msg="$FAIL" || msg=done
+    echo $msg | mail -s"[$SUBJECT] backing up sickbeard on $HOSTNAME" $DEST
+elif test "$FAIL"; then
+    echo $FAIL >&2
+else
+    echo done
+fi
+rm -f $TMPFILE
+
+exit 0

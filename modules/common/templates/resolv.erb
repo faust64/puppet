@@ -1,0 +1,6 @@
+search <% if @search != false -%><%=@search%>
+<% else -%><%=@domain%>
+<% end -%>domain <%=@domain%>
+<% if @dns_ip != false -%><% @dns_ip.each do |host| -%>nameserver <%=host%>
+<% end -%><% end -%><% if @operatingsystem == "OpenBSD" -%>lookup file bind
+<% end -%>

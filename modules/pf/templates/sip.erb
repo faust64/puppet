@@ -1,0 +1,8 @@
+<% if @asterisk_ip != false -%>pass in quick inet proto $t from $asterisk_ip to $ext_net port $sip_tcp_port route-to ( $ipbx_if $ipbx_gw )
+pass in quick inet proto $u from $asterisk_ip to $ext_net port $sip_udp_port route-to ( $ipbx_if $ipbx_gw )
+pass in quick inet proto $u from $asterisk_ip to <office_net> port $iax_port route-to ( $ipbx_if $ipbx_gw )
+pass in quick inet proto $i from $asterisk_ip to <office_net> route-to ( $ipbx_if $ipbx_gw )
+pass in quick inet proto $i from $asterisk_ip to $sipsrv_ip route-to ( $ipbx_if $ipbx_gw )
+<% end -%><% if @visio_ip != false -%>pass in quick inet proto $tui from <%=@visio_ip%> to $ext_net route-to ( $visio_if $visio_gw )
+<% end -%><% if @icecast_ip != false and @icecast_upstream != false -%>pass in quick inet proto $t from $icecast_ip to <%=@icecast_upstream%> port 8001 route-to ( $ipbx_if $ipbx_gw )
+<% end -%>

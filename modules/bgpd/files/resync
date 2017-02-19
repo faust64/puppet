@@ -1,0 +1,56 @@
+#!/bin/sh
+
+for confdir in /etc /usr/local/etc
+do
+    if test -s $confdir/bgpd.conf; then
+	CONFIGURATION=$confdir/bgpd.conf
+	break
+    fi
+done
+alias echo='echo -en'
+
+echo "    [ reloading BGPd configuration ]\nChecking global configuration: "
+if ! bgpd -nf $CONFIGURATION >/dev/null 2>&1; then
+    echo "[ WARNING ]\n"
+    exit 42
+else
+    echo "[   OK    ]\n"
+fi
+
+echo "Checking bgpd availability:    "
+if ! bgpctl show fib >/dev/null 2>&1; then
+    echo "[ WARNING ]\n"
+    echo "Trying to recover bgpd:        "
+    for script in /etc/rc.d/bgpd /usr/local/etc/rc.d/openbgpd
+    do
+	test -x $script || continue
+	if ! $script start >/dev/null 2>&1; then
+	    echo "[ WARNING ]\n"
+	    exit 8
+	else
+	    echo "[   OK    ]\n"
+	    exit 0
+	fi
+    done
+    if ! bgpctl show fib >/dev/null 2>&1; then
+	if ! bgpd -f $CONFIGURATION; then
+	    echo "[ WARNING ]\n"
+	    exit 8
+	else
+	    echo "[   OK    ]\n"
+	    exit 0
+	fi
+    fi
+else
+    echo "[   OK    ]\n"
+fi
+
+echo "Applying new configuration:    "
+if ! bgpctl reload >/dev/null; then
+    echo "[ WARNING ]\n"
+    exit 21
+else
+    echo "[   OK    ]\n"
+fi
+
+exit 0

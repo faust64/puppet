@@ -1,0 +1,34 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+perfdata=0
+CURL=`which curl`
+CURL_OPTS='--user-agent check_nrpe'
+
+if test -z "$1"; then
+    target=http://localhost/wp-version.php
+else
+    target=$1
+fi
+
+result=`$CURL $CURL_OPTS -k -s $target`
+
+if test $? -ne 0; then
+    res=UNKNOWN
+    msg="plugin misconfigured"
+else
+    res=`echo $result | cut -d\# -f1`
+    msg=`echo $result | cut -d\# -f2`
+    case $res in
+	OK) perfdata=1	;;
+    esac
+    test -z "$msg" && msg=Up-to-date
+fi
+
+echo "$res - $msg | $perfdata"
+eval res=\$$res
+exit $res

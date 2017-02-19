@@ -1,0 +1,389 @@
+#!/bin/sh
+
+Prg=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+ret=UNKNOWN
+community="public"
+target="127.0.0.1"
+query="firmware"
+port=1
+RETRY=3
+RETRY_DELAY=2
+N=0
+
+	OID_DISKNAME=".1.3.6.1.4.1.6574.2.1.1.3"
+      OID_DISKSTATUS=".1.3.6.1.4.1.6574.2.1.1.5"
+	OID_DISKTEMP=".1.3.6.1.4.1.6574.2.1.1.6"
+      OID_RAIDSTATUS=".1.3.6.1.4.1.6574.3.1.1.3.0"
+       OID_SYSSTATUS=".1.3.6.1.4.1.6574.1.1.0"
+	 OID_SYSTEMP=".1.3.6.1.4.1.6574.1.2.0"
+  OID_SYSPOWERSTATUS=".1.3.6.1.4.1.6574.1.3.0"
+    OID_CPUFANSTATUS=".1.3.6.1.4.1.6574.1.4.1.0"
+    OID_SYSFANSTATUS=".1.3.6.1.4.1.6574.1.4.1.0"
+	   OID_LOAD1=".1.3.6.1.4.1.2021.10.1.3.1"
+	   OID_LOAD2=".1.3.6.1.4.1.2021.10.1.3.2"
+	   OID_LOAD3=".1.3.6.1.4.1.2021.10.1.3.3"
+	 OID_RAMUSED=".1.3.6.1.4.1.2021.4.5.0"
+	 OID_RAMFREE=".1.3.6.1.4.1.2021.4.6.0"
+      OID_MOUNTPOINT=".1.3.6.1.2.1.25.2.3.1.3.36"
+       OID_FSBLKSIZE=".1.3.6.1.2.1.25.2.3.1.4.36"
+     OID_FSBLKAMOUNT=".1.3.6.1.2.1.25.2.3.1.5.36"
+       OID_FSBLKUSED=".1.3.6.1.2.1.25.2.3.1.6.36"
+
+usage()
+{
+    echo "Usage: $Prg -H host -C community -t query"
+    echo "  query: diskstatus [-d dsknbr]"
+    echo "  query: disktemp [-d dsknbr]"
+    echo "  query: name [-d dsknbr]"
+    echo "  query: raidstatus"
+    echo "  query: raidusage"
+    echo "  query: load"
+    echo "  query: ram"
+    echo "  query: status|systemstatus"
+    echo "  query: powerstatus"
+    echo "  query: cpufanstatus"
+    echo "  query: sysfanstatus"
+    echo "  query: temp"
+}
+
+if test -z "$1"; then
+    usage
+    exit $UNKNOWN
+fi
+
+while getopts H:C:t:d:h OPT
+do
+    case $OPT in
+	H) target=$OPTARG	;;
+	C) community=$OPTARG	;;
+	t) query=$OPTARG	;;
+	d) disk=$OPTARG		;;
+	h)
+	    usage
+	    exit $UNKNOWN
+	    ;;
+    esac
+done
+
+while test $N -le $RETRY
+do
+    N=`expr $N + 1`
+
+    if ping -c1 -q $target; then
+	max=`snmpwalk -t2 -r2 -v1 -c $community -Ovq $target $OID_DISKNAME | wc -l`
+    fi
+
+    if test x$max = x; then
+	msg=" $target unreachable"
+	ret=CRITICAL
+    elif test $query = status -o $query = systemstatus; then
+	res=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_SYSSTATUS`
+	if test "$res"; then
+	    if test $res = 1; then
+		ret=OK
+	    elif test $res = 2; then
+		ret=CRITICAL
+	    fi
+	fi
+	msg=" system partition status"
+    elif test $query = powerstatus; then
+	res=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_SYSPOWERSTATUS`
+	if test "$res"; then
+	    if test $res = 1; then
+		ret=OK
+	    elif test $res = 2; then
+		ret=CRITICAL
+	    fi
+	fi
+	msg=" power status"
+    elif test $query = cpufanstatus; then
+	res=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_CPUFANSTATUS`
+	if test "$res"; then
+	    if test $res = 1; then
+		ret=OK
+	    elif test $res = 2; then
+		ret=CRITICAL
+	    fi
+	fi
+	msg=" CPU FAN status"
+    elif test $query = sysfanstatus; then
+	res=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_SYSFANSTATUS`
+	if test "$res"; then
+	    if test $res = 1; then
+		ret=OK
+	    elif test $res = 2; then
+		ret=CRITICAL
+	    fi
+	fi
+	msg=" system FAN status"
+    elif test $query = load; then
+	l1=`echo "$(snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_LOAD1)*100" | sed 's|"||g' | sed 's|\.[0-9][0-9]*||g' | bc`
+	l2=`echo "$(snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_LOAD2)*100" | sed 's|"||g' | sed 's|\.[0-9][0-9]*||g' | bc`
+	l3=`echo "$(snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_LOAD3)*100" | sed 's|"||g' | sed 's|\.[0-9][0-9]*||g' | bc`
+	msg=" System load"
+	if test $l1 -ge 200 -o $l2 -ge 200 -o $l3 -ge 200; then
+	    ret=CRITICAL
+	    msg="$msg >2.0"
+	elif test $l1 -ge 100 -o $l2 -ge 100 -o $l3 -ge 100; then
+	    ret=WARNING
+	    msg="$msg >1.0"
+	elif test $l1 -ge 0 -a $l2 -ge 0 -a $l3 -ge 0; then
+	    ret=OK
+	fi
+    elif test $query = ram; then
+	rused=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_RAMUSED`
+	rfree=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_RAMFREE`
+	rtot=`expr $rfree + $rused`
+	if test "$rused" -a "$rfree"; then
+#	    if test `expr $rfree '*' 40` -lt $rtot; then
+	    if test $rfree -lt 5; then
+		ret=CRITICAL
+#	    elif test `expr $rfree '*' 30` -lt $rtot; then
+	    elif test $rfree -lt 10; then
+		ret=WARNING
+	    elif test $rfree -ge 0 -a $rused -ge 0; then
+		ret=OK
+	    fi
+	    for val in rfree rused
+	    do
+		unit=k
+		eval i=\$$val
+		while :
+		do
+		    case $unit in
+			k)	unit=M	;;
+			M)	unit=G	;;
+			G)	unit=T	;;
+			T)	unit=P	;;
+			P)	unit=E	;;
+			E)	unit=Z	;;
+			*)	break	;;
+		    esac
+		    if test `expr $i / 1024` -lt 1024; then
+			i="`expr $i / 1024`.`expr $i % 1024`"
+			break
+		    fi
+		    i=`expr $i / 1024`
+		done
+		eval $val=$i$unit
+	    done
+	    msg=" RAM usage free/used: $rfree/$rused"
+	else
+	    msg=" RAM usage"
+	fi
+    elif test $query = name; then
+	if test x$disk = x; then
+	    res=`snmpwalk -t2 -r2 -v1 -c $community -Ovq $target $OID_DISKNAME | tr '\n' ' '`
+	    test "$res" && ret=OK
+	    msg=" disks"
+	elif test $disk -ge $max; then
+	    msg=" disk ID out of bounds"
+	else
+	    res=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_DISKNAME.$disk`
+	    test "$res" && ret=OK
+	    msg=" disk #$disk"
+	fi
+    elif test $query = diskstatus; then
+	if test x$disk = x; then
+	    res=`snmpwalk -t2 -r2 -v1 -c $community -Ovq $target $OID_DISKSTATUS | tr '\n' ' '`
+	    if test "$res"; then
+		ret=OK
+		for disk in $res
+		do
+		    if test $disk = 2 -o $disk = 3; then
+			ret=WARNING
+		    elif test $disk -eq 4; then
+			ret=CRITICAL
+			break
+		    fi
+		done
+		msg=" overall disks status"
+	    else
+		msg=" disks status"
+	    fi
+	elif test $disk -ge $max; then
+	    msg=" disk ID out of bounds"
+	else
+	    res=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_DISKSTATUS.$disk`
+	    msg=" disk #$disk status"
+	    if test "$res"; then
+		if test $res = 4; then
+		    ret=CRITICAL
+		    msg=" damaged partitions on disk #$disk"
+		elif test $res = 3; then
+		    ret=WARNING
+		    msg=" unpartitionned disk #$disk"
+		elif test $res = 2; then
+		    ret=WARNING
+		    msg=" no data on disk #$disk"
+		elif test $res = 1; then
+		    ret=OK
+		fi
+	    fi
+	fi
+    elif test $query = raidusage; then
+	mpt=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_MOUNTPOINT`
+	bsz=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_FSBLKSIZE`
+	tsz=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_FSBLKAMOUNT`
+	usz=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_FSBLKUSED`
+	tsz=`expr $tsz '*' $bsz`
+	usz=`expr $usz '*' $bsz`
+	free=`expr $tsz - $usz`
+	if test $free = Z -o $usz = Z -o $tsz = Z; then
+	    ret=UNKNOWN		#dummy directive, ensuring staying on the loop
+	elif test `expr $free '*' 20` -lt $tsz; then
+	    ret=CRITICAL
+	elif test `expr $free '*' 10` -lt $usz; then
+	    ret=WARNING
+	elif test $tsz -ge 0 -a $usz -ge 0; then
+	    ret=OK
+	fi
+	for val in free usz tsz
+	do
+	    unit=b
+	    eval i=\$$val
+	    while :
+	    do
+		case $unit in
+		    b)	unit=k	;;
+		    k)	unit=M	;;
+		    M)	unit=G	;;
+		    G)	unit=T	;;
+		    T)	unit=P	;;
+		    P)	unit=E	;;
+		    E)	unit=Z	;;
+		    *)	break	;;
+		esac
+		if test `expr $i / 1024` -lt 1024; then
+		    i="`expr $i / 1024`.`expr $i % 1024`"
+		    break
+		fi
+		i=`expr $i / 1024`
+	    done
+	    eval $val=$i$unit
+	done
+	msg=" $mpt usage: $free/$usz/$tsz (free/used/tot)"
+    elif test $query = raidstatus; then
+	res=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_RAIDSTATUS`
+	if test "$res"; then
+	    case $res in
+		1)
+		    ret=OK
+		    msg=" RAID status"
+		    ;;
+		2)
+		    ret=WARNING
+		    msg=" RAID repairing"
+		    ;;
+		3)
+		    ret=WARNING
+		    msg=" RAID migrating"
+		    ;;
+		4)
+		    ret=WARNING
+		    msg=" RAID expanding"
+		    ;;
+		5)
+		    ret=CRITICAL
+		    msg=" RAID deleting"
+		    ;;
+		6)
+		    ret=WARNING
+		    msg=" RAID creating"
+		    ;;
+		7)
+		    ret=WARNING
+		    msg=" RAID syncing"
+		    ;;
+		8)
+		    ret=WARNING
+		    msg=" RAID parity checking"
+		    ;;
+		9)
+		    ret=WARNING
+		    msg=" RAID assembling"
+		    ;;
+		10)
+		    ret=CRITICAL
+		    msg=" RAID canceling"
+		    ;;
+		11)
+		    ret=CRITICAL
+		    msg=" RAID degraded"
+		    ;;
+		12)
+		    ret=CRITICAL
+		    msg=" RAID crashed"
+		    ;;
+		*)
+		    ret=UNKNOWN
+		    msg=" RAID status"
+		    ;;
+	    esac
+	else
+	    msg=" RAID status"
+	fi
+    elif test $query = disktemp; then
+	if test x$disk = x; then
+	    res=`snmpwalk -t2 -r2 -v1 -c $community -Ovq $target $OID_DISKTEMP | tr '\n' ' '`
+	    if test "$res"; then
+		ret=OK
+		for temp in $res
+		do
+		    if test $temp -ge 75; then
+			ret=CRITICAL
+		    elif test $temp -ge 65; then
+			ret=WARNING
+		    fi
+		done
+		msg=" disk temperatures: $res"
+	    else
+		msg=" disk temperatures"
+	    fi
+	elif test $disk -ge $max; then
+	    msg=" disk ID out of bounds"
+	else
+	    res=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_DISKTEMP.$disk`
+	    if test "$res"; then
+		if test $res -ge 75; then
+		    ret=CRITICAL
+		elif test $res -ge 65; then
+		    ret=WARNING
+		else
+		    ret=OK
+		fi
+		msg=" disk #$disk temperature: $res"
+	    else
+		msg=" disk #$disk temperature"
+	    fi
+	fi
+    elif test $query = temp; then
+	res=`snmpget -t2 -r2 -v1 -c $community -Ovq $target $OID_SYSTEMP`
+	if test "$res"; then
+	    if test $res -ge 70; then
+		ret=CRITICAL
+	    elif test $res -ge 65; then
+		ret=WARNING
+	    else
+		ret=OK
+	    fi
+	    msg=" system temperature: $res"
+	else
+	    msg=" system temperature"
+	fi
+    fi
+
+    if test $ret = UNKNOWN -a $N -le $RETRY; then
+	sleep $RETRY_DELAY
+    else
+	break
+    fi
+done >/dev/null 2>&1
+
+echo $ret$msg$pefdata
+eval ret=\$$ret
+exit $ret

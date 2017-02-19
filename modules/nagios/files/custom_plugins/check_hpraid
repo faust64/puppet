@@ -1,0 +1,33 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+TMPFILE=/tmp/.chkhpraid.$$
+
+if ! test "$1"; then
+    ret=UNKNOWN
+    msg=" - need to query for a specific device"
+    perfdata=" | 0"
+elif sudo cciss_vol_status $1 >$TMPFILE; then
+    if ! grep 'status: OK' $TMPFILE >/dev/null; then
+	ret=CRITICAL
+	msg=" - hardware RAID failure"
+	perfdata=" | 0"
+    else
+	ret=OK
+	perfdata=" | 1"
+    fi
+else
+    ret=CRITICAL
+    msg=" - hardware RAID failure"
+    prefdata=" | 0"
+fi
+rm -f $TMPFILE
+
+echo "$PRG $ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

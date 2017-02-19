@@ -1,0 +1,16 @@
+<% @main_networks.each do |ifhash| -%><% if ifhash['visio'] == true or ifhash['visio'] =~ /[0-9]\.[0-9]/ -%>visio_gw = <%=ifhash['gw']%>
+visio_if = <%=ifhash['name']%>
+<% end -%><% if ifhash['gw'] =~ /[0-9]\.[0-9]/ and ifhash['default'] == true -%>def_gw = <%=ifhash['gw']%>
+def_if = <%=ifhash['name']%>
+<% if ifhash['sipout'] == true -%>ipbx_gw = <%=ifhash['gw']%>
+ipbx_if = <%=ifhash['name']%>
+<% end -%><% if ifhash['vpn'] == true or ifhash['vpn'] =~ /[0-9]\.[0-9]/ -%>wan_gw = <%=ifhash['gw']%>
+wan_if = <%=ifhash['name']%>
+<% end -%><% elsif ifhash['gw'] =~ /[0-9]\.[0-9]/ and ifhash['sipout'] == true -%>ipbx_gw = <%=ifhash['gw']%>
+ipbx_if = <%=ifhash['name']%>
+<% if ifhash['vpn'] == true or ifhash['vpn'] =~ /[0-9]\.[0-9]/ -%>wan_gw = <%=ifhash['gw']%>
+wan_if = <%=ifhash['name']%>
+<% end -%><% elsif ifhash['gw'] =~ /[0-9]\.[0-9]/ and (ifhash['vpn'] == true or ifhash['vpn'] =~ /[0-9]\.[0-9]/) -%>wan_gw = <%=ifhash['gw']%>
+wan_if = <%=ifhash['name']%>
+<% elsif ifhash['gw'] =~ /[0-9]\.[0-9]/ -%>#<%=ifhash['name']%>_gw = <%=ifhash['gw']%>
+<% end -%><% end -%>

@@ -1,0 +1,4 @@
+[<%=@fqdn%>]
+    address <%=@listen%>
+<% if @port != "4949" and @port != 4949 -%>    port <%=@port%>
+<% end -%>    use_node_name yes

@@ -1,0 +1,7 @@
+dbdir /var/lib/munin
+htmldir <%=@web_root%>/munin
+logdir /var/log/munin
+rundir /var/run/munin
+includedir <%=@conf_dir%>/munin-conf.d
+max_graph_jobs 6
+rrdcached_socket /var/run/rrdcached.sock

@@ -1,0 +1,62 @@
+#!/usr/bin/env perl
+# Tomas Doran <bobtfish@bobtfish.net>
+# GPLv2
+
+use strict;
+use warnings;
+use LWP;
+use JSON qw/decode_json/;
+my $host = $ENV{'esearch_addr'} || 'localhost';
+my $esearch_version = $ENV{'esearch_version'} || 'latest';
+my $ua = LWP::UserAgent->new;
+$ua->timeout(10);
+
+sub get_json_from_url
+{
+    my $uri = shift;
+    my $res = $ua->get($uri, 'Content-Type' => 'application/json' );
+    Carp::confess($res->code . " for " . $uri) unless $res->is_success;
+    my $data = do { local $@; eval { decode_json($res->content) } };
+    die("Could not decode JSON from: " . $res->content) unless $data;
+    return $data;
+}
+
+my $data;
+if ($esearch_version eq "latest") {
+    $data = get_json_from_url("http://$host:9200/_nodes/_all/jvm");
+} elsif ($esearch_version eq "1.7") {
+    $data = get_json_from_url("http://$host:9200/_nodes?jvm=true");
+} else {
+    $data = get_json_from_url("http://$host:9200/_cluster/nodes?jvm=true");
+}
+my %out;
+
+foreach my $full_node_name (keys %{$data->{nodes}})
+{
+    foreach my $name (grep { /_in_bytes$/ } keys %{ $data->{nodes}{$full_node_name}{jvm}{mem} })
+    {
+        my ($dname) = $name =~ m/(.+)_in_bytes$/;
+        $out{$dname} = $data->{nodes}{$full_node_name}{jvm}{mem}{$name};
+    }
+}
+if ($ARGV[0] and $ARGV[0] eq 'config')
+{
+    print "graph_args --base 1024\n";
+    print "graph_title ElasticSearch JVM memory\n";
+    print "graph_category elasticsearch\n";
+    print "graph_vlabel Bytes\n";
+
+    foreach my $name (keys %out)
+    {
+        print "$name.label $name\n"."$name.type GAUGE\n";
+    }
+}
+elsif (!$ARGV[0] || $ARGV[0] eq 'autoconf')
+{
+    foreach my $name (keys %out)
+    {
+        print "$name.value " . $out{$name} . "\n";
+    }
+}
+
+exit(0);

@@ -1,0 +1,29 @@
+#!/bin/sh
+
+while true
+do
+<% if @app_url -%>    killall -TERM <%=@browser%> 2>/dev/null
+<% elsif @feed_url -%>    killall -TERM vlc 2>/dev/null
+<% end -%>    killall -TERM matchbox-window-manager 2>/dev/null
+    sleep 2
+<% if @app_url -%>    killall -9 <%=@browser%> 2>/dev/null
+<% elsif @feed_url -%>    kiall -p vlc 2>/dev/null
+<% end -%>    killall -9 matchbox-window-manager 2>/dev/null
+
+    rm -rf <%=@home_dir%>/<%=@runtime_user%>/.cache
+#   rm -rf <%=@home_dir%>/<%=@runtime_user%>/.config
+    rm -rf <%=@home_dir%>/<%=@runtime_user%>/.pki
+
+<% if @app_url and @browser == "chromium" -%>    mkdir -p <%=@home_dir%>/<%=@runtime_user%>/.config/chromium/Default
+    sqlite3 <%=@home_dir%>/<%=@runtime_user%>/.config/chromium/Default/Web\ Data "CREATE TABLE meta(key LONGVARCHAR NOT NULL UNIQUE PRIMARY KEY, value LONGVARCHAR); INSERT INTO meta VALUES('version','46'); CREATE TABLE keywords (foo INTEGER);"
+<% end -%>    xset -dpms
+    xset s off
+    fbset -depth `cat /sys/module/*fb*/parameters/fbdepth`
+    xwit -root -warp $( cat /sys/module/*fb*/parameters/fbwidth ) $( cat /sys/module/*fb*/parameters/fbheight )
+    matchbox-window-manager -use_titlebar no -use_cursor no &
+<% if @app_url and @browser == "chromium" -%>    chromium --app=<%=@app_url%>
+<% elsif @app_url and @browser == "midori" -%>    midori -e Fullscreen --app=<%=@app_url%>
+<% elsif @feed_url -%>    vlc -f <%=@feed_url%>
+<% else -%>    echo "unsupported combination [app_url=<%=@app_url%> feed_url=<%=@feed_url%> browser=<%=@browser%>]"
+    exit 0
+<% end -%>done

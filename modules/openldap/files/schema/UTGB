@@ -1,0 +1,64 @@
+attributetype   ( 1.3.6.1.4.1.37413.2.1.1
+        NAME 'startOfContract'
+        DESC 'Date of Start of Contract'
+        EQUALITY generalizedTimeMatch
+        ORDERING generalizedTimeOrderingMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.24
+        SINGLE-VALUE 
+        )
+
+attributetype   ( 1.3.6.1.4.1.37413.2.1.2
+        NAME 'endOfContract'
+        DESC 'Date of End od Contract'
+        EQUALITY generalizedTimeMatch
+        ORDERING generalizedTimeOrderingMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.24
+        SINGLE-VALUE
+        )
+
+attributetype	( 1.3.6.1.4.1.37413.2.1.3
+        NAME 'jabberDisplayName'
+        DESC 'DisplayName of group in Jabber'
+        EQUALITY caseIgnoreMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE
+	)
+
+attributetype   ( 1.3.6.1.4.1.37413.2.1.4
+        NAME 'primaryDepartmentNumber'
+        DESC 'Primary DepartmentNumber of an employee'
+        EQUALITY caseIgnoreMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE
+        )
+
+objectclass     ( 1.3.6.1.4.1.37413.2.2.1
+        NAME 'UTGBContractor'
+        DESC 'UTGB Contractor'
+        AUXILIARY
+	MAY  ( startOfContract $ personalTitle $ primaryDepartmentNumber )
+	MUST endOfContract
+        )
+
+objectclass     ( 1.3.6.1.4.1.37413.2.2.2
+        NAME 'UTGBEmployee'
+        DESC 'UTGB Employee'
+        AUXILIARY
+	MAY ( endOfContract $ startOfContract $ personalTitle $ primaryDepartmentNumber )
+        )
+
+objectclass     ( 1.3.6.1.4.1.37413.2.2.3
+        NAME 'UTGBEmail'
+        DESC 'UTGB Email'
+        AUXILIARY
+        MUST mail
+        )
+
+objectclass     ( 1.3.6.1.4.1.37413.2.2.4
+        NAME 'UTGBJabber'
+        DESC 'UTGB Jabber'
+        AUXILIARY
+        MUST jabberDisplayName
+        )

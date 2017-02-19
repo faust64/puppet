@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if test -d /usr/share/pakiti/scripts; then
+    cd /usr/share/pakiti/scripts
+    php repository_updates.php
+    php process_oval_rh.php
+#   php process_cve_freebsd.php
+fi
+
+exit 0

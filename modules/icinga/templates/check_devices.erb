@@ -1,0 +1,54 @@
+define command {
+    command_name        check-sw-firmware
+    command_line        <%=@plugindir%>/check_sw -H '$HOSTADDRESS$' -C icinga -t firmware
+}
+
+define command {
+    command_name        check-sw-model
+    command_line        <%=@plugindir%>/check_sw -H '$HOSTADDRESS$' -C icinga -t model
+}
+
+define command {
+    command_name        check-sw-ports
+    command_line        <%=@plugindir%>/check_sw -H '$HOSTADDRESS$' -C icinga -t ports
+}
+
+define command {
+    command_name        check-sw-portadm
+    command_line        <%=@plugindir%>/check_sw -H '$HOSTADDRESS$' -C icinga -t adm -p '$ARG1$'
+}
+
+define command {
+    command_name        check-sw-portchange
+    command_line        <%=@plugindir%>/check_sw -H '$HOSTADDRESS$' -C icinga -t lastchange -p '$ARG1$'
+}
+
+define command {
+    command_name        check-sw-portcheck
+    command_line        <%=@plugindir%>/check_sw -H '$HOSTADDRESS$' -C icinga -t portcheck -p '$ARG1$'
+}
+
+define command {
+    command_name        check-sw-portstats
+    command_line        <%=@plugindir%>/check_sw -H '$HOSTADDRESS$' -C icinga -t portstats -p '$ARG1$'
+}
+
+define command {
+    command_name        check-sw-uptime
+    command_line        <%=@plugindir%>/check_sw -H '$HOSTADDRESS$' -C icinga -t uptime
+}
+
+define command {
+    command_name        check_vmw
+    command_line        <%=@plugindir%>/check_vmw -H '$HOSTADDRESS$' -C icinga -t '$ARG1$'
+}
+
+define command {
+    command_name	check_syno
+    command_line	<%=@plugindir%>/check_syno -H '$HOSTADDRESS$' -C icinga -t '$ARG1$'
+}
+
+define command {
+    command_name        check_pfsense
+    command_line        <%=@plugindir%>/check_pfsense -H '$HOSTADDRESS$' -C icinga -t '$ARG1$'
+}

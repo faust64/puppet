@@ -1,0 +1,7 @@
+$TTL	|replaceTTL|
+@		SOA	|replaceROOT|. |replaceCONTACT|. (
+			|replaceSERIAL|
+			|replaceREFRESH|
+			|replaceRETRY|
+			|replaceEXPIRE|
+			|replaceNEGATIVETTL| )

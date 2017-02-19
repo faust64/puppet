@@ -1,0 +1,15 @@
+INSERT INTO Dictionary VALUES (11, 50000, 'yes', 'HP ProLiant%GPASS%DL320e Gen8 v2');
+INSERT INTO Dictionary VALUES (11, 50001, 'yes', 'HP ProLiant%GPASS%DL120 G6');
+INSERT INTO Dictionary VALUES (11, 50002, 'yes', 'HP ProLiant%GPASS%DL120 G7');
+INSERT INTO Dictionary VALUES (11, 50003, 'yes', 'HP ProLiant%GPASS%MicroServer');
+INSERT INTO Dictionary VALUES (11, 50004, 'yes', 'Qnap%GPASS%TS-509-Q025MB');
+INSERT INTO Dictionary VALUES (11, 50005, 'yes', 'HP ProLiant%GPASS%SE1102');
+INSERT INTO Dictionary VALUES (11, 50006, 'yes', 'HP ProLiant%GPASS%SE316M1');
+INSERT INTO Dictionary VALUES (11, 50007, 'yes', 'Gigabyte%GPASS%G33M-DS2R');
+INSERT INTO Dictionary VALUES (11, 50008, 'yes', 'Dell%GPASS%Latitude E5510');
+INSERT INTO Dictionary VALUES (11, 50009, 'yes', 'Soekris%GPASS%net5501');
+INSERT INTO Dictionary VALUES (17, 50010, 'yes', 'Soekris%GPASS%net5501');
+INSERT INTO Dictionary VALUES (11, 50011, 'yes', 'Soekris%GPASS%net6501');
+INSERT INTO Dictionary VALUES (17, 50012, 'yes', 'Soekris%GPASS%net6501');
+INSERT INTO Dictionary VALUES (27, 50013, 'yes', '[[APC%GPASS%AP9606 | http://www.apc.com/products/resource/include/techspec_index.cfm?base_sku=AP9606]]');
+INSERT INTO Dictionary VALUES (27, 50014, 'yes', 'ATEN%GPASS%PE8208G');

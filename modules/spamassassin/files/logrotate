@@ -1,0 +1,11 @@
+/var/log/spamassassin/*.log
+{
+    rotate 7
+    daily
+    compress
+    missingok
+    notifempty
+    postrotate
+	/etc/init.d/spamassassin restart >/dev/null 2>&1 || true
+    endscript
+}

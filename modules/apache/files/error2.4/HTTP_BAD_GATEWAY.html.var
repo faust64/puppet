@@ -1,0 +1,45 @@
+Content-language: en
+Content-type: text/html; charset=UTF-8
+Body:----------en--
+<!--#set var="TITLE" value="502: Bad Gateway!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 502</h1>
+	    <p>This page redirects to a site that is not available from your browser.</p>
+	    <p>If you see this page, please contact admin@unetresgrossebite.com, precising which URL you were trying to reach.</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------en--
+
+Content-language: es
+Content-type: text/html
+Body:----------es--
+<!--#set var="TITLE" value="502: Puerta de enlace err&oacute;nea!" -->
+<!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 502</h1>
+	    <p>El servidor origen recibi&oacute; informaci&oacute;n inv&aacute;lida por parte del servidor destino.</p>
+	    <p>Si recibe este error, gracias a communicarse con admin@unetresgrossebite.com, especifiando la URL que se trata de carga.</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------es--
+
+Content-language: fr
+Content-type: text/html; charset=UTF-8
+Body:----------fr--
+<!--#set var="CONTENT_LANGUAGE" value="fr"
+--><!--#set var="TITLE" value="502 : Gateway incorrecte !"
+--><!--#include virtual="include/top.html" -->
+<!--#include virtual="include/bottom.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERREUR 502</h1>
+	    <p>Le serveur est incapable de vous donner acc&egrave;s au site que vous tentez de joindre.</p>
+	    <p>Si vous rencontrez cette erreur, merci de rentrer en contact avec admin@unetresgrossebite.com, en pr&eacute;cisant quelle adresse vous essayiez de charger.</p>
+	</div>
+    </div>
+----------fr--

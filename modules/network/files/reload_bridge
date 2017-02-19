@@ -1,0 +1,19 @@
+#!/bin/sh
+
+export PATH=/sbin:/usr/sbin:/usr/local/sbin:/bin:/usr/bin:/usr/local/bin
+
+if test -z "$1"; then
+    echo "usage: $0 bridge_id"
+    exit 1
+elif ! test -e /etc/hostname.bridge$1; then
+    echo "Unknown bridge #$1"
+    exit 2
+fi
+
+if ifconfig bridge$1 | grep "br[i]dge$1"; then
+    ifconfig bridge$1 destroy
+fi >/dev/null 2>&1
+
+ifconfig bridge$1 `cat /etc/hostname.bridge$1`
+
+exit $?

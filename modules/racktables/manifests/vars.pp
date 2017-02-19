@@ -1,0 +1,15 @@
+class racktables::vars {
+    $auth_backend = hiera("racktables_auth_backend")
+    $conf_dir     = hiera("apache_conf_dir")
+    $db_pass      = hiera("racktables_database_passphrase")
+    $db_user      = hiera("racktables_database_user")
+    $download     = hiera("download_cmd")
+    $ldap_slave   = hiera("openldap_ldap_slave")
+    $ldap_suffix  = hiera("racktables_ldap_suffix")
+    $munin_host   = hiera("munin_vhost_name")
+    $rdomain      = hiera("root_domain")
+    $service_name = hiera("apache_service_name")
+    $version      = hiera("racktables_version")
+    $web_root     = hiera("apache_web_root")
+    $wwwgroup     = hiera("apache_runtime_group")
+}

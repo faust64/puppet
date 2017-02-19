@@ -1,0 +1,18 @@
+additional_classes:
+  - Fail2ban
+
+# BlueMind
+bluemind_satellite: true
+
+# Fail2ban
+fail2ban_do_mails: true
+
+# Postfix
+postfix_local_domains:
+  - emma-earth.com
+  - emma-earth.fr
+  - emma-earth.net
+  - emma-earth.org
+  - undomaine.42
+  - unetresgrossebite.com
+postfix_myhostname: bukkake.unetresgrossebite.com

@@ -1,0 +1,18 @@
+#!/bin/sh
+
+if test -z "$1"; then
+    echo "Usage: $PRG message" >&2
+    exit 1
+fi
+hook=<%=@slack_hook%>
+data=`echo REPORT: $@ on $(hostname -f) | sed 's|"|\"|g' | sed "s|'|\'|g"`
+json="{\"text\": \"$data\"}"
+<% if @cache_ip != false -%><% @cache_ip.each do |host| -%>export https_proxy=http://<%=@host%>:3128/
+<% break -%><% end -%><% end -%>
+if ! echo "$hook" | grep hooks.slack.com >/dev/null; then
+    hook=https://hooks.slack.com/services/$hook
+fi
+
+curl -s -d "payload=$json" "$hook"
+
+exit $?

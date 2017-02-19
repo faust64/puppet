@@ -1,0 +1,16 @@
+cluster.name: <%=@clustername%>
+bootstrap.system_call_filter: false
+node.name: "<%=@nodename%>"
+node.master: <% if @is_master == true -%>tru<% else -%>fals<% end -%>e
+node.data: <% if @is_data == true -%>tru<% else -%>fals<% end -%>e
+<% if @version == "5.x" -%>node.ingest: false
+<% end -%>network.bind_host: <%=@listen%>
+transport.tcp.port: 9300
+transport.tcp.compress: true
+http.port: 9200
+<% if @version != "5.x" -%>index.number_of_shards: <%=@shards%>
+index.number_of_replicas: <%=@replicas%>
+discovery.zen.ping.multicast.enabled: false
+<% end -%><% if @cors == true -%>http.cors.enabled: true
+<% end -%><% if @cluster_hosts -%>discovery.zen.ping.unicast.hosts: [ <% @cluster_hosts.each do |host| -%><% if host != @nodename and host != @fqdn -%>"<%=host%>", <% end -%><% end -%>]
+<% end -%>

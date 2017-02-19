@@ -1,0 +1,44 @@
+#!/usr/bin/perl -w
+# https://exchange.nagios.org/directory/Plugins/Email-and-Groupware/SpamAssasin/check_sa-2Dupdate/details
+
+if (@ARGV) {
+print << "EOF";
+Run without arguments.  The following will be reported to Nagios:
+ - OK: we are at the latest version of SA rules
+ - Warning: there is an update available but it is not installed
+ - Critical: our pre files do not pass a lint check
+ - Error: sa-update returned an error code
+EOF
+exit;
+}
+
+$rc = `ps -efww | grep sa-update | grep -v grep | grep -v $$`;
+exit if $rc;
+system("sudo /usr/bin/sa-update --checkonly");
+$rc = $? >> 8;
+$rc -= 256 if $rc > 127;
+
+SWITCH: {
+    if ($rc == 0) {
+	$output = 'SA WARNING - Update Available, System not current';
+	$ec = 1;
+	last SWITCH;
+    }
+    if ($rc == 1) {
+	$output = 'SA OK - Spamassassin signatures are all up to date';
+	$ec = 0;
+	last SWITCH;
+    }
+    if ($rc == 2) {
+	$output = 'SA CRITICAL - Site pre files do not pass lint check';
+	$ec = 2;
+	last SWITCH;
+    }
+    if ($rc >= 4) {
+	$output = "SA ERROR - sa-update returned error code $rc";
+	$ec = 3;
+	last SWITCH;
+    }
+}
+print "$output\n";
+exit $ec;

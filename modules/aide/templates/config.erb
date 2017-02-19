@@ -1,0 +1,29 @@
+database=file:<%=@db_dir%>/aide.db
+database_out=file:<%=@db_dir%>/aide.db.new
+database_new=file:<%=@db_dir%>/aide.db.new
+gzip_dbout=yes
+summarize_changes=yes
+grouped=yes
+Checksums = sha256+sha512+rmd160+haval+gost+crc32+tiger
+X=L-p-ftype-i-l-n-u-g
+OwnerMode = p+u+g+ftype
+Size = s+b
+InodeData = OwnerMode+n+i+Size+l+X
+StaticFile = m+c+Checksums
+RamdiskData = InodeData-i
+Full = InodeData+StaticFile
+VarTime = InodeData+Checksums
+VarInode = VarTime-i
+VarFile = OwnerMode+n+l+X
+VarDir = OwnerMode+n+i+X
+VarDirInode = OwnerMode+n+X
+VarDirTime = InodeData
+Log = OwnerMode+n+S+X
+FreqRotLog = Log-S
+LowLog = Log-S
+SerMemberLog  = Full+I
+LoSerMemberLog = SerMemberLog+ANF
+HiSerMemberLog = SerMemberLog+ARF
+LowDELog = SerMemberLog+ANF+ARF
+SerMemberDELog = Full+ANF
+LinkedLog = Log-n

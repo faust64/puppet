@@ -1,0 +1,41 @@
+#!/bin/sh
+
+export PATH="/usr/lib64/nagios/plugins:/usr/local/libexec/nagios:/usr/lib/nagios/plugins:/usr/local/sbin:/usr/sbin:$PATH"
+
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+from=$(expr `awk '/domain/{print $2}' /etc/resolv.conf` : '\([^\.]*\)')
+title="AsteriskChans_$from"
+ret=OK
+
+if ! sudo asterisk -rx 'core show version' >/dev/null; then
+    perfdata=" | 0"
+    ret=UNKNOWN
+elif grep '^span[ 	]*=[ 	]*' /etc/dahdi/system.conf >/dev/null 2>/dev/null; then
+    available=`sudo asterisk -rx 'dahdi show channels' | awk 'BEGIN{c=0}/In Service$/{c=c+1}END{print c}'`
+    occupied=`sudo asterisk -rx 'core show channels' | awk 'BEGIN{c=0}/^DAHDI/{c=c+1}END{print c}'`
+    if test -z "$available" -o -z "$occupied"; then
+	ret=UNKNOWN
+	perfdata=" | 0"
+    else
+	perfdata=" | $occupied/$warn/$available"
+	if test "$available" -le 4; then
+	    warn=`expr $available - 1`
+	elif test "$available" -le 8; then
+	    warn=`expr $available - 2`
+	else
+	    warn=`expr $available - 4`
+	fi
+	if test "$occupied" -gt "$warn"; then
+	    ret=CRITICAL
+	elif test "$occupied" -eq "$warn"; then
+	    ret=WARNING
+	fi
+    fi
+fi
+
+echo "$title $ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

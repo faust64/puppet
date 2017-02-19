@@ -1,0 +1,64 @@
+#!/bin/sh
+exit 0
+
+ADDRESS=<%=@pixeladdress%>
+CONFDIR=<%=@conf_dir%>
+TMPFILE=/tmp/gen.$$
+
+render_record()
+{
+#discard myftp.org: some friend of mine host his plex behind a myftp.org record,
+#I can't reach his setup otherwise, that makes me sad, ...
+    echo "$1" | grep myftp.org >/dev/null && return 0
+    grep "\"$1\"" $TMPFILE >/dev/null && return 0
+    echo "local-zone: \"$1\" redirect"
+    echo "local-data: \"$1 A $ADDRESS\""
+}
+
+cd /root
+
+if ! test -s winhelp-blocklist.txt; then
+    curl http://winhelp2002.mvps.org/hosts.txt >winhelp-blocklist.txt
+fi
+if ! test -s pglyoyo-blocklist.txt; then
+    curl http://pgl.yoyo.org/as/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext >pglyoyo-blocklist.txt
+fi
+if ! test -s adaway-blocklist.txt; then
+    curl https://adaway.org/hosts.txt >adaway-blocklist.txt
+fi
+
+for file in winhelp-blocklist.txt pglyoyo-blocklist.txt adaway-blocklist.txt
+do
+    grep -vE '^($|#)' $file | awk '/.\./{print $2}'
+done | sort -u | while read line
+    do
+	render_record "$line"
+    done >>$TMPFILE
+
+if test -s my_domains.txt; then
+    while read line
+    do
+	render_record "$line"
+    done <my_domains.txt >>$TMPFILE
+fi
+
+if test -s $TMPFILE -a -d $CONFDIR; then
+    if ! cmp $TMPFILE $CONFDIR/blocklist.conf >/dev/null 2>&1; then
+	mv $TMPFILE $CONFDIR/blocklist.conf
+	service unbound restart
+	RET=$?
+    else
+	echo "no modification, discarding generated file"
+	RET=0
+    fi
+elif ! test -d $CONFDIR; then
+    echo "error: $CONFDIR/ not found" >&2
+    RET=42
+else
+    echo "nothing generated" >&2
+    RET=21
+fi
+
+rm -f $TMPFILE
+
+exit $RET

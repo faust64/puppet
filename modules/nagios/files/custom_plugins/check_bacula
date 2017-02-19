@@ -1,0 +1,59 @@
+#!/bin/sh
+# based on a probe from Frederic Argolo, 2009-04-16
+# License unknown / public domain
+# https://exchange.nagios.org/directory/Plugins/Backup-and-Recovery/Bacula/check_bacula-2Esh/details
+
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+CLIENT=bacula-dir
+DATABASE=bacula
+DATE=$(date +%Y-%m-%d --date="1 day ago")
+res=UNKNOWN
+
+while test $# -ne 0
+do
+    case "$1" in
+	-D)
+	    shift
+	    DATABASE=$1
+	    ;;
+	-d)
+	    shift
+	    DATE=$1
+	    ;;
+	-c)
+	    shift
+	    CLIENT=$1
+	    ;;
+	*)
+	    echo "check_bacula - unknown argument $1"
+	    exit $UNKNOWN
+	    ;;
+    esac
+    shift
+done
+
+if test -z "$CLIENT"; then
+    msg="missing client"
+else
+    JOBSTATUS=$(mysql --defaults-file=/etc/mysql/nagios.cnf $DATABASE -B --skip-column-names -e "select JobStatus from Job where SchedTime like '${DATE}%' and Name like 'Backup-${CLIENT}%' order by SchedTime DESC limit 1")
+    if test -z "$JOBSTATUS"; then
+	msg="$CLIENT not found"
+    else
+	JOBSTATUSLONG=$(mysql --defaults-file=/etc/mysql/nagios.cnf $DATABASE -B --skip-column-names -e "select JobStatusLong from Status where JobStatus='$JOBSTATUS'")
+	msg="$CLIENT - $JOBSTATUSLONG"
+	if test $JOBSTATUS = 'T'; then
+	    res=OK
+	elif test $JOBSTATUS = 'f'; then
+	    res=CRITICAL
+	else
+	    res=WARNING
+	fi
+    fi
+fi
+
+echo "$res - $msg"
+eval res=\$$res
+exit $res

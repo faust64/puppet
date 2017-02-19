@@ -1,0 +1,42 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+MINSIZE=20000000
+
+for disk in `mount | awk '/type ext/{print $1}'`
+do
+    if test "`df -P $disk | awk 'END{print $2}'`" -gt "$MINSIZE"; then
+	NBMOUNT=`sudo /sbin/tune2fs -l $disk | awk -F: '/Mount count:/{printf("%d",$2);}'`
+	MAXMOUNT=`sudo /sbin/tune2fs -l $disk | awk -F: '/Maximum mount count:/{printf("%d",$2);}'`
+	NEXTCHECK=`sudo /sbin/tune2fs -l $disk | grep 'Next check after:' | sed 's|^[^:]*:[ \t]*||'`
+
+	if test "$MAXMOUNT" = "-1"; then
+	    ret=CRITICAL
+	    test "$msg" && msg="$msg, "
+	    msg="${msg}fsck not scheduled for $disk!"
+	elif test "$MAXMOUNT" -eq "$NBMOUNT"; then
+	    test -z "$ret" && ret=WARNING
+	    test    "$msg" && msg="$msg, "
+	    msg="${msg}mount limit reached for $disk"
+	elif test -n "$NEXTCHECK"; then
+	    WARN=`date --date "$NEXTCHECK -7 day" +%s`
+	    NOW=`date +%s`
+	    if test "$NOW" -gt "$WARN"; then
+		test -z "$ret" && ret=WARNING
+		test    "$msg" && msg="$msg, "
+		msg="${msg}time limit reached for $disk"
+	    fi
+	fi
+    fi
+done
+
+test -z "$ret" && ret=OK
+test    "$msg" && msg=" - $msg"
+
+echo "$ret$msg"
+eval ret=\$$ret
+exit $ret

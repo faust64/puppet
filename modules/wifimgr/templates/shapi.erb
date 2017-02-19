@@ -1,0 +1,176 @@
+#!/bin/sh
+
+baseurl=https://unifi.<%=@domain%>:8443
+cookie=/tmp/unifi_cookie
+password=<%=@manager_pass%>
+site=<%=@site%>
+username=<%=@manager_user%>
+
+curl_cmd="curl --sslv3 --silent --cookie $cookie --cookie-jar $cookie --insecure"
+
+named_args_to_payload()
+{
+    payload=
+    for a in $@
+    do
+	if test "${a##*=*}" = ""; then
+	    k=`echo $a | cut -d = -f 1`
+	    v=`echo $a | cut -d = -f 2`
+	    payload="$payload, '$k':'$v'"
+	fi
+    done
+    echo $payload
+}
+
+unifi_requires()
+{
+    if test -z "$username" -o -z "$password" -o -z "$baseurl" -o -z "$site"; then
+	echo "Unset variables:"
+	echo "export username=$username"
+	echo "export password=$password"
+	echo "export baseurl=$baseurl"
+	echo "export site=$site"
+	exit 1
+    fi
+}
+
+unifi_login()
+{
+    $curl_cmd --data login=login --data "username=$username" --data "password=$password" $baseurl/login
+}
+
+unifi_logout()
+{
+    $curl_cmd $baseurl/logout
+}
+
+unifi_api()
+{
+    if test $# -lt 1; then
+	echo "Usage: $0 <uri> [json]"
+	echo "    uri example /stat/sta"
+	exit 1
+    fi
+    uri=$1
+    shift
+    test "${uri:0:1}" != "/" && uri="/$uri"
+    json="$@"
+    test "$json" = "" && json="{}"
+    $curl_cmd --data "$json" $baseurl/api/s/$site$uri
+}
+
+unifi_authorize_guest()
+{
+    if test $# -lt 2 ; then
+	echo "Usage: $0 <mac> <minutes> [up=kbps] [down=kbps] [bytes=MB] [ap_mac=mac]"
+	exit 1
+    fi
+
+    mac=$1
+    minutes=$2
+    other_payload=`named_args_to_payload "$@"`
+
+    $curl_cmd --data "json={'cmd':'authorize-guest', 'mac':'$mac', 'minutes':$minutes$other_payload}" $baseurl/api/s/$site/cmd/stamgr
+}
+
+unifi_unauthorize_guest()
+{
+    if test $# -lt 1; then
+	echo "Usage: $0 <mac>"
+	return
+    fi
+
+    mac=$1
+    $curl_cmd --data "json={'cmd':'unauthorize-guest', 'mac':'$mac'}" $baseurl/api/s/$site/cmd/stamgr
+}
+
+unifi_reconnect_sta()
+{
+    if test $# -lt 1; then
+	echo "Usage: $0 <mac>"
+	return
+    fi
+
+    mac=$1
+    $curl_cmd --data "json={'cmd':'kick-sta', 'mac':'$mac'}" $baseurl/api/s/$site/cmd/stamgr
+}
+
+unifi_block_sta()
+{
+    if test $# -lt 1; then
+	echo "Usage: $0 <mac>"
+	return
+    fi
+
+    mac=$1
+    $curl_cmd --data "json={'cmd':'block-sta', 'mac':'$mac'}" $baseurl/api/s/$site/cmd/stamgr
+}
+
+unifi_update_sta()
+{
+    if test $# -lt 1; then
+	echo "Usage: $0 <mac> <name> <email>"
+	return
+    fi
+
+    mac=$1
+    $curl_cmd --data "json={'cmd':'update-sta', 'mac':'$mac', 'name':'$2', 'email':'$3'}" $baseurl/api/s/$site/cmd/stamgr
+}
+
+unifi_backup()
+{
+    if test "$1" = ""; then
+	output=unifi-`date +%Y%m%d`.unf
+    else
+	output=$1
+    fi
+
+    path=`$curl_cmd --data "json={'cmd':'backup'}" $baseurl/api/s/$site/cmd/system | sed -n 's/.*\(\/dl.*unf\).*/\1/p'`
+    $curl_cmd $baseurl$path -o $output
+}
+
+unifi_create_voucher()
+{
+    if test $# -lt 2; then
+	echo "Usage: $0 <minutes> <n> [note=notes] [up=kbps] [down=kbps] [bytes=MB]"
+	return
+    fi
+    minutes=$1
+    n=$2
+    other_payload=`named_args_to_payload "$@"`
+    token=`$curl_cmd --data "json={'cmd':'create-voucher','expire':$minutes,'n':$n $other_payload}" $baseurl/api/s/$site/cmd/hotspot | sed -e 's/.*"create_time"\s*:\s*\([0-9]\+\).*/\1/'`
+    echo "token=$token"
+    if test "$token" != ""; then
+	$curl_cmd --data "json={'create_time':$token}" $baseurl/api/s/$site/stat/voucher
+    fi
+}
+
+unifi_get_vouchers()
+{
+    set -x
+    if test $# -lt 0; then
+	echo "Usage: $0 [token]"
+	return
+    fi
+    token=$1
+    test "$token" != "" && other_payload="'create_time':$token"
+    $curl_cmd --data "json={$other_payload}" $baseurl/api/s/$site/stat/voucher
+}
+
+unifi_delete_voucher()
+{
+    if test $# -lt 1; then
+	echo "Usage: $0 <id>"
+	return
+    fi
+    id=$1
+    $curl_cmd --data "json={'cmd':'delete-voucher','_id':'$id'}" $baseurl/api/s/$site/cmd/hotspot
+}
+
+unifi_list_sta()
+{
+    $curl_cmd --data "json={}" $baseurl/api/s/$site/stat/sta
+}
+
+
+unifi_requires

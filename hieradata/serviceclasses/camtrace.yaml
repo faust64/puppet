@@ -1,0 +1,70 @@
+additional_classes:
+  - Camtrace
+  - Ipfw
+
+deported_ports: /disk1
+
+# Accounts
+generic_group: camtrace
+generic_groups:
+  - camtrace
+  - wheel
+generic_home_dir: /usr/local
+generic_user: camtrace
+
+# Apache
+apache_mod_php: true
+apache_runtime_group: camtrace
+apache_runtime_user: camtrace
+
+# IPFW
+myvlan: vlan35
+
+# Nagios
+nagios_load_crit_threshold: "3.0,3.0,3.0"
+nagios_load_warn_threshold: "1.5,1.5,1.5"
+nagios_partitions_watchlist:
+  root: /
+  backups: /disk
+  recordings: /disk1
+nagios_no_parent: false
+
+# Openbox
+openbox_autostart_cmd: 'firefox "http://localhost/" &'
+
+# PHP
+php_disabled_functions: false
+php_error_report: E_ALL & ~E_DEPRECATED
+php_explicit_sessions: true
+php_gc_probability: 1
+php_hashbits_per_character: 4
+php_mod_ctype: true
+php_mod_dom: true
+php_mod_ftp: true
+php_mod_gd: true
+php_mod_gettext: true
+php_mod_json: true
+php_mod_mbstring: true
+php_mod_pgsql: true
+php_mod_uploadprogress: true
+php_mod_xml: true
+php_mod_zip: true
+php_mod_zlib: true
+php_post_max_size: 128M
+php_serialize_precision: 100
+php_zend_extensions:
+  - /usr/local/lib/php/20090626/ioncube/ioncube_loader.so
+
+# PostgreSQL
+postgres_data_dir: /disk/dbdata
+
+# Racktables
+racktables_object_id: 4
+
+# Reboot
+reboot_hour: 10
+reboot_minute: 50
+
+# Slim
+slim_auto_login: true
+slim_theme: camtrace

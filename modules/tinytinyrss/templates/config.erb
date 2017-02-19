@@ -1,0 +1,58 @@
+<?php
+define('DB_TYPE', '<%=@db_backend%>');
+define('DB_HOST', 'localhost');
+define('DB_USER', '<%=@db_user%>');
+define('DB_NAME', 'ttrss');
+define('DB_PASS', '<%=@db_pass%>');
+define('DB_PORT', '<% if @db_backend == "mysql" -%>3306<% else -%>5432<% end -%>');
+define('MYSQL_CHARSET', 'UTF8');
+define('SELF_URL_PATH', 'http<% if @listen['ssl'] != false -%>s<% end -%>://<%=@fqdn%>/');
+define('FEED_CRYPT_KEY', '');
+define('SINGLE_USER_MODE', false);
+define('SIMPLE_UPDATE_MODE', false);
+define('PHP_EXECUTABLE', '/usr/bin/php');
+define('LOCK_DIRECTORY', 'lock');
+define('CACHE_DIR', 'cache');
+define('ICONS_DIR', "feed-icons");
+define('ICONS_URL', "feed-icons");
+define('AUTH_AUTO_CREATE', true);
+define('AUTH_AUTO_LOGIN', true); //??
+define('FORCE_ARTICLE_PURGE', 0);
+define('PUBSUBHUBBUB_HUB', '');
+define('PUBSUBHUBBUB_ENABLED', false);
+define('SPHINX_SERVER', 'localhost:9312');
+define('SPHINX_INDEX', 'ttrss, delta');
+define('ENABLE_REGISTRATION', false);
+define('REG_NOTIFY_ADDRESS', 'root@<%=@rdomain%>');
+define('REG_MAX_USERS', 64);
+define('SESSION_COOKIE_LIFETIME', 86400);
+define('SESSION_CHECK_ADDRESS', 1);
+define('SMTP_FROM_NAME', 'Tiny Tiny RSS');
+define('SMTP_FROM_ADDRESS', 'noreply@<%=@rdomain%>');
+define('DIGEST_SUBJECT', '[TinyTinyRSS] New headlines for last 24 hours');
+define('SMTP_SERVER', '<%=@mail_hub%>');
+define('SMTP_LOGIN', '');
+define('SMTP_PASSWORD', '');
+define('SMTP_SECURE', '');
+define('CHECK_FOR_UPDATES', true);
+define('ENABLE_GZIP_OUTPUT', false);
+define('PLUGINS', 'auth_remote, auth_internal, note, updater, auth_ldap');
+define('LDAP_AUTH_SERVER_URI', 'ldaps://<%=@ldap_host%>:636/');
+define('LDAP_AUTH_USETLS', FALSE);
+define('LDAP_AUTH_ALLOW_UNTRUSTED_CERT', FALSE);
+define('LDAP_AUTH_BASEDN', '<%=@ldap_user_base%>');
+define('LDAP_AUTH_ANONYMOUSBEFOREBIND', FALSE);
+define('LDAP_AUTH_SEARCHFILTER', '(&(objectClass=inetOrgPerson)(uid=???))');
+define('LDAP_AUTH_LOGIN_ATTRIB', 'cn');
+define('LDAP_AUTH_SCHEMA_CACHE_ENABLE', TRUE);
+define('LDAP_AUTH_SCHEMA_CACHE_TIMEOUT', 86400);
+define('LDAP_AUTH_LOG_ATTEMPTS', FALSE);
+define('LDAP_AUTH_DEBUG', TRUE);
+define('LOG_DESTINATION', 'sql');
+// should be sent to syslog
+// although... there's way to much warnings
+// mysql is used without PDO/mysqli
+// Pear is used statically
+// loading a single page generates tens of logs, ... I can't send this to my rsyslog...
+//define('LOG_DESTINATION', 'syslog');
+define('CONFIG_VERSION', 26);

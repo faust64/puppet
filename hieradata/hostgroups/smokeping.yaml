@@ -1,0 +1,15 @@
+additional_classes:
+  - Smokeping
+
+# Apache
+apache_mod_cgid: true
+apache_mod_headers: true
+apache_mod_status: true
+apache_munin: true
+apache_rsyslog: true
+
+# Nginx
+nginx_rsyslog: true
+
+# PHP
+php_mod_gd: false

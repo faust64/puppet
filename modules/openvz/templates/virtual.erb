@@ -1,0 +1,17 @@
+AKEYSPATH=<%=@repo%>/authorized_keys
+APT=<%=@apt_proxy%>
+<% if @vz_default_bridge != false and @vz_default_gateway != false -%><% if @vz_default_netmask == false -%><% netmsk = "255.255.255.0" -%><% else -%><% netmsk = @vz_default_netmask -%><% end -%>BRCHILD_GATEWAY=<%=@vz_default_gateway%>
+BRCHILD_NETMASK=<%=netmsk%>
+BRIDGE=<%=@vz_default_bridge%>
+<% else -%>BRIDGE=false
+<% end -%>DNS="<% @dns_ip.each do |dns| -%><% if dns == "127.0.0.1" -%><% if @vz_default_gateway != false -%> <%=@vz_default_gateway%><% end -%><% else -%> <%=dns%><% end -%><% end -%>"
+QUOTA=10G
+MAILHOST=<%=@mail_hub%>
+MODEL_DIR=/media/modeles
+<% if @jumeau != false -%>REMOTE=<%=@jumeau%>
+<% end -%><% if @srvtype == "kvmvz" or @srvtype == "vz" -%>VZ_STORAGE=/vz/private
+<% if @cpumodel -%>CPUMODEL=<%=@cpumodel%>
+<% end -%><% elsif @srvtype == "kvm" -%>KVM_STORAGE=<%=@default_vg%>
+<% if @cpumodel -%>CPUMODEL=<%=@cpumodel%>
+<% end -%><% else -%>XEN_STORAGE=<%=@default_vg%>
+<% end -%>

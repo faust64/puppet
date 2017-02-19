@@ -1,0 +1,87 @@
+#!/bin/sh
+#usage $0 LeModeleEnQuatreDigits UnDNSQuiResout UnServiceTAG
+
+case "$1" in
+    2748)
+	oid=344
+	ports=48
+	;;
+    2848)
+	oid=1064
+	ports=48
+	;;
+    2724)
+	oid=343
+	ports=24
+	;;
+    2824)
+	oid=1063
+	ports=24
+	;;
+    2716)
+	oid=342
+	ports=16
+	;;
+    2816)
+	oid=1062
+	ports=16
+	;;
+    5224)
+	oid=1622
+	ports=24
+	;;
+    5324)
+	oid=349
+	ports=24
+	;;
+    5424)
+	oid=1069
+	ports=24
+	;;
+    5448)
+	oid=1070
+	ports=48
+	;;
+    6224)
+	oid=350
+	ports=24
+	;;
+    6248)
+	oid=353
+	ports=48
+	;;
+    *)
+	echo i say wat wat ... >&2
+	exit 1
+	;;
+esac
+
+if ! host $2 | grep 'has address'; then
+    echo "missing hostname" >&2
+    exit 2
+fi >/dev/null
+
+if ! test "$3"; then
+    echo missing service tag >&2
+    exit 3
+fi >/dev/null
+
+eval `host $2 | awk '/ has address /{print "hname=" $1 " ip=" $2}'`
+short_office=`hostname -d | cut -d. -f1`
+sname=`echo $hname | cut -d. -f1`
+
+echo "INSERT INTO Object (name, label, objtype_id, asset_no, has_problems) VALUES (\"$hname\", \"${sname}\", 8, \"$3\", \"no\")" | mysql -u root racktables
+
+echo "INSERT INTO IPv4Allocation (object_id, ip, name, type) VALUES ((SELECT id FROM Object WHERE name = \"$hname\"), inet_aton(\"$ip\"), \"$hname management\", \"regular\")" | mysql -u root racktables
+
+echo "INSERT INTO AttributeValue (object_id, object_tid, attr_id, uint_value) VALUES ((SELECT id FROM Object WHERE name = \"$hname\"), 8, 2, $oid)" | mysql -u root racktables
+
+port=1
+test $ports -gt 100 && exit 42
+while test $port -le $ports
+do
+    echo "INSERT INTO Port (object_id, name, iif_id, type, label) VALUES ((SELECT id FROM Object WHERE name = \"$hname\"), \"g$port\", 1, 24, \"${sname}-$short_office #g$port\")" | mysql -u root racktables
+    port=`expr $port + 1`
+done
+
+exit 0

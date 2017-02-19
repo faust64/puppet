@@ -1,0 +1,2 @@
+table <fail2ban> counters
+block drop in log quick from <fail2ban> to any

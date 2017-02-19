@@ -1,0 +1,12 @@
+[general]
+mailboxdetail=yes
+tos=ef
+cos=5
+<% if @trunks != false -%><% @trunks.each do |trunk, trunkhash| -%><% if trunkhash['register'] == true -%>register => <%=trunkhash['username']%>:<%=trunkhash['pass']%>@<%=trunkhash['host']%><% if trunkhash['port'] -%>:<%=trunkhash['port']%><% end -%>
+
+<% end -%><% end -%><% end -%><% if @codecs -%>disallow=all
+<% @codecs.each do |codec| -%>allow=<%=codec%>
+<% end -%><% end -%>calltokenoptional = <%=@calltoken%>
+
+<% if @trunks -%><% @trunks.each do |iax, iaxhash| -%><% if iax != @here_priv and iax != @here_pub -%>#include iax.d/<%=iax%>.conf
+<% end -%><% end -%><% end -%>

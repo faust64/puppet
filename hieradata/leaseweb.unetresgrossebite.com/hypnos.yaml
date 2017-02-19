@@ -1,0 +1,25 @@
+# LinuxCounter
+lico_update_day: 1
+lico_update_hour: 15
+lico_update_min: 2
+
+# Fstab
+tmp_target_device: "UUID=690a9753-cebc-4e76-a0ad-62516480b40d"
+
+# Munin-Node
+munin_node_listenaddr: 10.43.1.254
+
+# Nagios
+nagios_listenaddr: 10.43.1.254
+nagios_no_parent: true
+nagios_smart_disks:
+  - sda
+  - sdb
+  - sdc
+  - sdd
+
+# OpenSSH
+ssh_port: 1022
+
+# SNMP
+snmp_listenaddr: 10.43.1.254

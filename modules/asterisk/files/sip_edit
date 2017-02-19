@@ -1,0 +1,136 @@
+#!/bin/sh
+
+Config=/etc/asterisk/sip.conf
+ConfigD=/etc/asterisk/sip.d
+Register=$ConfigD/register.conf
+TmpDir=/tmp
+Prg=`/bin/basename $0`
+
+usage()
+{
+    /bin/echo "$Prg usage: $Prg [{act|des} trunk|list]"
+}
+
+exist()
+{
+    if test -s $ConfigD/$name.conf; then
+	return 0
+    fi >/dev/null >&2
+
+    return 1
+}
+
+activated()
+{
+    if grep "#include sip.d/$name.conf" $Config; then
+	return 0
+    fi >/dev/null >&2
+
+    return 1
+}
+
+Lock()
+{
+    local cpt
+
+    cpt=0
+    while test -s /var/lock/$Prg
+    do
+	cpt=`expr $cpt + 1`
+	if test $cpt -ge 30; then
+	    echo $Prg is locked by some other operation >&2
+	    exit 1
+	fi
+	sleep 1
+    done
+    echo $$ >/var/lock/$Prg
+}
+
+UnLock()
+{
+    rm -f /var/lock/$Prg
+}
+
+activate()
+{
+    if test -z "$1"; then
+	return 3
+    elif exists "$1"; then
+	if activated "$1"; then
+	    return 2
+	else
+	    echo "#include *sip.d/$1.conf" >>$Config
+#	    /bin/chown asterisk:asterisk $Config
+	fi
+    fi
+
+    return 1
+}
+
+desactivate()
+{
+    if test -z "$1"; then
+	return 3
+    elif exists "$1"; then
+	if ! activated "$1"; then
+	    return 2
+	else
+	    grep -v "sip.d/$1.conf" $Config >$TmpDir/$1.tmp
+	    if test -s $TmpDir/$1.tmp; then
+		mv $Config $Config.save
+		mv $TmpDir/$1.tmp $Config
+		chown asterisk:asterisk $Config
+	    fi
+	fi
+    fi
+
+    return 0
+}
+
+register()
+{
+#FIXME
+}
+
+unregister()
+{
+#FIXME
+}
+
+if /usr/bin/test -z "$1"; then
+    /bin/echo Missing argument
+    usage
+    exit 1
+fi
+
+case "$1" in
+    list)
+	/usr/sbin/asterisk -rx 'sip show peers' | /bin/grep -vE '(Name/username| sip peers |^$|^[0-9][0-9/]*[ 	])'
+	exit $?
+	;;
+
+    help)
+	usage
+	;;
+
+    act)
+	Lock
+	activate $2
+	register $2
+	UnLock
+	;;
+
+    des)
+	Lock
+	desactivate $2
+	unregister $2
+	UnLock
+	;;
+
+    *)
+	usage
+	exit 1
+	;;
+esac
+
+exit 0

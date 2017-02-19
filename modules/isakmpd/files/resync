@@ -1,0 +1,30 @@
+#!/bin/sh
+
+if ! ps ax | grep 'isak[m]pd' >/dev/null; then
+    echo "    [ recovering isakmpd daemon ]\nChecking for isakmpd.fifo: "
+    if test -e /var/run/isakmpd.fifo; then
+	echo "[ WARNING ]\n"
+	echo "Dropping isakmpd.fifo"
+	rm -f /var/run/isakmpd.fifo
+    else
+	echo "[   OK    ]\n"
+    fi
+    . /etc/rc.conf
+    . /etc/rc.conf.local
+    if test "$isakmpd_flags" != NO; then
+	echo "Starting isakmpd: "
+	if isakmpd $isakmpd_flags >/dev/null 2>&1; then
+	    echo "[   OK    ]\n"
+	else
+	    echo "[ WARNING ]\n"
+	    exit 1
+	fi
+    else
+	echo "Isakmpd won't start: not activated according to system configuration" >&2
+	exit 1
+    fi
+else
+    /usr/local/sbin/isakreload
+fi
+
+exit $?

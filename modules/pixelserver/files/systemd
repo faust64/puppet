@@ -1,0 +1,15 @@
+# PixelServer
+[Unit]
+Description=PixelServer
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/sbin/pixelservice start
+ExecReload=/usr/local/sbin/pixelservice restart
+ExecStop=/usr/local/sbin/pixelservice stop
+TimeoutStopSec=5
+KillMode=mixed
+
+[Install]
+WantedBy=multi-user.target

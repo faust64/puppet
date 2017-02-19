@@ -1,0 +1,5 @@
+<% if @ipsec_offices == false -%>pass in quick on gre inet proto $o
+<% end -%><% @ospf_database.each do |area| -%><% if @ipsec_offices != false -%><% if area == "0" or area == "0.0.0.0" -%><% [ 'sdsl', 'adsl', 'sip' ].each do |loclink| -%><% if @ipsec_offices[@domain][loclink] =~ /[0-9]\.[0-9]/ -%><% @ipsec_offices.each do |rem, remhash| -%><% if rem != @domain -%><% [ 'sdsl', 'adsl', 'sip' ].each do |remlink| -%><% if remhash[remlink] =~ /[0-9]\.[0-9]/ -%>pass in quick on gre<% if @office_id[@domain] < @office_id[rem] -%><% tunid = (@office_id[rem] - 1) * 9 + @linkvaldb[loclink + remlink] -%><%=tunid%><% else -%><% tunid = (@office_id[rem] - 1) * 9 + @linkvaldb[remlink + loclink] -%><%=tunid%><% end -%> inet proto $o
+<% end -%><% end -%><% end -%><% end -%><% end -%><% end -%><% end -%>
+<% end -%><% @ospf_map[area].each do |nic, status| -%><% if status != "passive" -%>pass in quick on <%=nic%> inet proto $o
+<% end -%><% end -%><% end -%>

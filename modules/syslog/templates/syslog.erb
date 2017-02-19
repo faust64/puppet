@@ -1,0 +1,17 @@
+<% if @rsyslog_retransmit_ip != false -%>kern.debug;syslog,user.info				@<%=@rsyslog_retransmit_ip%>
+auth.info						@<%=@rsyslog_retransmit_ip%>
+authpriv.debug						@<%=@rsyslog_retransmit_ip%>
+daemon.info						@<%=@rsyslog_retransmit_ip%>
+ftp.info						@<%=@rsyslog_retransmit_ip%>
+mail.info						@<%=@rsyslog_retransmit_ip%>
+<% else -%>daemon.*						/var/log/daemon
+*.notice;kern,lpr,user.none				/var/log/messages
+cron.*							/var/cron/log
+authpriv.*						/var/log/secure
+*.*;auth,authpriv.none					/var/log/syslog
+ftp.*							/var/log/xferlog
+<% end -%>
+auth.*							/var/log/authlog
+kern.*							/var/log/kern
+mail.*							/var/log/maillog
+*.emerg							*

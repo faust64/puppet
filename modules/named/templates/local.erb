@@ -1,0 +1,13 @@
+include "<%=@runtime_conf_dir%>/rndc.key";
+
+view "private" {
+    match-clients { private_networks; };
+    include "<%=@runtime_conf_dir%>/named.conf.private";
+    include "<%=@runtime_conf_dir%>/named.conf.default-zones";
+};
+
+view "public" {
+    match-clients { any; };
+    include "<%=@runtime_conf_dir%>/named.conf.public";
+    include "<%=@runtime_conf_dir%>/named.conf.default-zones";
+};

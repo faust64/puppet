@@ -1,0 +1,11 @@
+/var/log/thruk/*.log /var/cache/thruk/*.log
+{
+    compress
+<% if @runtime_user != "root" %>    create 0644 <%=@runtime_user%> <%=@runtime_group%>
+<% end -%>    delaycompress
+    missingok
+    notifempty
+    rotate 10
+    weekly
+<% if @runtime_user != "root" %>    su <%=@runtime_user%>
+<% end -%>}

@@ -1,0 +1,46 @@
+<VirtualHost *:<%=@listen_ports['plain']%>>
+    ServerName DEFAULT<%=@listen_ports['plain']%>
+    ErrorLog <%=@log_dir%>/error-<%=@name%>.log
+    LogLevel warn
+    CustomLog <%=@log_dir%>/access-<%=@name%>.log combined
+    <Location />
+	Deny from all
+    </Location>
+    <Location /robots.txt>
+	Allow from all
+    </Location>
+    <Location /error/>
+	Allow from all
+    </Location>
+    <Location /include/>
+	Allow from all
+    </Location>
+</VirtualHost>
+<% if @listen_ports['ssl'] != false -%><VirtualHost *:<%=@listen_ports['ssl']%>>
+    ServerName DEFAULT<%=@listen_ports['ssl']%>
+    ErrorLog <%=@log_dir%>/ssl-error-<%=@name%>.log
+    LogLevel warn
+<% if @stricttransport != false -%>    Header always set Strict-Transport-Security "<%=@stricttransport%>"
+<% end -%><% if @deny_frames == "remote" -%>    Header always set X-Frame-Options SAMEORIGIN
+<% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
+<% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
+<% end -%>    CustomLog <%=@log_dir%>/ssl-access-<%=@name%>.log combined
+    Include ssl.conf
+    <Location />
+<% if @version == "2.2" -%>	Deny from all
+<% else -%>	Require all denied
+<% end -%>    </Location>
+    <Location /robots.txt>
+<% if @version == "2.2" -%>	Allow from all
+<% else -%>	Require all granted
+<% end -%>    </Location>
+    <Location /error/>
+<% if @version == "2.2" -%>	Allow from all
+<% else -%>	Require all granted
+<% end -%>    </Location>
+    <Location /include/>
+<% if @version == "2.2" -%>	Allow from all
+<% else -%>	Require all granted
+<% end -%>    </Location>
+</VirtualHost>
+<% end -%>

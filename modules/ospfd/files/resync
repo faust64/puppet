@@ -1,0 +1,56 @@
+#!/bin/sh
+
+for confdir in /etc /usr/local/etc
+do
+    if test -s $confdir/ospfd.conf; then
+	CONFIGURATION=$confdir/ospfd.conf
+	break
+    fi
+done
+alias echo='echo -en'
+
+echo "    [ reloading OSPFd configuration ]\nChecking global configuration: "
+if ! ospfd -nf $CONFIGURATION >/dev/null 2>&1; then
+    echo "[ WARNING ]\n"
+    exit 42
+else
+    echo "[   OK    ]\n"
+fi
+
+echo "Checking ospfd availability:   "
+if ! ospfctl show fib >/dev/null 2>&1; then
+    echo "[ WARNING ]\n"
+    echo "Trying to recover ospfd:       "
+    for script in /etc/rc.d/ospfd /usr/local/etc/rc.d/openospfd
+    do
+	test -x $script || continue
+	if ! $script start >/dev/null 2>&1; then
+	    echo "[ WARNING ]\n"
+	    exit 8
+	else
+	    echo "[   OK    ]\n"
+	    exit 0
+	fi
+    done
+    if ! ospfctl show fib >/dev/null 2>&1; then
+	if ! ospfd -f $CONFIGURATION; then
+	    echo "[ WARNING ]\n"
+	    exit 8
+	else
+	    echo "[   OK    ]\n"
+	    exit 0
+	fi
+    fi
+else
+    echo "[   OK    ]\n"
+fi
+
+echo "Applying new configuration:    "
+if ! ospfctl reload >/dev/null; then
+    echo "[ WARNING ]\n"
+    exit 21
+else
+    echo "[   OK    ]\n"
+fi
+
+exit 0

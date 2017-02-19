@@ -1,0 +1,41 @@
+#!/bin/sh
+
+COMMUNITY=moultipass
+WEBROOT=/var/www/mrtg
+
+declaresw()
+{
+    local addr node
+
+    node=$1
+    addr=`host $node | awk '/ has address /{print $4}'`
+    if test -z "$addr"; then
+	return 1
+    fi
+    test -d $WEBROOT/$node || mkdir -p $WEBROOT/$node
+    cfgmaker --global 'LogFormat: rrdtool' \
+	     --global "WorkDir: $WEBROOT/$node" \
+	     --global 'Options[_]:bits,growright' \
+	     --output $WEBROOT/$node/$node.cfg $COMMUNITY@$addr
+    if grep '^MaxBytes' $WEBROOT/$node/$node.cfg; then
+	ln -s $WEBROOT/$node/$node.cfg /usr/lib/cgi-bin/
+    fi >/dev/null 2>&1
+
+    return 0
+}
+
+if test "$1"; then
+    declaresw $1
+else
+    cpt=1
+    next=true
+    while $next
+    do
+	elt=sw$cpt
+	cpt=`expr $cpt + 1`
+	test -d $WEBROOT/$elt && continue
+	declaresw $elt || next=false
+    done
+fi
+
+exit 0

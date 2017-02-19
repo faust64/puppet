@@ -1,0 +1,12 @@
+/var/log/fail2ban.log
+{
+    compress
+    create 640 root <%=@gid_adm%>
+    delaycompress
+    missingok
+    rotate 4
+    weekly
+    postrotate
+	fail2ban-client set logtarget /var/log/fail2ban.log >/dev/null || true
+    endscript
+}

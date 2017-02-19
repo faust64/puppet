@@ -1,0 +1,2 @@
+[nginx*]
+env.url http://localhost:<% if @listen_ports['plain'] =~ /:/ -%><%=@listen_ports['plain'].gsub(/[0-9\.]*:/, '')%><% else -%><%=@listen_ports['plain']%><% end -%>/nginx_status

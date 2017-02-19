@@ -1,0 +1,5 @@
+[asterisk*]
+<% if @creds['user'] =~ /[a-z]/ -%>env.username <%=@creds['user']%>
+<% end -%><% if @creds['passphrase'] =~ /[a-z]/ -%>env.secret <%=@creds['passphrase']%>
+<% end -%><% if @ami_addr -%>env.host <%=@ami_addr%>
+<% end -%>

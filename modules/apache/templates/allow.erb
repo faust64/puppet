@@ -1,0 +1,7 @@
+<% if @office_networks != false -%><% @office_networks.each do |netname, net| -%><% if @version == "2.2" -%>Allow from <%=net%>
+<% else -%>Require ip <%=net%>
+<% end -%><% end -%><% end -%><% if @allow_privates != false -%><% @allow_privates.each do |net| -%><% if @version == "2.2" -%>Allow from <%=net%>
+<% else -%>Require ip <%=net%>
+<% end -%><% end -%><% end -%><% if @version == "2.2" -%>Deny from all
+<% if @office_networks != false or @allow_privates != false -%>Satisfy any
+<% end -%><% end -%>

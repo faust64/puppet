@@ -1,0 +1,27 @@
+<% if @version >= 7 -%>input(type="imfile"
+      File="/var/log/riak/console.log"
+      statefile="/var/log/riak/.console.log"
+      Tag="riak-console: "
+      Severity="info"
+      Facility="local7")
+
+input(type="imfile"
+      File="/var/log/riak/crash.log"
+      statefile="/var/log/riak/.crash.log"
+      Tag="riak-crash: "
+      Severity="error"
+      Facility="local7")
+<% else -%>$InputFileName /var/log/riak/console.log
+$InputFileTag riak-console:
+$InputFileStateFile riak-console
+$InputFileSeverity info
+$InputFileFacility local7
+$InputRunFileMonitor
+
+$InputFileName /var/log/riak/crash.log
+$InputFileTag riak-crash:
+$InputFileStateFile riak-crash
+$InputFileSeverity error
+$InputFileFacility local7
+$InputRunFileMonitor
+<% end -%>

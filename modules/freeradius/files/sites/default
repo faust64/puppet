@@ -1,0 +1,46 @@
+authorize {
+    preprocess
+    eap {
+	ok = return
+    }
+    ldap
+}
+authenticate {
+    Auth-Type MS-CHAP {
+	mschap
+    }
+    digest
+    Auth-Type LDAP {
+	ldap
+    }
+    eap
+}
+preacct {
+    preprocess
+    update request {
+ 	FreeRADIUS-Acct-Session-Start-Time = "%{expr: %l - %{%{Acct-Session-Time}:-0} - %{%{Acct-Delay-Time}:-0}}"
+    }
+    acct_unique
+    suffix
+}
+accounting {
+    detail
+    unix
+    radutmp
+    exec
+    attr_filter.accounting_response
+}
+session {
+    radutmp
+}
+post-auth {
+    exec
+    Post-Auth-Type REJECT {
+	attr_filter.access_reject
+    }
+}
+pre-proxy {
+}
+post-proxy {
+    eap
+}

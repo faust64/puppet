@@ -1,0 +1,39 @@
+#!/bin/sh
+
+HEIGHT=false
+LENGTH=false
+WIDTH=false
+
+while echo "$1" | grep ^- >/dev/null
+do
+    case "$1" in
+	--)	break					;;
+	-D)	LENGTH=true				;;
+	-W)	WIDTH=true				;;
+	-H)	HEIGHT=true				;;
+	-S)	HEIGHT=true; WIDTH=true			;;
+	-h)	echo "$0 [-D|-W|-H|-S] (duration, width, height, size)"	;;
+    esac
+    shift
+done
+opts=
+if $WIDTH; then
+    opts="$opts -ImageWidth"
+fi
+if $HEIGHT; then
+    opts="$opts -ImageHeight"
+fi
+if $LENGTH; then
+    opts="$opts -Duration"
+fi
+
+while test "$1"
+do
+    find "$1" -type f | while read line
+	do
+	    exiftool $opts "$line" | while read record; do echo "$line: $record"; done
+	done
+    shift
+done
+
+exit 0

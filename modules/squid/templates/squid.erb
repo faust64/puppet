@@ -1,0 +1,61 @@
+http_port 3128<% if @wat_do == "log" or @wat_do == "filter" -%> intercept
+<% else -%>
+
+http_port 3127 intercept
+<% end -%>
+<% if @wat_do == "cache" or @wat_do == "filter" -%>cache_log <%=@log_dir%>/cache.log
+cache_mem <%=@cache_mem%>
+cache_dir aufs <%=@cache_dir%> 10240 16 256
+maximum_object_size <%=@max_object_size%>
+cache_effective_group <%=@runtime_group%>
+<% end -%>hosts_file /etc/hosts
+mail_from squid@<%=@fqdn%>
+<% if @apt_cacher and (@operatingsystem == "Debian" or @operatingsystem == "Ubuntu") -%>redirect_children 1
+redirect_program /usr/lib/squid/jesred
+<% end -%>cache_mgr <%=@contact%>
+logfile_rotate <%=@rotate%>
+logformat combined %>a %ui %un [%tl] "%rm %ru HTTP/%rv" %Hs %<st "%{Referer}>h" "%{User-Agent}>h" %Ss:%Sh
+access_log <%=@log_dir%>/access.log combined
+coredump_dir <%=@cache_dir%>
+<% if @error_dir != false -%>error_directory <%=@error_dir%>/<%=@locale%>
+<% end -%><% if @wat_do == "cache" or @wat_do == "filter" -%>hierarchy_stoplist cgi-bin ?
+refresh_pattern ^ftp: 1440 20% 10080
+refresh_pattern ^gopher: 1440 0% 1440
+refresh_pattern (Release|Package(.gz)*)$ 0 20% 2880
+refresh_pattern . 0 20% 4320
+refresh_pattern -i .rpm$ 518400 100% 518400
+<% end -%>acl localnet src <%=@localnet%>
+<% if @ports_acl != false -%><% @ports_acl.each do |aclname, portlist| -%><% portlist.each do |port| -%>acl <%=aclname%> port <%=port%>
+<% end -%><% end -%><% end -%><% if @domain_blacklist != false -%><% @domain_blacklist.each do |aclname, domainlist| -%><% domainlist.each do |dom| -%>acl <%=aclname%> dstdomain <%=dom%>
+<% end -%><% end -%><% end -%><% if @hosts_blacklist != false -%><% @hosts_blacklist.each do |aclname, hostlist| -%><% hostlist.each do |host| -%>acl <%=aclname%> dst <%=host%>
+<% end -%><% end -%><% end -%><% if @hosts_whitelist != false -%><% @hosts_whitelist.each do |aclname, hostlist| -%><% hostlist.each do |host| -%>acl <%=aclname%> dst <%=host%>
+<% end -%><% end -%><% end -%>acl all src all
+acl mgr proto cache_object
+acl localhost src 127.0.0.1/32
+acl localhost src <%=@ipaddress%>/32
+acl to_localhost dst 127.0.0.0/8
+acl to_localhost dst <%=@ipaddress%>/32
+acl QUERY urlpath_regex cgi-bin \?
+acl apache rep_header Server ^Apache
+acl purge method PURGE
+acl CONNECT method CONNECT
+acl bypass dstdomain "<%=@conf_dir%>/nocache.acl"
+<% if @wat_do == "cache" -%>acl RPMcache url_regex -i http://mirrors.ircam.fr/pub/(CentOS|fedora|OpenVZ)/.*\.(rpm|img)$
+<% end -%>acl DropBoxClient browser DropboxDesktopClient.*
+http_access allow mgr localhost
+http_access allow purge localhost
+http_access deny DropBoxClient
+<% if @domain_blacklist != false -%><% @domain_blacklist.each do |aclname, hostlist| -%>http_reply_access deny <%=aclname%>
+<% end -%><% end -%><% if @hosts_whitelist != false -%><% @hosts_whitelist.each do |aclname, hostlist| -%>http_access allow <%=aclname%>
+<% end -%><% end -%><% if @hosts_blacklist != false -%><% @hosts_blacklist.each do |aclname, hostlist| -%>http_access deny <%=aclname%>
+<% end -%><% end -%><% if @ports_acl != false -%><% @ports_acl.each do |aclname, portlist| -%>http_access allow localnet <% if aclname =~ /SSL/ -%>CONNECT <% end -%><%=aclname%>
+<% end -%><% end -%><% if @wat_do == "filter" -%>http_access deny all
+<% else -%>http_access allow all
+<% end -%>http_reply_access allow all
+http_access deny mgr
+http_access deny purge
+cache deny bypass
+<% if @wat_do == "cache" -%>cache allow all
+<% else -%>cache allow RPMcache
+cache deny QUERY
+<% end -%>icp_access allow all

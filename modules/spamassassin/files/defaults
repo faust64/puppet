@@ -1,0 +1,5 @@
+CRON=1
+ENABLED=1
+NICE="--nicelevel 15"
+OPTIONS="--create-prefs --max-children 5 -H /var/log/spamassassin -s /var/log/spamassassin/spamd.log"
+PIDFILE=/var/run/spamd.pid

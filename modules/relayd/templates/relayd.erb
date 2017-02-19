@@ -1,0 +1,69 @@
+interval <%=@relayd_interval%>
+timeout <%=@relayd_timeout%>
+prefork <%=@relayd_prefork%>
+
+<% if @namecache_ip != false -%>table <namecache> { <% @namecache_ip.sort.each do |host| -%><%=host%> <% end -%>}
+<% end -%><% if @mailmx_ip != false -%>table <mailmx> { <%=@mailmx_ip%> }
+<% end -%><% if @webcache_ip != false -%>table <webcache> { <% @webcache_ip.sort.each do |host| -%><%=host%> <% end -%>}
+<% end -%><% if @reverse_ip != false -%>table <webreverse> { <% @reverse_ip.sort.each do |host| -%><%=host%> <% end -%>}
+<% end -%><% if @mailmx_ip != false -%>
+
+relay mailrelay {
+    listen on 127.0.0.1 port 8000
+    forward to <mailmx> port 25 check tcp
+}
+<% end -%><% if @namecache_ip != false -%>
+
+dns protocol dnsudp
+relay namecache {
+    protocol dnsudp
+    listen on 127.0.0.1 port 8001
+    forward to <namecache> port 53 check tcp
+}
+
+tcp protocol dnstcp
+relay namecachetcp {
+    protocol dnstcp
+    listen on 127.0.0.1 port 8001
+    forward to <namecache> port 53 check tcp
+}
+<% end -%><% if @reverse_ip != false -%>
+
+relay clearreverse {
+    listen on 127.0.0.1 port 8002
+    forward to <webreverse> port 80 check tcp
+}
+
+relay sslreverse {
+    listen on 127.0.0.1 port 8003
+    forward to <webreverse> port 443 check tcp
+}
+<% end -%><% if @mailmx_ip != false -%>
+
+relay mailsmtps {
+    listen on 127.0.0.1 port 8004
+    forward to <mailmx> port 465 check tcp
+}
+
+relay mailsubmission {
+    listen on 127.0.0.1 port 8005
+    forward to <mailmx> port 587 check tcp
+}
+
+relay mailimaps {
+    listen on 127.0.0.1 port 8006
+    forward to <mailmx> port 993 check tcp
+}
+<% end -%><% if @webcache_ip != false -%>
+
+relay webcache {
+    listen on 127.0.0.1 port 8007
+    forward to <webcache> port 3127 check tcp
+}
+<% end -%><% if @mailmx_ip != false -%>
+
+relay mailimap {
+    listen on 127.0.0.1 port 8008
+    forward to <mailmx> port 143 check tcp
+}
+<% end -%>

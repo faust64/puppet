@@ -1,0 +1,10 @@
+# sslscan-based check, looking for ssllabs scores<% @check_ssl.each do |remote| -%>
+
+define service {
+    check_command	check-ssllabs!<%=remote%>
+    host_name		<%=@fqdn%>
+    service_description	<%=remote%> score on sslLabs
+    servicegroups	network
+    use			jobs-service
+}
+<% end -%>

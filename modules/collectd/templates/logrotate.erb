@@ -1,0 +1,13 @@
+/var/log/collectd.log
+{
+    daily
+    delaycompress
+    missingok
+    notifempty
+    rotate 7
+    sharedscripts
+    postrotate
+<% if @lsbdistcodename == "jessie" -%>	/bin/systemctl restart collectd >/dev/null 2>/dev/null || true
+<% else -%>	/usr/sbin/service collectd restart >/dev/null 2>/dev/null || true
+<% end -%>    endscript
+}

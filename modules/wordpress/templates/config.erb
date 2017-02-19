@@ -1,0 +1,21 @@
+<?php
+define('DB_NAME', '<%=@db_name%>');
+define('DB_USER', '<%=@db_user%>');
+define('DB_PASSWORD', '<%=@db_pass%>');
+define('DB_HOST', '<%=@db_host%>');
+define('WP_CONTENT_DIR', '<%=@var_dir%>/wp-content');
+<% if @kauth != false -%>define( 'AUTH_KEY', '<%=@kauth%>');
+<% end -%><% if @ksecure_auth != false -%>define('SECURE_AUTH_KEY', '<%=@ksecure_auth%>');
+<% end -%><% if @klogged_in != false -%>define('LOGGED_IN_KEY', '<%=@klogged_in%>');
+<% end -%><% if @knonce != false -%>define('NONCE_KEY', '<%=@knonce%>');
+<% end -%><% if @ksalt != false -%>define('AUTH_SALT', '<%=@ksalt%>');
+<% end -%><% if @ksecure_salt != false -%>define('SECURE_AUTH_SALT', '<%=@ksecure_salt%>');
+<% end -%><% if @slogged_in != false -%>define('LOGGED_IN_SALT', '<%=@slogged_in%>');
+<% end -%><% if @snonce != false -%>define( 'NONCE_SALT', '<%=@snonce%>');
+<% end -%><% if @wp_network == true -%>define('MULTISITE', true);
+define('SUBDOMAIN_INSTALL', true);
+define('DOMAIN_CURRENT_SITE', '<%=@proxyname%>');
+define('PATH_CURRENT_SITE', '/');
+define('SITE_ID_CURRENT_SITE', 1);
+define('BLOG_ID_CURRENT_SITE', 1);
+<% end -%>?>

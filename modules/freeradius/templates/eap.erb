@@ -1,0 +1,42 @@
+eap {
+    default_eap_type = peap
+    timer_expire = 60
+    ignore_unknown_eap_types = no
+    cisco_accounting_username_bug = no
+    max_sessions = 4096
+    leap {
+    }
+    tls {
+	certdir = ${confdir}/certs
+	cadir = ${confdir}/certs
+	private_key_file = ${certdir}/server.key
+	certificate_file = ${certdir}/server.crt
+	CA_file = ${cadir}/server-chain.crt
+	dh_file = ${certdir}/dh
+	random_file = /dev/<% if @kernel == "Linux" -%>u<% end -%>random
+	CA_path = ${cadir}
+	cipher_list = "DEFAULT"
+	make_cert_command = "${certdir}/bootstrap"
+	cache {
+	      enable = no
+	      lifetime = 24 # hours
+	      max_entries = 255
+	}
+	verify {
+	}
+    }
+    ttls {
+	default_eap_type = md5
+	copy_request_to_tunnel = no
+	use_tunneled_reply = no
+	virtual_server = "inner-tunnel"
+    }
+    peap {
+	default_eap_type = mschapv2
+	copy_request_to_tunnel = no
+	use_tunneled_reply = no
+	virtual_server = "inner-tunnel"
+    }
+    mschapv2 {
+    }
+}

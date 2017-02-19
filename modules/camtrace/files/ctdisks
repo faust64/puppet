@@ -1,0 +1,108 @@
+#!/bin/sh
+
+#	mount/umount camtrace additional disk spaces
+
+# PROVIDE: ctdisks
+# REQUIRE: postgresql
+# KEYWORD: shutdown
+
+alias echo='echo -e'
+PATH=$PATH:/usr/local/bin
+
+usage()
+{
+    echo "Usage: $Prg [start|stop]" >&2
+    exit 1
+}
+
+paths()
+{
+    local DB
+
+    ps ax | grep '[/]usr/local/bin/postgres' >/dev/null || return
+    DB=`sed -n 's/^db_name *= *//p' /usr/local/etc/scamd.conf`
+    psql -A -t -c "SELECT path FROM spaces WHERE id_spc > 0 ORDER BY id_spc" $DB camtrace
+}
+
+ctdists()
+{
+    label=$1
+    test "$label" || return
+
+    for dist in obj ports src
+    do
+	if mount | grep "[ 	]/usr/$dist[ 	]"; then
+	    continue
+	elif test -d /$label/$dist; then
+	    test -d /usr/$dist || mkdir -p /usr/$dist
+	    mount_nullfs /$label/$dist /usr/$dist
+	    echo "Mounted /$label/$dist as /usr/$dist"
+	fi
+    done
+}
+
+Prg=$0
+test "$1" || usage
+
+spcs=`paths | sed -n 's;^/\(disk[0-9]*\)/images$;\1;p'`
+
+case "$1" in
+    start|faststart)
+	for dev in `sysctl -n kern.disks`
+	do
+	    type=
+	    label=
+	    eval `fstype $dev 'type=%t label=%l' 2>/dev/null`
+	    test "$type" = 'ufs' || continue
+	    expr "$label" : 'disk[1-9][0-9]*' >/dev/null || continue
+	    ln -s /dev/$dev /dev/$label
+	    test -d /$label || continue
+	    echo "$spcs" | grep "^$label\$" >/dev/null || continue
+	    mount | grep " on /$label " >/dev/null && continue
+	    labels="$labels $label"
+	    eval "${label}Dev=$dev"
+	done
+	test "$labels" && echo "Mounting CamTrace disks:"
+	for label in $labels
+	do
+	    eval "dev=\$${label}Dev"
+	    for try in 1 2
+	    do
+		if mount /dev/$label /$label 2>/dev/null; then
+		    if test -d /$label/images; then
+			echo "Mounted /dev/$dev on /$label."
+			ctdists $label
+			break	# Done!
+		    fi
+		    umount /$label
+		    continue	# Not an images disk
+		else
+		    if test $try = 1; then
+			echo "Checking filesystem on /dev/$dev ($label)..."
+			fsck_ffs -yl /dev/$dev
+		    else
+			echo "Could not mount /dev/$dev on /$label"
+		    fi
+		fi
+	    done
+	done
+	ctdists disk
+	;;
+
+    stop|faststop)
+	dirs=`mount | sed -n 's;.* on \(/disk[1-9][0-9]*\) (.*;\1;p'`
+	test "$dirs" && echo "Unmounting CamTrace disks:"
+	for dir in $dirs
+	do
+	    umount $dir
+	    rm /dev$dir
+	done
+	;;
+
+    default)
+	usage
+	;;
+
+esac
+
+exit 0

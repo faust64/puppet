@@ -1,0 +1,48 @@
+#!/bin/sh
+
+DEBUG=false
+PURGE=false
+ACTUAL_ROOT=<%=@media_root%>/media/Music
+PLEX_ROOT=<%=@media_root%>/media/plexMusic
+
+if $PURGE; then
+    find $PLEX_ROOT -type l -exec rm -f {} \;
+fi
+
+for category in Main
+do
+    test -d "$ACTUAL_ROOT/$category" || continue
+    cd "$ACTUAL_ROOT/$category"
+    ls | while read artist
+	do
+	    test -d "$ACTUAL_ROOT/$category/$artist" || continue
+	    cd "$ACTUAL_ROOT/$category/$artist"
+	    ls | while read album
+		do
+		    test -d "$ACTUAL_ROOT/$category/$artist/$album" || continue
+		    cd "$ACTUAL_ROOT/$category/$artist/$album"
+		    ls | while read track
+			do
+			    test -f "$track" || continue
+			    mtrack=`echo "$track" | sed "s/['()|]*//g"`
+			    tracknr=`echo "$mtrack" | sed 's|^\([A-H0-9]*\) .*|\1|'`
+			    echo "$tracknr" | grep '^[A-H0-9]*$' >/dev/null || continue
+			    eval `echo "$mtrack" | sed 's|^[A-H0-9]*[ -]*\(.*\)\.\([a-zA-Z0-9]*\)$|title="\1" ext=\2|'`
+			    if ! test -d "$PLEX_ROOT/$artist - $album"; then
+				mkdir -p "$PLEX_ROOT/$artist - $album"
+			    fi
+			    if ! $PURGE; then
+				if test -h "$PLEX_ROOT/$artist - $album/$tracknr - $title.$ext"; then
+				    if test "`readlink "$PLEX_ROOT/$artist - $album/$tracknr - $title.$ext"`" = "$ACTUAL_ROOT/$category/$artist/$album/$track"; then
+					continue
+				    fi
+				fi
+			    fi
+			    if $DEBUG; then echo "'/$category/$artist/$album/$track' > '/$artist - $album/$tracknr - $title.$ext'"; fi
+			    ln -sf "$ACTUAL_ROOT/$category/$artist/$album/$track" "$PLEX_ROOT/$artist - $album/$tracknr - $title.$ext"
+			done
+		done
+	done
+done
+
+exit 0

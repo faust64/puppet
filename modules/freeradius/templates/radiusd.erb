@@ -1,0 +1,69 @@
+prefix = /usr
+exec_prefix = /usr
+sysconfdir = /etc
+localstatedir = /var
+sbindir = ${exec_prefix}/sbin
+logdir = <%=@log_dir%>
+raddbdir = <%=@conf_dir%>
+radacctdir = ${logdir}/radacct
+name = freeradius
+confdir = ${raddbdir}
+run_dir = <%=@run_dir%>
+db_dir = ${raddbdir}
+libdir = <%=@lib_dir%>
+pidfile = ${run_dir}/${name}.pid
+user = <%=@runtime_user%>
+group = <%=@runtime_group%>
+max_request_time = 30
+cleanup_delay = 5
+max_requests = 1024
+listen {
+    type = auth
+    ipaddr = *
+    port = 0
+}
+listen {
+    ipaddr = *
+    port = 0
+    type = acct
+}
+hostname_lookups = no
+allow_core_dumps = no
+regular_expressions = yes
+extended_expressions = yes
+log {
+    destination = files
+    file = ${logdir}/radius.log
+    syslog_facility = daemon
+    stripped_names = yes
+    auth = yes
+    auth_badpass = yes
+    auth_goodpass = yes
+}
+checkrad = ${sbindir}/checkrad
+security {
+    max_attributes = 200
+    reject_delay = 1
+    status_server = yes
+}
+proxy_requests  = yes
+$INCLUDE clients.conf
+thread pool {
+    start_servers = 5
+    max_servers = 32
+    min_spare_servers = 3
+    max_spare_servers = 10
+    max_requests_per_server = 0
+}
+modules {
+    $INCLUDE ${confdir}/modules/
+    $INCLUDE eap.conf
+}
+instantiate {
+    exec
+    expr
+    expiration
+    logintime
+}
+$INCLUDE policy.conf
+$INCLUDE sites-enabled/

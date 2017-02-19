@@ -1,0 +1,5 @@
+SSLEngine On
+<% if @version == "2.4" -%>SSLCertificateFile ssl/dhserver-full.crt
+<% else -%>SSLCertificateFile ssl/dhserver.crt
+SSLCertificateChainFile ssl/server-chain.crt
+<% end -%>SSLCertificateKeyFile ssl/server.key

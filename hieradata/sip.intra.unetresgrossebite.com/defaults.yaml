@@ -1,0 +1,30 @@
+# Asterisk
+asterisk_ami_c2c_allow: 51.254.93.64/255.255.255.255
+
+# Autofs
+modeles_nfs_opts: fstype=nfs4,ro,soft,intr
+
+# Nagios
+nagios_ip:
+  - 10.42.242.202
+  - 10.42.242.203
+
+# PF
+dns_ip:
+  - 10.42.41.3
+  - 10.42.41.5
+mail_ip:
+  - 10.42.44.20
+reverse_ip:
+  - 10.42.242.21
+squid_ip:
+  - 10.42.44.100
+snmp_ip:
+  - 10.42.242.203
+  - 10.42.242.205
+  - 10.42.242.206
+
+# Pki
+pki_public: pki.adm.intra.unetresgrossebite.com
+
+dns_search: sip.intra.unetresgrossebite.com intra.unetresgrossebite.com unetresgrossebite.com

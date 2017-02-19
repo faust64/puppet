@@ -1,0 +1,54 @@
+#!/usr/bin/perl -w
+#FIXME: where did I find that one?
+#note: patched to avoid raising a warning during monthly checks
+
+my $ret = 3;
+my $status = "UNKNOWN";
+if ( -r "/proc/mdstat" and `grep md /proc/mdstat` and $ARGV[0] ) {
+    local( $/, *MDSTAT );
+    open (MDSTAT, "/proc/mdstat") or exit 1;
+    my $text = <MDSTAT>;
+    close MDSTAT;
+    while ($text =~ /(md\d+)\s+:\s+active\s+(\(auto-read-only\)\s+|)(\w+)\s+(.*)\n.*\[(\d+)\/(\d+)]\s+\[(\w+)]\n(.*(check|resync)\s=\s+(\d+\.\d+)%|.*\n)/ ) {
+	my($dev,$dummy,$type,$members,$nmem,$nact,$status,$dummy2,$dummy3,$proc) = ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10);
+	if ($dev eq $ARGV[0]) {
+	    my $pct = 100 * $nact / $nmem;
+	    my $rpct = 100;
+	    if ( $pct < 100 ) {
+		my @output = `/sbin/mdadm -D /dev/$dev | grep Rebuild`;
+		if( $output[0] and $output[0] =~ /([0-9]+)% complete/ ) {
+		    $rpct = $1;
+		} else {
+		    $rpct = 0;
+		}
+	    }
+	    if ( $proc ) {
+		$cpct = $proc;
+	    } else {
+		$cpct = $rpct;
+	    }
+
+	    if ( $dummy2 =~ /check/ or $dummy2 =~ /resync/ ) {
+		$ret = 0;
+		$status = "OK";
+	    } elsif ( $rpct < 98 or $cpct < 98 or $pct < 98 ) {
+		$status = "CRITICAL";
+		$ret = 2;
+	    } elsif ( $rpct ne 100 or $cpct ne 100 or $pct ne 100 ) {
+		$status = "WARNING";
+		$ret = 1;
+	    } else {
+		$status = "OK";
+		$ret = 0;
+	    }
+	    print "$status - raid $dev | $pct,$rpct,$cpct\n";
+	}
+	$text = $';
+    }
+} elsif ( -r "/proc/mdstat" and `grep md /proc/mdstat` ) {
+    print "$status - missing argument\n";
+} else {
+    print "$status - \n";
+}
+
+exit $ret;

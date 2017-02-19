@@ -1,0 +1,29 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+if ! test "`which sendmail`"; then
+    ret=UNKNOWN
+    msg=' - no sendmail'
+    perfdata=' | 0'
+elif ! ps ax | grep '[s]endmail: accepting connections' >/dev/null; then
+    if ps ax | grep '[s]endmail: rejecting connections' >/dev/null; then
+	ret=WARNING
+	msg=" - `ps ax | grep 's[e]ndmail: rejecting' | sed 's|.*rejecting[^:]*: ||'`"
+    else
+	ret=CRITICAL
+	msg=' - sendmail not running'
+    fi
+    perfdata=' | 0'
+else
+    ret=OK
+    perfdata=" | 1"
+fi
+
+echo "$PRG $ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

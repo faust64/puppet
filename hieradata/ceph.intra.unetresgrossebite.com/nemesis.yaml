@@ -1,0 +1,18 @@
+physical_parent: gaia.adm.intra.unetresgrossebite.com,rhea.adm.intra.unetresgrossebite.com
+
+# Fstab
+tmp_target_device: /dev/mapper/data-tmp
+
+# LinuxCounter
+lico_update_day: 1
+lico_update_hour: 14
+lico_update_min: 38
+
+# Munin-Node
+munin_node_listenaddr: 10.42.242.100
+
+# Nagios
+nagios_listenaddr: 10.42.242.100
+
+# SNMP
+snmp_listenaddr: 10.42.242.100

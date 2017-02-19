@@ -1,0 +1,570 @@
+#!/usr/bin/perl -w
+
+use strict;
+use warnings;
+use Getopt::Long qw(:config no_ignore_case);
+use Config::JSON;
+use Storable qw(dclone);
+
+our $VERSION = "1.2";
+our $VERBOSITY = 0;
+
+use constant {
+    STATE_OK => 0,
+    STATE_WARNING => 1,
+    STATE_CRITICAL => 2,
+    STATE_UNKNOWN => 3,
+};
+
+our @hdrmap_a = ('ID#','ATTRIBUTE_NAME','FLAG','VALUE','WORST','THRESH',
+	'TYPE','UPDATED','WHEN_FAILED','RAW_VALUE');
+
+sub getVersionString{
+	return "check_smart_values version $VERSION 20150109
+Copyright (C) 2015 Thomas-Krenn.AG (written by Georg SchÃ¶nberger)
+Current updates available via git repository http://git.thomas-krenn.com.\n";
+}
+
+sub getUsageString{
+	return "Usage:
+sudo check_smart_values -dbj <smartdb json file> -d <device path> [-d <device path>]
+[-ucfgj <user config json file>] [-p <path to smartctl>] [-nosudo]
+[-O <extra options>][ -v|-vv|-vvv] [-h] [-V]\n";
+}
+
+sub getHelpString{
+	return "
+  [-p|--path <path to smartctl]
+	Specify the path at which the smartctl binary can be found. Per
+	default /usr/sbin/smartctl is taken.
+  [-d|--device <path to device being checked>]
+	Specify the device being monitored. If multiple devices should be
+	checked provide the '-d' option multiple times.
+	E.g. '-d /dev/sda -d /dev/sdb'
+	For devices behind LSI RAID controllers specify 'megaraid' and then the
+	device number, e.g. '-d megaraid6'. Use storcli to find out the
+	corresponding device numbers.
+	For devices behind Adaptec RAID controllers specify '/dev/sg<X>' where
+	<X> is the number for your device. Use e.g. sg_scan to find the device.
+	You must also use '-O sat' or '-O scsi' according to the device
+	interface. This are extra options only necessary for '/dev/sg<X>'
+	devices.
+  [-dbj|--dbjson <path to smartdb JSON file>]
+	Specify the path at which the JSON smart db can be found. The JSON file
+	defines which parameter (VALUE or RAW_VALUE) must be taken for a
+	sensor. In order to interpret a sensor it is necessary to know which
+	value to take. As this mapping can be different for device models a
+	database is needed for a device.
+  [-ucfgj|--ucfgjson <path to user config JSON file>]
+	Specify the path at which the JSON user config file can be found.
+	The user config can be used to override thresholds and performance values
+	in the base config. This can be useful if the thresholds for a specific
+	device must be changed (e.g. showing up a non-critical error). If a value
+	is defined in the user config it overrides its corresponding value in
+	the base config. The override is only taken for the specific value, for
+	the other ones the base config is still valid.
+  [-nosudo]
+	Disable the usage of sudo for smartctl. This is handy if a system is
+	used where sudo is not available.
+  [-O|--options <extra options>]
+	Currently the extra options 'sat' or 'scsi' are possible. This options
+	are used to query SMART attributes behind Adaptec controllers. The
+	options are only used if a device of type sg<X> is given.
+  [-v <Verbose Level>]
+       be verbose
+	 (no -v) .. single line output
+	 -v ..... single line output with additional details for warnings
+	 -vv ..... multi line output, also with additional details for warnings
+	 -vvv ..... normal output, then debugging output
+  [-h|--help]
+       show this help
+  [-V|--version]
+       show version information\n";
+}
+
+sub readUCfgJSON{
+    my $uCfgJSON = shift;
+    return(Config::JSON->new($uCfgJSON));
+}
+
+sub readDbJSON{
+    my $dbJSON = shift;
+    return(Config::JSON->new($dbJSON));
+}
+
+sub getSmartctl{
+    my $smartctl = shift;
+    my @devicesToCheck_a = @{(shift)};
+    my $extraOpts = shift;
+    #a hash of all devices with their corresponding output
+    my %output_h;
+
+    foreach my $device (@devicesToCheck_a){
+	my @output;
+	# Check if a megaraid device is used
+	if($device =~ /^(megaraid[0-9]+),(\/dev\/[a-zA-Z]+)$/){
+	    my $megaDevice = $1;
+	    my $devicePath = $2;
+	    substr($megaDevice,8,0,',');
+	    # Device path and megaraid device are used together to
+	    # check the attributes with smartctl
+	    @output = `$smartctl -a -d $megaDevice $devicePath`;
+	    # From now on we use only e.g. megaraid6 as device
+	    $megaDevice =~ s/,//;
+	    $device = '/dev/'.$megaDevice;
+	}
+	# Check if an Adaptec sg device is used
+	elsif($device =~ /^\/dev\/sg[0-9]+/ && defined($extraOpts)){
+	    if($extraOpts ne 'sat' && $extraOpts ne 'scsi'){
+		print "Error: please use 'sat' or 'scsi' as options for Adaptec sg devices!\n";
+		print getUsageString();
+		exit(STATE_UNKNOWN);
+	    }
+	    # Call smartctl with extra option for Adaptec
+	    @output = `$smartctl -a -d $extraOpts $device`;
+	}
+	else{
+	    @output = `$smartctl -a $device`;
+	}
+	if(($? >> 8) & 2){
+	    print "Error: smartctl returned \"No such device\" for device $device.\n";
+	    exit(STATE_UNKNOWN);
+	}
+	$output_h{$device} = \@output;
+    }
+    return \%output_h;
+}
+
+sub checkWhichDevice{
+    my $dbConfig = shift;
+    my $uCfgJSON = shift;
+    my %smartctlOut_h = %{(shift)};;
+    # Array of found device hashes
+    my @devices_a;
+
+    # Fetch the device JSON hash
+    my $devices_h = $dbConfig->get("Devices");
+
+    # If given, fetch the user config for the devices
+    my $uCfgDevices_h;
+    if(defined($uCfgJSON)){
+	$uCfgDevices_h = $uCfgJSON->get("Devices");
+    }
+
+    # Check all models in the db
+    foreach my $key (keys %$devices_h){
+	# Check each device whose smartvalues are present
+	foreach my $device (keys %smartctlOut_h){
+	    my @smartctlOut = @{$smartctlOut_h{$device}};
+	    my @model = grep { /Model Family/i || /Device Model/i } @smartctlOut;
+	    foreach my $currModel (@model){
+		# Search for the model in the smart DB
+		my $found = 0;# We have not found the device yet
+		foreach (@{$devices_h->{$key}->{'Device'}}){
+		    # If the model matches we have found the correct db entry
+		    if($currModel =~ $_){
+			$found =1;
+			my %foundDevice_h;
+			# Clone the values from the JSON smart db, ensure to not work
+			# with the same reference every time
+			$foundDevice_h{'Path'} = $device;
+			$foundDevice_h{'Device'} = dclone $devices_h->{$key}->{'Device'};
+			$foundDevice_h{'ID#'} = dclone $devices_h->{$key}->{'ID#'};
+			$foundDevice_h{'Threshs'} = dclone $devices_h->{$key}->{'Threshs'};
+			$foundDevice_h{'Perfs'} = dclone $devices_h->{$key}->{'Perfs'};
+			# Tresholds and perf variables are defined in the user cfg
+			if(defined($uCfgDevices_h->{$device})){
+			    if(defined($uCfgDevices_h->{$device}->{'Threshs'})){
+				# A defined user config sensor overwrites the values from the json db
+				my %threshs_h = %{$uCfgDevices_h->{$device}->{'Threshs'}};
+				foreach my $ID (keys %threshs_h){
+				    $foundDevice_h{'Threshs'}->{$ID} = $threshs_h{$ID};
+				}
+			    }
+			    # A defined Perfs array overwrites the json db one
+			    if(defined($uCfgDevices_h->{$device}->{'Perfs'})){
+				$foundDevice_h{'Perfs'} = $uCfgDevices_h->{$device}->{'Perfs'};
+			    }
+			}
+			push @devices_a, \%foundDevice_h;
+			last;
+		    }
+		}
+		# Finish the current device model
+		if($found){last;}
+	    }
+	}
+    }
+    return \@devices_a;
+}
+
+sub parseSmartctlOut{
+    my %smartctlOut_h = %{(shift)};
+    # A hash with the parsed smart values for all devices
+    my %smartValues_h;
+
+    foreach my $device (keys %smartctlOut_h){
+	my @smartctlOut = @{$smartctlOut_h{$device}};
+	# Check for smart value lines
+	my @smartValues;
+	my @splittedLine;
+	foreach my $line (@smartctlOut) {
+	    if($line =~ /\d+\s+\w+\s+0[xX][0-9a-fA-F]+\s+\d+\s+\d+\s+[0-9\-]+\s+\w+/){
+		$line =~ s/^\s+|\s+$//g;
+		# Split the found line, and map its elements
+		# The header map defines the keys for the hash
+		@splittedLine = map { s/^\s*//; s/\s*$//; $_; } split(/\s+/,$line);
+		my %lineValues_h;
+		for(my $i = 0; $i < @hdrmap_a; $i++){
+		    # Prepend the attribute name with the device name
+		    if($hdrmap_a[$i] eq 'ATTRIBUTE_NAME'){
+			$device =~ /^\/dev\/(\w+)$/;
+			$lineValues_h{$hdrmap_a[$i]} = $1.'_'.$splittedLine[$i];
+		    }else{
+			$lineValues_h{$hdrmap_a[$i]} = $splittedLine[$i];
+		    }
+		}
+		push @smartValues, \%lineValues_h;
+	    }
+	    if($line =~ /(ATA Error Count)\:\s+(\d+)/){
+		my %lineValues_h;
+		$lineValues_h{'ATTRIBUTE_NAME'} = $1;
+		$lineValues_h{'VALUE'} = $2;
+		# Modify attribute name
+		$device =~ /^\/dev\/(\w+)$/;
+		$lineValues_h{'ATTRIBUTE_NAME'} =$1.'_'.$lineValues_h{'ATTRIBUTE_NAME'};
+		$lineValues_h{'ATTRIBUTE_NAME'} =~ s/ /_/g;
+		$lineValues_h{'ID#'} = 1024;
+		push @smartValues, \%lineValues_h;
+	    }
+	}
+	$smartValues_h{$device} = \@smartValues;
+    }
+    return \%smartValues_h;
+}
+
+sub checkThreshs{
+    my $value = shift;
+    my $pattern = shift;
+
+    if($pattern =~ /(^[0-9]*$)/){
+	if($value < 0 || $value > $1){
+	    return 0;
+	}
+    }
+    if($pattern =~ /(^[0-9]*)\:$/){
+	if($value < $1){
+	    return 0;
+	}
+    }
+    if($pattern =~ /^\~\:([0-9]*)$/){
+	if($value > $1){
+	    return 0;
+	}
+    }
+    return 1;
+}
+
+sub checkSmartctl{
+    my %smartValues_h = %{(shift)};
+    my @devices_a = @{(shift)};
+    # Resulting status level variables
+    my @warnings_a;
+    my @criticals_a;
+    my @statusLevel_a = ("OK");
+
+    foreach my $device (@devices_a){
+	# Fetch the configured variables for a device
+	my %IDs_h = %{$device->{'ID#'}};
+	my %threshs_h = %{$device->{'Threshs'}};
+	my @smartValues_a = @{$smartValues_h{$device->{'Path'}}};
+	# Check the corresponding smart values
+	foreach my $row (@smartValues_a){
+	    my $ID = $row->{'ID#'};
+	    if(exists $IDs_h{$ID} && exists $threshs_h{$ID}){
+		if(!(checkThreshs($row->{$IDs_h{$ID}},$threshs_h{$ID}->[0]))){
+		    # Don't loose the critical state
+		    $statusLevel_a[0] = 'Warning' unless $statusLevel_a[0] eq 'Critical';
+		    push @warnings_a, $row->{'ATTRIBUTE_NAME'};
+		}
+		if(!(checkThreshs($row->{$IDs_h{$ID}},$threshs_h{$ID}->[1]))){
+		    $statusLevel_a[0] = 'Critical';
+		    pop @warnings_a;
+		    push @criticals_a, $row->{'ATTRIBUTE_NAME'};
+		}
+	    }
+	}
+    }
+    push @statusLevel_a, \@warnings_a;
+    push @statusLevel_a, \@criticals_a;
+    return \@statusLevel_a;
+}
+
+sub checkMissingDevicesDB{
+    my @devicesToCheck_a = @{(shift)};
+    my @devices_a = @{(shift)};
+    my $missingDevs_str;
+    my $found;
+    foreach my $deviceToCheck (@devicesToCheck_a){
+	$found = 0;
+	foreach my $device (@devices_a){
+	    if($deviceToCheck eq $device->{'Path'}){
+		$found = 1;
+		last;
+	    }
+	}
+	if($found == 0){
+	    $missingDevs_str .= ', ' if defined($missingDevs_str);
+	    $missingDevs_str .= $deviceToCheck
+	}
+    }
+    return $missingDevs_str;
+}
+
+
+sub getStatusString{
+    my $level = shift;
+    my @statusLevel_a = @{(shift)};
+    my %smartValues_h = %{(shift)};
+    my @devices_a = @{(shift)};
+    # Sensors to check, warn or crit
+    my @sensors_a;
+    my $status_str = "";
+
+    if($level eq "Warning"){
+	@sensors_a = @{$statusLevel_a[1]};
+    }
+    if($level eq "Critical"){
+	@sensors_a = @{$statusLevel_a[2]};
+    }
+
+    if($level eq "Warning" || $level eq "Critical"){
+	if(@sensors_a){
+	    # Print which sensors are Warn or Crit
+	    foreach my $sensor (@sensors_a){
+		$status_str .= "[".$sensor." = ".$level;
+		if($VERBOSITY){
+		    # Parse out the used device, use numbers for megaraid devs
+		    $sensor =~ /^([a-zA-Z0-9]+)/;
+		    my $devicePath = '/dev/'.$1;
+		    my %IDs_h;
+		    my @smartValues_a;
+		    foreach my $device (@devices_a){
+			# Search for the device the sensor belongs to
+			if($devicePath eq $device->{'Path'}){
+			    %IDs_h = %{$device->{'ID#'}};
+			    @smartValues_a = @{$smartValues_h{$device->{'Path'}}};
+			}
+		    }
+		    # Append the value for the given sensor
+		    foreach my $row (@smartValues_a){
+			if($row->{'ATTRIBUTE_NAME'} eq $sensor){
+			    my $ID = $row->{'ID#'};
+			    if(exists $IDs_h{$ID}){
+				$status_str .= " (".$row->{$IDs_h{$ID}}.")";
+			    }
+			}
+		    }
+		}
+		$status_str .= "]";
+	    }
+	}
+    }
+    return $status_str;
+}
+
+sub getPerfString{
+    my %smartValues_h = %{(shift)};
+    my @devices_a = @{(shift)};
+    my $perf_str;
+
+    foreach my $device (@devices_a){
+	# Fetch the configured variables for a device
+	my %IDs_h = %{$device->{'ID#'}};
+	my %threshs_h = %{$device->{'Threshs'}};
+	my @perfmap_a = @{$device->{'Perfs'}};
+	my @smartValues_a = @{$smartValues_h{$device->{'Path'}}};
+
+	foreach my $perf (@perfmap_a){
+	    # Search for the sensor and print its value
+	    foreach my $row (@smartValues_a){
+		if($perf eq $row->{'ID#'}){
+		    my $ID = $row->{'ID#'};
+		    my $attr_str;
+		    if(exists $IDs_h{$ID}){
+			$attr_str = $row->{'ATTRIBUTE_NAME'}."=".$row->{$IDs_h{$ID}};
+			if($perf_str){
+			    $attr_str = " ".$attr_str;
+			}
+		    }
+		    if ($attr_str) { $perf_str .= $attr_str; }
+		    # If available also print its thresholds
+		    if(exists $IDs_h{$ID} && exists $threshs_h{$ID}){
+			$threshs_h{$ID}->[0] =~ /(\d+)/;
+			$perf_str .= ';'.$1.';';
+			$threshs_h{$ID}->[1] =~ /(\d+)/;
+			$perf_str .= $1;
+		    }
+		}
+	    }
+	}
+    }
+    return $perf_str;
+}
+
+sub getVerboseString{
+    my %smartValues_h = %{(shift)};
+    my @devices_a = @{(shift)};
+    my %smartctlOut_h = %{(shift)};
+    my $verb_str;
+
+    foreach my $device (@devices_a){
+	# Fetch the configured variables for a device
+	my %IDs_h = %{$device->{'ID#'}};
+	my %threshs_h = %{$device->{'Threshs'}};
+	my @perfmap_a = @{$device->{'Perfs'}};
+	my @smartValues_a = @{$smartValues_h{$device->{'Path'}}};
+
+	foreach my $row (@smartValues_a){
+	    my $ID = $row->{'ID#'};
+	    if(exists $IDs_h{$ID}){
+		$verb_str .= "\n".$row->{'ATTRIBUTE_NAME'}." = ".$row->{$IDs_h{$ID}};
+		$verb_str .= " (".$IDs_h{$ID}.")";
+	    }
+	}
+	if($VERBOSITY == 3){
+	    my @smartctlOut = @{$smartctlOut_h{$device->{'Path'}}};
+	    $verb_str .= "\n======================================== \n";
+	    $verb_str .= "Device: ".$device->{'Path'}."\n";
+	    $verb_str .= "\n================= \n";
+	    $verb_str .= "Thresholds:\n";
+	    foreach my $ID (keys %threshs_h){
+		$verb_str .= $ID.": [".$threshs_h{$ID}->[0].",".$threshs_h{$ID}->[1]."]\n";
+	    }
+	    $verb_str .= "================= \n";
+	    $verb_str .= "Performance Value IDs:\n";
+	    $verb_str .= "[@perfmap_a]\n";
+	    $verb_str .= "================= \n";
+	    $verb_str .= "Begin of smartctl output:\n";
+	    foreach my $line (@smartctlOut){
+		$verb_str .= $line;
+	    }
+	    $verb_str .= "\nEnd of verbose output for device: ".$device->{'Path'}."\n";
+	    $verb_str .= "======================================== \n";
+	}
+    }
+    return $verb_str;
+}
+
+MAIN: {
+    my ($smartctl, $dbJSON, $uCfgJSON, $exitCode, $noSudo, $extraOpts);
+    my @devicesToCheck_a;
+    if ( !(GetOptions(
+	'v|verbose' => sub { $VERBOSITY = 1 },
+	'vv' => sub { $VERBOSITY = 2 },
+	'vvv' => sub { $VERBOSITY = 3 },
+	'h|help' => sub {
+	    print getVersionString();
+	    print getUsageString();
+	    print getHelpString();
+	    exit(STATE_OK);
+	;},
+	'p|path=s' => \$smartctl,
+	'dbj|dbjson=s' => \$dbJSON,
+	'd|device=s' => \@devicesToCheck_a,
+	'ucfgj|ucfgjson=s' => \$uCfgJSON,
+	'nosudo' => \$noSudo,
+	'O|options=s' => \$extraOpts,
+	'V|version' => sub{
+	    print getVersionString()."\n";
+	    exit(STATE_OK);
+	},
+    )))	{
+	print getUsageString();
+	exit(STATE_UNKNOWN);
+    }
+    # Check smartclt tool
+    if(!defined($smartctl)){
+	$smartctl = "/usr/sbin/smartctl";
+    }
+    if(! -x $smartctl){
+	print "Error: cannot find smartctl executable.\n";
+	exit(STATE_UNKNOWN);
+    }
+    # Check for sudo unless disabled
+    if(!defined($noSudo)){
+	my $sudo;
+	chomp($sudo = `which sudo`);
+	if(! -x $sudo){
+	    print "Error: cannot find sudo executable.\n";
+	    exit(STATE_UNKNOWN);
+	}
+	$smartctl = $sudo.' '.$smartctl;
+    }
+    # The smartdb must be present
+    if(!defined($dbJSON)){
+	print "Error: smartctl requires a valid smartdb JSON file.\n";
+	print getUsageString();
+	exit(STATE_UNKNOWN);
+    }
+# Devices to check are required
+    if(!(@devicesToCheck_a)){
+	print "Error: check_smart_values requires a device to check.\n";
+	print getUsageString();
+	exit(STATE_UNKNOWN);
+    }
+    # Check if a user config is given
+    my $uCfg;
+    if(defined($uCfgJSON)){
+	$uCfg = readUCfgJSON($uCfgJSON);
+    }
+    my $output_h = getSmartctl($smartctl,\@devicesToCheck_a,$extraOpts);
+    my $dbConfig = readDbJSON($dbJSON);
+    my $devices_a = checkWhichDevice($dbConfig,$uCfg,$output_h);
+    if(!(@$devices_a)){
+	print "Error: device was not found in smartdb JSON file.\n";
+	exit(STATE_UNKNOWN);
+    }
+    # Not all devices were found in the smartdb JSON
+    if(@$devices_a != @devicesToCheck_a){
+	print "Error: the following device(s) where not found in the smartdb JSON file: ";
+	print checkMissingDevicesDB(\@devicesToCheck_a,$devices_a);
+	exit(STATE_UNKNOWN);
+    }
+    my $smartValues_h = parseSmartctlOut($output_h);
+    my $statusLevel_a = checkSmartctl($smartValues_h,$devices_a);
+
+    $exitCode = STATE_OK;
+    if($statusLevel_a->[0] eq "Critical"){
+	$exitCode = STATE_CRITICAL;
+    }
+    if($statusLevel_a->[0] eq "Warning"){
+	$exitCode = STATE_WARNING;
+    }
+
+    print $statusLevel_a->[0];
+    print' (';
+    my $dev_str;
+    foreach my $devChecked (@$devices_a){
+	$dev_str .= ', ' if defined($dev_str);
+	$devChecked->{'Path'} =~ /^\/dev\/(\w+)$/;
+	$dev_str .= $1;
+    }
+    $dev_str .= ') ';
+    # If the status string exceeds 36 chars, just use the number of checked devices
+    if(length($dev_str) > 36){
+	$dev_str = scalar(@$devices_a).' devices) ';
+    }
+    print $dev_str;
+    print getStatusString("Critical",$statusLevel_a,$smartValues_h,$devices_a);
+    print getStatusString("Warning",$statusLevel_a,$smartValues_h,$devices_a);
+    my $perf_str = getPerfString($smartValues_h,$devices_a);
+    if($perf_str){
+	print "|".$perf_str;
+    }
+    if($VERBOSITY == 2 || $VERBOSITY == 3){
+	print getVerboseString($smartValues_h,$devices_a,$output_h);
+    }
+    print "\n";
+    exit ($exitCode);
+}

@@ -1,0 +1,28 @@
+menu background boot-screens/splash.png
+include boot-screens/stdmenu.cfg
+menu hshift 19
+menu width 40
+menu margin 0
+
+menu title mfsBSD Systems
+    menu title mfsBSD Systems
+	menu label mfsBSD Systems
+	menu exit
+<% @distribswtf.each do |dist| -%><% [ "amd64" ].each do |arch| -%>    label -
+	menu label <%=dist%> <%=arch%>
+	kernel memdisk raw
+	append initrd=installers/mfsbsd-<%=dist%>/<%=arch%>/mfsbsd-<%=dist%>-RELEASE-<%=arch%>.img
+    label -
+	menu label <%=dist%> <%=arch%> SE
+	kernel memdisk raw
+	append initrd=installers/mfsbsd-<%=dist%>/<%=arch%>/mfsbsd-se-<%=dist%>-RELEASE-<%=arch%>.img
+<% end -%><% end -%><% @distribs.each do |dist| -%><% [ "amd64", "i386" ].each do |arch| -%>    label -
+	menu label <%=dist%> <%=arch%>
+	kernel memdisk raw
+	append initrd=installers/mfsbsd-<%=dist%>/<%=arch%>/mfsbsd-<%=dist%>-RELEASE-<%=arch%>.img
+    label -
+	menu label <%=dist%> <%=arch%> SE
+	kernel memdisk raw
+	append initrd=installers/mfsbsd-<%=dist%>/<%=arch%>/mfsbsd-se-<%=dist%>-RELEASE-<%=arch%>.img
+<% end -%><% end -%>
+menu end

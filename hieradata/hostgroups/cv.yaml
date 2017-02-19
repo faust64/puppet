@@ -1,0 +1,23 @@
+additional_classes:
+  - Clamav
+  - Fail2ban
+  - Apache
+
+# Apache
+apache_listen_ports:
+  plain: 80
+  ssl: 443
+apache_mod_status: true
+apache_munin: true
+apache_rsyslog: true
+
+# Fail2ban
+fail2ban_do_badbots: true
+fail2ban_do_web_abuses: true
+
+# Nginx
+nginx_rsyslog: true
+
+# ClamAV
+clamav_scan_dir:
+  - /var/www

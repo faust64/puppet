@@ -1,0 +1,26 @@
+<% if @kernel == "Linux" -%>[accounting_ipv4_*]
+user root
+    
+<% end -%><% if @operatingsystem == "Debian" or @operatingsystem == "Ubuntu" -%>[apt]
+user root
+
+<% end -%>[df*]
+env.exclude none unknown iso9660 squashfs udf romfs ramfs debugfs tmpfs binfmt_misc rpc_pipefs fuse.gvfs-fuse-daemon udev devtmpfs
+env.warning 92
+env.critical 98
+
+[diskstats]
+env.exclude sr0 cdrom cdrom0 acd0
+
+[if_*]
+user root
+
+[if_err_*]
+user nobody
+
+[ip_*]
+user root
+
+[munin_stats]
+user <%=@munin_user%>
+group <%=@munin_group%>

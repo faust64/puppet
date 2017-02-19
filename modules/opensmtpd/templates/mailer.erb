@@ -1,0 +1,8 @@
+sendmail	<%=@bin_dir%>/smtpctl
+send-mail	<%=@bin_dir%>/smtpctl
+mailq		<%=@bin_dir%>/smtpctl
+<% if @kernelversion == "5.8" -%>makemap		<%=@lib_dir%>/makemap
+newaliases	<%=@lib_dir%>/makemap
+<% else -%>makemap		<%=@bin_dir%>/smtpctl
+newaliases	<%=@bin_dir%>/smtpctl
+<% end -%>

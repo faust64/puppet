@@ -1,0 +1,8 @@
+Hostname "<%=@fqdn%>"
+BaseDir "<%=@var_dir%>"
+PidFile "<%=@run_dir%>/collectd.pid"
+PluginDir "<%=@usr_dir%>"
+TypesDB "<%=@share_dir%>/types.db"
+Interval <%=@interval%>
+ReadThreads <%=@readthreads%>
+Include "<%=@conf_dir%>/collectd.d/*.conf"

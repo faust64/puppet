@@ -1,0 +1,6 @@
+additional_classes:
+  - Collection3
+
+# Apache
+apache_mod_cgid: true
+collectd_default_plugins: false

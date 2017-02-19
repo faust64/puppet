@@ -1,0 +1,16 @@
+#!/bin/sh
+
+DEST=<%=@contact%>
+
+find /home			\
+   \(				\
+	-name '*~'		\
+     -o -name '.DS_Store'	\
+     -o -name '._.DS_Store'	\
+     -o -name '.Trash-*'	\
+     -o -name '.TemporaryItems'	\
+     -o -name '.Trashes'	\
+     -o -name 'Thumbs.db'	\
+   \)				\
+    -exec rm -vf {} \; |	\
+    mail -s "[REPORT] Purging `hostname -f` junks" $DEST

@@ -1,0 +1,42 @@
+Content-language: en
+Content-type: text/html; charset=UTF-8
+Body:----------en--
+<!--#set var="TITLE" value="501: Cannot process request!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 501</h1>
+	    <p>Your browser sent a request that our server does not handle.</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------en--
+
+Content-language: es
+Content-type: text/html
+Body:----------es--
+<!--#set var="TITLE" value="501: La solicitud no puede ser procesada!" -->
+<!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 501</h1>
+	    <p>Su navegador est&aacute; solicitando una acci&oacute;n que no puede ser procesada.</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------es--
+
+Content-language: fr
+Content-type: text/html; charset=UTF-8
+Body:----------fr--
+<!--#set var="CONTENT_LANGUAGE" value="fr"
+--><!--#set var="TITLE" value="501 : La requ&ecirc;te ne peut &ecirc;tre effectu&eacute;e !"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERREUR 501</h1>
+	    <p>Votre navigateur a envoy&eacute; une requ&ecirc;te non support&eacute; par le serveur.</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------fr--

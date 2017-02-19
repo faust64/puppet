@@ -1,0 +1,25 @@
+menu background boot-screens/splash.png
+include boot-screens/stdmenu.cfg
+menu hshift 19
+menu width 40
+menu margin 0
+
+default SystemRescueCD
+menu title Tools
+
+menu title Tools
+    menu label Tools
+    menu exit
+
+<% [ "64", "32" ].each do |arch| -%>    label -
+	menu label SystemRescueCD-<%=arch%>
+	kernel sysrcd/4.3/isolinux/rescue<%=arch%>
+	append initrd=sysrcd/4.3/isolinux/initram.igz netboot=http://pxe.<%=@domain%>/sysrcd/4.3/sysrcd.dat locale=<%=@locale%>
+
+<% end -%>    label -
+	menu label UBCD
+	kernel boot/syslinux/menu.c32
+	append ubcd/menus/syslinux/main.cfg
+
+    include boot-screens/biosupdate.cfg
+menu end

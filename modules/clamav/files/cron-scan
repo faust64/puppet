@@ -1,0 +1,8 @@
+#!/bin/sh
+
+RANDOM_NUMBER=`od -An -N2 -d /dev/random`
+WAIT_TIME=`expr 1 + $RANDOM_NUMBER % \( 600 - 1 \)`
+sleep $WAIT_TIME #max: 10 minutes
+/usr/local/bin/clamav_scan >/dev/null 2>&1
+
+exit 0

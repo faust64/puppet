@@ -1,0 +1,220 @@
+[General]
+config_version = 6
+log_dir = Logs
+web_port = 8082
+web_host = 127.0.0.1
+web_ipv6 = 0
+web_log = 1
+web_root = ""
+web_username = ""
+web_password = ""
+anon_redirect = http://derefer.me/?
+display_all_seasons = 1
+<% if @api_key != false -%>use_api = 1
+api_key = <%=@api_key%>
+<% else -%>use_api = 0
+<% end -%>enable_https = 0
+https_cert = server.crt
+https_key = server.key
+use_nzbs = 1
+use_torrents = 0
+nzb_method = sabnzbd
+usenet_retention = 50000
+search_frequency = <%=@freq%>
+postprocess_frequency = <%=@freq%>
+download_propers = 1
+quality_default = 500
+status_default = 5
+flatten_folders_default = 0
+provider_order = <% if @providers != false -%><%=@providers.keys.join(' ')%> <% end -%>sick_beard_index nzbs_org womble_s_index sick_beard_index usenet_crawler omgwtfnzbs
+version_notify = 0
+naming_pattern = %Sx%0E - %EN
+naming_custom_abd = 0
+naming_abd_pattern = %SN - %A-D - %EN
+naming_multi_ep = 2
+launch_browser = 1
+use_listview = 0
+metadata_xbmc = 0|0|0|0|0|0|0|0|0|0
+metadata_xbmc_12plus = 0|0|0|0|0|0|0|0|0|0
+metadata_mediabrowser = 0|0|0|0|0|0|0|0|0|0
+metadata_ps3 = 0|0|0|0|0|0|0|0|0|0
+metadata_wdtv = 0|0|0|0|0|0|0|0|0|0
+metadata_tivo = 0|0|0|0|0|0|0|0|0|0
+metadata_mede8er = 0|0|0|0|0|0|0|0|0|0
+cache_dir = cache
+root_dirs = 0|<%=@web_dir%>/store
+tv_download_dir = ""
+keep_processed_dir = 0
+move_associated_files = 1
+filter_associated_files = ""
+process_automatically = 0
+rename_episodes = 1
+create_missing_show_dirs = 0
+add_shows_wo_dir = 0
+extra_scripts = ""
+git_path = ""
+ignore_words = "german,french,core2hd,dutch,swedish"
+[Blackhole]
+nzb_dir = ""
+torrent_dir = ""
+[EZRSS]
+ezrss = 0
+[HDBITS]
+hdbits = 0
+hdbits_username = ""
+hdbits_passkey = ""
+[TVTORRENTS]
+tvtorrents = 0
+tvtorrents_digest = ""
+tvtorrents_hash = ""
+[BTN]
+btn = 0
+btn_api_key = ""
+[TorrentLeech]
+torrentleech = 0
+torrentleech_key = ""
+[NZBs]
+nzbs = 0
+nzbs_uid = ""
+nzbs_hash = ""
+[Womble]
+womble = 0
+[omgwtfnzbs]
+omgwtfnzbs = 0
+omgwtfnzbs_username = ""
+omgwtfnzbs_apikey = ""
+[SABnzbd]
+sab_username = ""
+sab_password = ""
+<% if @sab_api_key != false -%>sab_apikey = <%=@sab_api_key%>
+<% end -%>sab_category = tv
+<% if @sab_host != false -%>sab_host = <%=@sab_host%>
+<% end -%>[NZBget]
+nzbget_username = nzbget
+nzbget_password = tegbzn6789
+nzbget_category = tv
+nzbget_host = ""
+[XBMC]
+use_xbmc = 0
+xbmc_always_on = 1
+xbmc_notify_onsnatch = 0
+xbmc_notify_ondownload = 0
+xbmc_update_library = 0
+xbmc_update_full = 0
+xbmc_update_onlyfirst = 0
+xbmc_host = ""
+xbmc_username = ""
+xbmc_password = ""
+[Plex]
+use_plex = 0
+plex_notify_onsnatch = 0
+plex_notify_ondownload = 0
+plex_update_library = 0
+plex_server_host = ""
+plex_host = ""
+plex_username = ""
+plex_password = ""
+[Growl]
+use_growl = 0
+growl_notify_onsnatch = 0
+growl_notify_ondownload = 0
+growl_host = ""
+growl_password = ""
+[Prowl]
+use_prowl = 0
+prowl_notify_onsnatch = 0
+prowl_notify_ondownload = 0
+prowl_api = ""
+prowl_priority = 0
+[Twitter]
+use_twitter = 0
+twitter_notify_onsnatch = 0
+twitter_notify_ondownload = 0
+twitter_username = ""
+twitter_password = ""
+twitter_prefix = Sick Beard
+[Boxcar2]
+use_boxcar2 = 0
+boxcar2_notify_onsnatch = 0
+boxcar2_notify_ondownload = 0
+boxcar2_access_token = ""
+boxcar2_sound = default
+[Pushover]
+use_pushover = 0
+pushover_notify_onsnatch = 0
+pushover_notify_ondownload = 0
+pushover_userkey = ""
+pushover_priority = 0
+pushover_device = all
+pushover_sound = pushover
+[Libnotify]
+use_libnotify = 0
+libnotify_notify_onsnatch = 0
+libnotify_notify_ondownload = 0
+[NMJ]
+use_nmj = 0
+nmj_host = ""
+nmj_database = ""
+nmj_mount = ""
+[Synology]
+use_synoindex = 0
+synoindex_notify_onsnatch = 0
+synoindex_notify_ondownload = 0
+synoindex_update_library = 0
+[NMJv2]
+use_nmjv2 = 0
+nmjv2_host = ""
+nmjv2_database = ""
+nmjv2_dbloc = None
+[Trakt]
+use_trakt = 0
+trakt_username = ""
+trakt_password = ""
+trakt_api = ""
+[pyTivo]
+use_pytivo = 0
+pytivo_notify_onsnatch = 0
+pytivo_notify_ondownload = 0
+pytivo_update_library = 0
+pytivo_host = ""
+pytivo_share_name = ""
+pytivo_tivo_name = ""
+[NMA]
+use_nma = 0
+nma_notify_onsnatch = 0
+nma_notify_ondownload = 0
+nma_api = ""
+nma_priority = 0
+[Pushalot]
+use_pushalot = 0
+pushalot_notify_onsnatch = 0
+pushalot_notify_ondownload = 0
+pushalot_authorizationtoken = ""
+pushalot_silent = 0
+pushalot_important = 0
+[Pushbullet]
+use_pushbullet = 0
+pushbullet_notify_onsnatch = 0
+pushbullet_notify_ondownload = 0
+pushbullet_access_token = ""
+pushbullet_device_iden = ""
+[Slack]
+<% if @slack_notify != false -%>use_slack = 1
+slack_notify_onsnatch = 1
+slack_notify_ondownload = 0
+slack_access_token = <%=@slack_notify%>
+slack_channel = downloads
+slack_bot_name = SickBeard
+<% else -%>use_slack = 0
+slack_notify_onsnatch = 0
+slack_notify_ondownload = 0
+slack_access_token = ""
+slack_channel = ""
+slack_bot_name = ""
+<% end -%>slack_icon_url = ""
+[Newznab]
+newznab_data = "Sick Beard Index|http://lolo.sickbeard.com/|0|5030,5040|1!!!NZBs.org|http://nzbs.org/||5030,5040,5070,5090|0!!!Usenet-Crawler|https://www.usenet-crawler.com/||5030,5040|0<% if @providers != false -%><% @providers.keys.each do |provider| -%><% if @providers[provider]['url'] =~ /http/ -%>!!!<%=provider%>|<%=@providers[provider]['url']%>|<% if @providers[provider]['key'] =~ /[a-z0-9]/ -%><%=@providers[provider]['key']%><% end -%>|5030,5040|1<% end -%><% end -%><% end -%>"
+[GUI]
+coming_eps_layout = list
+coming_eps_display_paused = 1
+coming_eps_sort = date

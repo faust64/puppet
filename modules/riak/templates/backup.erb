@@ -1,0 +1,127 @@
+#!/bin/sh
+
+HOSTNAME=`hostname -f`
+BACKUP_REMOTE=<%=@backup_root%>/$HOSTNAME
+BACKUP_NAME="${HOSTNAME}_`date +%Y_%m_%d_%H%M`.tar.gz"
+DEST=<%=@contact%>
+HOT=false
+<% if @slack_hook -%>HOOK_URL=<%=@slack_hook%>
+<% end -%><%=@lv%>
+LVMATCH=backup$LV
+RETENTION=3
+PROG=`basename $0`
+REMOTE_USER=<%=@backup_user%>
+SENT=false
+SNAP=false
+SNAP_SIZE=<%=@snap_size%>
+SSH_PORT=<%=@ssh_port%>
+TARGET=<%=@backup_target%>
+VG=<%=@vg%>
+
+LVBACKUP=$LVMATCH`date +%Y%m%d`
+
+while test "$1"
+do
+    case "$1" in
+	hot|HOT|live|LIVE) HOT=true ;;
+	warm|WARM) HOT=false ;;
+	snap|SNAP) SNP_SIZE=$2; shift ;;
+	*) echo "what?"; exit 1 ;;
+    esac
+    shift
+done
+
+if mount | grep /mnt >/dev/null; then
+    logger -t backup "A job is currently running. Exiting"
+    echo "mount point busy" | mail -s "[CRITICAL] backup $PROG $HOSTNAME" $DEST
+    exit 1
+elif test -L /dev/$VG/$LVBACKUP; then
+    logger -t backup "Job was already run today. Exiting"
+    echo "volume already exists" | mail -s "[WARNING] backup $PROG $HOSTNAME" $DEST
+    exit 1
+fi
+
+logger -t backup "Starting old backups purge"
+ls -r1 /dev/$VG/$LVMATCH* 2>/dev/null | while read volume
+    do
+	if test 0$RETENTION -gt 1; then
+	    RETENTION=`expr $RETENTION - 1`
+	    continue
+	fi
+	logger -t backup "Purging $volume"
+	lvremove -f "$volume"
+    done
+logger -t backup "Old backups epuration done"
+if $HOT; then
+    logger -t backup "Snapshotting riak (WARNING: LIVE backup)"
+    if lvcreate -L$SNAP_SIZE -s -n$LVBACKUP /dev/$VG/$LV; then
+	SNAP=true
+    fi
+else
+    logger -t backup "Stopping riak"
+    START=`date '+%s'`
+    date
+    if /etc/init.d/riak stop; then
+	logger -t backup "Snapshotting riak"
+	if lvcreate -L$SNAP_SIZE -s -n$LVBACKUP /dev/$VG/$LV; then
+	    SNAP=true
+	fi
+	logger -t backup "Starting riak"
+	/etc/init.d/riak start
+    else
+	if test -s /var/run/riak/riak.pid; then
+	    pid=`cat /var/run/riak/riak.pid`
+	    if ! ps ax | grep "^[ ]*$pid " >/dev/null; then
+		riak restart
+	    fi
+	fi
+    fi
+    END=`date '+%s'`
+fi
+date
+if ! $SNAP; then
+    logger -t backup "Failed taking snapshot. Exiting"
+    echo "failed taking snapshot" | mail -s "[CRITICAL] backup $PROG $HOSTNAME" $DEST
+    exit 1
+elif ! mount /dev/$VG/$LVBACKUP /mnt; then
+    logger -t backup "Failed mounting snapshot. Exiting"
+    echo "failed mounting snapshot" | mail -s "[CRITICAL] backup $PROG $HOSTNAME" $DEST
+    exit 1
+fi
+if test "$TARGET"; then
+    if ! ssh -p$SSH_PORT $REMOTE_USER@$TARGET "mkdir -p '$BACKUP_REMOTE'" >/dev/null; then
+	logger -t backup "$TARGET won't accept our backup. Exiting"
+	echo "failed reaching $TARGET" | mail -s "[CRITICAL] backup $PROG $HOSTNAME" $DEST
+	exit 1
+    fi
+    logger -t backup "Backup in progress"
+    if tar -C /mnt -czf - <%=@backend%> | ssh -p$SSH_PORT $REMOTE_USER@$TARGET "dd of=$BACKUP_REMOTE/$BACKUP_NAME"; then
+	SENT=true
+    fi
+fi
+umount /mnt
+
+if test "$HOOK_URL" -a -x /usr/local/bin/slack; then
+    if $SENT; then
+	SUBJECTPFX=INFO:
+    else
+	SUBJECTPFX=WARN:
+    fi
+    /usr/local/bin/slack $HOOK_URL "$SUBJECTPFX backup riak $HOSTNAME on volume $LVBACKUP, sent: $SENT, to: $TARGET"
+else
+    if $SENT; then
+	SUBJECTPFX="[REPORT]"
+    else
+	SUBJECTPFX="[WARNING]"
+    fi
+    echo "SNAP:$SNAP, LV:$LVBACKUP, SENT:$SENT" | mail -s "$SUBJECTPFX $PROG $HOSTNAME" $DEST
+fi
+
+if ssh -p$SSH_PORT $REMOTE_USER@$TARGET "tar -tzf $BACKUP_REMOTE/$BACKUP_NAME >/dev/null" >/dev/null 2>&1; then
+    date +%Y%m%d:OK
+else
+    date +%Y%m%d:KO
+fi >>/var/lib/riak/.backup_report
+logger -t backup "Backup done"
+
+exit 0

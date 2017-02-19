@@ -1,0 +1,11 @@
+<%=@log_dir%>/*.log
+{
+    compress
+    daily
+    delaycompress
+    copytruncate
+    missingok
+    notifempty
+    rotate <%=@rotate%>
+    sharedscripts
+}

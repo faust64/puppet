@@ -1,0 +1,36 @@
+additional_classes:
+  - Git
+
+access_class: projet
+
+# Apache
+apache_listen_ports:
+  plain: 80
+  ssl: 443
+#apache_mod_authldap: true
+#apache_mod_php: true
+apache_mod_proxy_http: true
+apache_mod_status: true
+#apache_mod_svn: true
+apache_munin: true
+apache_rsyslog: true
+
+# Fail2ban
+fail2ban_do_badbots: true
+fail2ban_do_web_abuses: true
+
+# Git
+git_with_gitlist: false
+git_with_gitlab: true
+
+# Nginx
+nginx_rsyslog: true
+
+# PHP
+#php_apc: true
+
+# SSH
+ssh_tcp_wrappers: false
+
+# Subversion
+#subversion_web_front: true

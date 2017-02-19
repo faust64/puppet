@@ -1,0 +1,4 @@
+LoadPlugin exec
+<Plugin exec>
+    Exec "nagios:nagios" "/usr/local/bin/collectd-haproxy-stats" "-h" "localhost" "-p" "10" "-e"
+</Plugin>

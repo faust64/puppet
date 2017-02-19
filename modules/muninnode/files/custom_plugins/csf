@@ -1,0 +1,50 @@
+#!/bin/sh
+
+values()
+{
+    for jail in Fail2Ban smtpauth imapd pop3d Manual
+    do
+	num=`grep "^[0-9].*$jail" /etc/csf/csf.deny | awk 'END{print NR}'`
+	echo $jail.value $num
+    done
+    num=`grep "^[0-9]" /etc/csf/csf.deny | awk 'END{print NR}'`
+    echo total.value $num
+}
+
+config()
+{
+    echo 'graph_title Hosts blacklisted by csf'
+    echo 'graph_info This graph shows the number of host blacklisted by csf/lfd'
+    echo 'graph_category network'
+    echo 'graph_vlabel Number of hosts'
+    echo 'graph_args --base 1000 -l 0'
+
+    for jail in Fail2Ban smtpauth imapd pop3d Manual
+    do
+	echo $jail.label $jail
+    done
+    echo total.label Total
+}
+
+autoconf()
+{
+    if test -r /etc/csf/csf.deny; then
+	echo yes
+    else
+	echo no
+    fi
+}
+
+case $1 in
+    config)
+	config
+	;;
+    autoconf)
+	autoconf
+	;;
+    *)
+	values
+	;;
+esac
+
+exit 0

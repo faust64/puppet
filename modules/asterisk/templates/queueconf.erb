@@ -1,0 +1,25 @@
+[<%=@name%>]
+announce-frequency=0
+announce-holdtime=yes
+announce-position=no
+autofill=<%=@autofill%>
+eventmemberstatus=no
+eventwhencalled=no
+joinempty=<%=@joinempty%>
+leavewhenempty=<%=@leaveempty%>
+maxlen=<%=@maxlen%>
+music=<%=@music%>
+periodic-announce-frequency=0
+queue-callswaiting=silence/1
+queue-thereare=silence/1
+queue-youarenext=silence/1
+reportholdtime=no
+retry=<%=@retry%>
+ringinuse=yes
+servicelevel=<%=@servicelevel%>
+strategy=<%=@strategy%>
+timeout=<%=@timeout%>
+weight=0
+wrapuptime=0
+<% @members.each do |member| -%>member=Local/<%=member%>@from-queue/n,0
+<% end -%>

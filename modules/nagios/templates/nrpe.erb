@@ -1,0 +1,19 @@
+log_facility=daemon
+pid_file=<%=@nagios_run_dir%>/<%=@pid_file%>.pid
+server_port=<%=@nagios_port%>
+server_address=<%=@listen%>
+nrpe_user=<%=@runtime_user%>
+nrpe_group=<%=@runtime_group%>
+allowed_hosts=<% if @nagios_ip != false -%><% @nagios_ip.each do |host| -%><%=host%>,<% end -%><% end -%>127.0.0.1
+dont_blame_nrpe=1
+debug=0
+command_timeout=<%=@nrpe_timeout%>
+connection_timeout=<%=@conn_timeout%>
+command[check_nrpe_available]=/bin/echo "NRPE OK"
+command[check_all_disks]=<%=@plugindir%>/check_disk -w 10% -c 6% -e
+<% if @watchlist == false -%>command[check_disk_root]=<%=@plugindir%>/check_disk -w 10% -c 6% -p /
+<% else -%><% @watchlist.each do |disk, mountpoint| -%>command[check_disk_<%=disk%>]=<%=@plugindir%>/check_disk -w 10% -c 6% -p <%=mountpoint%>
+<% end -%><% end -%><% if @tmpdev or @kernel == "Linux" -%>command[check_disk_tmp]=<%=@plugindir%>/check_disk -w 10% -c 6% -p /tmp
+<% end -%><% if @hpraid != false -%><% @hpraid.each do |disk| -%>command[check_hpraid_<%=disk%>]=<%=@plugindir%>/check_hpraid /dev/<%=disk%>
+<% end -%><% end -%><% if @mdraid != false -%><% @mdraid.each do |disk| -%>command[check_mdraid_<%=disk%>]=<%=@plugindir%>/check_raid <%=disk%>
+<% end -%><% end -%>include_dir=<%=@conf_dir%>/nrpe.d/

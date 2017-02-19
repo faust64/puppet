@@ -1,0 +1,12 @@
+Job {
+    Client = "<%=@fqdn%>-fd"
+    Fileset = "Files-<%=@fqdn%>"
+    JobDefs = "utgb"
+    Name = "Backup-<%=@fqdn%>"
+    Pool = MonthlyPool
+<% if @run_after -%>    Run After Job = "<%=@run_after%>"
+<% end -%><% if @slack_hook -%>    Run After Job = "/usr/local/bin/slack <%=@slack_hook%> \"REPORT: <%=@fqdn%> successfully backed up\""
+<% end -%><% if @run_after_failed -%>    Run After Failed Job = "<%=@run_after_failed%>"
+<% end -%><% if @slack_hook -%>    Run After Failed Job = "/usr/local/bin/slack <%=@slack_hook%> \"WARNING: <%=@fqdn%> backup failed\""
+<% end -%><% if @run_before -%>    Run Before Job = "<%=@run_before%>"
+<% end -%>}

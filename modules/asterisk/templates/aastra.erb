@@ -1,0 +1,35 @@
+dhcp: 1
+http server: <%=@asterisk_ip%>
+
+download protocol: HTTP
+http server: <%=@asterisk_ip%>
+http path: /aastra/
+http port: 80
+
+sip registration time: 3600
+sip proxy ip: <%=@asterisk_ip%>
+sip proxy port: 5060
+sip registrar ip: <%=@asterisk_ip%>
+sip registrar port: 5060
+sip digit timeout: 6
+sip out-of-band dtmf: 1
+sip vmail: *97
+sip use basic codecs: 1
+sip dial plan: "X+#"
+sip silence suppression: 0
+
+time server disabled: 0
+time server1: <%=@ntp_upstream%>
+time zone name: <%=@aastra_tzname%>
+time zone code: <%=@aastra_tzcode%>
+time zone minutes: 60
+time format: <%=@aastra_tzfmt%>
+date format: <%=@aastra_dateefmt%>
+
+language 1: lang_<%=@aastra_lang%>.txt
+language: 1
+
+handset sidetone gain: -12
+handset tx gain: 0
+
+directory 1: repertoire

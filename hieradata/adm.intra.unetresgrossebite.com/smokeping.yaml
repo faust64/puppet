@@ -1,0 +1,35 @@
+nagios_no_parent: false
+physical_parent: oneiroi.adm.intra.unetresgrossebite.com
+
+# Smokeping
+smokeping_short_name: ping
+smokeping_targets:
+  - asteros.adm.intra.unetresgrossebite.com
+  - bacula.unetresgrossebite.com
+  - blog.unetresgrossebite.com
+  - bukkake.unetresgrossebite.com
+  - cerberus.adm.intra.unetresgrossebite.com
+  - cumshot.unetresgrossebite.com
+  - deepthroat.unetresgrossebite.com
+  - eris.unetresgrossebite.com
+  - gaia.unetresgrossebite.com
+  - gangbang-gw.unetresgrossebite.com
+  - geras.unetresgrossebite.com
+  - gitlab.unetresgrossebite.com
+  - hiddenreverse.unetresgrossebite.com
+  - hypnos.unetresgrossebite.com
+  - ker.unetresgrossebite.com
+  - logmaster.unetresgrossebite.com
+  - monitor.unetresgrossebite.com
+  - ns2.unetresgrossebite.com
+  - nzbindex.unetresgrossebite.com
+  - owncloud.unetresgrossebite.com
+  - patchdashboard.unetresgrossebite.com
+  - play.unetresgrossebite.com
+  - puppet.unetresgrossebite.com
+  - racktables.unetresgrossebite.com
+  - repository.unetresgrossebite.com
+  - sab.unetresgrossebite.com
+  - sso.unetresgrossebite.com
+  - tvschedule.unetresgrossebite.com
+  - wiki.unetresgrossebite.com

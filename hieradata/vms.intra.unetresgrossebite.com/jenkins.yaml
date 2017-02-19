@@ -1,0 +1,7 @@
+additional_classes:
+  - Docker
+  - Jenkins
+
+physical_parent: nemesis.ceph.intra.unetresgrossebite.com
+nagios_listenaddr: 10.42.44.50
+nagios_no_parent: false

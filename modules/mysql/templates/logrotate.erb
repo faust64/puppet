@@ -1,0 +1,20 @@
+/var/log/mysql/*.log {
+    compress
+    daily
+    missingok
+    create 640 <%=@runtime_user%> <%=@runtime_group%>
+    rotate 7
+    sharedscripts
+    postrotate
+<% if @operatingsystem == "Debian" or @operatingsystem == "Ubuntu" -%>	test -x /usr/bin/mysqladmin || exit 0
+	MYADMIN="/usr/bin/mysqladmin --defaults-file=/etc/mysql/debian.cnf"
+	if test -z "`$MYADMIN ping 2>/dev/null`"; then
+	    if killall -q -s0 -umysql mysqld; then
+		exit 1
+	    fi
+	else
+	    $MYADMIN flush-logs
+	fi
+<% else -%>	service <%=@service_name%> reload
+<% end -%>    endscript
+}

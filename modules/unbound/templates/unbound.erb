@@ -1,0 +1,106 @@
+server:
+    access-control:			0.0.0.0/0 <% if @do_public == true -%>allow<% else -%>deny<% end -%>
+
+<% if @recurse_networks != false -%><% @recurse_networks.each do |net| -%>    access-control:			<%=net%> allow_snoop
+<% end -%><% else -%>    access-control:			<%=@ipaddress%>/32 allow_snoop
+<% end -%>    access-control:			127.0.0.0/8 allow_snoop
+    add-holddown:			2592000
+<% if @do_dnssec == true -%>    auto-trust-anchor-file:		"<%=@var_dir%>/<% if @kernel == "OpenBSD" -%>db/<% end -%>root.key"
+<% end -%>    cache-max-ttl:			86400
+    cache-min-ttl:			3600
+    chroot:				""
+    del-holddown:			2592000
+    directory:				"<%=@conf_dir%>"
+<% if @do_dnssec == true -%>    dlv-anchor-file:			"<%=@conf_dir%>/dlv.isc.org.key"
+<% end -%>    do-daemonize:			yes
+    do-ip4:				yes
+    do-ip6:				no
+    do-not-query-address:		127.0.0.1/8
+    do-not-query-address:		::1
+    do-not-query-localhost:		yes
+    do-tcp:				yes
+    do-udp:				yes
+    edns-buffer-size:			<% if @do_public -%>1480<% else -%>4096<% end -%>
+
+    extended-statistics:		<% if @do_public -%>no<% else -%>yes<% end -%>
+
+    harden-dnssec-stripped:		yes
+    harden-glue:			yes
+    harden-large-queries:		yes
+    harden-referral-path:		no
+    harden-short-bufsize:		no
+    hide-identity:			yes
+    hide-version:			yes
+    identity:				""
+<% if @do_public == true -%>    include:				"<%=@conf_dir%>/blocklist.conf"
+<% end -%>    incoming-num-tcp:			10
+    infra-cache-lame-size:		10k
+    infra-cache-numhosts:		10000
+    infra-cache-slabs:			4
+    infra-host-ttl:			900
+    infra-lame-ttl:			900
+    interface:				0.0.0.0
+    interface-automatic:		no
+    jostle-timeout:			200
+    keep-missing:			31622400
+    key-cache-size:			4m
+    key-cache-slabs:			4
+    local-zone:				"10.in-addr.arpa" nodefault
+    log-queries:			<% if @fail2ban_unbound == true -%>yes<% else -%>no<% end -%>
+
+    log-time-ascii:			yes
+    logfile:				""
+    module-config:			"<% if @do_dnssec == true -%>validator <% end -%>iterator"
+    msg-buffer-size:			65552
+    msg-cache-size:			4m
+    msg-cache-slabs:			4
+    neg-cache-size:			1m
+    num-queries-per-thread:		1024
+    num-threads:			1
+    outgoing-num-tcp:			10
+    outgoing-port-avoid:		"3200-3208"
+    outgoing-port-permit:		32768
+    outgoing-range:			4096
+    pidfile:				"<%=@run_dir%>/unbound.pid"
+    port:				53
+    prefetch:				no
+    prefetch-key:			no
+<% if @forwards != false -%>    private-domain:			"<%=@rdomain%>"
+<% if @rdomain != "unetresgrossebite.com" -%>    private-domain:			"unetresgrossebite.com"
+<% end -%><% end -%>    root-hints:				"<%=@var_dir%>/root.hint"
+    rrset-cache-size:			4m
+    rrset-cache-slabs:			4
+    so-rcvbuf:				0
+    statistics-interval:		0
+    statistics-cumulative:		no
+    target-fetch-policy:		"3 2 1 0 0"
+    unwanted-reply-threshold:		10000000
+    use-caps-for-id:			<% if ! @do_public == true -%>yes<% else -%>no<% end -%>
+
+    use-syslog:				yes
+    username:				"<%=@runtime_user%>"
+    val-bogus-ttl:			60
+    val-clean-additional:		yes
+    val-log-level:			0
+    val-nsec3-keysize-iterations:	"1024 150 2048 500 4096 2500"
+    val-permissive-mode:		no
+    val-sig-skew-max:			86400
+    val-sig-skew-min:			3600
+    verbosity:				1
+    version:				""
+
+remote-control:
+<% if @do_public -%>    control-cert-file:			"<%=@conf_dir%>/unbound_control.pem"
+    control-enable:			yes
+    control-interface:			127.0.0.1
+    control-key-file:			"<%=@conf_dir%>/unbound_control.key"
+    control-port:			953
+    server-cert-file:			"<%=@conf_dir%>/unbound_server.pem"
+    server-key-file:			"<%=@conf_dir%>/unbound_server.key"
+<% else -%>    control-enable:			no
+<% end -%><% if @forwards != false -%><% @forwards.keys.each do |dname| -%>
+
+stub-zone:
+    name:				"<%=dname%>"
+<% @forwards[dname].each do |upstream| -%>    stub-addr:				<%=upstream%>
+<% end -%><% end -%><% end -%>

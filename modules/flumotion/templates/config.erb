@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<planet name="admin">
+    <atmosphere>
+    </atmosphere>
+    <flow name="default">
+	<component name="producer-audio"
+		   label="producer-audio"
+		   project="flumotion"
+		   type="soundcard-producer"
+		   version="0.10.0"
+		   worker="localhost">
+	    <property name="device">hw:0</property>
+	    <property name="channels">2</property>
+	    <property name="depth">16</property>
+	    <property name="input-track">Micro</property>
+	    <property name="samplerate">48000</property>
+	    <clock-master>true</clock-master>
+	</component>
+	<component name="producer-video"
+		   label="producer-video"
+		   project="flumotion"
+		   type="webcam-producer"
+		   version="0.10.0"
+		   worker="localhost">
+	    <property name="format">YV12</property>
+	    <property name="framerate">20/1</property>
+	    <property name="height">480</property>
+	    <property name="width">864</property>
+	    <property name="mime">video/x-raw-yuv</property>
+	    <property name="element-factory">v4l2src</property>
+	    <property name="device">/dev/video0</property>
+	    <clock-master>false</clock-master>
+	</component>
+	<component name="encoder-video"
+		   label="encoder-video"
+		   project="flumotion"
+		   type="theora-encoder"
+		   version="0.10.0"
+		   worker="localhost">
+	    <eater name="default">
+		<feed alias="default">producer-video:default</feed>
+	    </eater>
+	    <property name="keyframe-maxdistance">40</property>
+	    <property name="speed">3</property>
+	    <property name="bitrate">200000</property>
+	    <clock-master>false</clock-master>
+	</component>
+	<component name="encoder-audio"
+		   label="encoder-audio"
+		   project="flumotion"
+		   type="vorbis-encoder"
+		   version="0.10.0"
+		   worker="localhost">
+	    <eater name="default">
+		<feed alias="default">producer-audio:default</feed>
+	    </eater>
+	    <property name="bitrate">16000</property>
+	    <clock-master>false</clock-master>
+	</component>
+	<component name="muxer-audio-video"
+		   label="muxer-audio-video"
+		   project="flumotion"
+		   type="ogg-muxer"
+		   version="0.10.0"
+		   worker="localhost">
+	    <eater name="default">
+		<feed alias="default">encoder-audio:default</feed>
+		<feed alias="default-bis">encoder-video:default</feed>
+	    </eater>
+	    <clock-master>false</clock-master>
+	</component>
+<% if @forwarder and @pass -%>	<component name="shout2-audio-video"
+		   label="shout2-audio-video"
+		   project="flumotion"
+		   type="shout2-consumer"
+		   version="0.10.0"
+		   worker="localhost">
+	    <eater name="default">
+		<feed alias="default">muxer-audio-video:default</feed>
+	    </eater>
+	    <property name="short-name"></property>
+	    <property name="description"></property>
+	    <property name="url"></property>
+	    <property name="mount-point"><%=@mount%>.ogg</property>
+	    <property name="ip"><%=@forwarder%></property>
+	    <property name="password"><%=@pass%></property>
+	    <property name="port"><%=@port%></property>
+	    <clock-master>false</clock-master>
+	</component>
+<% end -%>    </flow>
+</planet>

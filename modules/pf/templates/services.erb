@@ -1,0 +1,41 @@
+antispoof for { <% @local_networks[@domain].each do |nic| -%><%=nic['name']%> <% end -%>}
+<% if @named_ip != false -%>pass in quick inet proto $tu from $named_ip to <office_net> port domain route-to ( $wan_if $wan_gw )
+<% end -%>pass in quick inet proto $tu from $dns_ip to $ext_net port domain route-to ( $def_if $def_gw )
+pass in quick inet proto $tu from any to $dns_ip port domain
+<% if @masterns != false -%>pass in quick inet proto $tu from $ns_ip to $dns_ip
+<% end -%><% if @ldap_ip != false and @masterldap != false -%>pass in quick inet proto $t from $ldap_host to $ldap_ip
+pass in quick inet proto $t from $ldap_ip to $ldap_host
+<% end -%><% if @squid_ip != false -%>pass in quick inet proto $t from $squid_ip to $ext_net port $web_port route-to ( $def_if $def_gw )
+pass in quick inet proto $t from $squid_ip to <private_networks> port $web_port
+<% end -%><% if @snmp_listenaddr != false and @snmp_ip != false -%>pass in quick inet proto $u from $snmphost_ip to <%=@snmp_listenaddr%> port snmp
+<% end -%><% if @snmp_ip != false -%>pass in quick inet proto $u from $snmphost_ip to <private_networks> port snmp
+<% end -%><% if @munin_ip != false -%>pass in quick inet proto $t from $munin_ip to <private_networks> port 4949
+pass in quick inet proto $t from $munin_ip to $ext_net port 4949 route-to ( $wan_if $wan_gw )
+<% end -%><% if @nagios_ip != false -%><% if @nagios_listenaddr != false and @nagios_port.to_i != 5666 -%>pass in quick inet proto $t from $nagios_ip to <%=@nagios_listenaddr%> port <%=@nagios_port%>
+<% end -%>pass in quick inet proto $t from $nagios_ip to <private_networks> port 5666
+pass in quick inet proto $t from $nagios_ip to $ext_net port 5666 route-to ( $wan_if $wan_gw )
+pass in quick inet proto $u from $nagios_ip to <private_networks> port snmp
+pass in quick inet proto $i from $nagios_ip to <private_networks>
+pass in quick inet proto $i from $nagios_ip to $ext_net route-to ( $wan_if $wan_gw )
+<% end -%><% if @pxe_ip != false -%>pass in quick inet proto $u from $pxe_ip to <private_networks>
+<% end -%><% if @mail_ip != false -%>pass in quick inet proto $t from $smtp_ip to $ext_net port smtp route-to ( $wan_if $wan_gw )
+<% end -%><% if @mail_mx != false -%>pass in quick inet proto $t from $mail_ip to $ext_net port 2703 route-to ( $wan_if $wan_gw )
+pass in quick inet proto $u from $mail_ip to $ext_net port 6277 route-to ( $wan_if $wan_gw )
+<% end -%><% if @transmission_ip != false -%>pass in quick inet proto $tu from $torrent_ip to $ext_net port 1024:65535 route-to ( $def_if $def_gw )
+<% end -%><% if @bacula_director_ip != false and @bacula_fd_port != false -%>pass in quick inet proto $t from $bdirector_ip to any port $bacula_fd_port
+<% end -%><% if @bacula_storage_ip != false and @bacula_storage_port != false -%># hopefully TEMP / FIXME
+pass in quick inet proto $t from any to $bstorage_ip port $bacula_st_port
+<% end -%><% if @vlist_ip != false -%><% @vlist_ip.sort.each do |host| -%>pass in quick inet proto $t from <%=host%> to any port { ssh https 8443 }
+<% end -%><% end -%><% if @icmp_ip != false -%><% @main_networks.each do |ifhash| -%><% if ifhash['carpaddr'] =~ /[0-9]\.[0-9]/ and ifhash['gw'] =~ /[0-9]\.[0-9]/ -%>pass in quick inet proto $i from $icmp_ip to carp<%=ifhash['carpvhid']%>:network route-to ( carp<%=ifhash['carpvhid']%> <%=ifhash['gw']%> )
+<% elsif ifhash['addr'] =~ /[0-9]\.[0-9]/ and ifhash['gw'] =~ /[0-9]\.[0-9]/ -%>pass in quick inet proto $i from $icmp_ip to <%=ifhash['name']%>:network route-to ( <%=ifhash['name']%> <%=ifhash['gw']%> )
+<% end -%><% end -%>pass in quick inet proto $i from $icmp_ip to <office_net> route-to ( $wan_if $wan_gw )
+pass in quick inet proto $i from $icmp_ip to $ext_net route-to ( $def_if $def_gw )
+pass in quick inet proto $i from $icmp_ip to any
+<% end -%><% if @dell_ups_mgr_ip != false and @dell_ups_ip != false -%>pass in quick inet proto $tui from $dupsmgr_ip to $dups_ip
+<% end -%><% if @vmwaremgr_ip != false -%>pass in quick inet proto $t from $vmwmgr_ip to <allvlan30_net> port ssh
+<% end -%><% @ovpn_networks[@domain].each do |ovpn| -%><% ovpnname = ovpn['name'] -%><% if @all_openvpns[ovpnname]['server'] == true -%><% @main_networks.each do |nic| -%><% if nic['gw'] =~ /[0-9]\.[0-9]/ and (nic['addr'] =~ /[0-9]\.[0-9]/ or nic['carpaddr'] =~ /[0-9]\.[0-9]/) -%>pass in quick inet proto $t from <private_networks> to <% if nic['vpn'] =~ /[0-9]\.[0-9]/ -%><%=nic['vpn']%><% elsif nic['carpaddr'] =~ /[0-9]\.[0-9]/ -%><%=nic['carpaddr']%><% else -%><%=nic['addr']%><% end -%> port <%=@all_openvpns[ovpnname]['port']%> rdr-to $vpnsrv_ip port <%=@all_openvpns[ovpnname]['port']%>
+<% end -%><% end -%><% end -%><% end -%><% @main_networks.each do |phys| -%><% if phys['gw'] =~ /[0-9]/ -%>pass in quick inet proto $t from <private_networks> to <% if phys['reverse'] =~ /[0-9]\.[0-9]/ -%><%=phys['reverse']%><% elsif phys['carpaddr'] =~ /[0-9]\.[0-9]/ -%><%=phys['carpaddr']%><% else -%><%=phys['addr']%><% end -%> port http divert-to 127.0.0.1 port <%=@relayd_http_port%>
+pass in quick inet proto $t from <private_networks> to <% if phys['reverse'] =~ /[0-9]\.[0-9]/ -%><%=phys['reverse']%><% elsif phys['carpaddr'] =~ /[0-9]\.[0-9]/ -%><%=phys['carpaddr']%><% else -%><%=phys['addr']%><% end -%> port https divert-to 127.0.0.1 port <%=@relayd_https_port%>
+<% end -%><% end -%><% if @syslog_ip != false -%>pass in quick inet proto $tu from $syslog_ip to any port syslog
+pass in quick inet proto $tu from any to $syslog_ip port syslog
+<% end -%>

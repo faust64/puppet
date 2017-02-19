@@ -1,0 +1,183 @@
+#!/bin/sh
+
+UPGRADE_FIRMWARE_942=http://<%=@asterisk_ip%>/cisco/firmware-942.bin
+UPGRADE_FIRMWARE_504=http://<%=@asterisk_ip%>/cisco/firmware-504.bin
+UPGRADE_FIRMWARE_303=http://<%=@asterisk_ip%>/cisco/firmware-303.bin
+
+check_version()
+{
+    local checkfile ip ret hwaddr firmware
+
+    checkfile=/tmp/bite
+    ip=$1
+    shift
+
+    if wget -q http://$ip/ -O $checkfile; then
+	if grep "<title>SPA504G Configuration Utility</title>" $checkfile >/dev/null; then
+	    ret=504
+	elif grep "<title>SPA303 Configuration Utility</title>" $checkfile >/dev/null; then
+	    ret=303
+	elif grep "Product Name:.*SPA-942" $checkfile >/dev/null; then
+	    ret=942
+	else
+	    echo "No match for phone model, patch needed"
+	fi
+    else
+	echo "can't contact the phone... exiting..."
+    fi >&2
+    hwaddr=`grep "MAC Address:" $checkfile | sed 's|.*MAC Address:[^<]*<[^<]*<[^>]*>\([0-9a-fA-F:]*\)<.*|\1|' | sed 's/\(.\{2\}\):\?\(.\{2\}\):\?\(.\{2\}\):\?\(.\{2\}\):\?\(.\{2\}\):\?\(.\{2\}\)/\1:\2:\3:\4:\5:\6/' | tr '[A-Z]' '[a-z]'`
+    firmware=`grep "Software Version:" $checkfile | sed 's|.*Software Version:[^<]*<[^<]*<[^>]*>\([0-9a-zA-Z()\.]*\)<.*|\1|'`
+    firmware=`echo $firmware | sed 's|(|\\\\(|g' | sed 's|)|\\\\)|g'`
+    rm -f $checkfile
+    test "$ret" || exit 1
+    if test "$3"; then
+	echo $1=$ret $2=$hwaddr $3=$firmware
+    elif test "$2"; then
+	echo $1=$ret $2=$hwaddr
+    elif test "$1"; then
+	echo $1=$ret
+    else
+	echo $ret
+    fi
+}
+
+if ! which host 2>/dev/null; then
+    echo "Missing dns-utils package" >&2
+# @centos => bind-utils, bind-libs
+    exit 1
+fi >/dev/null
+
+if test "$1"; then
+    IPADDR=$1
+else
+    while :
+    do
+	echo "Enter target phone IP address:"
+	read IPADDR
+	if test -z "$IPADDR"; then
+	    echo "Unable to read IP address" >&2
+	    continue
+	fi
+	break
+    done
+fi
+if ! ping -c 1 $IPADDR >/dev/null 2>&1; then
+    echo "Unable to reach phone [$IPADDR]" >&2
+    continue
+fi
+eval `check_version $IPADDR MODEL MACADDR FW`
+echo "Assuming HWADDR=$MACADDR"
+
+case $MODEL in
+    303)
+	confurl=http://$IPADDR/admin/acisco.csc
+	logopost="17069=http%3A%2F%2F<%=@asterisk_ip%>%2Fcisco%2Flogo.bmp"
+	provposta="21487=http%3A%2F%2F<%=@asterisk_ip%>%2Fcisco%2F\$MAC%2Faccount1.cfg"
+	provpostb="21423=http%3A%2F%2F<%=@asterisk_ip%>%2Fcisco%2F\$MAC%2Faccount2.cfg"
+	provpostc="20591=http%3A%2F%2F<%=@asterisk_ip%>%2Fcisco%2F\$MAC%2Faccount3.cfg"
+	provpostd="20527=http%3A%2F%2F<%=@asterisk_ip%>%2Fcisco%2Fspa303.cfg"
+	reqFW="7.4.9c"
+	upgradeurl=$UPGRADE_FIRMWARE_303
+	;;
+
+    504)
+	confurl=http://$IPADDR/admin/acisco.csc
+	logopost="26797=http%3A%2F%2F<%=@asterisk_ip%>%2Fcisco%2Flogo.bmp"
+	provpostb="21295=http%3A%2F%2F<%=@asterisk_ip%>%2Fcisco%2F\$MAC%2Faccount1.cfg"
+	provpostc="21487=http%3A%2F%2F<%=@asterisk_ip%>%2Fcisco%2F\$MAC%2Faccount2.cfg"
+	provposta="21359=http%3A%2F%2F<%=@asterisk_ip%>%2Fcisco%2F\$MAC%2Faccount3.cfg"
+	provpostd="21423=http%3A%2F%2F<%=@asterisk_ip%>%2Fcisco%2Fspa504.cfg"
+	reqFW="7.4.8a"
+	upgradeurl=$UPGRADE_FIRMWARE_504
+	;;
+
+    942)
+	confurl=http://$IPADDR/admin/asipura.spa
+	logopost="32686=http%3A%2F%2F<%=@asterisk_ip%>%2Fcisco%2Flogo.bmp"
+	provposta="27823=http%3A%2F%2F<%=@asterisk_ip%>:80%2Fcisco%2F\$MAC%2Faccount1.cfg"
+	provpostb="28015=http%3A%2F%2F<%=@asterisk_ip%>:80%2Fcisco%2F\$MAC%2Faccount2.cfg"
+	provpostc="27951=http%3A%2F%2F<%=@asterisk_ip%>:80%2Fcisco%2F\$MAC%2Faccount3.cfg"
+	provpostd="28143=http%3A%2F%2F<%=@asterisk_ip%>:80%2Fcisco%2Fspa942.cfg"
+	reqFW="6.1.5(a)"
+	upgradeurl=$UPGRADE_FIRMWARE_942
+	;;
+
+    *)
+	echo "Unsupported phone model. Patch needed..." >&2
+	exit 2
+	;;
+esac
+
+if test "$reqFW" != "$FW"; then
+    echo -n "Requesting for firmware upgrade... "
+    if ! wget -q http://$IPADDR/upgrade?$upgradeurl -O /dev/null; then
+	echo FAIL
+	exit 3
+    fi
+    echo OK
+fi
+
+mkdir -p <%=@srv_root%>/cisco/$MACADDR
+for i in 1 2 3
+do
+    ln -sf <%=@srv_root%>/cisco/generic$i.cfg <%=@srv_root%>/cisco/$MACADDR/account$i.cfg
+done
+chown -R asterisk:asterisk <%=@srv_root%>/cisco/$MACADDR
+
+if test "$reqFW" != "$FW"; then
+    echo Waiting for effective firmware upgrade.
+    echo -n This may take around 4 minutes
+    sleep 200
+
+    win=0
+    phail=0
+    while test $win -le 10
+    do
+	if ping -c1 -w1 -q $IPADDR; then
+	    win=`expr $win + 1`
+	else
+	    win=0
+	fi >/dev/null 2>&1
+	phail=`expr $phail + 1`
+	if test $phail -gt 60; then
+	    echo The phone does not want you.
+	    echo Have a break...
+	    exit 42
+	fi >&2
+	sleep 2
+    done
+fi
+
+echo "Configuring $IPADDR"
+echo -n "> Set account1 provisioning rule: "
+if ! wget -q --post-data="$provposta" $confurl -O /dev/null; then
+    echo FAIL
+    exit 1
+else echo OK; fi
+
+echo -n "> Set account2 provisioning rule: "
+if ! wget -q --post-data="$provpostb" $confurl -O /dev/null; then
+    echo FAIL
+else echo OK; fi
+
+echo -n "> Set account3 provisioning rule: "
+if ! wget -q --post-data="$provpostc" $confurl -O /dev/null; then
+    echo FAIL
+else echo OK; fi
+
+echo -n "> Set generic provisioning rule: "
+if ! wget -q --post-data="$provpostd" $confurl -O /dev/null; then
+    echo FAIL
+else echo OK; fi
+
+echo -n "> Set corporate logo: "
+if ! wget -q --post-data="$logopost" $confurl -O /dev/null; then
+    echo FAIL
+else echo OK; fi
+
+sleep 5
+
+echo "Rebooting phone"
+wget -q http://$IPADDR/admin/reboot -O /dev/null
+
+exit 0

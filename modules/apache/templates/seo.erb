@@ -1,0 +1,148 @@
+<% if @version == "2.4" -%><RequireAny>
+    <RequireAll>
+	Require host ahrefs.com
+	Require expr %{HTTP_USER_AGENT} =~ 'AhrefsBot'
+    </RequireAll>
+    <RequireAll>
+	Require host archive.org
+	Require expr %{HTTP_USER_AGENT} =~ 'archive.org_bot'
+    </RequireAll>
+    <RequireAll>
+	Require host msn.com
+	<RequireAny>
+	    Require expr %{HTTP_USER_AGENT} =~ 'BingPreview'
+	    Require expr %{HTTP_USER_AGENT} =~ 'BingLocalSearch'
+	    Require expr %{HTTP_USER_AGENT} =~ 'bingbot'
+	</RequireAny>
+    </RequireAll>
+    <RequireAll>
+	Require host duckduckgo.com
+	Require expr %{HTTP_USER_AGENT} =~ 'DuckDuck'
+    </RequireAll>
+    <RequireAll>
+	Require host exabot.com
+	Require expr %{HTTP_USER_AGENT} =~ 'Exabot'
+    </RequireAll>
+    <RequireAll>
+	<RequireAny>
+	    Require host googlebot.com
+	    Require host google.com
+	</RequireAny>
+	Require expr %{HTTP_USER_AGENT} =~ 'Google'
+    </RequireAll>
+    <RequireAll>
+	Require host mojeek.com
+	Require expr %{HTTP_USER_AGENT} =~ 'MojeekBot'
+    </RequireAll>
+    <RequireAll>
+	Require host meanpathbot.com
+	Require expr %{HTTP_USER_AGENT} =~ 'meanpathbot'
+    </RequireAll>
+    <RequireAll>
+	Require host netlyzer.com
+	Require expr %{HTTP_USER_AGENT} =~ 'NetLyzer'
+    </RequireAll>
+    <RequireAll>
+	Require host twttr.com
+	Require expr %{HTTP_USER_AGENT} =~ 'Twitterbot'
+    </RequireAll>
+    <RequireAll>
+	Require host yahoo.net
+	Require expr %{HTTP_USER_AGENT} =~ 'Yahoo'
+    </RequireAll>
+    <RequireAll>
+	Require host 127.0.0.1
+	Require expr %{HTTP_USER_AGENT} =~ 'libwww-perl'
+    </RequireAll>
+    <RequireAll>
+	Require host 127.0.0.1
+	Require expr %{HTTP_USER_AGENT} =~ 'Python-urllib'
+    </RequireAll>
+    <RequireAll>
+	Require not expr %{HTTP_USER_AGENT} =~ 'Aboundex'
+	Require not expr %{HTTP_USER_AGENT} =~ 'AdsBot-Google'
+	Require not expr %{HTTP_USER_AGENT} =~ 'AdnormCrawler'
+	Require not expr %{HTTP_USER_AGENT} =~ 'AhrefsBot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'AlexaToolbar'
+	Require not expr %{HTTP_USER_AGENT} =~ 'Apache-HttpClient'
+#	Require not expr %{HTTP_USER_AGENT} =~ 'AppleCoreMedia'
+	Require not expr %{HTTP_USER_AGENT} =~ 'Applebot'
+#	Require not expr %{HTTP_USER_AGENT} =~ 'Apple-PubSub'
+	Require not expr %{HTTP_USER_AGENT} =~ 'Baiduspider'
+	Require not expr %{HTTP_USER_AGENT} =~ 'BingPreview'
+	Require not expr %{HTTP_USER_AGENT} =~ 'BingLocalSearch'
+	Require not expr %{HTTP_USER_AGENT} =~ 'BrokenLinkCheck'
+	Require not expr %{HTTP_USER_AGENT} =~ 'CCBot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'CPython'
+	Require not expr %{HTTP_USER_AGENT} =~ 'CRAZYWEBCRAWLER'
+#	Require not expr %{HTTP_USER_AGENT} =~ 'DAP/NetHTTP'
+	Require not expr %{HTTP_USER_AGENT} =~ 'DigExt'
+	Require not expr %{HTTP_USER_AGENT} =~ 'Digg Deeper'
+	Require not expr %{HTTP_USER_AGENT} =~ 'DotBot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'DomainAppender'
+	Require not expr %{HTTP_USER_AGENT} =~ 'Dow Jones Searchbot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'DuckDuck'
+	Require not expr %{HTTP_USER_AGENT} =~ 'Embedly'
+	Require not expr %{HTTP_USER_AGENT} =~ 'EveryoneSocialBot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'Exabot'
+#	Require not expr %{HTTP_USER_AGENT} =~ 'FlipboardProxy'
+	Require not expr %{HTTP_USER_AGENT} =~ 'GigablastOpenSource'
+	Require not expr %{HTTP_USER_AGENT} =~ 'GimmeUSAbot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'Googlebot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'ICAP-IOD'
+	Require not expr %{HTTP_USER_AGENT} =~ 'InAGist'
+	Require not expr %{HTTP_USER_AGENT} =~ 'InfegyAtlas'
+	Require not expr %{HTTP_USER_AGENT} =~ 'Jakarta'
+	Require not expr %{HTTP_USER_AGENT} =~ 'LSSRocketCrawler'
+	Require not expr %{HTTP_USER_AGENT} =~ 'MJ12bot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'MaxPointCrawler'
+	Require not expr %{HTTP_USER_AGENT} =~ 'MetaURI'
+	Require not expr %{HTTP_USER_AGENT} =~ 'MixrankBot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'MojeekBot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'NerdyBot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'NetLyzer'
+	Require not expr %{HTTP_USER_AGENT} =~ 'NetcraftSurveyAgent'
+	Require not expr %{HTTP_USER_AGENT} =~ 'Nutch'
+	Require not expr %{HTTP_USER_AGENT} =~ 'OpenLinkProfiler'
+	Require not expr %{HTTP_USER_AGENT} =~ 'PaperLiBot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'Pinterest'
+	Require not expr %{HTTP_USER_AGENT} =~ 'Python-urllib'
+	Require not expr %{HTTP_USER_AGENT} =~ 'Ruby'
+	Require not expr %{HTTP_USER_AGENT} =~ 'RU_Bot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'SEOstats'
+	Require not expr %{HTTP_USER_AGENT} =~ 'SemrushBot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'ShowyouBot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'Sogou'
+	Require not expr %{HTTP_USER_AGENT} =~ 'SurveyBot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'Thumbtack'
+	Require not expr %{HTTP_USER_AGENT} =~ 'Twitterbot'
+	Require not expr %{HTTP_USER_AGENT} == 'vBSEO'
+	Require not expr %{HTTP_USER_AGENT} == 'Wordpress;'
+	Require not expr %{HTTP_USER_AGENT} =~ 'WWW-Mechanize'
+	Require not expr %{HTTP_USER_AGENT} =~ 'YandexBot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'Yahoo'
+	Require not expr %{HTTP_USER_AGENT} =~ 'YisouSpider'
+	Require not expr %{HTTP_USER_AGENT} =~ 'Y!J-ASR'
+	Require not expr %{HTTP_USER_AGENT} =~ 'archive.org_bot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'bingbot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'botify'
+	Require not expr %{HTTP_USER_AGENT} =~ 'facebookexternalhit'
+	Require not expr %{HTTP_USER_AGENT} =~ 'heritrix'
+	Require not expr %{HTTP_USER_AGENT} =~ 'ia_archiver'
+	Require not expr %{HTTP_USER_AGENT} =~ 'libwww-perl'
+	Require not expr %{HTTP_USER_AGENT} =~ 'linkdexbot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'meanpathbot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'oBot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'okhttp'
+	Require not expr %{HTTP_USER_AGENT} =~ 'postano'
+	Require not expr %{HTTP_USER_AGENT} =~ 'spbot'
+	Require not expr %{HTTP_USER_AGENT} =~ 'shareaholic'
+	Require not expr %{HTTP_USER_AGENT} =~ 'user-agent='
+	Require not expr %{HTTP_USER_AGENT} =~ 'webcollage'
+	Require not expr %{HTTP_USER_AGENT} =~ 'wscheck.com'
+	Require not expr %{HTTP_USER_AGENT} =~ 'yellowpages.com'
+	Require not expr %{HTTP_USER_AGENT} =~ '=Mozilla'
+	Require not expr %{HTTP_USER_AGENT} == '-'
+    </RequireAll>
+</RequireAny>
+<% end -%>

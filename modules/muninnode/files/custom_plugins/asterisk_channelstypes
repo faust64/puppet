@@ -1,0 +1,74 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+my $ret = undef;
+if (! eval "require Net::Telnet;") {
+    $ret = "Net::Telnet not found";
+}
+
+my @CHANNELS = exists $ENV{'channels'} ? split ' ',$ENV{'channels'} : qw(DAHDI Zap IAX2 SIP);
+
+if ($ARGV[0] and $ARGV[0] eq "config") {
+    print "graph_title Asterisk channels\n";
+    print "graph_args --base 1000 -l 0\n";
+    print "graph_vlabel channels\n";
+    print "graph_category asterisk\n";
+    foreach my $channel (@CHANNELS) {
+	if ($channel eq $CHANNELS[0]) {
+	    print "$channel.draw AREA\n";
+	}
+	else {
+	    print "$channel.draw STACK\n";
+	}
+	print "$channel.label $channel\n";
+    }
+    exit 0;
+}
+
+my $host     = exists $ENV{'host'} ? $ENV{'host'} : "127.0.0.1";
+my $port     = exists $ENV{'port'} ? $ENV{'port'} : "5038";
+my $username = exists $ENV{'username'} ? $ENV{'username'} : 'munin';
+my $secret   = exists $ENV{'secret'} ? $ENV{'secret'} : 'somepassword';
+
+my $pop = new Net::Telnet (Telnetmode => 0);
+$pop->open(Host => $host,
+	   Port => $port);
+my $line = $pop->getline;
+die $line unless $line =~ /^Asterisk/;
+$pop->print("Action: login");
+$pop->print("Username: $username");
+$pop->print("Secret: $secret");
+$pop->print("Events: off");
+$pop->print("");
+$pop->print("Action: command");
+$pop->print("Command: core show channels");
+$pop->print("");
+my @results;
+my ($i, $start)=(0,0);
+foreach my $channel (@CHANNELS) {
+    $results[$i] = 0;
+    $i++;
+}
+
+my @fields;
+while (($line = $pop->getline) and ($line !~ /active channels/o)) {
+    $i = 0;
+    if ($start) {
+	@fields = (split '/', $line);
+	foreach my $channel (@CHANNELS) {
+	    $results[$i] = $results[$i] + 1 if ($fields[0] eq $channel);
+	    $i++;
+	}
+    }
+    $start = 1 if ($line =~ /Channel/o);
+}
+$pop->print("Action: logoff");
+$pop->print("");
+while (($line = $pop->getline)) {
+}
+$i = 0;
+foreach my $channel (@CHANNELS) {
+    print "$channel.value $results[$i]\n";
+    $i++;
+}

@@ -1,0 +1,6 @@
+<% if @members -%>define contactgroup {
+    alias		<%=@aalias%>
+    contactgroup_name	<%=@name%>
+    members		<% @members.each do |member| -%><%=member%>,<% end -%>root
+}
+<% end -%>

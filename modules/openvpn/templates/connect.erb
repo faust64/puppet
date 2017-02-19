@@ -1,0 +1,13 @@
+#!/bin/sh
+
+export LOG=/var/log/openvpn-connect-<%=@name%>.log
+<% if @filter != false -%>export FILTER="<%=@filter%>"
+<% end -%>export DIRECTORIES=<%=@ldap%>
+<% if @openvpn_ldap_account != false -%>export BINDDN="<%=@openvpn_ldap_account%>"
+<% end -%><% if @openvpn_ldap_passphrase != false -%>export BINDPW="<%=@openvpn_ldap_passphrase%>"
+<% end -%><% if @openvpn_searchfilter != false -%>export SRCHOU="<%=@openvpn_searchfilter%>"
+<% end -%>
+
+/usr/local/sbin/openvpn_connect.sh
+
+exit $?

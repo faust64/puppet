@@ -1,0 +1,14 @@
+# configured rules:
+# Network chassis > Network switch
+# Network switch > Network switch
+# Network switch > Router
+# Network switch > Server
+# Power supply chassis >Power supply
+# Router > Network switch
+# Router > Router
+# Router > Server
+# Server > VM
+# Server > VM Virtual Switch
+# Server chassis > Server
+# Shelf > Modem
+# Shelf > Wireless

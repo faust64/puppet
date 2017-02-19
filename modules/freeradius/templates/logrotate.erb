@@ -1,0 +1,12 @@
+<%=@log_dir%>/*.log
+{
+    compress
+    delaycompress
+    missingok
+    notifempty
+    rotate 52
+    weekly
+    postrotate
+	/etc/init.d/<%=@service_name%> reload >/dev/null 2>&1
+    endscript
+}

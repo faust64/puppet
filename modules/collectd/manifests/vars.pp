@@ -1,0 +1,15 @@
+class collectd::vars {
+    $interval       = hiera("collectd_interval")
+    $cache_flush    = hiera("collectd_cache_flush")
+    $conf_dir       = hiera("collectd_conf_dir")
+    $log_dir        = hiera("collectd_log_dir")
+    $graphite       = hiera("collectd_graphite")
+    $plugins        = hiera("collectd_default_plugins")
+    $readthreads    = hiera("collectd_readthreads")
+    $run_dir        = hiera("collectd_run_dir")
+    $share_dir      = hiera("collectd_share_dir")
+    $upstream       = hiera("collectd_upstream")
+    $usr_dir        = hiera("collectd_usr_dir")
+    $var_dir        = hiera("collectd_var_dir")
+    $writes_per_sec = hiera("collectd_writes_per_second")
+}

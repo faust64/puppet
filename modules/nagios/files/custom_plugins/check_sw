@@ -1,0 +1,248 @@
+#!/bin/sh
+
+Prg=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+ret=UNKNOWN
+community="public"
+target="127.0.0.1"
+query="firmware"
+port=1
+RETRY=3
+RETRY_DELAY=2
+N=0
+
+        OID_FIRMWARE=".1.3.6.1.4.1.674.10895.3000.1.2.100.4.0"
+           OID_MODEL=".1.3.6.1.4.1.674.10895.3000.1.2.100.1.0"
+          OID_UPTIME=".1.3.6.1.2.1.1.3.0"
+  OID_ADMPORTS_STATE=".1.3.6.1.2.1.2.2.1.7"
+     OID_PORTS_STATE=".1.3.6.1.2.1.2.2.1.8"
+OID_LAST_STATECHANGE=".1.3.6.1.2.1.2.2.1.9"
+      OID_IN_PACKETS=".1.3.6.1.2.1.2.2.1.10"
+       OID_IN_ERRORS=".1.3.6.1.2.1.2.2.1.14"
+     OID_OUT_PACKETS=".1.3.6.1.2.1.2.2.1.16"
+      OID_OUT_ERRORS=".1.3.6.1.2.1.2.2.1.20"
+
+usage()
+{
+    echo "Usage: $Prg -H host -C community -t query"
+    echo "  query: firmware"
+    echo "  query: model"
+    echo "  query: uptime"
+    echo "  query: ports"
+    echo "  query: adm -p prtnbr"
+    echo "  query: lastchange -p prtnbr"
+    echo "  query: portcheck [-p prtnbr]"
+    echo "  query: portstats [-p prtnbr]"
+}
+
+if test -z "$1"; then
+    usage
+    exit $UNKNOWN
+fi
+
+while getopts H:C:t:p:h OPT
+do
+    case $OPT in
+	H) target=$OPTARG	;;
+	C) community=$OPTARG	;;
+	t) query=$OPTARG	;;
+	p) port=$OPTARG		;;
+	h)
+	    usage
+	    exit $UNKNOWN
+	    ;;
+    esac
+done
+
+while test $N -le $RETRY
+do
+    N=`expr $N + 1`
+
+    if ping -c3 -w3 -q $target | grep '100%[ 	]*packet[	 ]*loss'; then
+	msg=" $target unreachable"
+	ret=CRITICAL
+    elif test $query = firmware; then
+	res=`snmpget -t 2 -r 2 -v 1 -c $community -Ovq $target $OID_FIRMWARE`
+	if test "$res"; then
+	    ret=OK
+	    msg=" $res firmware"
+	fi
+    elif test $query = model; then
+	res=`snmpget -t 2 -r 2 -v 1 -c $community -Ovq $target $OID_MODEL`
+	if test "$res"; then
+	    ret=OK
+	    msg=" $res model"
+	fi
+    elif test $query = uptime; then
+	res=`snmpget -t 2 -r 2 -v 1 -c $community -Ovq $target $OID_UPTIME`
+	if test "$res"; then
+	    eval `echo $res | sed 's|\([0-9]*\):\([0-9]*\):\([0-9]*\):[0-9]*\.[0-9]*|days=\1 hour=\2 min=\3|'`
+	    if test "$days" -eq 0 -a "$hour" -eq 0 -a "$min" -lt 20; then
+		ret=WARNING
+	    else
+		ret=OK
+	    fi
+	    msg=" Uptime: $days days, $hour hours, $min mins"
+	fi
+    elif test $query = ports; then
+	res=`snmpwalk -t 2 -r 2 -v 1 -c $community -Ovq $target $OID_PORTS_STATE | sed 's|^\([^6]*\).*|\1|'`
+	msg=" Ports: Up: UNKNOWN Down: UNKNOWN"
+	PORTSUP=`echo $res | sed 's|[^1]*||g' | wc -c`
+	PORTSDOWN=`echo $res | sed 's|[^2]*||g' | wc -c`
+	if test $PORTSUP -ge 0 -a $PORTSDOWN -ge 0; then
+	    ret=OK
+	    msg=" Ports: Up: $PORTSUP Down: $PORTSDOWN"
+	fi
+    elif test $query = portcheck; then
+	res=`snmpget -t 2 -r 2 -v 1 -c $community -Ovq $target $OID_PORTS_STATE.$port`
+	if test "$res"; then
+	    msg=" Status port $port"
+	    ret=OK
+	    if test $res -eq 1; then
+		msg="$msg: up"
+	    elif test $res -eq 2; then
+		msg="$msg: down"
+	    elif test $res -eq 3; then
+		ret=WARNING
+		msg="$msg: testing"
+	    elif test $res -ge 0; then
+		msg="$msg: $res"
+		ret=CRITICAL
+	    else
+		msg="$msg: $res"
+	    fi
+	else
+	    msg=" port $port"
+	fi
+    elif test $query = adm; then
+	res=`snmpget -t 2 -r 2 -v 1 -c $community -Ovq $target $OID_ADMPORTS_STATE.$port`
+	msg=" port $port may be dormant, notPresent, or Poney"
+	if test "$res"; then
+	    if test $res = 1; then
+		ret=OK
+		msg=" Managed port $port"
+	    elif test $res = 2; then
+		ret=CRITICAL
+		msg=" Unmanaged port $port"
+	    elif test $res = 3; then
+		ret=WARNING
+		msg=" Testing port $port"
+	    fi
+	else
+	    msg=" port $port: administrative state"
+	fi
+    elif test $query = lastchange; then
+	res=`snmpget -t 2 -r 2 -v 1 -c $community -Ovq $target $OID_LAST_STATECHANGE.$port`
+	msg=" port $port: last state change date"
+	if test "$res"; then
+	    chk=`snmpget -t 2 -r 2 -v 1 -c $community -Ovq $target $OID_UPTIME`
+	    moar=`snmpget -t 2 -r 2 -v 1 -c $community -Ovq $target $OID_PORTS_STATE.$port`
+	    stt=unknown
+	    if test "$moar"; then
+		if test $moar -eq 1; then
+		    stt=UP
+		elif test $moar -eq 2; then
+		    stt=DOWN
+		elif test $moar -eq 3; then
+		    stt=TESTING
+		fi
+	    fi
+	    if test "$chk"; then
+		eval `echo $chk | sed 's|\([0-9]*\):\([0-9]*\):\([0-9]*\):\([0-9]*\)\.[0-9]*|cdays=\1 chour=\2 cmin=\3 csec=\4|'`
+		eval `echo $res | sed 's|\([0-9]*\):\([0-9]*\):\([0-9]*\):\([0-9]*\)\.[0-9]*| days=\1  hour=\2  min=\3  sec=\4|'`
+		ddays=`expr $cdays - $days`
+		dhour=`expr $chour - $hour`
+		dmin=`expr $cmin - $min`
+		dsec=`expr $csec - $sec`
+		if test $dsec -lt 0; then
+		    dmin=`expr $dmin - 1`
+		    dsec=`expr 60 + $dsec`
+		fi
+		if test $dmin -lt 0; then
+		    dhour=`expr $dhour - 1`
+		    dmin=`expr 60 + $dmin`
+		fi
+		if test $dhour -lt 0; then
+		    dday=`expr $dday - 1`
+		    dhour=`expr 24 + $dhour`
+		fi
+		if test $ddays -eq 0 -a $dhour -eq 0 -a $dmin -lt 5; then
+		    test $stt != DOWN && ret=WARNING || ret=OK
+		    msg=" port $port state changed to $stt [${dmin}m,${dsec}s ago]"
+		elif test $ddays$dhour$dmin -ge 5; then
+		    ret=OK
+		    msg=" port $port $stt since $ddays days, $dhour hours, $dmin mins"
+ 		elif test $ddays -lt 0 -o $dhour -lt 0 -o $dmin -lt 0; then
+ 		    test $stt = DOWN && ret=OK || ret=WARNING
+ 		    msg=" port $port $stt since like ever"
+		else
+		    msg=" port $port $stt since $res"
+		fi
+	    else
+		msg=" unable to get uptime"
+	    fi
+	fi
+    elif test $query = portstats; then
+	tin=`snmpget -t 2 -r 2 -v 1 -c $community -Ovq $target $OID_IN_PACKETS.$port`
+	tout=`snmpget -t 2 -r 2 -v 1 -c $community -Ovq $target $OID_OUT_PACKETS.$port`
+	ein=`snmpget -t 2 -r 2 -v 1 -c $community -Ovq $target $OID_IN_ERRORS.$port`
+	eout=`snmpget -t 2 -r 2 -v 1 -c $community -Ovq $target $OID_OUT_ERRORS.$port`
+	msg=" port $port"
+	if test $tin -lt 100 -o $tout -lt 100; then
+	    ret=OK
+	    msg="$msg [null traffic]"
+	elif test `expr $ein '*' 20` -ge $tin; then
+	    ret=CRITICAL
+	    msg="$msg inbound packet loss"
+	elif `expr $eout '*' 20` -ge $tout; then
+	    ret=CRITICAL
+	    msg="$msg outbound packet loss"
+	elif test `expr $ein '*' 40` -ge $tin; then
+	    ret=WARNING
+	    msg="$msg inbound packet loss"
+	elif test `expr $eout '*' 40` -ge $tout; then
+	    ret=WARNING
+	    msg="$msg outbount packet loss"
+	else
+	    ret=OK
+	fi
+	for val in tin tout ein eout
+	do
+	    unit=b
+	    eval i=\$$val
+	    while :
+	    do
+		case $unit in
+		    b)	unit=k	;;
+		    k)	unit=M	;;
+		    M)	unit=G	;;
+		    G)	unit=T	;;
+		    T)	unit=P	;;
+		    P)	unit=E	;;
+		    E)	unit=Z	;;
+		    *)	break	;;
+		esac
+		if test `expr $i / 1024` -lt 1024; then
+		    i="`expr $i / 1024`.`expr $i % 1024`"
+		    break
+		fi
+		i=`expr $i / 1024`
+	    done
+	    eval $val=$i$unit
+	done
+	msg="$msg (e/o in: $ein/$tin e/o out: $eout/$tout)"
+    fi
+
+    if test $ret = UNKNOWN -a $N -le $RETRY; then
+	sleep $RETRY_DELAY
+    else
+	break
+    fi
+done >/dev/null 2>&1
+
+echo $ret$msg$pefdata
+eval ret=\$$ret
+exit $ret

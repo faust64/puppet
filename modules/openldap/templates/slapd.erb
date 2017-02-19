@@ -1,0 +1,216 @@
+include			<%=@conf_dir%>/schema/asterisk.schema
+include			<%=@conf_dir%>/schema/core.schema
+include			<%=@conf_dir%>/schema/cosine.schema
+include			<%=@conf_dir%>/schema/dhcp.schema
+include			<%=@conf_dir%>/schema/dlz.schema
+include			<%=@conf_dir%>/schema/dyngroup.schema
+include			<%=@conf_dir%>/schema/inetorgperson.schema
+include			<%=@conf_dir%>/schema/kerberos.schema
+include			<%=@conf_dir%>/schema/nis.schema
+include			<%=@conf_dir%>/schema/openssh-lpk.schema
+include			<%=@conf_dir%>/schema/ppolicy.schema
+include			<%=@conf_dir%>/schema/samba.schema
+include			<%=@conf_dir%>/schema/UTGB.schema
+
+pidfile			<%=@run_dir%>/slapd.pid
+argsfile		<%=@run_dir%>/slapd.args
+loglevel		none
+modulepath		/usr/lib/ldap
+moduleload		back_hdb
+moduleload		memberof
+moduleload		ppolicy
+moduleload		auditlog
+moduleload		dynlist
+<% if @ldap_slave == false -%>moduleload		syncprov
+moduleload		refint
+<% end -%>moduleload		back_monitor
+
+sizelimit		4000
+tool-threads		2
+backend			hdb
+
+database		monitor
+access to *
+    by dn="cn=munin,ou=services,<%=@suffix%>" read
+    by dn.exact="cn=admin,<%=@suffix%>" read
+    by * none
+
+database		hdb
+suffix			"<%=@suffix%>"
+directory		"<%=@dir_dir%>"
+idletimeout		3600
+sasl-secprops		noanonymous,noplain,noactive
+
+dbconfig		set_cachesize 0 104857600 0
+dbconfig		set_lk_max_objects 1500
+dbconfig		set_lk_max_locks 1500
+dbconfig		set_lk_max_lockers 1500
+
+lastmod			on
+checkpoint		512 30
+
+
+rootdn			"cn=admin,<%=@suffix%>"
+<% if @ldap_slave == false -%>rootpw			{SSHA}<%=@admin_ssha%>
+<% end -%>
+
+index			default			pres,approx,eq,sub
+index			cn,sn,uid,mail
+index			objectClass		eq
+index			member			pres,eq
+index			memberOf		pres,eq
+index			entryUUID		pres,eq
+index			entryCSN		pres,eq
+index			dlzType			pres,eq
+index			dlzIPAddr		eq
+index			sambaSID		eq
+index			sambaPrimaryGroupSID	eq
+index			sambaDomainName		eq
+index			gidNumber		eq
+index			AstAccountHost		eq
+index			AstAccountCallerID	eq,sub
+index			AstContext		pres,eq
+index			AstExtension		eq,sub
+index			AstPriority		eq
+#index			AstQueueName		pres,eq
+#index			AstQueueMemberof	pres,eq
+index			AstVoicemailMailbox	eq
+index			krbPrincipalName	pres,eq
+index			krbPwdPolicyReference	pres,eq
+index			dhcpHWAddress		eq
+index			dhcpClassData		eq
+index			modifyTimestamp		pres,eq
+
+<% if @ldap_slave == false -%>overlay			syncprov
+syncprov-checkpoint     100 10
+overlay			memberof
+memberof-refint		true
+memberof-dangling	error
+memberof-group-oc	groupOfNames
+memberof-member-ad	member
+memberof-memberof-ad	memberOf
+overlay			refint
+refint_attributes	manager member
+refint_nothing		"cn=nothing,ou=services,<%=@suffix%>"
+<% end -%>
+
+overlay			ppolicy
+ppolicy_default		"cn=default,ou=policies,<%=@suffix%>"
+ppolicy_use_lockout
+overlay			auditlog
+auditlog                /var/log/ldapaudit
+
+overlay			dynlist
+dynlist-attrset		groupOfURLs memberURL member
+
+TLSCACertificateFile	<%=@conf_dir%>/ssl/server-chain.crt
+TLSCertificateKeyFile	<%=@conf_dir%>/ssl/server.key
+TLSCertificateFile	<%=@conf_dir%>/ssl/server.crt
+
+access to dn.base="" by * read
+
+security simple_bind=128
+
+access to dn.subtree="ou=dhcp,<%=@suffix%>"
+    by dn="cn=dhcp,ou=services,<%=@suffix%>" write
+    by dn="cn=repl,ou=services,<%=@suffix%>" read
+access to dn.subtree="ou=dns,<%=@suffix%>"
+    by dn="cn=dhcp,ou=services,<%=@suffix%>" write
+    by dn="cn=named,ou=services,<%=@suffix%>" read
+    by dn="cn=repl,ou=services,<%=@suffix%>" read
+access to dn.subtree="ou=sip,<%=@suffix%>"
+    by dn="cn=asterisk,ou=services,<%=@suffix%>" write
+    by dn="cn=repl,ou=services,<%=@suffix%>" read
+
+access to dn.subtree="ou=groups,<%=@suffix%>" filter=(objectClass=UTGBJabber)
+    by dn="cn=repl,ou=services,<%=@suffix%>" read
+    by dn="cn=jabber,ou=services,<%=@suffix%>" read
+    by * none
+access to attrs=userPassword,shadowLastChange
+    by dn.regex="uid=.*/admin,cn=GSSAPI,dn=auth" write
+    by dn="cn=repl,ou=services,<%=@suffix%>" read
+    by dn="cn=bluemind,ou=services,<%=@suffix%>" read
+    by dn="cn=freeradius,ou=services,<%=@suffix%>" read
+    by dn="cn=samba,ou=services,<%=@suffix%>" read
+    by self write
+    by anonymous auth
+access to attrs=userPKCS12
+    by dn.regex="uid=.*/admin,cn=GSSAPI,cn=auth" write
+    by dn="cn=repl,ou=services,<%=@suffix%>" read
+    by self write
+    by * auth
+access to attrs=labeledURI
+    by dn="cn=gedi,ou=services,<%=@suffix%>" read
+    by dn="cn=repl,ou=services,<%=@suffix%>" read
+access to attrs=pwdAccountLockedTime
+    by dn="cn=openvpn,ou=services,<%=@suffix%>" read
+    by dn="cn=bluemind,ou=services,<%=@suffix%>" read
+    by dn="cn=repl,ou=services,<%=@suffix%>" read
+    by dn="cn=freeradius,ou=services,<%=@suffix%>" read
+    by * read
+access to attrs=uidNumber,gidNumber,homeDirectory,loginShell
+    by * read
+access to attrs=entryUUID,entryDN,createTimestamp,modifyTimestamp
+    by dn="cn=bluemind,ou=services,<%=@suffix%>" read
+    by dn="cn=repl,ou=services,<%=@suffix%>" read
+    by * none
+access to attrs=startOfContract,employeeNumber
+    by dn="cn=repl,ou=services,<%=@suffix%>" read
+    by * none
+access to attrs=sambaAcctFlags,sambaKickoffTime,sambaLMPassword,sambaLogoffTime,SambaLogonTime,SambaNTPassword,SambaPwdCanChange,SambaPwdMustChange,SambaSID
+    by dn="cn=samba,ou=services,<%=@suffix%>" read
+    by dn="cn=freeradius,ou=services,<%=@suffix%>" read
+    by dn="cn=repl,ou=services,<%=@suffix%>" read
+    by self read
+access to attrs=sshPublicKey
+    by dn="cn=repl,ou=services,<%=@suffix%>" read
+    by self write
+    by * read
+access to attrs=jabberDisplayName
+    by dn="cn=jabber,ou=services,<%=@suffix%>" read
+    by dn="cn=repl,ou=services,<%=@suffix%>" read
+access to dn.regex="cn=[^,]+,ou=groups,<%=@suffix%>$" attrs=member filter=(objectClass=groupOfNames)
+    by group.exact="cn=access-mailing-admin,ou=groups,<%=@suffix%>" write
+    by dnattr=owner write
+    by * read
+access to dn.regex="cn=[^,]+,ou=groups,<%=@suffix%>$" attrs=owner filter=(objectClass=groupOfNames)
+    by group.exact="cn=access-mailing-admin,ou=groups,<%=@suffix%>" write
+    by * read
+access to dn.regex="cn=[^,]+,ou=groups,<%=@suffix%>$" attrs=mail
+    by group.exact="cn=access-mailing-admin,ou=groups,<%=@suffix%>" write
+    by * read
+access to attrs=memberOf
+    by dn="cn=bluemind,ou=services,<%=@suffix%>" none
+    by * read
+access to attrs=uid,cn,sn,givenName,departmentNumber,o,telephoneNumber,l,title,manager,personalTitle,ou,primaryDepartmentNumber,mail,owner,member
+    by * read
+access to dn.subtree="ou=services,<%=@suffix%>" attrs=objectclass,entry,children
+    by * read
+access to dn.subtree="ou=users,<%=@suffix%>" attrs=objectclass,entry,children
+    by * read
+access to dn.subtree="ou=groups,<%=@suffix%>" attrs=objectclass,entry,children
+    by * read
+access to dn.subtree="ou=users,<%=@suffix%>"
+    by dn="cn=repl,ou=services,<%=@suffix%>" read
+access to dn.subtree="ou=groups,<%=@suffix%>"
+    by dn="cn=repl,ou=services,<%=@suffix%>" read
+access to dn="<%=@suffix%>"
+    by dn="cn=repl,ou=services,<%=@suffix%>" read
+    by * read
+access to *
+    by dn="cn=repl,ou=services,<%=@suffix%>" read
+    by * none
+<% if @ldap_slave != false -%>
+
+syncrepl rid=<%=@ldap_id%>
+    provider=ldaps://<%=@ldap_slave%>
+    type=refreshAndPersist
+    retry="60 10 300 +"
+    searchbase="<%=@suffix%>"
+    schemachecking=off
+    bindmethod=simple
+    binddn="cn=repl,ou=services,<%=@suffix%>"
+    credentials=<%=@repl_dn_passwd%>
+    tls_cacert=<%=@cert_dir%>/ca-auth.crt
+    tls_reqcert=demand
+<% end -%>

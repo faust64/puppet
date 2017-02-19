@@ -1,0 +1,76 @@
+<% hosts = scope.lookupvar("vlist::vars::vlist_hosts_list") -%><VirtualHost <%=@ipaddress%>:<%=@listen_ports['plain']%>>
+    ServerName <%=@name%>
+<% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
+<% end -%><% end -%>    ServerAdmin <%=@server_admin%>
+    ErrorLog <%=@log_dir%>/error-<%=@name%>.log
+    LogLevel warn
+    CustomLog <%=@log_dir%>/access-<%=@name%>.log combined
+<% if @listen_ports['ssl'] != false -%>    RewriteEngine On
+    RewriteRule ^/(.*) https://<%=@name%>/$1 [L,R]
+</VirtualHost>
+<VirtualHost <%=@ipaddress%>:<%=@listen_ports['ssl']%>>
+    ServerName <%=@name%>
+<% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
+<% end -%><% end -%>    ServerAdmin <%=@server_admin%>
+    ErrorLog <%=@log_dir%>/ssl-error-<%=@name%>.log
+    LogLevel warn
+<% if @stricttransport != false -%>    Header always set Strict-Transport-Security "<%=@stricttransport%>"
+<% end -%><% if @deny_frames == "remote" -%>    Header always set X-Frame-Options SAMEORIGIN
+<% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
+<% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
+<% end -%>    CustomLog <%=@log_dir%>/ssl-access-<%=@name%>.log combined
+    Include ssl.conf
+<% end -%>    DocumentRoot /var/www/vm_list
+    ScriptAlias /cgi-bin/ /var/www/vm_list/cgi-bin/
+    Alias /icons/ /var/www/vm_list/icons/
+
+    <Directory /var/www/vm_list>
+	Options None
+<% if hosts[@fqdn] == "projets" -%>	AuthType Basic
+	Include authldap.conf
+<% else -%><% if @version == "2.2" -%>	Deny from all
+	Order deny,allow
+<% end -%>	AllowOverride None
+    Include admin.conf
+<% end -%>	RedirectMatch ^/$ /cgi-bin/vm_manager.cgi
+	RedirectMatch ^/cgi-bin/icons/(.*) /icons/$1
+	RedirectMatch ^/cgi-bin/css/(.*) /css/$1
+    </Directory>
+</VirtualHost>
+<% if hosts[@fqdn] == "projets" -%>Listen *:8443
+<VirtualHost <%=@ipaddress%>:8443>
+    ServerName <%=@name%>
+<% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
+<% end -%><% end -%>    ServerAdmin <%=@server_admin%>
+    ErrorLog <%=@log_dir%>/ssl-error-<%=@name%>.log
+    LogLevel warn
+<% if @stricttransport != false -%>    Header always set Strict-Transport-Security "<%=@stricttransport%>"
+<% end -%><% if @deny_frames == "remote" -%>    Header always set X-Frame-Options SAMEORIGIN
+<% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
+<% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
+<% end -%>    CustomLog <%=@log_dir%>/ssl-access-<%=@name%>.log combined
+    Include ssl.conf
+    DocumentRoot /var/www/vm_list
+    ScriptAlias /cgi-bin/ /var/www/vm_list/cgi-bin/
+    Alias /icons/ /var/www/vm_list/icons/
+
+    <Directory /var/www/vm_list>
+	Options None
+	AllowOverride None
+<% if @version == "2.2" -%>	Order deny,allow
+	Deny from all
+	Allow from 10.42.42.42 #vlist IP, TODO: find a way to keep it into hiera
+<% else -%>	Require ip 10.42.42.42
+<% end -%>	Include admin.conf
+	RedirectMatch ^/$ /cgi-bin/vlist_manager.cgi
+	RedirectMatch ^/vlist_popup.cgi(.*)$ /cgi-bin/vlist_popup.cgi$1
+	RedirectMatch ^/vlist_manager_action.cgi(.*)$ /cgi-bin/vlist_manager_action.cgi$1
+	RedirectMatch ^/vlist_manager.cgi(.*)$ /cgi-bin/vlist_manager.cgi$1
+	RedirectMatch ^/cgi-bin/icons/(.*) /icons/$1
+	RedirectMatch ^/cgi-bin/css/(.*) /css/$1
+	RedirectMatch ^(.*)/popup.cgi(.*)$ /cgi-bin/vlist_popup.cgi$2
+	RedirectMatch ^(.*)/vm_manager_action.cgi(.*)$ /cgi-bin/vlist_manager_action.cgi$2
+	RedirectMatch ^(.*)/vm_manager.cgi(.*)$ /cgi-bin/vlist_manager.cgi$2
+    </Directory>
+</VirtualHost>
+<% end -%>

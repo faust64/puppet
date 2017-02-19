@@ -1,0 +1,46 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:		kibana
+# Required-Start:	$remote_fs $syslog
+# Required-Stop:	$remote_fs $syslog
+# Default-Start:	2 3 4 5
+# Default-Stop:		
+# Short-Description:	Kibana
+### END INIT INFO
+
+set -e
+
+test -d /usr/share/kibana/bin || exit 0
+
+. /lib/lsb/init-functions
+
+case "$1" in
+    start)
+	/usr/share/kibana/bin/kibana >/var/log/kibana 2>&1 &
+	log_action_msg "Starting Kibana"
+	;;
+
+  stop)
+	for pid in `ps ax | grep '/[u]sr/share/kibana/bin/../node/bin/node ' | awk '{print $1}'`
+	do
+	    log_action_msg "Stopping $pid"
+	    kill $pid || kill -9 $pid
+	done
+	;;
+
+    reload|force-reload|try-restart|restart)
+	$0 stop
+	$0 start
+	;;
+
+  status)
+	ps ax | grep '/usr/[s]hare/kibana/bin/../node/bin/node ' | grep '[a-z]'
+	;;
+
+  *)
+	log_action_msg "Usage: /etc/init.d/kibana {start|stop|reload|force-reload|restart|try-restart|status}" || true
+	exit 1
+esac
+
+exit 0

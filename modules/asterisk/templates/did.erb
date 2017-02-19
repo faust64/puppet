@@ -1,0 +1,7 @@
+[ext-did-<%=@target%>]
+exten => <%=@name%>,1,Set(__FROM_DID=${EXTEN})
+exten => <%=@name%>,n,Gosub(blacklist-check,s,1)
+exten => <%=@name%>,n,ExecIf($[ "${CALLERID(name)}" = "" ] ?Set(CALLERID(name)=${CALLERID(num)}))
+exten => <%=@name%>,n,Set(__CALLINGPRES_SV=${CALLERPRES()})
+exten => <%=@name%>,n,Set(CALLERPRES()=allowed_not_screened)
+exten => <%=@name%>,n(dest-ext),Goto(<%=@context%>,<%=@target%>,1)

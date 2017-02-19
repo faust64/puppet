@@ -1,0 +1,35 @@
+#!/bin/sh
+
+pool_dir=/tmp/munin-pool
+TMPFILE=/tmp/`basename $0`.$$
+
+if test -s $pool_dir/lock; then
+    pid=`cat $pool_dir/lock`
+    if ps ax | grep "$pid[ ]" >/dev/null; then
+	exit 0
+    fi
+fi
+test -d $pool_dir || mkdir $pool_dir
+echo $$ >$pool_dir/lock
+
+test -d <%=@conf_dir%>/plugins-pool || exit 1
+cd <%=@conf_dir%>/plugins-pool
+
+for probe in *
+do
+    test -d $pool_dir/$probe || mkdir -p $pool_dir/$probe
+    if ! test -f $pool_dir/$probe/autoconf; then
+	./$probe autoconf >$TMPFILE
+	test -s $TMPFILE && mv $TMPFILE $pool_dir/$probe/autoconf
+    fi
+    if ! test -f $pool_dir/$probe/config; then
+	./$probe config >$TMPFILE
+	test -s $TMPFILE && mv $TMPFILE $pool_dir/$probe/config
+    fi
+    ./$probe >$TMPFILE
+    test -s $TMPFILE && mv $TMPFILE $pool_dir/$probe/value
+done 2>&1 | awk '{print strftime("[%Y/%m/%d - %H:%M:%S] "), $0}' ><%=@munin_log_dir%>/munin-pooler.log
+
+rm -f $pool_dir/lock
+
+exit 0

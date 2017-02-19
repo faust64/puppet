@@ -1,0 +1,14 @@
+defaults
+{
+    log_type        = SYSLOG daemon info
+    log_on_failure  = HOST
+    log_on_success  = PID HOST DURATION EXIT
+    cps             = 50 10
+    instances       = 50
+    per_source      = 10
+    v6only          = no
+    groups          = yes
+    only_from       = <% if @clients != false -%><%=@clients.join(" ")%> <% end -%>127.0.0.1
+    umask           = <%=@umask%>
+}
+includedir /etc/xinetd.d

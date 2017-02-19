@@ -1,0 +1,5 @@
+LoadPlugin network
+<Plugin network>
+<% if scope.lookupvar('collectd::vars::upstream') != false -%>    Server "<%=scope.lookupvar('collectd::vars::upstream')%>"
+<% else -%>	Listen "*"
+<% end -%></Plugin>

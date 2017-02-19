@@ -1,0 +1,46 @@
+Content-language: en
+Content-type: text/html; charset=ISO-8859-1
+Body:----------en--
+<!--#set var="TITLE" value="401: Authentication required!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 401</h1>
+	    <p>This server could not verify that you are authorized to access the URL "<!--#echo encoding="url" var="REDIRECT_URL" -->". You either supplied wrong credentials (e.g., bad password), or your browser doesn't understand how to supply the credentials required.</p>
+	    <p>If you think this is a mistake, please contact admin@unetresgrossebite.com</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------en--
+
+Content-language: es
+Content-type: text/html; charset=ISO-8859-1
+Body:----------es--
+<!--#set var="CONTENT_LANGUAGE" value="es"
+--><!--#set var="TITLE" value="&iexcl;401: Autentificaci&oacute;n requerida!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 401</h1>
+	    <p>El servidor no puede certificar que usted este autorizado para acceder al enlace "<!--#echo encoding="url" var="REDIRECT_URL" -->". Usted pudo suministrar informaci&oacute;n err&oacute;nea accidentalmente (ejem. una contrase&ntilde;a inv&aacute;lida) o, el navegador no sabe como suministrar la informaci&oacute;n requerida.</p>
+	    <p>Si usted piensa que es un error, gracias ponerse en contacto con admin@unetresgrossebite.com</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------es--
+
+Content-language: fr
+Content-type: text/html; charset=ISO-8859-1
+Body:----------fr--
+<!--#set var="CONTENT_LANGUAGE" value="fr"
+--><!--#set var="TITLE" value="401 : Autorisation requise!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERREUR 401</h1>
+	    <p>Ce server n'a pas &eacute;t&eacute; en mesure de v&eacute;rifier que vous &ecirc;tes autoris&eacute; &agrave; acc&eacute;der &agrave; cette URL "<!--#echo encoding="url" var="REDIRECT_URL" -->". Vous avez ou bien fourni des coordonn&eacute;es erron&eacute;es (p.ex. mot de passe inexact) ou bien votre navigateur ne parvient pas &agrave; fournir les donn&eacute;es exactes.</p>
+	    <p>Si vous pensez qu'il s'agit d'une erreur, merci de contacter admin@unetresgrossebite.com</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------fr--

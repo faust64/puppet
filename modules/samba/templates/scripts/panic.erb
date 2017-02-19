@@ -1,0 +1,8 @@
+#!/bin/sh
+
+DEST=<%=@contact%>
+
+echo "samba panic script invoked by `hostname -f` with arguments '$@'"	\
+	| mail -s "Samba panic" $DEST
+
+exit 0

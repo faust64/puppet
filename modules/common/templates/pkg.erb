@@ -1,0 +1,3 @@
+<% if @openbsd_pkg_source == false -%>installpath = http://ftp.nluug.nl/pub/OpenBSD/%c/packages/%a/
+<% else -%>installpath = <%=@openbsd_pkg_source%>
+<% end -%>

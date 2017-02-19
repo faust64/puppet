@@ -1,0 +1,48 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+my $ret = undef;
+if (! eval "require Net::Telnet;") {
+    $ret = "Net::Telnet not found";
+}
+
+if ($ARGV[0] and $ARGV[0] eq "config") {
+    print "graph_title Asterisk active channels\n";
+    print "graph_args --base 1000 -l 0\n";
+    print "graph_vlabel channels\n";
+    print "graph_category asterisk\n";
+    print "channels.draw AREA\n";
+    print "channels.label channels\n";
+    exit 0;
+}
+
+my $host     = exists $ENV{'host'} ? $ENV{'host'} : "127.0.0.1";
+my $port     = exists $ENV{'port'} ? $ENV{'port'} : "5038";
+my $username = exists $ENV{'username'} ? $ENV{'username'} : 'munin';
+my $secret   = exists $ENV{'secret'} ? $ENV{'secret'} : 'somepassword';
+
+my $pop = new Net::Telnet (Telnetmode => 0);
+$pop->open(Host => $host,
+	   Port => $port);
+
+my $line = $pop->getline;
+die $line unless $line =~ /^Asterisk/;
+$pop->print("Action: login");
+$pop->print("Username: $username");
+$pop->print("Secret: $secret");
+$pop->print("Events: off");
+$pop->print("");
+$pop->print("Action: command");
+$pop->print("Command: core show channels");
+$pop->print("");
+my $result;
+while (($line = $pop->getline) and ($line !~ /END COMMAND/o)) {
+    $result = $line if $line =~ /active channel/;
+}
+my $nb = (split ' ',$result)[0];
+$pop->print("Action: logoff");
+$pop->print("");
+while (($line = $pop->getline)) {
+}
+print "channels.value $nb\n";

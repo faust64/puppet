@@ -1,0 +1,38 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+us=`/sbin/ifconfig carp1 | awk '/MASTER/{print $4}'`
+PATH="/usr/local/sbin:/usr/sbin:/sbin:$PATH"
+export PATH
+ret=OK
+str=
+if ! ps ax | awk '/rip[d]: /{print $6" "$7}' | grep 'parent'; then
+    ret=CRITICAL
+    str=" - no root process"
+elif ! ps ax | awk '/rip[d]: /{print $6" "$7}' | grep 'route'; then
+    ret=CRITICAL
+    str=" - no RDE engine"
+elif ! ps ax | awk '/rip[d]: /{print $6" "$7}' | grep 'rip'; then
+    ret=WARNING
+    str=" - no RIP engine"
+elif ! test -S /var/run/ripd.sock; then
+    ret=CRITICAL
+    str=" - no socket"
+fi >/dev/null 2>&1
+cpl=$(sudo ripctl show 2>/dev/null | grep -v '^Interface' | \
+      while read iface addr state lstate upinfo
+      do
+	  test "$state" = ACTIVE && continue
+	  str="$str - $addr@$iface is $state"
+      done)
+test "$ret" = OK -a "$cpl" && ret=WARNING
+str="$str$cpl"
+
+echo "$ret$str"
+eval ret=\$$ret
+exit $ret

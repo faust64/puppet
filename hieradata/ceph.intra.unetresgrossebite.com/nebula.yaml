@@ -1,0 +1,17 @@
+physical_parent: oneiroi.adm.intra.unetresgrossebite.com
+additional_classes:
+  - Opennebula
+
+# Libvirt
+libvirt_runtime_group: oneadmin
+libvirt_runtime_user: oneadmin
+
+# MySQL
+mysql_bind_addr: 10.42.46.254
+
+# Nagios
+nagios_no_parent: false
+
+# OpenNebula
+nebula_class: sunstone
+nebula_datastore0: false

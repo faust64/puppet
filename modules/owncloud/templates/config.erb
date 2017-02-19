@@ -1,0 +1,31 @@
+<?php
+$CONFIG = array (
+    '3rdparty' => '',
+    'instanceid' => '<%=@instance_id%>',
+    'passwordsalt' => '<%=@password_salt%>',
+    'secret' => '<%=@secret%>',
+    'trusted_domains' =>
+	array (
+<% @domains.keys.each do |domid| -%>	    <%=domid%> => '<%=@domains[domid]%>',
+<% end -%>	),
+    'datadirectory' => '<%=@web_root%>/data',
+    'overwrite.cli.url' => '<%=@rewrite_proto%>://<%=@fqdn%>',
+    'overwrite.protcol' => '',
+    'dbtype' => 'mysql',
+    'version' => '<%=@version%>',
+    'dbname' => '<%=@db_name%>',
+    'dbhost' => '<%=@db_host%>',
+    'dbtableprefix' => '<%=@db_tableprefix%>',
+    'dbuser' => '<%=@db_user%>',
+    'dbpassword' => '<%=@db_pass%>',
+    'installed' => true,
+    'forcessl' => false,
+    'mail_from_address' => '<%=@mail_from%>',
+    'mail_smtpmode' => 'php',
+    'mail_domain' => '<%=@mail_domain%>',
+    'ldapIgnoreNamingRules' => false,
+    'theme' => '<%=@theme%>',
+    'maintenance' => false,
+<% if @php_apc == true -%>    'memcache.local' => '\OC\Memcache\APCu',
+<% end -%>    'loglevel' => 2,
+);

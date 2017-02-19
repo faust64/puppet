@@ -1,0 +1,177 @@
+define host {
+	address				<%=@host_ipaddress%>
+	alias				<%=@host_alias%>
+	contacts			<%=@host_contact%>
+	hostgroups			<%=@host_group%>
+	host_name			<%=@name%>
+	icon_image			<%=@iconimage%>
+	icon_image_alt			<%=@iconimagealt%>
+	statusmap_image			<%=@statusmapimage%>
+	use				generic-host
+<% if @host_parents -%>	parents				<%=@host_parents%>
+<% end -%>}
+
+##
+define service {
+	check_command			check-host-alive
+	host_name			<%=@name%>
+	use				critical-service
+	service_description		<%=@name%> alive
+	servicegroups			network
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		5
+	last_notification		6
+	escalation_period		10x5
+	notification_interval		30
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> alive
+}
+<% end -%>
+##
+define service {
+	check_command			check_ssh_port!222
+	host_name			<%=@name%>
+	use				jobs-service
+	service_description		<%=@name%> admin UI
+	servicegroups			netservices
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		3
+	last_notification		4
+	escalation_period		10x5
+	notification_interval		60
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> admin UI
+}
+<% end -%>
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> alive
+	dependent_service_description	<%=@name%> admin UI
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+##
+define service {
+	check_command			check_pfsense!diskusage
+	host_name			<%=@name%>
+	use				jobs-service
+	service_description		<%=@name%> disks usage
+	servicegroups			diskspace
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		3
+	last_notification		4
+	escalation_period		24x7
+	notification_interval		30
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> disks usage
+}
+<% end -%>
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> alive
+	dependent_service_description	<%=@name%> disks usage
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+##
+define service {
+	check_command			check_pfsense!users
+	host_name			<%=@name%>
+	use				warning-service
+	service_description		<%=@name%> connected users
+	servicegroups			system
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		3
+	last_notification		4
+	escalation_period		10x5
+	notification_interval		60
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> connected users
+}
+<% end -%>
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> alive
+	dependent_service_description	<%=@name%> connected users
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+##
+define service {
+	check_command			check_pfsense!processes
+	host_name			<%=@name%>
+	use				warning-service
+	service_description		<%=@name%> processes
+	servicegroups			system
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		3
+	last_notification		4
+	escalation_period		10x5
+	notification_interval		60
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> processes
+}
+<% end -%>
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> alive
+	dependent_service_description	<%=@name%> processes
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+##
+define service {
+	check_command			check_pfsense!states
+	host_name			<%=@name%>
+	use				critical-service
+	service_description		<%=@name%> pf states
+	servicegroups			network
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		3
+	last_notification		4
+	escalation_period		24x7
+	notification_interval		20
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> pf states
+}
+<% end -%>
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> alive
+	dependent_service_description	<%=@name%> pf states
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}

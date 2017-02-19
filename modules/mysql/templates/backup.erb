@@ -1,0 +1,45 @@
+#!/bin/sh
+
+TMPFILE=/tmp/`basename $0`.$$
+HOSTNAME=`hostname -f`
+SUBJECT=REPORT
+<% if @contact -%>DEST=<%=@contact%>
+<% end -%><% if @slack_hook != false -%>HOOK_URL=<%=@slack_hook%>
+<% end -%>
+msuser=<%=@msuser%>
+mspass="<% if @mspw != "" -%>-p<%=@mspw%><% end -%>"
+dbdir=<%=@dumpdir%>
+fail=0
+
+for database in `echo show databases | mysql -Nu$msuser $mspass | grep -v _schema`
+do
+    if ! mysqldump -u$msuser $mspass $database 2>&1 | gzip - >$dbdir/$database<% if @rolling_backup -%>-`date +%s`<% end -%>; then
+	echo "Failed to either dump or write to disk the dump of $database (/$dbdir/$database)"
+	fail=`expr $fail + 1`
+	continue
+    fi
+<% if @rolling_backup -%>    chmod 0600 $dbdir/$database*
+    echo done $database
+    find $dbdir/$database* -type f -mtime +7 -exec rm -f {} \;
+<% else -%>    chmod 0600 $dbdir/$database
+    echo done $database
+<% end -%>    du -sh $dbdir/$database*
+done >$TMPFILE
+
+test $fail -gt 0 && SUBJECT=WARNING
+if test "$HOOK_URL" -a -x /usr/local/bin/slack; then
+    while read line
+    do
+	echo "$line" | grep "	$dbdir/" >/dev/null && continue
+	/usr/local/bin/slack $HOOK_URL "$SUBJECT: backup mysql $HOSTNAME - $line"
+    done <$TMPFILE
+elif test "$DEST"; then
+    cat $TMPFILE | mail -s"[$SUBJECT] mysql backup $HOSTNAME" $DEST
+elif test $fail -gt 0; then
+    cat $TMPFILE >&2
+else
+    cat $TMPFILE
+fi
+rm -f $TMPFILE
+
+exit 0

@@ -1,0 +1,459 @@
+#!/bin/sh
+
+PARENT_NAME=`hostname -f`
+test -f /etc/virtual.conf   && . /etc/virtual.conf
+test -e "$MODEL_DIR"        || MODEL_DIR=/media/xen
+test    "$XEN_STORAGE"      || XEN_STORAGE=data
+test -z "$DOMAIN"           && DOMAIN=`expr $PARENT_NAME : '[^\.]*.\(.*\)'`
+test -z "$APT"              && APT=apt.$DOMAIN
+test -z "$BRIDGE"           && BRIDGE=$(brctl show 2>/dev/null | grep -o "^br[0-9]" | head -1)
+test -z "$QUOTA"            && QUOTA=5G
+test -z "$MAILHOST"         && MAILHOST=smtp.$DOMAIN
+test -n "$TEMPLATE"         && VZ_DIR=${TEMPLATE%/*}
+test -z "$DNS"              && DNS=`awk '/^nameserver/{print $2}' /etc/resolv.conf | tr \\n \ `
+test -z "$BRCHILD_IF"       && BRCHILD_IF=eth0
+CHROOT=/tmp/ve.$$
+
+usage()
+{
+    cat <<EOF
+Usage: ${0##*/} [OPTIONS] hostname ip source [quota]
+Creates a new VE from a model
+
+Options:
+	-h --help               this usage
+	-a --autostart          enable VE autostart
+	-p --nopasswd           disable root password
+	-s --start              start VE after its creation
+	-y --yes                no confirmation
+
+Required:
+	hostname                ve hostname
+	ip                      ve address
+	source                  ve source (tar.gz or directory)
+EOF
+
+    if test -d "$MODEL_DIR"; then
+	echo "Available templates:"
+	ls -1 $MODEL_DIR/*
+    fi
+
+    cat <<EOF
+Variables are:
+XEN_STORAGE=$XEN_STORAGE
+QUOTA=$QUOTA
+PARENT_NAME=$PARENT_NAME
+DOMAIN=$DOMAIN
+BRIDGE=$BRIDGE
+AKEYSPATH=$AKEYSPATH
+MAILHOST=$MAILHOST
+DNS=$DNS
+APT=$APT
+EOF
+}
+
+
+###
+
+
+create_conf()
+{
+    cat <<EOF >/etc/xen/conf/$VHOST.conf
+#bootloader  = '/usr/lib/xen-4.1/bin/pygrub'
+kernel      = 'VMLINUX'
+ramdisk     = 'INITRD'
+vcups       = '1'
+disk        = [
+		'phy:/dev/$XEN_STORAGE/$VHOST-root,xvda1,w',
+	      ]
+memory      = '256'
+name        = '$VHOST'
+on_poweroff = 'destroy'
+on_reboot   = 'restart'
+on_crash    = 'restart'
+root        = '/dev/xvda1'
+vif         = [ 'ip=$IP,bridge=$BRIDGE' ]
+EOF
+}
+
+dummy_checks()
+{
+    if test -x /usr/bin/id -a 0`id -u` -ne 0; then
+	echo "${0##*/} error: Must be run as root"
+	exit 1
+    elif ! test -x /usr/bin/mkpasswd; then
+	echo "mkpasswd missing"
+    elif ! test -d /dev/$XEN_STORAGE; then
+	if ! vgs | grep $XEN_STORAGE >/dev/null 2>&1; then
+	    echo "LVM $XEN_STORAGE does not exist"
+	    exit 1
+	fi
+    fi
+
+    if xl list-vm | grep " $VHOST[ ]*$" >/dev/null 2>&1; then
+	echo "Container already running" >&2
+	exit 1
+    elif test -e /dev/$XEN_STORAGE/$VHOST-root; then
+	echo "WARNING!! $VHOST already exists!"
+	if $CONFIRM; then
+	    echo -n "Do you want to proceed (not recommended)? (y/N) "
+	    read RESPONSE
+	    case $RESPONSE in
+		Y|y|yes)
+		    ;;
+		*)
+		    echo "Abort"
+		    exit 1
+		    ;;
+	    esac
+	else
+	    echo "Abort"
+	    exit 1
+	fi
+    fi
+
+    echo
+    echo "Virtual server creation:"
+    echo "nom:       $VHOST"
+    echo "ip:        $IP"
+    test -n "$BRIDGE" && echo "bridge:    $BRIDGE"
+    echo "model:     $FILEMODEL"
+    echo "quota:     $QUOTA"
+    echo "domain:    $DOMAIN"
+    echo "parent:    $PARENT_NAME"
+    echo "dns:       $DNS"
+    echo "mailhost:  $MAILHOST"
+    echo "apt:       $APT"
+    echo
+
+    if $CONFIRM; then
+        echo -n "Is this OK? (y/n) "
+	read RESPONSE
+	case $RESPONSE in
+	    Y|y|Yes|yes)
+		;;
+	    *)
+		echo "Abort on user exit."
+		exit 0
+		;;
+	esac
+    fi
+}
+
+finish()
+{
+    cd /boot
+    test -z "$GUESTKRN" && GUESTKRN=`find . -name '*linu[xz]*' | grep -v grub | head -1 | sed 's|\./||'`
+    sed -i "s|VMLINUX|/boot/$GUESTKRN|" /etc/xen/conf/$VHOST.conf
+    test -z "$GUESTINIT" && GUESTINIT=`find . -name '*initrd*' | grep -v grub | head -1 | sed 's|\./||'`
+    sed -i "s|INITRD|/boot/$GUESTINIT|" /etc/xen/conf/$VHOST.conf
+    if mount | grep $CHROOT >/dev/null; then
+	cd /
+	sync
+	umount $CHROOT
+	rmdir $CHROOT
+    fi
+
+    if $AUTOSTART; then
+	if test -d /var/www/vm_manager/scripts/; then
+	    echo $VHOST >>/var/www/vm_manager/scripts/vm_start_list.txt
+	    echo $VHOST:01/12/`date +%Y` >>/var/www/vm_manager/scripts/vm_whitelist.txt
+	fi
+	ln -sf /etc/xen/conf/$VHOST.conf /etc/xen/auto/
+    fi
+    if $START; then
+	xl create /etc/xen/conf/$VHOST.conf
+	msg=started
+    else
+	msg=created
+    fi
+
+    echo "Server has been $msg: $VHOST.$DOMAIN (root/$PLAINTEXT_PASSWD)"
+}
+
+parse_args()
+{
+    AUTOSTART=false
+    CONFIRM=true
+    MORETODO=true
+    NOPASSWD=false
+    START=false
+
+    while $MORETODO
+    do
+	case X"$1" in
+	    X--help|X-h)
+		usage
+		shift
+		exit 0
+		;;
+	    X--autostart|X-a)
+		AUTOSTART=true
+		;;
+	    X--nopasswd|X-p)
+		NOPASSWD=true
+		;;
+	    X--start|X-s)
+		START=true
+		;;
+	    X--yes|-y)
+		CONFIRM=false
+		;;
+	    X-*|X\?*)
+		usage
+		exit 1
+		;;
+	    *)
+		MORETODO=false
+		;;
+	esac
+	$MORETODO && shift
+    done
+
+    if test $# -lt 3; then
+	echo "${0##*/} error: too few arguments."
+	usage
+	exit 1
+    elif test $# -gt 4; then
+	echo "${0##*/} error: too many arguments."
+	usage
+	exit 1
+    fi >&2
+
+    case x$1 in
+	x[a-z]*[a-z0-9])
+	    VHOST="$1"
+	    ;;
+	*)
+	    echo "${0##*/} error: $1 must be a hostname for the ve"
+	    echo 'e.g. "alpha"'
+	    exit 1
+	    ;;
+    esac >&2
+    shift
+
+    case x$1 in
+	x[0-9]*.[0-9]*.[0-9]*.[0-9]*)
+	    IP=$1
+	    ;;
+	*)
+	    echo "${0##*/} error: $1 requires a single IPv4 e.g.: \"10.1.1.1\""
+	    exit 1
+	    ;;
+    esac >&2
+    shift
+
+    if test -f ./$1; then
+	FILEMODEL=`pwd`/$1
+    elif test -f $1; then
+	FILEMODEL=$1
+    elif test -f $MODEL_DIR/$1.tar.gz; then
+	FILEMODEL=$MODEL_DIR/$1.tar.gz
+    elif rsync $1/bin/bash >/dev/null 2>&1; then
+	FILEMODEL=$1
+    else
+	echo "${0##*/} error: $1 is not a valid tgz, does not exist in $MODEL_DIR and is not a linux directory"
+	exit 1
+    fi >&2
+    shift
+
+    if test "$1"; then
+	QUOTA=$1
+    fi
+}
+
+ve_conf()
+{
+    cd $CHROOT
+
+    echo $PARENT_NAME >parent
+    sed -i "s/root-[^:]*/root-$VHOST/" etc/passwd
+    if ! $NOPASSWD ; then
+	PLAINTEXT_PASSWD=$VHOST
+    else
+	PLAINTEXT_PASSWD=`</dev/urandom LANG=C tr -dc [:graph:] | head -c 10`
+    fi
+    SALT=`</dev/urandom LANG=C tr -dc [:alnum:] | head -c 16`
+    export PLAINTEXT_PASSWD
+    export SALT
+
+    NEWPASSWD=`perl -e 'print crypt("$ENV{PLAINTEXT_PASSWD}", "\\$6\\$$ENV{SALT}\\$")'`
+    sed -i "s#root:[^:]*#root:$NEWPASSWD#" etc/shadow
+
+    touch var/log/wtmp var/log/btmp
+    echo $VHOST >etc/hostname
+    echo $VHOST.$DOMAIN >etc/mailname
+    cat <<EOF >etc/hosts
+127.0.0.1	localhost
+$IP	$VHOST.$DOMAIN $VHOST
+
+::1		ip6-localhost ip6-loopback
+fe00::0		ip6-localnet
+ff00::0		ip6-mcastprefix
+ff02::1		ip6-allnodes
+ff02::2		ip6-allrouters
+ff02::3		ip6-allhosts
+EOF
+    if test -n "$AKEYSPATH"; then
+	opts=
+	if echo $AKEYSPATH | grep '^https' >/dev/null; then
+	    opts=--no-check-certificate
+	fi
+	if wget -q $opts $AKEYSPATH -O /tmp/authorized_keys; then
+	    mkdir -p root/.ssh
+	    chmod 700 root/.ssh
+	    mv /tmp/authorized_keys root/.ssh
+	else
+	    rm /tmp/authorized_keys
+	    echo "Unable to retrieve authorized_keys file from $AKEYSPATH"
+	fi
+    fi
+
+    if test -z "$DNS"; then
+	cat /etc/resolv.conf
+    else
+	echo search $DOMAIN
+	for i in $DNS
+	do
+	    echo nameserver $i
+	done
+    fi >etc/resolv.conf
+
+    if test -d etc/ssmtp; then
+	cat <<EOF >etc/ssmtp/ssmtp.conf
+root=CHANGEME
+mailhub=$MAILHOST
+rewriteDomain=$DOMAIN #tpl
+hostname=$VHOST.$DOMAIN
+FromLineOverride=YES
+EOF
+    fi
+    if test -e etc/mail/submit.cf; then
+	if grep -q '^[# 	]*DS[ 	$]' etc/mail/submit.cf; then
+	    sed -i "s|^[# 	]*DS[ 	$].*|DS $MAILHOST|" etc/mail/submit.cf
+	else
+	    echo "DS $MAILHOST" >>etc/mail/submit.cf
+	fi
+	if test -e etc/mail/submit.mc; then
+	    if grep "^[		]*FEATURE(\`msp'" etc/mail/submit.mc; then
+		sed -i "s|^[ 	]*FEATURE(\`msp'.*|FEATURE(\`msp', \`[$MAILHOST]')|" etc/mail/submit.mc
+	    else
+		echo "FEATURE(\`msp' \`[$MAILHOST]')" >>etc/mail/submit.mc
+	    fi
+	fi
+    fi
+
+    if test -f etc/debian_version; then
+	eval archives=false version=
+	if grep -q 5.[0-9] etc/debian_version; then
+	    version=lenny
+	    archives=true
+	elif grep -q 6.[0-9] etc/debian_version; then
+	    version=squeeze
+	    archives=true
+	elif grep -q 7.[0-9] etc/debian_version; then
+	    version=wheezy
+	elif grep -q 8.[0-9] etc/debian_version; then
+	    version=jessie
+	elif grep -q 9.[0-9] etc/debian_version; then
+	    version=stretch
+	fi
+
+	if test "$version"; then
+	    if $archives; then
+		cat <<EOF
+deb http://archive.debian.org/debian $version main contrib non-free
+deb http://archive.debian.org/debian-security $version/updates main contrib non-free
+EOF
+	    else
+		cat <<EOF
+deb http://ftp.debian.org/debian $version main contrib non-free
+deb http://security.debian.org $version/updates main contrib non-free
+EOF
+	    fi >etc/apt/sources.list
+	fi
+
+	if test "$BRIDGE" -a x$BRIDGE != xfalse; then
+	    cat <<EOF >etc/network/interfaces
+auto lo
+iface lo inet loopback
+
+auto $BRCHILD_IF
+iface $BRCHILD_IF inet static
+    address $IP
+    netmask $BRCHILD_NETMASK
+    gateway $BRCHILD_GATEWAY
+EOF
+	fi
+    elif test -f etc/redhat-release; then
+	echo "HOSTNAME=\"$VHOST\"" >etc/sysconfig/network
+
+	if test "$BRIDGE" -a x$BRIDGE != xfalse; then
+	    cat <<EOF >etc/sysconfig/network
+NETWORKING="yes"
+HOSTNAME="$VHOST"
+GATEWAY="$BRCHILD_GATEWAY"
+EOF
+	    cat <<EOF >etc/sysconfig/network-scripts/ifcfg-$BRCHILD_IF
+DEVICE=$BRCHILD_IF
+BOOTPROTO=static
+NM_CONTROLLED=no
+ONBOOT=yes
+IPADDR=$IP
+NETMASK=$BRCHILD_NETMASK
+EOF
+	fi
+	if test -f etc/wwwacct.conf; then
+	    (
+		echo ADDR $IP
+		echo ETHDEV $BRCHILD_IF
+		echo NS ns.$DOMAIN
+		echo NS2 ns.$DOMAIN
+	    ) >>etc/wwwacct.conf
+	fi
+    fi
+}
+
+ve_disk()
+{
+    if ! test -e /dev/$XEN_STORAGE/$VHOST-root; then
+	echo "Creating LV"
+	if ! lvcreate -n$VHOST-root -L$QUOTA $XEN_STORAGE; then
+	    echo "Failed creating VE rootfs's LV"
+	    exit 1
+	fi
+	echo "Initializing filesystem"
+	if ! mkfs.ext4 /dev/$XEN_STORAGE/$VHOST-root; then
+	    echo "Failed creating VE rootfs"
+	    exit 1
+	elif ! tune2fs -i 360d -c 50 /dev/$XEN_STORAGE/$VHOST-root; then
+	    echo "Unable to set e2fs max mount and total mount limits"
+	fi
+    fi
+    test -d $CHROOT || mkdir -p $CHROOT
+    if mount | grep $CHROOT >/dev/null; then
+	umount $CHROOT
+	sync
+    fi
+    if ! mount /dev/$XEN_STORAGE/$VHOST-root $CHROOT; then
+	echo "Failed mounting VE rootfs"
+	exit 1
+    fi
+    if test `readlink -m $FILEMODEL` != `readlink -m $CHROOT`; then
+	if test -f $FILEMODEL; then
+	    tar -zxvf $FILEMODEL --numeric-owner -C $CHROOT
+	else
+	    rsync -av --numeric-ids $FILEMODEL/* $CHROOT
+	fi
+    fi
+
+    ve_conf
+}
+
+parse_args $@
+dummy_checks
+create_conf
+ve_disk
+finish
+
+exit 0

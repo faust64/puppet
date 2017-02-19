@@ -1,0 +1,36 @@
+#!/bin/sh
+# mychroot
+
+if test -z "$1"; then
+    echo "missing argument" >&2
+    ret=1
+elif ! test -d "$1"; then
+    echo "unexisting root '$1'" >&2
+    ret=2
+elif test "$1" = /; then
+    echo "can't chroot to '$1'" >&2
+    ret=3
+else
+    cd "$1"
+    if mount | grep "`pwd`/dev" >/dev/null; then
+	DOMOUT=false
+    else
+	DOMOUT=true
+    fi
+    if $DOMOUNT; then
+	mount -t proc proc proc
+	mount -t sysfs sys sys
+	mount -o bind /dev dev
+	mount -t devpts pts dev/pts
+    fi
+    chroot .
+    ret=$?
+    if $DOMOUNT; then
+	umount proc
+	umount sys
+	umount dev/pts
+	umount pts
+    fi
+fi
+
+exit $ret

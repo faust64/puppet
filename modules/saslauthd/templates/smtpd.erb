@@ -1,0 +1,5 @@
+pwcheck_method: saslauthd
+mech_list: <%=@mech_list.join(' ')%>
+<% if @routeto != @fqdn -%>allowplaintext: 1
+allowanonymouslogin: 0
+<% end -%>

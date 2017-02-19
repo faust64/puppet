@@ -1,0 +1,75 @@
+#!/bin/sh
+
+TMPFILE=/tmp/`basename $0`.$$
+login="<%=@aironet_user%>"
+password="<%=@aironet_pass%>"
+addresses="<% @aironet_host.each do |host| -%><%=host%> <% end -%>"
+EMAIL=<%=@contact%>
+SUBJECT="[Guest WiFi] MAC added to authorized stations ACL"
+LIST=/tmp/list_mac_wifi_guest
+EMAILMESSAGE="Added address: $MACADDRESS"
+
+echo "Enter MAC address (hexa: xxxx.xxxx.xxxx):"
+read MACADDRESS
+
+if ! grep $MACADDRESS $LIST; then
+    echo $MACADDRESS >>$LIST
+else
+    echo $MACADDRESS seems to be already there >&2
+    exit 1
+fi
+
+for target in $addresses
+do
+    cat <<EOF >/root/add-mac
+#!/usr/bin/expect
+#!/bin/bash
+#
+
+spawn ssh $login@$target
+expect {
+    "Password:" {send "$password\r"}
+    timeout {exit}
+}
+expect "#"
+send "conf t\r"
+expect "Enter configuration commands, one per line.  End with CNTL/Z."
+EOF
+    (
+	echo "send \"no access-list 700 \r\""
+	echo "expect \"#\""
+	for macaddress in `cat $LIST`
+	do
+	    echo "send \"access-list 700 permit $macaddress 0000.0000.0000\r\""
+	    echo "expect \"#\""
+	done
+	echo "send \"access-list 700 permit 0000.0000.0000 ffff.ffff.ffff\r\""
+	echo "expect \"#\""
+	echo "send \"end\r\""
+	echo "expect \"#\""
+	echo "send \"exit\r\""
+	echo "expect \"#\""
+    ) >>/root/add-mac
+    chmod +x /root/add-mac
+    echo Processing $target
+    if ! time /root/add-mac; then
+	test "$failed" && failed="$failed, "
+	failed="$failed$target"
+    else
+	test "$success" && success="$success, "
+	success="$success$target"
+    fi
+done >$TMPFILE 2>&1
+rm -f /root/add-mac
+
+if test "$failed"; then
+    SUBJECT=WARNING
+    EMAILMESSAGE="FAILED ON $failed
+`cat $TMPFILE`
+$EMAILMESSAGE"
+fi
+rm -f $TMPFILE
+
+echo "$EMAILMESSAGE" | mail -s "[$SUBJECT] Adding MAC ACL" $EMAIL
+
+exit 0

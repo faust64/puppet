@@ -1,0 +1,24 @@
+additional_classes:
+  - Ceph
+
+# Apache
+apache_mod_wsgi: true
+
+# Nagios
+nagios_load_crit_threshold: "4.0,4.0,4.0"
+nagios_load_warn_threshold: "3.8,3.8,3.8"
+nagios_procs_crit: 600
+nagios_procs_warn: 300
+nagios_runprocs_crit: 100
+nagios_runprocs_warn: 50
+nagios_no_parent: false
+
+# OpenSSH
+ssh_tcp_wrappers:
+  - 10.42.42.0/24
+  - 10.42.46.0/24
+  - 10.42.242.0/24
+  - 127.0.0.1/32
+
+# Racktables
+racktables_object_id: 4

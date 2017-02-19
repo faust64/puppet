@@ -1,0 +1,62 @@
+#!/bin/sh
+
+CONFIG=<%=@conf_dir%>/job.conf
+<% if @contact -%>DEST=<%=@contact%>
+<% end -%>HOSTNAME=`hostname -f`
+SANE=true
+TMPFILE=/tmp/clamscan.$$
+freshclam >/dev/null 2>&1
+while test "$1"
+do
+    if test "$1" = -c -a -r "$2"; then
+	CONFIG=$2
+	shift
+    else
+	echo "unknown arg $1" >&2
+    fi
+    shift
+done
+if ! test -r $CONFIG; then
+    echo "can't read configuration" >&2
+    exit 1
+fi
+. $CONFIG
+if test -z "$SCAN_DIRS"; then
+    echo "no directories defined" >&2
+    exit 2
+fi
+for dir in $SCAN_DIRS
+do
+    if ! test -d $dir; then
+	echo directory not found "($dir)" >&2
+	continue
+    fi
+    clamscan -r -i $dir | grep files: | while read line
+	do
+	    echo "$dir:$line"
+	done
+done >$TMPFILE 2>&1
+
+if test -x /usr/local/bin/slack -a "$HOOK_URL"; then
+    if grep ':Infected files: [1-9]' $TMPFILE >/dev/null; then
+	while read line
+	do
+	    /usr/local/bin/slack $HOOK_URL "WARNING: $HOSTNAME - $line"
+	done <$TMPFILE
+    else
+	/usr/local/bin/slack $HOOK_URL "REPORT: $HOSTNAME all fine"
+    fi
+elif test "$DEST"; then
+    if grep ':Infected files: [1-9]' $TMPFILE >/dev/null; then
+	SUBJECT=WARNING
+    else
+	SUBJECT=REPORT
+    fi
+    cat $TMPFILE | mail -s "[$SUBJECT] clamav on $HOSTNAME" $DEST
+else
+    cat $TMPFILE
+fi
+
+rm -f $TMPFILE
+
+exit 0

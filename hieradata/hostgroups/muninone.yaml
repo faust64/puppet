@@ -1,0 +1,24 @@
+additional_classes:
+  - Munin
+  - Mrtg
+
+# Apache
+apache_mod_cgid: true
+apache_mod_expires: true
+apache_mod_php: true
+
+# Cron
+cron_allowed_users:
+  - munin
+  - root
+
+# Nagios
+nagios_load_crit_threshold: "12.0,12.0,12.0"
+nagios_load_warn_threshold: "11.0,11.0,11.0"
+
+# PHP
+php_pear: true
+php_mod_gd: true
+
+# RRDcached
+rrdcached_opts: "-s munin -l unix:/var/run/rrdcached.sock -b /var/lib/munin/ -B -j /var/lib/munin/journal/ -F -m 0660 -w 1800 -z 1800 -f 3600"

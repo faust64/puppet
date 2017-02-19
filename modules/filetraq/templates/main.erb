@@ -1,0 +1,7 @@
+/etc/fstab
+<% if @kernel == "Linux" -%>/etc/modules
+<% end -%>/etc/passwd
+/etc/resolv.conf
+/etc/services
+<% if @kernel == "Linux" -%>/etc/rc.local
+<% end -%><%=@conf_dir%>/filetraq.conf

@@ -1,0 +1,2 @@
+<% @rip_map.each do |nic, status| -%><% if status != "passive" -%>pass in quick on <%=nic%> inet proto $u from any to 224.0.0.9 port 520
+<% end -%><% end -%>

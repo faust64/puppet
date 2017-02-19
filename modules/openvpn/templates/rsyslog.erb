@@ -1,0 +1,13 @@
+<% if @version >= 7 -%>input(type="imfile"
+      File="/var/log/openvpn-<%=@name%>.log"
+      statefile="/var/log/.openvpn-<%=@name%>.log"
+      Tag="openvpn-<%=@name%>-access: "
+      Severity="info"
+      Facility="local7")
+<% else -%>$InputFileName /var/log/openvpn-<%=@name%>.log
+$InputFileTag openvpn-<%=@name%>-access:
+$InputFileStateFile openvpn-<%=@name%>
+$InputFileSeverity info
+$InputFileFacility local7
+$InputRunFileMonitor
+<% end -%>

@@ -1,0 +1,23 @@
+<FilesMatch ".+\.ph(p[345]?|t|tml)$">
+    SetHandler application/x-httpd-php
+</FilesMatch>
+<FilesMatch ".+\.phps$">
+    SetHandler application/x-httpd-php-source
+<% if @version == "2.2" -%>    Order Deny,Allow
+    Deny from all
+<% else -%>    Require all denied
+<% end -%></FilesMatch>
+<FilesMatch "^\.ph(p[345]?|t|tml|ps)$">
+<% if @version == "2.2" -%>    Order Deny,Allow
+    Deny from all
+<% else -%>    Require all denied
+<% end -%></FilesMatch>
+<IfModule mod_userdir.c>
+    <Directory /home/*/public_html>
+	php_admin_<% if @version == "2.2" -%>value<% else -%>flag<% end -%> engine Off
+    </Directory>
+</IfModule>
+<IfModule mod_mime.c>
+    AddType application/x-httpd-php .php
+    AddType application/x-httpd-php-source .phps
+</IfModule>

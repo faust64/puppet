@@ -1,0 +1,61 @@
+#!/usr/bin/perl -w
+
+if ($ARGV[0] and $ARGV[0] eq "autoconf") {
+    if (-r "/proc/mdstat" and `grep md /proc/mdstat`) {
+        print "yes\n";
+        exit 0;
+    } else {
+        print "no RAID devices\n";
+        exit 1;
+    }
+} else {
+    if ( $ARGV[0] and $ARGV[0] eq "config" ) {
+	print "graph_title RAID status\n";
+	print "graph_category disk\n";
+	print "graph_info This graph monitors RAID disk health.  Values are percentage of healthy drives in each raid group.  Degraded devices are marked Critical.\n";
+	print "graph_args --base 1000 -l 0\n";
+	print "graph_vlabel % healthy/rebuilt\n";
+	print "graph_scale  no\n";
+    }
+
+    local( $/, *MDSTAT );
+    open (MDSTAT, "/proc/mdstat") or exit 1;
+    my $text = <MDSTAT>;
+    close MDSTAT;
+
+    while ($text =~ /(md\d+)\s+:\s+active\s+(\(auto-read-only\)\s+|)(\w+)\s+(.*)\n.*\[(\d+)\/(\d+)]\s+\[(\w+)]\n(.*(check|resync)\s=\s+(\d+\.\d+)%|.*\n)/ ) {
+	my($dev,$dummy,$type,$members,$nmem,$nact,$status,$dummy2,$dummy3,$proc) = ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10);
+	if ( $ARGV[0] and $ARGV[0] eq "config" ) {
+	    print "$dev.label $dev\n";
+	    print "$dev.info $type $members\n";
+	    print "$dev.critical 98:\n";
+	    print $dev, "_rebuild.label $dev rebuilt\n";
+	    print $dev, "_rebuild.info $type\n";
+	    print $dev, "_rebuild.critical 98:\n";
+	    print $dev, "_check.label $dev check/resync \n";
+	    print $dev, "_check.info $type\n";
+	} else {
+	    my $pct = 100 * $nact / $nmem;
+	    my $rpct = 100;
+	    if ( $pct < 100 ) {
+		my @output = `/sbin/mdadm -D /dev/$dev | grep Rebuild`;
+		if( $output[0] and $output[0] =~ /([0-9]+)% complete/ ) {
+		    $rpct = $1;
+		} else {
+		    $rpct = 0;
+		}
+	    }
+	    if ( $proc ) {
+		$cpct = $proc;
+	    } else {
+		$cpct = $rpct;
+	    }
+	    print "$dev.value $pct\n";
+	    print $dev, "_rebuild.value $rpct\n";
+	    print $dev, "_check.value $cpct\n";
+	}
+	$text = $';
+    }
+}
+
+exit 0;

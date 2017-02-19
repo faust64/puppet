@@ -1,0 +1,8 @@
+LoadPlugin openvpn
+<Plugin openvpn>
+    StatusFile "/var/log/openvpn-<%=@name%>-status.log"
+    ImprovedNamingSchema false
+    CollectCompression true
+    CollectIndividualUsers true
+    CollectUserCount false
+</Plugin>

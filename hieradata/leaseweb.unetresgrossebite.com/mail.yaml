@@ -1,0 +1,3 @@
+# Postfix
+postfix_networks:
+  - 10.42.0.0/15

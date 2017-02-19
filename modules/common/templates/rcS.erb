@@ -1,0 +1,8 @@
+TMPTIME=10
+SULOGIN=no
+DELAYLOGIN=no
+UTC=yes
+VERBOSE=no
+FSCKFIX=yes
+<% if @virtual != "physical" and @virtual != "xen0" and @virtual != "openvzhn" -%>HWCLOCKACCESS=no
+<% end -%>

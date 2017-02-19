@@ -1,0 +1,6 @@
+initial-interval 1;
+send host-name "<%=@fqdn%>";
+request subnet-mask, broadcast-address, routers;
+supersede domain-name "<%=@domain%>";
+<% if @dns_ip -%>supersede domain-name-servers <% @dns_ip.each do |host| -%><%=host%><% break -%><% end -%>;
+<% end -%>

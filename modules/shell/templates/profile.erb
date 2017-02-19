@@ -1,0 +1,50 @@
+PATH=/bin:/usr/bin:/usr/local/bin
+if test -d /etc/X11R6/bin; then
+    PATH=/etc/X11R6/bin:$PATH
+fi
+if test `id -u` -eq 0; then
+    PATH=/sbin:/usr/sbin:/usr/local/sbin:$PATH
+fi
+export PATH
+: ${HOME=/root}
+export HOME
+if test -d "$HOME/bin"; then
+    PATH="$HOME/bin:$PATH"
+fi
+umask 022
+
+case "$-" in
+    *i*)
+	if test -x /usr/bin/tset; then
+	    if test -z "$XTERM_VERSION"; then
+		eval `/usr/bin/tset -sQ '-munknown:?vt200' $TERM`
+	    else
+		eval `/usr/bin/tset -IsQ '-munknown:?vt200' $TERM`
+	    fi
+	fi
+	;;
+
+    *m*)
+	stty susp '^z'
+	;;
+esac
+
+if test -z "$PWD"; then
+    PWD=$HOME
+    export PWD
+fi
+if tty >/dev/null; then
+    if test -f $HOME/<%=@whichconf%> -a -r $HOME/<%=@whichconf%>; then
+	ENV=$HOME
+	export ENV
+<% if @whichshell == "csh" or @whichshell == "tcsh" %>	source $HOME/<%=@whichconf%>
+	rehash
+<% elsif @whichshell != "ksh" %>	exec <%=@whichshell %>
+<% else -%>	. $HOME/.kshrc
+<% end %>    fi
+fi
+<% if @http_proxy != false -%><% @http_proxy.each do |host| -%>export http_proxy=http://<%=host%>:3128/
+export https_proxy=$http_proxy
+export ftp_proxy=$http_proxy
+<% break -%><% end -%><% if @no_proxy_for != false -%>export no_proxy=<%=@no_proxy_for.join(',')%>
+<% end -%><% end -%>

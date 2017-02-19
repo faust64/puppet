@@ -1,0 +1,175 @@
+#!/bin/sh
+
+# ultimately: consider user input
+COMPLETE=false # either complete database, or rewrite it (true)
+DEBUG=false
+CHECK=true
+RELOAD=true
+DO_NAMEDCONF=true
+DO_DOMAINS="<% if @do_domains != false -%><% @do_domains.each do |dom| -%> <%=dom%><% end -%><% end -%>"
+
+# system specifics
+NAMED_ROOT=<%=@zone_dir%>
+NAMED_RUNTIME_USER=<%=@ruser%>
+NAMED_RUNTIME_GROUP=<%=@rgroup%>
+NAMED_RUNTIME_ROOT=<%=@rzone_dir%>
+NAMED_SERVICE=<%=@srvname%>
+
+# why not, ...
+match_soa='^[ 	]*@[ 	]*[I]*[N]*[ 	]*SOA[ 	]*'
+
+render()
+{
+    while test "$1"
+    do
+	if test -s "$1"; then
+	    grep -v '^[ 	]*;' "$1"
+	fi
+	shift
+    done
+}
+
+if ! test -d /usr/share/dnsgen; then
+    echo "something's wrong, ..." >&2
+    exit 1
+fi
+cd /usr/share/dnsgen
+
+echo "Building named databases"
+for view in *-view.d
+do
+    if test -s ressources/vars; then
+	. ressources/vars
+    fi
+    if test -s $view/vars; then
+	. $view/vars
+    fi
+    viewname=`basename $view | sed 's|-view\.d||'`
+    if ! find $view/db.* -type f 2>/dev/null | grep 'db' >/dev/null; then
+	echo " Skipping View $viewname (empty)"
+	continue
+    elif $DEBUG; then
+	echo " Filling View $viewname having:"
+	echo "    CONTACT=$CONTACT"
+	echo "    EXPIRE=$EXPIRE"
+	echo "    NEGATIVETTL=$NEGATIVETTL"
+	echo "    REFRESH=$REFRESH"
+	echo "    RETRY=$RETRY"
+	echo "    SERIAL=$SERIAL"
+	echo "    TTL=$TTL"
+    else
+	echo " Filling View $viewname"
+    fi
+    if ! test -d "$NAMED_ROOT/view-$viewname"; then
+	mkdir -p "$NAMED_ROOT/view-$viewname"
+	chown $NAMED_RUNTIME_USER:$NAMED_RUNTIME_GROUP "$NAMED_ROOT/view-$viewname"
+    fi
+    if $DO_NAMEDCONF; then
+	echo "# $viewname view configuration" >"$NAMED_ROOT/named.conf.$viewname"
+    fi
+    if test -z "$DO_DOMAINS"; then
+	DO_DOMAINS="*"
+    fi
+    for ROOT in $DO_DOMAINS
+    do
+	out="$NAMED_ROOT/view-$viewname/db.$ROOT"
+	if ! find $view -name "*$ROOT" | grep '[a-z]' >/dev/null; then
+	    if $DEBUG; then
+		echo "    skipping pattern '$ROOT', no database matching"
+	    fi
+	    continue
+	fi
+	if test -s "$out"; then
+	    current=0
+	    if grep -A2 "$match_soa" "$out" | grep '^[ 	]*[1-9]' >/dev/null; then
+		current=`grep -A2 "$match_soa" "$out" | awk '/^[ 	]*[1-9]/{print $1;exit;}'`
+	    fi
+	    if $COMPLETE; then
+		if test -s "$out"; then
+		    echo "  Skipping $ROOT [$out exists]"
+		    continue
+		fi
+		echo "  Writing $ROOT [$out]"
+	    else
+		echo "  Rewriting $ROOT [$out]"
+	    fi
+	    if test $current -ge $SERIAL; then
+		if $DEBUG; then
+		    echo "    serial updated from $SERIAL to `expr $current + 1`"
+		fi
+		SERIAL=`expr $current + 1`
+	    fi
+	fi
+	NSROOT=`grep '[ 	]NS[ 	]' "$view/common-head" | head -1 | sed 's|.*NS[ \t]*\(.*\)\.|\1|'`
+	test -z "$NSROOT" && NSROOT=$ROOT
+	(
+	    test -s ressources/soa && cat ressources/soa | \
+		sed -e "s;|replaceTTL|;$TTL;" \
+		    -e "s;|replaceROOT|;$NSROOT;" \
+	            -e "s;|replaceCONTACT|;$CONTACT;" \
+	            -e "s;|replaceSERIAL|;$SERIAL;" \
+		    -e "s;|replaceREFRESH|;$REFRESH;" \
+		    -e "s;|replaceRETRY|;$RETRY;" \
+		    -e "s;|replaceEXPIRE|;$EXPIRE;" \
+		    -e "s;|replaceNEGATIVETTL|;$NEGATIVETTL;"
+	    echo ""
+	    if echo "$ROOT" | grep in-addr.arpa >/dev/null; then
+		render "$view/common-head" | grep -vE '[ 	](MX|SRV|TXT|CNAME|A)[ 	]'
+	    else
+		render "$view/common-head"
+	    fi
+	    for iput in $view/db.$ROOT $view/db.*.$ROOT
+	    do
+		test -f "$iput" || continue
+		origin=`echo "$iput" | sed 's|^.*/db\.||'`
+		echo ""
+		echo "\$ORIGIN $origin."
+		render "$iput"
+	    done
+	    render "$view/common-tail"
+	) >"$out"
+	chown $NAMED_RUNTIME_USER:$NAMED_RUNTIME_GROUP "$out"
+	if $CHECK; then
+	    if ! named-checkzone $ROOT "$out"; then
+		echo "  WARNING on $ROOT"
+		RELOAD=false
+	    fi | grep -vE '(\(out of zone\)|^OK$|loaded serial)'
+	fi
+	if $DO_NAMEDCONF; then
+	    if echo $viewname | grep public >/dev/null; then
+		masters="{ 78.193.67.92; };"
+		transfer="{ 212.83.154.64; 88.191.254.71; 62.212.76.50; 37.48.71.168; };"
+		notify="{ 212.83.154.64; 37.48.71.168; };"
+	    else
+		masters="{ 10.42.44.100; };"
+		transfer="{ 10.43.0.3; 10.43.1.3; };"
+	    fi
+	    cat <<EOF >>"$NAMED_ROOT/named.conf.$viewname"
+
+zone "$ROOT" {
+<% if 1 == 1 -%>    type master;
+    notify yes;
+    allow-transfer $transfer
+<% else -%>    type slave;
+    masters $masters
+<% end -%>    file "$NAMED_RUNTIME_ROOT/view-$viewname/db.$ROOT";
+EOF
+	    if test "$notify"; then
+		cat <<EOF >>"$NAMED_ROOT/named.conf.$viewname"
+    also-notify $notify
+EOF
+	    fi
+	    cat <<EOF >>"$NAMED_ROOT/named.conf.$viewname"
+};
+EOF
+	fi
+    done
+done
+
+if $RELOAD; then
+    if named-checkconf; then
+	service $NAMED_SERVICE reload
+    fi
+fi
+
+exit 0

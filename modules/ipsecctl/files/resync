@@ -1,0 +1,73 @@
+#!/bin/sh
+
+CONFIGURATION=/etc/ipsec.conf
+for src in rc.conf rc.conf.local
+do
+    if test -e /etc/$src; then
+	if grep ipsec_rules /etc/$src; then
+	    CONFIGURATION=`grep ipsec_rules /etc/$src | sed 's|^[^/]*\([^"#]*\).*$|\1|'`
+	fi
+    fi
+done >/dev/null
+alias echo='echo -en'
+
+echo "    [ reloading IPSEC tunnels ]\nChecking global configuration: "
+if ! ipsecctl -nf $CONFIGURATION >/dev/null; then
+    echo "[ WARNING ]\n"
+    exit 42
+else
+    echo "[   OK    ]\n"
+fi
+
+echo "Checking isakmpd availability: "
+if ! test -p /var/run/isakmpd.fifo; then
+    echo "[ WARNING ]\n"
+    echo "Trying to recover isakmpd:     "
+    if ! /usr/local/sbin/isakmpd_resync; then
+	echo "[ WARNING ]\n"
+	exit 8
+    else
+	echo "[   OK    ]\n"
+    fi
+else
+    echo "[   OK    ]\n"
+fi
+
+for file in rc.conf rc.conf.local
+do
+    value=`sed 's|[ 	#]*.*||' /etc/$file | awk -F= '/^sasyncd_flags=/{print $2}'`
+    if test "$value" = NO -o -z "$value"; then
+	continue
+    fi
+
+    echo "Checking sasyncd status:       "
+    if ! ps ax | grep '[s]asyncd' >/dev/null; then
+	echo "[ WARNING ]\n"
+	echo "Trying to recover sasyncd:     "
+	if ! /usr/sbin/sasyncd -vvv >/dev/null 2>&1; then
+	    echo "[ WARNING ]\n"
+	    exit 16
+	else
+	    echo "[   OK    ]\n"
+	fi
+    else
+	echo "[   OK    ]\n"
+    fi
+    break
+done
+
+echo "Applying new configuration:    "
+if ! ipsecctl -f $CONFIGURATION >/dev/null 2>&1; then
+    echo "[ WARNING ]\n"
+    exit 21
+else
+    echo "[   OK    ]\n"
+fi
+
+if test x"$1" = x-r; then
+    echo "Reload unresponsive tunnels    "
+    ( /usr/local/sbin/reload_tunnels >/dev/null 2>&1 ) &
+    echo "[ RUNNING ]\n"
+fi
+
+exit 0

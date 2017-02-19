@@ -1,0 +1,45 @@
+additional_classes:
+  - Newznab
+
+# Apache
+apache_listen_ports:
+  plain: 80
+  ssl: 443
+apache_mod_php: true
+apache_mpm: prefork
+apache_rsyslog: true
+
+# Memcache
+memcache_max_mem: 256
+
+# MySQL
+mysql_keep_backup: /media/backups
+mysql_max_allowed_packet: 12M
+mysql_max_binlog_size: 512M
+mysql_query_cache_size: 64M
+mysql_read_buffer_size: 1M
+mysql_rolling_backup: false
+mysql_sort_buffer_size: 2M
+mysql_table_cache: 256
+
+# Newznab
+newznab_memcache_backend: 127.0.0.1
+
+# Nginx
+nginx_rsyslog: true
+
+# OSSEC
+ossec_app_directories:
+  /var/www/nnplus:
+    restrict: ".php|.js|.py|.sh|.html"
+
+# PHP
+php_disabled_functions: false
+php_max_exectime: 60
+php_mod_curl: true
+php_mod_gd: true
+php_mod_json: true
+php_mod_ldap: true
+php_mod_memcache: true
+php_mod_mysqli: true
+php_pear: true

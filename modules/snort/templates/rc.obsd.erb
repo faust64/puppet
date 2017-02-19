@@ -1,0 +1,82 @@
+#!/bin/sh
+
+export PATH=/sbin:/usr/sbin:/usr/local/sbin:/bin:/usr/bin:/usr/local/bin
+
+<% if @snort_listen_if != false -%>itf=<%=@snort_listen_if%>
+<% else -%>exit 0
+<% end -%>
+<% if @operatingsystem == "OpenBSD" and @kernelversion == "5.8" -%>RUNDIR=/var/log/snort
+<% else -%>RUNDIR=/var/run
+<% end -%>
+
+if ! test -d <%=@log_dir%>; then
+    mkdir -p <%=@log_dir%>
+fi
+chown -R <%=@snort_user%>:<%=@snort_group%> <%=@log_dir%>
+
+usage()
+{
+    echo "$0: usage"
+    echo "$0 [start|stop|restart|reload|status|check]"
+}
+
+case "$1" in
+    start)
+	    if $0 status >/dev/null 2>&1; then
+		echo "already running" >&2
+		exit 1
+	    elif ! snort			\
+		-c <%=@conf_dir%>/snort.conf	\
+		-D				\
+		-i $itf				\
+		-u <%=@snort_user%>			\
+		-g <%=@snort_group%>			\
+		-t /var/snort			\
+<% if @operatingsystem == "OpenBSD" and @kernelversion == "5.8" -%>
+		--daq-dir /usr/local/lib/daq	\
+<% end -%>
+		-l <%=@log_dir%>; then
+		echo failed starting snort 2>&1
+		exit 1
+	    fi
+	;;
+
+    stop)
+	if ! $0 status >/dev/null 2>&1; then
+	    echo "not running" >&2
+	    exit 1
+	fi
+	pid=`cat $RUNDIR/snort_$itf.pid`
+	kill $pid || kill -9 $pid
+	rm -f $RUNDIR/snort_$itf.pid*
+	;;
+
+    check|status)
+	if ! test -s $RUNDIR/snort_$itf.pid; then
+	    echo not running >&2
+	    exit 3;
+	fi
+	echo pong
+	exit 0
+	;;
+
+    restart)
+	$0 stop
+	sleep 3
+	$0 start
+	;;
+
+    reload)
+	if ! $0 status >/dev/null 2>&1; then
+	    echo "not running" >&2
+	    exit 1
+	fi
+	kill -HUP `cat $RUNDIR/snort_$itf.pid`
+	;;
+
+    *)
+	usage
+	;;
+esac
+
+exit $?

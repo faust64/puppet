@@ -1,0 +1,68 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+PATH="/usr/local/bin:/usr/local/sbin:$PATH"
+export PATH
+
+if test -x /usr/bin/ipmitool -o -x /usr/local/bin/ipmitool; then
+    if ! sudo ipmitool mc getenables >/dev/null 2>&1; then
+	cnt=0
+	for temp in `sudo ipmitool sdr | grep '[ 	][0-9]* degrees C[ 	]' | sed 's/[^|]*|[ 	]\([0-9-]*\)[ 	].*/\1/'`
+	do
+	    cnt=`expr $cnt + 1`
+	    perfdata="$perfdata$temp;"
+	    if test $temp -gt 60; then
+		ret=CRITICAL
+	    elif test $temp -gt 50; then
+		test -z "$ret" && ret=WARNING
+	    else
+		continue
+	    fi
+	    msg="$msg probe #$cnt is $temp degrees,"
+	done
+    fi
+fi >/dev/null 2>&1
+
+if test -x /usr/local/bin/sysinfo; then
+    if sudo /usr/local/bin/sysinfo power 2>&1 | grep Overvoltage; then
+	msg="$msg overvoltage has been applied,"
+	ret=CRITICAL
+    fi
+    temp=`sudo /usr/local/bin/sysinfo temp | sed 's|[^:]*: \([^A-Z]*\).*|\1|'`
+    perfdata=$temp
+    inttemp=`echo $temp | sed 's|\..*||'`
+    if test $inttemp -gt 70; then
+	ret=CRITICAL
+    elif test $inttemp -gt 65; then
+	test -z "$ret" && ret=WARNING
+    fi
+    msg="$msg temp is $temp degrees"
+elif test -x /usr/sbin/dmidecode -o -x /usr/local/sbin/dmidecode; then
+    decode=`which dmidecode`
+    if sudo $decode -t chassis | grep State | egrep -v '(Boot-up|Safe|Other|Unknown|OUT OF SPEC)' >/dev/null; then
+	test -z "$ret" && ret=WARNING
+	msg="$msg `sudo $decode -t chassis | awk '/State:[ 	]/{printf $0","}' | sed 's|[ 	][ 	]*| |g'`"
+    fi
+    if sudo $decode -t system | grep '^[ 	]*Status:' | egrep -v '(No errors detected|OUT OF SPEC|Invalid, Not Full|Valid|Unknown|Enabled)' >/dev/null; then
+	test -z "$ret" && ret=WARNING
+    fi
+    msg="$msg System`sudo dmidecode -t system | awk '/^[ 	]Status:[ 	]/{printf $0}' | sed 's|[ 	][ 	]*| |g'`"
+fi
+
+if test -z "$msg$perfdata"; then
+    ret=WARNING
+    msg=" no hardware report tool installed"
+fi
+
+test -z "$ret" && ret=OK
+test "$msg" && msg=" -$msg"
+test "$perfdata" && perfdata=" | $perfdata"
+
+echo "$ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

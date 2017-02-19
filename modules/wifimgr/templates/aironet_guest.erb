@@ -1,0 +1,58 @@
+#!/bin/sh
+
+TMPFILE=/tmp/`basename $0`.$$
+PSK=`pwgen -sB1 <%=@generate_len%>`
+login="<%=@aironet_user%>"
+password="<%=@aironet_pass%>"
+addresses="<% @aironet_host.each do |host| -%><%=host%> <% end -%>"
+SUBJECT="[WiFi Guest] Renewing public passphrase"
+EMAIL=<%=@contact%>
+EMAILMESSAGE="New PSK: $PSK"
+
+for target in $addresses
+do
+    cat <<EOF >/root/expect-psk
+#!/usr/bin/expect
+#!/bin/bash
+#
+
+spawn ssh $login@$target
+expect {
+    "Password:" {send "$password\r"}
+    timeout {exit}
+}
+expect "#"
+send "conf t\r"
+expect "Enter configuration commands, one per line.  End with CNTL/Z."
+send "dot11 ssid UTGB-Guest\r"
+expect "#"
+send "wpa-psk ascii $PSK\r"
+expect "#"
+send "end\r"
+expect "#"
+send "exit\r"
+expect "#"
+EOF
+    chmod +x /root/expect-psk
+    echo Processing $target
+    if ! time /root/expect-psk; then
+	test "$failed" && failed="$failed, "
+	failed="$failed$target"
+    else
+	test "$success" && success="$success, "
+	success="$success$target"
+    fi
+done >$TMPFILE 2>&1
+rm -f /root/expect-psk
+
+if test "$failed"; then
+    SUBJECT="[CRITICAL] $SUBJECT"
+    EMAILMESSAGE="FAILED ON $failed
+`cat $TMPFILE`
+$EMAILMESSAGE"
+fi
+rm -f $TMPFILE
+
+echo "$EMAILMESSAGE" | mail -s "$SUBJECT" $EMAIL
+
+exit 0

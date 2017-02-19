@@ -1,0 +1,17 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+ret=OK
+if ! netstat -plant 2>&1 | grep ':873[ 	].*' >/dev/null; then
+    ret=CRITICAL
+    msg=" - rsync daemon not running"
+fi
+
+echo "$ret$msg"
+eval ret=\$$ret
+exit $ret

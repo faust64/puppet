@@ -1,0 +1,5 @@
+export MIBS=
+SNMPDRUN=yes
+SNMPDOPTS='-LS6d -Lf /dev/null -u snmp -g snmp -I -smux,mteTrigger,mteTriggerConf -p /var/run/snmpd.pid'
+TRAPDRUN=no
+TRAPDOPTS='-Lsd -p /var/run/snmptrapd.pid'

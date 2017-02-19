@@ -1,0 +1,42 @@
+Content-language: en
+Content-type: text/html; charset=UTF-8
+Body:----------en--
+<!--#set var="TITLE" value="415: Unsupported media type!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 415</h1>
+	    <p>The server does not support the media type transmitted in the request.</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------en--
+
+Content-language: es
+Content-type: text/html
+Body:----------es--
+<!--#set var="TITLE" value="415: El tipo de medio no est&aacute; implementado!" -->
+<!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 415</h1>
+	    <p>Los datos de su solicitud no se encuentran en un formato aceptado por este recurso.</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------es--
+
+Content-language: fr
+Content-type: text/html; charset=UTF-8
+Body:----------fr--
+<!--#set var="CONTENT_LANGUAGE" value="fr"
+--><!--#set var="TITLE" value="415 : Type de m&eacute;dia invalide !"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERREUR 415</h1>
+	    <p>Le serveur ne supporte pas le type de m&eacute;dia utilis&eacute; dans votre requ&ecirc;te.</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html"-->
+----------fr--

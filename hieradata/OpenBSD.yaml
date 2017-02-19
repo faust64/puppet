@@ -1,0 +1,175 @@
+download_cmd: ftp
+gid_adm: wheel
+gid_zero: wheel
+openbsd_pkg_source: false
+service_dir: /etc/rc.d
+no_linprocfs: true
+
+# At
+at_allow: /var/cron/at.allow
+at_deny: /var/cron/at.deny
+
+# Cron
+cron_allow: /var/cron/cron.allow
+cron_deny: /var/cron/cron.deny
+
+# DHCPD
+dhcpd_conf_dir: /etc
+
+# Fail2ban
+fail2ban_version: "0.9.0"
+
+# Freeradius
+freeradius_conf_dir: /etc/raddb
+freeradius_lib_dir: /usr/local/lib/freeradius
+freeradius_log_dir: /var/log/radius
+freeradius_run_dir: /var/run/radiusd
+freeradius_runtime_group: _freeradius
+freeradius_runtime_user: _freeradius
+freeradius_service_name: radiusd
+
+# Mail - general
+mail_alias_dir: /etc/mail
+
+# Munin / Munin-node
+munin_group: _munin
+munin_log_dir: /var/log/munin
+munin_node_service_name: munin_node
+munin_plugins_dir: /usr/local/libexec/munin/plugins
+munin_probes:
+  - cpu
+  - df
+  - intr
+  - load
+  - open_files
+  - processes
+  - vmstat
+munin_physical_probes:
+  - uptime
+munin_runtime_group: wheel
+munin_user: _munin
+
+# Nagios
+dmidecode_bin: /usr/local/sbin/dmidecode
+has_lm_sensors: false
+ipmitool_bin: /usr/local/bin/ipmitool
+nagios_hostgroup: openbsd-servers
+nagios_iconimage: utgb/openbsd.png
+nagios_iconimagealt: openbsd
+nagios_partitions_watchlist:
+  root: /
+  home: /home
+  tmp: /tmp
+  usr: /usr
+  X11R6: /usr/X11R6
+  local: /usr/local
+  obj: /usr/obj
+  src: /usr/src
+  var: /var
+nagios_plugins_dir: /usr/local/libexec/nagios
+nagios_run_dir: /var/run
+nagios_runtime_group: _nrpe
+nagios_runtime_user: _nrpe
+nagios_statusmapimage: utgb/openbsd.gd2
+
+# Named
+named_conf_dir: /var/named/etc
+named_log_dir: /var/named/log
+named_runtime_conf_dir: /etc
+named_runtime_group: named
+named_runtime_log_dir: /log
+named_runtime_user: named
+named_runtime_zone_dir: ""
+named_service_name: named
+named_zone_dir: /var/named
+
+# Nginx
+nginx_runtime_group: www
+nginx_runtime_user: www
+
+# NSD
+nsd_conf_dir: /var/nsd/etc
+nsd_run_dir: /var/nsd/run
+nsd_runtime_group: _nsd
+nsd_runtime_user: _nsd
+nsd_zones_dir: /var/nsd/zones
+
+# OpenLDAP
+openldap_conf_dir: /etc/openldap
+openldap_dir_dir: /var/openldap-data
+openldap_run_dir: /var/run/openldap
+openldap_runtime_group: _openldap
+openldap_runtime_user: _openldap
+
+# OpenSMTPD
+opensmtpd_bin_dir: /usr/sbin
+opensmtpd_lib_dir: /usr/libexec/smtpd
+
+# OpenSSH
+ssh_moduli_dir: /etc
+
+# OpenVPN
+openvpn_runtime_group: _openvpn
+openvpn_runtime_homedir: /nonexistent
+openvpn_runtime_shell: /sbin/nologin
+openvpn_runtime_user: _openvpn
+
+# Puppet
+puppet_run_dir: /var/run
+puppet_var_dir: /var/puppet
+
+# PXE
+pxe_root_dir: /home/tftpboot
+tftp_runtime_user: root
+
+# Rsync
+rsync_service_name: rsyncd
+
+# Snort
+snort_group: _snort
+snort_log_dir: /var/snort/log
+snort_user: _snort
+
+# Squid
+squid_cache_dir: /var/squid/cache
+squid_log_dir: /var/squid/logs
+squid_runtime_group: _squid
+squid_runtime_user: _squid
+
+# Unbound
+unbound_conf_dir: /var/unbound/etc
+unbound_run_dir: /var/run
+unbound_runtime_group: _unbound
+unbound_runtime_user: _unbound
+unbound_var_dir: /var/unbound
+
+fs_legit_suid:
+  - /sbin/ping
+  - /sbin/ping6
+  - /sbin/shutdown
+  - /usr/bin/chfn
+  - /usr/bin/chpass
+  - /usr/bin/chsh
+  - /usr/bin/doas
+  - /usr/bin/passwd
+  - /usr/bin/rsh
+  - /usr/bin/su
+  - /usr/bin/sudo
+  - /usr/bin/sudoedit
+  - /usr/X11R6/bin/Xorg
+  - /usr/libexec/auth/login_chpass
+  - /usr/libexec/auth/login_krb5
+  - /usr/libexec/auth/login_krb5-or-pwd
+  - /usr/libexec/auth/login_lchpass
+  - /usr/libexec/auth/login_passwd
+  - /usr/libexec/auth/login_tis
+  - /usr/libexec/lockspool
+  - /usr/libexec/ssh-keysign
+  - /usr/local/sbin/fping
+  - /usr/local/sbin/fping6
+  - /usr/sbin/ppp
+  - /usr/sbin/pppd
+  - /usr/sbin/sliplogin
+  - /usr/sbin/traceroute
+  - /usr/sbin/traceroute6
+random_source: /dev/arandom

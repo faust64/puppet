@@ -1,0 +1,2592 @@
+additional_classes:
+  - Common
+
+physical_parent: false
+
+# Accounts
+generic_contact: false
+generic_group: users
+generic_groups: users
+generic_home_dir: /home
+generic_pass: false
+generic_user: users
+
+# AIDE
+aide_conf_dir: /etc/aide
+aide_contact: false
+aide_database_dir: /var/lib/aide
+with_aide: false
+
+# Apache
+apache_allow_privates:
+  - 10.0.0.0/8
+apache_collectd: false
+apache_conf_dir: /etc/apache2
+apache_conf_file: apache2.conf
+apache_debugs: false
+apache_error_dir: /var/www/error
+apache_icons_dir: false
+apache_keepalive: "Off"
+apache_keepalive_timeout: 15
+apache_letsencrypt: false
+apache_listen_ports:
+  plain: 80
+  ssl: false
+apache_log_dir: /var/log/apache2
+apache_maintenance: false
+apache_max_keepalive_req: 100
+apache_modules_dir: /usr/lib/apache2/modules
+apache_mod_actions: false
+apache_mod_alias: true
+apache_mod_authldap: false
+apache_mod_autoindex: true
+apache_mod_cache: false
+apache_mod_cgi: false
+apache_mod_cgid: false
+apache_mod_deflate: true
+apache_mod_dir: true
+apache_mod_expires: false
+apache_mod_fcgid: false
+apache_mod_headers: false
+apache_mod_include: true
+apache_mod_mime: true
+apache_mod_negotiation: true
+apache_mod_php: false
+apache_mod_proxy_ajp: false
+apache_mod_proxy_balancer: false
+apache_mod_proxy_connect: false
+apache_mod_proxy_ftp: false
+apache_mod_proxy_http: false
+apache_mod_python: false
+apache_mod_reqtimeout: true
+apache_mod_rewrite: true
+apache_mod_security: false
+apache_mod_security_datadir: /var/cache/modsecurity
+apache_mod_security_owsap: false
+apache_mod_setenvif: true
+apache_mod_status: false
+apache_mod_svn: false
+apache_mod_userdir: false
+apache_mod_wsgi: false
+apache_mod_xsendfile: false
+apache_mod_xsendfile_paths: false
+apache_mpm: event
+apache_munin: false
+apache_munin_probes:
+  - apache_accesses
+  - apache_processes
+  - apache_volume
+apache_run_dir: /var/run
+apache_runtime_group: www-data
+apache_runtime_user: www-data
+apache_rsyslog: false
+apache_searchgroup: ou=groups,dc=example,dc=com
+apache_searchuser: ou=users,dc=example,dc=com
+apache_serveradmin: false
+apache_service_name: apache2
+apache_ssl_ciphers_backward_compatibility: false
+apache_timeout: 120
+apache_web_root: /var/www
+
+# Apt
+apt_contact: false
+apt_slack_hook_uri: false
+
+# Apt-cacher
+apt_cacher: false
+apt_cacher_passphrase: false
+apt_cacher_runtime_group: apt-cacher-ng
+apt_cacher_runtime_user: apt-cacher-ng
+apt_proxy_port: 3142
+
+# Asterisk
+asterisk_aastra_datefmt: "5"
+asterisk_aastra_default_lang: fr_eu
+asterisk_aastra_directory: false
+asterisk_aastra_tzcode: CET
+asterisk_aastra_tzfmt: "1"
+asterisk_aastra_tzname: FR-Paris
+asterisk_ami:
+  nagios:
+    allow: 127.0.0.1/255.255.255.0
+  c2c:
+    allow: 127.0.0.1/255.255.255.0
+  munin:
+    allow: 127.0.0.1/255.255.255.0
+asterisk_ami_listen: 127.0.0.1
+asterisk_ami_permissions:
+  - system
+  - call
+  - log
+  - verbose
+  - command
+  - agent
+  - user
+  - config
+  - command
+  - dtmf
+  - reporting
+  - cdr
+  - dialplan
+  - originate
+asterisk_cisco_default_lang: French
+asterisk_common_routes: false
+asterisk_conf_dir: /etc/asterisk
+asterisk_conference_rooms: false
+asterisk_data_dir: /usr/share/asterisk
+asterisk_default_sip_passphrase: false
+asterisk_default_voicemail_passphrase: false
+asterisk_dahdi_chans: false
+asterisk_extensions: false
+asterisk_external_ip: false
+asterisk_fax_from: noreply@example.com
+asterisk_fax_to: samuel@example.com
+asterisk_iax_calltoken_optional: 127.0.0.1/255.255.255.255
+asterisk_iax_port: 4569
+asterisk_iax_trunks: false
+asterisk_local_routes: false
+asterisk_localnet: 10.0.0.0/8
+asterisk_lib_dir: /usr/lib/asterisk
+asterisk_multiple_login: "no"
+asterisk_munin: false
+asterisk_munin_probes:
+  - asterisk_channels
+  - asterisk_channelstypes
+  - asterisk_meetme
+  - asterisk_meetmeusers
+  - asterisk_sippeers
+  - asterisk_voicemail
+asterisk_phones_syslog: true
+asterisk_pickup_contextes:
+  - ext-local
+  - from-did-direct
+  - from-internal
+  - from-internal-xfer
+asterisk_preferred_codecs:
+  - ulaw
+  - alaw
+  - gsm
+asterisk_public_patterns:
+  - 15
+  - 17
+  - 18
+  - 112
+  - 115
+  - 119
+  - _0.
+asterisk_queues: false
+asterisk_register_timeout: 1800
+asterisk_ring_groups: false
+asterisk_rsyslog: true
+asterisk_run_dir: /var/run/asterisk
+asterisk_runtime_group: asterisk
+asterisk_runtime_user: asterisk
+asterisk_service_keys: false
+asterisk_service_name: asterisk
+asterisk_sip_trunks: false
+asterisk_spool_dir: /var/spool/asterisk
+asterisk_time_conditions: false
+asterisk_var_dir: /var/lib/asterisk
+dahdi_conf_dir: /etc/dahdi
+
+# At
+at_allow: /etc/at.allow
+at_deny: /etc/at.deny
+
+# Auditd
+auditd_buffer_size: 320
+auditd_conf_dir: /etc/audit
+auditd_contact: false
+auditd_keep_logs: false
+auditd_max_logfile_size: 5
+auditd_plugins_conf_dir: /etc/audisp
+with_auditd: false
+
+# Autofs
+autofs_conf_dir: /etc/auto.master.d
+modeles_nas: false
+modeles_nfs_opts: fstype=nfs,ro,soft,intr
+modeles_path: /volume1/modeles
+
+# Backups
+backup_contact: false
+backup_hour: 1
+backup_kvm_vg: data
+backup_min: 15
+
+# Bacula
+bacula_archive_device: /media/backups/bacula
+bacula_archive_device_opts: fstype=nfs
+bacula_backuped_by: false
+bacula_blockdevice_path: false
+bacula_blockdevice_label: false
+bacula_conf_dir: /etc/bacula
+bacula_director_bind_addr: 0.0.0.0
+bacula_director_conf_dir: /etc/bacula
+bacula_director_work_dir: /var/lib/bacula
+bacula_director_host: false
+bacula_director_passphrase: false
+bacula_director_port: 9101
+bacula_do_webapp: false
+bacula_file_daemon_bind_addr: 0.0.0.0
+bacula_file_daemon_fileset: false
+bacula_file_daemon_fileset_ignore: false
+bacula_file_daemon_passphrase: false
+bacula_file_daemon_port: 9102
+bacula_max_concurrent_jobs: 3
+bacula_mysql_passphrase: false
+bacula_nfs_host: false
+bacula_nfs_path: /volume1/bacula
+bacula_run_after: false
+bacula_run_before: false
+bacula_run_dir: /var/run/bacula
+bacula_runtime_group: bacula
+bacula_runtime_user: bacula
+bacula_slack_hook_uri: false
+bacula_storage_bind_addr: 0.0.0.0
+bacula_storage_host: false
+bacula_storage_passphrase: false
+bacula_storage_port: 9103
+bacula_web_dir: /usr/share/bacula-web
+bacula_work_dir: /var/lib/bacula
+
+# BGPD
+bgp_auth: false
+bgp_allow_networks: false
+bgp_conf_dir: /etc
+bgp_database: false
+bgp_deny_networks:
+  0.0.0.0: 8
+  10.0.0.0: 8
+  100.64.0.0: 10
+  127.0.0.0: 8
+  169.254.0.0: 16
+  172.16.0.0: 12
+  192.0.2.0: 24
+  192.168.0.0: 16
+  198.18.0.0: 15
+  198.51.100.0: 24
+  203.0.113.0: 24
+  224.0.0.0: 4
+  240.0.0.0: 4
+bgp_holdtime: 180
+bgp_log_updates: true
+bgp_map: false
+bgp_max_pfx_len: false
+bgp_min_pfx_len: false
+bgp_pass: false
+bgp_redistribute: false
+bgp_router_id: 127.0.0.1
+bgp_route_collector: false
+bgp_service_name: bgpd
+
+# BlueMind
+bluemind_letsencrypt: false
+bluemind_satellite: false
+
+# Browser
+preferred_browser: midori
+
+# Btsync
+btsync_default_secret: false
+btsync_listen_addr: false
+btsync_runtime_user: btsync
+btsync_shared_folders: false
+btsync_sync_umask: "0002"
+
+# CamTrace
+camtrace_keyhash: false
+camtrace_keyid: false
+
+# Ceph
+ceph_cluster_name: ceph
+ceph_do_dashboard: false
+ceph_dashboard_client_keyring: ceph.client.dashboard.keyring
+ceph_dashboard_client_name: client.dashboard
+ceph_munin: false
+ceph_munin_probes:
+  - ceph_osd
+  - ceph_usage
+ceph_nagios: false
+ceph_nagios_client: nagios
+ceph_nagios_keyring_path: false
+ceph_nagios_map: false
+ceph_version: hammer
+
+# ClamAV
+clamav_contact: false
+clamav_conf_dir: /etc/clamav
+clamav_scan_dir:
+  - /var/www
+clamav_slack_hook_uri: false
+
+# Collectd
+collectd_cache_flush: 120
+collectd_conf_dir: /etc/collectd
+collectd_default_plugins:
+  cpu: false
+  disk: false
+  df:
+    MountPoint:
+      - /
+    FSType:
+      - rootfs
+      - tmpfs
+    IgnoreSelected: true
+  interface:
+    Interface:
+      - eth0
+  load: false
+  memory: false
+  processes: false
+  tcpconns: false
+  users: false
+collectd_graphite: false
+collectd_interval: 10
+collectd_log_dir: /var/log
+collectd_readthreads: 5
+collectd_run_dir: /var/run
+collectd_share_dir: /usr/share/collectd
+collectd_upstream: false
+collectd_usr_dir: /usr/lib/collectd
+collectd_var_dir: /var/lib/collectd
+collectd_writes_per_second: 30
+with_collectd: false
+
+# Cron
+cron_allow: /etc/cron.allow
+cron_allowed_users:
+  - root
+cron_deny: /etc/cron.deny
+cron_service_name: cron
+
+# Cups
+cups_conf_dir: /etc/cups
+cups_log_dir: /var/log/cups
+cups_nagios_printers: false
+cups_permissions:
+  /:
+    Order: allow,deny
+  /admin:
+    Order: allow,deny
+  /admin/conf:
+    AuthType: Default
+    Order: allow,deny
+    Require: user @SYSTEM
+cups_public: false
+cups_runtime_group: cups
+cups_runtime_user: cups
+cups_service_name: cups
+cups_share_dir: /usr/share/cups
+cups_with_hplip: true
+
+# DHCPD
+dhcpd_collect_static_leases: false
+dhcpd_conf_dir: /etc/dhcp
+dhcp_on_nondhcp_network: false
+dhcp_isc_service_name: isc-dhcp-server
+pxe_ip: false
+rndc_conf_dir: false
+
+# Elasticsearch
+elasticsearch_cluster_hosts: false
+elasticsearch_cluster_name: TheInternetIsForPorn
+elasticsearch_http_cors: false
+elasticsearch_is_data: true
+elasticsearch_is_master: true
+elasticsearch_listen_addr: false
+elasticsearch_munin: false
+elasticsearch_munin_probes:
+  - elasticsearch_cache
+  - elasticsearch_cluster_shards
+  - elasticsearch_docs
+  - elasticsearch_index_size
+  - elasticsearch_jvm_memory
+  - elasticsearch_jvm_threads
+  - elasticsearch_open_files
+  - elasticsearch_translog_size
+elasticsearch_node_name: false
+elasticsearch_number_of_replicas: 1
+elasticsearch_number_of_shards: 10
+elasticsearch_retention_open: 10
+elasticsearch_retention: 30
+elasticsearch_retention_unit: days
+elasticsearch_version: 5.x
+
+# Fail2ban
+fail2ban_conf_dir: /etc/fail2ban
+fail2ban_contact: root@example.com
+fail2ban_do_badbots: false
+fail2ban_do_asterisk: false
+fail2ban_do_cpanel: false
+fail2ban_do_mails: false
+fail2ban_do_named: false
+fail2ban_do_openvpn: false
+fail2ban_do_pam: false
+fail2ban_do_ssh: true
+fail2ban_do_unbound: false
+fail2ban_do_web_abuses: false
+fail2ban_do_web_noscript: false
+fail2ban_do_web_overflow: false
+fail2ban_do_wordpress: false
+fail2ban_do_xinetd: false
+fail2ban_ignoreips:
+  - 127.0.0.1/8
+fail2ban_maxretry: 3
+fail2ban_munin: true
+fail2ban_munin_probes:
+  - fail2ban
+  - fail2ban_reject
+fail2ban_slack_hook_uri: false
+fail2ban_version: false
+
+# Filetraq
+filetraq_backup_dir: /usr/local/filetraq/backups
+filetraq_bin_dir: /usr/local/sbin
+filetraq_conf_dir: /etc
+filetraq_conf_include: /etc/filetraq.d
+
+# Firehol
+firehol_interfaces:
+  - name: eth0
+    description: LAN
+    protection: strong
+    allow:
+      - client all accept
+
+# Flumotion
+flumotion_admin_pass: test
+flumotion_admin_user: user
+flumotion_conf_dir: /etc/flumotion
+flumotion_forwarder_host: false
+flumotion_forwarder_pass: false
+flumotion_forwarder_port: 8000
+flumotion_forwarder_mountpoint: /test
+flumotion_runtime_group: flumotion
+flumotion_runtime_user: flumotion
+
+# Ftp-proxy
+ftpproxy_local_port: 8021
+
+# FreeBSD
+freebsd_with_dbus: false
+
+# Freeradius
+freeradius_authorized_clients: false
+freeradius_conf_dir: /etc/freeradius
+freeradius_default_passphrase: false
+freeradius_ldap_slave: false
+freeradius_ldap_passphrase: false
+freeradius_lib_dir: /usr/lib/freeradius
+freeradius_log_dir: /var/log/freeradius
+freeradius_run_dir: /var/run/freeradius
+freeradius_runtime_group: freerad
+freeradius_runtime_user: freerad
+freeradius_service_name: freeradius
+
+# Fstab
+fstab_mountpoint: false
+fstab_root_ro: false
+tmp_fs: false
+tmp_target_device: false
+
+# Git
+git_gitmaster_mail: root@example.com
+git_gitmaster_name: MintBerryCrunch
+git_repo_root: /home/git
+git_with_gitlist: false
+git_with_gitlab: false
+gitlab_backups_dir: /media/backups
+gitlab_github_appid: false
+gitlab_github_appsecret: false
+gitlab_ldap_bind_user: false
+gitlab_ldap_bind_passphrase: false
+gitlab_rootpw: false
+gitlab_searchuser: ou=users,dc=example,dc=com
+gitlab_slack_hook_uri: false
+gitlab_user_filter: ''
+
+# Grub
+grub_admin_users: false
+
+# HAproxy
+haproxy_backends: false
+haproxy_chroot_dir: /var/lib/haproxy
+haproxy_collectd: false
+haproxy_conf_dir: /etc/haproxy
+haproxy_default_mode: http
+haproxy_default_nooptions: false
+haproxy_default_options:
+  - httplog
+  - dontlognull
+haproxy_default_ssl_verify: none
+haproxy_default_sticky: true
+haproxy_dh_size: 2048
+haproxy_errors_dir: /etc/haproxy/errors
+haproxy_front_acl: false
+haproxy_listen: false
+haproxy_logs_dir: /var/log
+haproxy_max_conn: 256000
+haproxy_munin: false
+haproxy_munin_probes:
+  - haproxy_ng
+haproxy_peers: false
+haproxy_runtime_group: haproxy
+haproxy_runtime_user: haproxy
+haproxy_service_name: haproxy
+haproxy_sni_rules: false
+haproxy_spread_checks: 5
+haproxy_ssl_bind_ciphers:
+  - ECDH+AESGCM
+  - DH+AESGCM
+  - ECDH+AES256
+  - DH+AES256
+  - ECDH+AES128
+  - DH+AES
+  - RSA+AESGCM
+  - RSA+AES
+  - "!aNULL"
+  - "!MD5"
+  - "!DSS"
+haproxy_ssl_bind_options:
+  - no-sslv3
+  - no-tlsv10
+haproxy_stats_listen: 127.0.0.1
+haproxy_stats_passphrase: secret
+haproxy_stats_port: 1664
+haproxy_stats_socket: /etc/haproxy/hactl
+haproxy_stats_timeout: 30s
+haproxy_stats_user: monit
+haproxy_stick_table_size: 20k
+haproxy_sync_port: 9999
+haproxy_timeouts:
+  client: 1m
+  connect: 10s
+  http-keep-alive: 1s
+  http-request: 15s
+  queue: 30s
+  server: 1m
+  tarpit: 1m
+  tunnel: 360m
+haproxy_uptodate: false
+
+# Hast
+hast_resources: false
+
+# Icecast
+icecast_admin_passphrase: false
+icecast_admin_user: false
+icecast_conf_dir: /etc/icecast2
+icecast_log_dir: /var/log/icecast2
+icecast_relay_passphrase: false
+icecast_relay_user: false
+icecast_runtime_group: icecast
+icecast_runtime_user: icecast2
+icecast_service_name: icecast2
+icecast_share_dir: /usr/share/icecast2
+icecast_upstream: false
+
+# Icinga
+contact_alerts_icinga: false
+contact_domain: false
+icinga_cache_dir: /var/cache/icinga
+icinga_check_domains: false
+icinga_check_ssl: false
+icinga_collect_domains: false
+icinga_conf_dir: /etc/icinga
+icinga_lib_dir: /var/lib/icinga
+icinga_livestatus_clients: false
+icinga_log_dir: /var/log/icinga
+icinga_run_dir: /var/run/icinga
+icinga_service_groups:
+  authentication:
+    aalias: Authentication Services
+  certificates:
+    aalias: Certificates Services
+  databases:
+    aalias: Databases Services
+  dhcp:
+    aalias: DHCP Services
+  diskspace:
+    aalias: Disks status
+  dns:
+    aalias: DNS Services
+  netservices:
+    aalias: Network Services
+  network:
+    aalias: Network Status
+  pbx:
+    aalias: PBX services
+  pdu:
+    aalias: Power Distribution Units
+  printer:
+    aalias: Printer services
+  phone:
+    aalias: SIP services
+  syslog:
+    aalias: Logging Services
+  system:
+    aalias: System Status
+  updates:
+    aalias: System Updates
+  videosurveillance:
+    aalias: VideoSurveillance Services
+  virt:
+    aalias: Virtualization Services
+  virtbackups:
+    aalias: Virtualization Backups
+  vpn:
+    aalias: VPN Services
+  webservices:
+    aalias: Web Services
+icinga_service_classes:
+  critical:
+    check_interval: "2"
+    max_check_attempts: "3"
+    notification_interval: "30"
+    retry_check_interval: "1"
+    timeperiod: 24x7
+  error:
+    check_interval: "5"
+    max_check_attempts: "2"
+    notification_interval: "180"
+    retry_check_interval: "3"
+    timeperiod: 24x7
+  meh:
+    check_interval: "10"
+    max_check_attempts: "3"
+    notification_interval: "360"
+    retry_check_interval: "5"
+    timeperiod: 24x7
+  jobs:
+    check_interval: "60"
+    max_check_attempts: "2"
+    notification_interval: "720"
+    retry_check_interval: "5"
+    timeperiod: 24x7
+  status:
+    check_interval: "1440"
+    max_check_attempts: "2"
+    notification_interval: "4320"
+    retry_check_interval: "20"
+    timeperiod: 24x7
+  warning:
+    check_interval: "1440"
+    max_check_attempts: "6"
+    notification_interval: "4320"
+    retry_check_interval: "20"
+    timeperiod: 24x7
+icinga_share_dir: /usr/share/icinga
+icinga_slack_hook_uri: false
+icinga_static_devices: false
+icinga_sslscan_critical_threshold: B
+icinga_sslscan_warning_threshold: A
+nagios_contact_groups:
+  admins:
+    members:
+      - root
+nagios_contacts:
+  root:
+    email: root@localhost
+    alias: Root
+nagios_hostgroups:
+# - cam
+# - centos
+  - debian
+# - freebsd
+# - nas
+# - network
+# - openbsd
+# - rhel
+# - ubuntu
+# - vmware
+# - print
+nagios_hp_raid: false
+nagios_iconimage: unknown.gif
+nagios_iconimagealt: unknown
+nagios_md_raid: false
+nagios_nrpe_pid_file: nrpe
+nagios_share_dir: /usr/share/nagios
+nagios_smart_disks: false
+nagios_statusmapimage: unknown.gd2
+
+# Ifplugd
+ifplugd_iface: eth0
+
+# Ifstated
+ifstated_bypass: false
+ifstated_conf_dir: /etc
+ifstated_dhcrelay: true
+
+# Ipfw
+myvlan: false
+
+# Ipsecctl
+contact_alerts_ipsecctl: false
+default_ipsec_settings: false
+ipsec_tunnels: false
+ipsecctl_default_backend: isakmpd
+
+# ISAKMPD
+isakmpd_conf_dir: /etc/isakmpd
+isakmpd_dpd_interval: 20
+isakmpd_lifetimep1: "86400,60:86400"
+isakmpd_lifetimep2: "28800,60:86400"
+
+# ISCSI
+iscsi_abrt_timeout: 15
+iscsi_cmd_max: 128
+iscsi_conf_dir: /etc/iscsi
+iscsi_fast_abort: "No"
+iscsi_first_burst_len: 313072
+iscsi_immediate_data: "Yes"
+iscsi_initial_r2t: "No"
+iscsi_login_max_retry: 5
+iscsi_login_timeout: 15
+iscsi_logout_timeout: 15
+iscsi_max_burst_len: 10485760
+iscsi_noop_out_itv: 10
+iscsi_noop_out_timeout: 15
+iscsi_queue_depth: 32
+iscsi_replacement_timeout: 120
+iscsi_reset_timeout: 30
+iscsi_xmit_priority: -20
+iscsid_bin: /usr/sbin/iscsid
+
+# Java
+java_default_version: "7"
+
+# Jesred
+jesred_regexpr:
+  - "(.*)archive.ubuntu.com/ubuntu"
+  - "security.ubuntu.com/ubuntu"
+jesred_rewrite_for:
+  - 0.0.0.0/0
+
+# Kibana
+kibana_index_name: .kibana
+kibana_prefix: logs
+
+# KVM
+kvm_collectd: false
+kvm_cpu_family: SandyBridge
+kvm_munin_monitored: true
+kvm_munin_probes:
+  - kvm_io
+  - kvm_mem
+
+# Letsencrypt
+letsencrypt_contact: root@example.com
+letsencrypt_renew_day: false
+letsencrypt_renew_hour: false
+letsencrypt_renew_min: false
+letsencrypt_slack_hook_uri: false
+
+# LibVirt
+libvirt_runtime_group: root
+libvirt_runtime_user: root
+
+# Lightdm
+lightdm_conf_dir: /etc/lightdm
+lightdm_auto_login: false
+
+# LinuxCounter
+lico_api_key: false
+lico_update_day: false
+lico_update_hour: false
+lico_update_min: false
+
+# Locales
+locale: en
+locale_LOCALE: en_US
+locale_charset: UTF-8
+locale_tz: Europe/Amsterdam
+
+# Logrotate
+logrotate_retention: 2
+logrotate_dir: /etc/logrotate.d
+
+# Logstash
+logstash_do_relp: false
+logstash_do_tcp: false
+logstash_do_udp: true
+logstash_output:
+  elasticsearch:
+    aws:
+      region: us-east-1
+      index: bigbrother
+      userid: ABCD
+      userkey: 01234ABCD
+#   index: logs #actually just a prefix, kibana-compliant date appended
+logstash_relp_port: 6969
+logstash_runtime_group: logstash
+logstash_runtime_user: logstash
+logstash_tcp_port: 1514
+logstash_udp_port: 1514
+logstash_version: "5.1"
+
+# Mail - general
+contact_alerts: false
+mail_alias_dir: /etc
+mail_recipient: false
+
+# Matchbox
+matchbox_app_url: false
+matchbox_feed_url: false
+matchbox_runtime_user: pi
+
+# Media
+media_subsonic: false
+media_sickbeard: false
+media_web_root: /goinfre
+
+# Memcache
+memcache_conf_dir: /etc
+memcache_listen_addr: 127.0.0.1
+memcache_max_mem: 64
+memcache_munin: true
+memcache_munin_probes:
+  - memcached_multi_bytes
+  - memcached_multi_conns
+  - memcached_multi_commands
+  - memcached_multi_evictions
+  - memcached_multi_items
+  - memcached_multi_memory
+memcache_runtime_user: nobody
+memcache_service_name: memcached
+
+# Moin
+moin_conf_dir: /etc/moin
+moin_lib_dir: /var/lib/moin
+moin_frontpage: FrontPage
+moin_interwiki_name: Wiki
+moin_mail_from: root@example.com
+moin_site_name: Wiki
+moin_slack_hook_uri: false
+moin_superuser: false
+moin_underlay_dir: /usr/share/moin/underlay
+moin_web_dir: /var/www/moin
+
+# Mongodb
+mongodb_backup_collections: false
+mongodb_backup_database: dbname
+mongodb_backup_dir: /media/backups/mongodb
+mongodb_conf_dir: /etc
+mongodb_db_path: /var/lib/mongodb
+mongodb_do_service: true
+mongodb_journal: true
+mongodb_listen_addr: 127.0.0.1
+mongodb_log_dir: /var/log/mongodb
+mongodb_log_retention: "60"
+mongodb_munin: true
+mongodb_munin_probes:
+  - mongo_btree
+  - mongo_conn
+  - mongo_docs
+  - mongo_lock
+  - mongo_mem
+  - mongo_ops
+mongodb_nagios_databases: false
+mongodb_port: 27017
+mongodb_runtime_group: mongodb
+mongodb_runtime_user: mongodb
+
+# Mrtg
+mrtg_monitor: false
+mrtg_collect: example.com
+mrtg_week_start_day: "1"
+
+# Munin / Munin-Node
+munin_collect_domains: false
+munin_conf_dir: /etc/munin
+munin_group: munin
+munin_log_dir: /var/log/munin-node
+munin_log_level: 4
+munin_nat_addr: false
+munin_nat_port: false
+munin_node_listenaddr: false
+munin_node_service_name: munin-node
+munin_pooler: false
+munin_port: 4949
+munin_run_dir: /var/run/munin
+munin_runtime_group: root
+munin_runtime_user: root
+munin_sensors:
+  - fan
+  - temp
+  - volt
+munin_smart_temp: false
+munin_timeout: false
+munin_user: munin
+munin_plugins_dir: /usr/share/munin/plugins
+munin_probes:
+  - cpu
+  - df
+  - diskstats
+  - entropy
+  - forks
+  - interrupts
+  - load
+  - memory
+  - open_files
+  - processes
+  - proc_pri
+  - threads
+  - users
+  - vmstat
+munin_physical_probes:
+  - df_inode
+  - fw_conntrack
+  - fw_forwarded_local
+  - fw_packets
+  - open_inodes
+  - uptime
+munin_time_probes:
+  - ntp_kernel_err
+  - ntp_kernel_pll_freq
+  - ntp_kernel_pll_off
+  - ntp_offset
+munin_purge_probes:
+  - bind9_rndc
+  - munin_stats
+  - nfs_client
+  - unbound_by_class
+  - unbound_by_flags
+  - unbound_by_opcode
+  - unbound_by_type
+vps_with_munin: false
+with_munin: true
+
+# MySQL
+mysql_bind_addr: 127.0.0.1
+mysql_binlog_do_db: false
+mysql_charset: false
+mysql_conf_dir: /etc/mysql
+mysql_expire_log_days: 10
+mysql_keep_backup: false
+mysql_key_buffer: 16M
+mysql_include_dir: /etc/mysql/conf.d
+mysql_lib_dir: /var/lib/mysql
+mysql_log_slowqueries: true
+mysql_max_allowed_packet: 1M
+mysql_max_binlog_size: 100M
+mysql_max_connections: 100
+#general-innodb:
+# - innodb
+mysql_innodb_munin_probes:
+  - mysql_innodb_bpool
+  - mysql_innodb_bpool_act
+# - mysql_innodb_insert_buf
+  - mysql_innodb_io
+# - mysql_innodb_io_pend
+  - mysql_innodb_log
+  - mysql_innodb_rows
+  - mysql_innodb_semaphores
+  - mysql_innodb_tnx
+mysql_multi_munin_probes:
+  - mysql_bin_relay_log
+  - mysql_commands
+  - mysql_connections
+  - mysql_files_tables
+  - mysql_network_traffic
+  - mysql_qcache
+  - mysql_qcache_mem
+# - mysql_replication
+  - mysql_select_types
+  - mysql_slow
+  - mysql_sorts
+  - mysql_table_locks
+  - mysql_tmp_tables
+mysql_munin: false
+mysql_munin_myisam_databases: false
+mysql_munin_probes:
+  - mysql_bytes
+  - mysql_queries
+  - mysql_slowqueries
+  - mysql_threads
+mysql_myisam_munin_probes:
+  - mysql_myisam_indexes
+mysql_pid_file: mysqld.pid
+mysql_provider: oracle
+mysql_query_cache_limit: 1M
+mysql_query_cache_size: 16M
+mysql_read_buffer_size: 256K
+mysql_replication_from: false
+mysql_replication_passphrase: false
+mysql_replication_user: repl
+mysql_rolling_backup: true
+mysql_runtime_group: mysql
+mysql_runtime_user: mysql
+mysql_replicate_do_table: false
+mysql_service_name: mysql
+mysql_server_id: false
+mysql_slack_hook_uri: false
+mysql_sock_dir: /var/run/mysqld
+mysql_sock_file: mysqld.sock
+mysql_sort_buffer_size: 512K
+mysql_table_cache: 64
+mysql_thread_concurrency: 10
+mysql_thread_cache_size: 8
+mysql_thread_stack: 192K
+
+# Nagios
+dmidecode_bin: /usr/sbin/dmidecode
+has_ipmi: false
+has_lm_sensors: true
+has_serial_io: false
+ipmitool_bin: /usr/bin/ipmitool
+nagios_conf_dir: /etc/nagios
+nagios_contact_escalate: false
+nagios_dns_proof: perdu.com
+nagios_host_class: generic-host
+nagios_icmp_proof: 8.8.8.8
+nagios_ip: false
+nagios_listenaddr: false
+nagios_load_crit_threshold: "1,1,1"
+nagios_load_warn_threshold: "0.9,0.8,0.8"
+nagios_nat_listenaddr: false
+nagios_no_parent: false
+nagios_nrpe_nat_port: false
+nagios_nrpe_port: 5666
+nagios_nrpe_service_name: nrpe
+nagios_nrpe_timeout: 60
+nagios_partitions_watchlist: false
+nagios_plugins_dir: /usr/lib/nagios/plugins
+nagios_procs_crit: 160
+nagios_procs_warn: 150
+nagios_run_dir: /var/run/nagios
+nagios_runprocs_crit: 10
+nagios_runprocs_warn: 5
+nagios_runtime_group: nagios
+nagios_runtime_user: nagios
+nagios_users_crit: 5
+nagios_users_warn: 3
+with_nagios: true
+
+# Named
+named_channels:
+  - client
+  - config
+  - database
+  - default
+  - dispatch
+  - dnssec
+  - general
+  - lame-servers
+  - network
+  - notify
+  - queries
+  - resolver
+  - security
+  - unmatched
+  - update
+  - xfer-in
+  - xfer-out
+named_conf_dir: /etc/bind
+named_contact: false
+named_collectd: false
+named_gen_domains: false
+named_log_dir: /var/log/named
+named_master: false
+named_munin: true
+named_munin_probes:
+  - bind9
+named_notify: false
+named_rndc_key: rbvsezgcuT+vx4d6LKHDeA==
+named_runtime_conf_dir: /etc/bind
+named_runtime_group: bind
+named_runtime_log_dir: /var/log/named
+named_runtime_user: bind
+named_runtime_zone_dir: /etc/bind
+named_service_name: bind9
+named_sshfp_domains: false
+named_zone_dir: /etc/bind
+named_zones_check:
+  - example.com
+
+# Network
+can_set_tos: true
+gre_tunnels: false
+# anything elegant would be welcome
+name_to_number:
+  "0": noull
+  "1": heins
+  "2": tzwei
+  "3": dry
+  "4": four
+  "5": funf
+  "6": sechxstts
+  "7": ziehben
+  "8": arrrcht
+  "9": NEIN
+net_ifs: false
+# again
+netmask_correspondance:
+  1: 128.0.0.0
+  2: 192.0.0.0
+  3: 224.0.0.0
+  4: 240.0.0.0
+  5: 248.0.0.0
+  6: 252.0.0.0
+  7: 254.0.0.0
+  8: 255.0.0.0
+  9: 255.128.0.0
+  10: 255.192.0.0
+  11: 255.224.0.0
+  12: 255.240.0.0
+  13: 255.248.0.0
+  14: 255.252.0.0
+  15: 255.254.0.0
+  16: 255.255.0.0
+  17: 255.255.128.0
+  18: 255.255.192.0
+  19: 255.255.224.0
+  20: 255.255.240.0
+  21: 255.255.248.0
+  22: 255.255.252.0
+  23: 255.255.254.0
+  24: 255.255.255.0
+  25: 255.255.255.128
+  26: 255.255.255.192
+  27: 255.255.255.224
+  28: 255.255.255.240
+  29: 255.255.255.248
+  30: 255.255.255.252
+  31: 255.255.255.254
+  32: 255.255.255.255
+reverse_path_filtering: "1"
+
+# Newznab
+newznab_contact: root@example.com
+newznab_ldap_object_login: cn
+newznab_ldap_object_mail: mail
+newznab_ldap_user_base: dc=example,dc=com
+newznab_memcache_backend: false
+newznab_mysql_database: newznab
+newznab_mysql_password: false
+newznab_mysql_username: newznab
+newznab_nntp_password: false
+newznab_nntp_username: false
+newznab_nntp_host: nntp.example.com
+newznab_slack_hook_uri: false
+newznab_svn_password: false
+newznab_svn_username: false
+
+# NFS
+nfs_service_name: nfsd
+
+# Nginx
+nginx_cgi_socket: false
+nginx_collectd: false
+nginx_conf_dir: /etc/nginx
+nginx_keepalive_timeout: 25
+nginx_listen_ports:
+  plain: 80
+  ssl: false
+nginx_log_dir: /var/log/nginx
+nginx_munin: false
+nginx_munin_probes:
+  - nginx_request
+  - nginx_status
+nginx_names_hash_bucket_size: 64
+nginx_run_dir: /var/run
+nginx_runtime_group: root
+nginx_runtime_user: root
+nginx_rsyslog: false
+nginx_with_cgi: false
+nginx_worker_processes: 4
+nginx_worker_connections: 768
+
+# Nitrogen
+nitrogen_posx: 0
+nitrogen_posy: 0
+nitrogen_sizex: 1920
+nitrogen_sizey: 1080
+
+# NodeJS
+nodejs_force_version: false
+nodejs_from_sources: false
+nodejs_pm2_home: /root
+nodejs_pm2_group: root
+nodejs_pm2_user: root
+nodejs_service_name: pm2
+
+# NSD
+nsd_conf_dir: /etc/nsd
+nsd_control_enable: false
+nsd_control_listen_address: 127.0.0.1
+nsd_control_listen_port: 8952
+nsd_listen_address: 0.0.0.0
+nsd_listen_port: 53
+nsd_run_dir: /run/nsd
+nsd_runtime_group: nsd
+nsd_runtime_user: nsd
+nsd_serve_domains:
+  - example.com
+  - 10.in-addr.arpa
+nsd_zones_dir: /etc/nsd/zones.d
+
+# NTP
+ntp_driftfile: /var/lib/ntp/ntp.drift
+ntp_method: IP
+ntp_update_minute: 12
+ntp_upstream: pool.ntp.org
+
+# Openbox
+openbox_autostart_cmd: false
+openbox_autostart_file: autostart
+
+# OpenDKIM
+opendkim_conf_dir: /etc
+opendkim_runtime_group: opendkim
+opendkim_runtime_user: opendkim
+opendkim_sign_domains:
+  - example.com
+opendkim_trusted_hosts: false
+
+# OpenLDAP
+ldap_id: 1
+openldap_admin_ssha_hash: false
+openldap_certificate_cn: false
+openldap_conf_dir: /etc/ldap
+openldap_contact: false
+openldap_dir_dir: /var/lib/ldap
+openldap_ldap_slave: false
+openldap_ldap_suffix: false
+openldap_munin: true
+openldap_munin_passphrase: false
+openldap_munin_probes:
+  - slapd_statistics_bytes
+  - slapd_statistics_pdu
+  - slapd_statistics_referrals
+  - slapd_statistics_entries
+  - slapd_connections
+  - slapd_waiters
+  - slapd_operations
+  - slapd_operations_diff
+openldap_munin_user: cn=munin,ou=services,dc=example,dc=com
+openldap_repl_passphrase: false
+openldap_run_dir: /var/run/slapd
+openldap_runtime_group: openldap
+openldap_runtime_user: openldap
+openldap_slack_hook_uri: false
+openldap_ssp_bind_dn: false
+openldap_ssp_bind_pw: false
+openldap_ssp_keyphrase: changeme
+openldap_ssp_mail_from: admin@example.com
+openldap_service_name: slapd
+openldap_web_front: true
+
+# OpenNebula
+nebula_class: manager
+nebula_datastore0: false
+nebula_db_backend: sqlite
+nebula_db_passphrase: onepass
+nebula_db_user: oneadmin
+nebula_runtime_group: oneadmin
+nebula_runtime_user: oneadmin
+nebula_searchuser: ou=users,dc=example,dc=com
+nebula_version: 4.14
+
+# OpenSMTPD
+mail_masquerade: false
+opensmtpd_bin_dir: /usr/sbin
+opensmtpd_conf_dir: /etc/mail
+opensmtpd_lib_dir: /usr/share/opensmtpd
+
+# OpenSSL
+pki_ca_expire: 365
+pki_contact: pki@example.com
+pki_key_city: Amsterdam
+pki_key_country: NL
+pki_key_expire: 365
+pki_key_org: example PKI
+pki_key_province: NL
+pki_key_size: 2048
+pki_domains_lookup:
+  - example.com
+pki_master: false
+pki_nocontact: noreply@example.com
+pki_public: false
+
+# OpenVPN
+active_openvpns: false
+contact_alerts_openvpn: false
+openvpn_auth_source: certificate
+openvpn_collectd: false
+openvpn_conf_dir: /etc/openvpn
+openvpn_default_filter: "(uid=$X509_0_CN)"
+openvpn_gateway: vpn.example.com
+openvpn_keepalive: 15 120
+openvpn_munin: true
+openvpn_ldap_passphrase: false
+openvpn_munin_probes:
+  - openvpn
+openvpn_mute: 5
+openvpn_push_default: false
+openvpn_push_networks: false
+openvpn_rotate: 21
+openvpn_runtime_group: openvpn
+openvpn_runtime_homedir: /var/empty
+openvpn_runtime_shell: /bin/false
+openvpn_runtime_user: openvpn
+openvpn_script_security: 2
+openvpn_searchuser: ou=users,dc=example,dc=com
+openvpn_verbosity: 4
+
+# OpenVZ
+openvz_and_kvm: false
+openvz_and_xen: false
+openvz_contact: admin@example.com
+openvz_munin: true
+openvz_munin_probes:
+  - openvz_loadavg
+openvz_modules:
+  - autofs4
+  - ipt_LOG
+  - ipt_REDIRECT
+  - ipt_REJECT
+  - ipt_conntrack
+  - ipt_helper
+  - ipt_length
+  - ipt_limit
+  - ipt_multiport
+  - ipt_state
+  - ipt_tcpmss
+  - ipt_ttl
+  - ipt_tos
+  - iptable_mangle
+  - iptable_nat
+  - nf_conntrack
+  - nf_conntrack_ftp
+  - nf_conntrack_irc
+  - nf_nat
+  - nfsd
+  - xt_comment
+  - xt_state
+  - xt_tcpudp
+openvz_nas_host: nas.example.com
+openvz_nas_root: /volume1
+virtual_default_vg: data
+vz_default_bridge: false
+vz_default_gateway: false
+vz_default_netmask: false
+vz_root: /var/lib/vz
+
+# OSPFD
+ospf_conf_dir: /etc
+ospf_database: false
+ospf_hello_interval: 2
+ospf_map: false
+ospf_no_redistribute: false
+ospf_redistribute: false
+ospf_retransmit_interval: 5
+ospf_router_dead_interval: 6
+ospf_router_id: 127.0.0.1
+ospf_router_priority: 1
+ospf_router_transmit_delay: 1
+ospf_service_name: ospfd
+ospf_spf_delay: 1
+ospf_spf_holdtime: 5
+ospf_stub_router: false
+
+# OSSEC
+ossec_accept_new_agents: false
+ossec_app_directories: false
+ossec_check_directories:
+  - /etc
+  - /usr/bin
+  - /usr/sbin
+  - /bin
+  - /sbin
+ossec_check_frequency: 7200
+ossec_conf_dir: /var/ossec
+ossec_contact: false
+ossec_ignore:
+  - /etc/mtab
+  - /etc/hosts.deny
+  - /etc/random-seed
+  - /etc/adjtime
+ossec_include_rules:
+  - rules_config
+  - pam_rules
+  - sshd_rules
+  - telnetd_rules
+  - syslog_rules
+  - arpwatch_rules
+  - symantec-av_rules
+  - symantec-ws_rules
+  - pix_rules
+  - named_rules
+  - smbd_rules
+  - vsftpd_rules
+  - pure-ftpd_rules
+  - proftpd_rules
+  - ms_ftpd_rules
+  - ftpd_rules
+  - hordeimp_rules
+  - roundcube_rules
+  - wordpress_rules
+  - cimserver_rules
+  - vpopmail_rules
+  - vmpop3d_rules
+  - courier_rules
+  - web_rules
+  - web_appsec_rules
+  - apache_rules
+  - nginx_rules
+  - php_rules
+  - mysql_rules
+  - postgresql_rules
+  - ids_rules
+  - squid_rules
+  - firewall_rules
+  - cisco-ios_rules
+  - netscreenfw_rules
+  - sonicwall_rules
+  - postfix_rules
+  - sendmail_rules
+  - imapd_rules
+  - mailscanner_rules
+  - dovecot_rules
+  - ms-exchange_rules
+  - racoon_rules
+  - vpn_concentrator_rules
+  - spamd_rules
+  - msauth_rules
+  - mcafee_av_rules
+  - trend-osce_rules
+  - ms-se_rules
+# - policy_rules
+  - zeus_rules
+  - solaris_bsm_rules
+  - vmware_rules
+  - ms_dhcp_rules
+  - asterisk_rules
+  - ossec_rules
+  - attack_rules
+  - local_rules
+ossec_mail_from: noreply@example.com
+ossec_manager: 127.0.0.1
+ossec_realtime: false
+ossec_report_changes: false
+ossec_service_name: ossec
+ossec_slack_hook_uri: false
+ossec_whitelist:
+  - 127.0.0.1
+
+# OpenSSH
+ssh_ciphers:
+  - chacha20-poly1305@openssh.com
+  - aes256-gcm@openssh.com
+  - aes128-gcm@openssh.com
+  - aes256-ctr
+  - aes192-ctr
+  - aes128-ctr
+ssh_host_keys:
+  - ssh-rsa
+  - ssh-rsa-cert-v01@openssh.com
+  - ssh-ed25519
+  - ssh-ed25519-cert-v01@openssh.com
+ssh_kex_algorithms:
+  - curve25519-sha256@libssh.org
+  - diffie-hellman-group-exchange-sha256
+ssh_keys_database: false
+ssh_mac_algorithms:
+  - hmac-sha2-256-etm@openssh.com
+  - hmac-sha2-512-etm@openssh.com
+  - hmac-ripemd160-etm@openssh.com
+  - hmac-sha2-256                                      
+  - hmac-sha2-512
+  - hmac-ripemd160
+  - umac-128@openssh.com
+  - umac-128-etm@openssh.com
+ssh_moduli_dir: /etc/ssh
+ssh_password_authentication: false
+ssh_port: 22
+ssh_service_name: sshd
+ssh_tcp_wrappers: false
+
+# OwnCloud
+owncloud_db_backend: mysql
+owncloud_db_host: localhost
+owncloud_db_name: owncloud
+owncloud_db_passphrase: false
+owncloud_db_tableprefix: oc_
+owncloud_db_user: owncloud
+owncloud_do_backup: false
+owncloud_domains:
+  0: example.com
+owncloud_instance_id: false
+owncloud_mail_domain: example.com
+owncloud_mail_from: root
+owncloud_password_salt: false
+owncloud_secret: false
+owncloud_theme: ''
+owncloud_version: 8.1.9.2
+owncloud_web_root: /var/www/owncloud
+
+# Packages
+packages_is_apache: true
+packages_do_nfs: true
+
+# Pakiti
+do_pakiti: false
+pakiti_admins: false
+pakiti_conf_dir: /etc/pakiti2
+pakiti_db_passphrase: false
+pakiti_db_user: pakiti2
+pakiti_http_passphrase: false
+pakiti_http_user: pakiti
+pakiti_upstream: false
+pakiti_site_id: 1
+
+# Patchdashboard
+do_patchdashboard: false
+patchdashboard_db_passphrase: changeme
+patchdashboard_db_user: patchdashboard
+patchdashboard_salt: W[62~L41|]CU15b
+patchdashboard_upstream: false
+
+# Peerio
+peerio_admin_name: admin.example.com
+peerio_airbrake: false
+peerio_apt_repo: https://repo.example.com
+peerio_apt_repo_key_author: admin@example.com
+peerio_chunks_dir: /var/tmp/peerio-server
+peerio_conf_dir: /var/lib/pm2
+peerio_contact: false
+peerio_default_locale: en
+peerio_environment: production
+peerio_files_name: blob.example.com
+peerio_force_fork: false
+peerio_inferno_name: ghost.example.com
+peerio_inferno_tor: false
+peerio_hauntedhouse_port: 443
+peerio_hauntedhouse_proto: https
+peerio_logs_dir: /var/log/peerio-server
+peerio_logs_rotate: 7
+peerio_mailfrom: peerio@example.com
+peerio_mailreplyto: noreply@example.com
+peerio_munin: false
+peerio_munin_admin_probes:
+  - peerio_active
+  - peerio_closed
+  - peerio_lwactive
+  - peerio_users
+peerio_munin_background_probes:
+  - peerio_sumconnected
+peerio_munin_foreground_probes:
+  - peerio_connected
+peerio_munin_shark_probes:
+  - shark_invoices
+  - shark_ppw
+peerio_nuts_name: nuts.example.com
+peerio_nuts_repository: false
+# PeerioTechnologies/peerio-desktop:
+#   apikey: githubtoken
+#   apipassphrase: alternativelysethereapassphrase
+#   apisecret: independentfromyourgithubaccount
+#   apiuser: username
+peerio_redis_backends:
+  - 127.0.0.1
+peerio_redis_elasticache: false
+peerio_redis_limit: false
+peerio_riak_backends:
+  - 127.0.0.1
+peerio_riak_health_auth:
+peerio_riak_is_balanced: false
+peerio_riak_max_connections_per_node: 4096
+peerio_riak_min_connections_per_node: 10
+peerio_riak_ssl: false
+peerio_riak_user: peerio
+peerio_runtime_group: peerioadmin
+peerio_runtime_processes:
+  - nuts
+  - filemgr
+  - schedule
+  - foreground
+  - background
+  - inferno
+  - shark
+  - admin
+peerio_runtime_user: peerioadmin
+peerio_shark_dbhost: 127.0.0.1
+peerio_shark_dbmaxcon: 10
+peerio_shark_dbname: shark
+peerio_shark_dbpass: secret
+peerio_shark_dbuser: shark
+peerio_shark_name: accounts.example.com
+peerio_shark_port: 443
+peerio_shark_proto: https
+peerio_shark_secret: false
+peerio_shark_stores: false
+# appstorepassword: abc
+# googleaccesstoken: abc
+# googleclientid: abc
+# googleclientsecret: abc
+# googleplaypubkey: abc
+# googlereftoken: abc
+peerio_slack_hook: false
+peerio_sns:
+  accessKey: false
+  androidARN: false
+  keyId: false
+  iosARN: false
+peerio_storage:
+  azure: false
+#   id: username
+#   key: apikey
+  s3: false
+#   host: s3gw
+#   id: s3id
+#   key: s3key
+#   port: 443
+#   proto: https
+peerio_statsd:
+  port: 8080
+  proxy: false
+# proxy: statsd.example.com
+peerio_throttle: true
+peerio_twilio:
+  admincontact: false
+  number: false
+  sid: false
+  token: false
+peerio_website_name: www.example.com
+peerio_ws_name: ws.example.com
+peerio_zendesk:
+  account: false
+  email: false
+  key: false
+# account: username
+# email: user@zendesk.com
+# key: apikey
+
+# PF
+ad_ip: false
+adm_ip: false
+allowed_tcp_ports: false
+allowed_udp_ports: false
+asterisk_ip: false
+bacula_director_ip: false
+bacula_storage_ip: false
+bigbluebutton_ip: false
+blacklist: false
+collectd_ip: false
+collectd_port: 37658
+contact_alerts_pf: false
+dell_ups_ip: false
+dell_ups_mgr_ip: false
+dhcp_ip: false
+dns_ip: false
+dns_masters: false
+dns_push: false
+git_ip: false
+icecast_ip: false
+icecast_upstream_ip: 91.216.209.231
+icmp_ip: false
+ldap_masters: false
+ldap_ip: false
+mail_ip: false
+mail_mx: false
+munin_ip: false
+qos_root_if: lo
+qos_root_bandwidth: 1000Mb
+#should remain below kern.maxclusters
+pf_frags_limit: 2000
+pf_max_mss: 1440
+pf_munin: true
+pf_munin_probes:
+  - pf_changes
+  - pf_searches
+  - pf_states
+pf_skip_gre: false
+pf_state_limit: 50000
+pf_state_policy: if-bound
+pf_sourcetrack_timeout: 2000
+pf_table_entries: 50000
+pf_tables: 2000
+plex_ip: false
+pubgit_ip: false
+pubmx_ip: false
+pubreverse_ip: false
+reverse_ip: false
+sip_providers: false
+squid_ip: false
+snmp_ip: false
+ssh_ip: false
+transmission_ip: false
+visio_clients: false
+visio_ip: false
+vlist_ip: false
+vmwaremgr_ip: false
+vpnserver_if: false
+vpnserver_ip: 127.0.0.1
+xmpp_ip: false
+
+# PHP
+php_apc: false
+php_conf_dir: /etc/php5
+php_disabled_functions:
+  - pcntl_alarm
+  - pcntl_fork
+  - pcntl_waitpid
+  - pcntl_wait
+  - pcntl_wifexited
+  - pcntl_wifstopped
+  - pcntl_wifsignaled
+  - pcntl_wexitstatus
+  - pcntl_wtermsig
+  - pcntl_wstopsig
+  - pcntl_signal
+  - pcntl_signal_dispatch
+  - pcntl_get_last_error
+  - pcntl_strerror
+  - pcntl_sigprocmask
+  - pcntl_sigwaitinfo
+  - pcntl_sigtimedwait
+  - pcntl_exec
+  - pcntl_getpriority
+  - pcntl_setpriority
+php_error_report: E_ALL & ~E_DEPRECATED & ~E_STRICT
+php_explicit_sessions: false
+php_gc_probability: 0
+php_hashbits_per_character: 5
+php_is_cli: false
+php_is_fpm: false
+php_max_exectime: 30
+php_memory_limit: 128M
+php_mod_ctype: false
+php_mod_curl: false
+php_mod_dom: false
+php_mod_ftp: false
+php_mod_fileinfo: false
+php_mod_gd: false
+php_mod_gettext: false
+php_mod_gmp: false
+php_mod_intl: false
+php_mod_json: false
+php_mod_ldap: false
+php_mod_ldap_pecl: false
+php_mod_mbstring: false
+php_mod_mcrypt: false
+php_mod_memcache: false
+php_mod_mysql: false
+php_mod_mysqli: false
+php_mod_mysqlnd: false
+php_mod_pdo: false
+php_mod_pgsql: false
+php_mod_phar: false
+php_mod_snmp: false
+php_mod_sqlite: false
+php_mod_uploadprogress: false
+php_mod_xml: false
+php_mod_xmlrpc: false
+php_mod_zip: false
+php_mod_zlib: false
+php_munin: false
+php_munin_probes:
+  - php_apc_fragmentation
+  - php_apc_files
+  - php_apc_hit_miss
+  - php_apc_purge
+  - php_apc_rates
+  - php_apc_usage
+php_pear: false
+php_post_max_size: 8M
+php_serialize_precision: 17
+php_upload_max_filesize: 2M
+php_with_dev: false
+php_zend_extensions: false
+
+# Pnp4nagios
+pnp4nagios_conf_dir: /etc/pnp4nagios
+pnp4nagios_install_dir: /usr/share/pnp4nagios
+pnp4nagios_lib_dir: /usr/lib/pnp4nagios
+pnp4nagios_spool_dir: /var/spool/pnp4nagios
+pnp4nagios_service_name: npcd
+
+# PostgreSQL
+#check
+postgres_data_dir: /var/lib/postgresql/9.1/main
+postgres_data_reldir: main
+postgres_lib_dir: /usr/lib/postgresql
+postgres_root_dir: /var/lib/postgresql/9.1
+postgres_runtime_group: postgres
+postgres_runtime_user: postgres
+
+# Postfix
+postfix_conf_dir: /etc/postfix
+postfix_letsencrypt: false
+postfix_local_domains: false
+postfix_munin: false
+postfix_munin_probes:
+  - postfix_mailqueue
+  - postfix_mailstats
+  - postfix_mailvolume
+postfix_myhostname: false
+postfix_networks: false
+postfix_rbls:
+  - pbl.spamhaus.org
+  - bl.spamcop.net
+  - opm.blitzed.org
+  - rbl.mail-abuse.org
+  - spamsources.fabel.dk
+  - zen.spamhaus.org
+  - zombie.dnsbl.sorbs.net
+postfix_routeto: false
+postfix_runtime_user: postfix
+postfix_runtime_group: postfix
+postfix_smtp_generic_maps: false
+postfix_spool_dir: /var/spool/postfix
+
+# Puppet
+puppet_apt_repo: http://www.example.com
+puppet_apt_repo_key_author: false
+puppet_conf_dir: /etc/puppetlabs/puppet
+puppet_ip: false
+puppet_http_repo: http://www.example.com
+puppet_run_dir: /var/run/puppet
+puppet_run_interval: 21600
+puppet_runtime_group: puppet
+puppet_runtime_user: puppet
+puppet_service_name: puppet
+puppet_update_by_cron: false
+puppet_var_dir: /var/lib/puppet
+puppetmaster: false
+
+# PXE
+ks_host_hashed_password: false
+ps_host_hashed_password: false
+ui_host_clear_password: false
+ui_openbsd_nics:
+  - em0
+  - em1
+  - em2
+  - em3
+pxe_root_dir: /srv/tftpboot
+tftp_runtime_user: tftp
+wds_ip: false
+
+# Qemu
+qemu_has_kvm: false
+
+# Racktables
+do_racktables: false
+munin_vhost_name:
+  - munin.example.com
+racktables_auth_backend: local
+racktables_database_password: false
+racktables_database_user: false
+racktables_ldap_suffix: false
+racktables_object_id: 1504
+racktables_version: 0.20.11
+
+# Reboot
+reboot_week_day: false
+reboot_month_day: false
+reboot_hour: false
+reboot_minute: false
+
+# Redis
+redis_conf_dir: /etc/redis
+redis_databases: 16
+redis_listen_address: 127.0.0.1
+redis_listen_port: 6379
+redis_max_lag: 10
+redis_min_slave_to_write: 1
+redis_munin: false
+redis_munin_probes:
+  - redis_connected_clients
+  - redis_key_ratio
+  - redis_keys_per_sec
+  - redis_per_sec
+  - redis_used_keys
+  - redis_used_memory
+redis_output_buffer_limits:
+  normal: 0 0 0
+  slave: 256mb 64mb 60
+  pubsub: 32mb 8mb 60
+redis_repl_backlog_size: 8m
+redis_repl_pass: false
+redis_runtime_group: redis
+redis_runtime_user: redis
+redis_save:
+  - "900 1"
+  - "300 10"
+  - "60 10000"
+redis_sentinel_name: redismasterslave
+redis_sentinel_port: 26379
+redis_sentinel_quorum: 2
+redis_sentinel_down_timeout: 30
+redis_sentinel_failover_timeout: 180
+redis_service_name: redis-server
+redis_serve_stale_data: true
+redis_slave_max_lag: 10
+redis_slave_read_only: true
+redis_slave_priority: 100
+redis_slaveof: false
+redis_tcp_keepalive: 0
+redis_timeout: 0
+
+# Relayd
+relayd_conf_dir: /etc
+relayd_http_alt_port: 8081
+relayd_http_port: 8080
+relayd_https_alt_port: 8444
+relayd_https_port: 8443
+relayd_interval: 60
+relayd_prefork: 3
+relayd_timeout: 30000
+
+# Reverses
+reverse_domains: false
+
+# Riak
+riak_backend: leveldb
+riak_backup_hour: 3
+riak_backup_minute: false
+riak_backup_remote_path: /var/spool/backups
+riak_backup_remote_user: riakbackup
+riak_backup_remote_host: false
+riak_backup_remote_ssh_port: 22
+riak_backup_snap_size: 10G
+riak_bucket_types: false
+riak_ciphers: false
+riak_contact: false
+riak_collectd: false
+riak_db_drive: false
+riak_dcookie: riak
+riak_do_aae: true
+riak_do_control: false
+riak_do_fullsync: false
+riak_do_riakcs: false
+riak_enterprise: false
+riak_fullsync_downgrade: false
+riak_leveldb_compress: lz4
+riak_listen: 127.0.0.1
+riak_lv: database
+riak_nodename: false
+riak_max_memory_percent: 70
+riak_munin: false
+riak_munin_basic: false
+riak_munin_probes:
+  - riak_coord_redirs
+  - riak_erlang_memory
+  - riak_erlang_processes
+  - riak_node_get_put
+  - riak_pbc_connection
+  - riak_read_repairs
+  - riak_vnode_get_put
+riak_nagios_local_passphrase: false
+riak_nagios_local_username: false
+riak_nagios_remote_fqdn: false
+riak_nagios_remote_passphrase: false
+riak_nagios_remote_username: false
+riak_port_http: 8098
+riak_port_protobuf: 8087
+riak_register: false
+riak_runtime_group: riak
+riak_runtime_user: riak
+riak_security: false
+riak_slack_hook_uri: false
+riak_ssl: false
+riak_vg: riak
+
+# RiakCS
+riakcs_admin_key: admin-key
+riakcs_admin_secret: admin-secret
+riakcs_dcookie: riak
+riakcs_name_prefix: riak-cs
+riakcs_do_proxy_get: false
+riakcs_root_host: s3.example.com
+riakcs_stanchion_host: false
+riakcs_version: 2.1.1
+
+# RIPD
+rip_auth: simple
+rip_authid: 1
+rip_authkey: false
+rip_conf_dir: /etc
+rip_map: false
+rip_no_redistribute: false
+rip_redistribute: false
+rip_service_name: ripd
+rip_splithorizon_method: poisoned
+
+# RKhunter
+do_rkhunter: false
+rkhunter_app_whitelist: false
+rkhunter_conf_dir: /etc
+rkhunter_contact: false
+rkhunter_db_dir: /var/lib/rkhunter/db
+rkhunter_dev_whitelist:
+  - /dev/.udev/rules.d/root.rules
+rkhunter_disabled_tests:
+  - apps
+  - deleted_files
+  - hidden_procs
+  - packet_cap_apps
+  - suspscan
+rkhunter_enabled_tests:
+  - all
+rkhunter_has_lwp: false
+rkhunter_hiddendir_whitelist:
+  - /dev/.udev
+rkhunter_hiddenfile_whitelist:
+  - /dev/.blkid.tab
+  - /dev/.blkid.tab.old
+  - /dev/.initramfs
+rkhunter_hook_uri: false
+rkhunter_install_dir: /usr
+rkhunter_log_dir: /var/log
+rkhunter_pwdless_whitelist: false
+rkhunter_procdel_whitelist:
+  - /sbin/init
+rkhunter_proclisten_whitelist:
+  - /sbin/dhclient
+rkhunter_scan_temp: /dev/shm
+rkhunter_script_dir: /usr/share/rkhunter/scripts
+rkhunter_script_whitelist:
+  - /bin/grep
+  - /bin/fgrep
+  - /bin/which
+  - /usr/bin/groups
+  - /usr/bin/ldd
+  - /usr/sbin/adduser
+rkhunter_tmp_dir: /var/lib/rkhunter/tmp
+
+# RRDcached
+rrdcached_opts: ""
+
+# Rsync
+rsync_clients: false
+rsync_conf_dir: /etc
+rsync_service_name: rsync
+rsync_shares: false
+
+# Rsyslog / syslog
+contact_alerts_rsyslog: false
+newsyslog_cmd: /usr/bin/newsyslog
+rsyslog_collect: false
+rsyslog_conf_dir: /etc
+rsyslog_discard_local_write: false
+rsyslog_do_relp: false
+rsyslog_do_tcp: false
+rsyslog_do_tls: false
+rsyslog_do_udp: true
+rsyslog_filter_contains: false
+rsyslog_filter_regexp: false
+rsyslog_hub: false
+rsyslog_logstash_target: false
+rsyslog_om_elasticsearch_target: false
+rsyslog_store_dir: /var/log/remote
+rsyslog_service_name: rsyslog
+rsyslog_to_ossec: false
+rsyslog_version: false
+rsyslog_via_stunnel: false
+
+# Sabnzbd
+sabnzbd_api_key: '""'
+sabnzbd_email_reports: root
+sabnzbd_conf_dir: /home/sabnzbd
+sabnzbd_nntp_host: nntp.example.com
+sabnzbd_nntp_max_conn: 20
+sabnzbd_nntp_pass: false
+sabnzbd_nntp_port: 443
+sabnzbd_nntp_timeout: 5
+sabnzbd_nntp_user: anonymous
+sabnzbd_nzb_key: '""'
+sabnzbd_password: false
+sabnzbd_runtime_group: sabnzbd
+sabnzbd_runtime_user: sabnzbd
+sabnzbd_rss_source: false
+sabnzbd_service_name: sabnzbdplus
+sabnzbd_slack_download_hook: false
+sabnzbd_slack_hook_uri: false
+sabnzbd_username: sabnzbd
+
+# Samba
+samba_bind_dn: false
+samba_bind_passphrase: false
+samba_contact: false
+samba_directory_setperms:
+  - /home/formation:1000:10000:2774:0744
+samba_domainname: WORKGROUP
+samba_domainsid: false
+samba_ldap_suffix: dc=example,dc=com
+samba_nfs_opts: fstype=nfs,ro,soft,intr
+samba_nfs_path: /volume1/samba
+samba_over_nfs: false
+samba_shares: false
+samba_veto_files:
+  - .DS_Store
+  - .TemporaryItems
+  - Thumbs.db
+  - crack
+  - lost+found
+  - serial
+samba_user_suffix: ou=users
+
+# Saslauthd
+saslauthd_conf_dir: /etc
+saslauthd_ldap_passphrase: false
+saslauthd_ldap_user: false
+saslauthd_mech_list:
+  - PLAIN
+  - LOGIN
+  - CRAM-MD5
+  - DIGEST-MD5
+saslauthd_run_dir: /var/run/saslauthd
+saslauthd_search_base: dc=example,dc=com
+saslauthd_search_filter: "(|(cn=%u)(|(mail=%u)(mail=%u@example.com)))"
+
+# SAsyncd
+sasyncd_group: carp
+sasyncd_peer: false
+sasyncd_sharedkey: false
+
+# Sendmail
+sendmail_accept_domains:
+  - example.com
+
+# Shells
+prompt_color: false
+prompt_style: false
+
+# Selfoss
+selfoss_db_backend: sqlite
+selfoss_mysql_passphrase: false
+selfoss_mysql_user: selfoss
+
+# SickBeard
+sickbeard_api_key: false
+sickbeard_backup_dir: /media/backups
+sickbeard_conf_dir: /etc/sickbeard
+sickbeard_contact: false
+sickbeard_custom_providers: false
+sickbeard_data_dir: false
+sickbeard_home_dir: /usr/share/sickbeard
+sickbeard_run_dir: /var/run/sickbeard
+sickbeard_runtime_group: sickbeard
+sickbeard_runtime_user: sickbeard
+sickbeard_sab_target: false
+sickbeard_search_frequency: 10
+sickbeard_slack_hook_uri: false
+sickbeard_web_dir: /var/www/sickbeard
+
+# Slim
+slim_auto_login: false
+slim_conf_dir: /etc
+slim_console_cmd: false
+slim_login_cmd: 'exec /bin/sh - ~/.xinitrc %session'
+slim_run_dir: /var/run
+slim_server_args: vt09
+slim_suspend_cmd: false
+slim_theme: false
+
+# Smokeping
+smokeping_conf_dir: /etc/smokeping
+smokeping_share_dir: false
+smokeping_short_name: smokeping
+smokeping_targets: false
+
+# SNMP
+snmp_community: moultipass
+snmp_conf_dir: /etc
+snmp_listenaddr: false
+snmp_location: DaVoid
+snmp_sysservices: 74
+snmp_uptodate: true
+snmp_uptodate_new: false
+# snmp sysservices oid formula: sum(2 ^ ($network_osi_layer - 1))
+
+# Snort
+snort_conf_dir: /etc/snort
+snort_group: snort
+snort_listen_if: false
+snort_log_dir: /var/log/snort
+snort_user: snort
+
+# Sonarr / Nzbdrone
+sonarr_runtime_group: sonarr
+sonarr_runtime_user: sonarr
+
+# Spamassassin
+spamassassin_bayes_ignore_headers:
+  - X-Spam-Status
+  - X-Spam-Flag
+spamassassin_blacklist_from: false
+spamassassin_blacklist_subject: false
+spamassassin_conf_dir: /etc/spamassassin
+spamassassin_contact: root@example.com
+spamassassin_cyrus_domain_root: /var/spool/cyrus/mail
+spamassassin_cyrus_ipurge: /usr/sbin/ipurge
+spamassassin_munin: true
+spamassassin_munin_probes:
+  - spamassassin_score
+  - spamassassin_stats
+spamassassin_require_score: "2.0"
+spamassassin_rewrite_subject: "[ SPAM _SCORE_ ]"
+spamassassin_rsyslog: true
+spamassassin_runtime_user: debian-spamd
+spamassassin_trusted_networks: false
+spamassassin_whitelist_from: false
+spamassassin_whitelist_subject: false
+
+# Squid
+squid_acl_blacklist: false
+squid_acl_ports: false
+squid_acl_whitelist: false
+squid_acl_noulldomain: false
+squid_cache_dir: /var/spool/squid
+squid_cache_ip: false
+squid_cache_size: 256 MB
+squid_cache_objsize_max: 1024 MB
+squid_command: squid
+squid_conf_dir: /etc/squid
+squid_error_dir: false
+squid_exceptions:
+  - localhost
+squid_log_dir: /var/log/squid
+squid_rotate: 4
+squid_runtime_group: proxy
+squid_runtime_user: proxy
+squid_rsyslog: false
+squid_service_name: squid
+squid_wat_do: log
+
+# Stanchion
+stanchion_dcookie: riak
+stanchion_name_prefix: stanchion
+
+# Stunnel
+stunnel_ciphers:
+  - ECDHE-RSA-AES128-GCM-SHA256
+  - ECDHE-ECDSA-AES128-GCM-SHA256
+  - ECDHE-RSA-AES256-GCM-SHA384
+  - ECDHE-ECDSA-AES256-GCM-SHA384
+  - DHE-RSA-AES128-GCM-SHA256
+  - DHE-DSS-AES128-GCM-SHA256
+  - kEDH+AESGCM
+  - ECDHE-RSA-AES128-SHA256
+  - ECDHE-ECDSA-AES128-SHA256
+  - ECDHE-RSA-AES128-SHA
+  - ECDHE-ECDSA-AES128-SHA
+  - ECDHE-RSA-AES256-SHA384
+  - ECDHE-ECDSA-AES256-SHA384
+  - ECDHE-RSA-AES256-SHA
+  - ECDHE-ECDSA-AES256-SHA
+  - DHE-RSA-AES128-SHA256
+  - DHE-RSA-AES128-SHA
+  - DHE-DSS-AES128-SHA256
+  - DHE-RSA-AES256-SHA256
+  - DHE-DSS-AES256-SHA
+  - DHE-RSA-AES256-SHA
+  - '!aNULL'
+  - '!eNULL'
+  - '!EXPORT'
+  - '!DES'
+  - '!RC4'
+  - '!3DES'
+  - '!MD5'
+  - '!PS'
+stunnel_options:
+  - NO_SSLv2
+# - NO_SSLv3
+  - CIPHER_SERVER_PREFERENCE
+stunnel_service_name: stunnel
+
+# Subsonic
+subsonic_alerts: root@example.com
+subsonic_allocate: 150
+subsonic_do_flac: false
+subsonic_getting_started: false
+subsonic_message: "Subsonic"
+subsonic_music_root: /var/music
+subsonic_searchuser: ou=users,dc=example,dc=com
+subsonic_slack_hook_uri: false
+subsonic_subtitle: "Subsonic"
+subsonic_sync_bwlimit: false
+subsonic_sync_directories: false
+subsonic_title: "Welcome to Subsonic"
+
+# Subversion
+subversion_web_front: false
+
+# Sudo
+sudo_conf_dir: /etc
+
+# Sysctl
+do_martians: true
+ip_forwarding: 0
+igmp_forwarding: 0
+ifqmaxlen: 256
+
+# Terminator
+terminator_background: false
+terminator_font: false
+terminator_foreground: false
+terminator_history: 10000
+
+# TFTP-PROXY
+tftpproxy_local_port: 6969
+
+# TFTPD
+pxe_packages_repository: false
+pxe_reference_repository: false
+
+# Thruk
+thruk_admin_contact: false
+thruk_backends:
+  local:
+    hidden: 1
+    socket: /var/lib/icinga/rw/live
+    type: livestatus
+thruk_base_dir: /usr/share/thruk
+thruk_conf_dir: /etc/thruk
+thruk_drop_plugins:
+  - minemap
+  - panorama
+  - shinken_features
+  - statusmap
+thruk_home_link: http://www.example.com
+thruk_plugins:
+  - business_process
+  - conf
+  - mobile
+  - reports2
+thruk_start_timeout: 15
+thruk_with_icinga: false
+thruk_with_shinken: false
+
+# TinyTinyRSS
+tinytinyrss_db_backend: mysql
+tinytinyrss_mysql_user: ttrss
+tinytinyrss_mysql_passphrase: false
+
+# Tor
+tor_accept_networks: 10.42.0.0/15
+tor_data_dir: /var/lib/tor
+tor_runtime_user: root
+
+# Transmission
+transmission_conf_dir: /etc/transmission-daemon
+transmission_contact: root@example.com
+transmission_dht_enable: false
+transmission_forwarding: false
+transmission_lib_dir: /var/lib/transmission-daemon
+transmission_munin: false
+transmission_munin_probes:
+  - transmission_status
+  - transmission_traffic
+transmission_peer_port_default: 51413
+transmission_peer_port_high: false
+transmission_peer_port_low: false
+transmission_rpc_listen: 127.0.0.1
+transmission_rpc_passphrase: false
+transmission_rpc_skip_auth: false
+transmission_runtime_group: root
+transmission_runtime_user: root
+transmission_service_name: transmission-daemon
+transmission_store_dir: /home/transmission-daemon
+
+# Tunner
+tunner_driver: dvb-usb-dib0700-1.20.fw
+tunner_driver_provider: http://linuxtv.org/downloads/firmware/
+
+# Unbound
+unbound_collectd: false
+unbound_do_cache: true
+unbound_do_dnssec: false
+unbound_do_public: false
+unbound_conf_dir: /etc/unbound
+unbound_munin: true
+unbound_munin_probes:
+  - unbound_by_rcode
+  - unbound_histogram
+  - unbound_hits
+  - unbound_memory
+  - unbound_queue
+unbound_forwarders: false
+unbound_pixel_address: false
+unbound_recurse_networks: false
+unbound_rotate: 7
+unbound_run_dir: /var/run/unbound
+unbound_runtime_group: unbound
+unbound_runtime_user: unbound
+unbound_var_dir: /var/lib/unbound
+
+# Unifi
+unifi_keep_backup: true
+unifi_manager_passphrase: ubnt
+unifi_manager_user: ubnt
+unifi_site: default
+
+# Vebackup
+jumeau: false
+triplet: false
+
+# Vlist
+vlist_contact: root@example.com
+vlist_hosts_list:
+  server1.example.com: interne
+  server2.example.com: porjets
+
+# VMWare Manager
+esx_version: 5.1
+vmwares_esx_hosts: false
+vmwares_esx_passphrase: false
+vmwares_esx_probes:
+  - cpu
+  - df
+  - gmem
+  - hmem
+  - mem
+vmwares_esx_username: root
+
+#WebServers
+csp_policy_inventory:
+  cv: "; style-src 'self'; script-src 'self'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
+  baculaweb: "; style-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
+  gitlab: "; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; img-src 'self' http://www.gravatar.com; font-src 'self'; frame-src 'none'; object-src 'none';"
+  icinga: "; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; img-src 'self'; font-src 'self'; frame-src 'self'; object-src 'none';"
+  icingaweb2: "; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self' data:; frame-src 'none'; object-src 'none';"
+  inferno: "; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:; font-src 'self' data:; frame-src 'none'; object-src 'none';"
+  kibana: "https://tiles.elastic.co/; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' https://tiles.elastic.co data:; font-src 'self'; frame-src 'none'; object-src 'none';"
+  munin: "'unsafe-inline'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
+  moinmoin: "; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
+  nuts: "; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
+  owncloud: "; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval'; img-src 'self' data:; font-src 'self' data:; frame-src 'self'; object-src 'none';"
+  packages: "; style-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
+  patchdashboard: "; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
+  pki: "; style-src 'none'; script-src 'self'; img-src 'none'; font-src 'none'; frame-src 'none'; object-src 'none';"
+  racktables: "; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
+  sabnzbd: "; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self'; font-src 'self' data:; frame-src 'none'; object-src 'none';"
+  shark: "; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://code.jquery.com; script-src 'self' 'unsafe-inline' https://code.jquery.com; img-src 'self'; font-src 'self' data: https://fonts.gstatic.com; frame-src 'none'; object-src 'none'"
+  sickbeard: "'unsafe-inline'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data:; font-src 'self'; frame-src 'none'; object-src 'none';"
+  smokeping: "; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
+  sonarr: "'unsafe-inline'; style-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
+  ssp: "; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
+  subsonic: "'unsafe-inline'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src *; font-src 'self'; frame-src 'self'; object-src 'none';"
+  websocket: "; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
+  wordpress: "; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: https://secure.gravatar.com https://www.linuxcounter.net; font-src 'self' data:; frame-src 'self'; object-src 'none';"
+csp_report: false
+csp_sources: false
+hpkp_max_age: 2592000
+hpkp_report: false
+public_key_pins: false
+
+# WiFi Management
+wifimgr_contact: false
+wifimgr_generate_length: 16
+wifimgr_passphrase: admin
+wifimgr_targets: false
+wifimgr_user: admin
+
+# Wordpress
+wordpress_conf_dir: /etc/wordpress
+wordpress_db_host: localhost
+wordpress_db_name: wordpress
+wordpress_db_pass: false
+wordpress_db_user: wordpress
+wordpress_do_network: false
+wordpress_network_aliases:
+  - portal
+wordpress_key_auth: false
+wordpress_key_secure_auth: false
+wordpress_key_logged_in: false
+wordpress_key_nonce: false
+wordpress_key_salt: false
+wordpress_key_secure_salt: false
+wordpress_nagios_check_rdomain: false
+wordpress_salt_logged_in: false
+wordpress_salt_nonce: false
+wordpress_server_name: blog
+wordpress_slack_hook_uri: false
+wordpress_usr_dir: /usr/share/wordpress
+wordpress_var_dir: /var/lib/wordpress
+
+# Wpasupplicant
+wpasupplicant_ap_scan: "2"
+wpasupplicant_auth_alg: OPEN
+wpasupplicant_auth_key: false
+wpasupplicant_auth_type: false
+wpasupplicant_conf_dir: /etc/wpa_supplicant
+wpasupplicant_pairwise: CCMP
+wpasupplicant_proto: RSN
+wpasupplicant_run_dir: /var/run
+wpasupplicant_runtime_group: netdev
+#wpasupplicant_service_name: wpa_supplicant
+wpasupplicant_ssid: tripottelamoi
+
+# Xen
+xen_collectd: false
+xen_mem_max: 1536
+xen_mem_reserved: 1216
+xen_munin: true
+xen_munin_probes:
+  - xen-multi
+
+# Xinetd
+xinetd_umask: "002"
+xinetd_service_name: xinetd
+
+# Xorg
+x11vnc_contact: false
+xorg_with_audio: false
+xorg_bin: /usr/bin/X
+xorg_xauth: /usr/bin/xauth
+
+# ZFS
+zfs_munin: true
+zfs_munin_fs_probes:
+  - zfs_fs_store
+zfs_munin_stats_probe:
+  - zfs_stats_cachehitdtype
+  - zfs_stats_cachehitlist
+  - zfs_stats_dumprefetch
+  - zfs_stats_efficiency
+  - zfs_stats_l2efficiency
+  - zfs_stats_l2utilization
+  - zfs_stats_utilization
+zfs_munin_probes:
+  - zfs_iostat
+
+dns_search: false
+fs_legit_suid:
+  - /bin/mount
+  - /bin/ping
+  - /bin/ping6
+  - /bin/umount
+  - /bin/fusermount
+  - /bin/su
+  - /sbin/mount.nfs
+  - /usr/bin/chfn
+  - /usr/bin/chsh
+  - /usr/bin/cryptmount
+  - /usr/bin/fping
+  - /usr/bin/fping6
+  - /usr/bin/gpasswd
+  - /usr/bin/mtr
+  - /usr/bin/newgrp
+  - /usr/bin/passwd
+  - /usr/bin/pkexec
+  - /usr/bin/sudo
+  - /usr/bin/sudoedit
+  - /usr/lib/pt_chown
+  - /usr/lib/dbus-1.0/dbus-daemon-launch-helper
+  - /usr/lib/eject/dmcrypt-get-device
+  - /usr/lib/landscape/apt-update
+  - /usr/lib/nagios/plugins/check_dhcp
+  - /usr/lib/openssh/ssh-keysign
+  - /usr/lib/policykit-1/polkit-agent-helper-1
+  - /usr/lib/spice-gtk/spice-client-glib-usb-acl-helper
+  - /usr/lib/squid3/pinger
+  - /var/lib/docker/aufs/diff/.*
+no_linprocfs: false
+random_source: /dev/urandom
+root_domain: false
+zip_password: example
+suspicious_slack_hook_uri: false

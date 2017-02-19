@@ -1,0 +1,45 @@
+Content-language: en
+Content-type: text/html; charset=UTF-8
+Body:----------en--
+<!--#set var="TITLE" value="400: Bad request!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 400</h1>
+	    <p>Your browser sent a request that this server could not understand.</p>
+	    <p>If you think this is a mistake, please contact admin@unetresgrossebite.com</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------en--
+
+Content-language: es
+Content-type: text/html
+Body:----------es--
+<!--#set var="TITLE" value="400: Solicitud err&oacute;nea!" -->
+<!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 400</h1>
+	    <p>El navegador ha solicitado una operaci&oacute;n que no puede procesada por el servidor</p>
+	    <p>Si usted piensa que es un error, gracias ponerse en contacto con admin@unetresgrossebite.com</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------es--
+
+Content-language: fr
+Content-type: text/html; charset=UTF-8
+Body:----------fr--
+<!--#set var="CONTENT_LANGUAGE" value="fr"
+--><!--#set var="TITLE" value="400 : Demande incorrecte !"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERREUR 400</h1>
+	    <p>Votre navigateur a envoy&eacute; une demande que ce serveur n'a pas comprise.</p>
+	    <p>Si vous pensez qu'il s'agit d'une erreur, merci de contacter admin@unetresgrossebite.com</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------fr--

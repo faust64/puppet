@@ -1,0 +1,110 @@
+#!/bin/sh
+
+# PROVIDE: apache
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+CMD=/usr/local/sbin/httpd
+PATH=$PATH:/usr/local/bin
+export PATH
+
+pidof()
+{
+    local car cdr
+
+    car=`expr "$1" : '\(.\).*'`
+    cdr=`expr "$1" : '.\(.*\)'`
+    ps ax | awk "/[$car]$cdr/{print \$1}"
+}
+
+network()
+{
+    grep "^ifconfig_" /etc/rc.conf >/dev/null && return 0
+    grep "^ppp_enable=" /etc/rc.conf >/dev/null && return 0
+    return 1
+}
+
+#
+# ===== Main =====
+#
+ok=
+max1=5
+max2=3
+case "$1" in
+    start|faststart|onestart)
+	network || exit 0
+	test -x $CMD || exit 0
+	if [ "$1" = 'start' ]; then
+	    test -z "`pidof 'httpd'`" || exit 0
+	fi
+	echo
+	echo "(If the system appears locked here, press [Ctrl]+[C] repeatedly"
+	echo "and check your gateway and name server when the system has booted)"
+	host=`hostname`
+	if [ "$host" ]; then
+	    chk=0
+	    while [ $chk -lt $max1 ]
+	    do
+		host -4 -W 1 "$host" >/dev/null 2>&1 && break
+		kldunload splash_pcx 2>/dev/null
+		chk=`expr $chk + 1`
+	    done
+	fi
+	$CMD -DNOHTTPACCEPT -k start >/dev/null && ok=y
+
+	chk=0
+	while test "$ok" -a $chk -lt $max2
+	do
+	    test "`pidof 'httpd'`" && break
+	    chk=`expr $chk + 1`
+	    sleep 1
+        done
+	test "$ok" -a $chk -lt $max2 && echo "Starting apache."
+	;;
+
+    stop|faststop|onestop)
+	if test "$1" = 'stop'; then
+	    test "`pidof 'httpd'`" || exit 0
+	    test -r /var/run/apache22/apache22.pid || exit 0
+	fi
+
+	$CMD -k stop >/dev/null && ok=y
+
+	chk=0
+	while [ $chk -lt $max2 ]
+	do
+	    test -z "`pidof 'httpd'`" && break
+	    chk=`expr $chk + 1`
+	    sleep 1
+        done
+	test "$ok" -a $chk -lt $max2 && echo "Stopping apache."
+	;;
+
+    restart|fastrestart|onerestart)
+	$0 stop
+	test "$1" = faststop || sleep 2
+	$0 start
+	;;
+
+    status)
+	if test -r /var/run/apache22/apache22.pid; then
+	    pid=`cat /var/run/apache22/apache22.pid`
+	    if ps ax | grep "^[ \t]*$pid[ \t]*" >/dev/null; then
+		echo httpd is running with pid $pid
+		exit 0
+	    else
+		echo httpd is not running
+		exit 3
+	    fi
+	else
+	    echo httpd is not running
+	    exit 3
+	fi
+	;;
+    *)
+	echo "Usage: `basename $0` [[fast|one]start|[fast|one]stop]|status" >&2
+	exit 64
+	;;
+esac
+
+exit 0

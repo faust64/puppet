@@ -1,0 +1,5 @@
+#!/bin/sh
+
+find /var/log/elasticsearch -name '*.log.[0-9-]*' -mtime +7 -exec rm -f {} \;
+
+exit 0

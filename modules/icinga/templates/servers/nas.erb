@@ -1,0 +1,380 @@
+define host {
+	address				<%=@host_ipaddress%>
+	alias				<%=@host_alias%>
+	contacts			<%=@host_contact%>
+	hostgroups			<%=@host_group%>
+	host_name			<%=@name%>
+	icon_image			<%=@iconimage%>
+	icon_image_alt			<%=@iconimagealt%>
+	statusmap_image			<%=@statusmapimage%>
+	use				generic-host
+<% if @host_parents -%>	parents				<%=@host_parents%>
+<% end -%>}
+
+##
+define service {
+	check_command			check-host-alive
+	host_name			<%=@name%>
+	use				critical-service
+	service_description		<%=@name%> alive
+	servicegroups			network
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		5
+	last_notification		6
+	escalation_period		10x5
+	notification_interval		30
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> alive
+}
+<% end -%>
+##
+define service {
+	check_command			check_ssh
+	host_name			<%=@name%>
+	use				jobs-service
+	service_description		<%=@name%> admin UI
+	servicegroups			netservices
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		3
+	last_notification		4
+	escalation_period		10x5
+	notification_interval		60
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> admin UI
+}
+<% end -%>
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> alive
+	dependent_service_description	<%=@name%> admin UI
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+##
+define service {
+	check_command			check_syno!raidstatus
+	host_name			<%=@name%>
+	use				status-service
+	service_description		<%=@name%> RAID status
+	servicegroups			system
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		10
+	last_notification		11
+	escalation_period		24x7
+	notification_interval		60
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> RAID status
+}
+<% end -%>
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> alive
+	dependent_service_description	<%=@name%> RAID status
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+##
+define service {
+	check_command			check_syno!systemstatus
+	host_name			<%=@name%>
+	use				status-service
+	service_description		<%=@name%> system partition status
+	servicegroups			system
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		10
+	last_notification		11
+	escalation_period		24x7
+	notification_interval		60
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> system partition status
+}
+<% end -%>
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> alive
+	dependent_service_description	<%=@name%> system partition status
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+##
+define service {
+	check_command			check_syno!powerstatus
+	host_name			<%=@name%>
+	use				status-service
+	service_description		<%=@name%> power status
+	servicegroups			system
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		10
+	last_notification		11
+	escalation_period		24x7
+	notification_interval		60
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> power status
+}
+<% end -%>
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> alive
+	dependent_service_description	<%=@name%> power status
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+##
+define service {
+	check_command			check_syno!cpufanstatus
+	host_name			<%=@name%>
+	use				status-service
+	service_description		<%=@name%> CPU FAN status
+	servicegroups			system
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		10
+	last_notification		11
+	escalation_period		24x7
+	notification_interval		60
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> CPU FAN status
+}
+<% end -%>
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> alive
+	dependent_service_description	<%=@name%> CPU FAN status
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+##
+define service {
+	check_command			check_syno!sysfanstatus
+	host_name			<%=@name%>
+	use				status-service
+	service_description		<%=@name%> system FAN status
+	servicegroups			system
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		10
+	last_notification		11
+	escalation_period		24x7
+	notification_interval		60
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> system FAN status
+}
+<% end -%>
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> alive
+	dependent_service_description	<%=@name%> system FAN status
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+##
+define service {
+	check_command			check_syno!temp
+	host_name			<%=@name%>
+	use				error-service
+	service_description		<%=@name%> global temperature
+	servicegroups			system
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		10
+	last_notification		11
+	escalation_period		24x7
+	notification_interval		60
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> global temperature
+}
+<% end -%>
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> alive
+	dependent_service_description	<%=@name%> global temperature
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+##
+define service {
+	check_command			check_syno!disktemp
+	host_name			<%=@name%>
+	use				error-service
+	service_description		<%=@name%> disks temperature
+	servicegroups			system
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		10
+	last_notification		11
+	escalation_period		24x7
+	notification_interval		60
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> disks temperature
+}
+<% end -%>
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> alive
+	dependent_service_description	<%=@name%> disks temperature
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+##
+define service {
+	check_command			check_syno!diskstatus
+	host_name			<%=@name%>
+	use				status-service
+	service_description		<%=@name%> disks status
+	servicegroups			diskspace
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		10
+	last_notification		11
+	escalation_period		24x7
+	notification_interval		60
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> disks status
+}
+<% end -%>
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> alive
+	dependent_service_description	<%=@name%> disks status
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+##
+define service {
+	check_command			check_syno!load
+	host_name			<%=@name%>
+	use				error-service
+	service_description		<%=@name%> load
+	servicegroups			system
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		10
+	last_notification		11
+	escalation_period		24x7
+	notification_interval		60
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> load
+}
+<% eidn -%>
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> alive
+	dependent_service_description	<%=@name%> load
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+##
+define service {
+	check_command			check_syno!ram
+	host_name			<%=@name%>
+	use				warning-service
+	service_description		<%=@name%> RAM
+	servicegroups			system
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		10
+	last_notification		11
+	escalation_period		24x7
+	notification_interval		60
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> RAM
+}
+<% end -%>
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> alive
+	dependent_service_description	<%=@name%> RAM
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+##
+define service {
+	check_command			check_syno!raidusage
+	host_name			<%=@name%>
+	use				warning-service
+	service_description		<%=@name%> RAID usage
+	servicegroups			diskspace
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		10
+	last_notification		11
+	escalation_period		24x7
+	notification_interval		60
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> RAID usage
+}
+<% end -%>
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> RAID status
+	dependent_service_description	<%=@name%> RAID usage
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}

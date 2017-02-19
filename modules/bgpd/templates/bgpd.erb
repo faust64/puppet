@@ -1,0 +1,28 @@
+AS <%=@bgp_as_no%>
+router-id <%=@bgp_router_id%>
+holdtime <%=@bgp_holdtime%>
+fib-update no #devel
+<% if @bgp_route_collector -%>route-collector yes
+<% end -%><% if @bgp_log_updates -%>log updates
+<% end -%><% if @bgp_redistribute -%><% @bgp_redistribute.each do |net| -%>network <%=net%>
+<% end -%><% end -%><% if @bgp_database and @bgp_map -%><% @bgp_database.each do |peer| -%>
+
+group "peering AS<%=peer%>" {
+    remote-as <%=peer%>
+<% @bgp_map[peer].each do |nic, status| -%><% nicno = nic.gsub(/gre/, '') -%><% if @gre_tunnels[nicno] -%><% if @gre_tunnels[nicno]['innerremote'] =~ /[0-9]\.[0-9]/ -%>    neighbor <%=@gre_tunnels[nicno]['innerremote']%> {
+	descr "AS <%=peer%> via gre<%=nicno%>"
+	local-address <%=@gre_tunnels[nicno]['innerlocal']%>
+	announce all
+<% if status != "passive" -%><% if @bgp_auth != false -%>	<%=@bgp_auth%><% if @bgp_pass != false -%> password "<%=@bgp_pass%>"<% end -%>
+<% if @bgp_auth =~ /ipsec esp/ -%>    local-address <%=@bgp_router_id%>
+<% end -%><% end -%><% end -%>
+    }
+<% end -%><% end -%><% end -%>
+}
+<% end -%><% end -%>
+
+deny from any
+<% if @bgp_min_pfx_len != false and @bgp_max_pfx_len != false -%>allow from any inet prefixlen <%=@bgp_min_pfx_len -%> - <%=@bgp_max_pfx_len%>
+<% end -%><% if @bgp_allow_networks != false -%><% @bgp_allow_networks.each do |net| -%>allow from any prefix <%=net%>
+<% end -%><% end -%><% if @bgp_deny_networks != false -%><% @bgp_deny_networks.each do |net, maxlen| -%>deny from any prefix <%=net%>/<%=maxlen%> prefixlen >= <%=maxlen%>
+<% end -%><% end -%>deny from any inet6

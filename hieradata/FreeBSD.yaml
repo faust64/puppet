@@ -1,0 +1,180 @@
+download_cmd: fetch
+deported_ports: false
+gid_adm: wheel
+gid_zero: wheel
+service_dir: /usr/local/etc/rc.d
+
+# Apache
+apache_conf_dir: /usr/local/etc/apache22
+apache_conf_file: httpd.conf
+apache_log_dir: /var/log/apache22
+apache_modules_dir: /usr/local/libexec/apache22
+apache_run_dir: /var/run/apache22
+apache_runtime_group: apache
+apache_runtime_user: apache
+apache_service_name: apache22
+
+# At
+at_allow: /var/at/at.allow
+at_deny: /var/at/at.deny
+
+# Bacula
+bacula_conf_dir: /usr/local/etc/bacula
+
+# Collectd
+collectd_conf_dir: /usr/local/etc/collectd
+
+# Cron
+cron_allow: /var/cron/allow
+cron_deny: /var/cron/deny
+
+# Cups
+cups_conf_dir: /usr/local/etc/cups
+cups_service_name: cupsd
+cups_share_dir: /usr/local/share/cups
+
+# Fail2ban
+fail2ban_conf_dir: /usr/local/etc/fail2ban
+
+# Ifstated
+ifstated_conf_dir: /usr/local/etc
+
+# Isakmpd
+isakmpd_conf_dir: /usr/local/etc/isakmpd
+
+# Mail - general
+mail_alias_dir: /etc/mail
+
+# Munin / Munin-node
+munin_conf_dir: /usr/local/etc/munin
+munin_plugins_dir: /usr/local/share/munin/plugins
+munin_probes:
+  - cpu
+  - df
+  - load
+  - memory
+  - netstat
+  - open_files
+  - processes
+  - users
+  - vmstat
+munin_physical_probes:
+  - df_inode
+  - uptime
+munin_runtime_group: wheel
+munin_sensors: false
+
+# Nagios
+dmidecode_bin: /usr/local/sbin/dmidecode
+has_lm_sensors: false
+ipmitool_bin: /usr/local/bin/ipmitool
+nagios_conf_dir: /usr/local/etc/nagios
+nagios_hostgroup: freebsd-servers
+nagios_iconimage: utgb/freebsd.png
+nagios_iconimagealt: freebsd
+nagios_nrpe_service_name: nrpe2
+nagios_nrpe_pid_file: nrpe2
+nagios_plugins_dir: /usr/local/libexec/nagios
+nagios_run_dir: /var/run/nrpe2
+nagios_statusmapimage: utgb/freebsd.gd2
+
+# Openbox
+openbox_autostart_file: autostart.sh
+
+# OpenSMTPD
+opensmtpd_bin_dir: /usr/local/sbin
+opensmtpd_lib_dir: /usr/local/libexec/opensmtpd
+
+# OpenVPN
+openvpn_conf_dir: /usr/local/etc/openvpn
+
+# OSPFD
+ospf_conf_dir: /usr/local/etc
+ospf_service_name: openospfd
+
+# OSSEC
+ossec_conf_dir: /usr/local/ossec-hids
+ossec_service_name: ossec-hids
+
+# PHP
+php_conf_dir: /usr/local/etc/php.d
+
+# PostgreSQL
+postgres_data_dir: /usr/local/pgsql/data
+postgres_data_reldir: data
+postgres_lib_dir: /usr/local/lib
+postgres_root_dir: /usr/local/pgsql
+postgres_runtime_group: pgsql
+postgres_runtime_user: pgsql
+
+# Puppet
+puppet_conf_dir: /usr/local/etc/puppet
+puppet_run_dir: /var/run
+puppet_var_dir: /var/puppet
+
+# Relayd
+relayd_conf_dir: /usr/local/etc
+
+# Rsync
+rsync_service_name: rsyncd
+
+# Rsyslog
+newsyslog_cmd: /usr/sbin/newsyslog
+rsyslog_conf_dir: /usr/local/etc
+rsyslog_service_name: rsyslogd
+
+# Slim
+slim_conf_dir: /usr/local/etc
+slim_console_cmd: '/usr/local/bin/mrxvt -C -fg white -bg black +sb -T "Console login" -e /bin/sh -c "/bin/cat /etc/motd; exec /usr/bin/login"'
+slim_suspend_cmd: /usr/sbin/acpiconf -s 3
+
+# Sudo
+sudo_conf_dir: /usr/local/etc
+
+# Xorg
+xorg_bin: /usr/local/bin/X
+xorg_xauth: /usr/local/bin/xauth
+
+fs_legit_suid:
+  - /bin/rcp
+  - /sbin/mksnap_ffs
+  - /sbin/ping
+  - /sbin/ping6
+  - /sbin/poweroff
+  - /sbin/shutdown
+  - /usr/bin/at
+  - /usr/bin/atq
+  - /usr/bin/atrm
+  - /usr/bin/batch
+  - /usr/bin/chfn
+  - /usr/bin/chpass
+  - /usr/bin/chsh
+  - /usr/bin/crontab
+  - /usr/bin/lock
+  - /usr/bin/login
+  - /usr/bin/opieinfo
+  - /usr/bin/opiepasswd
+  - /usr/bin/passwd
+  - /usr/bin/quota
+  - /usr/bin/rlogin
+  - /usr/bin/rsh
+  - /usr/bin/su
+  - /usr/bin/ypchfn
+  - /usr/bin/ypchpass
+  - /usr/bin/ypchsh
+  - /usr/bin/yppasswd
+  - /usr/libexec/ulog-helper
+  - /usr/libexec/ssh-keysign
+  - /usr/local/bin/pkexec
+  - /usr/local/bin/sudo
+  - /usr/local/libexec/dbus-daemon-launch-helper
+  - /usr/local/libexec/nagios/check_dhcp
+  - /usr/local/libexec/nagios/check_icmp
+  - /usr/local/libexec/polkit-agent-helper-1
+  - /usr/local/libexec/polkit-grant-helper-pam
+  - /usr/local/libexec/polkit-resolve-exe-helper
+  - /usr/local/libexec/polkit-set-default-helper
+  - /usr/sbin/ppp
+  - /usr/sbin/timedc
+  - /usr/sbin/traceroute
+  - /usr/sbin/traceroute6

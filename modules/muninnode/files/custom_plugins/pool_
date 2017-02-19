@@ -1,0 +1,18 @@
+#!/bin/sh
+
+pool_dir=/tmp/munin-pool
+probe=`basename $0 | sed 's|^pool_||'`
+
+test -d $pool_dir/$probe || exit 1
+if test "$1" = autoconf; then
+    test -s $pool_dir/$probe/autoconf || exit 0
+    cat $pool_dir/$probe/autoconf
+elif test "$1" = config; then
+    test -s $pool_dir/$probe/config || exit 0
+    cat $pool_dir/$probe/config
+else
+    test -s $pool_dir/$probe/value || exit 0
+    cat $pool_dir/$probe/value
+fi
+
+exit 0

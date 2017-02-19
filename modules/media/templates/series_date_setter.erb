@@ -1,0 +1,80 @@
+#!/bin/sh
+
+DEBUG=verbose
+baseurl=<%=@sickbeard%>
+IDXFILE=/tmp/idx.$$
+TMPFILE=/tmp/list.$$
+SERIES_ROOT=<%=@media_root%>/media/Series
+WGET="wget --no-check-certificate --no-proxy"
+
+if ! $WGET $baseurl/home/ -O $IDXFILE >/dev/null 2>&1; then
+    echo "Failed to retrieve series index" >&2
+    exit 2
+fi
+
+while test "$1"
+do
+    cleaned=`echo "$1" | sed -e 's|(|\\(|g' -e 's|)|\\)|g'`
+    if test -z "$match"; then
+	match="($cleaned"
+    else
+	match="$match|$cleaned"
+    fi
+    shift
+done
+if test "$match"; then
+    match="$match)"
+fi
+
+grep '<td class="tvShow">' $IDXFILE | sed 's|.*displayShow?show=\([0-9]*\)">\([^<]*\)<.*|showid=\1 showtitle="\2"|' | while read line
+    do
+	eval $line
+	test "$showid" -a "$showtitle" || continue
+	if test "$match"; then
+	    echo "$showtitle" | grep -E "$match" || continue
+	fi >/dev/null
+
+	if test -d "$SERIES_ROOT/$showtitle"; then
+	    if ! $WGET $baseurl/home/displayShow?show=$showid -O $TMPFILE >/dev/null 2>&1; then
+		echo "Failed getting $showtitle index" >&2
+		continue
+	    fi
+	    cd "$SERIES_ROOT/$showtitle"
+	    ls | while read episode
+	    do
+		if echo "$episode" | grep -E '^\[[0-9][0-9]x[0-9]*\] ' >/dev/null; then
+		    eval `echo "$episode" | sed 's|.*\[0*\([0-9]*\)x0*\([0-9]*\).*|s=\1 e=\2|'`
+		    test -z "$e" && echo "$episode" | grep "x00\]" >/dev/null && e=0
+		    if test -z "$s" -o -z "$e"; then
+			echo "Failed to parse $episode name" >&2
+			continue
+		    elif ! test "$s" -gt 0 -a "$e" -gt 0; then
+			echo "Failed to parse $episode name" >&2
+			continue
+		    fi
+		    datestr=`grep -A11 "class=\"epCheck\" id=\"${s}x$e\" " $TMPFILE | grep 'class="col-airdate"' | sed -e 's|.*airdate">\([^<]*\)<.*|\1|' -e 's|-||g'`
+		    if test "$DEBUG" = verbose; then
+			echo "[$showtitle/${s}x$e] $datestr $episode"
+		    fi
+		elif echo "$episode" | grep -E '^\[[1-2][0-9][0-9][0-9].[0-9][0-9].[0-9][0-9]\] ' >/dev/null; then
+		    datestr=`echo "$episode" | sed 's|^\[\([1-2][0-9][0-9][0-9]\).\([0-9][0-9]\).\([0-9][0-9]\)\].*|\1\2\3|'`
+		    if test "$DEBUG" = verbose; then
+			echo "[$showtitle/$datestr] $episode"
+		    fi
+		fi
+		if echo "$datestr" | grep [0-9] >/dev/null; then
+		    if test -d "$episode"; then
+			find "$episode" -exec touch -md $datestr {} \;
+		    else
+			touch -md $datestr "$episode"
+		    fi
+		    touch -md $datestr .
+		fi
+	    done
+	    rm -f $TMPFILE
+	fi
+    done
+
+rm -f $IDXFILE
+
+exit 0

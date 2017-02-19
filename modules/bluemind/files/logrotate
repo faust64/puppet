@@ -1,0 +1,15 @@
+/var/log/bm-webmail/debug
+/var/log/bm-webmail/errors
+/var/log/bm-webmail/imap
+/var/log/bm-webmail/mailSent.log
+/var/log/bm-webmail/sendmail
+{
+    daily
+    missingok
+    rotate 52
+    compress
+    delaycompress
+    notifempty
+    create 640 www-data www-data
+    sharedscripts
+}

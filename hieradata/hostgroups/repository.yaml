@@ -1,0 +1,15 @@
+additional_classes:
+  - Packages
+
+# Apache
+mod_autoindex: true
+apache_rsyslog: true
+
+# Nginx
+nginx_names_hash_bucket_size: 128
+nginx_rsyslog: true
+
+# OSSEC
+ossec_app_directories:
+  /var/www:
+    restrict: ".php|.js|.py|.sh|.html"

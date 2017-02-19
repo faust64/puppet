@@ -1,0 +1,17 @@
+define host {
+    check_command			check-host-alive
+    event_handler_enabled		1
+    failure_prediction_enabled		1
+    flap_detection_enabled		1
+    max_check_attempts			10
+    name				generic-host
+    notification_interval		0
+    notification_options		d,u,r
+    notification_period			24x7
+    notifications_enabled		1
+    process_perf_data			1
+    register				0
+    retain_nonstatus_information	1
+    retain_status_information		1
+<% if @pnp == true -%>    use				pnp-hst
+<% end -%>}

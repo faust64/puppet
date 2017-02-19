@@ -1,0 +1,8 @@
+ldap_servers: ldaps://<%=@ldap_slave%>
+ldap_version: 3
+ldap_search_base: <%=@search_base%>
+ldap_scope: sub
+ldap_filter: <%=@search_filter%>
+ldap_auth_method: bind
+ldap_bind_dn: <%=@ldap_user%>
+ldap_bind_pw: <%=@ldap_passphrase%>

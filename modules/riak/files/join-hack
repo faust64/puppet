@@ -1,0 +1,22 @@
+#!/bin/sh
+
+MAX=5
+cpt=0
+
+if test -z "$1"; then
+    echo missing target >&2
+    exit 1
+fi
+
+while test $cpt -lt $MAX
+do
+    cpt=`expr $cpt + 1`
+    if riak-admin cluster join "$1"; then
+	exit 0
+    fi
+    echo trying again shortly
+    sleep 2
+done
+
+echo failed >&2
+exit 1

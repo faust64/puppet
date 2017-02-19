@@ -1,0 +1,4 @@
+[unbound*]
+<% if @operatingsystem == "OpenBSD" or @operatingsystem == "FreeBSD" -%>env.statefile /var/lib/munin/plugin-state/unbound-state
+<% end -%>env.unbound_conf <%=@conf_dir%>/unbound.conf
+user root

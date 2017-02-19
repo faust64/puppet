@@ -1,0 +1,77 @@
+#!/bin/sh
+# https://github.com/megazirt/nagios-plugin-transmission
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+eval getdownwarn=200 getdowncrit=1000 getupwarn=200 getupcrit=1000
+
+while test $# -gt 1
+do
+    case "$1" in
+	-H)	hostname=${2} ; shift 2		;;
+	-a)	getdownwarn=${2/\.*} ; shift 2	;;
+	-b)	getdowncrit=${2/\.*} ; shift 2	;;
+	-c)	getupwarn=${2/\.*} ; shift 2	;;
+	-d)	getupcrit=${2/\.*} ; shift 2	;;
+	-u)	user=${2} ; shift 2		;;
+	-p)	pass=${2} ; shift 2		;;
+	*)	shift 1				;;
+    esac
+done
+
+if ! transmission-remote -l >/dev/null 2>&1; then
+    ret=UNKNOWN
+    msg=" - unable to contact transmission daemon"
+    perfdata=" | 0,0,0;0,0,0"
+else
+    if test "$hostname"; then
+	if test "$user"; then
+	    if test "$pass"; then
+		getdownrate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote "$hostname" -n "$user":"$pass" -l | grep Sum | tail -1 | awk '{print int($(NF))}'`
+		getuprate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote "$hostname" -n "$user":"$pass" -l | grep Sum | tail -1 | awk '{print int($(NF-1))}'`
+	    else
+		getdownrate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote "$hostname" -n "$user": -l | grep Sum | tail -1 | awk '{print int($(NF))}'`
+		getuprate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote "$hostname" -n "$user": -l | grep Sum | tail -1 | awk '{print int($(NF-1))}'`
+	    fi
+	else
+	    getdownrate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote "$hostname" -l | grep Sum | tail -1 | awk '{print int($(NF))}'`
+	    getuprate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote "$hostname" -l | grep Sum | tail -1 | awk '{print int($(NF-1))}'`
+	fi
+    else
+	getdownrate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote -l | grep Sum | tail -1 | awk '{print int($(NF))}'`
+	getuprate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote -l | grep Sum | tail -1 | awk '{print int($(NF-1))}'`
+    fi
+
+    if test -z "$getdownrate" -o -z "$getuprate"; then
+	ret=UNKNOWN
+	msg=" - unable to query transmission"
+	perfdata=" | 0,0,0;0,0,0"
+	exit 3
+    else
+	if test "$getdownrate" -gt "$getdowncrit"; then
+	    ret=CRITICAL
+	    msg="$msg, critical download rate"
+	elif test "$getdownrate" -gt "$getdownwarn"; then
+	    test -z "$ret" && ret=WARNING
+	    msg="$msg, warning download rate"
+	fi
+	if test "$getuprate" -gt "$getupcrit"; then
+	    ret=CRITICAL
+	    msg="$msg, critical upload rate"
+	elif test "$getuprate" -gt "$getupwarn"; then
+	    test -z "$ret" && ret=WARNING
+	    msg="$msg, warning upload rate"
+	fi
+	test -z "$ret" && ret=OK
+	msg=" - Down: ${getdownrate}KB/s, Up: ${getuprate}KB/s$msg"
+	perfdata=" | $getuprate,$getupwarn,$getupcrit;$getdownrate,$getdownwarn,$getdowncrit"
+    fi
+fi
+
+echo "$PRG $ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

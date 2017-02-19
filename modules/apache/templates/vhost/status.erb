@@ -1,0 +1,24 @@
+<IfModule mod_status.c>
+    ExtendedStatus On
+    <VirtualHost *:<%=@listen_ports['plain']%>>
+	ServerName <%=@name%>
+	<Location /server-status>
+<% if @version == "2.2" -%>	    Allow from 127.0.0.1
+	    Deny from all
+	    Order deny,allow
+<% else -%>	    Require local
+<% end -%>	    SetHandler server-status
+	</Location>
+	<IfModule mod_proxy.c>
+	    ProxyStatus On
+	</IfModule>
+	<IfModule mod_php.c>
+	    DocumentRoot <%=@app_root%>
+	    <Location />
+<% if @version == "2.2" -%>		Allow from 127.0.0.1
+		Deny from all
+<% else -%>		Require local
+<% end -%>	    </Location>
+	</IfModule>
+    </VirtualHost>
+</IfModule>

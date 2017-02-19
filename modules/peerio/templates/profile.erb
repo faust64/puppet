@@ -1,0 +1,171 @@
+# Peerio server environment configuration
+
+# set here the FQDN for your websocket service
+export PEERIO_WS_NAME=<%=@ws_name%>
+
+# set here the FQDN for your files storage service
+export PEERIO_FILES_NAME=<%=@files_name%>
+
+# set here the FQDN for your ghosts gateway
+export PEERIO_INFERNO_NAME=<%=@inferno_name%>
+
+# set here the FQDN for your admin service
+export PEERIO_ADMIN_NAME=<%=@admin_name%>
+
+<% if @workers.include?('admin') -%>export PEERIO_ACCEPTABLE_HOSTNAMES="$PEERIO_ADMIN_NAME $PEERIO_WS_NAME $PEERIO_FILES_NAME"
+<% else -%>export PEERIO_ACCEPTABLE_HOSTNAMES="$PEERIO_WS_NAME $PEERIO_FILES_NAME"
+<% end -%>
+<% if @inferno_tor -%>export HAUNTED_HOUSE_HOST_TOR=<%=@inferno_tor%>
+<% end -%>export HHS_LISTEN_PORT=8082
+export HAUNTED_HOUSE_PORT=<%=@hhouse_port%>
+export HAUNTED_HOUSE_PROTO=<%=@hhouse_proto%>
+export HHS_CLIENT_ORIGIN="https://$PEERIO_INFERNO_NAME https://$PEERIO_WS_NAME http://localhost:3000 http://localhost:52341"
+
+<% if @nuts_repo != false -%><% @nuts_repo.each do |name, auth| -%>export GITHUB_REPO=<%=name%>
+<% if auth['apiuser'] != nil -%>export API_USERNAME=<%=auth['apiuser']%>
+<% end -%><% if auth['apikey'] != nil -%>export GITHUB_TOKEN=<%=auth['apikey']%>
+<% elsif auth['apipassphrase'] != nil -%>export API_PASSWORD=<%=auth['apipassphrase']%>
+<% end -%><% if auth['apisecret'] != nil -%>export GITHUB_SECRET=<%=auth['apisecret']%>
+<% else -%>export GITHUB_SECRET=changeme
+<% end -%><% end -%><% end -%><% if @shark_stores != false -%><% if @shark_stores['appstorepassword'] -%>export APPSTORE_PASSWORD=<%=@shark_stores['appstorepassword']%>
+<% end -%><% if @shark_stores['googleaccesstoken'] -%>export GOOGLE_ACCESS_TOKEN=<%=@shark_stores['googleaccesstoken']%>
+<% end -%><% if @shark_stores['googleclientid'] -%>export GOOGLE_CLIENT_ID=<%=@shark_stores['googleclientid']%>
+<% end -%><% if @shark_stores['googleclientsecret'] -%>export GOOGLE_CLIENT_SECRET=<%=@shark_stores['googleclientsecret']%>
+<% end -%><% if @shark_stores['googleplaypubkey'] -%>export GOOGLE_PLAY_PUBLIC_KEY=<%=@shark_stores['googleplaypubkey']%>
+<% end -%><% if @shark_stores['googlereftoken'] -%>export GOOGLE_REF_TOKEN=<%=@shark_stores['googlereftoken']%>
+<% end -%><% end -%><% if @force_fork != false -%>export FORKS=<%=@force_fork%>
+<% end -%>export PEERIO_DEFAULT_LOCALE=<%=@default_locale%>
+
+# list your redis proxies (or hosts)
+<% if @redis_backends != false -%><% if @redis_elcname != false -%>export REDIS_ELASTICACHE_NAME=<%=@redis_elcname%>
+<% end -%>export REDIS_HOSTS="<%=@redis_backends.join(' ')%>"
+<% if @redis_limit -%>export REDIS_LIMIT=`expr <%=@redis_limit%> '*' 1024 '*' 1024`
+<% end -%><% else -%>echo "CRITICAL: queue backend not defined"
+exit 1
+<% end -%>
+
+# list your riak proxies (or backends)
+<% if @riak_backends != false -%>export RIAK_PROXIES="<%=@riak_backends.join(':8087 ')%>:8087"
+<% if @riak_lb %>export RIAK_IS_BALANCED=yes
+<% end -%><% if @riak_ssl != false -%>export PEERIO_CA_RIAK=/var/lib/pm2/ssl/server-chain.crt
+export PEERIO_CERT_RIAK=/var/lib/pm2/ssl/client.crt
+export PEERIO_KEY_RIAK=/var/lib/pm2/ssl/client.key
+export PEERIO_RIAK_USER=<%=@riak_user%>
+<% end -%><% if @riak_health != false -%>export PEERIO_HEALTH_RIAK_PASSPHRASE=<%=@riak_health['passphrase']%>
+<% if @riak_ssl -%>export PEERIO_HEALTH_RIAK_PROTO=https
+<% else -%>export PEERIO_HEALTH_RIAK_PROTO=http
+<% end -%>export PEERIO_HEALTH_RIAK_USER=<%=@riak_health['username']%>
+<% end -%><% else -%>echo "CRITICAL: metadata backend not defined"
+exit 1
+<% end -%>
+
+# knowing your amount of workers, riak instances, haproxy, ... you will want to tune these:
+export RIAK_MAX_CONNECTIONS_PER_NODE=<%=@riak_max_cpn%>
+export RIAK_MIN_CONNECTIONS_PER_NODE=<%=@riak_min_cpn%>
+
+# local services
+<% if @workers != false -%>export RUN_WORKERS="<%=@workers.join(' ')%>"
+<% else -%>export RUN_WORKERS="foreground schedule"
+<% end -%>
+
+<% if @storage != false -%><% if @storage['s3'] != nil and @storage['s3'] != false and @storage['s3']['id'] != nil and @storage['s3']['key'] != nil and @storage['s3']['host'] != nil -%># s3 storage backend
+export S3_STORE_ACCESS_KEY=<%=@storage['s3']['id']%>
+<% if @storage['s3']['bucket'] != nil -%>export S3_STORE_BUCKET_NAME=<%=@storage['s3']['bucket']%>
+<% else -%>export S3_STORE_BUCKET_NAME=peerio
+<% end -%>export S3_STORE_HOST=<%=@storage['s3']['host']%>
+<% if @storage['s3']['port'] != nil -%>export S3_STORE_PORT=<%=@storage['s3']['port']%>
+<% else -%>export S3_STORE_PORT=443
+<% end -%><% if @storage['s3']['port'] != nil -%>export S3_STORE_PROTO=<%=@storage['s3']['proto']%>
+<% else -%>export S3_STORE_PROTO=https
+<% end -%>
+export S3_STORE_SECRET_KEY=<%=@storage['s3']['key']%>
+
+<% elsif @storage['azure'] != nil and @storage['azure'] != false and @storage['azure']['id'] != nil and @storage['azure']['key'] != nil -%># Azure storage backend
+export AZURE_ACCOUNT=<%=@storage['azure']['id']%>
+export AZURE_KEY=<%=@storage['azure']['key']%>
+
+<% else -%>echo "CRITICAL: storage backend not defined"
+exit 1
+
+<% end -%><% else -%>echo "CRITICAL: storage backend not defined"
+exit 1
+
+<% end -%><% if @mailrelay -%># SMTP
+export SMTP_RELAY=<%=@mailrelay%>
+<% end -%><% if @mailfrom %>export PEERIO_EMAIL_FROM=<%=@mailfrom%>
+export SHARK_EMAIL_FROM=<%=@mailfrom%>
+<% end -%><% if @mailreplyto -%>export PEERIO_EMAIL_REPLYTO=<%=@mailreplyto%>
+<% end -%><% if @contact -%>export PEERIO_ADMIN_EMAIL=<%=@contact%>
+
+<% end -%><% if @slack_hook -%># Slack
+export SLACK_HOOK=<%=@slack_hook%>
+
+<% end -%><% if @sns != false -%># SNS configuration
+<% if @sns['accessKey'] and @sns['keyId'] -%>export SNS_ACCESS_KEY="<%=@sns['accessKey']%>"
+<% if @sns['androidARN'] -%>export SNS_ANDROID_ARN="<%=@sns['androidARN']%>"
+<% end -%><% if @sns['iosARN'] -%>export SNS_IOS_ARN="<%=@sns['iosARN']%>"
+<% end -%>export SNS_KEY_ID="<%=@sns['keyId']%>"
+
+<% end -%><% end -%><% if @twilio != false -%># to allow SMS communications, set in the following:
+<% if @twilio['number'] and @twilio['sid'] and @twilio['token'] != false -%>export TWILIO_ACCOUNTSID=<%=@twilio['sid']%>
+export TWILIO_NUMBER=<%=@twilio['number']%>
+export TWILIO_TOKEN=<%=@twilio['token']%>
+
+<% if @twilio['admincontact'] -%># SMS notifications
+export PEERIO_ADMIN_PHONE=<%=@twilio['admincontact']%>
+
+<% end -%><% end -%><% end -%># syslog logging
+export SYSLOG_FACILITY=local6
+export SYSLOG_PROTO=unix
+export SYSLOG_PROXY=localhost
+
+<% if @statsd != false and @statsd['proxy'] and @statsd['port'] -%># statsd metrics collection
+export STATSD_PORT=<%=@statsd['port']%>
+export STATSD_PROXY=<%=@statsd['proxy']%>
+
+<% end -%><% if @airbrake != false -%># errors collection
+<% if @airbrake['id'] and @airbrake['key'] -%><% if @airbrake['host'] -%>export AIRBRAKE_HOST=<%=@airbrake['host']%>
+<% end -%>export AIRBRAKE_ID=<%=@airbrake['id']%>
+export AIRBRAKE_KEY=<%=@airbrake['key']%>
+
+<% end -%><% end -%><% if @shark_name != false -%># Shark
+export SHARK_HOST=<%=@shark_name%>
+export SHARK_PORT=<%=@shark_port%>
+export SHARK_PROTO=<%=@shark_proto%>
+export SHARK_BASE_URL=$SHARK_PROTO://$SHARK_HOST/
+export SHARK_MYSQL_PORT=3306
+export PEERIO_SITE_STRIPE_FAILURE=https://<%=@website_name%>/failure.html
+export PEERIO_SITE_STRIPE_SUCCESS=https://<%=@website_name%>/success.html
+<% if @workers.include?('shark') -%><% if @shark_secret -%>export SHARK_SECRET_KEY=<%=@shark_secret%>
+<% end -%>export SHARK_MYSQL_DATABASE=<%=@shark_dbname%>
+export SHARK_MYSQL_HOST=<%=@shark_dbhost%>
+export SHARK_MYSQL_MAX_CONNECTIONS=<%=@shark_dbmaxcon%>
+<% if @shark_dbpass -%>export SHARK_MYSQL_PASSWORD=<%=@shark_dbpass%>
+<% end -%><% if @shark_dbuser -%>export SHARK_MYSQL_USER=<%=@shark_dbuser%>
+<% end -%>
+<% end -%><% end -%># usually, you won't need to change this
+
+<% if @environ -%>export NODE_ENV=<%=@environ%>
+<% else -%>export NODE_ENV=development
+<% end -%>if ! echo "$NODE_ENV" | grep -E '(production|dr|staging)' >/dev/null; then
+    export NODE_TLS_REJECT_UNAUTHORIZED=0
+fi
+if echo "$NODE_ENV" | grep -E '(production|dr)' >/dev/null; then
+    export PEERIO_IS_PRODUCTION=yes
+else
+    export PEERIO_ALLOW_FAKE_INVITES=yes
+    export SHARK_ALLOW_FAKE_EMAILS=yes
+    export PEERIO_RENDER_ERROR_MESSAGES=yes
+fi
+export PEERIO_FILES_LOCATION=<%=@chunks_dir%>
+export PEERIO_LOGS_LOCATION=<%=@logs_dir%>
+export HHS_LOGS_LOCATION=<%=@logs_dir%>
+<% if ! @throttle -%>
+# Throttling
+export PEERIO_DONT_THROTTLE=true
+<% end -%><% if @zendesk != false and @zendesk['account'] and @zendesk['email'] and @zendesk['key'] -%>
+# Zendesk API configuration
+ZENDESK_ACCOUNT=<%=@zendesk['account']%>
+ZENDESK_API_EMAIL=<%=@zendesk['email']%>
+ZENDESK_API_KEY=<%=@zendesk['key']%>
+<% end -%>

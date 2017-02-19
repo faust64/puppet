@@ -1,0 +1,4 @@
+additional_classes:
+  - Riak
+
+riak_listen: 10.255.125.200

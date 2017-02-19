@@ -1,0 +1,5 @@
+[default]
+codec=<% if @codecs -%><% @codecs.each do |codec| -%><%=codec%><% break -%><% end -%><% else -%>ulaw<% end -%>
+
+flags=register,heartbeat
+port=<%=@port%>

@@ -1,0 +1,36 @@
+[global]
+tmp_dir = /tmp
+lock_file = /var/lock/sa-learn-cyrus.lock
+verbose	= 1
+simulate = no
+log_with_tag = yes
+
+[mailbox]
+include_list = ''
+include_regexp = '.*'
+exclude_list = ''
+exclude_regexp = ''
+spam_folder = 'Junk'
+ham_folder = 'Inbox'
+remove_spam = yes
+remove_ham = no
+
+[sa]
+debug = no
+site_config_path = <%=@conf_dir%>
+learn_cmd = /usr/bin/sa-learn
+bayes_storage = berkely
+prefs_file = <%=@conf_dir%>/local.cf
+fix_db_permissions = yes
+user = mail
+group = mail
+sync_once = yes
+virtual_config_dir = ''
+
+[imap]
+base_dir = <%=@cyrus_domain_root%>/
+initial_letter = yes
+domains = ''
+unixhierarchysep = no
+purge_cmd = <%=@cyrus_ipurge%>
+user = cyrus

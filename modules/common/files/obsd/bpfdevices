@@ -1,0 +1,21 @@
+#!/bin/sh
+
+CNT=10
+END=20
+
+test "$1" = start || exit 0
+
+alias echo='echo -en'
+cd /dev
+echo "Creating BPF devices: "
+while test $CNT -le $END
+do
+    dev=bpf$CNT
+    CNT=`expr $CNT + 1`
+    test -c $dev && continue
+    echo "$dev,"
+    ./MAKEDEV $dev
+done
+echo "done\n"
+
+exit 0

@@ -1,0 +1,5 @@
+additional_classes:
+  - Bastillon
+
+# OpenSSH
+ssh_password_authentication: true

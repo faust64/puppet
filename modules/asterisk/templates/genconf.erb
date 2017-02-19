@@ -1,0 +1,138 @@
+#!/bin/sh
+
+export PATH=/usr/bin:/usr/sbin:/bin
+
+TMPFILE=/tmp/bite.$$
+
+leexit()
+{
+    rm -f $TMPFILE
+    exit 0
+}
+
+bailout()
+{
+    local reason
+
+    echo 'SET VARIABLE answer "FAIL"'
+    test "$1" && reason=$1 || reason=Towelie
+    echo "SET VARIABLE reason \"$reason\""
+    leexit
+}
+
+yeay()
+{
+    echo "SET VARIABLE answer \"SUCCESS: $CONF_FILE\""
+    leexit
+}
+
+get_hwaddr()
+{
+    local hwaddr model
+
+    hwaddr=
+    model=
+    if ! wget -q http://$STATION/ -O $TMPFILE; then
+	>$TMPFILE
+	if ! wget -q http://admin:22222@$STATION/ -O $TMPFILE; then
+	    >$TMPFILE
+	fi
+    fi >/dev/null 2>&1
+    if test -s $TMPFILE; then
+	if grep '<title>Aastra ' $TMPFILE; then
+	    model=aastra
+	elif grep "<title>SPA504G Configuration Utility</title>" $TMPFILE; then
+	    model=504
+	elif grep "<title>SPA303 Configuration Utility</title>" $TMPFILE; then
+	    model=303
+	elif grep "Product Name:.*SPA-942" $TMPFILE; then
+	    model=942
+	fi
+    fi >/dev/null
+    case x$model in
+	x303|x504|x942|xaastra)
+	    hwaddr=`grep -E "MAC Address:" $TMPFILE | sed 's|.*MAC Address:[^<]*<[^<]*<[^>]*>\([0-9a-fA-F:]*\)<.*|\1|'`
+	    ;;
+    esac
+    echo HWADDR=$hwaddr MODEL=$model
+}
+
+USERNAME=$1
+#test "$2" && eval `echo "$2" | sed 's|^[^@]*@\([^:]*\):\(.*\)|STATION=\1 PORT=\2|'`
+if test "$2"; then
+    data=`echo "$2" | awk -F@ '{print $2}'`
+    STATION=`echo "$data" | cut -d: -f1`
+    PORT=`echo "$data" | cut -d: -f2`
+fi
+
+test -z "$USERNAME" -o -z "$STATION" -o -z "$PORT" && bailout Arguments
+test $PORT -ge 5060 -a $PORT -le 5062 || bailout SipPort
+if test -s <%=@conf_dir%>/sip.d/$USERNAME.conf; then
+    SIPPASS=`awk -F= '/^secret/{print $2}' <%=@conf_dir%>/sip.d/$USERNAME.conf`
+else
+    grep -A10 "^\[$USERNAME\]$" <%=@conf_dir%>/sip_additional.conf >$TMPFILE
+    if grep '^secret=' $TMPFILE; then
+	SIPPASS=`awk -F= '/^secret/{print $2}' $TMPFILE`
+    fi
+fi >/dev/null 2>&1
+if grep "^$USERNAME =" <%=@conf_dir%>/voicemail.conf; then
+    DNAME=`grep -E "^$USERNAME" <%=@conf_dir%>/voicemail.conf | cut -d, -f2`
+else
+    DNAME=SIP$USERNAME
+fi >/dev/null 2>&1
+test -z "$SIPPASS" && bailout SipPass
+eval `get_hwaddr $STATION`
+test -z "$HWADDR" -o -z "$MODEL" && bailout UnidentifiedStation
+LINEID=`expr $PORT - 5059`
+
+case $MODEL in
+    aastra)
+	CONF_FILE=<%=@srv_root%>/aastra/$USERNAME.cfg
+	if ! cat <<EOF >$CONF_FILE
+sip line1 auth name:$USERNAME
+sip line1 password:$SIPPASS
+sip line1 user name:$USERNAME
+sip line1 display name:$USERNAME
+sip line1 screen name:$DNAME
+EOF
+	then
+	    bailout GenConf
+	fi
+	;;
+    303|504|942)
+	hwaddr=`echo "$HWADDR" | sed 's/\(.\{2\}\):\?\(.\{2\}\):\?\(.\{2\}\):\?\(.\{2\}\):\?\(.\{2\}\):\?\(.\{2\}\)/\1:\2:\3:\4:\5:\6/' | tr '[A-Z]' '[a-z]'`
+	CONF_DIR=<%=@srv_root%>/cisco/$hwaddr
+	CONF_FILE=$CONF_DIR/account${LINEID}.cfg
+	test -d $CONF_DIR || mkdir -p $CONF_DIR
+	for target in <%=@srv_root%>/cisco/??:??:??:??:??:??/account*.cfg
+	do
+	    if grep -E "<User_ID_.*>$USERNAME</User_ID.*" $target >/dev/null; then
+		lineid=`echo $target | sed 's|.*account\([0-9]\).cfg|\1|'`
+		rm -f $target
+		ln -sf <%=@srv_root%>/cisco/generic${lineid}.cfg $target
+		refresh=`asterisk -rx "sip show peer $USERNAME" | grep 'Reg\. Contact.*sip:' | sed "s|.*$USERNAME@\([^:]*\).*|\1|"`
+		test "$refresh" = $STATION && refresh=
+	    fi
+	done
+	rm -f $CONF_FILE
+	if ! cat <<EOF >$CONF_FILE
+<flat-profile>
+<Display_Name_${LINEID}_ group="Ext_$LINEID/Subscriber_Information">$DNAME</Display_Name_${LINEID}_>
+<User_ID_${LINEID}_ group="Ext_$LINEID/Subscriber_Information">$USERNAME</User_ID_${LINEID}_>
+<Password_${LINEID}_ group="Ext_$LINEID/Subscriber_Information">$SIPPASS</Password_${LINEID}_>
+</flat-profile>
+EOF
+	then
+	    bailout GenConf
+	fi
+	chmod 0644 $CONF_FILE
+	if test "$refresh"; then
+	    wget -q http://$refresh/admin/reboot -O /dev/null 2>&1 &
+	fi
+	wget -q http://$STATION/admin/reboot -O /dev/null 2>&1 &
+	;;
+esac
+
+test -z "$CONF_FILE" && bailout NoConf
+test -s $CONF_FILE && yeay
+bailout VariantMayVary

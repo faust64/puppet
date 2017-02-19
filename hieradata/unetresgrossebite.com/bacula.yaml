@@ -1,0 +1,54 @@
+additional_classes:
+  - Fail2ban
+  - Firehol
+
+physical_parent: gaia.unetresgrossebite.com
+
+# Bacula
+bacula_do_webapp: true
+
+# Firehol
+firehol_interfaces:
+  - name: eth0
+    description: WAN
+    protection: strong
+    allow:
+      - server icmp accept
+      - server http accept
+      - server https accept
+      - server custom openssh "tcp/1022" default accept
+      - server custom munin "tcp/4949" default accept src "$office_networks"
+      - server custom nrpe "tcp/5666" default accept src "$office_networks"
+      - server custom baculadir "tcp/9101" default accept src "95.211.136.212/32"
+      - server custom baculadir "tcp/9102" default accept src "$office_networks"
+      - server custom baculafd "tcp/9103" default accept src "$office_networks"
+      - client all accept
+
+# Letsencrypt
+letsencrypt_renew_day: 19
+letsencrypt_renew_hour: 22
+letsencrypt_renew_min: 14
+
+# Nagios
+nagios_partitions_watchlist:
+  root: /
+  backups: /media/backups
+
+# OpenLDAP
+openldap_ldap_slave: repository.unetresgrossebite.com
+
+# OpenSSH
+ssh_tcp_wrappers:
+  - 37.59.45.201/32
+  - 52.3.63.157/32
+  - 52.10.164.137/32
+  - 78.193.67.92/32
+  - 86.247.183.179/32
+  - 95.211.205.36/32
+  - 127.0.0.1/32
+  - 188.165.212.140/32
+
+# PF
+dns_ip:
+  - 95.211.205.36
+  - 37.59.45.201

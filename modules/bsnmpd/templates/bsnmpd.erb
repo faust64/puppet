@@ -1,0 +1,30 @@
+read := <%=@snmp_community%>
+contact := "Waldo (root@<%=@fqdn%>)"
+description := "FreeBSD-<%=@kernelversion%>-<%=@architecture%>"
+location := "<%=@snmp_location%>"
+services := <%=@snmp_sysservices%>
+system := 1
+
+securityModelAny := 0
+securityModelSNMPv1 := 1
+securityModelSNMPv2c := 2
+securityModelUSM := 3
+MPmodelSNMPv1 := 0
+MPmodelSNMPv2c := 1
+MPmodelSNMPv3 := 3
+noAuthNoPriv := 1
+authNoPriv := 2
+authPriv := 3
+%snmpd
+begemotSnmpdDebugDumpPdus = 2
+begemotSnmpdDebugSyslogPri = 7
+begemotSnmpdCommunityString.0.1 = $(read)
+begemotSnmpdCommunityDisable = 1
+begemotSnmpdPortStatus.<%=@ipaddress%>.161 = 1
+begemotSnmpdLocalPortStatus."/var/run/snmpd.sock" = 1
+begemotSnmpdLocalPortType."/var/run/snmpd.sock" = 4
+sysContact = $(contact)
+sysLocation = $(location)
+sysObjectId = 1.3.6.1.4.1.12325.1.1.2.1.$(system)
+snmpEnableAuthenTraps = 2
+begemotSnmpdModulePath."mibII" = "/usr/lib/snmp_mibII.so"

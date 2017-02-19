@@ -1,0 +1,5 @@
+puppet_service_name: puppetd
+rsyslog_version: 4
+snmp_uptodate: false
+ssh_kex_algorithms:
+  - diffie-hellman-group-exchange-sha256

@@ -1,0 +1,24 @@
+physical_parent: gaia.adm.intra.unetresgrossebite.com,hestia.adm.intra.unetresgrossebite.com
+
+# Collectd
+with_collectd: false
+
+# LinuxCounter
+lico_update_day: 1
+lico_update_hour: 14
+lico_update_min: 52
+
+# Munin-Node
+munin_node_listenaddr: 10.42.242.18
+
+# Nagios
+nagios_listenaddr: 10.42.242.18
+nagios_smart_disks:
+  - sda
+  - sdb
+  - sdc
+  - sdd
+  - sde
+
+# SNMP
+snmp_listenaddr: 10.42.242.18

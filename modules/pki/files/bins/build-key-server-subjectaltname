@@ -1,0 +1,45 @@
+#!/bin/sh
+# This script builds a new server key with a subjectAltName
+
+usage () {
+	echo "$0 name altname1 altname2"
+	echo "the script will add DNS: in front of each alt name"
+	exit $1
+}
+
+error () {
+	echo "$@"
+	exit 1
+}
+
+if ! [ -f openssl.altnames.cnf ] ; then
+	echo 'Could not find openssl.altnames.cnf'
+	echo 'Please create it in the current folder'
+	echo 'it should contain a line that reads :'
+	echo 'subjectAltName=$ENV::KEY_SAN'
+	echo 'in the [server] section'
+	error
+fi
+
+if [ $# -lt 2 ] ; then
+	usage 1
+fi
+
+NAME=$1
+shift
+
+KEY_SAN="DNS:$1"
+shift
+for name in $@ ; do
+	KEY_SAN=$KEY_SAN",DNS:"$name
+done
+
+# This is the important part of the script, you could just run these three
+# commands in the shell, with your own KEY_SAN value and the desired $NAME
+# to get a new certificate with subjectAltNames
+
+export KEY_SAN
+export KEY_CONFIG=openssl.altnames.cnf
+
+echo $KEY_SAN
+exec build-key-server $NAME

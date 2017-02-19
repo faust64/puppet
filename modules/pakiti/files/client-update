@@ -1,0 +1,8 @@
+#!/bin/sh
+
+RANDOM_NUMBER=`od -An -N2 -d /dev/random`
+WAIT_TIME=`expr 1 + $RANDOM_NUMBER % \( 240 - 1 \)`
+sleep $WAIT_TIME
+/usr/sbin/pakiti2-client &>/dev/null
+
+exit 0

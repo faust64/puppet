@@ -1,0 +1,19 @@
+<IfModule mod_userdir.c>
+    UserDir public_html
+    UserDir disabled root
+
+    <Directory /home/*/www>
+	AllowOverride FileInfo AuthConfig Limit Indexes
+	Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
+	<Limit GET POST OPTIONS>
+<% if @version == "2.2" -%>	    Order allow,deny
+	    Allow from all
+<% else -%>	    Require all granted
+<% end -%>	</Limit>
+	<LimitExcept GET POST OPTIONS>
+<% if @version == "2.2" -%>	    Order deny,allow
+	    Deny from all
+<% else -%>	    Require all denied
+<% end -%>	</LimitExcept>
+    </Directory>
+</IfModule>

@@ -1,0 +1,187 @@
+[bad-number]
+exten => _X.,1,ResetCDR()
+exten => _X.,n,NoCDR()
+exten => _X.,n,Progress
+exten => _X.,n,Wait(1)
+exten => _X.,n,Playback(silence/1&cannot-complete-as-dialed&check-number-dial-again,noanswer)
+exten => _X.,n,Wait(1)
+exten => _X.,n,Congestion(20)
+exten => _X.,n,Hangup
+
+[block-cf]
+exten => _X.,1,Noop(Blocking callforward to ${EXTEN} because CF is blocked)
+exten => _X.,n,Hangup()
+
+[cidlookup]
+exten => cidlookup_return,1,ExecIf($["${DB(cidname/${CALLERID(num)})}" != ""]?Set(CALLERID(name)=${DB(cidname/${CALLERID(num)})}))
+exten => cidlookup_return,n,Return()
+
+[default]
+include => ext-local
+exten => s,1,Playback(vm-goodbye)
+exten => s,2,Macro(hangupcall)
+
+[ext-did-catchall]
+exten => s,1,Noop(No DID or CID Match)
+exten => s,n(a2),Answer
+exten => s,n,Wait(2)
+exten => s,n,Playback(ss-noservice)
+exten => s,n,SayAlpha(${FROM_DID})
+exten => s,n,Hangup
+exten => _X.,1,Set(__FROM_DID=${EXTEN})
+exten => _X.,n,Noop(Received an unknown call with DID set to ${EXTEN})
+exten => _X.,n,Goto(s,a2)
+exten => h,1,Hangup
+
+[ext-did-pre]
+exten => fax,1,Goto(${CUT(FAX_DEST,^,1)},${CUT(FAX_DEST,^,2)},${CUT(FAX_DEST,^,3)})
+
+[ext-did]
+include => ext-did-pre
+include => ext-did-main
+exten => foo,1,Noop(bar)
+
+[ext-fax]
+exten => s,1,Macro(user-callerid,)
+exten => s,n,Noop(Receiving Fax for: ${FAX_RX_EMAIL} , From: ${CALLERID(all)})
+exten => s,n(receivefax),StopPlaytones
+exten => s,n,ReceiveFAX(${ASTSPOOLDIR}/fax/${UNIQUEID}.tif)
+exten => h,1,GotoIf($["${FAXSTATUS:0:6}" = "FAILED"]?failed)
+exten => h,n(process),GotoIf($[${LEN(${FAX_RX_EMAIL})} = 0]?end)
+exten => h,n,System(${ASTVARLIBDIR}/bin/fax-process.pl --to ${FAX_RX_EMAIL} --from "<%=@fax_from%>" --dest "${FROM_DID}" --subject "New fax from ${URIENCODE(${CALLERID(name)})} ${URIENCODE(<${CALLERID(number)}>)}" --attachment fax_${URIENCODE(${CALLERID(number)})}.pdf --type application/pdf --file ${ASTSPOOLDIR}/fax/${UNIQUEID}.tif)
+exten => h,n(end),Macro(hangupcall,)
+exten => h,process+101(failed),Noop(FAX ${FAXSTATUS} for: ${FAX_RX_EMAIL} , From: ${CALLERID(all)})
+exten => h,n,Macro(hangupcall,)
+
+[ext-local-confirm]
+exten => _LC-.,1,Noop(IN ext-local-confirm with - RT: ${RT}, RG_IDX: ${RG_IDX})
+exten => _LC-.,n,GotoIf($["x${ALERT_INFO}"="x"]?godial)
+exten => _LC-.,n,SIPAddHeader(Alert-Info: ${ALERT_INFO})
+exten => _LC-.,n(godial),dial(${DB(DEVICE/${EXTEN:3}/dial)},${RT},M(auto-confirm^${RG_IDX})${DIAL_OPTIONS})
+
+[ext-paging]
+exten => _PAGE.,1,GotoIf($[ ${AMPUSER} = ${EXTEN:4} ]?skipself)
+exten => _PAGE.,n(AVAIL),ChanIsAvail(${DB(DEVICE/${EXTEN:4}/dial)},s)
+exten => _PAGE.,n,GotoIf($["${AVAILORIGCHAN}" == ""]?skipself)
+exten => _PAGE.,n,GotoIf($["${DB(DND/${DB(DEVICE/${EXTEN:4}/user)})}" = "YES"]?skipself)
+exten => _PAGE.,n(SKIPCHECK),Macro(autoanswer,${EXTEN:4})
+exten => _PAGE.,n,Dial(${DIAL},${DTIME},${DOPTIONS})
+exten => _PAGE.,n(skipself),Hangup
+exten => _FPAGE.,1,GotoIf($[ ${AMPUSER} = ${EXTEN:5} ]?skipself)
+exten => _FPAGE.,n(SKIPCHECK),Macro(autoanswer,${EXTEN:5})
+exten => _FPAGE.,n,Dial(${DIAL},${DTIME},${DOPTIONS})
+exten => _FPAGE.,n(skipself),Hangup
+
+[ext-test]
+exten => 7777,1,Goto(from-pstn,${EXTEN},1)
+exten => h,1,Macro(hangupcall,)
+
+[findmefollow-ringallv2]
+exten => _FMPR-.,1,Noop(In FMPR ${FMGRP} with ${EXTEN:5})
+exten => _FMPR-.,n,Set(RingGroupMethod=)
+exten => _FMPR-.,n,Set(USE_CONFIRMATION=)
+exten => _FMPR-.,n,Set(RINGGROUP_INDEX=)
+exten => _FMPR-.,n,Macro(simple-dial,${EXTEN:5},${FMREALPRERING})
+exten => _FMPR-.,n,GotoIf($["${DIALSTATUS}" != "BUSY"]?nodnd)
+exten => _FMPR-.,n,Set(DB(FM/DND/${FMGRP}/${FMUNIQUE})=DND)
+exten => _FMPR-.,n(nodnd),Noop(Ending FMPR ${FMGRP} with ${EXTEN:5} and dialstatus ${DIALSTATUS})
+exten => _FMPR-.,n,Hangup()
+exten => _FMGL-.,1,Noop(In FMGL ${FMGRP} with ${EXTEN:5})
+exten => _FMGL-.,n,GotoIf($["${DB(FM/DND/${FMGRP}/${FMUNIQUE})}" = "DND"]?dodnd)
+exten => _FMGL-.,n,Wait(1)
+exten => _FMGL-.,n,GotoIf($["${DB(FM/DND/${FMGRP}/${FMUNIQUE})}" = "DND"]?dodnd)
+exten => _FMGL-.,n,Wait(1)
+exten => _FMGL-.,n,GotoIf($["${DB(FM/DND/${FMGRP}/${FMUNIQUE})}" = "DND"]?dodnd)
+exten => _FMGL-.,n,Wait(${FMPRERING})
+exten => _FMGL-.,n,GotoIf($["${DB(FM/DND/${FMGRP}/${FMUNIQUE})}" = "DND"]?dodnd)
+exten => _FMGL-.,n,DBDel(FM/DND/${FMGRP}/${FMUNIQUE})
+exten => _FMGL-.,n(dodial),Macro(dial,${FMGRPTIME},${DIAL_OPTIONS},${EXTEN:5})
+exten => _FMGL-.,n,Noop(Ending FMGL ${FMGRP} with ${EXTEN:5} and dialstatus ${DIALSTATUS})
+exten => _FMGL-.,n,Hangup()
+exten => _FMGL-.,n+10(dodnd),DBDel(FM/DND/${FMGRP}/${FMUNIQUE})
+exten => _FMGL-.,n,GotoIf($["${FMPRIME}" = "FALSE"]?dodial)
+exten => _FMGL-.,n,Noop(Got DND in FMGL ${FMGRP} with ${EXTEN:5} in ${RingGroupMethod} mode, aborting)
+exten => _FMGL-.,n,Hangup()
+
+[ivr-3]
+include => from-did-direct-ivr
+include => app-directory
+exten => #,1,Noop(Deleting: ${BLKVM_OVERRIDE} ${DB_DELETE(${BLKVM_OVERRIDE})})
+exten => #,n,Set(__NODEST=)
+exten => #,n,Goto(app-directory,#,1)
+exten => h,1,Hangup
+exten => s,1,Set(MSG=)
+exten => s,n,Set(LOOPCOUNT=0)
+exten => s,n,Set(__DIR-CONTEXT=default)
+exten => s,n,Set(_IVR_CONTEXT_${CONTEXT}=${IVR_CONTEXT})
+exten => s,n,Set(_IVR_CONTEXT=${CONTEXT})
+exten => s,n,GotoIf($["${CDR(disposition)}" = "ANSWERED"]?begin)
+exten => s,n,Answer
+exten => s,n,Wait(1)
+exten => s,n(begin),Set(TIMEOUT(digit)=3)
+exten => s,n,Set(TIMEOUT(response)=10)
+exten => s,n,Set(__IVR_RETVM=)
+exten => s,n,ExecIf($["${MSG}" != ""]?Background(${MSG}))
+exten => s,n,WaitExten(,)
+exten => hang,1,Playback(vm-goodbye)
+exten => hang,n,Hangup
+exten => i,1,Playback(invalid)
+exten => i,n,Goto(loop,1)
+exten => t,1,Goto(loop,1)
+exten => loop,1,Set(LOOPCOUNT=$[${LOOPCOUNT} + 1])
+exten => loop,n,GotoIf($[${LOOPCOUNT} > 2]?hang,1)
+exten => loop,n,Goto(ivr-3,s,begin)
+exten => return,1,Set(MSG=)
+exten => return,n,Set(_IVR_CONTEXT=${CONTEXT})
+exten => return,n,Set(_IVR_CONTEXT_${CONTEXT}=${IVR_CONTEXT_${CONTEXT}})
+exten => return,n,Goto(ivr-3,s,begin)
+exten => fax,1,Goto(${CUT(FAX_DEST,^,1)},${CUT(FAX_DEST,^,2)},${CUT(FAX_DEST,^,3)})
+
+[sub-fmsetcid]
+exten => s,1,Goto(s-${DB(AMPUSER/${BLKVM_BASE}/followme/changecid)},1)
+exten => s-fixed,1,ExecIf($["${REGEX("^[\+]?[0-9]+$" ${DB(AMPUSER/${BLKVM_BASE}/followme/fixedcid)})}" = "1"]?Set(__TRUNKCIDOVERRIDE=${DB(AMPUSER/${BLKVM_BASE}/followme/fixedcid)}))
+exten => s-fixed,n,Return()
+exten => s-extern,1,ExecIf($["${REGEX("^[\+]?[0-9]+$" ${DB(AMPUSER/${BLKVM_BASE}/followme/fixedcid)})}" == "1" & "${FROM_DID}" != ""]?Set(__TRUNKCIDOVERRIDE=${DB(AMPUSER/${BLKVM_BASE}/followme/fixedcid)}))
+exten => s-extern,n,Return()
+exten => s-did,1,ExecIf($["${REGEX("^[\+]?[0-9]+$" ${FROM_DID})}" = "1"]?Set(__REALCALLERIDNUM=${FROM_DID}))
+exten => s-did,n,Return()
+exten => s-forcedid,1,ExecIf($["${REGEX("^[\+]?[0-9]+$" ${FROM_DID})}" = "1"]?Set(__TRUNKCIDOVERRIDE=${FROM_DID}))
+exten => s-forcedid,n,Return()
+exten => _s-.,1,Noop(Unknown value for AMPUSER/${BLKVM_BASE}/followme/changecid of ${DB(AMPUSER/${BLKVM_BASE}/followme/changecid)} set to "default")
+exten => _s-.,n,Set(DB(AMPUSER/${BLKVM_BASE}/followme/changecid)=default)
+exten => _s-.,n,Return()
+
+[sub-pincheck]
+exten => s,1,Authenticate(${ARG3},)
+exten => s,n,ResetCDR()
+exten => s,n,Return()
+
+[sub-rgsetcid]
+exten => s,1,Goto(s-${DB(RINGGROUP/${BLKVM_BASE}/changecid)},1)
+exten => s-fixed,1,ExecIf($["${REGEX("^[\+]?[0-9]+$" ${DB(RINGGROUP/${BLKVM_BASE}/fixedcid)})}" = "1"]?Set(__TRUNKCIDOVERRIDE=${DB(RINGGROUP/${BLKVM_BASE}/fixedcid)}))
+exten => s-fixed,n,Return()
+exten => s-extern,1,ExecIf($["${REGEX("^[\+]?[0-9]+$" ${DB(RINGGROUP/${BLKVM_BASE}/fixedcid)})}" == "1" & "${FROM_DID}" != ""]?Set(__TRUNKCIDOVERRIDE=${DB(RINGGROUP/${BLKVM_BASE}/fixedcid)}))
+exten => s-extern,n,Return()
+exten => s-did,1,ExecIf($["${REGEX("^[\+]?[0-9]+$" ${FROM_DID})}" = "1"]?Set(__REALCALLERIDNUM=${FROM_DID}))
+exten => s-did,n,Return()
+exten => s-forcedid,1,ExecIf($["${REGEX("^[\+]?[0-9]+$" ${FROM_DID})}" = "1"]?Set(__TRUNKCIDOVERRIDE=${FROM_DID}))
+exten => s-forcedid,n,Return()
+exten => _s-.,1,Noop(Unknown value for RINGGROUP/${BLKVM_BASE}/changecid of ${DB(RINGGROUP/${BLKVM_BASE}/changecid)} set to "default")
+exten => _s-.,n,Set(DB(RINGGROUP/${BLKVM_BASE}/changecid)=default)
+exten => _s-.,n,Return()
+
+[vm-callme]
+exten => s,1,Answer
+exten => s,n,Wait(1)
+exten => s,n(repeat),Background(${MSG}&silence/2&vm-repeat&vm-starmain)
+exten => s,n,WaitExten(15,)
+exten => 5,1,Goto(s,repeat)
+exten => #,1,Playback(vm-goodbye)
+exten => #,n,Hangup
+exten => *,1,Macro(get-vmcontext,${MBOX})
+exten => *,n,VoiceMailMain(${MBOX}@${VMCONTEXT},s)
+exten => i,1,Playback(pm-invalid-option)
+exten => i,n,Goto(s,repeat)
+exten => t,1,Playback(vm-goodbye)
+exten => t,n,Hangup
+exten => h,1,Hangup

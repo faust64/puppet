@@ -1,0 +1,5 @@
+base <%=@ldap_base%>
+ldap_version 3
+uri ldaps://<%=@ldap_slave%>/
+nss_base_passwd ou=users,<%=@ldap_base%>?sub?&(!(PwdAccountLockedTime=*))
+nss_base_group ou=groups,<%=@ldap_base%>?sub?&(gidNumber=*)

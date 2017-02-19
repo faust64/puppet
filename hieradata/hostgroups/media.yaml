@@ -1,0 +1,29 @@
+additional_classes:
+  - Iscsiinitiator
+  - Media
+  - Subsonic
+  - Packages
+
+# Apache
+apache_keepalive: "On"
+apache_listen_ports:
+  plain: 80
+  ssl: 443
+
+# Media
+media_sickbeard: https://tvschedule.unetresgrossebite.com
+
+# Nagios
+nagios_load_crit_threshold: "4.0,4.0,4.0"
+nagios_load_warn_threshold: "3.3,3.3,3.3"
+nagios_procs_crit: 300
+nagios_procs_warn: 250
+nagios_runprocs_crit: 20
+nagios_runprocs_warn: 15
+
+# Subsonic
+subsonic_allocate: 300
+subsonic_message: "__Welcome to Mephitheque\\!__\\r\\n\\r\\n\\\\ \\\\\\r\\n\\r\\nHere is a bunch of poor download choices"
+subsonic_music_root: /goinfre/media/Music
+subsonic_subtitle: ""
+subsonic_title: "Welcome to Mephitheque\\!"

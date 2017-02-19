@@ -1,0 +1,7 @@
+additional_classes:
+  - Wifimgr
+
+# MongoDB
+mongodb_do_service: false
+mongodb_journal: false
+mongodb_port: 27117

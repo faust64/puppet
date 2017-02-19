@@ -1,0 +1,125 @@
+url_prefix = /
+use_bookmark_titles = 0
+use_dynamic_titles = 1
+use_strict_host_authorization = 0
+csrf_allowed_hosts=127.0.0.1
+csrf_allowed_hosts=::1
+cgi.cfg = <%=@conf_dir%>/cgi.cfg
+use_frames = 1
+use_feature_histogram = 0
+use_feature_trends = 1
+use_feature_recurring_downtime = 1
+use_service_description = 0
+strict_passive_mode = 1
+hide_passive_icon = 0
+delay_pages_after_backend_reload = 0
+ssl_verify_hostnames=1
+home_link = <%=@home_link%>
+use_new_search = 1
+use_new_command_box = 1
+use_ajax_search = 1
+ajax_search_hosts = 1
+ajax_search_hostgroups = 1
+ajax_search_services = 1
+ajax_search_servicegroups = 1
+ajax_search_timeperiods = 1
+default_theme = Thruk
+tmp_path = /var/cache/thruk
+var_path = /var/lib/thruk
+thruk_user=<%=@runtime_user%>
+thruk_group=<%=@runtime_group%>
+ssi_path = <%=@conf_dir%>/ssi/
+plugin_path = <%=@conf_dir%>/plugins/
+themes_path = <%=@conf_dir%>/themes/
+log4perl_conf = <%=@conf_dir%>/log4perl.conf
+use_pager = 1
+paging_steps = *100, 500, 1000, 5000, all
+group_paging_overview = *3, 10, 100, all
+group_paging_summary = *10, 50, 100, all
+group_paging_grid = *5, 10, 50, all
+show_long_plugin_output = popup
+status_color_background = 0
+info_popup_event_type = onclick
+info_popup_options = STICKY,CLOSECLICK,HAUTO,MOUSEOFF
+show_notification_number = 1
+show_config_edit_buttons = 0
+show_backends_in_table=0
+show_full_commandline = 1
+show_full_commandline_source = check_command
+perf_bar_mode = match
+perf_bar_pnp_popup = 1
+shown_inline_pnp = 1
+show_modified_attributes = 1
+can_submit_commands = 1
+<cmd_defaults>
+    ahas = 0
+    broadcast_notification = 0
+    force_check = 0
+    force_notification = 0
+    send_notification = 1
+    sticky_ack = 1
+    persistent_comments = 1
+    persistent_ack = 0
+    ptc = 0
+    use_expire = 0
+</cmd_defaults>
+<cmd_quick_status>
+    default = "reschedule next check"
+    reschedule = 1
+    downtime = 1
+    comment = 1
+    acknowledgement = 1
+    active_checks = 1
+    notifications = 1
+    submit_result = 1
+    reset_attributes = 1
+</cmd_quick_status>
+force_sticky_ack = 0
+force_send_notification = 0
+force_persistent_ack = 0
+force_persistent_comments = 0
+downtime_duration = 7200
+expire_ack_duration = 86400
+datetime_format = %Y-%m-%d  %H:%M:%S
+datetime_format_today = %H:%M:%S
+datetime_format_long = %a %b %e %H:%M:%S %Z %Y
+datetime_format_log = %B %d, %Y  %H
+datetime_format_trends = %a %b %e %H:%M:%S %Y
+<apache_status>
+    # System http://127.0.0.1/server-status
+</apache_status>
+cron_file = /var/cache/thruk/thruk_cron.tmp
+cron_pre_edit_cmd = /usr/bin/crontab -l > /var/cache/thruk/thruk_cron.tmp
+cron_post_edit_cmd = /usr/bin/crontab /var/cache/thruk/thruk_cron.tmp && rm -f /var/cache/thruk/thruk_cron.tmp
+thruk_bin = /usr/bin/thruk
+thruk_init = /etc/init.d/thruk
+use_wait_feature = 1
+wait_timeout = 10
+<initial_menu_state>
+    General = 1
+    Current_Status = 1
+    Reports = 1
+    System = 1
+    Bookmarks = 1
+</initial_menu_state>
+mobile_agent=iPhone,Android,IEMobile
+show_error_reports = both
+skip_js_errors = cluetip is not a function
+bug_email_rcpt = <%=@admin_contact%>
+cookie_auth_login_url = thruk/cgi-bin/login.cgi
+cookie_auth_restricted_url = http://localhost/thruk/cgi-bin/restricted.cgi
+cookie_auth_session_timeout = 604800
+cookie_auth_session_cache_timeout = 5
+<Component Thruk::Backend>
+</Component>
+<Component Thruk::Plugin::ConfigTool>
+    show_plugin_syntax_helper = 1
+    thruk = <%=@conf_dir%>/thruk_local.conf
+    cgi.cfg = <%=@conf_dir%>/cgi.cfg
+    htpasswd = <%=@conf_dir%>/htpasswd
+</Component>
+<Component Thruk::Plugin::Reports2>
+    wkhtmltopdf = /usr/share/thruk/script/wkhtmltopdf
+</Component>
+<Component Thruk::Plugin::BP>
+</Component>

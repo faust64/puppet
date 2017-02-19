@@ -1,0 +1,14 @@
+/var/log/unbound.log
+{
+    compress
+    create 644 <%=@runuser%> <%=@rungroup%>
+    daily
+    delaycompress
+    missingok
+    notifempty
+    rotate <%=@rotate%>
+    sharedscripts
+    postrotate
+	service unbound reload >/dev/null 2>&1
+    endscript
+}

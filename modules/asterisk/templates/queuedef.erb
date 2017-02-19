@@ -1,0 +1,26 @@
+[ext-queue-<%=@name%>]
+exten => <%=@name%>,1,Macro(user-callerid,)
+exten => <%=@name%>,n,Answer
+exten => <%=@name%>,n,ExecIf($["${QUEUEWAIT}" = ""]?Set(__QUEUEWAIT=${EPOCH}))
+exten => <%=@name%>,n,Set(__BLKVM_OVERRIDE=BLKVM/${EXTEN}/${CHANNEL})
+exten => <%=@name%>,n,Set(__BLKVM_BASE=${EXTEN})
+exten => <%=@name%>,n,Set(DB(${BLKVM_OVERRIDE})=TRUE)
+exten => <%=@name%>,n,ExecIf($["${REGEX("(M[(]auto-blkvm[)])" ${DIAL_OPTIONS})}" != "1"]?Set(_DIAL_OPTIONS=${DIAL_OPTIONS}M(auto-blkvm)))
+exten => <%=@name%>,n,Set(__NODEST=${EXTEN})
+exten => <%=@name%>,n,Set(MONITOR_FILENAME=${ASTSPOOLDIR}/monitor/q${EXTEN}-${STRFTIME(${EPOCH},,%Y%m%d-%H%M%S)}-${UNIQUEID})
+exten => <%=@name%>,n,Playback(<%=@playback%>)
+exten => <%=@name%>,n,Set(__MOHCLASS=default)
+exten => <%=@name%>,n,Queue(<%=@name%>,tn,,)
+exten => <%=@name%>,n,Noop(Deleting: ${BLKVM_OVERRIDE} ${DB_DELETE(${BLKVM_OVERRIDE})})
+exten => <%=@name%>,n,Set(__NODEST=)
+exten => <%=@name%>,n,Goto(<%=@fallback%>,1)
+exten => <%=@name%>*,1,Macro(agent-add,<%=@name%>,)
+exten => <%=@name%>**,1,Macro(agent-del,<%=@name%>)
+exten => *45<%=@name%>,1,Set(QUEUENO=<%=@name%>)
+exten => *45<%=@name%>,n,Goto(app-queue-toggle,s,start)
+<% if @extensions -%><% @extensions.each do |exten, exthash| -%>exten => *45<%=exten%>*<%=@name%>,1,Set(QUEUENO=<%=@name%>)
+exten => *45<%=exten%>*<%=@name%>,n,Goto(app-queue-toggle,s,start)
+exten => *45<%=exten%>*<%=@name%>,hint,Custom:QUEUE<%=exten%>*<%=@name%>
+<% end -%><% end -%>
+[from-queue-<%=@name%>]
+exten => <%=@name%>,1,Goto(from-internal,${QAGENT},1)

@@ -1,0 +1,6 @@
+LoadPlugin rrdtool
+<Plugin rrdtool>
+    DataDir "<%=scope.lookupvar('collectd::vars::var_dir')%>/rrd"
+    CacheFlush <%=scope.lookupvar('collectd::vars::cache_flush')%>
+    WritesPerSecond <%=scope.lookupvar('collectd::vars::writes_per_sec')%>
+</Plugin>

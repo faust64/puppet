@@ -1,0 +1,11 @@
+<LDAP>
+    URL		ldaps://<%=@ldap_host%>
+    BindDN	cn=openvpn,ou=services,<%=@base_suffix%>
+    Password	<%=@ldap_passphrase%>
+    Timeout	15
+</LDAP>
+<Authorization>
+    BaseDN		"<%=@search_user%>"
+    SearchFilter	"(uid=%u)"
+    RequireGroup	false
+</Authorization>

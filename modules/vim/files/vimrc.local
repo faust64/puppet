@@ -1,0 +1,55 @@
+set term=$TERM
+set stl=%<%f%h%m%r%=%l,%c%V\ %P ts=8 sw=4 report=1
+set sm ru nowrap nonumber notbi hlsearch
+set background=dark
+syntax on
+filetype on
+filetype indent on
+filetype plugin on
+hi comment ctermfg=yellow
+hi Special ctermfg=lightblue
+hi string  ctermfg=grey
+au BufRead * vmap C :s!^!# !<CR>
+au BufRead * vmap U :s!^# !!<CR>
+augroup filename
+  au BufRead *.sql vmap C :s!^!-- !<CR>
+  au BufRead *.sql vmap U :s!^-- !!<CR>
+  au BufRead *.php vmap C :s!^!// !<CR>
+  au BufRead *.php vmap U :s!^// !!<CR>
+  au BufRead *.c vmap C :s!^!// !<CR>
+  au BufRead *.c vmap U :s!^// !!<CR>
+  au BufRead *.js vmap C :s!^!// !<CR>
+  au BufRead *.js vmap U :s!^// !!<CR>
+  au BufRead *.tex vmap C :s!^!% !<CR>
+  au BufRead *.tex vmap U :s!^% !!<CR>
+augroup END
+augroup filename
+  au BufRead /etc/apache/conf/*    set filetype=apache
+  au BufRead /etc/apache/conf.d/*  set filetype=apache
+  au BufRead /etc/apache/sites*/*  set filetype=apache
+  au BufRead /etc/apache/mod*/*    set filetype=apache
+  au BufRead /etc/apache2/conf/*   set filetype=apache
+  au BufRead /etc/apache2/conf.d/* set filetype=apache
+  au BufRead /etc/apache2/sites*/* set filetype=apache
+  au BufRead /etc/apache2/mod*/*   set filetype=apache
+  au BufRead /etc/httpd/conf/*     set filetype=apache
+  au BufRead /etc/httpd/conf.d/*   set filetype=apache
+  au BufRead /etc/httpd/sites*/*   set filetype=apache
+  au BufRead /etc/httpd/mod*/*     set filetype=apache
+augroup end
+if has("cscope") && filereadable("/usr/bin/cscope")
+   set csprg=/usr/bin/cscope
+   set csto=0
+   set cst
+   set nocsverb
+   if filereadable("cscope.out")
+      cs add cscope.out
+   elseif $CSCOPE_DB != ""
+      cs add $CSCOPE_DB
+   endif
+   set csverb
+endif
+if &t_Co > 2 || has("gui_running")
+  syntax on
+  set hlsearch
+endif

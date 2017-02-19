@@ -1,0 +1,13 @@
+define contact {
+    alias				<%=@aalias%>
+    contact_name			<%=@name%>
+    email				<%=@contact%>
+<% if @doslack == true -%>    host_notification_commands		notify-host-by-email,notify-host-by-slack
+<% else -%>    host_notification_commands		notify-host-by-email
+<% end -%>    host_notification_options		d,r
+    host_notification_period		<%=@notify_period%>
+<% if @doslack == true -%>    service_notification_commands	notify-service-by-email,notify-service-by-slack
+<% else -%>    service_notification_commands	notify-service-by-email
+<% end -%>    service_notification_options	<%=@notify_options%>
+    service_notification_period		<%=@notify_period%>
+}

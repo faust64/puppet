@@ -1,0 +1,21 @@
+#!/bin/sh
+
+BLACKLIST=/home/bl
+WHITELIST=/home/wl
+LOGDIR=<%=@log_dir%>
+
+(
+    grep -RiE '/(xmlrpc.php |dropbox/index.php |readme.txt |forum/)' $LOGDIR
+    grep -RiE 'POST /wp-login.php .* "-" "-"' $LOGDIR
+) | \
+    cut -d: -f2 | awk '{print $1}' | sort -u | \
+    while read line
+    do
+	test -s $BLACKLIST && grep $line $BLACKLIST >/dev/null && continue
+	test -s $WHITELIST && grep $line $WHITELIST >/dev/null && continue
+	echo $line >>$BLACKLIST
+	echo adding $line
+	iptables -A INPUT -s $line -j DROP
+    done
+
+exit 0

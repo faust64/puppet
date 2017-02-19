@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if mount | grep "/ " | grep rw >/dev/null; then
+    if (command -v fake-hwclock >/dev/null 2>&1) ; then
+	fake-hwclock save
+    fi
+fi
+
+exit 0

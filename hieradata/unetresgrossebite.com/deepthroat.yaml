@@ -1,0 +1,74 @@
+additional_classes:
+  - Fail2ban
+  - Firehol
+
+physical_parent: geras.unetresgrossebite.com
+
+# Fail2ban
+fail2ban_do_badbots: true
+fail2ban_do_mails: true
+fail2ban_do_web_abuses: true
+
+# Firehol
+firehol_interfaces:
+  - name: eth0
+    description: WAN
+    protection: strong
+    allow:
+      - server icmp accept
+      - server smtp accept
+      - server http accept
+      - server imap accept
+      - server https accept
+      - server smtps accept
+      - server submission accept
+      - server imaps accept
+      - server custom openssh "tcp/1022" default accept
+      - server custom munin "tcp/4949" default accept src "$office_networks"
+      - server custom nrpe "tcp/5666" default accept src "$office_networks"
+      - client all accept
+
+# Letsencrypt
+letsencrypt_renew_day: 19
+letsencrypt_renew_hour: 22
+letsencrypt_renew_min: 54
+
+# Nagios
+nagios_load_crit_threshold: "8.0,8.0,8.0"
+nagios_load_warn_threshold: "7.7,7.7,7.7"
+nagios_partitions_watchlist:
+  root: /
+  mails: /var/spool/cyrus
+  backups: /var/backups/bluemind
+nagios_procs_crit: 800
+nagios_procs_warn: 600
+nagios_runprocs_crit: 100
+nagios_runprocs_warn: 80
+
+# PF
+dns_ip:
+  - 37.59.45.201
+  - 188.165.212.140
+
+# Postfix
+postfix_myhostname: deepthroat.unetresgrossebite.com
+postfix_networks:
+  - 5.135.4.208/29
+  - 5.135.176.165/32
+  - 5.135.190.108/32
+  - 37.59.45.201/32
+  - 51.254.93.64/29
+  - 95.211.136.210/31
+  - 95.211.136.212/32
+  - 95.211.205.36/32
+  - 176.31.250.180/32
+  - 188.165.212.140/32
+
+# Saslauthd
+saslauthd_mech_list:
+  - PLAIN
+  - LOGIN
+
+# Spamassassin
+spamassassin_cyrus_domain_root: /var/spool/cyrus/unetresgrossebite_com/domain/u/unetresgrossebite.com
+spamassassin_cyrus_ipurge: /usr/lib/cyrus/bin/ipurge

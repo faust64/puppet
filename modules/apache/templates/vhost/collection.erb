@@ -1,0 +1,41 @@
+<VirtualHost *:<%=@listen_ports['plain']%>>
+    ServerName <%=@name%>
+<% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
+<% end -%><% end -%>    ServerAdmin <%=@server_admin%>
+    ErrorLog <%=@log_dir%>/error-<%=@name%>.log
+    LogLevel warn
+    CustomLog <%=@log_dir%>/access-<%=@name%>.log combined
+<% if @listen_ports['ssl'] != false -%>    RewriteEngine On
+    RewriteRule ^/(.*) https://<%=@name%>/$1 [L,R]
+</VirtualHost>
+<VirtualHost *:<%=@listen_ports['ssl']%>>
+    ServerName <%=@name%>
+<% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
+<% end -%><% end -%>    ServerAdmin <%=@server_admin%>
+    ErrorLog <%=@log_dir%>/ssl-error-<%=@name%>.log
+    LogLevel warn
+<% if @stricttransport != false -%>    Header always set Strict-Transport-Security "<%=@stricttransport%>"
+<% end -%><% if @deny_frames == "remote" -%>    Header always set X-Frame-Options SAMEORIGIN
+<% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
+<% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
+<% end -%>    CustomLog <%=@log_dir%>/ssl-access-<%=@name%>.log combined
+    Include ssl.conf
+<% end -%>    DocumentRoot <%=@app_root%>
+    ScriptAlias /collection3/bin <%=@app_root%>/bin
+    <Directory <%=@app_root%>>
+<% if @allow_override != false -%>	AllowOverride <%=@allow_override%>
+<% end -%><% if @options != false -%>	Options <%=@options%>
+<% end -%><% if @version == "2.2" -%>	Order allow,deny
+	Allow from all
+<% else -%>	Require all granted
+<% end -%>	AddHandler cgi-script .cgi
+	DirectoryIndex bin/index.cgi
+    </Directory>
+    <Directory <%=@app_root%>/bin>
+<% if @listen_ports['ssl'] != false and (@vhostldapauth == true or @vhostldapauth == "pubonly") -%>	Include authldap.conf
+<% if @vhostldapauth == "pubonly" -%>	Include allow.conf
+<% end -%><% elsif @version == "2.2" -%>	Order allow,deny
+	Allow from all
+<% else -%>	Require all granted
+<% end -%>    </Directory>
+</VirtualHost>

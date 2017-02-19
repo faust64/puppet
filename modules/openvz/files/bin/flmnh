@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# old backups logs
+find /tmp -name backup_croise-\*.log -mtime +7 -exec /bin/rm {} \;
+
+# local APT archives
+find /var/cache/apt/archives -name *.deb -mtime +3 -type f -exec /bin/rm {} \;
+
+# VE APT archives
+for server in /vz/*
+do
+    test -d $server/var/cache/apt/archives || continue
+    find $server/var/cache/apt/archives -name *.deb -mtime +7 -type f -exec /bin/rm {} \;
+done
+
+# VE eaccelerator caches
+for server in /vz/*
+do
+    test -d $server/var/cache/eaccelerator || continue
+    find $server/var/cache/eaccelerator -mtime +2 -type f -exec rm {} \;
+done
+
+# VE exim frozen mails
+for server in /vz/*
+do
+    if test -d $server/var/spool/exim4; then
+	find $server/var/spool/exim4/input -mtime +1 -type f -exec /bin/rm {} \;
+	find $server/var/spool/exim4/msglog -mtime +1 -type f -exec /bin/rm {} \;
+    fi
+    if test -d $server/var/spool/exim; then
+	find $server/var/spool/exim/input -mtime +1 -type f -exec /bin/rm {} \;
+	find $server/var/spool/exim/msglog -mtime +1 -type f -exec /bin/rm {} \;
+    fi
+done
+
+exit 0

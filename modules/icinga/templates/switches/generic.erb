@@ -1,0 +1,32 @@
+define host {
+	address				<%=@host_ipaddress%>
+	alias				<%=@host_alias%>
+	contacts			<%=@host_contact%>
+	host_name			<%=@name%>
+	hostgroups			<%=@host_group%>
+	icon_image			<%=@iconimage%>
+	icon_image_alt			<%=@iconimagealt%>
+	statusmap_image			<%=@statusmapimage%>
+	use				generic-host
+<% if @host_parents -%>	parents				<%=@host_parents%>
+<% end -%>}
+
+##
+define service {
+	check_command			check-host-alive
+	host_name			<%=@name%>
+	use				critical-service
+	service_description		<%=@name%> alive
+}
+<% if @contact != false -%>
+define serviceescalation {
+	first_notification		5
+	last_notification		6
+	escalation_period		10x5
+	notification_interval		30
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> alive
+}
+<% end -%>

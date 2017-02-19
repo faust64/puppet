@@ -1,0 +1,9 @@
+[General]
+DPD-check-interval=<%=@isakmpd_dpd_interval%>
+Listen-on=<%=@isakmpd_listen.uniq.join(',')%>
+Default-phase-1-lifetime=<%=@isakmpd_lifetimep1%>
+Default-phase-2-lifetime=<%=@isakmpd_lifetimep2%>
+<% if @ipsec_tunnels != false -%><% @ipsec_tunnels.each do |tun, tunhash| -%><% if tunhash['lifetimep1'].to_i > 0 or tunhash['lifetimep2'].to_i > 0 -%>[from-<%=tunhash['localnet']%>-to-<%=tunhash['remotenet']%>]
+<% if tunhash['lifetimep1'].to_i > 0 -%>Default-phase1-lifetime=<%=tunhash['lifetimep1']%>,60:<%=tunhash['lifetimep1']%>
+<% end -%><% if tunhash['lifetimep2'].to_i > 0 -%>Default-phase2-lifetime=<%=tunhash['lifetimep1']%>,60:<%=tunhash['lifetimep2']%>
+<% end -%><% end -%><% end -%><% end -%>

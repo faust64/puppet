@@ -1,0 +1,61 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:		nodejs
+# Required-Start:	$remote_fs $syslog
+# Required-Stop:	$remote_fs $syslog
+# Default-Start:	2 3 4 5
+# Default-Stop:		
+# Short-Description:	NodeJS applications
+### END INIT INFO
+
+set -e
+
+test -x /usr/bin/nodejs || exit 0
+
+. /lib/lsb/init-functions
+
+case "$1" in
+    start)
+	cd /etc/node/apps-enabled
+	for app in *
+	do
+	    cd "$app"
+	    log_action_msg "Starting $app"
+	    if test -f package.json; then
+		main=`awk -F:  '/"main":/{print $2}' package.json |sed 's|^[^"]*"\([^"]*\).*|\1|'`
+		if test "$main"; then
+		    /usr/bin/nodejs $main >/var/log/node/$app.log 2>&1 &
+		fi
+	    else
+		main=main.js
+		/usr/bin/nodejs $main >/var/log/node/$app.log 2>&1 &
+	    fi
+	    log_action_msg "Done $app"
+	    cd ..
+	done
+	;;
+
+  stop)
+	for pid in `ps ax | grep '/[u]sr/bin/nodejs ' | awk '{print $1}'`
+	do
+	    log_action_msg "Stopping $pid"
+	    kill $pid || kill -9 $pid
+	done
+	;;
+
+    reload|force-reload|try-restart|restart)
+	$0 stop
+	$0 start
+	;;
+
+  status)
+	ps ax | grep '/usr/[b]in/nodejs ' | grep '[a-z]'
+	;;
+
+  *)
+	log_action_msg "Usage: /etc/init.d/nodejs {start|stop|reload|force-reload|restart|try-restart|status}" || true
+	exit 1
+esac
+
+exit 0

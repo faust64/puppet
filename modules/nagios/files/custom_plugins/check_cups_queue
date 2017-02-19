@@ -1,0 +1,141 @@
+#!/bin/sh
+# CUPS print queue plugin for Nagios
+# Written by John E. Vincent (nagios-plugs@lusis.org)
+# --patched
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+perfdata=
+res=UNKNOWN
+
+d=/
+for i in /usr/local/bin /usr/bin /bin /
+do
+    test -x $i/lpstat && d=$i && break
+done
+LPSTAT=$d/lpstat
+
+print_usage()
+{
+    cat <<EOF
+usage: $PRG [-H hostname] [-T {s|b}] [-w size_warning_threshold] [-c size_critical_threshold] [-a max_age]"
+    -H: target host, defaults to localhost
+    -T: type of check, can be s (queue size) or b (both queue size and age), defaults to 1
+    -w: queue length warning threshold, defaults to 5
+    -c: queue length critical threshold, defaults to 10
+    -a: Max age of queue (days), defaults to 1
+EOF
+}
+
+print_help()
+{
+    print_usage
+    cat <<EOF
+This plugin will check the CUPS print queue on a remote (or local with -H localhost) CUPS server.
+It can check both the size of the queue and the age of the oldest print job in the queue.
+-w and -c are for reporting warning and critical levels of the queue size.
+-a is optional for specifying the max age of a job in the print queue. Anything older thatn <max age>
+will return a CRITICAL
+EOF
+    exit $OK
+}
+
+check_queue_size()
+{
+    if test "$count" -ge "$critlevel"; then
+	msg=" queue size - $count"
+	res=CRITICAL
+    elif test "$count" -ge "$warnlevel"; then
+	msg=" queue size - $count"
+	res=WARNING
+    else
+	msg=" queue size - $count"
+	res=OK
+    fi
+}
+
+if ! test -x "$LPSTAT"; then
+    msg=" $LPSTAT not found"
+else
+    eval hostname=localhost testtype=b warnlevel=5 critlevel=10
+    while test -n "$1"
+    do
+	case "$1" in
+	    -h|--help)
+		print_help
+		exit $OK
+		;;
+	    -H)
+		hostname=$2
+		shift
+		;;
+	    -T)
+		testtype=$2
+		shift
+		;;
+	    -w)
+		warnlevel=$2
+		shift
+		;;
+	    -c)
+		critlevel=$2
+		shift
+		;;
+	    -a)
+		maxage=$2
+		shift
+		;;
+	esac
+	shift
+    done
+
+    if test "$testtype" = b -a -z "$maxage"; then
+	maxage=1
+    fi
+
+    if test -z "$critlevel" -o -z "$warnlevel"; then
+	echo "You must specify a warning and critical level" >&2
+	print_usage >&2
+    elif test "$critlevel" -lt "$warnlevel"; then
+	echo "CRITICAL threshold lower than WARNING threshold" >&2
+	print_usage >&2
+    else
+	now=`date +%s`
+	tmpfile=`mktemp -t lpstat.XXXXXX`
+	if ! $LPSTAT -h $hostname -o >$tmpfile; then
+	    msg=" lpstat error"
+	else
+	    if test -s $tmpfile; then
+		count=`awk 'BEG{c=0}{c=c+1}END{print c}' $tmpfile`
+	    else
+		count=0
+	    fi
+	    perfdata=" | print_jobs=$count;$warnlevel;$critlevel;0"
+	    if test "$count" -gt 0 -a "$maxage"; then
+		maxage=`echo "86400 * $maxage" | bc`
+		while read job
+		do
+		    hrdate=`echo $job | awk '{print $4, $5, $6, $7, $8 }'`
+		    jobdate=`date --date="$hrdate" +%s`
+		    datediff=`echo "($now - $jobdate)" | bc`
+		    if test $datediff -gt $maxage ; then
+			msg=" suspicious jobs left in queue"
+			res=CRITICAL
+		    else
+			check_queue_size
+		    fi
+		done <$tmpfile
+	    else
+		check_queue_size
+	    fi
+	fi
+	rm -f $tmpfile
+    fi
+fi
+
+echo "$res$msg$perfdata"
+eval res=\$$res
+exit $res

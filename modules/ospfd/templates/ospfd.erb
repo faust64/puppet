@@ -1,0 +1,23 @@
+router-id <%=@ospf_router_id%>
+spf-delay <%=@ospf_spf_delay%>
+spf-holdtime <%=@ospf_spf_holdtime%>
+hello-interval <%=@ospf_hello_interval%>
+retransmit-interval <%=@ospf_retransmit_interval%>
+router-dead-time <%=@ospf_router_dead_interval%>
+router-priority <%=@ospf_router_priority%>
+transmit-delay <%=@ospf_router_transmit_delay%>
+<% if @ospf_stub_router != false -%>stub router <%=@ospf_stub_router%>
+<% end -%><% if @ospf_no_redistribute != false -%><% @ospf_no_redistribute.each do |network| -%>no redistribute <%=network%>
+<% end -%><% end -%><% if @ospf_redistribute != false -%><% @ospf_redistribute.each do |network| -%>redistribute <%=network%>
+<% end -%><% end -%><% if @ospf_database != false -%><% @ospf_database.each do |area| -%>area <%=area%> {
+<% if @ospf_map != false -%><% @ospf_map[area].keys.sort.each do |nic| -%>    interface <%=nic%> {<% if @ospf_map[area][nic] == "passive" -%> passive <% elsif @ospf_auth_type != "plain" %>
+<% if @ospf_map[area][nic] =~ /metric/ -%>	<%=@ospf_map[area][nic]%>
+<% else -%>	metric 10
+<% end -%>	auth-type <%=@ospf_auth_type%>
+<% if @ospf_auth_type == "crypt" -%>	auth-md <%=@ospf_authid%> "<%=@ospf_authkey%>"
+	auth-md-keyid <%=@ospf_authid%>
+<% end -%>    <% end -%>}
+<% end -%><% end -%><% if @has_carp -%>    demote carp
+<% end -%>
+}
+<% end -%><% end -%>

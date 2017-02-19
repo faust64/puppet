@@ -1,0 +1,3 @@
+<% [ "", "/usr", "/usr/local" ].each do |d| -%><%=@nagios_user%>	ALL=NOPASSWD:	<%=d%>/sbin/ospfctl show nei
+<%=@nagios_user%>	ALL=NOPASSWD:	<%=d%>/sbin/ospfctl show rib
+<% end -%>

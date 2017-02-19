@@ -1,0 +1,140 @@
+#!/bin/sh
+
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+if test -z "$1" -o x$1 = xmem; then
+    match=Mem
+elif test $1 = swap; then
+    match=Swap
+else
+    match=$1
+fi
+
+tot=0
+type=`uname -s`
+freeindmsg=
+if test $type = Linux; then
+    eval `free | awk "/^$match:[ 	]/{print \"tot=\"\\\$2\" used=\"\\\$3\" free=\"\\\$4\" buf=0\"\\\$6\" cache=0\"\\\$7}"`
+    freeind=`expr 100 - 0$(df -i 2>/dev/null | awk '/\/dev\/shm$/{print $5}' | sed 's|%||')`
+    if test "$match" = Mem; then
+	pagesize=`awk '/^Hugepagesize:[ 	]/{print $2}' /proc/meminfo`
+    elif test "$match" = Swap; then
+	if mount | grep swap >/dev/null; then	# otherwise, tot=0, anyway...
+	    pagesize=4096			# ynot... e2fstools won't be everywhere
+	fi
+    fi
+    freeindmsg=" inode:$freeind%"
+elif test $type = FreeBSD; then
+    if test $match = Mem; then
+	tot=`expr $(sysctl -n hw.physmem) / 1024`
+	pagesize=`sysctl -n hw.pagesize`
+	used=`expr $(sysctl -n vm.stats.vm.v_active_count) '*' $pagesize / 1024`
+	free=`expr $(sysctl -n vm.stats.vm.v_free_count) '*' $pagesize / 1024`
+	buf=0 #FIXME?
+	cache=`expr $(sysctl -n vm.stats.vm.v_cache_count) '*' $pagesize / 1024`
+    elif test $match = Swap; then
+	tot=`expr $(sysctl -n vm.swap_total) / 1024`
+	pagesize=`diskinfo $(awk '/[ 	]swap[ 	]/{print $1}' /etc/fstab) | awk '{print $2}'`
+	used=`swapinfo | awk '/^\/dev\//{print $3}'`
+	free=`swapinfo | awk '/^\/dev\//{print $4}'`
+	buf=0
+	cache=0
+    fi
+elif test $type = OpenBSD; then
+    if test $match = Mem; then
+	tot=`echo \`sysctl -n hw.physmem\` / 1024 | bc`
+#	pagesize=`sysctl -n hw.pagesize`
+	pagesize=`pagesize`
+	eval `top -b | awk '/^Memory:/' | sed 's|.*Real:[ 	]*\([0-9]*\)\(.\)/\([0-9]*\)\(.\)[ 	]act/tot[ 	]*Free:[ 	]\([0-9]*\)\(.\).*|act=\1 \actunit=\2 used=\3 usedunit=\4 free=\5 freeunit=\6|'`
+	for i in act used free
+	do
+	    eval val=\$$i unit=\$${i}unit
+	    if test $unit = G; then
+		val=`expr $val '*' 1024 '*' 1024`
+	    elif test $unit = M; then
+		val=`expr $val '*' 1024`
+	    fi
+	    eval $i=$val
+	done
+	buf=0				# idn
+	cache=`expr $used - $act`	# lol?
+    elif test $match = Swap; then
+	eval `top -b | awk '/^Memory:/' | sed 's|.*Swap:[ 	]*\([0-9]*\)\(.\)/\([0-9]*\)\(.\).*|used=\1 usedunit=\2 tot=\3 totunit=\4|'`
+	for i in tot used
+	do
+	    eval val=\$$i unit=\$${i}unit
+	    if test $unit = G; then
+		val=`expr $val '*' 1024 '*' 1024`
+	    elif test $unit = M; then
+		val=`expr $val '*' 1024`
+	    fi
+	    eval $i=$val
+	done
+	pagesize=4096
+	free=`expr $tot - $used`
+	buf=0
+	cache=0
+    fi
+fi
+
+if test $tot -eq 0; then
+    ret=UNKNOWN
+else
+    freemb=`expr $free / 1024`
+    freepc=`expr $free '*' 100 / $tot`
+    usedmb=`expr $used / 1024`
+    cache=`expr $cache + $buf` #CHECKME
+    cachemb=`expr $cache / 1024`
+    totmb=`expr $tot / 1024`
+#   echo "totmb:$totmb freemb:$freemb freeind:$freeind freepc:$freepc usedmb:$usedmb cachemb:$cachemb"
+
+    if test -d /var/lib/ceph; then
+	if test $freemb -lt 32; then
+	    ret=CRITICAL
+	elif test $freemb -lt 64; then
+	    ret=WARNING
+	else
+	    ret=OK
+	fi
+    elif test -d /var/lib/xend; then
+	if test $freepc -lt 7; then
+	    ret=CRITICAL
+	elif test $freepc -lt 10; then
+	    ret=WARNING
+	else
+	    ret=OK
+	fi
+    elif test -d /var/lib/libvirt/qemu; then
+	if test $freemb -lt 128; then
+	    ret=CRITICAL
+	elif test $freemb -lt 256; then
+	    ret=WARNING
+	else
+	    ret=OK
+	fi
+    elif test $totmb -lt 8000; then
+	test "$match" = Swap && threshold=91 || threshold=88
+	if test `expr $totmb '*' $threshold / 100` -gt `expr $usedmb - $cachemb`; then
+	    ret=OK
+	elif test `expr $totmb '*' 94 / 100` -gt `expr $usedmb - $cachemb`; then
+	    ret=WARNING
+	else
+	    ret=CRITICAL
+	fi
+    elif test $freemb -lt 128; then
+	ret=CRITICAL
+    elif test $freemb -lt 392; then
+	ret=WARNING
+    else
+	ret=OK
+    fi
+    msg=" - free space: $match $freemb MB ($freepc%$freeindmsg)"
+    perfdata=" | $match=${usedmb}MB;$cache;$free;$pagesize;$tot"
+fi
+
+echo "$ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

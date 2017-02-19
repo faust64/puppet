@@ -1,0 +1,31 @@
+#!/bin/sh
+
+PURGE=false
+ROOT=<%=@web_root%>/freebsd/releases
+
+if test "$1" = purge; then
+    PURGE=true
+fi
+
+cd $ROOT
+ls | while read architecture
+    do
+	test -d "$ROOT/$architecture" || continue
+	test "$architecture" = distfiles && continue
+	cd $ROOT/$architecture
+	ls | while read release
+	    do
+		test -d "$ROOT/$architecture/$release" || continue
+		if $PURGE; then
+		    find $ROOT/$architecture/$release/packages/Latest -type l -exec rm -f {} \;
+		fi
+		cd $ROOT/$architecture/$release/packages/All
+		ls | while read package
+		    do
+			shortname=`echo $package | sed 's|\(.*\)-[0-9][0-9a-z,\._-]*\(\.t[bgx]z\)|\1\2|'`
+			ln -sf $ROOT/$architecture/$release/packages/All/$package $ROOT/$architecture/$release/packages/Latest/$shortname
+		    done
+	    done
+    done
+
+exit 0

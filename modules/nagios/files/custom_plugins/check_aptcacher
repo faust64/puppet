@@ -1,0 +1,26 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+perfdata=0
+res=OK
+
+if ! which apt-cacher-ng 2>&1 | grep cache >/dev/null; then
+    msg=" - no apt-cacher-ng"
+    res=$UNKNOWN
+elif ! ps ax | grep '/[a]pt-cacher-ng ' >/dev/null; then
+    msg=" - apt-cacher-ng not running"
+    res=$CRITICAL
+elif ! netstat -lant | grep ':3142.*LISTEN' >/dev/null; then
+    msg=" - apt-cacher-ng not listening on :3142"
+    res=$WARNING
+else
+    perfdata="| 1"
+fi
+
+echo "$res$msg$perfdata"
+eval res=\$$res
+exit $res

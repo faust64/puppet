@@ -1,0 +1,5 @@
+dbpath=<%=@dbpath%>
+logpath=<%=@log_dir%>/mongodb.log
+logappend=true
+<% if ! @journal -%>nojournal=true
+<% end -%>

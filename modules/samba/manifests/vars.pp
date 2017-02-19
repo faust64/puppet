@@ -1,0 +1,16 @@
+class samba::vars {
+    $contact             = hiera("samba_contact")
+    $dir_map             = hiera("samba_directory_setperms")
+    $ldap_slave          = hiera("openldap_ldap_slave")
+    $samba_domainname    = hiera("samba_domainname")
+    $samba_domainsid     = hiera("samba_domainsid")
+    $samba_binddn        = hiera("samba_bind_dn")
+    $samba_bindpw        = hiera("samba_bind_passphrase")
+    $samba_fsopts        = hiera("samba_nfs_opts")
+    $samba_ldap_sfx      = hiera("samba_ldap_suffix")
+    $samba_nfs_path      = hiera("samba_nfs_path")
+    $samba_over_nfs      = hiera("samba_over_nfs")
+    $samba_shares        = hiera("samba_shares")
+    $samba_user_sfx      = hiera("samba_user_suffix")
+    $samba_veto          = hiera("samba_veto_files")
+}

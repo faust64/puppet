@@ -1,0 +1,22 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+TMPFILE=/tmp/$PRG.$$
+
+sudo /usr/sbin/pakiti2-client >$TMPFILE
+if test -s $TMPFILE; then
+    if cat $TMPFILE | grep "Cannot connect to the DB"; then
+	msg=" - pakiti DB unavailable"
+    else
+	msg=" - `cat $TMPFILE`"
+    fi >/dev/null
+fi
+test "$msg" && ret=WARNING || ret=OK
+
+rm -f $TMPFILE
+
+echo "$ret$msg"
+eval ret=\$$ret
+exit $ret

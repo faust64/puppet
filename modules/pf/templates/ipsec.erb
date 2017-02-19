@@ -1,0 +1,12 @@
+pass in quick inet proto $i from $interco_net to $interco_net
+pass in quick inet proto $g from $interco_net to $interco_net
+<% if @ipsec_offices != false -%><% [ 'listen', 'sdsl', 'adsl', 'sip' ].each do |link| -%><% if @ipsec_offices[@domain][link] =~ /[0-9]\.[0-9]/ and (@ipsec_offices[@domain][link] != @ipsec_offices[@domain]['listen'] or link == 'listen') -%>pass in quick on enc0 inet proto $n from <office_net> to <%=@ipsec_offices[@domain][link]%>
+pass in quick on enc0 inet proto $e from <office_net> to <%=@ipsec_offices[@domain][link]%>
+<% end -%><% end -%><% @main_networks.each do |ifhash| -%><% if ifhash['gw'] =~ /[0-9]\.[0-9]/ -%>pass in quick on <%=ifhash['name']%> inet proto $u from <office_net> to any port { isakmp ipsec-nat-t } reply-to ( <%=ifhash['name']%> <%=ifhash['gw']%> )
+pass in quick on <%=ifhash['name']%> inet proto $e from <office_net> to any reply-to ( <%=ifhash['name']%> <%=ifhash['gw']%> )
+pass in quick on <%=ifhash['name']%> inet proto $i from <office_net> to any reply-to ( <%=ifhash['name']%> <%=ifhash['gw']%> )
+<% end -%><% end -%><% end -%><% if @ipsec_tunnels != false -%><% @ipsec_tunnels.each do |customer, tunhash| -%><% if tunhash['localnet'] =~ /[0-9]/ and tunhash['remotenet'] =~ /[0-9]/ -%>pass in quick on enc0 inet proto $n from <%=tunhash['remotegw']%> to <%=tunhash['localgw']%>
+pass in quick on enc0 inet proto $e from <%=tunhash['remotegw']%> to <%=tunhash['localgw']%>
+<% if tunhash['filter'] == true -%>block<% else -%>pass<% end -%> in quick inet<% if tunhash['filter'] != true -%> proto<% if tunhash['proto'] =~ /\$[tuiegn]/ -%> <%=tunhash['proto']%><% else -%> $tui<% end -%><% end -%> from { <%=tunhash['remotenet']%> } to { <%=tunhash['localnet']%> }
+pass in quick inet<% if tunhash['proto'] =~ /\$[tuiegn]/ -%> proto <%=tunhash['proto']%><% else -%><% end -%> from { <%=tunhash['localnet']%> } to { <%=tunhash['remotenet'] -%> }
+<% end -%><% end -%><% end -%>

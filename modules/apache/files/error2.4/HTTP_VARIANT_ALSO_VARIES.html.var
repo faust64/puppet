@@ -1,0 +1,42 @@
+Content-language: en
+Content-type: text/html; charset=UTF-8
+Body:----------en--
+<!--#set var="TITLE" value="506: Variant also varies!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 506</h1>
+	    <p>A variant for the requested entity is itself a negotiable resource. Access not possible.</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------en--
+
+Content-language: es
+Content-type: text/html
+Body:----------es--
+<!--#set var="TITLE" value="506: La variante tambi&eacute;n varia!" -->
+<!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 506</h1>
+	    <p>No es posible tener acceso debido a que una variante de la solicitud es por si misma un recurso negociable.</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------es--
+
+Content-language: fr
+Content-type: text/html; charset=UTF-8
+Body:----------fr--
+<!--#set var="CONTENT_LANGUAGE" value="fr"
+--><!--#set var="TITLE" value="506 : La variante varie elle-m&ecirc;me !"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 506</h1>
+	    <p>Une variante pour l'entit&eacute; requise est elle-m&ecirc;me une ressource n&eacute;gociable. L'acc&egrave;s est impossible.</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------fr--

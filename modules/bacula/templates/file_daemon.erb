@@ -1,0 +1,19 @@
+Director {
+    Name = <%=@director_host%>-dir
+    Password = "<%=@file_daemon_pass%>"
+}
+
+FileDaemon {
+    FDAddress = <%=@bind_addr%>
+    FDport = <%=@file_daemon_port%>
+    Maximum Concurrent Jobs = <%=@max_concurrent_jobs%>
+    Name = <%=@fqdn%>-fd
+    Pid Directory = <%=@run_dir%>
+    WorkingDirectory = <%=@work_dir%>
+}
+
+Messages {
+    Name = Standard
+    director = <%=@director_host%>-dir = all, !skipped, !restored
+    syslog = all, !skipped
+}

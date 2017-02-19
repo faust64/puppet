@@ -1,0 +1,11 @@
+additional_classes:
+  - Muninnode
+  - Riak
+  - Redis
+  - Nodejs
+
+nagios_no_parent: false
+physical_parent: nemesis.ceph.intra.unetresgrossebite.com
+
+# NodeJS
+nodejs_force_version: 0.10.40

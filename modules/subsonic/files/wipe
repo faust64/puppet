@@ -1,0 +1,19 @@
+#!/bin/sh
+
+/etc/init.d/subsonic stop
+sleep 3
+if cp -p /var/subsonic/db/subsonic.script ~/; then
+    if rm -f /var/subsonic/db/*; then
+	if cp -p ~/subsonic.script /var/subsonic/db/; then
+	    /etc/init.d/subsonic start
+	else
+	    echo "failed installing database init script" >&2
+	fi
+    else
+	echo "failed wiping subsonic database" >&2
+    fi
+else
+    echo "failed backing up subsonic database init script" >&2
+fi
+
+exit 0

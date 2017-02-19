@@ -1,0 +1,5 @@
+<Location /svn>
+    <LimitExcept GET PROPFIND OPTIONS REPORT>
+	Require valid-user
+    </LimitExcept>
+</Location>

@@ -1,0 +1,36 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+TMPFILE=/tmp/$PRG.$$
+
+if ! ntpq -v >/dev/null; then
+    perfdata=" | 0"
+    res=UNKNOWN
+else
+    ntpq -crv -pn >$TMPFILE
+    if grep sync_alarm $TMPFILE >/dev/null; then
+	msg=" - NTP sync alarm"
+	perfdata=" | 0"
+	res=WARNING
+    else
+	dispersion=`grep rootdispersion= $TMPFILE | sed 's|.*rootdispersion=\([0-9]*\).*|\1|'`
+	if test "$dispersion" -gt 600; then
+	    msg=" - rootdispersion: $dispersion"
+	    perfdata=" | 0"
+	    res=WARNING
+	else
+	    msg=" - `date +%s`"
+	    perfdata=" | 1"
+	    res=OK
+	fi
+    fi
+    rm -f $TMPFILE
+fi
+
+echo "$res$msg$perfdata"
+eval res=\$$res
+exit $res

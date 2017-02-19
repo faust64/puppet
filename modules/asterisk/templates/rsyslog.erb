@@ -1,0 +1,27 @@
+<% if @version >= 7 -%>input(type="imfile"
+      File="/var/log/asterisk/messages"
+      statefile="/var/log/asterisk/.messages"
+      Tag="asterisk-messages: "
+      Severity="info"
+      Facility="local7")
+
+input(type="imfile"
+      File="/var/log/asterisk/queue_log"
+      statefile="/var/log/asterisk/.queue_log"
+      Tag="asterisk-queue: "
+      Severity="info"
+      Facility="local7")
+<% else -%>$InputFileName /var/log/asterisk/messages
+$InputFileTag asterisk-messages:
+$InputFileStateFile asterisk-messages
+$InputFileSeverity info
+$InputFileFacility local7
+$InputRunFileMonitor
+
+$InputFileName /var/log/asterisk/queue_log
+$InputFileTag asteirsk-queue:
+$InputFileStateFile asterisk-queue
+$InputFileSeverity info
+$InputFileFacility local7
+$InputRunFileMonitor
+<% end -%>

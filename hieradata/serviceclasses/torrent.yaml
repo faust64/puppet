@@ -1,0 +1,5 @@
+additional_classes:
+  - Transmission
+
+# Transmission
+transmission_munin: true

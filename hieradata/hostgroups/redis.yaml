@@ -1,0 +1,6 @@
+additional_classes:
+  - Redis
+
+# Redis
+redis_munin: true
+redis_slaveof: 10.255.125.97

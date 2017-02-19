@@ -1,0 +1,29 @@
+#!/bin/sh
+
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+res=UNKNOWN
+if ! ps ax | grep lxpanel; then
+    msg="lxpanel is not running"
+    res=WARNING
+elif ! ps ax | grep openbox; then
+    msg="openbox is not running"
+    res=WARNING
+elif ! ps ax | grep vncwrapper; then
+    msg="VNC wrapper is not running"
+    res=WARNING
+elif ! ps ax | grep x11vnc; then
+    msg="VNC server is not running"
+    res=WARNING
+else
+    res=OK
+fi >/dev/null 2>&1
+
+test "$msg" && msg=" - $msg"
+
+echo "$res$errstr"
+eval res=\$$res
+exit $res

@@ -1,0 +1,47 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+my $ret = undef;
+if (! eval "require Net::Telnet;") {
+    $ret = "Net::Telnet not found";
+}
+
+if ($ARGV[0] and $ARGV[0] eq "config") {
+    print "graph_title Asterisk conference's users\n";
+    print "graph_args --base 1000 -l 0\n";
+    print "graph_category asterisk\n";
+    print "graph_vlabel users\n";
+    print "users.draw AREA\n";
+    print "users.label users\n";
+    print "users.info users on active conference\n";
+    exit 0;
+}
+
+my $host     = exists $ENV{'host'} ? $ENV{'host'} : "127.0.0.1";
+my $port     = exists $ENV{'port'} ? $ENV{'port'} : "5038";
+my $username = exists $ENV{'username'} ? $ENV{'username'} : 'munin';
+my $secret   = exists $ENV{'secret'} ? $ENV{'secret'} : 'somepassword';
+
+my $pop = new Net::Telnet (Telnetmode => 0);
+$pop->open(Host => $host,
+	   Port => $port);
+my $line = $pop->getline;
+die $line unless $line =~ /^Asterisk/;
+$pop->print("Action: login");
+$pop->print("Username: $username");
+$pop->print("Secret: $secret");
+$pop->print("Events: off");
+$pop->print("");
+$pop->print("Action: command");
+$pop->print("Command: meetme");
+$pop->print("");
+my $nb = 0;
+while (($line = $pop->getline) and ($line !~ /END COMMAND/o)) {
+    $nb = $1 if $line =~ /MeetMe users:\s(\d)$/;
+}
+$pop->print("Action: logoff");
+$pop->print("");
+while (($line = $pop->getline)) {
+}
+print "users.value $nb\n";

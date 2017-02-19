@@ -1,0 +1,51 @@
+<% if @do_stunnel -%><% if @do_relp -%>$ModLoad omrelp
+auth.*				:omrelp:127.0.0.1:6969
+authpriv.debug			:omrelp:127.0.0.1:6969
+daemon.*			:omrelp:127.0.0.1:6969
+kern.*				:omrelp:127.0.0.1:6969
+mail.*				:omrelp:127.0.0.1:6969
+user.*				:omrelp:127.0.0.1:6969
+local5.*			:omrelp:127.0.0.1:6969
+local6.*			:omrelp:127.0.0.1:6969
+local7.*			:omrelp:127.0.0.1:6969
+<% else -%>auth.*				@@127.0.0.1:514
+authpriv.debug			@@127.0.0.1:514
+daemon.*			@@127.0.0.1:514
+kern.*				@@127.0.0.1:514
+mail.*				@@127.0.0.1:514
+user.*				@@127.0.0.1:514
+local5.*			@@127.0.0.1:514
+local6.*			@@127.0.0.1:514
+local7.*			@@127.0.0.1:514
+<% end -%><% elsif @do_relp -%><% if @do_tls -%>module(load="omrelp")
+action(type="omrelp" target="<%=@retransmit%>" port="6969" tls="on" tls.caCert="<%=@conf_dir%>/rsyslog.tls/server-chain.crt" tls.myCert="<%=@conf_dir%>/rsyslog.tls/server.crt" tls.myPrivKey="<%=@conf_dir%>/rsyslog.tls/server.key" tls.authmode="name" tls.permittedpeer=["<%=@fqdn%>"])
+<% else -%>$ModLoad omrelp
+auth.*				:omrelp:<%=@retransmit%>:6969
+authpriv.debug			:omrelp:<%=@retransmit%>:6969
+daemon.*			:omrelp:<%=@retransmit%>:6969
+kern.*				:omrelp:<%=@retransmit%>:6969
+mail.*				:omrelp:<%=@retransmit%>:6969
+user.*				:omrelp:<%=@retransmit%>:6969
+local5.*			:omrelp:<%=@retransmit%>:6969
+local6.*			:omrelp:<%=@retransmit%>:6969
+local7.*			:omrelp:<%=@retransmit%>:6969
+<% end -%><% elsif @do_tcp -%>auth.*				@@<%=@retransmit%>
+authpriv.debug			@@<%=@retransmit%>
+daemon.*			@@<%=@retransmit%>
+kern.*				@@<%=@retransmit%>
+mail.*				@@<%=@retransmit%>
+user.*				@@<%=@retransmit%>
+local5.*			@@<%=@retransmit%>
+local6.*			@@<%=@retransmit%>
+local7.*			@@<%=@retransmit%>
+<% elsif @do_udp -%>auth.*				@<%=@retransmit%>
+authpriv.debug			@<%=@retransmit%>
+daemon.*			@<%=@retransmit%>
+kern.*				@<%=@retransmit%>
+mail.*				@<%=@retransmit%>
+user.*				@<%=@retransmit%>
+local5.*			@<%=@retransmit%>
+local6.*			@<%=@retransmit%>
+local7.*			@<%=@retransmit%>
+<% else -%># rsyslog retransmission misconfigured
+<% end -%>

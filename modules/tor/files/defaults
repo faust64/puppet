@@ -1,0 +1,7 @@
+RUN_DAEMON=yes
+# MAX_FILEDESCRIPTORS=
+NICE="--nicelevel 5"
+CLEANUP_OLD_COREFILES=y
+if test -e /etc/default/tor.vidalia -a -x /usr/bin/vidalia; then
+    . /etc/default/tor.vidalia
+fi

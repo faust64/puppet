@@ -1,0 +1,21 @@
+[ext-meetme-<%=@name%>]
+exten => <%=@name%>,1,Macro(user-callerid,)
+exten => <%=@name%>,n,Set(MEETME_ROOMNUM=<%=@name%>)
+exten => <%=@name%>,n,Set(MEETME_MUSIC=${MOHCLASS})
+<% if @pinuser -%>exten => <%=@name%>,n,GotoIf($["${DIALSTATUS}" = "ANSWER"]?READPIN)
+<% else -%>exten => <%=@name%>,n,GotoIf($["${DIALSTATUS}" = "ANSWER"]?USER)
+<% end -%>exten => <%=@name%>,n,Answer
+exten => <%=@name%>,n,Wait(1)
+<% if @pinuser -%>exten => <%=@name%>,n,Set(PINCOUNT=0)
+exten => <%=@name%>,n(READPIN),Read(PIN,enter-conf-pin-number,,,,)
+exten => <%=@name%>,n,GotoIf($[x${PIN} = x<%=@pinuser%>]?USER)
+<% if @pinadmin -%>exten => <%=@name%>,n,GotoIf($[x${PIN} = x<%=@pinadmin%>]?ADMIN)
+<% end -%>exten => <%=@name%>,n,Set(PINCOUNT=$[${PINCOUNT}+1])
+exten => <%=@name%>,n,GotoIf($[${PINCOUNT}>3]?h)
+exten => <%=@name%>,n,Playback(conf-invalidpin)
+exten => <%=@name%>,n,Goto(READPIN)
+<% if @pinadmin -%>exten => <%=@name%>,n(ADMIN),Set(MEETME_OPTS=aAoT)
+exten => <%=@name%>,n,Goto(STARTMEETME,1)
+<% end -%><% end -%>exten => <%=@name%>,n(USER),Set(MEETME_OPTS=o<% if @did -%>q<% end -%>TM)
+exten => <%=@name%>,n,Goto(STARTMEETME,1)
+exten => <%=@name%>,hint,MeetMe:<%=@name%>

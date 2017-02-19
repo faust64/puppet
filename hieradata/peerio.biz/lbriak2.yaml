@@ -1,0 +1,42 @@
+additional_classes:
+  - Firehol
+  - Haproxy
+
+haproxy_backends:
+  - name: restful
+    basic: aGFwcm94eTpoZWFsdGg=
+    check_interval: 10s
+    check_fall: 3
+    check_rise: 3
+    check_version: 1.1
+    options:
+      - httplog
+    mode: http
+    port: 8098
+    ssl: true
+    ssl_verify: none
+    targets:
+      - { name: riak1, host: 10.43.0.100 }
+      - { name: riak2, host: 10.43.0.101 }
+      - { name: riak3, host: 10.43.0.102 }
+      - { name: riak4, host: 10.43.0.103 }
+    type: riak
+  - name: protobuf
+    balance: leastconn
+    check_interval: 10s
+    check_fall: 2
+    check_rise: 3
+    options:
+      - tcplog
+    port: 8087
+    targets:
+      - { name: riak1, host: 10.43.0.100 }
+      - { name: riak2, host: 10.43.0.101 }
+      - { name: riak3, host: 10.43.0.102 }
+      - { name: riak4, host: 10.43.0.103 }
+haproxy_default_mode: tcp
+haproxy_default_options:
+  - dontlognull
+haproxy_peers:
+  - { hostname: lbriak1, bind: 10.43.0.200, port: 9999 }
+  - { hostname: lbriak2, bind: 10.43.0.201 }

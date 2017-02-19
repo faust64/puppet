@@ -1,0 +1,102 @@
+ServerRoot		"<%=@conf_dir%>"
+ServerName		<%=@fqdn%>
+ServerAdmin		<%=@server_admin%>
+ServerTokens		OS
+ServerSignature		On
+<% if @operatingsystem == "Debian" or @operatingsystem == "Ubuntu" -%><% if @version == "2.4" -%>Mutex			file:/var/lock/apache2 default
+<% else -%>LockFile		/var/lock/apache2/accept.lock
+<% end -%><% end -%>PidFile			run/<%=@service_name%>.pid
+Timeout			<%=@timeout%>
+KeepAlive		<%=@keepalive%>
+MaxKeepAliveRequests	<%=@max_keepalive_req%>
+KeepAliveTimeout	<%=@keepalive_timeout%>
+UseCanonicalName	Off
+
+Include			mods-enabled/*.load
+Include			mods-enabled/*.conf
+
+<% if @version != "2.4" -%>DefaultType		text/plain
+<% end -%>HostnameLookups		Off
+User			<%=@runtime_user%>
+Group			<%=@runtime_group%>
+<% if @version == "2.4" -%>DocumentRoot		<%=@web_root%>
+<% end -%>LogFormat		"%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\""	combined
+LogFormat		"%h %l %u %t \"%r\" %>s %b"	common
+LogFormat		"%{Referer}i -> %U"		referer
+LogFormat		"%{User-agent}i"		agent
+LogFormat		"%h %l %u %t %v %r %>s %b"	proxy
+ErrorLog		/var/log/<%=@service_name%>/error.log
+<% if @hostname =~ /reverse/ -%>CustomLog		/var/log/<%=@service_name%>/proxy.log proxy
+<% else -%>CustomLog		/var/log/<%=@service_name%>/access.log common
+<% end -%>LogLevel		warn
+#AddDefaultCharset	utf-8
+AccessFileName		.htaccess
+TraceEnable		off
+<Files ~ "^\.ht">
+    Order		allow,deny
+    Deny from		all
+</Files>
+<FilesMatch "\.shtml(\..+)?$">
+    SetOutputFilter INCLUDES
+</FilesMatch>
+<IfModule prefork.c>
+    StartServers	5
+    MinSpareServers	5
+    MaxSpareServers	10
+    MaxClients		150
+    MaxRequestsPerChild	0
+</IfModule>
+<IfModule worker.c>
+    StartServers	2
+    MaxClients		150
+    MinSpareThreads	25
+    MaxSpareThreads	75
+    ThreadsPerChild	25
+    MaxRequestsPerChild	0
+</IfModule>
+<IfModule perchild.c>
+    NumServers		5
+    StartThreads	5
+    MinSpareThreads	5
+    MaxSpareThreads	10
+    MaxThreadsPerChild	20
+    MaxRequestsPerChild	0
+    AcceptMutex		fcntl
+</IfModule>
+<% if @operatingsystem == "CentOS" or @operatingsystem == "RedHat" -%>Alias		/error/	"<%=@error_dir%>/"
+<Directory "<%=@error_dir%>">
+    AllowOverride		None
+    Options			IncludesNoExec
+    AddOutputFilter		Includes html
+    AddHandler			type-map var
+<% if @version == "2.4" -%>    Require			all granted
+<% else -%>    Order			allow,deny
+    Allow from			all
+<% end -%></Directory>
+
+Include			error.conf
+<% else -%><IfModule mod_negotiation.c>
+    <IfModule mod_include.c>
+	Alias		/error/ <%=@error_dir%>/
+	Alias		/include/ <%=@error_dir%>/include/
+	<Directory "<%=@error_dir%>">
+	    AllowOverride		None
+	    Options			IncludesNoExec
+	    AddOutputFilter		Includes html
+	    AddHandler			type-map var
+<% if @version == "2.4" -%>	    Require			all granted
+<% else -%>	    Order			allow,deny
+	    Allow from			all
+<% end -%>	    <IfModule mod_negotiation.c>
+		LanguagePriority	en fr es
+		ForceLanguagePriority	Prefer Fallback
+	    </IfModule>
+	</Directory>
+	Include		error.conf
+    </IfModule>
+</IfModule>
+<% end -%>
+Include			ports.conf
+<% if @ldap and @version == "2.4" -%>Include			users.conf
+<% end -%>Include<% if @version == "2.4" -%>Optional<% else -%>	<% end -%>		conf.d/*.conf
+Include<% if @version == "2.4" -%>Optional<% else -%>	<% end -%>		sites-enabled/*

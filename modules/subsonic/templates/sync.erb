@@ -1,0 +1,39 @@
+#!/bin/sh
+
+DEST=<%=@alerts%>
+REMOTES=`test -d /var/subsonic/remotes && cd /var/subsonic/remotes && cat * 2>/dev/null`
+<% if @slack_hook -%>HOOK_URI=<%=@slack_hook%>
+<% end -%>ROOT=<%=@music_root%>
+TMPFILE=/tmp/subsonic_sync.$$
+
+if test -z "$REMOTES"; then
+    exit 0
+elif ls /tmp/subsonic_sync.* 2>/dev/null | grep [0-9] >/dev/null; then
+    ls -l /tmp/subsonic_sync.* | mail -s "[WARNING] subsonic sync - overlapping jobs" $DEST
+    exit 1
+fi
+
+cd $ROOT
+for remoteitem in $REMOTES
+do
+    if echo $remoteitem | grep : >/dev/null; then
+	eval `echo $remoteitem | sed 's|\([^:]*\):\([0-9]*\)$|remote=\1 port=\2|'`
+    else
+	remote=$remoteitem
+	port=22
+    fi
+    rsync --rsh="ssh -p$port" -avWxzP<% if @bwlimit != false -%> --bwlimit=<%=@bwlimit%><% end -%> --numeric-ids<% if @sync_directories != true -%><% @sync_directories.each do |dir| -%> "<%=dir%>"<% end -%><% else -%> .<% end -%> root@$remote:/var/music/
+done >$TMPFILE 2>&1
+
+if test -s $TMPFILE; then
+    if test "$HOOK_URI" -a -x /usr/local/bin/slack; then
+	/usr/local/bin/slack $HOOK_URI "REPORT: done syncing subsonic data on `hostname -f`"
+    fi
+    if test "$DEST"; then
+	cat $TMPFILE | mail -s "[REPORT] subsonic sync" $DEST
+    fi
+fi
+
+rm -f $TMPFILE
+
+exit 0

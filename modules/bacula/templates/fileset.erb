@@ -1,0 +1,16 @@
+FileSet {
+    Name = "Files-<%=@fqdn%>"
+    Include {
+	Options {
+	    signature = MD5
+	    compression = GZIP
+	}
+<% if @file_daemon_fileset -%><% @file_daemon_fileset.each do |file| -%>	File = <%=file%>
+<% end -%><% end -%>    }
+    Exclude {
+	File = /proc
+	File = /tmp
+	File = *.vmdk
+<% if @file_daemon_ignore -%><% @file_daemon_ignore.each do |file| -%>	File = <%=file%>
+<% end -%><% end -%>    }
+}

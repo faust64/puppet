@@ -1,0 +1,13 @@
+<% if @operatingsystem == "CentOS" or @operatingsystem == "Debian" or @operatingsystem == "RedHat" or @operatingsystem == "Ubuntu" -%>Defaults        env_reset
+Defaults        mail_badpass
+Defaults        secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+root            ALL=(ALL:ALL) ALL
+%sudo           ALL=(ALL:ALL) ALL
+<% elsif @operatingsystem == "OpenBSD" -%>Defaults env_keep +="DESTDIR DISTDIR EDITOR FETCH_CMD FLAVOR FTPMODE GROUP MAKE"
+Defaults env_keep +="MAKECONF MULTI_PACKAGES NOMAN OKAY_FILES OWNER PKG_CACHE"
+Defaults env_keep +="PKG_DBDIR PKG_DESTDIR PKG_PATH PKG_TMPDIR PORTSDIR"
+Defaults env_keep +="RELEASEDIR SHARED_ONLY SSH_AUTH_SOCK SUBPACKAGE VISUAL"
+Defaults env_keep +="WRKOBJDIR"
+root            ALL=(ALL) SETENV: ALL
+<% elsif @operatingsystem == "FreeBSD" -%>root            ALL=(ALL) ALL
+<% end -%>#includedir <%=@conf_dir%>/sudoers.d

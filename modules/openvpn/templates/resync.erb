@@ -1,0 +1,101 @@
+#!/bin/sh
+
+export PATH=/sbin:/usr/sbin:/usr/local/sbin:/bin:/usr/bin:/usr/local/bin
+
+DEST=<%=@alerts%>
+DORELOAD=false
+DOROTATE=false
+RET=0
+ROTATE=<%=@rotate%>
+
+<% if @kernel == "OpenBSD" or @kernel == "FreeBSD" -%>if test "`ifconfig carp | awk 'BEGIN{c=0}{if ($2 == "MASTER") c = c + 1}END{print c}'`" -lt 2; then
+    exit $RET
+fi
+<% end -%>
+while test "$1"
+do
+    case "$1" in
+	-r|--reload)	DORELOAD=true	;;
+	-R|--rotate)
+	    DORELOAD=true
+	    DOROTATE=true
+	    ;;
+	*)	echo "unknown $1" >&2	;;
+    esac
+    shift
+done
+for t in /etc/openvpn /usr/local/etc/openvpn
+do
+    test -d "$t" && confdir=$t
+done
+
+for config in $confdir/*.conf
+do
+    vpn=`echo $config | sed 's|.*/\([^/]*\)\.conf|\1|'`
+    port=`awk '/^port[ 	]/{print $2}' $config`
+    status=ko
+    for remote in `lsof -n | awk '/^openvpn[ 	].*TCP/{print $9}' | sed 's|.*:\([^:]*\)|\1|'`
+    do
+	if test "$remote" = "$port"; then
+	    status=ok
+	fi
+	if grep "^$remote" /etc/services | grep "[ 	]$port/"; then
+	    status=ok
+	fi
+    done
+
+    if $DOROTATE; then
+	logfile=`awk '/^log-append[ 	]/{print $2}' $config | sed -e 's|"||g' -e "s|'||g"`
+	test -s "$logfile" || logfile=`awk '/^log[ 	]/{print $2}' $config`
+	lastlog=`echo $logfile | sed 's|\.log|-lasterror.%d.gz|'`
+	if test -s "$logfile"; then
+	    cpt=$ROTATE
+	    dstfile=
+	    while test $cpt -ge 0
+	    do
+		srcfile=`printf "$lastlog" $cpt`
+		cpt=`expr $cpt - 1`
+		test "$dstfile" -a -f "$srcfile" && mv "$srcfile" "$dstfile"
+		dstfile="$srcfile"
+	    done
+	    dstfile=`echo "$dstfile" | sed 's|\.gz$||'`
+	    mv $logfile "$dstfile"
+	    gzip -9 -f "$dstfile"
+	    touch $logfile
+	fi
+    fi
+
+    pidfile=`awk '/^writepid[ 	]/{print $2}' $config | sed 's|^["]*||' | sed 's|["]*$||'`
+    if test -s $pidfile; then
+	pid=`cat $pidfile`
+	if test "$pid"; then
+	    if $DOROTATE; then
+		kill -HUP $pid
+		sleep 1
+	    elif $DORELOAD; then
+		kill -HUP $pid
+		sleep 1
+	    fi
+	fi
+    fi
+    if test "$status" = ok; then
+	continue
+    fi
+
+<% if @lsbdistcodename != "jessie" -%>    tundev=`awk '/^dev[ 	]/{print $2}' $config`
+    if ! test -c /dev/$tundev; then
+	( cd /dev ; ./MAKEDEV $tundev )
+    fi
+
+<% end -%>    if ! openvpn --daemon $vpn --config $config; then
+	SUBJECT="[ERROR] OpenVPN failed restarting ($vpn)"
+	RET=`expr $RET + 1`
+    else
+	SUBJECT="[WARNING] OpenVPN restarted ($vpn)"
+    fi
+
+    echo "Restarting OpenVPN on `hostname`" |   \
+	mail -s "$SUBJECT" $DEST
+done >/dev/null 2>&1
+
+exit $RET

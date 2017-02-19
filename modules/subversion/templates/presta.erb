@@ -1,0 +1,12 @@
+# as of <%=@timestamp%><% @svn_exceptions.each do |comment, svnhash| -%><% if svnhash['user'] != "" and svnhash['project'] != "" and svnhash['closedate'] != "" and svnhash['glpi'] != "" -%><% thedate = svnhash['closedate'].split('/') -%><% today = @timestamp.split('/') -%><% if thedate[0] >= today[0] and thedate[1] >= today[1] and thedate[2] >= today[2] -%># #<%=svnhash['glpi']%> - <%=svnhash['closedate']%> - <%=comment%>
+<Location /svn-contractors/<%=svnhash['project']%>>
+    DAV				svn
+    SVNPath			/home/svn/<%=svnhash['project']%>
+    AuthBasicProvider		ldap
+    AuthType			Basic
+    AuthzLDAPAuthoritative	On
+    AuthName			"Contractors"
+    AuthLDAPUrl			"ldaps://<%=@ldap_slave%>/ou=users,<%=@suffix%>?uid"
+    Require	ldap-user	<%=svnhash['user']%>
+</Location>
+<% end -%><% end -%>

@@ -1,0 +1,28 @@
+#!/bin/sh
+
+daemon=/usr/local/bin/fail2ban-server
+daemon_flags="-b -s /var/run/fail2ban/fail2ban.sock"
+
+. /etc/rc.d/rc.subr
+
+rc_reload=NO
+
+if ! ps ax | grep 'fail2[b]an-server' >/dev/null; then
+    if ! test -d /var/run/fail2ban; then
+	mkdir -p /var/run/fail2ban
+    fi
+    if test -S /var/run/fail2ban/fail2ban.sock; then
+	rm -f /var/run/fail2ban/fail2ban.sock
+    fi
+fi
+
+if test "$1" = status -o "$1" = check; then
+    if test -S /var/run/fail2ban/fail2ban.sock; then
+	if /usr/local/bin/fail2ban-client status >/dev/null; then
+	    exit 0
+	fi
+    fi
+    exit 1
+else
+    rc_cmd $1
+fi

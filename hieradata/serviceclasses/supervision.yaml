@@ -1,0 +1,18 @@
+# Apache
+apache_listen_ports:
+  plain: 80
+  ssl: 443
+
+# Collectd
+collectd_upstream: false
+
+# Nagios
+nagios_load_crit_threshold: "4.0,4.0,4.0"
+nagios_load_warn_threshold: "3.7,3.7,3.7"
+nagios_procs_crit: 500
+nagios_procs_warn: 200
+nagios_runprocs_crit: 100
+nagios_runprocs_warn: 60
+
+# PHP
+php_mod_gd: true

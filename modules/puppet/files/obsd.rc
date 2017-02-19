@@ -1,0 +1,37 @@
+#!/bin/sh
+#
+# $OpenBSD: puppet,v 0.1 2015/01/08 11:38 SYN Exp $
+
+daemon=/usr/local/sbin/puppetd
+case "$1" in
+    start)
+	if test -x $daemon; then
+	    echo -n ' puppetd'
+	    $daemon
+	fi
+	;;
+    restart)
+	$0 stop
+	$0 start
+	;;
+    status|check)
+	pid=0
+	for i in $(ps ax | grep "[ ]$daemon" | awk '{print $1}')
+	do
+	    pid=$i
+	done
+	if test $pid -gt 0; then
+	    test "$1" = status && echo puppetd:$pid
+	else
+	    exit 1
+	fi
+	;;
+    stop)
+	for i in $(ps ax | grep "[ ]$daemon" | awk '{print $1}')
+	do
+	    kill $i || kill -6 $i || kill -9 $i
+	done >/dev/null 2>&1
+	;;
+esac
+
+exit 0

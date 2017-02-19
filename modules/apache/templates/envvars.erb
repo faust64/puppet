@@ -1,0 +1,16 @@
+unset HOME
+
+if test "${APACHE_CONFDIR##<%=@conf_dir%>-}" != "${APACHE_CONFDIR}"; then
+    SUFFIX="-${APACHE_CONFDIR##<%=@conf_dir%>-}"
+else
+    SUFFIX=
+fi
+
+export APACHE_RUN_USER=<%=@runtime_user%>
+export APACHE_RUN_GROUP=<%=@runtime_group%>
+export APACHE_PID_FILE=<%=@run_dir%>/<%=@service_name%>$SUFFIX.pid
+export APACHE_RUN_DIR=<%=@run_dir%>/<%=@service_name%>$SUFFIX
+export APACHE_LOCK_DIR=/var/lock/<%=@service_name%>$SUFFIX
+export APACHE_LOG_DIR=/var/log/<%=@service_name%>$SUFFIX
+. /etc/default/locale
+export LANG

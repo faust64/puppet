@@ -1,0 +1,13 @@
+<% if @version >= 7 -%>input(type="imfile"
+      File="/var/log/mysql/mysql-slow.log"
+      statefile="/var/log/mysql/.mysql-slow.log"
+      Tag="mysql-slow: "
+      Severity="info"
+      Facility="local7")
+<% else -%>$InputFileName /var/log/mysql/mysql-slow.log
+$InputFileTag mysql-slow:
+$InputFileStateFile mysql-slow
+$InputFileSeverity info
+$InputFileFacility local7
+$InputRunFileMonitor
+<% end -%>

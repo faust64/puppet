@@ -1,0 +1,9 @@
+System hostname = changeme.<%=@domain%>
+Password for root = <%=@clear_root_pass%>
+Network interfaces = <%=@nics.join(',')%>
+<% @nics.each do |nic| -%>IPv4 address for <%=nic%> = dhcp
+<% end -%><% if @default_user != false -%>Setup a user = <%=@default_user%>
+Password for user = <%=@clear_user_pass%>
+<% end -%>What timezone are you in = <%=@timezone%>
+Location of sets = http
+Server = ftp.nluug.nl

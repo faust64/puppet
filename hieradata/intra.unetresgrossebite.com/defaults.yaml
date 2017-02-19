@@ -1,0 +1,43 @@
+# Autofs
+modeles_nas: repository.unetresgrossebite.com
+modeles_nfs_opts: fstype=nfs,ro,soft,intr
+modeles_path: /var/www/modeles
+
+# Collectd
+with_collectd: false
+
+# Nagios
+nagios_ip:
+  - 10.42.242.202
+  - 10.42.242.203
+
+# PF
+asterisk_ip:
+  - 10.42.41.254
+dhcp_ip:
+  - 10.42.44.100
+dns_ip:
+  - 10.42.44.3
+  - 10.42.44.5
+mail_ip:
+  - 10.42.44.20
+  - 10.43.1.4
+mail_mx: 10.42.44.20
+reverse_ip:
+  - 10.42.242.21
+squid_ip:
+  - 10.42.44.100
+snmp_ip:
+  - 10.42.242.203
+  - 10.42.242.205
+  - 10.42.242.206
+
+# Rsync
+rsync_clients:
+  - 10.42.242.0/24
+
+# SAsyncd
+sasyncd_peer: 172.16.42.1
+
+dns_search: intra.unetresgrossebite.com adm.intra.unetresgrossebite.com unetresgrossebite.com
+root_domain: intra.unetresgrossebite.com

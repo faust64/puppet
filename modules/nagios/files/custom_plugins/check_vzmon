@@ -1,0 +1,18 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+if ! ps ax | grep '\[vzmond\]' >/dev/null; then
+    ret=CRITICAL
+    msg=" - vzmond not running"
+fi
+
+test -z "$ret" && ret=OK
+
+echo "$ret$msg"
+eval ret=\$$ret
+exit $ret

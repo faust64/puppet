@@ -1,0 +1,38 @@
+#!/bin/sh
+
+CRL=crl.pem
+RT=revoke-test.pem
+. /root/vars
+
+if test $# -ne 1; then
+    echo "usage: revoke-full <common-name>"
+    exit 1
+elif test -z "$CWD"; then
+    CWD=`pwd`
+fi
+
+if test "$KEY_DIR"; then
+    cd "$KEY_DIR"
+    rm -f "$RT"
+
+    export KEY_CN=""
+    export KEY_OU=""
+    $OPENSSL ca -revoke "$1.crt" -config "$KEY_CONFIG"
+    $OPENSSL ca -gencrl -out "$CRL" -config "$KEY_CONFIG"
+    if test -e export-ca.crt; then
+	cat export-ca.crt "$CRL" >"$RT"
+    else
+	cat ca.crt "$CRL" >"$RT"
+    fi
+
+    $OPENSSL verify -CAfile "$RT" -crl_check "$1.crt"
+    if test -d revoked; then
+	mv $1.* revoked
+    fi
+    if test "$CWD" = /home/pki/vpn; then
+	rm -f /home/openvpn/$1.zip
+	cp -p crl.pem /etc/openvpn/
+    fi
+else
+    echo 'Missing variables, please check /root/vars'
+fi

@@ -1,0 +1,10 @@
+[postfix_mailqueue]
+user root
+
+[postfix_mailstats]
+group <%=@adm%>
+
+[postfix_mailvolume]
+user root
+env.logfile maillog
+env.logdir /var/log

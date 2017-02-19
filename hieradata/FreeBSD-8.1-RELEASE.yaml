@@ -1,0 +1,5 @@
+# Nagios
+nagios_run_dir: /var/spool/nagios
+
+# Puppet
+puppet_service_name: puppetd

@@ -1,0 +1,188 @@
+additional_classes:
+  - Fail2ban
+
+do_rkhunter: true
+physical_parent: ker.unetresgrossebite.com
+apt_cacher: false
+
+# Autofs
+modeles_nas: false
+modeles_path: /media/backups
+modeles_nfs_opts: fstype=nfs4,ro,soft,intr
+
+# Firehol
+firehol_interfaces:
+  - name: eth0
+    description: WAN
+    protection: strong
+    allow:
+      - server icmp accept
+      - server http accept
+      - server https accept
+      - server custom riak_protobuf "tcp/8087" default accept
+      - server custom riak_restful "tcp/8098" default accept
+      - server custom openssh "tcp/1022" default accept
+      - server custom munin "tcp/4949" default accept src "$office_networks"
+      - server custom nrpe "tcp/5666" default accept src "$office_networks"
+      - client all accept
+  - name: eth1
+    description: LAN
+    protection: strong
+    allow:
+      - server all accept
+      - client all accept
+
+# HAproxy
+haproxy_ssl_bind_ciphers:
+  - ECDHE-RSA-AES128-SHA256
+haproxy_ssl_bind_options:
+  - force-tlsv12
+
+# Munin
+munin_ip:
+  - 51.254.93.69
+
+# Nagios
+nagios_ip:
+  - 5.135.4.213
+nagios_no_parent: false
+
+# OpenLDAP
+openldap_ldap_slave: sso.unetresgrossebite.com
+
+# OpenSSH
+ssh_keys_database:
+  samuel.martin.moro@unetresgrossebite.com:
+    credential: interne
+    key: AAAAB3NzaC1kc3MAAACBAN1OCCEg9d83n1OB+69vymo0LxFUIqGjpvOMr7Ed9GqUae6uBN+fLLO4wkykfb6vExPpr0IfC6qzIUgHILj5O03uov4tQpW1EjHB4pEQnoNQH4rxCEgc9CA9PtaoTsm/TIX/oTJARypvR90MH1QQbAGaXI0gyGq7Lcj4rNrLavUzAAAAFQCa0865igpyFN7U+108p1kISAeZvQAAAIBQ91x6jfR10cFqDufctTLVwVBhPlaSA6PquMsdhcKSiMbpDf1uMuow4jruTbWYiv+JA5tysoN6aBOHKBcs5z2aSFQ8pIXLOpmc42mVjMfFp4+IccMsNRAOQ1I2a8f3g17SqiDpW/nRpP77zte2Qt3ShtuYbxPoFPP0Uep7YP98ggAAAIA5Xa5/uDNtrLN6E6ce3mxqiS3+pcrW/fZf4QsnjbogWNCxiY61QnBda1i7N176xonQ9eSyNqARoV8PGy7rGtPFBqrchk9+5nCpFB+lRdfDM2Semv2hlv2N2wwMuS6R6IOxaNh15HALDU6dcGy51fjFaYJ2pCY3TAv1DAQevqyo0Q==
+    pentagram: faust
+  syn@loulou.faust.intra.unetresgrossebite.com:
+    credential: interne
+    key: AAAAB3NzaC1kc3MAAACBALWHgyyZyqqu+WCFLxwYrc4Grt7IauxVL3nL1O5eK2PEFdwJK5KfBoywXx6N3dB7FXOPqyXuzgTzavNcVHHj7TfuUyjysE2w9ZzB90rU49/L3X+V49tiQJ3a0JqB75v13I02NnsviF+ZDH+RETlNLILLJbnN+BKlYc5ZmcPrVVIhAAAAFQDQRs5Vou9C7OdKXbQPHeS7bEaiDQAAAIBdsBzY7KsaxCHi+MYrwt+sg7P1CFW8luQVbfZwnSuCkZ2aSKOlR/CKm4fXmUlVA6t7Dewocvs7SN0LMV1Ya/dMccvE2nJF1qptnr3I8pmazaC/yfCCmmERMGLJjNiWnXf0aR7yVwj34u8zLp+9shGEkhigHe34ZicWtG542rHqnQAAAIEApxCFUJiF5dTd9lfZQNhaT4aH+B7yRAH2cz9Tn3DRaqYf2igN4hPUy+SmKCx2/V6VvXdFJVy89aaV9BXYLA9kWYVQS7LeMUnXgpwHm7hWUz81WNzWvvK9YW1IZ7tKBe5e7OXz2GnnE8lZTli7xJ4jTBspNZR7pj/mxXWl5c/2jaE=
+    pentagram: freelance
+  syn@peerio.com:
+    credential: interne
+    key: AAAAB3NzaC1yc2EAAAADAQABAAAEAQDDLROwfk5blsWutgHe5sh2fcl6lwxAR2BaXHiGHARtg1Rzw5zXllzbgt+cFB9gPnrGVp4tTWNwMA/7o4H+B7fx67P+5D/01w2mgOH87f4G48AyImSxhjcyiWR+FYyouXI2GEfKo4x96Fuj5+Hlk3HSEJ/p5Le/Igkv9MrSulatncH4z9JYFdy4kNKNEiD6g2l3tyzuIr1Ay8JtMAo4xcimySFU50cFiA1atqSRUYAk5HVn8qEzhnYsTjReo4CHcRmoO0YLLx8Khndk9Xq+HRnfHsM4nUMYWKCyARcX6UW3fKSEg919nWU2JTnKmdSu01lQy+b/oFxH0SOw2li9Z0dZzvI91x2v77g1xKIWCl5h/+XLP8tQS66U6fkbiLcRfGps3pVQ9MQj6PPojrPdRJZtgPnDubmJffjdrMD43fBlmMYG1lgFaJH3SA2SqSDP/LPKFUfwUmi5XXymi/N/eVoGpmyDfMpm9PWWL6a2jMAXeHnnVqawuGRbkL+Fdj5l+8iuVT/17fLGcBDkQiBYFC0CzLmbMRdMcIxP77qupUAV5eIRQr2l2TBe82OhB/ALYFT7NBkH9WrKZ9lxi1wt4inSdtVaEV1lHvlHSXtQqhgWDu6yOY5nDycavW8xH2TrCef005s6fTNslKOBCuQy70oo7lRnFe0ZtXWTfe3cRSizPpWNfLewDu1MAui9zPl9+0LMlOiajw6pOubGySKRlUXUXbu63xB8vvTc04ksbhrSoWGMd0XAvdv8fF6Z5cfRrTrZdaiiKsBeOG/hndtnRyJq8y6mENhaO9RhPj/BOLY9Vqqh5tcM3/+wPspyA21iEYteCPqcSsw8Q8xlsO3dPZumejEnv1Zjjiu2AlFSmHXjhRUNX1IrOQsMoktUAu33Nm6OpsSVAAin6KqH23I77KpHZZxsF888+zZkQFdLh8JNVTm+sv/N1o5hZ6IOPoQSKUb82waZGnIJWOv2B/5JkHb0Iu5OSlSRENCsdUtKC6mF7eNeJ/+BgspV/T5Xi74SiOE4f6wmw27tslZ1ghuLqZJuGlBSnWrm1kxibC315frqA4vsvDcP/Oc3x6e1L8bSt6kXyGeUWn8a17VcjyL9Cxv503DQfoXXe0mgaWC+5Uxzj5LFDbjMo+wyG0tF+g45nZ2TI7sfxvTxiojrLLYXW4t51A5mjwOFurNQaur2N/TxeK1+jd2DTzuaTLdP3frpW2qz8WxCViUJ8I+mWgKUkOvUi+kevrQLArsuaorj97tnJPw7GcAUCqCvnHyoCtU8Juepa0q3sXfMeKcPnBzrRg1bR1D+RTqnbRsBzT24KUBLM5FpIp5tE5YUY3WVR0DzSQg4nqV/XBVMkCc/zipsBCfp
+    pentagram: syn
+    type: ssh-rsa
+  anri@peerio.com:
+    credential: projets
+    key: AAAAB3NzaC1yc2EAAAADAQABAAABAQDlcGsYK6naPUTJ130U70jXYNWnTkp5af7WYJQ9XwOYSVGbcx+jPfIfCMJvNzN8YivJXpvnWlXfqFbIVSFbfO0Uww0URB7ED1AePrO0a1tm7mMIjX+lX+Fuu/oCIjqwcXfqpRO9QGpZSCYW7xG6kwJkt2hxOnB24Wgf1dOYBkUNo2nbTXak7mfafVRT2F5d6eY/Y42W33iD6AeifjDFHHNKwR1PfEX4dCUVqvv9QMbMzkqkXTh5dITZExSgRK/5Y2+4qsXyeTFYJi3IVETV3m0J3PpvMbGyS8W7uNLPdHWnlqFS8YcmhIr1s4VKatpfhPoEjlbL3GRQzQGKCPkWFOY9
+    pentagram: anri
+    type: ssh-rsa
+  ebilg@rMBP.local:
+    credential: interne
+    key: AAAAB3NzaC1yc2EAAAADAQABAAABAQCtMFqgNbMe0aQmX+7cDh6r5EhM7kSAHSSk8xa3fbb1PzJ203T8S03lt3VY8x1X+yjusy4jC36/l85g5hhzmGgq4WHncwf99PieHO5wHcboypQPZ9gPrW2yZExxwwYwG/owLyl66f6ZJkKKSlg7uVa5mjWicPKwE8YdggOJHlI2z4FkiHOd+xpH00SdgxNFWXhGehAgS9nPlARj6U/YmkmBW/h0iSnYxM5WJDTv8O3h4ktNnnsOCHYTeIQomc6w2k+uh0vvmwLvzPeosddmz5FHn0QURmLceGIdObpliwUP32qgv/86D8KyWXbJ6Klp1YF1rG1cnRf3YbmdaHGM6dnb
+    pentagram: ebilg
+    type: ssh-rsa
+  floh@flohdot.org:
+    credential: interne
+    key: AAAAB3NzaC1yc2EAAAADAQABAAABAQDKr9uSR37+ZijuG+BKAZ+noCbhS7o62hxCcqU4Wr3Vn8Fsk5QtcohCw72nxMJk/NIV6arluPqG85Ge0SO37l9pKzYgvJ5ygU7Si+E4YfZ4LPFMXvc9S8i+OYv/3h65bBwlX8kCxpDYok5WWiCsoS5+dyGS406f0bPLTOno7mAZLWcr7Mexwwrfs+i0BOK/jzhTUiODBSnNkmV0vjctndlL6PZvRpjFlHNgBD/WshiLLga7OC2ELZHr1fQtJvuDdwa+0g920lxL9NXyaI8ecPeS3A8QwUClVX+OkEmvddX/agWsZgq5pe3dX8nJeJNED9oodISakf/v5iqfO5nh7cY1
+    pentagram: flohdot
+    type: ssh-rsa
+  flohdot@garnet.local:
+    credential: interne
+    key: AAAAB3NzaC1yc2EAAAADAQABAAACAQC9rAzt46f4vGr23FF4efxfg8O62p9/I3GAqs4Xf6D4dg6rpeH6QWJngPuUF2VinG5ApFvofXW8W+JI47xOI4FLPzb8/3uR50FDI7ZV98o7gmV3dfTA876F+DWSmCZ2msa8MDKD9OfXzxE3t/qQ11kgMQWuwjbizdRp53fJtw5m3+7+NufsT1pIWV20Q6iLZnPQ4g3ZHdXqppJtJeIZKz769ibSxnSCyLWb/VqEK0n+h9wL4vsKw0vMCQ0+THwIlJKUXz5Uw+/3DKOr/SDyGns5rgfWVfTt/+jvQoVqssL0xwond9ryVD88tMSpT0cXgfjdU7z8//bUPRejLlT09mTLlD6BhB2x4+UBif61CC3tHsPls+chWm8eMP2lbMuDcyQx0UocXVDDXYVJ2XsCjQ204v8s8bgjbCI3sNKSkGgH74p+spEvxOpReaaqM9II9ZKbj5FtlwxYgGQoAqfhlJ16/0knkfvOdbPCZB9nD6g4rNdHUxSnh6evkNEAy2M2RaYgTXSMbzNAa+LqpwQ6ZLF2zJqB62AKyrLel+cHHQzQXvQQvR4EbbrhOHMVcqjz0miXR+O8jyJhovCKcsm4dFVKsvcYjjMy99WCadZiVl1bNRJbVOTPfOnQwxhkwPKVoUNOoVlzEoQIeC8qNFemHD47rulqZK+A/+goC1dTETZ5rw==
+    pentagram: flohdot
+    type: ssh-rsa
+  seavan@Samvels-MacBook-Pro.local:
+    credential: projets
+    key: AAAAB3NzaC1yc2EAAAADAQABAAABAQDMrQlhpbKToZsEHwyBE2M9RQLo8Wq9gtMfKPjXOSdcpPf+G6gpNZZqfaZPKzhdW0moI0pDCCufOOcKOsqAyploYtrZnu3Xi8vQMaWTUEhCasdjKFzN8LDpmTH+o4KSAIMrnXnWiomnEz4HopOIp7eydOnbpYOvKfWyJowGYqcNI6ksp4N4dy5JI/sV2yZRAacZmUd4VxHk/4gGS+S3anJ9C/lXRFlQDZ7o0cFtzRZbvZrAqVKWn2sY11udlG+D3XvZpYpsaXSowWtlKGYlhgstN4Lff4n5fvqqe6AKrPUZAXfD/e79cxoZl/V+mRpFKP2sNeMz16ndN+/FMNtCU8sb
+    pentagram: seavan
+    type: ssh-rsa
+  zipp@zipp-desktop:
+    credential: projets
+    key: AAAAB3NzaC1yc2EAAAABIwAAAQEAso8xG+e1iIQ7ey297Ws4jQ4/PzXbD+XfEn6Z83cpPi3bFVFAUQO6B+eTgFLMtkK+FxU587A3FXUjR8stz+CxPsx4rN5CsUsuM8no+GbrXMIenpObHfvJybERgHmAPTunvb6fmlmyX4Mv8C05a+eGGxBmTtPVteF/5aNm+XkRRi07iBFKyBlbirTSmfqQhKzAkMujOWd3OyzfP6mfcdKX09nXu4iW/WsT39sL3g9tHGYGE2Li3rizqIxq7Q0DusVMBGvbBYUYYcKiIJzRDrA7/8Q4DsbzrbhS3YNiQpIcluXtQQjLRFIHUdm29D/SiK8heaR+HpvBW3JwqFs/A5cVjQ==
+    pentagram: zipp
+    type: ssh-rsa
+ssh_port: 1022
+ssh_tcp_wrappers: false
+
+# PF
+dns_ip:
+  - 10.43.0.254
+  - 8.8.8.8
+mail_ip:
+  - 78.193.67.92
+mail_mx: 5.135.4.214
+snmp_ip:
+  - 5.135.4.213
+dns_search: peerio.biz
+
+# PKI
+pki_master: pki.unetresgrossebite.com
+
+# Rsyslog
+rsyslog_discard_local_write: false
+rsyslog_hub: false
+
+# RackTables
+do_racktables: true
+
+# Riak
+riak_backend: bitcask
+riak_bucket_types:
+  counter:
+    object: '{"props":{"datatype":"counter"}}'
+    what: counters
+  set:
+    object: '{"props":{"datatype":"set"}}'
+    what: sets
+  map:
+    object: '{"props":{"datatype":"map"}}'
+    what: maps
+  value:
+    object: '{"props":{"allow_mult":true,"last_write_wins":false}}'
+    what: values
+riak_ciphers: false
+riak_do_fullsync: false
+riak_enterprise: true
+riak_munin_basic: haproxy:health
+riak_register: 10.43.0.100
+riak_security:
+  groups:
+    mgt:
+      ensure: present
+    peerio:
+      ensure: present
+  users:
+    admin:
+      ingroups:
+        - mgt
+      password: admin
+      permissions:
+        - bucket_all
+        - kv_all
+    worker:
+      ingroups:
+        - peerio
+      password: health
+      permissions:
+        - bucket_read
+      sources:
+        password:
+          - 0.0.0.0/0
+    haproxy:
+      ingroups:
+        - mgt
+      permissions:
+        - bucket_read
+      password: health
+      sources:
+        password:
+          - 10.43.0.0/24
+    peerio:
+      ingroups:
+        - peerio
+      permissions:
+        - bucket_all
+        - kv_all
+      sources:
+        certificate:
+          - 0.0.0.0/0
+riak_ssl: true
+
+# Webserver
+csp_sources:
+  - peerio.biz
+  - peerio.com

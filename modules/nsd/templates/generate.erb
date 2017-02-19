@@ -1,0 +1,119 @@
+#!/bin/sh
+
+# ultimately: consider user input
+COMPLETE=false # either complete database, or rewrite it (true)
+DEBUG=false
+CHECK=true
+RELOAD=true
+DO_DOMAINS="<% @zones.sort.each do |zone| -%> <%=zone%><% end -%>"
+
+# system specifics
+NSD_ZONES_ROOT=<%=@zones_dir%>
+NSD_RUNTIME_USER=<%=@runtime_user%>
+NSD_RUNTIME_GROUP=<%=@runtime_group%>
+
+# why not, ...
+match_soa='^[ 	]*@[ 	]*[I]*[N]*[ 	]*SOA[ 	]*'
+
+render()
+{
+    while test "$1"
+    do
+	if test -s "$1"; then
+	    grep -v '^[ 	]*;' "$1"
+	fi
+	shift
+    done
+}
+
+if ! test -d /usr/share/dnsgen; then
+    echo "something's wrong, ..." >&2
+    exit 1
+fi
+cd /usr/share/dnsgen
+
+echo "Building nsd databases"
+if test -s ressources/vars; then
+    . ressources/vars
+fi
+if $DEBUG; then
+    echo " Main settings:"
+    echo "    CONTACT=$CONTACT"
+    echo "    EXPIRE=$EXPIRE"
+    echo "    NEGATIVETTL=$NEGATIVETTL"
+    echo "    REFRESH=$REFRESH"
+    echo "    RETRY=$RETRY"
+    echo "    SERIAL=$SERIAL"
+    echo "    TTL=$TTL"
+fi
+if test -z "$DO_DOMAINS"; then
+    DO_DOMAINS=`find zones -name 'db.*' | sed 's|zones/db.||'`
+fi
+for ROOT in $DO_DOMAINS
+do
+    out="$NSD_ZONES_ROOT/db.$ROOT"
+    if ! test -s zones/db.$ROOT; then
+	if $DEBUG; then
+	    echo "    skipping pattern '$ROOT', no database matching"
+	fi
+	continue
+    fi
+    if test -s "$out"; then
+	current=0
+	if grep -A2 "$match_soa" "$out" | grep '^[ 	]*[1-9]' >/dev/null; then
+	    current=`grep -A2 "$match_soa" "$out" | awk '/^[ 	]*[1-9]/{print $1;exit;}'`
+	fi
+	if $COMPLETE; then
+	    if test -s "$out"; then
+		echo "  Skipping $ROOT [$out exists]"
+		continue
+	    fi
+	    echo "  Writing $ROOT [$out]"
+	else
+	    echo "  Rewriting $ROOT [$out]"
+	fi
+	if test $current -ge $SERIAL; then
+	    if $DEBUG; then
+		echo "    serial updated from $SERIAL to `expr $current + 1`"
+	    fi
+	    SERIAL=`expr $current + 1`
+	fi
+    fi
+    NSROOT=`grep '[ 	]NS[ 	]' "zones/common-head" | head -1 | sed 's|.*NS[ \t]*\(.*\)\.|\1|'`
+    test -z "$NSROOT" && NSROOT=$ROOT
+    (
+	test -s ressources/soa && cat ressources/soa | \
+	    sed -e "s;|replaceTTL|;$TTL;" \
+		-e "s;|replaceROOT|;$NSROOT;" \
+	        -e "s;|replaceCONTACT|;$CONTACT;" \
+	        -e "s;|replaceSERIAL|;$SERIAL;" \
+		-e "s;|replaceREFRESH|;$REFRESH;" \
+		-e "s;|replaceRETRY|;$RETRY;" \
+		-e "s;|replaceEXPIRE|;$EXPIRE;" \
+		-e "s;|replaceNEGATIVETTL|;$NEGATIVETTL;"
+	echo ""
+	echo "\$ORIGIN $ROOT."
+	if echo "$ROOT" | grep in-addr.arpa >/dev/null; then
+	    render zones/common-head | grep -vE '[ 	](MX|SRV|TXT|CNAME|A)[ 	]'
+	else
+	    render zones/common-head
+	fi
+	render zones/db.$ROOT
+	render zones/common-tail
+    ) >"$out"
+    chown $NSD_RUNTIME_USER:$NSD_RUNTIME_GROUP "$out"
+    if $CHECK; then
+	if ! nsd-checkzone $ROOT "$out"; then
+	    echo "  WARNING on $ROOT"
+	    RELOAD=false
+	fi | grep -vE '(\(out of zone\)|^OK$|loaded serial)'
+    fi
+done
+
+if $RELOAD; then
+    if nsd-checkconf <%=@conf_dir%>/nsd.conf; then
+	service nsd reload
+    fi
+fi
+
+exit 0

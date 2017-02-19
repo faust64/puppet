@@ -1,0 +1,7 @@
+Syslog yes
+UMask 002
+OversignHeaders From
+KeyTable <%=@conf_dir%>/dkim.d/KeyTable
+SigningTable <%=@conf_dir%>/dkim.d/SigningTable
+ExternalIgnoreList <%=@conf_dir%>/dkim.d/TrustedHosts
+InternalHosts <%=@conf_dir%>/dkim.d/TrustedHosts

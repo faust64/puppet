@@ -1,0 +1,3 @@
+<% if @gre_tunnels != false -%><% @gre_tunnels.each do |tun, tunhash| -%><% if tunhash['local'] =~ /[0-9]\.[0-9]/ and tunhash['remote'] =~ /[0-9]\.[0-9]/ -%>pass in quick inet proto $g from <%=tunhash['remote']%> to <%=tunhash['local']%>
+<% if @skip_gre == false and tunhash['innerlocal'] =~ /[0-9]\.[0-9]/ and tunhash['innerremote'] =~ /[0-9]\.[0-9]/ -%>pass in quick on gre<%=tun%> inet proto $i from <%=tunhash['innerremote']%> to <%=tunhash['innerlocal']%>
+<% end -%><% end -%><% end -%><% end -%>

@@ -1,0 +1,30 @@
+<% if @version >= 7 -%>input(type="imfile"
+      File="/var/log/gitlab/gitlab-shell/gitlab-shell.log"
+      statefile="/var/log/gitlab/gitlab-shell/.gitlab-shell.log"
+      Tag="gitlab-shell: "
+      Severity="info"
+      Facility="local7")
+<% [ "gitlab_access", "gitlab_error", "error" ].each do |fl| -%>
+
+input(type="imfile"
+      File="/var/log/gitlab/nginx/<%=fl%>.log"
+      statefile="/var/log/gitlab/nginx/.<%=fl%>.log"
+      Tag="gitlab-nginx: "
+      Severity="<% if fl =~ /error/ -%>error<% else -%>info<% end -%>"
+      Facility="local7")
+<% end -%><% else -%>$InputFileName /var/log/gitlab/gitlab-shell/gitlab-shell.log
+$InputFileTag gitlab-shell:
+$InputFileStateFile gitlab-shell
+$InputFileSeverity info
+$InputFileFacility local7
+$InputRunFileMonitor
+<% [ "gitlab_access", "gitlab_error", "error" ].each do |fl| -%>
+
+$InputFileName /var/log/gitlab/gitlab-shell/<%=fl%>.log
+$InputFileTag gitlab-nginx:
+$InputFileStateFile <%=fl%>
+<% if fl =~ /error/ -%>$InputFileSeverity error
+<% else -%>$InputFileSeverity info
+<% end -%>$InputFileFacility local7
+$InputRunFileMonitor
+<% end -%><% end -%>

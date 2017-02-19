@@ -1,0 +1,51 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+my $ret = undef;
+if (! eval "require Net::Telnet;") {
+    $ret = "Net::Telnet not found";
+}
+
+if ($ARGV[0] and $ARGV[0] eq "config") {
+    print "graph_title Asterisk Voicemail messages\n";
+    print "graph_args --base 1000 -l 0\n";
+    print "graph_vlabel messages\n";
+    print "graph_category asterisk\n";
+    print "messages.draw AREA\n";
+    print "messages.label messages\n";
+    exit 0;
+}
+
+my $host     = exists $ENV{'host'} ? $ENV{'host'} : "127.0.0.1";
+my $port     = exists $ENV{'port'} ? $ENV{'port'} : "5038";
+my $username = exists $ENV{'username'} ? $ENV{'username'} : 'munin';
+my $secret   = exists $ENV{'secret'} ? $ENV{'secret'} : 'somepassword';
+
+my $pop = new Net::Telnet (Telnetmode => 0);
+$pop->open(Host => $host,
+	   Port => $port);
+my $line = $pop->getline;
+die $line unless $line =~ /^Asterisk/;
+$pop->print("Action: login");
+$pop->print("Username: $username");
+$pop->print("Secret: $secret");
+$pop->print("Events: off");
+$pop->print("");
+$pop->print("Action: command");
+$pop->print("Command: show voicemail users");
+$pop->print("");
+my ($results,$start)=(0,0);
+my @fields;
+while (($line = $pop->getline)  and ($line !~ /--END/o)) {
+    if ($start) {
+	@fields = (split ' ', $line);
+	$results = $results + pop(@fields);
+    }
+    $start = 1 if ($line =~ /Context/o);
+}
+$pop->print("Action: logoff");
+$pop->print("");
+while (($line = $pop->getline)) {
+}
+print "messages.value $results\n";

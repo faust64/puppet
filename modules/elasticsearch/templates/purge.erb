@@ -1,0 +1,6 @@
+#!/bin/sh
+
+/usr/local/bin/curator_cli --host <%=@addr%> delete_indices \
+    --filter_list '[{"filtertype":"age","source":"creation_date","direction":"older","unit":"<%=@unit%>","unit_count":<%=@val%>},{"filtertype":"pattern","kind":"prefix","value":"<%=@pfx%>"}]'
+
+exit $?

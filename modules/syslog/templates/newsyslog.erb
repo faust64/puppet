@@ -1,0 +1,48 @@
+<% if @kernel == "FreeBSD" -%>
+/var/log/all.log			600  7	   *	@T00  J
+/var/log/amd.log			644  7	   100	*     J
+/var/log/auth.log			600  7	   100	*     JC
+/var/log/console.log			600  5	   100	*     J
+/var/log/cron				600  3	   100	*     JC
+/var/log/daily.log			640  7	   *	@T00  JN
+/var/log/debug.log			600  7	   100	*     JC
+/var/log/kerberos.log			600  7	   100	*     J
+/var/log/lpd-errs			644  7	   100	*     JC
+/var/log/maillog			640  7	   *	@T00  JC
+/var/log/messages			644  5	   100	*     JC
+/var/log/monthly.log			640  12	   *	$M1D0 JN
+/var/log/pflog				600  3	   100	*     JB    /var/run/pflogd.pid
+/var/log/ppp.log	root:network	640  3	   100	*     JC
+/var/log/security			600  10	   100	*     JC
+<% if @has_sendmail -%>/var/log/sendmail.st			640  10    *	168   B
+<% end -%>/var/log/weekly.log			640  5     1	$W6D0 JN
+/var/log/wtmp				644  3     *	@01T05 B
+/var/log/xferlog			600  7     100	*     JC
+/var/log/ntpsync.log			644  5     100	*     Z
+<% if @has_slim -%>/var/log/slim.log			644  3     1024	*     Z  <%=@slim_run_dir%>/slim.pid 31
+<% end -%><% if @has_camtrace -%>/var/log/scamd.out <%=@ctr_user%>:<%=@ctr_group%>	644  3     100	*     Z
+/var/log/scamd.log <%=@ctr_user%>:<%=@ctr_group%>	644  10    1024	*     BZ /var/run/scamd.pid 30
+/var/log/predir.log <%=@ctr_user%>:<%=@ctr_group%>	644  5     1024	*     BZ /var/run/predir.pid
+/var/log/player.log <%=@ctr_user%>:<%=@ctr_group%>	644  3     1024	*     BZ
+/var/log/dbpurge.log <%=@ctr_user%>:<%=@ctr_group%>	644  3     100	*     Z
+/var/log/policyd.log			644  3     1024	*     BZ /var/run/policyd.pid
+<% end -%><% if @has_apache -%><%=@apache_log_dir%>/*.log		644  5     1024	*     GZ  <%=@apache_run_dir%>/<%=@apache_srvname%>.pid
+<% end -%><% if @has_psql -%>/var/log/pgsql.log	<%=@pg_runtime_user%>:<%=@pg_runtime_group%>	600  3     1024	*     BZ <%=@pg_data_dir%>/pg_logd.pid
+<% end -%><% if @has_nginx -%><%=@nginx_log_dir%>/*.log	<%=@nginx_runtime_user%>:<%=@nginx_runtime_group%>	644  5     1024	*     GZ  /var/run/nginx.pid
+<% end -%><% if @has_munin -%><%=@munin_log_dir%>/munin-node.log			644  7     *	@T00  Z <%=@munin_run_dir%>/munin-node.pid
+<% end -%><% elsif @kernel == "OpenBSD" -%>/var/cron/log		root:wheel	600  3	   10	*     Z
+/var/log/aculog		uucp:dialer	660  7	   *	24    Z
+/var/log/authlog	root:wheel	640  7	   *	168   Z
+/var/log/daemon				640  5	   30	*     Z
+/var/log/lpd-errs			640  7	   10	*     Z
+/var/log/maillog			600  7	   *	24    Z
+/var/log/messages			644  5	   30	*     Z
+/var/log/secure				600  7	   *	168   Z
+/var/log/wtmp				644  7	   *	$W6D4 B
+/var/log/xferlog			640  7	   250	*     Z
+/var/log/ppp.log			640  7	   250	*     Z
+/var/log/pflog				600  3	   250	*     ZB "pkill -HUP -u root -U root -t - -x pflogd"
+/var/log/syslog				644  7	   30	*     Z
+/var/log/kern				644 15	   *    24    Z
+<% if @has_munin -%><%=@munin_log_dir%>/munin-node.log		644  7     60	*  Z <%=@munin_run_dir%>/munin-node.pid
+<% end -%><% end -%>

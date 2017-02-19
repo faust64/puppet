@@ -1,0 +1,74 @@
+#!/bin/sh
+
+DEBUG=true
+PURGE=false
+ACTUAL_ROOT=<%=@media_root%>/media/Series
+PLEX_ROOT=<%=@media_root%>/media/plexSeries
+specials=0
+
+if $PURGE; then
+    find $PLEX_ROOT -type l -exec rm -f {} \;
+fi
+
+cd $ACTUAL_ROOT
+ls | while read show
+    do
+	dshow=`echo "$show" | sed 's|&.*|*|'`
+	cd "$ACTUAL_ROOT/$show"
+	spacials=0
+	ls | grep '\[[0-9][0-9]x[0-9-]*\]' | while read episode
+	do
+	    test -d "$episode" && continue
+	    eval `echo "$episode" | sed 's|.*\[\([0-9]*\)x\([0-9-]*\)\].*|s=\1 e=\2|'`
+	    if test -z "$s" -o -z "$e"; then
+		echo "Failed to parse $episode name" >&2
+		continue
+	    elif ! test "$s" -ge 0; then
+		echo "Failed to parse $episode name" >&2
+		continue
+	    fi
+	    if echo "$e" | grep '^[0-9]*$' >/dev/null; then
+		e=$e
+	    else
+		e=`echo "$e" | sed 's|-|-e|g'`
+	    fi
+	    test -d "$PLEX_ROOT/$show" || mkdir -p "$PLEX_ROOT/$show"
+	    ext=`echo "$episode" | sed 's|.*\.\([a-zA-Z0-9]*\)$|\1|'`
+	    cd=`echo "$episode" | sed "s|.* - cd\([0-9]*\)\.$ext|\1|"`
+	    echo "$cd" | grep '^[0-9]*$' >/dev/null && suffix="-cd$cd" || suffix=
+	    if test "$e" -ge 70 -o "$e" -eq 0 2>/dev/null; then
+		if ! $PURGE; then continue; fi
+		test -d "$PLEX_ROOT/$show/Specials" || mkdir -p "$PLEX_ROOT/$show/Specials"
+		if test "$ext" != srt -a "$ext" != idx -a "$ext" != sub; then
+		    lang=
+		    specials=`expr $specials + 1`
+		else
+		    lang=.eng
+		fi
+		test $specials -lt 10 && dspec=0$specials || dspec=$specials
+		if ! $PURGE; then
+		    if test -h "$PLEX_ROOT/$show/Specials/$show - s00e$dspec$suffix$lang.$ext"; then
+			if test "`readlink "$PLEX_ROOT/$show/Specials/$show - s00e$dspec$suffix$lang.$ext"`" = "$ACTUAL_ROOT/$show/$episode"; then
+			    continue
+			fi
+		    fi
+		fi
+		if $DEBUG; then echo "'/$show/$episode' > '/Specials/$show - s00e$dspec$suffix$lang.$ext'"; fi
+		ln -sf "$ACTUAL_ROOT/$show/$episode" "$PLEX_ROOT/$show/Specials/$show - s00e$dspec$suffix$lang.$ext"
+	    else
+		test -d "$PLEX_ROOT/$show/Season $s" || mkdir -p "$PLEX_ROOT/$show/Season $s"
+		if ! $PURGE; then
+		    if test -h "$PLEX_ROOT/$show/Season $s/$show - s${s}e$e$suffix.$ext"; then
+			if test "`readlink "$PLEX_ROOT/$show/Season $s/$show - s${s}e$e$suffix.$ext"`" = "$ACTUAL_ROOT/$show/$episode"; then
+			    continue
+			fi
+		    fi
+		fi
+		if $DEBUG; then echo "'/$show/$episode' > '/Season $s/$show - s${s}e$e$suffix.$ext'"; fi
+		ln -sf "$ACTUAL_ROOT/$show/$episode" "$PLEX_ROOT/$show/Season $s/$show - s${s}e$e$suffix.$ext"
+	    fi
+	done
+	rmdir "$ACTUAL_ROOT/$show/*" "$ACTUAL_ROOT/$show" 2>/dev/null
+    done
+
+exit 0

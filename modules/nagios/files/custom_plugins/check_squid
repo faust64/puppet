@@ -1,0 +1,21 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+ret=OK
+str=
+if ! test -s /var/run/squid*.pid; then
+    ret=CRITICAL
+    str=" - no PID file"
+elif ! ps ax | awk '/squi[d]/'; then
+    ret=CRITICAL
+    str=" - not running"
+fi >/dev/null 2>&1
+
+echo "$ret$str"
+eval ret=\$$ret
+exit $ret

@@ -1,0 +1,12 @@
+nagios_no_parent: false
+physical_parent: oizis.adm.intra.unetresgrossebite.com
+
+# BlueMind
+bluemind_satellite: true
+
+# Postfix
+postfix_local_domains:
+  - emma-earth.com
+  - emma-earth.fr
+  - undomaine.42
+  - unetresgrossebite.com

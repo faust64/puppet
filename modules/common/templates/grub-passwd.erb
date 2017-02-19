@@ -1,0 +1,7 @@
+#! /bin/sh
+set -e
+
+<% if @grub_admins != false -%>cat <<EOF
+set superusers="<%=@grub_admins.keys.join(" ")%>"
+<% @grub_admins.each do |admin, hash| -%>password_pbkdf2 <%=admin%> <%=hash%>
+<% end -%>EOF<% end -%>

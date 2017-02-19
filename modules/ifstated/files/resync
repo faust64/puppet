@@ -1,0 +1,36 @@
+#!/bin/sh
+
+for confdir in /etc /usr/local/etc
+do
+    if test -s $confdir/ifstated.conf; then
+	CONFIGURATION=$confdir/ifstated.conf
+	break
+    fi
+done
+alias echo='echo -en'
+
+echo "    [ reloading IfStated configuration ]\nChecking global configuration: "
+if ! ifstated -nf $CONFIGURATION >/dev/null 2>&1; then
+    echo "[ FAILED  ]\n"
+    exit 42
+fi
+echo "[   OK    ]\n"
+
+pid=`ps ax | awk '/ifs[t]ated$/{print $1}'`
+test -z "$pid" && pid=`ps ax | awk '/ifsta[t]ed -/{print $1}'`
+if test "$pid"; then
+    echo "Applying new configuration:    "
+    if ! kill -HUP $pid; then
+	echo "[ FAILED  ]\n"
+	exit 21
+    fi
+else
+    echo "Starting ifstated:             "
+    if ! ifstated -f $CONFIGURATION >/dev/null; then
+	echo "[ FAILED  ]\n"
+	exit 21
+    fi
+fi
+echo "[   OK    ]\n"
+
+exit 0

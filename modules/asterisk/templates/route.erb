@@ -1,0 +1,9 @@
+[outbound-<%=@name%>]
+<% @patterns.each do |pattern| -%>exten => <%=pattern%>,1,Macro(user-callerid,SKIPTTL,)
+<% if @intra -%>exten => <%=pattern%>,n,Set(INTRACOMPANYROUTE=YES)
+<% end -%><% if @cidforce -%>exten => <%=pattern%>,n,ExecIf($["${KEEPCID}"!="TRUE" & ${LEN(${DB(AMPUSER/${AMPUSER}/outboundcid)}}=0 & ${LEN(${TRUNKCIDOVERRIDE}}=0]?Set(TRUNKCIDOVERRIDE=<%=@cidforce%>))
+<% end -%>exten => <%=pattern%>,n,Set(_NODEST=)
+exten => <%=pattern%>,n,Macro(record-enable,${AMPUSER},OUT,)
+<% @routes.each do |route| -%>exten => <%=pattern%>,n,Macro(dialout-trunk,<%=route%>,${EXTEN},,)
+<% end -%>exten => <%=pattern%>,n,Macro(outisbusy,)
+<% end -%>

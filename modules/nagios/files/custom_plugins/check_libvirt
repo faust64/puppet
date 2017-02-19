@@ -1,0 +1,22 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+ret=OK
+if test -x /usr/local/bin/libvirt-bin; then
+    if ! /usr/local/bin/libvirt-bin status >/dev/null 2>&1; then
+	ret=CRITICAL
+	msg=' - libvirt not started | 0'
+    fi
+else
+    ret=UNKNOWN
+    msg=' - missing libvirt-bin script'
+fi
+
+echo "$ret$msg"
+eval ret=\$$ret
+exit $ret

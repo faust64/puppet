@@ -1,0 +1,38 @@
+#!/bin/sh
+
+who | awk '{print $1" "$<% if @operatingsystem == "Debian" or @operatingsystem == "Ubuntu" -%>5<% else -%>6<% end -%>}' | sort | awk '
+    BEGIN {
+	cnt  = 0
+	last = "noon"
+    } {
+	if ($2 == last) {
+	    cnt = cnt + 1
+	}
+	else {
+	    if (lastname != "") {
+		if (cnt == 1) {
+		    what = "session"
+		} else {
+		    what = "sessions"
+		}
+		if (last == "") {
+		    last = "local"
+		}
+		print lastname" "last" ("cnt" "what")";
+	    }
+	    lastname = $1;
+	    cnt      = 1;
+	    last     = $2
+	}
+    }
+    END {
+	if (cnt == 1) {
+	    what = "session"
+	} else {
+	    what = "sessions"
+	}
+	if (last == "") {
+	    last = "local"
+	}
+	print lastname" "last" ("cnt" "what")"
+    }'

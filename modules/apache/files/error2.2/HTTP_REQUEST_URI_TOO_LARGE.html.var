@@ -1,0 +1,43 @@
+Content-language: en
+Content-type: text/html; charset=ISO-8859-1
+Body:----------en--
+<!--#set var="TITLE" value="414: Submitted URI too large!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 414</h1>
+	    <p>The length of the requested URL exceeds the capacity limit for this server. The request cannot be processed.</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------en--
+
+Content-language: es
+Content-type: text/html; charset=ISO-8859-1
+Body:----------es--
+<!--#set var="CONTENT_LANGUAGE" value="es"
+--><!--#set var="TITLE" value="&iexcl;414: Direcci&oacute;n suministrada demasiado larga!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 414</h1>
+	    <p>Su solicitud no puede procesarse debido a que la longitud del enlace excede la capacidad l&iacute;mite del servidor.</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------es--
+
+Content-language: fr
+Content-type: text/html; charset=ISO-8859-1
+Body:----------fr--
+<!--#set var="CONTENT_LANGUAGE" value="fr"
+--><!--#set var="TITLE" value="414 : L'URI demandee est trop longue!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERREUR 414</h1>
+	    <p>La longueur de l'URL demand&eacute;e exc&egrave;de la limite de capacit&egrave; pour ce serveur. Nous ne pouvons donner suite &agrave; votre requ&ecirc;te.</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------fr--

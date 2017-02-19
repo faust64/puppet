@@ -1,0 +1,23 @@
+[general]
+language=<%=@locale%>
+registertimeout=<%=@regtimeout%>
+vmexten=*97
+faxdetect=yes
+<% if @externalip -%>externip=<%=@externalip%>
+localnet=<%=@localnet%>
+<% end -%>context=from-sip-external
+callerid=Unknown
+notifyringing=yes
+notifyhold=yes
+limitonpeers=yes
+tos_sip=cs3
+tos_audio=ef
+tos_video=af41
+alwaysauthreject=yes
+<% if @trunks != false -%><% @trunks.each do |trunk, trunkhash| -%><% if trunkhash['register'] == true -%>register => <%=trunkhash['username']%>:<%=trunkhash['pass']%>@<%=trunkhash['host']%><% if trunkhash['port'] -%>:<%=trunkhash['port']%><% end -%><% if trunkhash['expires'] -%>~<%=trunkhash['expires']%><% end -%>
+
+<% end -%><% end -%><% end -%><% if @codecs -%>disallow=all
+<% @codecs.each do |codec| -%>allow=<%=codec%>
+<% end -%><% end -%><% @extensions.each do |exten, exthash| -%>#include sip.d/<%=exten%>.conf
+<% end -%><% @trunks.each do |trunk, trunkhash| -%>#include sip.d/<%=trunk%>.conf
+<% end -%>#include sip.d/00000.conf

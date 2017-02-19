@@ -1,0 +1,44 @@
+template(name="jsonfmt" type="list" option.json="on") {
+	constant(value="{")
+	constant(value="\"@timestamp\":\"") property(name="timereported" dateFormat="rfc3339")
+	constant(value="\",\"@version\":\"1")
+	constant(value="\",\"message\":\"") property(name="msg")
+	constant(value="\",\"@fields.host\":\"") property(name="hostname")
+	constant(value="\",\"@fields.severity\":\"") property(name="syslogseverity-text")
+	constant(value="\",\"@fields.facility\":\"") property(name="syslogfacility-text")
+	constant(value="\",\"@fields.programname\":\"") property(name="programname")
+	constant(value="\",\"@fields.procid\":\"") property(name="procid")
+	constant(value="\"}\n")
+    }
+
+<% if @filter_regexp != false -%><% @filter_regexp.each do |pattern| -%>:msg, regex, "<%=pattern%>" stop
+<% end -%><% end -%><% if @filter_contains != false -%><% @filter_contains.each do |pattern| -%>:msg, contains, "<%=pattern%>" stop
+<% end -%><% end -%><% if @do_relp -%>auth.*				:omrelp:<%=@store_logstash%>:6969;jsonfmt
+authpriv.debug			:omrelp:<%=@store_logstash%>:6969;jsonfmt
+daemon.*			:omrelp:<%=@store_logstash%>:6969;jsonfmt
+kern.*				:omrelp:<%=@store_logstash%>:6969;jsonfmt
+mail.*				:omrelp:<%=@store_logstash%>:6969;jsonfmt
+user.*				:omrelp:<%=@store_logstash%>:6969;jsonfmt
+local5.*			:omrelp:<%=@store_logstash%>:6968;jsonfmt
+local6.*			:omrelp:<%=@store_logstash%>:6969;jsonfmt
+local7.*			:omrelp:<%=@store_logstash%>:6969;jsonfmt
+<% elsif @do_tcp -%>auth.*				@@<%=@store_logstash%>:1514;jsonfmt
+authpriv.debug			@@<%=@store_logstash%>:1514;jsonfmt
+daemon.*			@@<%=@store_logstash%>:1514;jsonfmt
+kern.*				@@<%=@store_logstash%>:1514;jsonfmt
+mail.*				@@<%=@store_logstash%>:1514;jsonfmt
+user.*				@@<%=@store_logstash%>:1514;jsonfmt
+local5.*			@@<%=@store_logstash%>:6968;jsonfmt
+local6.*			@@<%=@store_logstash%>:6969;jsonfmt
+local7.*			@@<%=@store_logstash%>:1514;jsonfmt
+<% elsif @do_udp -%>auth.*				@<%=@store_logstash%>:1514;jsonfmt
+authpriv.debug			@<%=@store_logstash%>:1514;jsonfmt
+daemon.*			@<%=@store_logstash%>:1514;jsonfmt
+kern.*				@<%=@store_logstash%>:1514;jsonfmt
+mail.*				@<%=@store_logstash%>:1514;jsonfmt
+user.*				@<%=@store_logstash%>:1514;jsonfmt
+local5.*			@<%=@store_logstash%>:6968;jsonfmt
+local6.*			@<%=@store_logstash%>:6969;jsonfmt
+local7.*			@<%=@store_logstash%>:1514;jsonfmt
+<% else -%># rsyslog retransmission misconfigured
+<% end -%>

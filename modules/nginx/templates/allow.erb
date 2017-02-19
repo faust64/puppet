@@ -1,0 +1,3 @@
+<% if @office_networks != false -%><% @office_networks.each do |netname, net| -%>allow <%=net%>;
+<% end -%><% end -%><% if @allow_privates != false -%><% @allow_privates.each do |net| -%>allow <%=net%>;
+<% end -%><% end -%>

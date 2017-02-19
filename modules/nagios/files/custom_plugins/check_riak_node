@@ -1,0 +1,11 @@
+#!/bin/sh
+
+TMPFILE=/tmp/wrap_riak.$$
+export HOME=/tmp #otherzise, 'erlexec- HOME must be set'
+
+$@ 2>&1 | sed -e 's|OKAY|OK|' -e 's|: | - |' >$TMPFILE
+RET=$?
+cat $TMPFILE ; echo
+rm -f $TMPFILE
+
+exit $RET

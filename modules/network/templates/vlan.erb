@@ -1,0 +1,4 @@
+<% if @addr != false -%>inet <%=@addr%> <%=@nmask%> NONE<% elsif @ifstate != false -%><%=@ifstate%><% else -%>#unknown state<% end -%> vlan <%=@vid%> vlandev <%=@root_if%>
+<% if @routes -%><% @routes.each do |elt| -%><% if elt['net'] -%>!route add <%=elt['net'] -%> <% if elt['gw'] -%><%=elt['gw']%><% elsif @addr != false -%><%=@addr%><% else -%>-link -iface <%=@name%><% end -%>
+
+<% end -%><% end -%><% end -%>-inet6

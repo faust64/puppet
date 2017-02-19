@@ -1,0 +1,97 @@
+LogLevel warn
+Listen <%=@listen%>:631
+Listen /var/run/cups.sock
+Browsing On
+BrowseLocalProtocols dnssd
+DefaultAuthType Basic
+WebInterface Yes
+<% @permissions.keys.each do |loc| -%><Location <%=loc%>>
+<% if @permissions[loc] != false -%><% @permissions[loc].each do |property, value| -%>
+    <%=property%> <%=value%>
+<% end -%><% end -%>
+</Location>
+<% end -%>
+<Policy default>
+    JobPrivateAccess default
+    JobPrivateValues default
+    SubscriptionPrivateAccess default
+    SubscriptionPrivateValues default
+    <Limit Create-Job Print-Job Print-URI Validate-Job>
+<% if @admin_flt != false -%>	Allow <%=@admin_flt%>
+<% end -%>	Order deny,allow
+    </Limit>
+    <Limit Send-Document Send-URI Hold-Job Release-Job Restart-Job Purge-Jobs Set-Job-Attributes Create-Job-Subscription Renew-Subscription Cancel-Subscription Get-Notifications Reprocess-Job Cancel-Current-Job Suspend-Current-Job Resume-Job Cancel-My-Jobs Close-Job CUPS-Move-Job CUPS-Get-Document>
+<% if @admin_flt != false -%>	Allow <%=@admin_flt%>
+	Satisfy any
+<% end -%>	Order deny,allow
+	Require user @OWNER @SYSTEM
+    </Limit>
+    <Limit CUPS-Add-Modify-Printer CUPS-Delete-Printer CUPS-Add-Modify-Class CUPS-Delete-Class CUPS-Set-Default CUPS-Get-Devices>
+<% if @admin_flt != false -%>	Allow <%=@admin_flt%>
+	Satisfy any
+<% end -%>	AuthType Default
+	Order deny,allow
+	Require user @SYSTEM
+    </Limit>
+    <Limit Pause-Printer Resume-Printer Enable-Printer Disable-Printer Pause-Printer-After-Current-Job Hold-New-Jobs Release-Held-New-Jobs Deactivate-Printer Activate-Printer Restart-Printer Shutdown-Printer Startup-Printer Promote-Job Schedule-Job-After Cancel-Jobs CUPS-Accept-Jobs CUPS-Reject-Jobs>
+<% if @admin_flt != false -%>	Allow <%=@admin_flt%>
+	Satisfy any
+<% end -%>	AuthType Default
+	Order deny,allow
+	Require user @SYSTEM
+    </Limit>
+    <Limit Cancel-Job CUPS-Authenticate-Job>
+<% if @admin_flt != false -%>	Allow <%=@admin_flt%>
+	Satisfy any
+<% end -%>	Order deny,allow
+	Require user @OWNER @SYSTEM
+    </Limit>
+    <Limit All>
+<% if @admin_flt != false -%>	Allow <%=@admin_flt%>
+<% end -%>	Order deny,allow
+    </Limit>
+</Policy>
+<Policy authenticated>
+    JobPrivateAccess default
+    JobPrivateValues default
+    SubscriptionPrivateAccess default
+    SubscriptionPrivateValues default
+    <Limit Create-Job Print-Job Print-URI Validate-Job>
+<% if @admin_flt != false -%>	Allow <%=@admin_flt%>
+	Satisfy any
+<% end -%>	AuthType Default
+	Order deny,allow
+    </Limit>
+    <Limit Send-Document Send-URI Hold-Job Release-Job Restart-Job Purge-Jobs Set-Job-Attributes Create-Job-Subscription Renew-Subscription Cancel-Subscription Get-Notifications Reprocess-Job Cancel-Current-Job Suspend-Current-Job Resume-Job Cancel-My-Jobs Close-Job CUPS-Move-Job CUPS-Get-Document>
+<% if @admin_flt != false -%>	Allow <%=@admin_flt%>
+	Satisfy any
+<% end -%>	AuthType Default
+	Order deny,allow
+	Require user @OWNER @SYSTEM
+    </Limit>
+    <Limit CUPS-Add-Modify-Printer CUPS-Delete-Printer CUPS-Add-Modify-Class CUPS-Delete-Class CUPS-Set-Default>
+<% if @admin_flt != false -%>	Allow <%=@admin_flt%>
+	Satisfy any
+<% end -%>	AuthType Default
+	Order deny,allow
+	Require user @SYSTEM
+    </Limit>
+    <Limit Pause-Printer Resume-Printer Enable-Printer Disable-Printer Pause-Printer-After-Current-Job Hold-New-Jobs Release-Held-New-Jobs Deactivate-Printer Activate-Printer Restart-Printer Shutdown-Printer Startup-Printer Promote-Job Schedule-Job-After Cancel-Jobs CUPS-Accept-Jobs CUPS-Reject-Jobs>
+<% if @admin_flt != false -%>	Allow <%=@admin_flt%>
+	Satisfy any
+<% end -%>	AuthType Default
+	Order deny,allow
+	Require user @SYSTEM
+    </Limit>
+    <Limit Cancel-Job CUPS-Authenticate-Job>
+<% if @admin_flt != false -%>	Allow <%=@admin_flt%>
+	Satisfy any
+<% end -%>	AuthType Default
+	Order deny,allow
+	Require user @OWNER @SYSTEM
+    </Limit>
+    <Limit All>
+<% if @admin_flt != false -%>	Allow <%=@admin_flt%>
+<% end -%>	Order deny,allow
+    </Limit>
+</Policy>

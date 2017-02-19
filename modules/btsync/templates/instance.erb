@@ -1,0 +1,44 @@
+// DAEMON_UID=<%=@runtime_user%>
+// DAEMON_UMASK=<%=@umask%>
+{
+    "device_name": "<%=@name%>",
+    "storage_path": "/var/lib/btsync",
+    "listening_port": 65432,
+    "check_for_updates": false,
+    "use_upnp": false,
+    "download_limit": 150,
+    "upload_limit": 100,
+    "disk_low_priority": true,
+    "lan_encrypt_data": true,
+    "rate_limit_local_peers": false,
+    "folder_rescan_interval": 600,
+<% if @shared_folders == false -%>
+    "webui":
+    {
+	"listen" : "0.0.0.0:4242",
+	"login" : "admin",
+	"password" : "sigipsr"
+    }
+<% else -%>
+    "shared_folders":
+    [
+<% @shared_folders.each do |folder, descr| -%><% if descr['peers'] != false -%><% descr['peers'].each do |loc| -%><% if loc == @ipaddress or loc == @listen_addr -%><% if descr['secret'] =~ /[a-zA-Z]/ -%><% secret = descr['secret'] -%><% else %><% secret = @default_secret -%><% end -%>	{
+	    "secret": "<%=secret%>",
+	    "dir": "<%=folder%>",
+	    "use_relay_server": true,
+	    "use_tracker": true,
+	    "use_dht": false,
+	    "search_lan": true,
+	    "known_hosts": [ "<%=descr['peers'].join('", "')%>" ]
+	},
+<% end -%><% end -%><% end -%><% end -%>	{
+	    "secret": "<%=@default_secret%>",
+	    "dir": "/tmp",
+	    "use_relay_server": false,
+	    "use_tracker": false,
+	    "use_dht": false,
+	    "search_lan": false,
+	    "known_hosts": [ "127.0.0.1" ]
+    	}
+    ]
+<% end -%>}

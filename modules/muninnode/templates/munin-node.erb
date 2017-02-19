@@ -1,0 +1,21 @@
+host		<%=@fqdn%>
+<% @munin_ip.sort.each do |host| -%>allow		^<%=host.gsub(/\./, '\\.')%>$
+<% end -%>
+allow		^127\.0\.0\.1$
+port		<%=@munin_port%>
+user		<%=@munin_runtime_user%>
+group		<%=@munin_runtime_group%>
+setsid		1
+background	1
+log_level	<%=@munin_log_level%>
+log_file	<%=@munin_log_dir%>/munin-node.log
+pid_file	<%=@munin_run_dir%>/munin-node.pid
+<% if @timeout -%>timeout		<%=@timeout%>
+<% end -%>
+
+ignore_file	~$
+ignore_file	\.bak$
+ignore_file	%$
+<% if @operatingsystem == "Debian" or @operatingsystem == "Ubuntu" -%>ignore_file	\.dpkg-(tmp|new|old|dist)$
+<% end -%><% if @operatingsystem == "CentOS" or @operatingsystem == "RedHat" -%>ignore_file	\.rpm(save|new)$
+<% end -%>ignore_file	\.pod$

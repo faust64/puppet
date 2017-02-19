@@ -1,0 +1,76 @@
+#!/bin/sh
+
+TMPFILE=/tmp/`basename $0`.$$
+HOSTNAME=`hostname -f`
+SUBJECT=REPORT
+BACKUP_DIR=<%=@backup_dir%>
+<% if @contact -%>DEST=<%=@contact%>
+<% end -%><% if @slack_hook != false -%>HOOK_URL=<%=@slack_hook%>
+<% end -%>FAIL=
+
+cd /tmp
+if ! test -x /usr/bin/gitlab-rake; then
+    FAIL="gitlab-rake missing"
+else
+    if ! test -d $BACKUP_DIR; then
+	if ! mkdir -p $BACKUP_DIR; then
+	    FAIL="failed creating backup directory"
+	fi
+    fi
+    if test -d $BACKUP_DIR; then
+	chown root:root $BACKUP_DIR
+	chmod 0700 $BACKUP_DIR
+	if test -x /usr/local/sbin/dropcaches; then
+	    /usr/local/sbin/dropcaches
+	fi
+	if ! gitlab-rake gitlab:backup:create >$TMPFILE 2>&1; then
+	    FAIL="creating backup"
+	else
+	    pfx=`ls -tr /var/opt/gitlab/backups/*tar | tail -1 | sed 's|.*backups/\(.*\)_gitlab_backup.tar|\1|'`
+	    if test "$pfx"; then
+		if ! tar -cf $BACKUP_DIR/gitlab_config.tar /etc/gitlab >>$TMPFILE 2>&1; then
+		    FAIL="creating configuration backup"
+		fi
+		mv /var/opt/gitlab/backups/${pfx}_gitlab_backup.tar $BACKUP_DIR/gitlab_backup.tar
+	    else
+		FAIL="could not find gitlab backup output"
+	    fi
+	fi
+    fi
+fi
+
+test "$FAIL" && SUBJECT=WARNING
+if test "$HOOK_URL" -a -x /usr/local/bin/slack; then
+    if test "$FAIL"; then
+	/usr/local/bin/slack $HOOK_URL "$SUBJECT: backup gitlab on $HOSTNAME - $FAIL"
+	if test -s $TMPFILE; then
+	    while read line
+	    do
+		/usr/local/bin/slack $HOOK_URL "$SUBJECT: backup gitlab on $HOSTNAME - $line"
+	    done <$TMPFILE
+	fi
+    else
+	/usr/local/bin/slack $HOOK_URL "$SUBJECT: backup gitlab done on $HOSTNAME"
+    fi
+elif test "$DEST"; then
+    if test -s $TMPFILE; then
+	cat $TMPFILE | mail -s"[$SUBJECT] gitlab backup on $HOSTNAME" $DEST
+    else
+	test "$FAIL" && msg="$FAIL" || msg=done
+	echo $msg | mail -s"[$SUBJECT] backing up gitlab on $HOSTNAME" $DEST
+    fi
+elif test -s $TMPFILE; then
+    if test "$FAIL"; then
+	echo $FAIL >&2
+	cat $TMPFILE >&2
+    else
+	cat $TMPFILE
+    fi
+elif test "$FAIL"; then
+    echo $FAIL >&2
+else
+    echo done
+fi
+rm -f $TMPFILE
+
+exit 0

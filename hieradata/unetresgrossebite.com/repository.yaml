@@ -1,0 +1,81 @@
+additional_classes:
+  - Fail2ban
+  - Firehol
+  - Openldap
+
+physical_parent: gaia.unetresgrossebite.com
+
+#Required bootstrapping:
+#puppet_apt_repo: http://repository.intra.unetresgrossebite.com/debian
+#puppet_http_repo: http://repository.intra.unetresgrossebite.com
+#pxe_packages_repository: repository.intra.unetresgrossebite.com
+#//
+
+# Firehol
+firehol_interfaces:
+  - name: eth0
+    description: WAN
+    protection: strong
+    allow:
+      - server icmp accept
+      - server http accept
+      - server ldap accept
+      - server https accept
+      - server ldaps accept
+      - server custom openssh "tcp/1022" default accept
+      - server custom munin "tcp/4949" default accept src "$office_networks"
+      - server custom nrpe "tcp/5666" default accept src "$office_networks"
+      - client all accept
+
+# Letsencrypt
+letsencrypt_renew_day: 22
+letsencrypt_renew_hour: 22
+letsencrypt_renew_min: 14
+
+# Nagios
+nagios_partitions_watchlist:
+  root: /
+  repository: /var/www
+
+# Packages
+packages_do_nfs: false
+
+# PF
+dns_ip:
+  - 95.211.205.36
+  - 188.165.212.140
+
+# WANs
+office_networks:
+  "hypnos": 5.79.79.190/32
+  "leaseweb#1": 37.48.71.168/31
+  "leaseweb#2": 37.48.71.170/32
+  "leaseweb#3": 95.211.136.210/31
+  "leaseweb#4": 95.211.136.212
+  "gaia": 95.211.205.36
+  "ker": 62.210.188.140/32
+  "kimsufi#1": 176.31.250.180/32
+  "kimsufi#2": 5.135.176.165/32
+  "kimsufi#3": 5.135.190.108/32
+  "gangbang": 78.193.67.92/32
+  "illiad#1": 212.83.154.64/32
+  "illiad#2": 212.83.154.66/31
+  "orange": 86.247.183.179/32
+  "ovh#1": 5.135.4.208/29
+  "ovh#2": 51.254.93.64/29
+  "soyoustart#1": 188.165.212.140/32
+  "soyoustart#2": 37.59.45.201/32
+  "peeriostress#1": 52.91.247.102/32
+  "peeriostress#2": 54.87.226.23/32
+  "peeriostress#3": 54.165.194.75/32
+  "peeriostress#4": 54.146.150.147/32
+  "peeriostress#5": 52.201.236.81/32
+  "peeriostress#6": 54.90.239.33/32
+  "peeriostress#7": 52.90.98.122/32
+  "peeriostress#8": 54.197.1.121/32
+  "peeriostress#9": 54.146.163.228/32
+  "peeriostress#10": 54.172.238.233/32
+  "peeriostress#11": 54.157.202.140/32
+  "peeriostress#12": 52.91.49.50/32
+  "peeriostress#13": 54.172.185.8/32
+  "peeriostress#14": 54.146.230.45/32

@@ -1,0 +1,14 @@
+<% if @locale == "fr" -%>emailbody = ${VM_NAME},\n\nLa boite vocale de l'extension ${VM_MAILBOX} comporte un nouveau message :\n\n\tDe :\t${VM_CALLERID}\n\tDuree :\t${VM_DUR} seconds\n\tDate :\t${VM_DATE}\n\nVous pouvez appeler le *98 de n'importe quel poste interne, ou le *97 de votre poste telephonique pour acceder a votre boite vocale.\n
+<% else -%>emailbody = ${VM_NAME},\n\nThe voicemailbox of account ${VM_MAILBOX} just received a new message:\n\n\tFrom:\t${VM_CALLERID}\n\tLength:\t${VM_DUR} seconds\n\tDate:\t${VM_DATE}\n\nYou may call *98 from any SIP station within local network, or *97 from your own station to check out messages in your voicemailbox.\n
+<% end -%>
+fromat = wav49|wav
+attach = yes
+pbxskip = yes
+servermail = no-reply@<%=@domain%>
+fromstring = Voicemail System
+maxsilence = 5
+silencethreshold = 128
+skipms = 3000
+review = yes
+operator = yes
+nextaftercmd = yes

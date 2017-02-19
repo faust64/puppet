@@ -1,0 +1,24 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+if ! test -x /usr/sbin/postfix -o -x /sbin/postfix; then
+    ret=UNKNOWN
+    msg=' - no postfix'
+    perfdata=' | 0'
+elif ! ps ax | grep '[p]ostfix/master' >/dev/null; then
+    ret=CRITICAL
+    msg=' - postfix not running'
+    perfdata=' | 0'
+else
+    ret=OK
+    perfdata=" | 1"
+fi
+
+echo "$PRG $ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

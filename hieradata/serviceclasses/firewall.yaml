@@ -1,0 +1,110 @@
+additional_classes:
+  - Fail2ban
+
+# BGPD
+bgp_max_pfx_len: false
+bgp_min_pfx_len: false
+
+# Ipsecctl
+contact_alerts_ipsecctl: faust@unetresgrossebite.com
+
+# Nagios
+nagios_class: network
+nagios_load_crit_threshold: "3.0,3.0,3.0"
+nagios_load_warn_threshold: "2.9,2.9,2.9"
+nagios_no_parent: false
+nagios_partitions_watchlist:
+  root: /
+nagios_runprocs_crit: 15
+nagios_runprocs_warn: 10
+
+# Network
+carp_advbase: 10
+carp_advskew: 5
+carp_pass: false
+hostid: 2
+
+# OpenSSH
+ssh_port: 222
+
+# OpenVPN
+contact_alerts_openvpn: faust@unetresgrossebite.com
+
+# OSPFD
+ospf_auth: plain
+ospf_authid: false
+ospf_authkey: false
+ospf_no_redistribute:
+  - 0.0.0.0/0
+  - 37.48.71.168/32
+  - 78.193.67.0/24
+  - 109.190.108.0/22
+  - 192.168.0.0/24
+  - 192.168.10.0/24
+  - 169.254.0.0/16
+
+# PF
+allowed_tcp_ports:
+  - ssh
+  - whois
+  - http
+  - pop3
+  - ntp
+  - imap
+  - 222
+  - https
+  - 444
+  - smtps
+  - 563
+  - imaps
+  - pop3s
+  - 1022
+  - 1194
+  - cvspserver
+  - 3000
+  - 3690
+  - 5222
+  - "8080:8090"
+  - 8140
+  - 9418
+  - 11371
+allowed_udp_ports:
+  - time
+  - ntp
+  - "33434:33534"
+blacklist:
+  - 37.61.242.57
+  - 62.148.83.123
+  - 62.193.59.142
+  - 81.93.250.110
+  - 88.171.146.19
+  - 194.250.231.251
+dns_masters:
+  - 10.42.44.100
+ldap_masters:
+  - 10.42.44.100
+pf_skip_gre: true
+pf_state_policy: floating
+vpnserver_if: vlan4
+
+# Puppet
+puppet_update_by_cron: true
+
+# Racktables
+racktables_object_id: 7
+
+# RIPD
+rip_splithorizon_method: simple
+
+# SNMP
+snmp_sysservices: 78
+# L2: (vlans) 2 ^ (2-1)
+# L3: (routing/firewalling) 2 ^ (3-1)
+# L4: (ftpproxy/tftpproxy/igmpproxy) 2 ^ (4-1)
+# L7: (relayd/openvpn) 2 ^ (7-1)
+# => 78
+
+# Sysctl
+ip_forwarding: 1
+igmp_forwarding: 1
+ifqmaxlen: 768

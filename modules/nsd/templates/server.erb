@@ -1,0 +1,7 @@
+server:
+    do-ip4: yes
+    ip-address: <%=@listen_addr%>@<%=@listen_port%>
+    username: <%=@runtime_user%>
+    zonesdir: "<%=@zones_dir%>"
+    logfile: "/var/log/nsd.log"
+    pidfile: "<%=@run_dir%>/nsd.pid"

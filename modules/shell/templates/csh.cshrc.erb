@@ -1,0 +1,44 @@
+set path = (/sbin /bin /usr/sbin /usr/bin /usr/local/sbin /usr/local/bin $HOME/bin)
+if ($user == root) then
+    set prompt="%{\033[<%=@prompt%>m%}%m:%B%~%b%{\033[0;37m%}#%{\033[0;00m%} "
+else
+    set prompt="%{\033[<%=@prompt%>m%}%n@%m:%B%~%b%{\033[0;37m%}\$%{\033[0;00m%} "
+endif
+set complete
+set autolist
+set nobeep
+set rmstar
+set history=100
+set savehist=100
+set watch=(1 $USER any)
+set filec
+set history = 100
+set savehist = 100
+set mail = (/var/mail/$USER)
+unset ignoreeof
+
+if ($?tcsh) then
+    bindkey "^W" backward-delete-word
+    bindkey -k up history-search-backward
+    bindkey -k down history-search-forward
+endif
+
+if ( -d /etc/profile.d ) then
+    set nonomatch
+    test -e /etc/profile.d/* >&/dev/null && set load=true
+    if ( $?load ) then
+	foreach config ( /etc/profile.d/* )
+	    grep "^#\!/bin/[t]*csh" $config >/dev/null || continue
+	    source $config
+	end
+    endif
+endif
+
+setenv BLOCKSIZE K
+setenv CLICOLOR true
+setenv EDITOR vi
+setenv FACTERLIB /opt/puppetlabs/puppet/cache/lib/facter
+<% if @operatingsystem != "FreeBSD" -%>setenv LC_CTYPE <%=@locale%>.<%=@charset%>
+setenv LC_MESSAGES <%=@locale%>.<%=@charset%>
+<% end -%>setenv LESS -X
+setenv PAGER less

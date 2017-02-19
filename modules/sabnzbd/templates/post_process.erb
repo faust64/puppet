@@ -1,0 +1,29 @@
+#!/bin/sh
+
+if test -d "$1"; then
+    DOWNLOAD_DIR="$1"
+else
+    DOWNLOAD_DIR=<%=@conf_dir%>/downloads/complete
+fi
+<% if @pp_hook != false -%>HOOK_URL=<%=@pp_hook%>
+<% end -%>IGNORE_EXTENSIONS="nzb nfo idx sub srt sfv srr wmv url lnk URL"
+
+find "$DOWNLOAD_DIR" -type f -exec chmod 0664 {} \;
+find "$DOWNLOAD_DIR" -type d -exec chmod 0775 {} \;
+find "$DOWNLOAD_DIR" -exec chown <%=@run_user%>:<%=@run_group%> {} \;
+
+for dropped in $IGNORE_EXTENSIONS
+do
+    find "$DOWNLOAD_DIR" -type f -name "*.$dropped" -exec rm -vf {} \;
+done
+find "$DOWNLOAD_DIR" -type f \( -name '*-sample.*' -o -name 'sample-*' \) -exec rm -vf {} \;
+for dropped in Proof Proofs Sample Samples
+do
+    test -d "$DOWNLOAD_DIR/$dropped" || continue
+    rm -fr "$DOWNLOAD_DIR/$dropped"
+done
+if test "$HOOK_URL" -a -x /usr/local/bin/slack; then
+    /usr/local/bin/slack $HOOK_URL "REPORT: done processing $2" >/dev/null
+fi
+
+exit 0

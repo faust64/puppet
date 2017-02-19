@@ -1,0 +1,25 @@
+#!/bin/sh
+
+chmod 0700 /var/lib/sudo
+while ! `tvservice --dumpedid /tmp/edid | grep -qv 'Nothing written'`
+do
+    echo "waiting for screen"
+    sleep 30
+done
+
+echo "extracting preferred mode"
+eval `edidparser /tmp/edid | grep 'preferred mode' | tail -1 | sed -Ene 's/^.+(DMT|CEA) \(([0-9]+)\) ([0-9]+)x([0-9]+)[pi]? @.+/_GROUP=\1;_MODE=\2;_XRES=\3;_YRES=\4;/p'`
+_DEPTH=16
+echo "assuming ${_GROUP}-$_MODE ${_XRES}x${_YRES}x${_DEPTH}"
+tvservice --explicit="$_GROUP $_MODE"
+sleep 1
+echo "reset framebuffer"
+export OS_CHROMEOS=TowelieStrikesAgain
+fbset --all --geometry $_XRES $_YRES $_XRES $_YRES $_DEPTH -left 0 -right 0 -upper 0 -lower 0
+if test -f /boot/xinitrc; then
+    ln -fs /boot/xinitrc /home/<%=@runtime_user%>/.xinitrc
+    su - pi -c 'startx -- -br -nolisten tcp -dpms' &
+fi
+<% if @kernel == "Linux" -%>
+exit 0
+<% end -%>

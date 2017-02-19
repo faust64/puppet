@@ -1,0 +1,46 @@
+Content-language: en
+Content-type: text/html; charset=ISO-8859-1
+Body:----------en--
+<!--#set var="TITLE" value="410: Resource is no longer available!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 410</h1>
+	    <p>This page is no longer available, there is no forwarding address.</p>
+	    <p>If you think this is a mistake, please contact admin@unetresgrossebite.com</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------en--
+
+Content-language: es
+Content-type: text/html; charset=ISO-8859-1
+Body:----------es--
+<!--#set var="CONTENT_LANGUAGE" value="es"
+--><!--#set var="TITLE" value="&iexcl;410: Recurso no disponible!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 410</h1>
+	    <p>Los recursos solicitados ya no est&aacute;n disponibles en este servidor y no existe una direcci&oacute;n alternativa.</p>
+	    <p>Si usted piensa que es un error, gracias ponerse en contacto con admin@unetresgrossebite.com</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------es--
+
+Content-language: fr
+Content-type: text/html; charset=ISO-8859-1
+Body:----------fr--
+<!--#set var="CONTENT_LANGUAGE" value="fr"
+--><!--#set var="TITLE" value="410 : Cette ressource n'existe plus!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERREUR 410</h1>
+	    <p>L'URL demand&eacute;e n'est plus accessible sur ce serveur, il n'y a pas d'adresse de redirection.</p>
+	    <p>Si vous pensez qu'il s'agit d'une erreur, merci de contacter admin@unetresgrossebite.com</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------fr--

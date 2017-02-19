@@ -1,0 +1,5 @@
+#cloud-config
+
+ssh_authorized_keys:
+<% @keys.values.each do |key| %>  - <% if key['type'] =~ /ssh-/ -%><%=key['type']%><% else -%>ssh-dss<% end -%> <%=key['key']%> <%=key['pentagram']%>@puppet
+<% end -%>output: {all: '| tee -a /var/log/cloud-init-output.log'}

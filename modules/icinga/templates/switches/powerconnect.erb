@@ -1,0 +1,266 @@
+define host {
+	address				<%=@host_ipaddress%>
+	alias				<%=@host_alias%>
+	contacts			<%=@host_contact%>
+	host_name			<%=@name%>
+	hostgroups			<%=@host_group%>
+	icon_image			<%=@iconimage%>
+	icon_image_alt			<%=@iconimagealt%>
+	statusmap_image			<%=@statusmapimage%>
+	use				generic-host
+<% if @host_parents -%>	parents				<%=@host_parents%>
+<% end -%>}
+
+##
+define service {
+	check_command			check-host-alive
+	host_name			<%=@name%>
+	use				critical-service
+	service_description		<%=@name%> alive
+	servicegroups			network
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		5
+	last_notification		6
+	escalation_period		10x5
+	notification_interval		30
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> alive
+}
+<% end -%>
+##
+define service {
+	check_command			check-sw-model
+	host_name			<%=@name%>
+	use				jobs-service
+	service_description		<%=@name%> model
+	servicegroups			system
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		20
+	last_notification		21
+	escalation_period		10x5
+	notification_interval		120
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> model
+}
+<% end -%>
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> model
+	dependent_service_description	<%=@name%> alive
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+##
+define service {
+	check_command			check-sw-firmware
+	host_name			<%=@name%>
+	use				jobs-service
+	service_description		<%=@name%> firmware
+	servicegroups			system
+}
+
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> firmware
+	dependent_service_description	<%=@name%> alive
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		20
+	last_notification		21
+	escalation_period		10x5
+	notification_interval		120
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> firmware
+}
+<% end -%>
+##
+define service {
+	check_command			check-sw-ports
+	host_name			<%=@name%>
+	use				meh-service
+	service_description		<%=@name%> ports
+	servicegroups			system
+}
+
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> ports
+	dependent_service_description	<%=@name%> alive
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		10
+	last_notification		11
+	escalation_period		10x5
+	notification_interval		20
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> ports
+}
+<% end -%>
+##
+define service {
+	check_command			check-sw-uptime
+	host_name			<%=@name%>
+	use				meh-service
+	service_description		<%=@name%> uptime
+	servicegroups			system
+}
+
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> uptime
+	dependent_service_description	<%=@name%> alive
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		2
+	last_notification		3
+	escalation_period		10x5
+	notification_interval		10
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> uptime
+}
+<% end -%><% if @ports != false -%><% @ports.each do |port| -%>
+
+##
+define service {
+	check_command			check-sw-portadm!<%=port%>
+	host_name			<%=@name%>
+	use				jobs-service
+	service_description		<%=@name%> port <%=port%> managed state
+	servicegroups			network
+}
+
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> port <%=port%> managed state
+	dependent_service_description	<%=@name%> ports
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		2
+	last_notification		3
+	escalation_period		10x5
+	notification_interval		10
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> port <%=port%> managed state
+}
+<% end -%>
+##
+define service {
+	check_command			check-sw-portcheck!<%=port%>
+	host_name			<%=@name%>
+	use				error-service
+	service_description		<%=@name%> port <%=port%> link state
+	servicegroups			network
+}
+
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> port <%=port%> link state
+	dependent_service_description	<%=@name%> port <%=port%> managed state
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		2
+	last_notification		3
+	escalation_period		10x5
+	notification_interval		10
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> port <%=port%> link state
+}
+<% end -%>
+##
+define service {
+	check_command			check-sw-portchange!<%=port%>
+	host_name			<%=@name%>
+	use				critical-service
+	service_description		<%=@name%> port <%=port%> last status change
+	servicegroups			network
+}
+
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> port <%=port%> last status change
+	dependent_service_description	<%=@name%> port <%=port%> link state
+	execution_failure_criteria	u
+	notification_failure_criteria	u
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		2
+	last_notification		3
+	escalation_period		10x5
+	notification_interval		10
+	escalation_options		u
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> port <%=port%> last status change
+}
+<% end -%>
+##
+define service {
+	check_command			check-sw-portstats!<%=port%>
+	host_name			<%=@name%>
+	use				warning-service
+	service_description		<%=@name%> port <%=port%> traffic counters
+	servicegroups			network
+}
+
+define servicedependency {
+	host_name			<%=@name%>
+	dependent_host_name		<%=@name%>
+	service_description		<%=@name%> port <%=port%> traffic counters
+	dependent_service_description	<%=@name%> port <%=port%> managed state
+	execution_failure_criteria	u,w,c
+	notification_failure_criteria	u,w,c
+}
+
+<% if @contact != false -%>define serviceescalation {
+	first_notification		2
+	last_notification		3
+	escalation_period		10x5
+	notification_interval		10
+	escalation_options		w,c
+	contact_groups			<%=@contact%>
+	host_name			<%=@name%>
+	service_description		<%=@name%> port <%=port%> traffic counters
+}
+<% end -%><% end -%><% end -%>

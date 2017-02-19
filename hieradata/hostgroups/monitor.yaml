@@ -1,0 +1,37 @@
+additional_classes:
+  - Icinga
+# - Pnp4nagios (currently broken/requires sid dependencies/pulling php7/...)
+
+# Apache
+apache_listen_ports:
+  plain: 80
+  ssl: 443
+apache_mod_authldap: true
+apache_mod_cgi: true
+apache_mod_php: true
+apache_mod_status: true
+apache_mpm: prefork
+apache_munin: true
+apache_rsyslog: true
+
+# Icinga
+icinga_livestatus_clients:
+  - 10.43.1.11
+  - 10.42.42.42
+
+# Nagios
+nagios_iconimage: icinga.gif
+nagios_iconimagealt: icinga
+nagios_statusmapimage: icinga.gd2
+nagios_load_crit_threshold: "5.0,5.0,5.0"
+nagios_load_warn_threshold: "4.0,4.0,4.0"
+nagios_procs_crit: 400
+nagios_procs_warn: 300
+nagios_runprocs_crit: 20
+nagios_runprocs_warn: 10
+
+# Nginx
+nginx_rsyslog: true
+
+# PHP
+php_mod_gd: true

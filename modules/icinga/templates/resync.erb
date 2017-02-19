@@ -1,0 +1,22 @@
+#!/bin/sh
+
+test -d <%=@conf_dir%> || exit 1
+
+TMPFILE=/tmp/icinga_resync.$$
+
+cd <%=@conf_dir%>
+find import.d/ -type f -exec chmod 0644 {} \;
+if ! icinga -v icinga-check-puppet.cfg >$TMPFILE 2>&1; then
+    echo "trace kept in $TMPFILE"
+    exit 1
+fi
+
+rm -f $TMPFILE
+rsync -avWxP --delete import.d/* objects/
+if which systemctl >/dev/null 2>&1; then
+    systemctl reload icinga
+else
+    /etc/init.d/icinga reload
+fi
+
+exit 0

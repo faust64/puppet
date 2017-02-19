@@ -1,0 +1,326 @@
+# L3 - hwfilter
+filtering_switches: false
+filtering_switches_passphrase: false
+filtering_switches_user: admin
+
+# BGPD
+bgp_deny_networks:
+  0.0.0.0: 8
+  10.255.0.0: 16
+  100.64.0.0: 10
+  127.0.0.0: 8
+  169.254.0.0: 16
+  172.16.0.0: 12
+  192.0.2.0: 24
+  198.18.0.0: 15
+  198.51.100.0: 24
+  203.0.113.0: 24
+  224.0.0.0: 4
+  240.0.0.0: 4
+
+# LANs
+is_datacenter: false
+office_netids:
+  intra.unetresgrossebite.com: 42
+# dedibox.unetresgrossebite.com: 43.0
+  leaseweb.unetresgrossebite.com: 43.1
+
+# OpenVPN
+active_openvpns:
+  leaseweb.unetresgrossebite.com:
+    - { name: leaseweb, rootif: tun0 }
+# dedibox.unetresgrossebite.com:
+#   - { name: dedibox, rootif: tun0 }
+# intra.unetresgrossebite.com:
+#   - { name: intra, rootif: tun1 }
+# vms.intra.unetresgrossebite.com:
+#   - { name: intra, rootif: tun1 }
+openvpn_database:
+  dedibox:
+    mapto: vlan3
+    netid: 10.242.0
+    netmsk: 24
+    port: 1194
+    server: true
+  intra:
+    mapto: vlan3
+    netid: 10.242.2
+    netmsk: 24
+    port: 1194
+    server: true
+  leaseweb:
+    mapto: vlan3
+    netid: 10.242.1
+    netmsk: 24
+    port: 1194
+    server: true
+
+# PF
+adm_ip:
+  - 10.42.42.0/24
+  - 5.135.4.213/32
+  - 54.174.21.210/32
+  - 78.193.67.92/32
+icmp_ip:
+  - 10.42.242.202
+  - 10.42.242.204
+  - 10.43.1.7
+
+# VLANs
+active_vlans:
+  intra.unetresgrossebite.com:
+    - { name: vlan2, rootif: trunk0 }
+    - { name: vlan3, rootif: trunk0 }
+    - { name: vlan4, rootif: trunk0 }
+    - { name: vlan5, rootif: trunk0 }
+    - { name: vlan6, rootif: trunk0 }
+    - { name: vlan7, rootif: trunk0 }
+    - { name: vlan8, rootif: trunk0 }
+    - { name: vlan10, rootif: trunk0 }
+    - { name: vlan11, rootif: trunk0 }
+    - { name: vlan42, rootif: trunk0 }
+    - { name: vlan100, rootif: trunk0 }
+  dedibox.unetresgrossebite.com:
+    - { name: vlan4, ospfif: eth0, netid: 10.43.0 }
+  leaseweb.unetresgrossebite.com:
+    - { name: vlan4, ospfif: eth0, netid: 10.43.1 }
+vlan_database:
+  vlan2:
+    name: Management
+    dns: "adm"
+    netid: "242"
+    netmsk: 24
+    acl:
+      - vlan3
+      - vlan4
+      - vlan5
+      - vlan6
+      - vlan7
+      - vlan8
+      - vlan10
+      - vlan11
+      - vlan100
+    dhcp: true
+    ftp: true
+    forceproxy: false
+    icecast: false
+    igmp: false
+    internet: true
+    quic: false
+    tftp: false
+    vid: 2
+    xmppvisio: false
+  vlan3:
+    name: Users
+    dns: "users"
+    netid: "45"
+    netmsk: 24
+    acl:
+      - vlan4
+      - vlan6
+      - vlan8
+    dhcp: true
+    ftp: true
+    forceproxy: false
+    icecast: true
+    igmp: true
+    internet: true
+    quic: false
+    tftp: true
+    vid: 3
+    xmppvisio: true
+  vlan4:
+    name: VirtServices
+    dns: "vms"
+    netid: "44"
+    netmsk: 24
+    acl:
+      - vlan6
+      - vlan8
+    dhcp: true
+    ftp: true
+    forceproxy: false
+    icecast: false
+    igmp: upstream
+    internet: true
+    quic: false
+    tftp: true
+    vid: 4
+    xmppvisio: false
+  vlan5:
+    name: Friends
+    dns: "friends"
+    netid: "253"
+    netmsk: 24
+    acl:
+      - vlan3
+      - vlan4
+      - vlan6
+      - vlan8
+    dhcp: true
+    ftp: true
+    forceproxy: false
+    icecast: true
+    igmp: true
+    internet: true
+    quic: false
+    tftp: true
+    vid: 5
+    xmppvisio: true
+  vlan6:
+    name: WiFi
+    dns: "wifi"
+    netid: "254"
+    netmsk: 24
+    acl:
+      - vlan3
+      - vlan4
+      - vlan8
+    dhcp: true
+    ftp: true
+    forceproxy: false
+    icecast: true
+    igmp: true
+    internet: true
+    quic: false
+    tftp: true
+    vid: 6
+    xmppvisio: true
+  vlan7:
+    name: Plaristote
+    dns: "plaristote"
+    netid: "43"
+    netmsk: 24
+    acl:
+      - vlan3
+      - vlan4
+      - vlan5
+      - vlan6
+      - vlan8
+      - vlan100
+    dhcp: true
+    ftp: true
+    forceproxy: false
+    icecast: true
+    igmp: true
+    internet: true
+    quic: true
+    tftp: true
+    vid: 7
+    xmppvisio: true
+  vlan8:
+    name: VoIP
+    dns: "sip"
+    netid: "41"
+    netmsk: 24
+    acl:
+      - vlan3
+      - vlan4
+      - vlan5
+      - vlan6
+      - vlan7
+    dhcp: true
+    ftp: true
+    forceproxy: false
+    icecast: false
+    igmp: false
+    internet: true
+    quic: false
+    tftp: true
+    vid: 8
+    xmppvisio: false
+  vlan10:
+    name: Ceph
+    dns: "ceph"
+    netid: "46"
+    netmsk: 24
+    acl:
+      - vlan4
+    dhcp: true
+    ftp: true
+    forceproxy: false
+    icecast: false
+    igmp: false
+    internet: true
+    quic: false
+    tftp: false
+    vid: 10
+    xmppvisio: false
+  vlan11:
+    name: VideoSurveillance
+    dns: "surv"
+    netid: "40"
+    netmsk: 24
+    acl:
+      - vlan4
+    dhcp: true
+    ftp: true
+    forceproxy: false
+    icecast: false
+    igmp: false
+    internet: true
+    quic: false
+    tftp: true
+    vid: 11
+    xmppvisio: false
+  vlan42:
+    name: Faust
+    dns: "faust"
+    admin: true
+    netid: "42"
+    netmsk: 24
+    acl:
+      - vlan2
+      - vlan3
+      - vlan4
+      - vlan5
+      - vlan6
+      - vlan7
+      - vlan8
+      - vlan10
+      - vlan11
+      - vlan100
+    dhcp: true
+    ftp: true
+    forceproxy: false
+    icecast: true
+    igmp: true
+    internet: true
+    quic: true
+    tftp: true
+    vid: 42
+    xmppvisio: true
+  vlan100:
+    name: Guests
+    dns: "guests"
+    netid: "252"
+    netmsk: 24
+    acl: false
+    dhcp: true
+    ftp: false
+    forceproxy: false
+    icecast: false
+    igmp: false
+    internet: guest
+    quic: false
+    tftp: false
+    vid: 100
+    xmppvisio: false
+
+# WANs
+office_networks:
+  "hypnos": 5.79.79.190/32
+  "leaseweb#1": 37.48.71.168/31
+  "leaseweb#2": 37.48.71.170/32
+  "leaseweb#3": 95.211.136.210/31
+  "leaseweb#4": 95.211.136.212
+  "gaia": 95.211.205.36
+  "ker": 62.210.188.140/32
+  "kimsufi#1": 176.31.250.180/32
+  "kimsufi#2": 5.135.176.165
+  "kimsufi#3": 5.135.190.108/32
+  "gangbang": 78.193.67.92/32
+  "ovh#1": 5.135.4.208/29
+  "ovh#2": 51.254.93.64/29
+  "soyoustart#1": 188.165.212.140/32
+  "soyoustart#2": 37.59.45.201/32

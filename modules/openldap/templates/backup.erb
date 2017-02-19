@@ -1,0 +1,31 @@
+#!/bin/sh
+
+TMPFILE=/tmp/openldap.$$
+HOSTNAME=`hostname -f`
+BACKUP_DIR=/media/backups
+<% if @slack_hook != false -%>HOOK_URL=<%=@slack_hook%>
+<% end -%>backup_file=$BACKUP_DIR/openldap.tar
+if ! test -d $BACKUP_DIR; then
+    mkdir $BACKUP_DIR
+fi
+tar -cf $backup_file /var/lib/ldap /etc/ldap 2>&1 | grep -v 'tar: Removing leading' >$TMPFILE
+if test -s $TMPFILE; then
+    SUBJECT=WARNING
+else
+    SUBJECT=REPORT
+fi
+chmod 0600 $backup_file
+if test "$HOOK_URL" -a -x /usr/local/bin/slack; then
+    if test -s $TMPFILE; then
+	while read line
+	do
+	    /usr/local/bin/slack $HOOK_URL "$SUBJECT: backup openldap on $HOSTNAME - $line"
+	done <$TMPFILE
+    else
+	/usr/local/bin/slack $HOOK_URL "$SUBJECT: backup openldap done on $HOSTNAME"
+    fi
+fi
+
+rm -f $TMPFILE
+
+exit $?

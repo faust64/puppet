@@ -1,0 +1,41 @@
+additional_classes:
+  - Fail2ban
+
+# Collectd
+with_collectd: false
+
+# KVM
+kvm_cpu_family: Nehalem
+
+# LinuxCounter
+lico_update_day: 1
+lico_update_hour: 15
+lico_update_min: 14
+
+# Munin-Node
+munin_node_listenaddr: 95.211.205.36
+
+# Nagios
+nagios_listenaddr: 95.211.205.36
+nagios_md_raid:
+  - md0
+  - md1
+nagios_no_parent: true
+nagios_partitions_watchlist:
+  root: /
+nagios_smart_disks:
+  - sda
+  - sdb
+  - sdc
+  - sdd
+
+# OpenVZ/Xen/KVM
+vz_default_gateway: 95.211.205.36
+
+# PF
+dns_ip:
+  - 127.0.0.1
+  - 188.165.212.140
+
+# SNMP
+snmp_listenaddr: 95.211.205.36

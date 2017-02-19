@@ -1,0 +1,32 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+if test x$1 = xgeneral; then
+    tcp=`sudo /sbin/pfctl -ss | /usr/bin/awk "BEGIN{c=0}/tcp/{c=c+1}END{print c}"`
+    udp=`sudo /sbin/pfctl -ss | /usr/bin/awk "BEGIN{c=0}/udp/{c=c+1}END{print c}"`
+    tot=`sudo /sbin/pfctl -ss | /usr/bin/awk "END{print NR}"`
+    perfdata=" | $tcp;$udp;$tot"
+elif test "$1"; then
+    tot=`sudo /sbin/pfctl -ss | /usr/bin/awk "BEGIN{c=0}/$1/{c=c+1}END{print c}"`
+    perfdata=" | $tot"
+else
+    tot=`sudo /sbin/pfctl -ss | /usr/bin/awk "END{print NR}"`
+    perfdata=" | $tot"
+fi
+
+if test $tot -gt 40000; then
+    ret=CRITICAL
+elif test $tot -gt 25000; then
+    ret=WARNING
+fi
+
+test x$ret = x && ret=OK
+
+echo "$ret - $tot$perfdata"
+eval ret=\$$ret
+exit $ret

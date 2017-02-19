@@ -1,0 +1,89 @@
+#!/bin/sh
+
+. /etc/virtual.conf
+DEBUG=false
+COMPRESS=false
+NICE_LEVEL=19
+
+test "$QUOTA" && SNAPSIZE=$QUOTA || SNAPSIZE=10G
+test "$BACKUP_STORAGE"           || BACKUP_STORAGE=/media/backups
+test "$TMP_STORAGE"              || TMP_STORAGE=$BACKUP_STORAGE/tmp
+
+while getopts cds:hv: options
+do
+    case "$options" in
+	c) COMPRESS=true	;;
+	d) DEBUG=true		;;
+	s) SNAPSIZE=$OPTARG	;;
+	v) LIST=$OPTARG		;;
+	*)
+	    echo Unknown option "$options"
+	    exit 1
+	    ;;
+    esac
+done
+
+if test -z "$LIST"; then
+    LIST=`cd /etc/xen/conf; ls *.conf | sed 's|\.conf$||'`
+fi
+if ! test -d $TMP_STORAGE; then
+    mkdir -p $TMP_STORAGE
+fi
+cd $TMP_STORAGE
+
+for VM in $LIST
+do
+    test -d $VM || mkdir $VM
+    test "$DEBUG" && echo backing $VM up
+    SUSPEND=false
+    if xl list | grep "^$VM[ ]*" | grep ' [r-][b-]----' >/dev/null; then
+	xl sysrq $VM s
+	if ! xl pause $VM; then
+	    echo Failed snapshotting $VM >&2
+	    continue
+	fi
+	xl sysrq $VM s
+	SUSPEND=true
+    fi
+    >$VM/dumpeddisks
+    for disk in `grep "'phy:" /etc/xen/conf/$VM.conf | sed 's|[^:]*:\([^,]*\),.*|\1|'`
+    do
+	if ! test -e $disk; then
+	    echo Skipping $disk, which seems absent >&2
+	    continue
+	fi
+	rname="$disk-snap`date +%s`"
+	nname="`basename $disk`-snap`date +%s`"
+	test "$DEBUG" && echo creating snapshot $nname
+	if ! lvcreate -L $SNAPSIZE -s -n $nname $disk; then
+	    echo Failed creating snapshot >&2
+	    continue
+	fi
+	echo $disk:$rname >>$VM/dumpeddisks
+    done
+    if $SUSPEND; then
+	if ! xl unpause $VM; then
+	    echo CRITICAL: failed restoring $VM >&2
+	fi
+    fi
+    while read line
+    do
+	eval `echo $line | sed 's|\([^:]*\):\(.*\)|device=\1 snapshot=\2|'`
+	if $COMPRESS; then
+	    test "$DEBUG" && echo dumping $snapshot to $VM/`basename $device`.img.gz
+	    if ! nice -n$NICE_LEVEL dd if=$snapshot | gzip -9 - >$VM/`basename $device`.img.gz ; then
+		echo CRITICAL: failed dumping $snapshot >&2
+	    fi
+	else
+	    test "$DEBUG" && echo dumping $snapshot to $VM/`basename $device`.img
+	    if ! nice -n$NICE_LEVEL dd if=$snapshot of=$VM/`basename $device`.img; then
+		echo CRITICAL: failed dumping $snapshot >&2
+	    fi
+	fi
+	lvremove -f $snapshot || echo WARNING: failed purging $snapshot >&2
+    done <$VM/dumpeddisks
+    rm -f $VM/dumpeddisks
+    test "$DEBUG" && echo "done $VM"
+done
+
+exit 0

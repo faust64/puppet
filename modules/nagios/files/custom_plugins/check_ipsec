@@ -1,0 +1,102 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+yo=`/sbin/ifconfig carp1 | grep -A4 MASTER | awk '/[ 	]inet[ 	]/{print $2;exit;}'`
+
+if test -z "$1"; then
+    err=arg
+elif test -z "$yo"; then
+    err=notrly
+    msg=" - BACKUP"
+else
+    err=notfnd
+    file="/etc/ipsec.d/$1"
+    if test -s "$file"; then
+	if ! grep "^[ 	]*include[ 	]*['\"]$file['\"]$"> /dev/null; then
+	    err=
+	    msg=" - not loaded"
+	    break
+	fi
+	pub=`grep ' peer ' "$file" | sed 's|.*peer[ {]*\([^ ]*\) .*|\1|'`
+	loc=`grep ' local ' "$file" | sed 's|.*local[ {]*\([^ ]*\) .*|\1|'`
+	usnet=`grep ' from ' "$file" | sed 's|.*from[ {]*\([^ ]*\) .*|\1|'`
+	demnet=`grep ' to ' "$file" | sed 's|.*to[ {]*\([^ ]*\) .*|\1|'`
+	proof=`awk -F= '/^#remoteproof=/{print $2}' "$file"`
+	if echo $usnet | grep '[0-9]\.[0-9]*$' >/dev/null; then
+	    us=$usnet
+	else
+	    match=`echo $usnet | sed 's|[0-9]*/[0-9]*$||'`
+	    us=
+	    for nic in 60 70 90 30
+	    do
+		this=`ifconfig carp$nic 2>/dev/null | awk '/[ 	]inet[ 	]/{print $2;exit;}'`
+		if echo $this | grep $match; then
+		    us=$this
+		    break
+		fi >/dev/null
+	    done
+	fi
+	if test "$us"; then
+	    dem=
+	    if echo $demnet | grep '[0-9]\.[0-9]*$' >/dev/null; then
+		dem=$demnet
+	    elif test "$proof"; then
+		dem=$proof
+	    fi
+	    if test "$dem"; then
+		if ! ping -c 3 -w 2 -S $loc $pub; then
+		    err=link
+		elif ! ping -c 3 -w 2 -S $us $dem; then
+		    err=flow
+		else
+		    err=
+		fi >/dev/null 2>&1
+		break
+	    else
+		err=nodem
+	    fi
+	else
+	    err=nous
+	fi
+    fi
+fi
+
+case "$err" in
+    arg)
+	res=UNKNOWN
+	msg=" - arg error!"
+	;;
+    flow)
+	res=WARNING
+	msg=" - $1 down"
+	perfdata=" | 0"
+	;;
+    link)
+	res=CRITICAL
+	msg=" - $1 unreachable"
+	perfdata=" | 0"
+	;;
+    notfnd)
+	res=UNKNOWN
+	msg=" - no such tunnel $1"
+	perfdata=" | 0"
+	;;
+    nodem|nous)
+	res=OK
+	msg=" - no ICMP host to check"
+	perfdata=" | 0"
+	;;
+    *)
+	res=OK
+	perfdata=" | 1"
+	;;
+esac
+
+echo "IPSEC-$1 $res$msg$perfdata"
+eval res=\$$res
+exit $res

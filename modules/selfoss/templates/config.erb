@@ -1,0 +1,35 @@
+[globals]
+db_type=<%=@db_backend%>
+<% if @db_backend == "sqlite" -%>db_file=data/sqlite/selfoss.db
+<% elsif @db_backend == "mysql" -%>db_host=<%=@db_host%>
+db_username=<%=@db_user%>
+db_password=<%=@db_pass%>
+db_port=3306
+db_database=selfoss
+db_prefix=
+<% end -%>logger_level=ERROR
+items_perpage=50
+items_lifetime=30
+base_url=
+username=
+password=
+salt=lkjl1289
+public=
+html_title=Reader
+rss_title=Feed
+rss_max_items=300
+rss_mark_as_read=0
+homepage=newest
+language=0
+auto_mark_as_read=0
+auto_stream_more=1
+anonymizer=
+use_system_font=
+readability=
+share=gtfprde
+wallabag=
+allow_public_update_access=
+unread_order=
+load_images_on_mobile=0
+auto_hide_read_on_mobile=0
+env_prefix=selfoss_

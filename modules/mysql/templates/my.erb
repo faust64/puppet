@@ -1,0 +1,56 @@
+[client]
+port			= 3306
+socket			= <%=@sock_dir%>/<%=@sock_file%>
+
+[mysqld_safe]
+nice			= 0
+socket			= <%=@sock_dir%>/<%=@sock_file%>
+
+[mysqld]
+basedir			= /usr
+bind-address		= <%=@bind_addr%>
+<% if @binlog_do_db != false -%>binlog-do-db		=<% @binlog_do_db.each do |db| -%> <%=db%><% end -%>
+
+<% end -%><% if @charset != false -%>character-set-server    = <%=@charset%>
+<% end -%>datadir			= <%=@lib_dir%>
+expire_logs_days	= <%=@expire_log_days%>
+key_buffer		= <%=@key_buffer%>
+lc-messages-dir		= /usr/share/mysql
+<% if @binlog_do_db != false -%>log-bin			= mysql-bin
+server-id		= 1
+<% elsif @server_id != false -%><% if @repl_do_table != false -%><% @repl_do_table.each do |table| -%>replicate-do-table	= <%=table%>
+<% end -%><% end -%>server-id		= <%=@server_id%>
+<% end -%><% if @log_slowqueries == true %><% if @provider == "mariadb" -%>slow_query_log		= 1
+slow_query_log_file	= /var/log/mysql/mysql-slow.log
+<% else -%>log_slow_queries	= /var/log/mysql/mysql-slow.log
+<% end -%>long_query_time		= 2
+<% end -%>max_allowed_packet	= <%=@mxallowedpkt%>
+max_binlog_size		= <%=@mxbinlogsize%>
+max_connections		= <%=@mxconnx%>
+myisam-recover		= BACKUP
+pid-file		= <%=@sock_dir%>/<%=@pid_file%>
+read_buffer_size	= <%=@readbufsize%>
+sort_buffer_size	= <%=@sortbufsize%>
+user			= <%=@runtime_user%>
+port			= 3306
+query_cache_limit	= <%=@qclimit%>
+query_cache_size	= <%=@qcsize%>
+skip-external-locking
+socket			= <%=@sock_dir%>/<%=@sock_file%>
+thread_cache_size	= <%=@tcsize%>
+thread_stack		= <%=@tstack%>
+tmpdir			= /tmp
+table_cache		= <%=@table_cache%>
+thread_concurrency	= <%=@threadconcr%>
+
+[mysqldump]
+max_allowed_packet	= 16M
+quick
+quote-names
+
+[mysql]
+
+[isamchk]
+key_buffer		= <%=@key_buffer%>
+
+!includedir <%=@include_dir%>

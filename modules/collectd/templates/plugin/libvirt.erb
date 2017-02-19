@@ -1,0 +1,6 @@
+LoadPlugin libvirt
+<Plugin libvirt>
+    Connection "<% if @virtual == "xen0" -%>xen:///<% else -%>qemu:///system<% end -%>"
+    RefreshInterval 60
+    HostnameFormat "name"
+</Plugin>

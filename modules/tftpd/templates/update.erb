@@ -1,0 +1,41 @@
+#!/bin/sh
+
+Prg=`basename $0`
+DEST=<%=@contact%>
+ERROR=
+LOG=/tmp/update_pxe.log
+SRC=<%=@pxe_master%>
+
+check_available()
+{
+    if ! ping -c1 -w1 $SRC; then
+	ERROR="host $SRC unreachable"
+	return 1
+    elif ! ssh $SRC ls /srv/tftpboot/boot-screens; then
+	ERROR="unable to connect to $SRC"
+	return 1
+    fi >/dev/null 2>&1
+
+    return 0
+}
+
+update_inst()
+{
+    check_available || return 1
+    rsync -avWx --numeric-ids --delete --exclude='*/oldies/*' $SRC:/srv/tftpboot <%=@root_dir%>/../
+}
+
+
+>$LOG
+
+update_inst >$LOG
+
+if test "$ERROR"; then
+    echo $ERROR | mail -s '[ERROR] syncing PXE' $DEST
+else
+    cat $LOG | mail -s '[REPORT] syncing PXE' $DEST
+fi
+
+rm -f $LOG
+
+exit $?

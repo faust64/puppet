@@ -1,0 +1,18 @@
+<%=@logs_dir%>/pm2.log
+{
+    compress
+    create 640 <% if @operatingsystem == "Ubuntu" -%>syslog<% else -%>root<% end -%> <%=@gidadm%>
+    daily
+    delaycompress
+    missingok
+    notifempty
+    rotate <%=@rotate%>
+    sharedscripts
+    postrotate
+<% if @operatingsystem == "Ubuntu" and @lsbdistcodename == "trusty" -%>	reload rsyslog >/dev/null 2>&1 || true
+<% elsif @operatingsystem == "Debian" -%>	invoke-rc.d rsyslog rotate >/dev/null 2>&1 || true
+<% elsif @kernel == "Linux" -%>	systemctl restart rsyslog >/dev/null 2>&1 || true
+<% else -%>	/etc/rc.d/syslogd restart >/dev/null 2>&1 || true
+<% end -%>	test -x /usr/share/peerio-server/script/misc/watchdog && /usr/share/peerio-server/script/misc/watchdog status && /usr/share/peerio-server/script/misc/watchdog restart || true
+    endscript
+}

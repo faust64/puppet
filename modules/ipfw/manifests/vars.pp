@@ -1,0 +1,16 @@
+class ipfw::vars {
+    $all_networks      = hiera_hash("vlan_database")
+    $all_openvpns      = hiera_hash("openvpn_database")
+    $local_networks    = hiera("active_vlans")
+    $munin_ip          = hiera("munin_ip")
+    $munin_listenaddr  = hiera("munin_node_listenaddr")
+    $munin_port        = hiera("munin_port")
+    $myvlan            = hiera("myvlan")
+    $nagios_ip         = hiera("nagios_ip")
+    $nagios_listenaddr = hiera("nagios_listenaddr")
+    $nagios_port       = hiera("nagios_nrpe_port")
+    $netids            = hiera("office_netids")
+    $ovpn_networks     = hiera("active_openvpns")
+    $snmp_ip           = hiera("snmp_ip")
+    $snmp_listenaddr   = hiera("snmp_listenaddr")
+}

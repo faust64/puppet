@@ -1,0 +1,56 @@
+#!/bin/sh
+
+if test "$1"; then
+    export KEY_CN="$1"
+else
+    echo "Please provide a login" >&2
+    exit 1
+fi
+export OPENSSL=/usr/bin/openssl
+export KEY_DIR=/home/pki/vpn
+. /root/vars
+
+ldapsearch -b <%=@user_base%> -x -LLL "(&(uid=$KEY_CN))" uid >$FILE
+if ! grep "^uid: $KEY_CN" $FILE; then
+    echo "User $KEY_CN is not listed in our LDAP"
+    rm $FILE
+    exit 1
+fi
+rm -f $FILE
+
+if test "$2"; then
+    FILE=$2
+else
+    FILE=/tmp/tmpfile
+fi
+
+rm -f $KEY_CN.p12
+if ! test -e "$KEY_DIR/$KEY_CN.crt"; then
+    build-key --batch
+else
+    echo "User already has a certificate, please revoke manually if needed." >&2
+fi
+
+while :
+do
+    pass=`pwgen -s 16 1`
+    if echo $pass | grep ':'; then
+	continue
+    elif echo $pass | grep '|'; then
+	continue
+    fi
+    break
+done >/dev/null 2>&1
+
+openssl pkcs12 -export -out "$KEY_CN.p12" -in "$KEY_DIR/$KEY_CN.crt" -inkey "$KEY_DIR/$KEY_CN.key" -password "pass:$pass" -certfile $KEY_DIR/export-ca.crt
+echo "$pass" >$FILE
+
+if ! test -s "$KEY_CN.p12"; then
+    echo "Problem while creating PKCS#12 file" >&2
+    exit 1
+elif ! test -s $FILE; then
+    echo "Error while saving PKCS#12 psk" >&2
+    exit 2
+fi
+
+exit 0

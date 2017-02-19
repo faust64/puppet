@@ -1,0 +1,50 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+TMPFILE=/tmp/.check_riak.$$
+PATH="/usr/local/sbin:/usr/sbin:/sbin:$PATH"
+export PATH
+
+if test "$1" -a -x "$1/riak-admin"; then
+    bin="$1/riak-admin"
+else
+    bin=`which riak-admin`
+fi
+
+if test -x "$bin"; then
+    if sudo riak ping 2>&1 | grep pong >/dev/null; then
+	sudo $bin cluster plan >$TMPFILE
+	if grep '^There are no staged changes$' $TMPFILE >/dev/null; then
+	    sudo $bin status | grep fsm_time_99 >$TMPFILE
+	    if grep '^[1-9][0-9][0-9][0-9][0-9][0-9]$' $TMPFILE >/dev/null; then
+		#>=100.000 µs / 100 ms, warning
+		ret=WARNING
+		msg=" - unusually high get/put latencies (>100ms)"
+	    else
+		ret=OK
+		perfdata=" | 1"
+	    fi
+	else
+	    ret=WARNING
+	    msg=" - plan pending commit"
+	    perfdata=" | 1"
+	fi
+    else
+	ret=CRITICAL
+	msg=" - riak-admin test failed"
+	perfdata=" | 0"
+    fi
+else
+    ret=UNKNOWN
+    msg=" - riak-admin not found"
+    prefdata=" | 0"
+fi
+rm -f $TMPFILE
+
+echo "$PRG $ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

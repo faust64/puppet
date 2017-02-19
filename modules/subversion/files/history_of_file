@@ -1,0 +1,22 @@
+#!/bin/sh
+
+history_of_file()
+{
+    url=$1
+    svn log -q $url | grep -E -e "^r[[:digit:]]+" -o | cut -c2- | sort -n | {
+	echo
+	read r
+	svn log -r$r $url@HEAD
+	svn cat -r$r $url@HEAD
+	echo
+	while read r
+	do
+	    echo
+	    svn log -r$r $url@HEAD
+	    svn diff -c$r $url@HEAD
+	    echo
+	done
+    }
+}
+
+history_of_file $1

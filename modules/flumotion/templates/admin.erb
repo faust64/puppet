@@ -1,0 +1,12 @@
+<worker>
+    <debug>4</debug>
+    <manager>
+	<host>localhost</host>
+	<port>49015</port>
+    </manager>
+    <authentication type="plaintext">
+	<username><%=@admin_user%></username>
+	<password><%=@admin_pass%></password>
+    </authentication>
+    <feederports random="True" />
+</worker>

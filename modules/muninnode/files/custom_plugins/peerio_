@@ -1,0 +1,136 @@
+#!/bin/sh
+
+test -z "$PMHOME" && PMHOME=/var/lib/pm2
+test -s $PMHOME/hostnames && . $PMHOME/hostnames
+test -s $PMHOME/.profile && . $PMHOME/.profile
+test -s $PMHOME/.bash_profile && . $PMHOME/.bash_profile
+if test -d /var/www/peerio-server/current/admin/bin; then
+    WEBROOT=/var/www/peerio-server/current
+elif test -d /usr/share/peerio-server/admin/bin; then
+    WEBROOT=/usr/share/peerio-server
+fi
+test -z "$WEBROOT" && exit 1
+test -z "$HOSTNAME" && HOSTNAME=`hostname`
+test -z "$REDIS_HOSTS" && REDIS_HOSTS=127.0.0.1
+if test -z "$AZURE_ACCOUNT" -o -z "$AZURE_KEY"; then
+    unset AZURE_ACCOUNT
+    unset AZURE_KEY
+fi
+NODE_BIN=
+for d in /usr/local/nodejs /usr/local /usr /
+do
+    if test -x $d/bin/node; then
+	NODE_BIN=$d/bin/node
+	break
+    fi
+done
+
+probe=`basename $0 | sed 's|^peerio_||'`
+
+if test "$1" = autoconf; then
+    echo yes
+elif test -z "$NODE_BIN"; then
+    echo nodejs missing
+elif test "$1" = config; then
+    case "$probe" in
+	users)
+	    val0=$probe
+	    val0label="existing accounts"
+	    vlabel=count
+	    what="total accounts"
+	    ;;
+	closed)
+	    val0=$probe
+	    val0label="closed accounts"
+	    vlabel=count
+	    what="closed accounts"
+	    ;;
+	connected)
+	    val0=$probe
+	    val0label="locally-connected users"
+	    vlabel=count
+	    what="connected users"
+	    ;;
+	sumconnected)
+	    val0=$probe
+	    val0label="overall connected users"
+	    vlabel=count
+	    what="total connected users"
+	    ;;
+	active)
+	    val0=$probe
+	    val0label="active accounts"
+	    vlabel=count
+	    what="active accounts"
+	    ;;
+	lwactive)
+	    val0=$probe
+	    val0label="last week's active accounts"
+	    vlabel=count
+	    what="unique account loggin per day, over the last 7 days"
+	    ;;
+	newlwactive)
+	    val0=$probe
+	    val0label="new last week's active accounts"
+	    vlabel=count
+	    what="unique account logins over the last 7 days"
+	    ;;
+    esac
+    cnt=0
+    echo graph_title Peerio $what
+    echo graph_vlabel $vlabel
+    echo graph_category peerio
+    while true
+    do
+	eval "item=\$val$cnt label=\$val${cnt}label"
+	test "$item" -a "$label" || break
+	echo $item.label $label
+	cnt=`expr $cnt + 1`
+    done
+else
+    cd "$WEBROOT"
+    case "$probe" in
+	users)
+	    echo $probe.value `$NODE_BIN ./admin/bin/user count | awk '/Total users:/{print $3}'`
+	    ;;
+	active)
+	    echo $probe.value `$NODE_BIN ./admin/bin/user count | awk '/Active users:/{print $3}'`
+	    ;;
+	closed)
+	    echo $probe.value `$NODE_BIN ./admin/bin/user count | awk '/Closed users:/{print $3}'`
+	    ;;
+	connected)
+	    missing=true
+	    for cache in $REDIS_HOSTS
+	    do
+		val=`echo "smembers live_users:$HOSTNAME" | redis-cli -h $cache 2>/dev/null | grep -v 'empty list or set' | grep -vE '^$' | awk 'END{print NR}'`
+		test "$val" || continue
+		echo $probe.value $val
+		missing=false
+		break
+	    done
+	    if $missing; then
+		echo $probe.value 0
+	    fi
+	    ;;
+	sumconnected)
+	    for cache in $REDIS_HOSTS
+	    do
+		echo 'keys live_users:*' | redis-cli -h $cache | \
+		    while read key
+		    do
+			echo "smembers $key" | redis-cli -h $cache 2>/dev/null | grep -v 'empty list or set' | grep -vE '^$' | awk 'END{print NR}'
+		    done 2>/dev/null | awk "BEGIN{sum=0}{sum += \$1}END{print \"$probe.value \" sum}"
+		test $? -eq 0 && break
+	    done 2>/dev/null | grep 'value' || echo "$probe.value 0"
+	    ;;
+	lwactive)
+	    echo $probe.value `$NODE_BIN ./admin/bin/stats active-users-last-week | awk '/Active users count last week:/{print $6}'`
+	    ;;
+	newlwactive)
+	    echo $probe.value `$NODE_BIN ./admin/bin/stats active-users-last-week2 | awk '/Active users count last week:/{print $6}'`
+	    ;;
+    esac
+fi
+
+exit 0

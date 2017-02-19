@@ -1,0 +1,41 @@
+<VirtualHost *:<%=@listen_ports['plain']%>>
+    ServerName <%=@name%>
+<% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
+<% end -%><% end -%>    ServerAdmin <%=@server_admin%>
+    ErrorLog <%=@log_dir%>/error-<%=@name%>.log
+    LogLevel warn
+    CustomLog <%=@log_dir%>/access-<%=@name%>.log combined
+<% if @listen_ports['ssl'] != false -%>    RewriteEngine On
+    RewriteRule ^/(.*) https://<%=@name%>/$1 [L,R]
+</VirtualHost>
+<VirtualHost *:<%=@listen_ports['ssl']%>>
+    ServerName <%=@name%>
+<% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
+<% end -%><% end -%>    ServerAdmin <%=@server_admin%>
+    ErrorLog <%=@log_dir%>/ssl-error-<%=@name%>.log
+    LogLevel warn
+<% if @stricttransport != false -%>    Header always set Strict-Transport-Security "<%=@stricttransport%>"
+<% end -%><% if @deny_frames == "remote" -%>    Header always set X-Frame-Options SAMEORIGIN
+<% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
+<% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
+<% end -%>    CustomLog <%=@log_dir%>/ssl-access-<%=@name%>.log combined
+    Include ssl.conf
+<% end -%>    DocumentRoot /var/www/vm_list
+    RewriteEngine On
+    Include sslproxy.conf
+
+    <Directory /var/www/vm_list>
+	Include authldap.conf
+    </Directory>
+
+    RewriteRule ^$ /index.html
+
+    RewriteCond %{LA-U:REMOTE_USER} (.+)
+    RewriteRule . - [E=RU:%1]
+    RequestHeader set X-Remote-User %{RU}e env=RU
+
+<% scope.lookupvar('vlist::vars::vlist_hosts_list').each do |remote, accessclass| -%><% display = remote.gsub(/\..*/, '') -%>, '<% if accessclass == "interne" -%>    RedirectMatch ^/<%=display%>/(.*) https://<%=remote%>/$1
+<% elsif accessclass == "projets" -%>    ProxyPass /<%=display%>/ https://<%=remote%>:8443/
+    ProxyPassReverse /<%=display%>/ https://<%=remote%>:8443/
+<% end -%><% end -%>
+</VirtualHost>

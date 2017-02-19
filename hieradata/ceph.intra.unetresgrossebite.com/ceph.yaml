@@ -1,0 +1,31 @@
+physical_parent: oneiroi.adm.intra.unetresgrossebite.com
+
+# Ceph
+ceph_do_dashboard: true
+ceph_munin: true
+ceph_nagios: true
+ceph_nagios_map:
+  helios:
+    mon: true
+    osd: "15,16,17"
+  selene:
+    mon: true
+    osd: "12,13,14"
+  hemara:
+    mon: true
+    osd: "8,9,10,11"
+  erebe:
+    mon: false
+    osd: "18,19,20,21"
+  eos:
+    mon: false
+    osd: "4,5,6,7"
+  nyx:
+    mon: false
+    osd: "0,1,2,3"
+
+# Nagios
+nagios_no_parent: false
+
+# Racktables
+racktables_object_id: 1504

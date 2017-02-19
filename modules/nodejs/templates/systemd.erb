@@ -1,0 +1,22 @@
+[Unit]
+Description=PM2 process manager
+Documentation=https://pm2.keymetrics.io/
+After=network.target
+
+[Service]
+User=<%=@runtime_user%>
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+TimeoutStartSec=8
+Environment=PATH=<%=@nodepath%>:/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+Environment=PM2_HOME=<%=@home_dir%>/.pm2
+Restart=always
+RestartSec=3
+
+ExecStart=<%=@nodepath%>/pm2/bin/pm2 resurrect --no-daemon
+ExecReload=<%=@nodepath%>/pm2/bin/pm2 reload all
+ExecStop=<%=@nodepath%>/pm2/bin/pm2 kill
+
+[Install]
+WantedBy=multi-user.target

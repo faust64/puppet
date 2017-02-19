@@ -1,0 +1,13 @@
+# as of <%=@timestamp%><% @pf_custom_rules.each do |comment, rulehash| -%><% if rulehash['host'] != "" and rulehash['port'] != "" and rulehash['proto'] =~ /\$[tuiegn]/ and rulehash['vlans'] != "" and rulehash['closedate'] != false and rulehash['glpi'] != false -%><% thedate = rulehash['closedate'].split('/') -%><% today = @timestamp.chomp.split('/') -%><% if @debug == true -%># Having (cur:match) year <%=thedate[0]%>:<%=today[0]%> month <%=thedate[2]%>:<%=today[2]%> day <%=thedate[1]%>:<%=today[1]%> for rule #<%=rulehash['glpi']%>
+<% end -%><% if thedate[0] > today[0] or (thedate[0] == today[0] and (thedate[2] > today[2] or (thedate[2] == today[2] and thedate[1] >= today[1]))) -%># #<%=rulehash['glpi']%> - <%=rulehash['closedate']%> - <%=comment%>
+  glpi<%=rulehash['glpi']%>_ip = '{ <% @pf_custom_rules[comment]['host'].each do |what, where| -%><%=where%> <% end -%>}'
+<% if rulehash['proto'] == "$tui" or rulehash['proto'] == "$tu" or rulehash['proto'] == "$u" or rulehash['proto'] == "$t" -%>glpi<%=rulehash['glpi']%>_port = '{ <% rulehash['port'].values.each do |what| -%><%=what%> <% end -%>}'
+<% end -%><% rulehash['vlans'].each do |srcnet| -%><% @local_networks[@domain].each do |loc| -%><% if loc['name'] == srcnet -%><% if loc['ospfif'] =~ /[a-z][0-9]/ -%><% src = loc['ospfif'] -%><% else -%><% src = srcnet -%><% end -%><% if rulehash['proto'] == "$tui" -%>pass in on <%=src%> inet proto $tu from <<%=srcnet%>_net> to $glpi<%=rulehash['glpi']%>_ip port $glpi<%=rulehash['glpi']%>_port<% if rulehash['routeif'] =~ /[a-z]/ -%> route-to ( $<%=rulehash['routeif']%>_if $<%=rulehash['routeif']%>_gw )<% elsif @routeto != "" -%><%=@routeto%><% end -%>
+
+pass in on <%=src%> inet proto $i from <<%=srcnet%>_net> to $glpi<%=rulehash['glpi']%>_ip<% if rulehash['routeif'] =~ /[a-z]/ -%> route-to ( $<%=rulehash['routeif']%>_if $<%=rulehash['routeif']%>_gw )<% elsif @routeto != "" -%><%=@routeto%><% end -%>
+
+<% elsif rulehash['proto'] == "$tu" or rulehash['proto'] == "$u" or rulehash['proto'] == "$t" -%>pass in on <%=src%> inet proto <%=rulehash['proto']%> from <<%=srcnet%>_net> to $glpi<%=rulehash['glpi']%>_ip port $glpi<%=rulehash['glpi']%>_port<% if rulehash['routeif'] =~ /[a-z]/ -%> route-to ( $<%=rulehash['routeif']%>_if $<%=rulehash['routeif']%>_gw )<% elsif @routeto != "" -%><%=@routeto%><% end -%>
+
+<% else -%>pass in on <%=src%> inet proto <%=rulehash['proto']%> from <<%=srcnet%>_net> to $glpi<%=rulehash['glpi']%>_ip<% if rulehash['routeif'] =~ /[a-z]/ -%> route-to ( $<%=rulehash['routeif']%>_if $<%=rulehash['routeif']%>_gw )<% elsif @routeto != "" -%><%=@routeto%><% end -%>
+
+<% end -%><% break -%><% end -%><% end -%><% end -%><% end -%><% end -%><% end -%>

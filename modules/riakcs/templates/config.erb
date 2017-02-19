@@ -1,0 +1,66 @@
+<% if @listener -%>listener = <%=@listener%>:8080
+<% else -%>listener = 127.0.0.1:8080
+<% end -%><% if 0 == 1 -%>riak_host = <%=@listener%>:8097
+ssl.certfile = /etc/riak/ssl/server.crt
+ssl.keyfile = /etc/riak/ssl/server.key
+stanchion.ssl = on
+<% elsif @listener -%>riak_host = <%=@listener%>:8087
+stanchion.ssl = off
+<% else -%>riak_host = 127.0.0.1:8087
+stanchion.ssl = off
+<% end -%><% if @stanchion -%>stanchion_host = <%=@stanchion%>:8085
+<% elsif @riak_master -%>stanchion_host = <%=@riak_master%>:8085
+<% elsif @listener -%>stanchion_host = <%=@listener%>:8085
+<% else -%>stanchion_host = 127.0.0.1:8085
+<% end -%><% if @admin_key == "admin-key" or @admin_secret == "admin-secret" -%>anonymous_user_creation = on
+<% else -%>anonymous_user_creation = off
+<% end -%>admin.key = <%=@admin_key%>
+admin.secret = <%=@admin_secret%>
+root_host = <%=@root_host%>
+pool.request.size = 128
+pool.list.size = 5
+max_buckets_per_user = 100
+max_key_length = 1024
+trust_x_forwarded_for = on
+max_scheduled_delete_manifests = 50
+gc.leeway_period = 24h
+gc.interval = 15m
+gc.retry_interval = 6h
+active_delete_threshold = 0
+fast_user_get = off
+stats.access.flush_factor = 1
+stats.access.flush_size = 1000000
+stats.access.archive_period = 1h
+stats.access.archiver.max_backlog = 2
+stats.access.archiver.max_workers = 2
+stats.storage.archive_period = 1d
+stats.usage_request_limit = 744
+server.name = Riak CS
+log.access = on
+log.access.dir = $(platform_log_dir)
+cs_version = 10300
+<% if @do_proxy_get -%>proxy_get = on
+<% else -%>proxy_get = off
+<% end -%>dtrace = off
+log.console = file
+log.console.level = info
+log.console.file = $(platform_log_dir)/console.log
+log.console.size = 10MB
+log.console.rotation = $D0
+log.console.rotation.keep = 5
+log.error.file = $(platform_log_dir)/error.log
+log.error.size = 10MB
+log.error.rotation = $D0
+log.error.rotation.keep = 5
+log.syslog = off
+log.crash = on
+log.crash.file = $(platform_log_dir)/crash.log
+log.crash.maximum_message_size = 64KB
+log.crash.size = 10MB
+log.crash.rotation = $D0
+log.crash.rotation.keep = 5
+platform_log_dir = /var/log/riak-cs
+nodename = <%=@nodename%>
+distributed_cookie = <%=@dcookie%>
+erlang.async_threads = 64
+erlang.max_ports = 65536

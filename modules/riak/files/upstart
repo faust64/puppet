@@ -1,0 +1,11 @@
+description "Riak database"
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+script
+    /etc/init.d/riak status || /etc/init.d/riak start
+end script
+post-start exec initctl emit --no-wait started JOB=riak
+
+pre-stop exec /etc/init.d/riak stop
+post-stop exec initctl emit --no-wait stopped JOB=riak

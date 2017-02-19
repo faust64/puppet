@@ -1,0 +1,64 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+bname='backup_ve_*'
+
+find /tmp -name "$bname" -mtime 0 >/tmp/yesterday
+for backup in `find /tmp -name "$bname"`
+do
+    grep $backup /tmp/yesterday || continue
+    look=$backup
+    break
+done >/dev/null 2>&1
+rm -f /tmp/yesterday
+
+if test -z "$look"; then
+    ret=CRITICAL
+    msg=" - no backup for today"
+elif ps ax | grep 'backup_.*[g]zip.*/tmp/backup_ve_'; then
+    hour=`date +%H`
+    min=`date +%M`
+    if test $hour -gt 8 -o \( test $hour -eq 7 -a $min -gt 15 \); then
+	ret=CRITICAL
+    else
+	ret=OK
+    fi
+    disp=" - backup is still processing"
+elif ! test -r /tmp/nagios_backups; then
+    ret=UNKNOWN
+    disp=" - unable to read /tmp/nagios_backup"
+elif ! test -s /tmp/nagios_backups; then
+    ret=CRITICAL
+    disp=" - empty /tmp/nagios_backup: no backups?"
+else
+    component=
+    failures=0
+    grep ^fail: /tmp/nagios_backup | while read line
+	do
+	    eval `echo $line | sed 's|^fail:\(.*\):\([^:]*\)$|ve=\1 cause=\2|'`
+	    component="$component,"
+	    case "X$cause" in
+		Xrsync|Xdd)
+		    failures=`expr $failures + 1`
+		    ret=CRITICAL
+		*)
+		    component="failed ${cause}-ing $ve"
+		    ;;
+	    esac
+	done
+    test "$component" -a -z "$ret" && ret=WARNING
+    test -z "$ret" && ret=OK && component=", everything's allright"
+    success=`awk 'BEG{n=0}/^success:/{n=n+1}END{print n}' /tmp/nagios_backups`
+    tot=`expr $success + failures`
+    disp=" - $success environment successfully backuped$component"
+    perfdata=" | $tot;$success;$failures"
+fi >/dev/null 2>&1
+
+echo "$ret$disp$perfdata"
+eval ret=\$$ret
+exit $ret

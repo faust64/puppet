@@ -1,0 +1,44 @@
+$ModLoad omelasticsearch
+
+main_queue(queue.size="1000000"
+		   queue.dequeuebatchsize="1000"
+		   queue.workerthreads="2")
+
+template(name="logidx" type="list") {
+    constant(value="log-")
+    property(name="timereported" dateFormat="rfc3339" position.from="1" position.to="4")
+    constant(value=".")
+    property(name="timereported" dateFormat="rfc3339" position.from="6" position.to="7")
+    constant(value=".")
+    property(name="timereported" dateFormat="rfc3339" position.from="9" position.to="10")
+}
+
+template(name="bigbowser" type="list") {
+    constant(value="{")
+    constant(value="\"@timestamp\":\"")
+    property(name="timereported" dateformat="rfc3339")
+    constant(value="\",\"severity\":\"")
+    property(name="syslogseverity-text")
+    constant(value="\",\"facility\":\"")
+    property(name="syslogfacility-text")
+    constant(value="\",\"host\":\"")
+    property(name="hostname")
+    constant(value="\",\"message\":\"")
+    property(name="msg" format="json")
+    constant(value="\"}")
+}
+
+<% if @filter_regexp != false -%><% @filter_regexp.each do |pattern| -%>:msg, regex, "<%=pattern%>" stop
+<% end -%><% end -%><% if @filter_contains != false -%><% @filter_contains.each do |pattern| -%>:msg, contains, "<%=pattern%>" stop
+<% end -%><% end -%><% if @do_ossec == true -%>*.* @<%=@ipaddress%>:1513
+<% end -%>*.*	action(type="omelasticsearch"
+	       action.resumeretrycount="-1"
+	       dynSearchIndex="on"
+	       bulkmode="on"
+	       queue.type="linkedlist"
+	       queue.size="1000000"
+	       queue.dequeuebatchsize="1000"
+	       queue.workerthreads="2"
+	       searchIndex="logidx"
+	       server="<%=@store_esearch%>"
+	       template="bigbowser")

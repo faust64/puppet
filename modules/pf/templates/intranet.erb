@@ -1,0 +1,5 @@
+<% @all_networks.each do |vlanname, vlanhash| -%><% if vlanhash['netid'].to_i > 0 or vlanhash['netid'] == "0" -%>pass in quick inet proto $tui from <all<%=vlanname%>_net> to <all<%=vlanname%>_net>
+<% @all_openvpns.each do |vpnname, vpnhash| -%><% if vpnhash['mapto'] == vlanname -%>pass in quick inet proto $tui from <all<%=vpnname%>_net> to <all<%=vlanname%>_net>
+<% end -%><% end -%><% if vlanhash['acl'] != false -%><% vlanhash['acl'].each do |remote| -%>pass in quick inet proto $tui from <all<%=vlanname%>_net> to <all<%=remote%>_net>
+<% @all_openvpns.each do |vpnname, vpnhash| -%><% if vpnhash['mapto'] == vlanname -%>pass in quick inet proto $tui from <all<%=vpnname%>_net> to <all<%=remote%>_net>
+<% end -%><% end -%><% end -%><% end -%><% end -%><% end -%>

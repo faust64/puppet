@@ -1,0 +1,15 @@
+#!/bin/sh
+
+MRTG_ROOT=/var/www/mrtg
+
+cd $MRTG_ROOT
+for node in `find . -name '*.cfg' | sed 's|\./[^/]*/\([^.]*\).cfg|\1|'`
+do
+    env LANG=C /usr/bin/mrtg $MRTG_ROOT/$node/$node.cfg
+    /usr/bin/indexmaker --output=$MRTG_ROOT/$node/index.html $MRTG_ROOT/$node/$node.cfg
+done
+
+cd /var/www/wmap
+./weathermap
+
+exit $?

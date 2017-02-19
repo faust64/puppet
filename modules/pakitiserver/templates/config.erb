@@ -1,0 +1,19 @@
+<?php
+$admin_dns = <% if @admins == false -%>null<% else -%>array('<%=@admins.join("', '")%>')<% end -%>;
+$anonymous_link_lifetime = 604800;
+$anonymous_links = 1;
+$asynchronous_mode = 0;
+$config = '/usr/share/pakiti/config/pakiti.conf';
+$default_order = 'tag';
+$default_tag = 'all';
+$default_type = 'all';
+$default_view = 'updates';
+$enable_authz = 0;
+$ext_pages_outdated = 0;
+$ignore_package_list = array ('kernel-headers', 'kernel-debug', 'kernel-source');
+$kernel_pkg_names = array('kernel', 'kernel-devel', 'kernel-smp', 'kernel-smp-devel', 'kernel-xenU', 'kernel-xenU-devel', 'kernel-largesmp', 'kernel-largesmp-devel', 'kernel-xen', 'kernel-PAE', 'kernel-hugemem');
+$secret = 'iouoiuoiuouoiuouiuiouiouiui--nononononononnnononono--pourquoipas';
+$store_devel_packages = 0;
+$store_doc_packages = 0;
+$trusted_proxy_clients = array();
+?>

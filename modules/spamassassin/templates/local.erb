@@ -1,0 +1,17 @@
+<% if @rewrite_subject != false -%>rewrite_header Subject <%=@rewrite_subject%>
+<% end -%><% if @trusted_networks != false -%>trusted_networks <%=@trusted_networks.join(" ")%>
+score ALL_TRUSTED -5
+<% end -%><% if @blacklist_from != false -%><% @blacklist_from.each do |from| -%>blacklist_from <%=from%>
+<% end -%><% end -%><% if @whitelist_from != false -%><% @whitelist_from.each do |from| -%>whitelist_from <%=from%>
+<% end -%><% end -%>required_score <%=@require_score%>
+use_bayes 1
+bayes_auto_learn 1
+bayes_path /root/.spamassassin/bayes
+<% if @ignore_headers != false -%><% @ignore_headers.each do |header| -%>bayes_ignore_header <%=header%>
+<% end -%><% end -%>ifplugin Mail::SpamAssassin::Plugin::Shortcircuit
+<% if @trusted_networks != false -%>shortcircuit ALL_TRUSTED on
+<% end -%><% if @blacklist_from != false -%>shortcircuit USER_IN_BLACKLIST on
+<% end -%><% if @whitelist_from != false -%>shortcircuit USER_IN_WHITELIST on
+<% end -%>shortcircuit BAYES_99 spam
+shortcircuit BAYES_00 ham
+endif

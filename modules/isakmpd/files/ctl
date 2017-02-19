@@ -1,0 +1,144 @@
+#!/bin/sh
+
+Prg=`basename $0`
+
+usage()
+{
+    echo "$Prg usage:"
+    echo "    $Prg [up|down|reload] from-\${local_domain}-to-\${remote_domain}"
+    echo "    $Prg [up|down|reload] remote (file from /etc/ipsec.d)"
+    echo "    $Prg [up|down|reload] remote (matches '%c/%s sdsl-sdsl')"
+    echo "    $Prg reload remote\\ sdsl-sdsl"
+    echo "    $Prg up from-10.13.0.0/16-to-10.10.8.0/21"
+    echo "    $Prg down mpl"
+}
+
+ipsec_down()
+{
+    echo "t quick $TUNNEL" >>/var/run/isakmpd.fifo
+    echo "t main $TUNNEL" >>/var/run/isakmpd.fifo
+    if test "$FORCE" -a "$GW"; then
+	match=`echo "$GW" | sed 's|\.|\\\.|g'`
+	if test "$LOC"; then
+	    safematch=`echo "$LOC" | sed 's|\.|\\\.|g'`
+	    ipsecctl -sf    | grep "$match"     | grep     "$safematch" | sed 's|/32||g' | ipsecctl -d -f-
+	    ipsecctl -ss -k | grep -A2 "$match" | grep -A2 "$safematch" | sed 's|/32||g' | ipsecctl -d -f-
+	else
+	    ipsecctl -sf    | grep "$match"     | sed 's|/32||g' | ipsecctl -d -f-
+	    ipsecctl -ss -k | grep -A2 "$match" | sed 's|/32||g' | ipsecctl -d -f-
+	fi
+    fi
+    if test "$KILL" -a "$GW"; then
+	if test "$LOC"; then
+	    pfctl -k $LOC -k $GW
+	    pfctl -k $GW -k $LOC
+	else
+	    pfctl -k 0.0.0.0/0 -k $GW
+	    pfctl -k $GW -k 0.0.0.0/0
+	fi
+    fi
+}
+
+ipsec_up()
+{
+    echo "c ${TUNNEL}" >>/var/run/isakmpd.fifo
+}
+
+do_tunnel()
+{
+    case "$ACTION" in
+	up)
+	    ipsec_up
+	    ;;
+	down)
+	    ipsec_down $FORCE
+	    ;;
+	reload)
+	    ipsec_down $FORCE
+	    sleep 1
+	    ipsec_up
+	    ;;
+	h|-h|--help)
+	    usage
+	    ;;
+	*)
+	    usage
+	    exit 42
+	    ;;
+    esac
+}
+
+while test "$1"
+do
+    case "$1" in
+	up|down|reload)
+	    ACTION=$1
+	    ;;
+	--force|-f)
+	    FORCE=true
+	    ;;
+	--kill|-k)
+	    KILL=true
+	    ;;
+	*)
+	    OFFICE=$1
+	    ;;
+    esac
+    shift
+done
+
+if test "$ACTION" = reload; then
+    if $KILL; then
+	$0 down --kill --force "$OFFICE"
+    else
+	$0 down --force "$OFFICE"
+    fi
+    sleep 2
+    $0 up "$OFFICE"
+    exit 0
+elif test -z "$OFFICE" -o -z "$ACTION"; then
+    usage
+    exit 1
+elif ! test -p /var/run/isakmpd.fifo; then
+    rm -f /var/run/isakmpd.fifo
+    ipsec_resync >/dev/null 2>&1
+fi
+
+if echo "$OFFICE" | grep 'from-.*-to-.*' >/dev/null; then
+    TUNNEL="$OFFICE"
+    LOC=
+    GW=
+    echo "Assuming tunnel name is \`$TUNNEL'"
+    do_tunnel
+else
+    for confdir in `pwd` /etc/ipsec.d
+    do
+	for linktype in '' ' sdsl-sdsl' ' sdsl-adsl' ' sdsl-sip' \
+			' adsl-sdsl' ' adsl-adsl' ' adsl-sip' \
+			' sip-sdsl' ' sip-adsl' ' sip-sip'
+	do
+	    CONF=`printf "%s/%s%s" $confdir "$OFFICE" "$linktype"`
+	    if test -r "$CONF"; then
+		if test "$ACTION" = up && \
+	! grep "^[ 	]*include[ 	]*['\"]$CONF['\"]" /etc/ipsec.conf; then
+		    continue
+		fi >/dev/null
+		locnet=$(awk '/ from /{print $0}' "$CONF" | \
+    sed 's|.* from [^0-9]*\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*/*[0-9]*\).*|\1|')
+		remnet=`awk '/ to /{print $0}' "$CONF" | \
+    sed 's|.* to [^0-9]*\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*/*[0-9]*\).*|\1|'`
+		LOC=`awk '/ local /{print $0}' "$CONF" | \
+    sed 's|.* local [^0-9]*\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*|\1|'`
+		GW=`awk '/ peer /{print $0}' "$CONF" | \
+    sed 's|.* peer [^0-9]*\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*|\1|'`
+		if test "$locnet" -a "$remnet"; then
+		    TUNNEL="from-$locnet-to-$remnet"
+		    echo "${ACTION}ing $CONF"
+		    do_tunnel
+		fi
+	    fi
+	done
+    done
+fi
+
+exit 0

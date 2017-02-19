@@ -1,0 +1,16 @@
+#!/bin/sh
+
+TRASHME=/tmp/trashme
+
+grep 'Unregistered torrent' daemon | \
+	grep -v 'Tracker error:' | \
+	sed 's|^[^ ]* [a-z]* transmission-daemon\[[0-9]*\]: \(.*\) Unregistered torrent (announcer.*|\1|' | \
+	sort -u >$TRASHME
+
+<% if @contact == false -%>cat $TRASHME
+
+<% else -%>if test -s $TRASHME; then
+    cat $TRASHME | mail -s '[WARNING] torrents to purge' <%=@contact%>
+fi
+<% end -%>
+exit 0

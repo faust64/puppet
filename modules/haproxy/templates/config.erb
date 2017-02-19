@@ -1,0 +1,104 @@
+global
+    log /dev/log		local0
+    log /dev/log		local1 notice
+    maxconn			<%=@max_conn%>
+    chroot			<%=@chroot_dir%>
+    user			<%=@runtime_user%>
+    group			<%=@runtime_group%>
+    spread-checks		<%=@spread_checks%>
+    stats socket		<%=@stats_socket%> level admin
+    stats timeout		<%=@stats_timeout%>
+    ssl-default-bind-ciphers	<%=@ssl_bind_ciphers.join(':')%>
+    ssl-default-bind-options	<%=@ssl_bind_options.join(' ')%>
+    tune.ssl.default-dh-param	<%=@dh_size%>
+    daemon
+
+defaults
+    log				global
+<% if @default_mode != false -%>    mode			<%=@default_mode%>
+<% end -%><% if @default_options -%><% @default_options.each do |option| -%>    option			<%=option%>
+<% end -%><% end -%><% if @default_nooptions -%><% @default_nooptions.each do |option| -%>    no option			<%=option%>
+<% end -%><% end -%>    maxconn			<%=@max_conn%>
+<% if @default_timeouts -%><% @default_timeouts.each do |name, value| -%>    timeout			<%=name%> <%=value%>
+<% end -%><% end -%>
+    errorfile 400		<%=@errors_dir%>/HTTP_BAD_REQUEST.html
+    errorfile 403		<%=@errors_dir%>/HTTP_FORBIDDEN.html
+    errorfile 408		<%=@errors_dir%>/HTTP_REQUEST_TIME_OUT.html
+    errorfile 500		<%=@errors_dir%>/HTTP_INTERNAL_SERVER_ERROR.html
+    errorfile 502		<%=@errors_dir%>/HTTP_BAD_GATEWAY.html
+    errorfile 503		<%=@errors_dir%>/HTTP_SERVICE_UNAVAILABLE.html
+    errorfile 504		<%=@errors_dir%>/HTTP_REQUEST_TIME_OUT.html
+<% if @peers -%>
+
+peers puppetlb
+<% @peers.each do |peer| -%><% if peer['hostname'] == @hostname or peer['bind'] == @ipaddress or peer['bind'] == @listen -%><% haslocal = true -%><% end -%>    peer			<%=peer['hostname']%> <% if peer['bind'] != nil -%><%=peer['bind']%><% else -%><%=@listen%><% end -%>:<% if peer['port'] != nil -%><%=peer['port']%><% else -%><%=@sync_port%><% end -%> check
+<% end -%><% if 0 == 1 -%>    peer			<%=@hostname%> <%=@listen%>:<%=@sync_port%> check #fixme: scope issue/can't get 'haslocal' from outside our loop
+<% end -%><% end -%><% @backends.each do |backend| -%><% if backend['targets'] and backend['port'] -%>
+
+backend <%=backend['name']%>_backend
+<% if backend['mode'] -%>    mode			<%=backend['mode']%>
+<% end -%><% if backend['balance'] -%>    balance			<%=backend['balance']%>
+<% else -%>    balance			roundrobin
+<% end -%><% if backend['options'] -%><% backend['options'].each do |option| -%>    option			<%=option%>
+<% end -%><% end -%><% if backend['nooptions'] -%><% backend['nooptions'].each do |option| -%>    nooption			<%=nooption%>
+<% end -%><% end -%><% if backend['mode'] == 'http' or backend['xforwardedfor'] or (backend['mode'] == nil and @default_mode == "http") -%>    option			forwardfor
+    http-request		set-header X-Forwarded-Port %[dst_port]
+    http-request		add-header X-Forwarded-Proto https if { ssl_fc }
+<% end -%><% if backend['sticky_sessions'] == true and (backend['mode'] == 'http' or (backend['mode'] == nil and @default_mode == 'http')) -%><% prefix = ' cookie' -%>    cookie			puppetlb prefix
+<% elsif backend['sticky_sessions'] == false -%><% prefix = '' -%><% elsif @default_sticky and (backend['mode'] == 'http' or (backend['mode'] == nil and @default_mode == "http")) -%><% prefix = ' cookie' -%>    cookie			puppetlb prefix
+<% else -%><% prefix = '' -%><% end -%><% if @peers -%>    stick-table			type ip size <%=@stick_table_size%> peers puppetlb
+    stick			on src
+<% end -%><% if backend['check_interval'] -%><% itv = backend['check_interval'] -%><% else -%><% itv = "10s" %><% end -%><% if backend['check_fall'] -%><% fall = backend['check_fall'] -%><% else -%><% fall = backend['check_fall'] -%><% end -%><% if backend['check_rise'] -%><% rise = backend['check_rise'] -%><% else -%><% rise = backend['check_rise'] -%><% end -%>    default-server 		inter <%=itv%> fall <%=fall%> rise <%=rise%>
+<% if backend['check_uri'] != nil -%><% if backend['check_method'] != nil -%><% check_method = backend['check_method'] -%><% else -%><% check_method = "HEAD" -%><% end -%><% if backend['check_hostname'] -%><% targetname = backend['check_hostname'] -%><% else -%><% targetname = 'localhost' -%><% end -%><% if backend['check_version'] -%><% version = backend['check_version'] -%><% else -%><% version = "1.1" -%><% end -%>    option			httpchk <%=check_method%> <%=backend['check_uri']%> HTTP/<%=version%>\r\nHost:\ <%=targetname%>
+<% elsif (backend['mode'] == 'http' or (backend['mode'] == nil and @default_mode == "http")) and backend['type'] == 'riak' -%><% if backend['basic'] != nil -%><% if backend['check_version'] -%><% version = backend['check_version'] -%><% else -%><% version = "1.1" -%><% end -%>    option			httpchk GET /ping HTTP/<%=version%>\r\nAuthorization:\ Basic\ <%=backend['basic']%>
+<% else -%>    option			httpchk GET /ping
+<% end -%><% elsif (backend['mode'] == 'http' or (backend['mode'] == nil and @default_mode == "http")) and backend['type'] == 'riakcs' -%>    option			httpchk GET /riak-cs/ping
+<% elsif backend['mode'] == 'http' or (backend['mode'] == nil and @default_mode == "http") -%>    option			httpchk HEAD / HTTP/1.1
+<% elsif (backend['mode'] == 'tcp' or (backend['mode'] == nil and @default_mode == "tcp")) and backend['type'] == 'mysql' -%><% if backend['check_auth_user'] -%>    option			mysql-check <%=backend['check_auth_user']%> post-41
+<% else -%>    option			mysql-check post-41
+<% end -%><% elsif (backend['mode'] == "tcp" or (backend['mode'] == nil and @default_mode == "tcp")) and backend['type'] == 'redis' -%>    option			tcp-check
+    tcp-check			send PING\r\n
+    tcp-check			expect string +PONG
+    tcp-check			send info\ replication\r\n
+    tcp-check			expect string role:master
+    tcp-check			send QUIT\r\n
+    tcp-check			expect string +OK
+<% elsif (backend['mode'] == "tcp" or (backend['mode'] == nil and @default_mode == "tcp")) and backend['type'] == 'postgresql' -%><% if backend['check_auth_user'] -%>    option			pgsql-check <%=backend['check_auth_user']%>
+<% else -%>    option			pgsql-check
+<% end -%><% else -%># health check missing
+<% end -%><% if backend['port'] == '443' or backend['port'] == 443 or backend['ssl'] == true -%><% if backend['type'] != 'riak' -%>    option			ssl-hello-chk
+<% end -%><% end -%><% backend['targets'].each do |target| -%><% if target['name'] and target['host'] -%><% if target['weight'] -%><% weight = target['weight'] -%><% else -%><% weight = '1' -%><% end -%><% if target['maxconn'] -%><% maxconn = target['maxconn'] -%><% else -%><% maxconn = '4096' -%><% end -%><% if (backend['ssl'] == true or backend['port'] == 443 or backend['port'] == "443") and (backend['ssl_verify'] == nil or backend['ssl_verify'] != false) -%><% if backend['ssl_verify'] -%><% sslopts = backend['ssl_verify'] -%><% else -%><% sslopts = @default_ssl_verify -%><% end -%>    server			<%=target['name']%> <%=target['host']%>:<% if target['port'] -%><%=target['port']%><% else -%><%=backend['port']%><% end -%> check weight <%=weight%> maxconn <%=maxconn%><%=prefix%> check ssl verify <%=sslopts%>
+<% else -%>    server			<%=target['name']%> <%=target['host']%>:<% if target['port'] -%><%=target['port']%><% else -%><%=backend['port']%><% end -%> check weight <%=weight%> maxconn <%=maxconn%><%=prefix%>
+<% end -%><% end -%><% end -%><% if ! backend['virtual'] -%>
+
+frontend <%=backend['name']%>
+<% if @front_acl -%><% if @frontacl['allow'] -%><% @frontacl['allow'].each do |remote| -%>    acl				network_allowed src <%=remote%>
+<% end -%><% end -%><% if @frontacl['deny'] -%><% @frontacl['deny'].each do |remote| -%>    acl				network_denied src <%=remote%>
+<% end -%><% end -%><% if @frontacl['restrict'] -%><% @frontacl['restrict'].each do |uri| -%>    acl				restricted_pages path_beg <%=uri%>
+<% end -%><% if @frontacl['allow'] -%>    http-request		deny if restricted_page !network_allowed
+<% elsif @frontacl['deny'] -%>    http-request		deny if restricted_page network_denied
+<% else -%># looks like ACLs are broken
+<% end -%><% elsif @frontacl['allow'] -%>    http-request		deny if !network_allowed
+<% elsif @frontacl['deny'] -%>    http-request		deny if network_denied
+<% end -%><% end -%><% if backend['port'] == '443' or backend['port'] == 443 or backend['ssl'] -%><% loadcert = ' ssl crt ' + @conf_dir + '/ssl/server.pem' %>    bind			<% if backend['listen'] -%><%=backend['listen']%><% else -%><%=@listen%><% end -%>:80
+    redirect			scheme https code 301 if !{ ssl_fc }
+<% else -%><% loadcert = '' -%><% end -%><% if backend['mode'] == 'http' or (backend['mode'] == nil and @default_mode == 'http') -%>    rspidel			^X-Powered-By:.*$
+<% end -%>    bind			<% if backend['listen'] -%><%=backend['listen']%><% else -%><%=@listen%><% end -%>:<%=backend['port']%><%=loadcert%>
+<% if backend['mode'] -%>    mode			<%=backend['mode']%>
+<% end -%><% if backend['frontoptions'] -%><% backend['frontoptions'].each do |option| -%>    option			<%=option%>
+<% end -%><% end -%><% if backend['frontnooptions'] -%><% backend['frontnooptions'].each do |option| -%>    no option			<%=option%>
+<% end -%><% end -%><% if @sni_rules -%><% @sni_rules.each do |rules| -%><% if rules['backend'] and rules['rules'] -%><% rules['rules'].each do |rule| -%><% if rule['name'] and rule['match'] and rule['pattern'] -%>    acl				<%=rules['backend']%>-<%=rule['name']%> <%=rule['match']%><% if rule['match'] == "hdr_beg(host)" -%> -i<% end -%> <%=rule['pattern']%>
+<% end -%><% end -%><% rules['rules'].each do |rule| -%><% if rule['name'] and rule['match'] and rule['pattern'] -%>    use_backend			<%=rules['backend']%>_backend if <%=rules['backend']%>-<%=rule['name']%>
+<% end -%><% end -%><% end -%><% end -%><% end -%>    default_backend		<%=backend['name']%>_backend
+<% end -%><% end -%><% end -%><% if @stats_user and @stats_passphrase -%>
+
+<% if @uptodate -%>frontend stats
+    bind			<%=@stats_listen%>:<%=@stats_port%>
+<% else -%>listen stats <%=@stats_listen%>:<%=@stats_port%>
+<% end -%>    mode			http
+    stats			enable
+    stats			hide-version
+    stats			auth <%=@stats_user%>:<%=@stats_passphrase%>
+    stats			realm "HAproxy Statistics"
+    stats			uri /
+<% end -%>

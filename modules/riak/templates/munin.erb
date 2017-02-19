@@ -1,0 +1,7 @@
+[riak*]
+env.riak_host <%=@fqdn%>
+<% if @port_http != 8098 and @port_http != "8098" -%>env.riak_port <%=@port_http%>
+<% end -%><% if @basic != false -%>env.riak_basic <%=@basic%>
+<% end -%><% if @riak_ssl != false -%>env.riak_ca /etc/riak/ssl/server-chain.crt
+env.riak_proto https
+<% end -%>

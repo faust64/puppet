@@ -1,0 +1,57 @@
+additional_classes:
+  - Fail2ban
+  - Firehol
+
+physical_parent: geras.unetresgrossebite.com
+
+# Firehol
+firehol_interfaces:
+  - name: eth0
+    description: WAN
+    protection: strong
+    allow:
+      - server icmp accept
+      - server http accept
+      - server https accept
+      - server custom openssh "tcp/1022" default accept
+      - server custom munin "tcp/4949" default accept src "$office_networks"
+      - server custom nrpe "tcp/5666" default accept src "$office_networks"
+      - client all accept
+
+# Letsencrypt
+letsencrypt_renew_day: 21
+letsencrypt_renew_hour: 22
+letsencrypt_renew_min: 14
+
+# PF
+dns_ip:
+  - 37.59.45.201
+  - 188.165.212.140
+
+# Smokeping
+smokeping_short_name: smokeping
+smokeping_targets:
+  - bacula.unetresgrossebite.com
+  - blog.unetresgrossebite.com
+  - bukkake.unetresgrossebite.com
+  - cumshot.unetresgrossebite.com
+  - deepthroat.unetresgrossebite.com
+  - eris.unetresgrossebite.com
+  - gaia.unetresgrossebite.com
+  - gangbang.unetresgrossebite.com
+  - geras.unetresgrossebite.com
+  - gitlab.unetresgrossebite.com
+  - hypnos.unetresgrossebite.com
+  - ker.unetresgrossebite.com
+  - logmaster.unetresgrossebite.com
+  - monitor.unetresgrossebite.com
+  - nzbindex.unetresgrossebite.com
+  - orange.unetresgrossebite.com
+  - owncloud.unetresgrossebite.com
+  - patchdashboard.unetresgrossebite.com
+  - puppet.unetresgrossebite.com
+  - racktables.unetresgrossebite.com
+  - sab.unetresgrossebite.com
+  - sso.unetresgrossebite.com
+  - tvschedule.unetresgrossebite.com
+  - wiki.unetresgrossebite.com

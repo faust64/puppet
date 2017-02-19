@@ -1,0 +1,33 @@
+acl private_networks {
+    10.0.0.0/8;
+    127.0.0.0/8;
+    172.16.0.0/12;
+    192.168.0.0/16;
+};
+
+options
+{
+<% if @operatingsystem != "OpenBSD" -%>    directory "/var/cache/bind";
+<% end -%>    auth-nxdomain no;
+    listen-on-v6 { any; };
+    allow-query { any; };
+    allow-query-cache { any; };
+    recursion no;
+};
+<% if @named_channels != false -%>
+
+logging
+{
+<% @named_channels.each do |channel| -%>    channel		<%=channel%>_file
+    {
+	file		"<%=@runtime_log_dir%>/<%=channel%>.log" versions 3 size 5m;
+	severity	dynamic;
+	print-time	yes;
+    };
+    category		<%=channel%>
+    {
+	<%=channel%>_file;
+    };
+<% end -%>
+};
+<% end -%>

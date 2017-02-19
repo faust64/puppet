@@ -1,0 +1,14 @@
+<% if @upstream == @fqdn -%><% if @method == "DCF" -%>server 127.127.8.0 mode 19
+fudge 127.127.8.0 stratum 0
+fudge 127.127.8.0 time1 0.000
+<% elsif @method == "PPS" -%>server 127.127.20.1 mode 1
+fudge 127.127.20.1 stratum 0
+fudge 127.127.20.1 time1 0.000 flag3 1 refid PPS
+<% else -%>server pool.ntp.org
+<% end -%><% else -%>driftfile <%=@driftfile%>
+server <%=@upstream%>
+restrict -4 default kod notrap nomodify nopeer noquery
+restrict -6 default kod notrap nomodify nopeer noquery
+restrict 127.0.0.1
+restrict ::1
+<% end -%>

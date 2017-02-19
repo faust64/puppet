@@ -1,0 +1,22 @@
+include "/etc/pf.d/IFS"
+include "/etc/pf.d/Alias"
+include "/etc/pf.d/Redundancy"
+#include "/etc/pf.d/Shaping"
+<% if @gre_tunnels != false -%>include "/etc/pf.d/GRE"
+<% end -%><% if @rip_map != false -%>include "/etc/pf.d/RIP"
+<% end -%><% if @bgp_database != false and @bgp_map != false -%>include "/etc/pf.d/BGP"
+<% end -%><% if @ospf_database != false -%>include "/etc/pf.d/OSPF"
+<% end -%>include "/etc/pf.d/Policy"
+include "/etc/pf.d/QoS"
+include "/etc/pf.d/SIP"
+include "/etc/pf.d/NAT"
+include "/etc/pf.d/IPSEC"
+include "/etc/pf.d/Intranet"
+include "/etc/pf.d/Services"
+<% @local_networks[@domain].each do |nic| -%><% vlanname = nic['name'] -%>include "/etc/pf.d/VLAN-<%=@all_networks[vlanname]['name']%>"
+<% end -%>
+<% @ovpn_networks[@domain].each do |nic| -%><% vpnname = nic['name'] -%><% if @all_openvpns[vpnname]['server'] == true or nic['server'] == true -%>include "/etc/pf.d/OpenVPN-<%=vpnname%>"
+<% end -%><% end -%>
+include "/etc/pf.d/GLPI"
+<% @main_networks.each do |nic| -%><% if nic['gw'] =~ /[0-9]\.[0-9]/ -%>include "/etc/pf.d/WAN-<%=nic['name']%>"
+<% end -%><% end -%>

@@ -1,0 +1,77 @@
+#!/bin/sh
+
+DO_CIPHERS=false
+DO_HOST_KEYS=false
+DO_MACS=false
+TARGET=127.0.0.1
+
+while test "$1"
+do
+    case "$1" in
+	-a)
+	    DO_CIPHERS=true
+	    DO_HOST_KEYS=true
+	    DO_MACS=true
+	    ;;
+	-c) DO_CIPHERS=true	;;
+	-k) DO_HOST_KEYS=true	;;
+	-m) DO_MACS=true	;;
+	-t) TARGET=$2; shift	;;
+    esac
+    shift
+done
+
+ExpectedCiphers="aes128-ctr aes128-gcm@openssh.com aes192-ctr aes256-ctr aes256-gcm@openssh.com chacha20-poly1305@openssh.com"
+ExpectedHostKeys="ssh-ed25519-cert-v01@openssh.com ssh-ed25519 ssh-rsa-cert-v01@openssh.com ssh-rsa"
+ExpectedMACs="hmac-sha2-256-etm@openssh.com hmac-sha2-512-etm@openssh.com hmac-ripemd160-etm@openssh.com hmac-sha2-256 hmac-sha2-512 hmac-ripemd160 umac-128@openssh.com umac-128-etm@openssh.com"
+WeakCiphers="3des-cbc aes128-cbc aes192-cbc aes256-cbc arcfour arcfour128 arcfour256 blowfish-cbc cast128-cbc"
+WeakHostKeys="ssh-dsa ssh-dss ssh-ecdsa"
+WeakMACs="hmac-md5 hmac-md5-96 hmac-sha1 hmac-sha1-96 hmac-md5-etm@openssh.com hmac-md5-96-etm@openssh.com hmac-sha1-etm@openssh.com hmac-sha1-96-etm@openssh.com umac-64 umac-64-etm@openssh.com"
+
+if $DO_CIPHERS; then
+    for cipher in $WeakCiphers
+    do
+	if ssh -F/dev/null -vv -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no -oCiphers=$cipher $TARGET 'exit 0' >/dev/null 2>&1; then
+	    echo "EE: successfully used weak cipher $cipher"
+	fi
+    done
+    for cipher in $ExpectedCiphers
+    do
+	if ssh -vv -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no -oCiphers=$cipher $TARGET 'exit 0' >/dev/null 2>&1; then
+	    continue
+	fi
+	echo "WW: failed using trusted cipher $cipher"
+    done
+fi
+if $DO_HOST_KEYS; then
+    for key in $WeakHostKeys
+    do
+	if ssh -F/dev/null -vv -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no -oHostKeyAlgorithms=$key $TARGET 'exit 0' >/dev/null 2>&1; then
+	    echo "EE: successfully used weak hostkey $key"
+	fi
+    done
+    for key in $ExpectedHostKeys
+    do
+	if ssh -vv -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no -oHostKeyAlgorithms=$key $TARGET 'exit 0' >/dev/null 2>&1; then
+	    continue
+	fi
+	echo "WW: failed using trusted hostkey $key"
+    done
+fi
+if $DO_MACS; then
+    for mac in $WeakMACs
+    do
+	if ssh -F/dev/null -vv -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no -oMACs=$mac $TARGET 'exit 0' >/dev/null 2>&1; then
+	    echo "EE: successfully used weak MAC $mac"
+	fi
+    done
+    for mac in $ExpectedMACs
+    do
+	if ssh -vv -oUserKnownHostsFile=/dev/null -oStrictHostKeyChecking=no -oMACs=$mac $TARGET 'exit 0' >/dev/null 2>&1; then
+	    continue
+	fi
+	echo "WW: failed using trusted MAC $mac"
+    done
+fi
+
+exit 0

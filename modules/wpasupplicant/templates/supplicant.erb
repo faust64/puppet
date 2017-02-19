@@ -1,0 +1,11 @@
+ctrl_interface = DIR=<%=@run_dir%>/wpa_supplicant GROUP=<%=@runtime_group%>
+update_config = 1
+ap_scan = <%=@ap_scan%>
+network = {
+    ssid     = "<%=@ssid%>"
+    psk      = "<%=@auth_key%>"
+    proto    = <%=@proto%>
+    key_mgmt = <%=@auth_type%>
+    pairwise = <%=@pairwise%>
+    auth_alg = <%=@auth_algo%>
+}

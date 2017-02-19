@@ -1,0 +1,42 @@
+#!/bin/sh
+
+export PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
+
+<% if @contact -%>DEST=<%=@contact%>
+<% end -%><% if @slack_hook != false -%>HOOK_URL=<%=@slack_hook%>
+<% end -%>HOSTNAME=`hostname -f`
+TMPFILE=/tmp/apt_removed
+drop=false
+notify=false
+if test "$1" = remove; then
+    drop=true
+elif test "$1" = cron; then
+    notify=true
+fi
+
+if $notify; then
+    dpkg -l | awk '/^r/{print $2}' >$TMPFILE
+    if test -s $TMPFILE; then
+	if test "$HOOK_URL" -a -x /usr/local/bin/slack; then
+	    while read line
+	    do
+		/usr/local/bin/slack $HOOK_URL "WARNING: half-removed on $HOSTNAME - $line"
+	    done <$TMPFILE
+	elif test "$DEST"; then
+	    cat $TMPFILE | mail -s"[WARNING] half-removed packages on $HOSTNAME" $DEST
+	else
+	    cat $TMPFILE
+	fi
+    fi
+    rm -f $TMPFILE
+else
+    for pkg in `dpkg -l | awk '/^r/{print $2}'`
+    do
+	echo $pkg
+	if $drop; then
+	    apt-get remove --purge --yes $pkg
+	fi
+    done
+fi
+
+exit 0

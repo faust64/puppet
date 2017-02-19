@@ -1,0 +1,21 @@
+<% [ "graph", "html", "limit", "update" ].each do |log| -%>/var/log/munin/munin-<%=log%>.log
+{
+    compress
+    create 640 <%=@munin_user%> <%=@gid_adm%>
+    daily
+    delaycompress
+    missingok
+    notifempty
+    rotate 7
+}
+
+<% end -%>/var/log/munin/munin-cgi-graph.log
+{
+    compress
+    copytruncate
+    daily
+    delaycompress
+    missingok
+    notifempty
+    rotate 7
+}

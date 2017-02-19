@@ -1,0 +1,136 @@
+#!/bin/sh
+
+export PATH=/usr/local/bin:/usr/bin:/bin
+
+# use thomson_status, thomson_uptime, thomson_efm, thomson_attenuation or thomson_snr
+MONITOR=`basename $0 | sed 's/^thomson_//g'`
+HOST=192.168.1.254
+dsl="http://$HOST/cgi/b/is/_bridge_/dt/?be=0&l0=2&l1=2&name=eth-br-dsl"
+info="http://$HOST/cgi/b/events/?be=0&l0=1&l1=4"
+stat="http://$HOST/?be=0&l0=-1&l1=-1"
+
+HTML_OUT="/tmp/thomson.html"
+GET_CMD="ftp -o $HTML_OUT"
+
+do_get()
+{
+    case "$1" in
+	dsl)	target="$dsl"	;;
+	stat)	target="$stat"	;;
+	*)	target="$info"	;;
+    esac
+
+    if $GET_CMD "$target" >/dev/null 2>&1; then
+	eval `grep dsl0 $HTML_OUT | head -1 | sed 's|.*p:[ \t]*\([0-9]*\) kbit.*Bw:[ \t]*\([0-9]*\) kbit.*Margin Down/Up:[ \t]*\([0-9]*\)/\([0-9]*\) dB.*uation Down/Up:[ \t]*\([0-9]*\)/\([0-9]*\) dB.*|bw_down=\1 bw_up=\2 snr_down=\3 snr_up=\4 att_down=\5 att_up=\6|'`
+    fi
+}
+
+do_info()
+{
+    do_get info
+    case "$1" in
+	attenuation)
+	    echo attenuation_down.value $att_down
+	    echo attenuation_up.value $att_up
+	    ;;
+	efm)
+	    echo efm_down.value $bw_down
+	    echo efm_up.value $bw_up
+	    ;;
+	snr)
+	    echo snr_down.value $snr_down
+	    echo snr_up.value $snr_up
+	    ;;
+    esac
+}
+
+do_uptime()
+{
+    do_get info
+    local UPTIME=`grep '(since last boot)' $HTML_OUT | head -1 | sed "s|.*left'>\(.*\) (since last boot).*|\1|"`
+    local DAY=$(echo "$UPTIME" | sed 's|\([0-9]*\) day.*|\1|')
+    local HOU=$(echo "$UPTIME" | sed 's|.* \([0-9]*\):.*|\1|')
+    local MIN=$(echo "$UPTIME" | sed 's|.*:\([0-9]*\):.*|\1|')
+    test -z "$DAY" && DAY=0
+    test -z "$HOU" && HOU=0
+    test -z "$MIN" && MIN=0
+    UPTIME=$(echo "scale=2; ($DAY * 86400 + $HOU * 3600 + $MIN * 60) / 86400" | bc)
+    echo uptime.value $UPTIME
+}
+
+do_status()
+{
+    local stat
+    do_get stat
+    if grep eth-br-dsl $HTML_OUT | grep Connected >/dev/null; then
+	stat=1
+    else
+	stat=0
+    fi
+    echo status.value $stat
+}
+
+if test "$1" = autoconf; then
+    echo yes
+elif test "$1" = config; then
+    echo grpah_category ovh
+    echo graph_args --base 1000 -l 0
+
+    case "$MONITOR" in
+	status)
+	    echo graph_title OVH $MONITOR
+	    echo $MONITOR.label $MONITOR
+	    echo graph_vlabel $MONITOR
+	    echo "graph_info This graph show the status of the OVH link. 1-> Connected, 0-> Disconnected"
+	    echo $MONITOR.draw AREA
+	    ;;
+	uptime)
+	    echo graph_title OVH $MONITOR in days
+	    echo $MONITOR.label $MONITOR
+	    echo graph_vlabel $MONITOR
+	    echo graph_info This graph show the uptime of the OVH modem
+	    echo $MONITOR.draw AREA
+	    ;;
+	efm)
+	    echo "graph_title OVH EFM Bandwidth (Up and Down)"
+	    echo ${MONITOR}_down.label EFM down
+	    echo ${MONITOR}_up.label EFM up
+	    echo "graph_vlabel EFM Bandwidth (kbit/s)"
+	    echo graph_info This graph show the EFM bandwidth of the SDSL line of the thomson modem
+	    ;;
+	attenuation)
+	    echo "graph_title OVH Attenuation (Up and Down)"
+	    echo ${MONITOR}_down.label Attenuation down
+	    echo ${MONITOR}_up.label Attenuation up
+	    echo "graph_vlabel Line attenuation (dB)"
+	    echo graph_info This graph show the Attenuation of the SDSL line of the thomson modem
+	    ;;
+	snr)
+	    echo graph_title OVH $MONITOR in days
+	    echo ${MONITOR}_down.label SNR margin down
+	    echo ${MONITOR}_up.label SNR margin up
+	    echo "graph_vlabel SNR margin (dB)"
+	    echo graph_info This graph show the SNR margin of the SDSL line of the thomson modem
+	    ;;
+	*)
+	    echo "ERROR: Monitor can only be status, uptime, attenuation, snr or efm"
+	    exit 1
+	    ;;
+    esac
+else
+    case "$MONITOR" in
+	status)	do_status	;;
+	uptime)	do_uptime	;;
+	efm|snr|attenuation)
+	    do_info $MONITOR
+	    ;;
+	*)
+	    echo "ERROR: Monitor can only be status, uptime, atm, attenuation or snr"
+	    exit 1
+	    ;;
+    esac
+fi
+
+rm -f $TMPFILE
+
+exit 0

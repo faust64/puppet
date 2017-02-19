@@ -1,0 +1,11 @@
+Host *
+    ChallengeResponseAuthentication no
+    Ciphers <%=@ciphers.join(',')%>
+<% if @operatingsystem != "OpenBSD" and @kernel != "5.8" -%>    GSSAPIAuthentication yes
+    GSSAPIDelegateCredentials no
+<% end -%>    HashKnownHosts yes
+    HostKeyAlgorithms <%=@hostkeys.join(',')%>
+<% if @kex != false -%>    KexAlgorithms <%=@kex%>
+<% end -%><% if @mac != false -%>    MACs <%=@mac%>
+<% end -%><% if @psk != true -%>    PasswordAuthentication no
+<% end -%>    SendEnv LANG LC_*

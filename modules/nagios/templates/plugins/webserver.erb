@@ -1,0 +1,2 @@
+command[<%=@command%>]=<%=@plugindir%>/check_http -I localhost -e "HTTP/1." -p <% if @http_listen['plain'] =~ /:/ -%><%=@http_listen['plain'].gsub(/[0-9\.]*:/, '')%><% else -%><%=@http_listen['plain']%><% end -%>
+

@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if getent passwd peerioadmin >/dev/null 2>&1; then
+    dir=`echo ~peerioadmin`
+else
+    dir=/var/lib/pm2
+fi
+
+if test -d $dir -a -d /usr/share/peerio-server; then
+    test -s $dir/.profile && . $dir/.profile
+    cd /usr/share/peerio-server
+    echo started on `date +%Y/%m/%d-%H:%M:%S`
+    nice -n19 node ./admin/bin/stats cron
+    echo done on `date +%Y/%m/%d-%H:%M:%S`
+fi >/var/log/stats.output 2>&1 &
+
+exit 0

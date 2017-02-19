@@ -1,0 +1,38 @@
+/var/log/syslog
+{
+    compress
+    daily
+    delaycompress
+    missingok
+    notifempty
+    rotate 2
+    postrotate
+<% if @operatingsystem == "Debian" -%>	invoke-rc.d rsyslog rotate >/dev/null
+<% elsif @operatingsystem == "Ubuntu" -%>	service rsyslog rotate >/dev/null 2>&1 || true
+<% else -%>	/bin/kill -HUP `cat /var/run/syslogd.pid 2>/dev/null` 2>/dev/null || true
+<% end -%>    endscript
+}
+
+/var/log/authlog
+/var/log/cron
+/var/log/daemon
+/var/log/kern
+/var/log/maillog
+/var/log/messages
+/var/log/secure
+/var/log/spooler
+/var/log/user
+{
+    compress
+    delaycompress
+    missingok
+    notifempty
+    rotate 4
+    weekly
+    sharedscripts
+    postrotate
+<% if @operatingsystem == "Debian" -%>	invoke-rc.d rsyslog rotate >/dev/null
+<% elsif @operatingsystem == "Ubuntu" -%>	service rsyslog rotate >/dev/null 2>&1 || true
+<% else -%>	/bin/kill -HUP `cat /var/run/syslogd.pid 2>/dev/null` 2>/dev/null || true
+<% end -%>    endscript
+}

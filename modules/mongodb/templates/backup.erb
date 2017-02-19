@@ -1,0 +1,18 @@
+#!/bin/sh
+
+db=<%=@backup_db%>
+collections="<%=@backup_collections.each do |col| -%> <%=col%><% end -%>"
+backupdir="<%=@backup_dir%>"
+
+if ! test -d "/$backupdir"; then
+    mkdir -p "/$backupdir"
+fi
+cd "/$backupdir"
+
+for col in $collections
+do
+    test -f $col.json && mv $col.json former.$col.json
+    mongoexport --db $db --collection $col >$col.json
+done
+
+exit 0

@@ -1,0 +1,7 @@
+additional_classes:
+  - Redis
+
+# Redis
+redis_listen_address: 10.255.125.25
+redis_munin: true
+redis_slaveof: 10.255.125.97

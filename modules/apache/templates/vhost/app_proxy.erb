@@ -1,0 +1,46 @@
+<VirtualHost *:<%=@listen_ports['plain']%>>
+    ServerName <%=@name%>
+<% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
+<% end -%><% end -%>    ServerAdmin <%=@server_admin%>
+    ErrorLog <%=@log_dir%>/error-<%=@name%>.log
+    LogLevel warn
+    CustomLog <%=@log_dir%>/access-<%=@name%>.log combined
+<% if @csp_name != false and @csp_policies[@csp_name] =~ /self/ -%>    Header set Content-Security-Policy "default-src 'self'<% if @csp_sources != false -%> http://*.<%=@csp_sources.join(' http://*.')%> https://*.<%=@csp_sources.join(' https://*.')%><% end -%> <%=@csp_policies[@csp_name]%><% if @csp_report != false -%> report-uri <%=@csp_report%><% end -%>"
+<% end -%><% if @deny_frames == "remote" -%>    Header always set X-Frame-Options SAMEORIGIN
+<% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
+<% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
+<% end -%><% if @xss_protection == true -%>    Header always set X-Xss-Protection "1; mode=block"
+<% end -%><% if @listen_ports['ssl'] != false -%><% if @app_rewrite == true -%>    RewriteEngine On
+    RewriteRule ^/(.*) https://<%=@name%>/$1 [L,R]
+<% else -%>    ProxyPreserveHost <%=@preserve_host%>
+    ProxyPass / <%=@app_proto%>://127.0.0.1:<%=@app_port%>/
+    ProxyPassReverse / <%=@app_proto%>://127.0.0.1:<%=@app_port%>/
+    ProxyErrorOverride On
+<% end -%></VirtualHost>
+<VirtualHost *:<%=@listen_ports['ssl']%>>
+    ServerName <%=@name%>
+<% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
+<% end -%><% end -%>    ServerAdmin <%=@server_admin%>
+    ErrorLog <%=@log_dir%>/ssl-error-<%=@name%>.log
+    LogLevel warn
+<% if @csp_name != false and @csp_policies[@csp_name] =~ /self/ -%>    Header set Content-Security-Policy "default-src 'self'<% if @csp_sources != false -%> https://*.<%=@csp_sources.join(' https://*.')%><% end -%> <%=@csp_policies[@csp_name]%><% if @csp_report != false -%> report-uri <%=@csp_report%><% end -%>"
+<% end -%><% if @stricttransport != false -%>    Header always set Strict-Transport-Security "<%=@stricttransport%>"
+<% end -%><% if @deny_frames == "remote" -%>    Header always set X-Frame-Options SAMEORIGIN
+<% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
+<% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
+<% end -%><% if @xss_protection == true -%>    Header always set X-Xss-Protection "1; mode=block"
+<% end -%>    CustomLog <%=@log_dir%>/ssl-access-<%=@name%>.log combined
+    Include ssl.conf
+<% end -%><% if 0 == 1 -%>    <Location /↑↑↓↓←→←→BA/>
+<% end -%><% if @konami_location -%>    <Location /UpUpDownDownLeftRightLeftRightBA/>
+	DocumentRoot <%=@konami_location%>
+    </Location>
+<% end -%>    ProxyPreserveHost <%=@preserve_host%>
+    ProxyPass / <%=@app_proto%>://127.0.0.1:<%=@app_port%>/
+    ProxyPassReverse / <%=@app_proto%>://127.0.0.1:<%=@app_port%>/
+    ProxyErrorOverride On
+<% if @vhostldapauth == true or @vhostldapauth == "pubonly" -%>    <Location />
+	Include authldap.conf
+<% if @vhostldapauth == "pubonly" -%>	Include allow.conf
+<% end -%>    </Location>
+<% end -%></VirtualHost>

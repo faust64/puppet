@@ -1,0 +1,28 @@
+#!/bin/sh
+
+DEST=<%=@contact%>
+DOMAINS="
+<% @domains.each do |dom| -%><%=dom%>
+<% end -%>"
+
+rm -f /tmp/result
+for LOOKUP in $DOMAINS
+do
+    for PAGES in `seq 0 100 1000`
+    do
+	wget -q "http://www.google.fr/search?q=site:$LOOKUP&num=100&hl=fr&lr=&safe=off&as_qdr=all&ei=-AxITNaSIY-SjAf_t4DRDg&start=$PAGES&sa=N" --user-agent='Mozilla/5.0 (X11; U; Linux i686; fr; rv:1.9.1.9) Gecko/20100401 Ubuntu/9.10 (karmic) Firefox/3.5.9' -O -
+    done >/tmp/lookup
+    (
+	echo -e "List of $LOOKUP references in google:"
+	LANG=C egrep -oi "[^<>:/ ]*\.`echo $LOOKUP | sed 's|\.|\\.|g'`" /tmp/lookup | sort -u
+    ) >>/tmp/result
+done 2>/dev/null
+rm -f /tmp/lookup
+grep -v '^List of ' /tmp/result | grep . >/dev/null || rm -f /tmp/result
+
+if test -s /tmp/result; then
+    cat /tmp/result | mail -s"Google domain lookup" $DEST
+    rm -f /tmp/result
+fi
+
+exit 0

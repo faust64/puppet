@@ -1,0 +1,3 @@
+<% @redis_backends.each do |remote| -%>[<%=remote.gsub('.', '-')%>_redis*]
+env.host <%=remote%>
+<% end -%>

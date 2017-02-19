@@ -1,0 +1,4 @@
+[haproxy_ng]
+<% if @stats_user and @stats_passphrase -%>env.url http://<%=@stats_user%>:<%=@stats_passphrase%>@<%=@stats_listen%>:<%=@stats_port%>/;csv;norefresh
+<% else -%>env.url http://<%=@stats_listen%>:<%=@stats_port%>/;csv;norefresh
+<% end -%>

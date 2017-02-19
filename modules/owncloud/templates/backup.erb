@@ -1,0 +1,24 @@
+#!/bin/sh
+
+DATA_ROOT=<%=@web_root%>/data
+DUMP_DIR=/var/backups/owncloud
+
+if test -d $DATA_ROOT -a -d $DUMP_DIR; then
+    rsync -avWxP --numeric-ids --delete $DATA_ROOT/ $DUMP_DIR/
+    if ! test -f $DUMP_DIR/owncloud.db; then
+	if test -r /etc/mysql/debian.cnf; then
+	    mysqldump --defaults-file=/etc/mysql/debian.cnf owncloud >$DUMP_DIR/owncloud.db
+	else
+	    echo "Unable to backup owncloud database" >&2
+	fi
+    fi
+else
+    if ! test -d $DATA_ROOT; then
+	echo "Unable to find owncloud data directory ($DATA_ROOT)"
+    else
+	echo "Unable to find owncloud backup directory ($DUMP_DIR)"
+    fi
+    exit 1
+fi
+
+exit $?

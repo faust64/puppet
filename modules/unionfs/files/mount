@@ -1,0 +1,19 @@
+#!/bin/sh
+
+export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+
+test -z "$1" && exit 1
+DIR=$1
+
+if awk '/[     ]\/[    ]/{print ","$4","}' /etc/fstab | grep '[^a-z]ro[^a-z]' >/dev/null; then
+    if mount | grep ${DIR}_rw >/dev/null; then
+	mount -o remount -t tmpfs ramdisk ${DIR}_rw
+    else
+	mount -t tmpfs ramdisk ${DIR}_rw
+    fi
+    unionfs-fuse -o cow,allow_other,suid,dev,nonempty ${DIR}_rw=RW:${DIR}_org=RO ${DIR}
+elif ! mount | grep ${DIR}_org; then
+    mount --bind ${DIR}_org ${DIR}
+fi
+
+exit $?

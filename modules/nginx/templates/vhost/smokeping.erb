@@ -1,0 +1,62 @@
+server
+{
+    listen <%=@listen_ports['plain']%>;
+    server_name <%=@name%>;
+    server_tokens off;
+    error_log <%=@log_dir%>/error-<%=@name%>.log;
+    access_log <%=@log_dir%>/access-<%=@name%>.log main;
+<% if @csp_name != false and @csp_policies[@csp_name] =~ /self/ -%>    add_header Content-Security-Policy "default-src 'self'<% if @csp_sources != false -%> http://*.<%=@csp_sources.join(' http://*.')%> https://*.<%=@csp_sources.join(' https://*.')%><% end -%> <%=@csp_policies[@csp_name]%><% if @csp_report != false -%> report-uri <%=@csp_report%><% end -%>";
+<% end -%><% if @deny_frames == true -%>    add_header X-Frame-Options DENY;
+<% end -%><% if @nosniff == true -%>    add_header X-Content-Type-Options nosniff;
+<% end -%><% if @xss_protection == true -%>    add_header X-XSS-Protection "1; mode=block";
+<% end -%><% if @listen_ports['ssl'] != false -%>    rewrite ^/(.*) https://<%=@name%>/$1;
+}
+
+server
+{
+    listen <%=@listen_ports['ssl']%>;
+    server_name <%=@name%>;
+    server_tokens off;
+    error_log <%=@log_dir%>/ssl-error-<%=@name%>.log;
+    access_log <%=@log_dir%>/ssl-access-<%=@name%>.log main;
+<% if @csp_name != false and @csp_policies[@csp_name] =~ /self/ -%>    add_header Content-Security-Policy "default-src 'self'<% if @csp_sources != false -%> https://*.<%=@csp_sources.join(' https://*.')%><% end -%> <%=@csp_policies[@csp_name]%><% if @csp_report != false -%> report-uri <%=@csp_report%><% end -%>";
+<% end -%><% if @stricttransport != false -%>    add_header Strict-Transport-Security "<%=@stricttransport%>";
+<% end -%><% if @public_key_pins != false -%>    add_header Public-Key Pins 'pin-sha256="<%=@public_key_pins.join('"; pin-sha256="')%>"; max-age=<%=@hpkp_max_age%>; includeSubDomains<% if @hpkp_report != false -%>; report-uri="<%=@hpkp_report%>"<% end -%>';
+<% end -%><% if @deny_frames == true -%>    add_header X-Frame-Options DENY;
+<% end -%><% if @nosniff == true -%>    add_header X-Content-Type-Options nosniff;
+<% end -%><% if @xss_protection == true -%>    add_header X-XSS-Protection "1; mode=block";
+<% end -%>    ssl on;
+    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+<% if 0 == 1 -%># Require nginx 1.5.9
+    ssl_session_tickets off;
+<% end -%>    ssl_certificate <%=@conf_dir%>/ssl/server-full.crt;
+    ssl_certificate_key <%=@conf_dir%>/ssl/server.key;
+    ssl_dhparam /etc/nginx/ssl/dh.pem;
+<% end -%>    root <%=@app_root%>;
+    location /cgi-bin/ {
+	gzip off;
+	root /usr/lib;
+	include <%=@conf_dir%>/fastcgi_params;
+	fastcgi_param SCRIPT_FILENAME /usr/lib$fastcgi_script_name;
+	fastcgi_pass unix:<%=@cgi_socket%>;
+    }
+    location ~ \.cgi$ {
+<% if @noerrors == false -%>	fastcgi_intercept_errors on;
+<% end -%>	root <%=@app_root%>;
+	include <%=@conf_dir%>/fastcgi_params;
+	fastcgi_param SCRIPT_FILENAME <%=@app_root%>/smokeping/$fastcgi_script_name;
+	fastcgi_pass unix:<%=@cgi_socket%>;
+    }
+    location /smokeping/ {
+	root <%=@app_root%>;
+	index smokeping.cgi;
+	gzip on;
+    }
+    location / {
+	rewrite ^(.*)$ http<% if @listen_ports['ssl'] != false -%>s<% end -%>://<%=@name%>/smokeping$1;
+    }
+<% if @noerrors == false -%>    include <%=@conf_dir%>/errors.conf;
+<% end -%>}

@@ -1,0 +1,40 @@
+#!/bin/sh
+
+<% if @contact != false -%>DEST=<%=@contact%>
+<% end -%>HOSTNAME=`hostname<% if @kernel == "Linux" -%> -f<% end -%>`
+<% if @slack_hook != false -%>HOOK_URL=<%=@slack_hook%>
+<% end -%>RANDOM_NUMBER=`od -An -N2 -d /dev/random`
+TMPFILE=/tmp/suspicious.$$
+WAIT_TIME=`expr 1 + $RANDOM_NUMBER % \( 1800 - 1 \)`
+PERM_EXCLUDE="(/usr/share/ossec-wui-master/tmp|/var/www/nnplus|/var/lib/btsync|/media/backups/bluemind)"
+SUID_EXCLUDE="<% if @suid_exclude != false -%>(^$<% @suid_exclude.each do |fl| -%>|<%=fl%><% end -%>)<% end -%>"
+
+sleep $WAIT_TIME
+grep -E '[ \t](ext[234]|btrfs|[ufx]fs)[ \t]' /etc/fstab | \
+    awk '{print $2}' | while read partition
+	do
+	    find $partition -xdev \( -type f -o -type d \) \( -perm -0002 -a ! -perm -1000 \) | grep -vE "$PERM_EXCLUDE" 2>&1 | grep -v ': No such file or directory$'
+	    find $partition -xdev -type f \( -perm -04000 -a ! -perm -02000 \)<% if @suid_exclude != false -%> | grep -vE "^$SUID_EXCLUDE$"<% end -%> 2>&1 | grep -v ': No such file or directory$'
+	    find $partition -xdev -nouser -o -nogroup | grep -vE "^(<% if @kernel == "FreeBSD" or @kernel == "OpenBSD" -%>/usr/ports/|<% end -%>/usr/src|.*[/\.]crl.pem$)" 2>&1 | grep -v ': No such file or directory$'
+	done >$TMPFILE
+<% if @kernel == "Linux" -%>if grep ^root:[*\!]: /etc/shadow; then
+    echo "root password is not set!" >>$TMPFILE
+fi
+<% end -%>
+
+if test -s $TMPFILE; then
+    if test "$HOOK_URL" -a -x /usr/local/bin/slack; then
+	while read line
+	do
+	    /usr/local/bin/slack $HOOK_URL "WARNING: $HOSTNAME - $line"
+	done <$TMPFILE
+    elif test "$DEST"; then
+	cat $TMPFILE | mail -s "[WARNING] suspicious permissions on $HOSTNAME" $DEST
+    else
+	cat $TMPFILE >&2
+    fi
+fi
+
+rm -f $TMPFILE
+
+exit 0

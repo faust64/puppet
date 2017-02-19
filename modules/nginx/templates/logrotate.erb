@@ -1,0 +1,17 @@
+<%=@log_dir%>/*.log
+{
+    compress
+    create 0640 <%=@runuser%> <%=@rungroup%>
+    daily
+    delaycompress
+    missingok
+    notifempty
+    rotate <%=@rotate%>
+    sharedscripts
+    prerotate
+	test -d /etc/logrotate.d/httpd-prerotate && run-parts /etc/logrotate.d/httpd-prerotate || true
+    endscript
+    postrotate
+	test -s <%=@run_dir%>/nginx.pid && kill -USR1 `cat <%=@run_dir%>/nginx.pid`
+    endscript
+}

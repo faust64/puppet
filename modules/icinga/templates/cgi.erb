@@ -1,0 +1,48 @@
+main_config_file=<%=@conf_dir%>/icinga.cfg
+physical_html_path=<%=@share_dir%>/htdocs
+url_html_path=/icinga
+url_stylesheets_path=/icinga/stylesheets
+http_charset=utf-8
+icinga_check_command=<%=@plugindir%>/check_nagios <%=@lib_dir%>/status.dat 5 '/usr/sbin/icinga'
+show_context_help=0
+highlight_table_rows=1
+use_pending_states=1
+use_logging=1
+cgi_log_file=<%=@share_dir%>/htdocs/log/icinga-cgi.log
+cgi_log_rotation_method=d
+cgi_log_archive_path=<%=@share_dir%>/htdocs/log
+enforce_comments_on_actions=0
+first_day_of_week=1
+disable_cmd_cgi_csrf_protection=0
+use_authentication=1
+use_ssl_authentication=0
+authorized_for_system_information=*
+authorized_for_configuration_information=<% @contacts.each do |who, data| -%><% if who != "root" -%><%=who%>,<% end -%><% end -%>icingaadmin
+authorized_for_full_command_resolution=<% @contacts.each do |who, data| -%><% if who != "root" -%><%=who%>,<% end -%><% end -%>icingaadmin
+authorized_for_system_commands=<% @contacts.each do |who, data| -%><% if who != "root" -%><%=who%>,<% end -%><% end -%>icingaadmin
+authorized_for_all_services=*
+authorized_for_all_hosts=*
+authorized_for_all_service_commands=<% @contacts.each do |who, data| -%><% if who != "root" -%><%=who%>,<% end -%><% end -%>icingaadmin
+authorized_for_all_host_commands=<% @contacts.each do |who, data| -%><% if who != "root" -%><%=who%>,<% end -%><% end -%>icingaadmin
+show_all_services_host_is_authorized_for=1
+show_partial_hostgroups=1
+default_statusmap_layout=5
+default_statuswrl_layout=4
+ping_syntax=/bin/ping -n -U -c 5 $HOSTADDRESS$
+refresh_rate=90
+refresh_type=1
+escape_html_tags=1
+persistent_ack_comments=0
+action_url_target=main
+notes_url_target=main
+lock_author_names=1
+default_downtime_duration=7200
+default_expiring_acknowledgement_duration=86400
+status_show_long_plugin_output=0
+display_status_totals=0
+tac_show_only_hard_state=0
+extinfo_show_child_hosts=0
+suppress_maintenance_downtime=0
+show_tac_header=1
+show_tac_header_pending=1
+tab_friendly_titles=1

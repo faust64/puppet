@@ -1,0 +1,96 @@
+#!/bin/sh
+
+GATEWAY=<%=@ovpngw%>
+
+usage ()
+{
+    echo " $0 uid [force]"
+    echo "      uid : user login"
+    echo "      force : force l'envoie du mail"
+}
+
+if test $# -ne 1 -a $# -ne 2; then
+    usage
+    exit 1
+fi
+
+uid=$1
+force=$2
+tmpfile=`mktemp`
+
+export EASY_RSA=/usr/local/bin
+
+cd /home/pki/vpn
+./makecert $uid $tmpfile
+
+if ! test -e "$uid.p12"; then
+    echo "There was a problem creating the certificate, aborting."
+    exit 1
+fi >&2
+
+cd - >/dev/null
+cat <<EOF >$uid.ovpn
+#OpenVPN client conf
+tls-client
+client
+dev tun
+proto tcp
+tun-mtu 1500
+remote $GATEWAY 1194
+ns-cert-type server
+pkcs12 "$uid.p12"
+cipher BF-CBC
+comp-lzo
+verb 3
+route-method exe
+route-delay 2
+EOF
+
+cp -p "/home/pki/vpn/$uid.p12" /home/openvpn
+zip -P <%=@zip_pass%> $uid $uid.ovpn "$uid.p12" README.txt
+rm -f "/home/openvpn/$uid.p12" $uid.ovpn
+
+if ! test -f $uid.zip; then
+    echo "Unable to create zip file" >&2
+    exit 1
+fi
+echo "$uid.zip was created"
+
+PW=`cat $tmpfile`
+if test "$PW"; then
+    rm -f $tmpfile
+else
+    echo "Unable to read password from $tmpfile" >&2
+    exit 1
+fi
+
+RESP=
+if test "$force" = no; then
+    echo "Certificate was not sent."
+elif test "$force"; then
+    RESP=y
+else
+    echo "Would you like to send the certificate by mail? (y/n)"
+    read RESP
+    case $RESP in
+	Y|y|yes)
+	    ;;
+	*)
+	    RESP=
+	    ;;
+    esac
+fi
+
+DEST=`ldapsearch -b <%=@user_base%> -x -LLL "(&(uid=$KEY_CN))" mail | awk '/^mail:/{print $2;exit;}'`
+if test "$RESP"; then
+    if cat /home/openvpn/mailvpn | sed "s|PUTPASSWORDHERE|$PW|" | mutt -F /root/muttrc-vpn $DEST -s "VPN Certificate" -a "/home/openvpn/$uid.zip"; then
+	echo "Message was sent. [$PW]"
+	exit 0
+    fi
+    echo "Error while sending certificate." >&2
+else
+    echo "Not sending certificate."
+fi
+echo "Make sure user gets its .p12 and its password: $PW"
+
+exit 0

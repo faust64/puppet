@@ -1,0 +1,51 @@
+download_cmd: wget
+gid_adm: adm
+gid_zero: root
+service_dir: /etc/init.d
+
+# Apache
+apache_error_dir: /usr/share/apache2/error
+apache_icons_dir: /usr/share/apache2/icons
+
+# Nagios
+nagios_hostgroup: ubuntu-servers
+nagios_iconimage: utgb/ubuntu.png
+nagios_iconimagealt: ubuntu
+nagios_nrpe_service_name: nagios-nrpe-server
+nagios_statusmapimage: utgb/ubuntu.gd2
+
+# NFS
+nfs_service_name: nfs-kernel-server
+
+# Nginx
+nginx_run_dir: /run
+nginx_runtime_user: www-data
+
+# OpenSSH
+ssh_service_name: ssh
+
+# OSSEC
+ossec_ignore:
+  - /dev/.blkid.tab
+  - /etc/mtab
+  - /etc/hosts.deny
+  - /etc/random-seed
+  - /etc/adjtime
+
+# PHP - usual suspects
+#php_mod_pdo: true
+#php_mod_mysqli: true
+
+# SNMP
+snmp_conf_dir: /etc/snmp
+
+# Smokeping
+smokeping_share_dir: /usr/share/smokeping
+
+# Squid
+squid_conf_dir: /etc/squid3
+squid_command: squid3
+squid_error_dir: /usr/share/squid3/errors
+squid_log_dir: /var/log/squid3
+squid_service_name: squid3
+squid_spool_dir: /var/spool/squid3

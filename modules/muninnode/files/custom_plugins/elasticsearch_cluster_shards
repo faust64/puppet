@@ -1,0 +1,44 @@
+#!/usr/bin/env perl
+# Tomas Doran <bobtfish@bobtfish.net>
+# GPLv2
+
+use strict;
+use warnings;
+use LWP;
+use JSON qw/decode_json/;
+my $host = $ENV{'esearch_addr'} || 'localhost';
+my $ua = LWP::UserAgent->new;
+$ua->timeout(10);
+
+sub get_json_from_url
+{
+    my $uri = shift;
+    my $res = $ua->get($uri, 'Content-Type' => 'application/json' );
+    Carp::confess($res->code . " for " . $uri) unless $res->is_success;
+    my $data = do { local $@; eval { decode_json($res->content) } };
+    die("Could not decode JSON from: " . $res->content) unless $data;
+    return $data;
+}
+
+my $data = get_json_from_url("http://$host:9200/_cluster/health");
+
+if ($ARGV[0] and $ARGV[0] eq 'config')
+{
+    print "graph_title ElasticSearch cluster shards\n";
+    print "graph_category elasticsearch\n";
+    print "graph_scale no\n";
+
+    foreach my $name (grep { /_shards$/ } keys %$data)
+    {
+        print "$name.label $name\n"."$name.type GAUGE\n";
+    }
+}
+elsif (!$ARGV[0] || $ARGV[0] eq 'autoconf')
+{
+    foreach my $name (grep { /_shards$/ } keys %$data)
+    {
+        print "$name.value " . $data->{$name} . "\n";
+    }
+}
+
+exit(0);

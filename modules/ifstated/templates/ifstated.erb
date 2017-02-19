@@ -1,0 +1,69 @@
+
+init-state justguessing
+
+carp_init = "carp2.link.unknown<% @main_networks.each do |nic| -%><% if nic['carpaddr'] =~ /[0-9]\.[0-9]/ and nic['gw'] =~ /[0-9]\.[0-9]/ -%> || carp<%=nic['carpvhid']%>.link.unknown<% end -%><% end -%>"
+carp_up = "carp2.link.up<% @main_networks.each do |nic| -%><% if nic['carpaddr'] =~ /[0-9]\.[0-9]/ and nic['gw'] =~ /[0-9]\.[0-9]/ -%> && carp<%=nic['carpvhid']%>.link.up<% end -%><% end -%>"
+<% @main_networks.each do |nic| -%><% if nic['carpaddr'] =~ /[0-9]\.[0-9]/ and nic['gw'] =~ /[0-9]\.[0-9]/ -%>carp<%=nic['carpvhid']%>_down = "carp2.link.down && carp<%=nic['carpvhid']%>.link.down"
+<% end -%><% end -%><% if @sync_peer != false -%>peer = '( "ping -q -c1 -w1 <%=@sync_peer%>" every 3 )'
+<% end -%><% @main_networks.each do |nic| -%><% if nic['carpaddr'] =~ /[0-9]\.[0-9]/ and nic['proof'] =~ /[0-9]\.[0-9]/ -%>proof = '( "ping -q -c1 -w2 -S <%=nic['carpaddr']%> <%=nic['proof']%>" every 3 )'
+<% break -%><% elsif nic['addr'] =~ /[0-9]\.[0-9]/ and nic['proof'] =~ /[0-9]\.[0-9]/ -%>proof = '( "ping -q -c1 -w2 <%=nic['proof']%>" every 3 )'
+<% break -%><% end -%><% end -%>
+
+state primary
+{
+    init
+    {
+	run     "/usr/local/sbin/carpctl 1:0:MASTER; \
+<% if @dhcp_ip and @do_relay_dhcp -%>		 for vlan in<% @local_networks.each do |vlan| -%><% vlanname = vlan['name'] -%><% if vlan['rootif'] =~ /[a-z][0-9]/ and @vlan_database[vlanname]['dhcp'] == true -%> <%=vlanname%><% end -%><% end -%>; \
+		 do \
+		     /usr/sbin/dhcrelay -i $vlan<% @dhcp_ip.each do |backend| -%> <%=backend%><% end -%>; \
+		 done; \
+<% end -%><% if @has_ftpproxy -%>		 /etc/rc.d/ftpproxy restart; \
+<% end -%><% if @has_tftpproxy -%>		 /etc/rc.d/tftpproxy restart; \
+<% end -%><% if @has_relayd -%>		 relayctl reload; \
+<% end -%><% if @gw -%>		 route change default `cat /etc/mygate`; \
+<% end -%><% if @has_openvpn -%>		 /usr/local/sbin/openvpn_resync; \
+<% end -%><% if @has_pf -%>		 /usr/local/sbin/pf_resync; \
+<% end -%><% if @has_ipsecctl -%>		 /usr/local/sbin/ipsec_resync -r; \
+<% end -%><% if @has_ospfd -%>		 /usr/local/sbin/ospf_resync; \
+<% end -%>		 echo foo | mail -s 'FW Failover' <%=@contact_alerts%>; \
+		 "
+    }
+<% if @bypass != true -%>
+
+    if $peer && ! $proof
+	set-state justguessing
+}
+
+state backup
+{
+    init
+    {
+	run     "/usr/local/sbin/carpctl <%=@carp_advbase%>:254:BACKUP; \
+<% if @do_relay_dhcp -%><% @local_networks.each do |vlan| -%><% vlanname = vlan['name'] -%><% if vlan['rootif'] =~ /[a-z][0-9]/ and @vlan_database[vlanname]['dhcp'] == true -%>		 pkill dhcrelay; \
+<% break -%><% end -%><% end -%><% end -%><% if @has_ftpproxy -%>		 /etc/rc.d/ftpproxy stop; \
+<% end -%><% if @has_tftpproxy -%>		 /etc/rc.d/tftpproxy stop; \
+<% end -%><% if @gw -%>		 route change default `cat /etc/myigate`; \
+<% end -%><% if @has_ospfd -%>		 /usr/local/sbin/ospf_resync; \
+<% end -%>		 "
+    }
+
+    if $proof || <% if @sync_peer != false -%>! $peer<% else -%>$carp_up<% end -%>
+
+	set-state justguessing
+<% end -%>}
+
+state justguessing
+{
+<% if @bypass == true -%>    set-state primary
+<% else -%><% [ "5s", "10s", "15s" ].each do |sleep| -%>    if $carp_init
+	run "sleep 5"
+<% end -%><% if @sync_peer != false -%>    if "sleep 3" every 5 && ! $peer
+	set-state primary
+<% end -%><% @main_networks.each do |nic| -%><% if nic['carpaddr'] =~ /[0-9]\.[0-9]/ and nic['gw'] =~ /[0-9]\.[0-9]/ -%>    if <% if @sync_peer != false -%>"sleep 3" every 10 && $peer && <% end -%>$carp<%=nic['carpvhid']%>_down
+	set-state backup
+<% end -%><% end -%>    if ! $carp_up
+	set-state backup
+    if $carp_up
+	set-state primary
+<% end -%>}

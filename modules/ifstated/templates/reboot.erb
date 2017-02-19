@@ -1,0 +1,24 @@
+#!/bin/sh
+
+if test -s /etc/pf.conf; then
+    if ! pfctl -nf /etc/pf.conf; then
+	echo "You're in for a harsh day"
+	echo "`hostname` aborted reboot due to poor judgement" | mail -s 'FW Critical' <%=@contact_alerts%>
+	exit 1
+    fi
+fi
+
+if ifconfig carp >/dev/null 2>&1; then
+    for nic in `ifconfig carp | awk -F: '/^carp[0-9]/{print $1}'`
+    do
+	ifconfig $nic advbase <%=@carp_advbase%> advskew 254
+    done
+    sleep `expr <%=@carp_advbase%> + 1`
+    for nic in `ifconfig carp | awk -F: '/^carp[0-9]/{print $1}'`
+    do
+	ifconfig $nic down
+    done
+    sleep 2
+fi
+
+reboot

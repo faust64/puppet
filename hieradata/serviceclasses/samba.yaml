@@ -1,0 +1,42 @@
+additional_classes:
+  - Samba
+
+# Samba
+samba_domainname: ISIS2
+samba_domainsid: S-1-5-21-3302862096-1558626135-73820913
+samba_shares:
+  agence:
+    label: Administrative Ressources
+    path: /home/agence
+    write: true
+  archives:
+    label: Archives
+    path: /home/archives
+    write: true
+  cd_utils:
+    label: CD, Softs and Utilitles
+    path: /home/cd_utils
+    write: false
+    writelist:
+      - greve
+      - gumai
+      - mabes
+      - olcha
+      - pacur
+      - phdeo
+  clients:
+    label: Clients
+    path: /home/clients
+    write: true
+  formation:
+    label: Training
+    path: /home/formation
+    write: false
+  goinfre:
+    label: Temporary Dump Directory
+    path: /home/goinfre
+    write: true
+  projets:
+    label: Projects
+    path: /home/projets
+    write: true

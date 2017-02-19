@@ -1,0 +1,73 @@
+[ext-local-<%=@name%>]
+exten => <%=@name%>,1,Macro(exten-vm,<%=@name%>,<%=@name%>)
+exten => <%=@name%>,n,Goto(vmret,1)
+exten => <%=@name%>,hint,SIP/<%=@name%>&Custom:DND<%=@name%>
+<% if @vmmail != false -%>exten => ${VM_PREFIX}<%=@name%>,1,Macro(vm,<%=@name%>,DIRECTDIAL,${IVR_RETVM})
+exten => ${VM_PREFIX}<%=@name%>,n,Goto(vmret,1)
+exten => vmb<%=@name%>,1,Macro(vm,<%=@name%>,BUSY,${IVR_RETVM})
+exten => vmb<%=@name%>,n,Goto(vmret,1)
+exten => vmu<%=@name%>,1,Macro(vm,<%=@name%>,NOANSWER,${IVR_RETVM})
+exten => vmu<%=@name%>,n,Goto(vmret,1)
+exten => vms<%=@name%>,1,Macro(vm,<%=@name%>,NOMESSAGE,${IVR_RETVM})
+exten => vms<%=@name%>,n,Goto(vmret,1)
+<% else -%>exten => vmu<%=@name%>,1,Hangup
+<% end -%>
+
+[ext-cf-hint-<%=@name%>]
+exten => *740<%=@name%>,1,Goto(app-cf-toggle,*740,1)
+exten => *740<%=@name%>,hint,Custom:DEVCF<%=@name%>
+exten => _*740<%=@name%>.,1,Set(toext=${EXTEN:9})
+exten => _*740<%=@name%>.,n,Goto(app-cf-toggle,*740,setdirect)
+
+[ext-dnd-hint-<%=@name%>]
+exten => *76<%=@name%>,1,Goto(app-dnd-toggle,*76,1)
+exten => *76<%=@name%>,hint,Custom:DEVDND<%=@name%>
+
+[ext-followme-<%=@name%>]
+exten => *21<%=@name%>,1,Goto(app-fmf-toggle,*21,1)
+exten => *21<%=@name%>,hint,Custom:FOLLOWME<%=@name%>
+exten => FM<%=@name%>,1,Goto(<%=@name%>,FM<%=@name%>)
+exten => <%=@name%>,1,GotoIf($[ "${DB(AMPUSER/<%=@name%>/followme/ddial)}" = "EXTENSION" ]?ext-local,<%=@name%>,1)
+exten => <%=@name%>,n(FM<%=@name%>),Macro(user-callerid,)
+exten => <%=@name%>,n,GotoIf($["foo${BLKVM_OVERRIDE}" = "foo"]?skipdb)
+exten => <%=@name%>,n,GotoIf($["${DB(${BLKVM_OVERRIDE})}" = "TRUE"]?skipov)
+exten => <%=@name%>,n(skipdb),Set(__NODEST=)
+exten => <%=@name%>,n,Set(__BLKVM_OVERRIDE=BLKVM/${EXTEN}/${CHANNEL})
+exten => <%=@name%>,n,Set(__BLKVM_BASE=${EXTEN})
+exten => <%=@name%>,n,Set(DB(${BLKVM_OVERRIDE})=TRUE)
+exten => <%=@name%>,n(skipov),Set(RRNODEST=${NODEST})
+exten => <%=@name%>,n(skipvmblk),Set(__NODEST=${EXTEN})
+exten => <%=@name%>,n,GosubIf($[${DB_EXISTS(AMPUSER/<%=@name%>/followme/changecid)} = 1 & "${DB(AMPUSER/<%=@name%>/followme/changecid)}" != "default" & "${DB(AMPUSER/<%=@name%>/followme/changecid)}" != ""]?sub-fmsetcid,s,1)
+exten => <%=@name%>,n,Set(RecordMethod=Group)
+exten => <%=@name%>,n,Macro(record-enable,${DB(AMPUSER/<%=@name%>/followme/grplist)},${RecordMethod})
+exten => <%=@name%>,n(skipsimple),Set(RingGroupMethod=ringallv2)
+exten => <%=@name%>,n,Set(_FMGRP=<%=@name%>)
+exten => <%=@name%>,n(DIALGRP),GotoIf($[ "${DB(AMPUSER/<%=@name%>/followme/grpconf)}" = "ENABLED" ]?doconfirm)
+exten => <%=@name%>,n,Macro(dial,$[ ${DB(AMPUSER/<%=@name%>/followme/grptime)} + ${DB(AMPUSER/<%=@name%>/followme/prering)} ],${DIAL_OPTIONS},${DB(AMPUSER/<%=@name%>/followme/grplist)})
+exten => <%=@name%>,n,Goto(nextstep)
+exten => <%=@name%>,n(doconfirm),Macro(dial-confirm,$[ ${DB(AMPUSER/<%=@name%>/followme/grptime)} + ${DB(AMPUSER/<%=@name%>/followme/prering)} ],${DIAL_OPTIONS},${DB(AMPUSER/<%=@name%>/followme/grplist)},<%=@name%>)
+exten => <%=@name%>,n(nextstep),Set(RingGroupMethod=)
+exten => <%=@name%>,n,GotoIf($["foo${RRNODEST}" != "foo"]?nodest)
+exten => <%=@name%>,n,Set(__NODEST=)
+exten => <%=@name%>,n,Noop(Deleting: ${BLKVM_OVERRIDE} ${DB_DELETE(${BLKVM_OVERRIDE})})
+exten => <%=@name%>,n,Goto(<%=@fallback%>,1)
+exten => <%=@name%>,n(nodest),Noop(SKIPPING DEST, CALL CAME FROM Q/RG: ${RRNODEST})
+
+[ext-fmgrp-<%=@name%>]
+exten => _RG-<%=@name%>-.,1,Macro(dial,${DB(AMPUSER/<%=@name%>/followme/grptime)},M(confirm^^^<%=@name%>)${DIAL_OPTIONS},${EXTEN:9})
+
+[from-did-direct-ivr-<%=@name%>]
+exten => <%=@name%>,1,ExecIf($["${BLKVM_OVERRIDE}" != ""]?Noop(Deleting: ${BLKVM_OVERRIDE}: ${DB_DELETE(${BLKVM_OVERRIDE})}))
+exten => <%=@name%>,n,Set(__NODEST=)
+exten => <%=@name%>,n,Goto(from-did-direct,<%=@name%>,1)
+<% if @vmmail != false -%>exten => ${VM_PREFIX}<%=@name%>,1,ExecIf($["${BLKVM_OVERRIDE}" != ""]?Noop(Deleting: ${BLKVM_OVERRIDE}: ${DB_DELETE(${BLKVM_OVERRIDE})}))
+exten => ${VM_PREFIX}<%=@name%>,n,Set(__NODEST=)
+exten => ${VM_PREFIX}<%=@name%>,n,Macro(vm,<%=@name%>,DIRECTDIAL,${IVR_RETVM})
+exten => ${VM_PREFIX}<%=@name%>,n,GotoIf($["${IVR_RETVM}" = "RETURN" & "${IVR_CONTEXT}" != ""]?ext-local,vmret,playret)
+<% end -%>
+
+[from-queue-exten-only-<%=@name%>]
+exten => <%=@name%>,1,Set(RingGroupMethod=none)
+exten => <%=@name%>,n,Macro(record-enable,<%=@name%>,IN)
+exten => <%=@name%>,n,Macro(dial,,${DIAL_OPTIONS},<%=@name%>)
+exten => <%=@name%>,n,Hangup

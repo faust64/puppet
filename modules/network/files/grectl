@@ -1,0 +1,44 @@
+#!/bin/sh
+
+usage()
+{
+    echo "Usage: $0 [up|down]"
+    exit 1
+}
+
+case "$1" in
+    up|UP)
+	cmd=up
+	;;
+    down|DOWN)
+	cmd=down
+	;;
+    --help)
+	usage
+	exit 0
+	;;
+    *)
+	usage >&2
+	exit 1
+	;;
+esac
+
+for i in /etc/hostname.gre*
+do
+    itf=${i#/etc/hostname.}
+# I'm so fracking high
+# I can't even tell if this makes sence
+# It looks like so. But hey, who knows, fuck me!
+    if /sbin/ifconfig $itf | grep -E 'flags=.*[^A-Z]UP[^A-Z]'; then
+	if test $cmd = up; then
+	    continue
+	fi
+    elif test $cmd = down; then
+	continue
+    elif ! /sbin/ifconfig $itf; then
+	sh /etc/netstart $itf
+    fi >/dev/null
+    /sbin/ifconfig $itf $cmd
+done
+
+exit $?

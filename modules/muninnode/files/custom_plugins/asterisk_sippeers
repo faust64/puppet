@@ -1,0 +1,65 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+my $ret = undef;
+if (! eval "require Net::Telnet;") {
+    $ret = "Net::Telnet not found";
+}
+
+if ($ARGV[0] and $ARGV[0] eq "config") {
+    print "graph_title Asterisk sip peers\n";
+    print "graph_args --base 1000 -l 0\n";
+    print "graph_order mon moff umon umoff\n";
+    print "graph_vlabel peers\n";
+    print "graph_category asterisk\n";
+    print "mon.draw AREA\n";
+    print "mon.label monitored online\n";
+    print "moff.draw STACK\n";
+    print "moff.label monitored offline\n";
+    print "umon.draw STACK\n";
+    print "umon.label unmonitored online\n";
+    print "umoff.draw STACK\n";
+    print "umoff.label unmonitored offline\n";
+    exit 0;
+}
+
+my $host     = exists $ENV{'host'} ? $ENV{'host'} : "127.0.0.1";
+my $port     = exists $ENV{'port'} ? $ENV{'port'} : "5038";
+my $username = exists $ENV{'username'} ? $ENV{'username'} : 'munin';
+my $secret   = exists $ENV{'secret'} ? $ENV{'secret'} : 'somepassword';
+
+my $pop = new Net::Telnet (Telnetmode => 0);
+$pop->open(Host => $host,
+	   Port => $port);
+my $line = $pop->getline;
+die $line unless $line =~ /^Asterisk/;
+$pop->print("Action: login");
+$pop->print("Username: $username");
+$pop->print("Secret: $secret");
+$pop->print("Events: off");
+$pop->print("");
+$pop->print("Action: command");
+$pop->print("Command: sip show peers");
+$pop->print("");
+my ($peers,$monitor_online,$monitor_offline,$unmonitor_online,$unmonitor_offline)=(0,0,0,0,0);
+while (($line = $pop->getline) and ($line !~ /END COMMAND/o)) {
+    my @fields = split(' ', $line);
+    my $count = @fields;
+    if (($count > 10) and ($fields[1] eq 'sip' and $fields[2] eq 'peers')) {
+	$peers = $fields[0];
+	$monitor_online = $fields[4];
+	$monitor_offline = $fields[6];
+	$unmonitor_online = $fields[9];
+	$unmonitor_offline = $fields[11];
+	last;
+    }
+}
+$pop->print("Action: logoff");
+$pop->print("");
+while (($line = $pop->getline)) {
+}
+print "mon.value $monitor_online\n";
+print "moff.value $monitor_offline\n";
+print "umon.value $unmonitor_online\n";
+print "umoff.value $unmonitor_offline\n";

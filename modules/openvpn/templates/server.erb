@@ -1,0 +1,41 @@
+mode			server
+proto			<%=@proto%>
+port			<%=@port%>
+daemon			openvpn<%=@port%>
+dev			<%=@iface%>
+tun-mtu			1500
+verb			<%=@verbosity%>
+mute			<%=@mute%>
+keepalive		<%=@keepalive%>
+script-security		<%=@script_security%>
+persist-tun
+persist-key
+comp-lzo
+tls-server
+mssfix
+
+ca			"<%=@confdir%>/certificates/server-chain.crt"
+cert			"<%=@confdir%>/certificates/server.crt"
+key			"<%=@confdir%>/keys/server.key"
+dh			"<%=@confdir%>/dh.pem"
+crl-verify		"/etc/vpn-crl.pem"
+
+<% if @validate_auth == "certificate" -%>client-connect		"<%=@confdir%>/bin/validate-<%=@name%>.sh"
+client-disconnect	"<%=@confdir%>/bin/disconnect-<%=@name%>.sh"
+<% elsif @validate_auth == "ldap" -%>client-cert-not-required
+username-as-common-name
+plugin			/usr/lib/openvpn/openvpn-auth-ldap.so /etc/openvpn/auth/auth-ldap.conf
+<% end -%><% if @bridge != false and @srvtype != "firewall" -%>up			"<%=@confdir%>/bin/bridge-<%=@name%>.sh"
+<% end -%>log-append		"/var/log/openvpn-<%=@name%>.log"
+status			"/var/log/openvpn-<%=@name%>-status.log"
+writepid		"/var/run/openvpn-<%=@name%>.pid"
+
+server                  <%=@netroot%>.0 <%=@netmask_map[@netmsk]%>
+push			"dhcp-option DOMAIN <%=@domain%>"
+<% if @dns_push != false -%><% @dns_push.each do |host| -%>push			"dhcp-option DNS <%=host%>"
+<% end -%><% elsif @dns_ip != false -%><% @dns_ip.each do |host| -%>push			"dhcp-option DNS <%=host%>"
+<% end -%><% end -%><% if @ad_ip != false -%><% @ad_ip.sort.each do |host| -%>push			"dhcp-option WINS <%=host%>"
+<% end -%><% end -%><% if @push_default_route == true -%>push			"redirect-gateway def1"
+<% else -%><% @office_netids.each do |office, netid| -%>push			"route 10.<%=netid%>.0.0 255.255.0.0"
+<% end -%><% if @ovpn_push != false -%><% @ovpn_push.each do |routename, routedata| -%><% msk = routedata['mask'] -%><% if msk > 0 and routedata['netid'] =~ /[0-9]\.[0-9]/ -%>push			"route <%=routedata['netid']%> <%=@netmask_map[msk]%>"
+<% end -%><% end -%><% end -%><% end -%>

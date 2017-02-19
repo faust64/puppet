@@ -1,0 +1,7 @@
+#!/bin/sh
+
+export LOG=/var/log/openvpn-connect-<%=@name%>.log
+
+/usr/local/sbin/openvpn_disconnect.sh
+
+exit $?

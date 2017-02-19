@@ -1,0 +1,50 @@
+*** Targets ***
+probe  = FPing
+menu   = Top
+title  = Network Latency Grapher
+remark = UTGB SmokePing
+
++ Publics
+menu  = Publics
+title = Public Latency
+
+++ GoogleNS1
+menu  = GoogleNS1
+title = GoogleNS1
+host  = 8.8.8.8
+
+++ GoogleNS2
+menu  = GoogleNS2
+title = GoogleNS2
+host  = 8.8.4.4
+
+++ FreeWWW
+menu  = FreeWWW
+title = FreeWWW
+host  = www.free.fr
+
+++ OVH
+menu  = OVH
+title = SIP OVH
+host  = 91.121.129.20
+
+++ Colt
+menu  = Colt
+title = SIP COLT
+host  = 84.14.241.174
+
+++ FreePhonie
+menu  = Free
+title = SIP Free
+host  = 212.27.48.12
+
++ Private
+menu  = Privates
+title = Private Latency
+<% if @targets != false -%><% @targets.each do |target| -%><% label = target.gsub('.', '-') -%>
+
+++ <%=label%>
+menu  = <%=label%>
+title = <%=label%>
+host  = <%=target%>
+<% end -%><% end -%>

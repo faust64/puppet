@@ -1,0 +1,3 @@
+rsyslog_version: 8
+ssh_kex_algorithms:
+  - diffie-hellman-group-exchange-sha256

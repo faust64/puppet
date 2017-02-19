@@ -1,0 +1,43 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+TMPFILE=/tmp/.awscli.$$
+res=OK
+
+if ! test -s /var/lib/nagios/.aws/config -a -x /usr/bin/aws; then
+    res=UNKNOWN
+    msg=" - can not run ec2 to describe instance"
+elif ! timeout 5 /usr/bin/aws ec2 describe-instance-status $@ >$TMPFILE 2>&1; then
+    res=UNKNOWN
+    msg=" - ec2 describe instance timed out"
+else
+    if grep '"Events"' $TMPFILE >/dev/null; then
+	res=CRITICAL
+	nbf=$(grep -A4 '"Events"' $TMPFILE | grep '"NotBefore"' | awk -F'"' '{print $4}')
+	code=$(grep -A4 '"Events"' $TMPFILE | grep '"Code"' | awk -F'"' '{print $4}')
+	msg=$(grep -A4 '"Events"' $TMPFILE | grep '"Description"' | awk -F'"' '{print $4}')
+	msg=" - $nbf $code $msg"
+    elif grep '"SystemStatus"' $TMPFILE >/dev/null 2>&1; then
+	counter=0
+	for i in $@; do echo $i | grep ^i- >/dev/null && counter=`expr $counter + 2`; done
+	checks=$(grep -A7 '"SystemStatus"' $TMPFILE | awk 'BEG{c=0}/(passed|reachable|ok)/{c=c+1}END{print c}')
+	if test "0$checks" -eq $counter; then
+	    msg=" - all fine"
+	else
+	    res=WARNING
+	    msg=" - suspicious system status"
+	fi
+    else
+	res=UNKNOWN
+	msg=" - no system status reported"
+    fi
+fi
+rm -f $TMPFILE
+
+echo "$res$msg"
+eval res=\$$res
+exit $res

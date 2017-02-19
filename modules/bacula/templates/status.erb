@@ -1,0 +1,35 @@
+#!/bin/sh
+
+export PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
+
+SITE="<%=@backupset.upcase%>"
+MAIL=mail
+CONSOLE=bconsole
+DEST=<%=@contact%>
+SUBJECT="Bacula $SITE"
+
+if ! which $CONSOLE; then
+    SUBJECT="[WARNING] $SUBJECT"
+    echo -e "host is not properly configured, nothing would be done" \
+	| $MAIL -s "$SUBJECT" $DEST
+    exit 1
+fi
+HDRJOBS="JobId | JobsStatus | Level | VolumeName"
+HDRSEP="-------------------------------------------"
+HDRSTATUS="MediaId | VolStatus | VolumeName | VolBytes"
+YESTERDAY=$(date "+%Y-%m-%d" --date="yesterday")
+TODAY=$(date "+%Y-%m-%d" --date="today")
+NBFAILMEDIA=$(echo 'list media' | $CONSOLE | awk "/($YESTERDAY|$TODAY)/{print \$6}" | grep -v Used | wc -l)
+NBFAILJOBS=$(echo 'list jobs' | $CONSOLE | awk "/($YESTERDAY|$TODAY)/{print \$17}" | grep -v T | wc -l)
+STATUSMEDIA=$(echo 'list media' | $CONSOLE | awk "BEGIN{print '$HDRSTATUS'; print '$HDRSEP'}/($YESTERDAY|$TODAY)/{print \$2' | '\$6' | '\$4' | '\$10}")
+STATUSJOBS=$(echo 'list jobs' | $CONSOLE | awk "BEGIN {print '$HDRJOBS'; print '$HDRSEP'}/($YESTERDAY|$TODAY)/{print \$2' | '\$17' | '\$11' | '\$4}")
+
+if test "$NBFAILMEDIA" -ne 0 -o "$NBFAILJOBS" -ne 0; then
+    SUBJECT="[CRITICAL] $SUBJECT"
+    echo -e "$STATUSMEDIA \n\n\n$STATUSJOBS" | $MAIL -s "$SUBJECT" $DEST
+else
+    SUBJECT="[REPORT] $SUBJECT"
+    echo -e "$STATUSMEDIA \n\n\n$STATUSJOBS" | $MAIL -s "$SUBJECT" $DEST
+fi
+
+exit 0

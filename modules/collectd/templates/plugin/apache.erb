@@ -1,0 +1,7 @@
+<% if @web_ports['plain'] != false -%>LoadPlugin apache
+<Plugin apache>
+    <Instance apache<% if @web_ports['plain'] =~ /:/ -%><%=@web_ports['plain'].gsub(/[0-9\.]*:/, '')%><% else -%><%=@web_ports['plain']%><% end -%>>
+	URL "http://localhost:<% if @web_ports['plain'] =~ /:/ -%><%=@web_ports['plain'].gsub(/[0-9\.]*:/, '')%><% else -%><%=@web_ports['plain']%><% end -%>/server-status?auto"
+    </Instance>
+</Plugin>
+<% end -%>

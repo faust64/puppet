@@ -1,0 +1,31 @@
+# Apache
+apache_listen_ports:
+  plain: 80
+  ssl: 443
+apache_mod_authldap: true
+apache_mod_headers: true
+apache_munin: true
+
+# Fail2ban
+fail2ban_do_badbots: true
+fail2ban_do_web_abuses: true
+
+# Nagios
+nagios_load_crit_threshold: "8.2,8.2,8.2"
+nagios_load_warn_threshold: "7.8,7.8,7.8"
+nagios_procs_crit: 600
+nagios_procs_warn: 300
+nagios_runprocs_crit: 100
+nagios_runprocs_warn: 50
+
+# Newznab
+newznab_contact: samuel@unetresgrossebite.com
+newznab_ldap_user_base: ou=users,dc=unetresgrossebite,dc=com
+newznab_nntp_host: reader.usenetbucket.com
+
+# Nginx
+nginx_collectd: true
+nginx_munin: true
+
+# PHP
+php_memory_limit: 1024M

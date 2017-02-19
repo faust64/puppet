@@ -1,0 +1,10 @@
+# whois-based check, looking for expiry dates<% @check_domains.each do |remote| -%>
+
+define service {
+    check_command	check-domain-expiry!<%=remote%>
+    host_name		<%=@fqdn%>
+    service_description	<%=remote%> expiry date
+    servicegroups	network
+    use			jobs-service
+}
+<% end -%>

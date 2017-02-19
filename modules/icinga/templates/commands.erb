@@ -1,0 +1,89 @@
+define command {
+    command_name	notify-host-by-email
+    command_line	/usr/bin/printf "%b" "***** Icinga *****\n\nNotification Type: $NOTIFICATIONTYPE$\nHost: $HOSTNAME$\nState: $HOSTSTATE$\nAddress: $HOSTADDRESS$\nInfo: $HOSTOUTPUT$\n\nDate/Time: $LONGDATETIME$\n" | /usr/bin/mail -s "** $NOTIFICATIONTYPE$ Host Alert: $HOSTNAME$ is $HOSTSTATE$ **" $CONTACTEMAIL$
+}
+
+define command {
+    command_name	notify-service-by-email
+    command_line	/usr/bin/printf "%b" "***** Icinga *****\n\nNotification Type: $NOTIFICATIONTYPE$\n\nService: $SERVICEDESC$\nHost: $HOSTALIAS$\nAddress: $HOSTADDRESS$\nState: $SERVICESTATE$\n\nDate/Time: $LONGDATETIME$\n\nAdditional Info:\n\n$SERVICEOUTPUT$\n" | /usr/bin/mail -s "** $NOTIFICATIONTYPE$ Service Alert: $HOSTALIAS$/$SERVICEDESC$ is $SERVICESTATE$ **" $CONTACTEMAIL$
+}
+
+<% if @slack_hook_uri != false %>define command {
+    command_name	notify-host-by-slack
+    command_line	/usr/local/bin/slack <%=@slack_hook_uri%> "$NOTIFICATIONTYPE$: $HOSTNAME$ is $HOSTSTATE$ with $HOSTOUTPUT$"
+}
+
+define command {
+    command_name	notify-service-by-slack
+    command_line	/usr/local/bin/slack <%=@slack_hook_uri%> "$NOTIFICATIONTYPE$: $SERVICEDESC$@$HOSTNAME$ is $SERVICESTATE$ with $SERVICEOUTPUT$"
+}
+
+<% end -%>define command {
+    command_name	process-host-perfdata
+    command_line	/usr/bin/printf "%b" "$LASTHOSTCHECK$\t$HOSTNAME$\t$HOSTSTATE$\t$HOSTATTEMPT$\t$HOSTSTATETYPE$\t$HOSTEXECUTIONTIME$\t$HOSTOUTPUT$\t$HOSTPERFDATA$\n" >><%=@cache_dir%>/host-perfdata.out
+}
+
+define command {
+    command_name	process-service-perfdata
+    command_line	/usr/bin/printf "%b" "$LASTSERVICECHECK$\t$HOSTNAME$\t$SERVICEDESC$\t$SERVICESTATE$\t$SERVICEATTEMPT$\t$SERVICESTATETYPE$\t$SERVICEEXECUTIONTIME$\t$SERVICELATENCY$\t$SERVICEOUTPUT$\t$SERVICEPERFDATA$\n" >><%=@cache_dir%>/service-perfdata.out
+}
+
+define command {
+    command_name	check-peerio
+    command_line	<%=@plugindir%>/check_http -H 'app.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -s 'Peerio server'
+}
+
+define command {
+    command_name	check-peerioblob
+    command_line	<%=@plugindir%>/check_http -H 'blob.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -s 'Peerio objects gateway'
+}
+
+define command {
+    command_name	check-peerioghost
+    command_line	<%=@plugindir%>/check_http -H 'ghost.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -u https://ghost.peerio.com/v1/ping
+}
+
+define command {
+    command_name	check-peerioshark
+    command_line	<%=@plugindir%>/check_http -H 'account.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -s 'Peerio Customer Login' -f follow
+}
+
+define command {
+    command_name	check-peeriosite
+    command_line	<%=@plugindir%>/check_http -H 'www.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -s '<title>Peerio</title>' -f follow
+}
+
+define command {
+    command_name	check-aws-alive
+    command_line	/usr/local/bin/aws-status-check 'http://status.aws.amazon.com/rss/$ARG1$-$HOSTADDRESS$.rss'
+}
+
+define command {
+    command_name	check-ec2-environ
+    command_line	<%=@plugindir%>/check_ec2_instances_status --environ '$ARG1$'
+}
+
+define command {
+    command_name	check-ec2-status
+    command_line	<%=@plugindir%>/check_ec2_instance_status --region '$ARG1$' --instance-ids '$ARG2$'
+}
+
+define command {
+    command_name	check-domain-expiry
+    command_line	<%=@plugindir%>/check_domain -d '$ARG1$'
+}
+
+define command {
+    command_name	check-ssllabs
+    command_line	<%=@plugindir%>/check_sslscan -H '$ARG1$' -c <%=@sslscan_critical%> -w <%=@sslscan_warning%>
+}
+<% if @dns_ip != false -%><% @dns_ip.sort.each do |host| -%>
+define command {
+    command_name	check_nsdec
+    command_line	<%=@plugindir%>/check_dns -H '$HOSTNAME$' -s <%=host%>
+}
+
+define command {
+    command_name	check_nsrev
+    command_line	<%=@plugindir%>/check_dns -H '$HOSTADDRESS$' -s <%=host%>
+}<% break -%><% end -%><% end -%>

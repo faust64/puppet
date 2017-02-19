@@ -1,0 +1,155 @@
+# lxpanel <profile> config file. Manually editing is not recommended.
+# Use preference dialog in lxpanel to adjust config when you can.
+
+Global {
+    edge = bottom
+    allign = left
+    margin = 0
+    widthtype = percent
+    width = 100
+    height = 30
+    transparent = false
+    tintcolor = #000000
+    alpha = 104
+    setdocktype = true
+    setpartialstrut = true
+    usefontcolor = false
+    fontcolor = #000000
+    background = false
+}
+
+Plugin {
+    type = space
+    Config {
+	Size = 3
+    }
+}
+
+Plugin {
+    type = menu
+    Config {
+	image = camtrace
+	name = <b>Start</b>
+	tooltip = Click here to start
+	item {
+	    image = explorer
+	    name = Files
+	    action = xfe
+	}
+	item {
+	    image = firefox
+	    name = Firefox
+	    action = firefox
+	}
+	item {
+	    image = rxvt
+	    name = Terminal
+	    action = mrxvt
+	}
+	separator {
+	}
+	item {
+	    image = camtrace
+	    name = Camtrace
+	    action = firefox "http://localhost"
+	}
+	item {
+	    image = camtrace
+	    name = Slave screen
+	    action = firefox "http://localhost/start.php"
+	}
+	item {
+	    image = help
+	    name = User's manual
+	    action = epdfview /usr/local/camtrace/www/help/doc-en_US.pdf
+	}
+	item {
+	    image = run
+	    name = Execute...
+	    command = run
+	}
+	separator {
+	}
+	item {
+	    image = config
+	    name = Configure
+	    command = configure
+	}
+	item {
+	    image = refresh
+	    name = Reload config.
+	    command = restart
+	}
+    }
+}
+
+Plugin {
+    type = separator
+    Config {
+	Size = 7
+    }
+}
+
+Plugin {
+    type = wincmd
+    Config {
+	image = desktop
+	tooltip = Display Desktop
+    }
+}
+
+Plugin {
+    type = separator
+    Config {
+	Size = 5
+    }
+}
+
+Plugin {
+    type = taskbar
+    expand = true
+    Config {
+	tooltips = true
+	IconsOnly = false
+	AcceptSkipPager = true
+	ShowIconified = true
+	ShowMapped = true
+	ShowAllDesks = false
+	UseMouseWheel = true
+	UseUrgencyHint = true
+	FlatButton = false
+	MaxTaskWidth = 150
+	spacing = 1
+    }
+}
+
+Plugin {
+    type = separator
+    Config {
+	Size = 1
+    }
+}
+
+Plugin {
+    type = tray
+}
+
+Plugin {
+    type = space
+    Config {
+	Size = 3
+    }
+}
+
+Plugin {
+    type = cpu
+}
+
+Plugin {
+    type = dclock
+    Config {
+	ClockFmt = %R
+	TooltipFmt = %A %e %B %Y
+    }
+}
+

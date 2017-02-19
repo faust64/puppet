@@ -1,0 +1,25 @@
+#!/bin/sh
+
+DEST=<%=@contact%>
+TMPFILE=/tmp/sa-learn.$$
+
+if test -x /usr/local/sbin/sa-learn-cyrus; then
+    if ! /usr/local/sbin/sa-learn-cyrus >$TMPFILE 2>&1; then
+	SUBJECT=WARNING
+    else
+	SUBJECT=REPORT
+    fi
+    if test -s <%=@conf_dir%>/sa-learn-propagate.list; then
+	while read remote
+	do
+	    echo " --- syncing to $remote ---"
+	    rsync -avWxzP --numeric-ids ~/.spamassassin $remote:
+	done< <%=@conf_dir%>/sa-learn-propagate.list >>$TMPFILE 2>&1
+    fi
+    cat $TMPFILE | mail -s "[$SUBJECT] sa-learn on `hostname`" $DEST
+    if test $? -eq 0; then
+	rm -f $TMPFILE
+    fi
+fi
+
+exit 0

@@ -1,0 +1,65 @@
+#!/bin/sh
+
+test -z "$PMHOME" && PMHOME=/var/lib/pm2
+test -s $PMHOME/.profile && . $PMHOME/.profile
+test -s $PMHOME/.bash_profile && . $PMHOME/.bash_profile
+if test -d /var/www/peerio-shark/current/shark; then
+    WEBROOT=/var/www/peerio-shark/current
+elif test -d /usr/share/peerio-shark/shark; then
+    WEBROOT=/usr/share/peerio-shark
+fi
+test -z "$WEBROOT" && exit 1
+test -z "$HOSTNAME" && HOSTNAME=`hostname`
+
+probe=`basename $0 | sed 's|^shark_||'`
+
+if test "$1" = autoconf; then
+    echo yes
+elif test "$1" = config; then
+    case "$probe" in
+	users)
+	    val0=$probe
+	    val0label="amount of Peerio accounts subject to plans"
+	    vlabel=count
+	    what="amount of Peerio accounts subject to plans"
+	    ;;
+	invoices)
+	    val0=$probe
+	    val0label="amount of invoices"
+	    vlabel=count
+	    what="amount of invoices"
+	    ;;
+	ppw)
+	    val0=$probe
+	    val0label="amount of plans sold per week"
+	    vlabel=count
+	    what="amount of plans sold per week"
+	    ;;
+    esac
+    cnt=0
+    echo graph_title Shark $what
+    echo graph_vlabel $vlabel
+    echo graph_category peerio
+    while true
+    do
+	eval "item=\$val$cnt label=\$val${cnt}label"
+	test "$item" -a "$label" || break
+	echo $item.label $label
+	cnt=`expr $cnt + 1`
+    done
+else
+    cd "$WEBROOT"
+    case "$probe" in
+	users)
+	    echo $probe.value `echo "SELECT COUNT(DISTINCT(peerio_user)) FROM subscription" | mysql -N -u$SHARK_MYSQL_USER -p$SHARK_MYSQL_PASSWORD -h$SHARK_MYSQL_HOST $SHARK_MYSQL_DATABASE`
+	    ;;
+	invoices)
+	    echo $probe.value `echo "SELECT COUNT(id) FROM invoice" | mysql -N -u$SHARK_MYSQL_USER -p$SHARK_MYSQL_PASSWORD -h$SHARK_MYSQL_HOST $SHARK_MYSQL_DATABASE`
+	    ;;
+	ppw)
+	    echo $probe.value `echo "SELECT COUNT(id) FROM invoice WHERE FROM_UNIXTIME(date) >= DATE_SUB(NOW(), INTERVAL 1 WEEK)" | mysql -N -u$SHARK_MYSQL_USER -p$SHARK_MYSQL_PASSWORD -h$SHARK_MYSQL_HOST $SHARK_MYSQL_DATABASE`
+	    ;;
+    esac
+fi
+
+exit 0

@@ -1,0 +1,9 @@
+nagios_no_parent: false
+physical_parent: momos.ceph.intra.unetresgrossebite.com
+
+# CamTrace
+camtrace_keyhash: xxxxxx
+camtrace_keyid: 99999
+
+# Reboot
+reboot_week_day: 4

@@ -1,0 +1,60 @@
+<IfModule mod_mime.c>
+    TypesConfig		<% if @kernel == "Linux" -%>/etc/<% end -%>mime.types
+    AddType		text/html			.shtml
+    AddOutputFilter	INCLUDES			.shtml
+    AddHandler		type-map			var
+    AddType		application/<% if @operatingsystem == "CentOS" or @operatingsystem == "RedHat" -%>x-gzip .gz<% else -%>x-tar<% end -%> .tgz
+    <% if @operatingsystem == "CentOS" or @operatingsystem == "RedHat" -%>AddType		application/x-compress .Z
+    <% else -%>AddEncoding		x-compress Z
+    AddEncoding		x-gzip gz tgz
+    <% end -%>AddLanguage		da				.dk
+    AddLanguage		nl				.nl
+    AddLanguage		en				.en
+    AddLanguage		et				.et
+    AddLanguage		fr				.fr
+    AddLanguage		de				.de
+    AddLanguage		el				.el
+    AddLanguage		it				.it
+    AddLanguage		ja				.ja
+    AddLanguage		pl				.po
+    AddLanguage		ko				.ko
+    AddLanguage		pt				.pt
+    AddLanguage		no				.no
+    AddLanguage		pt-br				.pt-br
+    AddLanguage		ltz				.ltz
+    AddLanguage		ca				.ca
+    AddLanguage		es				.es
+    AddLanguage		sv				.se
+    AddLanguage		cz				.cz
+    AddLanguage		ru				.ru
+    AddLanguage		tw				.tw
+    AddLanguage		zh-tw				.tw
+    AddCharset		ISO-8859-1	.iso8859-1	.latin1
+    AddCharset		ISO-8859-2	.iso8859-2	.latin2	.cen
+    AddCharset		ISO-8859-3	.iso8859-3	.latin3
+    AddCharset		ISO-8859-4	.iso8859-4	.latin4
+    AddCharset		ISO-8859-5	.iso8859-5	.latin5	.cyr	.iso-ru
+    AddCharset		ISO-8859-6	.iso8859-6	.latin6	.arb
+    AddCharset		ISO-8859-7	.iso8859-7	.latin7	.grk
+    AddCharset		ISO-8859-8	.iso8859-8	.latin8	.heb	
+    AddCharset		ISO-8859-9	.iso8859-9	.latin9	.trk
+    AddCharset		ISO-2022-JP	.iso2022-jp	.jis
+    AddCharset		ISO-2022-KR	.iso2022-kr	.kis
+    AddCharset		ISO-2022-CN	.iso2022-cn	.cis
+    AddCharset		Big5		.Big5		.big5
+    AddCharset		WINDOWS-1251	.cp-1251	.win-1251
+    AddCharset		CP866		.cp866
+    AddCharset		KOI8-r		.koi8-r		.koi8-ru
+    AddCharset		KOI8-ru		.koi8-uk	.ua
+    AddCharset		ISO-10646-UCS-2	.ucs2
+    AddCharset		ISO-10646-UCS-4	.ucs4
+    AddCharset		UTF-8		.utf8
+    AddCharset		GB2312		.gb2312 .gb
+    AddCharset		utf-7		.utf7
+    AddCharset		utf-8		.utf8
+    AddCharset		big5		.big5 .b5
+    AddCharset		EUC-TW		.euc-tw	
+    AddCharset		EUC-JP		.euc-jp
+    AddCharset		EUC-KR		.euc-kr
+    AddCharset		shift_jis	.sjis
+</IfModule>

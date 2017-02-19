@@ -1,0 +1,9 @@
+#!/bin/sh
+
+BASE_URL="https://wmap.<%=@domain%>/weathermap.png"
+
+cd /var/www/mrtg/vortex
+test -d weathermap/`date +%y` || mkdir -p weathermap/`date +%y`
+wget --no-check-certificate $BASE_URL -O weathermap/`date +%y`/weathermap-`date +%y%m%d%H%M`.png
+
+exit $?

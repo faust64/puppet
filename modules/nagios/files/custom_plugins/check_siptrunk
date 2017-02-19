@@ -1,0 +1,55 @@
+#!/bin/sh
+
+export PATH="/usr/lib64/nagios/plugins:/usr/local/libexec/nagios:/usr/lib/nagios/plugins:/usr/local/sbin:/usr/sbin:$PATH"
+
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+from=$(expr `awk '/domain/{print $2}' /etc/resolv.conf` : '\([^\.]*\)')
+to=$1
+title="SIP_${from}_to_$to"
+ret=OK
+if test -z "$1"; then
+    msg="Usage `basename $0` trunk_name"
+    ret=UNKNOWN
+else
+    if test -s /etc/asterisk/sip.d/$to.conf; then
+	user=`awk -F= '/^fromuser/{print $2}' /etc/asterisk/sip.d/$to.conf`
+	host=`awk -F= '/^fromdomain/{print $2}' /etc/asterisk/sip.d/$to.conf`
+	match="^$host:.*[ 	]$user[ 	]"
+    else
+	match="(\.$to|^$to)\."
+    fi
+    regstate=`sudo asterisk -rx 'sip show registry' | grep -E "$match" | awk '{print $5}'`
+    eval `sudo asterisk -rx "sip show peer $to" | awk '/[ 	]Status[ 	]/{print "trkstate="$3" latency=\""$4" "$5"\""}'`
+    latency=`echo "$latency" | sed 's|[^0-9]*||g'`
+    perfdata=" | rta=${latency}ms;60.0;140.0 pl=0%;20;40;0"
+
+    if grep "^[ 	]*register[ 	]*=[ 	]*.*$to" /etc/asterisk/sip.conf >/dev/null; then
+	if test "$regstate" != Registered -o '(' "$trkstate" != OK -a "$trkstate" != "Unmonitored" ')'; then
+	    if grep '^span[ 	]*=[ 	]*' /etc/dahdi/system.conf >/dev/null 2>&1; then
+		ret=WARNING
+		perfdata=" | 0"
+	    else
+		ret=CRITICAL
+		perfdata=" | 0"
+	    fi
+	fi
+    else
+	if test "$trkstate" != OK -a "$trkstate" != "Unmonitored"; then
+	    if grep '^span[ 	]*=[ 	]*' /etc/dahdi/system.conf >/dev/null; then
+		ret=WARNING
+		perfdata=" | 0"
+	    else
+		ret=CRITICAL
+		perfdata=" | 0"
+	    fi
+	fi
+    fi
+fi
+
+echo "$title $ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

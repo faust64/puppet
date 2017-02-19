@@ -1,0 +1,38 @@
+ROTATE_MIRRORS=1
+UPDATE_MIRRORS=1
+MIRRORS_MODE=0
+MAIL-ON-WARNING="<% if @contact -%><%=@contact%><% end -%>"
+MAIL_CMD=<%=@mail_cmd%>
+TMPDIR=<%=@tmp_dir%>
+DBDIR=<%=@db_dir%>
+SCRIPTDIR=<%=@script_dir%>
+LOGFILE=<%=@log_dir%>/rkhunter.log
+APPEND_LOG=0
+COPY_LOG_ON_ERROR=0
+COLOR_SET2=0
+AUTO_X_DETECT=1
+WHITELISTED_IS_WHITE=0
+ALLOW_SSH_ROOT_USER=without-password
+ALLOW_SSH_PROT_V1=0
+ENABLE_TESTS="<%=@enabled.join(' ')%>"
+DISABLE_TESTS="<%=@disabled.join(' ')%>"
+<% if @whitelisted != false -%><% @whitelisted.each do |script| -%>SCRIPTWHITELIST="<%=script%>"
+<% end -%><% end -%><% if @has_lwp -%>SCRIPTWHITELIST="/usr/bin/lwp-request"
+<% end -%>IMMUTABLE_SET=0
+<% if @hiddenfile != false -%><% @hiddenfile.each do |file| -%>ALLOWHIDDENFILE="<%=file%>"
+<% end -%><% end -%><% if @hiddendir != false -%><% @hiddendir.each do |dir| -%>ALLOWHIDDENDIR="<%=dir%>"
+<% end -%><% end -%><% if @procdel != false -%><% @procdel.each do |file| -%>ALLOWPROCDELFILE="<%=file%>"
+<% end -%><% end -%><% if @proclisten != false -%><% @proclisten.each do |file| -%>ALLOWPROCLISTEN="<%=file%>"
+<% end -%><% end -%>PHALANX2_DIRTEST=0
+<% if @devfile != false -%><% @devfile.each do |file| -%>ALLOWDEVFILE="<%=file%>"
+<% end -%><% end -%><% if @pwdless != false -%>PWDLESS_ACCOUNTS="<%=@pwdless.join(' ')%>"
+<% end -%>ALLOW_SYSLOG_REMOTE_LOGGING=0
+<% if @apps != false -%>APP_WHITELIST="<%=@apps.join(' ')%>"
+<% end -%><% if @scan_temp -%>SUSPSCAN_TEMP=<%=@scan_temp%>
+SUSPSCAN_MAXSIZE=10240000
+SUSPSCAN_THRESH=200
+<% end -%>USE_LOCKING=0
+LOCK_TIMEOUT=300
+SHOW_LOCK_MSGS=1
+DISABLE_UNHIDE=1
+INSTALLDIR="<%=@install_dir%>"

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+/usr/local/etc/rc.d/scamd stop
+/usr/local/etc/rc.d/postgresql stop
+sync
+/sbin/shutdown -r now
+
+exit $?

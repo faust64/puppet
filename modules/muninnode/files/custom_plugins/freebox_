@@ -1,0 +1,141 @@
+#!/bin/sh
+
+export PATH=/usr/local/bin:/usr/bin:/bin
+
+# use freebox_status, freebox_uptime, freebox_atm, freebox_attenuation or freebox_snr
+MONITOR=`basename $0 | sed 's/^freebox_//g'`
+info=http://mafreebox.freebox.fr/pub/fbx_info.txt
+
+HTML_OUT="/tmp/freebox.html"
+WGET_CMD="wget -q --tries=1 --timeout=2 --output-document=$HTML_OUT"
+
+get_page()
+{
+    $WGET_CMD --load-cookies=/tmp/free_cookies.txt $1
+    if test $? -ne 0; then
+	exit 1
+    fi
+}
+
+get_status()
+{
+    get_page $info
+    CONN_STATE=$(grep "^  WAN" $HTML_OUT|awk {'print $2'})
+    if test "$CONN_STATE" = "Ok"; then
+	CONN_STATE=1
+    else
+	CONN_STATE=0
+    fi
+
+    printf "status.value $CONN_STATE\n"
+}
+
+get_uptime()
+{
+    get_page $info
+
+    UPTIME=$(grep "Temps depuis la mise en route" $HTML_OUT | sed 's|.* en route[ ]*||')
+    local DAY=$(echo "$UPTIME" | sed 's|\([0-9]*\) jour.*|\1|')
+    local HOU=$(echo "$UPTIME" | sed 's|.* \([0-9]*\) heure.*|\1|')
+    local MIN=$(echo "$UPTIME" | sed 's|.* \([0-9]*\) minute.*|\1|')
+    test -z "$DAY" && DAY=0
+    test -z "$HOU" && HOU=0
+    test -z "$MIN" && MIN=0
+    UPTIME=$(echo "scale=2; ($DAY * 86400 + $HOU * 3600 + $MIN * 60) / 86400" | bc)
+    printf "uptime.value $UPTIME\n"
+}
+
+get_atm_bandwidth()
+{
+    get_page $info
+    val=`iconv -t utf-8 -f latin1 $HTML_OUT | grep "Connexion" | head -1 | sed 's|.*Connexion[ ]*||'`
+    eval `echo "$val" | sed 's|\([0-9]*\) / \([0-9]*\)|down=\1 up=\2|'`
+    up=`expr $up '*' 1000`
+    down=`expr $down '*' 1000`
+    echo "atm_down.value $down"
+    echo "atm_up.value $up"
+}
+
+get_attenuation()
+{
+    get_page $info
+    val=`iconv -t utf-8 -f latin1 $HTML_OUT | grep "Atténuation" | sed 's|.*Atténuation[ ]*||'`
+    eval `echo "$val" | sed 's|\([0-9\.]*\) dB[ ]*\([0-9\.]*\) dB|down=\1 up=\2|'`
+    echo "attenuation_down.value $down"
+    echo "attenuation_up.value $up"
+}
+
+get_SNR_margin()
+{
+    get_page $info
+    val=`grep "Marge de bruit" $HTML_OUT | sed 's|.*Marge de bruit[ ]*||'`
+    eval `echo "$val" | sed 's|\([0-9\.]*\) dB[ ]*\([0-9\.]*\) dB|down=\1 up=\2|'`
+    echo "snr_down.value $down"
+    echo "snr_up.value $up"
+}
+
+
+if test "$1" = autoconf; then
+    echo yes
+elif test "$1" = config; then
+    echo graph_category freebox
+    echo graph_args --base 1000 -l 0
+
+    case "$MONITOR" in
+	status)
+	    printf "graph_title Freebox $MONITOR\n"
+	    printf "$MONITOR.label $MONITOR\n"
+	    printf "graph_vlabel $MONITOR\n"
+	    printf "graph_info This graph shows the status of the freebox modem. 1-> Connected, 0-> Disconnected\n"
+	    printf "$MONITOR.draw AREA\n"
+	    ;;
+	uptime)
+	    printf "graph_title Freebox $MONITOR in days\n"
+	    printf "$MONITOR.label $MONITOR\n"
+	    printf "graph_vlabel $MONITOR\n"
+	    printf "graph_info This graph shows the uptime of the freebox modem.\n"
+	    printf "$MONITOR.draw AREA\n"
+	    ;;
+	atm)
+	    printf "graph_title Freebox ATM Bandwidth (Up and Down)\n"
+	    printf "graph_info This graph shows the ATM bandwith of the freebox modem.\n"
+	    printf "atm_down.label ATM down\n"
+	    printf "atm_up.label ATM up\n"
+	    printf "graph_vlabel ATM Bandwidth (kbit/s)\n"
+	    ;;
+	attenuation)
+	    printf "graph_title Freebox Attenuation (Up and Down)\n"
+	    printf "graph_info This graph shows the Attenuation of the ADSL line of the freebox modem.\n"
+	    printf "attenuation_down.label Attenuation down\n"
+	    printf "attenuation_up.label Attenuation up\n"
+	    printf "graph_vlabel Line attenuation (dB)\n"
+	    ;;
+	snr)
+	    printf "graph_title Freebox SNR margin (Up and Down)\n"
+	    printf "graph_info This graph shows the SNR margin of the ADSL line of the freebox modem.\n"
+	    printf "snr_down.label SNR margin down\n"
+	    printf "snr_up.label SNR margin up\n"
+	    printf "graph_vlabel SNR margin (dB)\n"
+	    ;;
+	*)
+	    printf "ERROR: Monitor can only be status, uptime, attenuation, atm, snr\n"
+	    exit 1
+	    ;;
+    esac
+else
+    case "$MONITOR" in
+	status)		get_status		;;
+	uptime)		get_uptime		;;
+	atm)		get_atm_bandwidth	;;
+	attenuation)	get_attenuation		;;
+	snr)		get_SNR_margin		;;
+	*)
+	    echo "ERROR: Monitor can only be status, uptime, atm, attenuation or snr"
+	    exit 1
+	    ;;
+    esac
+
+    rm -f $HTML_OUT
+fi
+
+exit 0

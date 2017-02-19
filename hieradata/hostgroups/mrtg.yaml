@@ -1,0 +1,10 @@
+additional_classes:
+  - Mrtg
+
+# Apache
+apache_mod_php: true
+apache_mpm: prefork
+
+# PHP
+php_pear: true
+php_mod_gd: true

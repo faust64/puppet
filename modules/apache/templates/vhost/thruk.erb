@@ -1,0 +1,71 @@
+<VirtualHost *:<%=@listen_ports['plain']%>>
+    ServerName <%=@name%>
+<% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
+<% end -%><% end -%>    ServerAdmin <%=@server_admin%>
+    ErrorLog <%=@log_dir%>/error-<%=@name%>.log
+    LogLevel warn
+    CustomLog <%=@log_dir%>/access-<%=@name%>.log combined
+<% if @listen_ports['ssl'] != false -%>    RewriteEngine On
+    RewriteRule ^/(.*) https://thruk.<%=@domain%>/$1 [L,R]
+</VirtualHost>
+<VirtualHost *:<%=@listen_ports['ssl']%>>
+    ServerName <%=@name%>
+<% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
+<% end -%><% end -%>    ServerAdmin <%=@server_admin%>
+    ErrorLog <%=@log_dir%>/ssl-error-<%=@name%>.log
+    LogLevel warn
+<% if @stricttransport != false -%>    Header always set Strict-Transport-Security "<%=@stricttransport%>"
+<% end -%><% if @deny_frames == "remote" -%>    Header always set X-Frame-Options SAMEORIGIN
+<% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
+<% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
+<% end -%>    CustomLog <%=@log_dir%>/ssl-access-<%=@name%>.log combined
+    Include ssl.conf
+<% end -%>    AddHandler fcgid-script .sh
+    IPCCommTimeout 120
+    <Directory <%=@app_root%>>
+	Options FollowSymLinks
+	AllowOverride All
+<% if @version == "2.2" -%>	Order allow,deny
+	Allow from all
+<% else -%>	Require all granted
+<% end -%>    </Directory>
+<% [ "themes", "plugins" ].each do |folder| -%>    <Directory /etc/thruk/<%=folder%>>
+	Options FollowSymLinks
+<% if @version == "2.2" -%>	Allow from all
+<% else -%>	Require all granted
+<% end -%>    </Directory>
+<% end -%>    RewriteEngine On
+    RewriteRule ^(application|modules|system) - [F,L]
+<% scope.function_hiera(['office_netids']).each do |office, netid| -%><% tmpary = office.split('\.') -%><% shortoffice = tmpary[0] -%># pnp4nagios@<%=office%>
+<% [ "graph", "popup" ].each do |what| -%>    RewriteCond %{REQUEST_URI} ^/pnp4nagios/<%=what%>$ [NC]
+    RewriteCond %{QUERY_STRING} ^host=(.+)\.<%=office%>(.*)$ [NC]
+    RewriteRule ^/pnp4nagios/<%=what%>$ https://icinga.<%=shortoffice%>.<%=scope.function_hiera(['root_domain'])%>/<%=what%>?host=%1.<%=office%>%2 [NC,L,R=301]
+<% end -%><% end -%>
+    Include <%=@app_root%>/thruk_cookie_auth.include
+    Alias /thruk/documentation.html <%=@app_root%>/root/thruk/documentation.html
+    Alias /thruk/startup.html <%=@app_root%>/root/thruk/startup.html
+    AliasMatch ^/thruk/(.*\.cgi|.*\.html) <%=@app_root%>/fcgid_env.sh/thruk/$1
+    AliasMatch ^/thruk/plugins/(.*?)/(.*)$ /etc/thruk/plugins/plugins-enabled/$1/root/$2
+    Alias /thruk/themes/Thruk/images/logos <%=scope.lookupvar('icinga::vars::share_dir')%>/htdocs/images/logos
+    Alias /thruk/themes/ /etc/thruk/themes/themes-enabled/
+    Alias /thruk <%=@app_root%>/root/thruk
+    Alias /pnp4nagios/media /usr/share/pnp4nagios/html/media
+
+    <Location /thruk>
+	Options ExecCGI
+<% if @listen_ports['ssl'] != false and (@vhostldapauth == true or @vhostldapauth == "pubonly") -%>	Include authldap.conf
+<% if @version == "2.2" -%>	Allow from 127.0.0.1
+<% else -%>	Require local
+<% end -%>	Require ldap-group cn=admins,<%=@group_base%>
+	RequestHeader set REMOTE_USER thrukadmin
+<% elsif @version == "2.2" -%>	Order allow,deny
+	Allow from all
+<% else -%>	Require all granted
+<% end -%>    </Location>
+    <Location /thruk/cgi-bin/remote.cgi>
+<% if @version == "2.2" -%>	Order deny,allow
+	Allow from all
+	Satisfy any
+<% else -%>	Require all granted
+<% end -%>    </Location>
+</VirtualHost>

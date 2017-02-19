@@ -1,0 +1,60 @@
+#!/bin/sh
+
+for confdir in /etc /usr/local/etc
+do
+    if test -s $confdir/ripd.conf; then
+	CONFIGURATION=$confdir/ripd.conf
+	break
+    fi
+done
+alias echo='echo -en'
+
+echo "    [ reloading RIPd configuration ]\nChecking global configuration: "
+if ! ripd -nf $CONFIGURATION >/dev/null 2>&1; then
+    echo "[ WARNING ]\n"
+    exit 42
+else
+    echo "[   OK    ]\n"
+fi
+
+echo "Checking ripd availability:    "
+if ! ripctl show fib >/dev/null 2>&1; then
+    echo "[ WARNING ]\n"
+    echo "Trying to recover ripd:        "
+    for script in /etc/rc.d/ripd /usr/local/etc/rc.d/ripd
+    do
+	test -x $script || continue
+	if ! $script start >/dev/null 2>&1; then
+	    echo "[ WARNING ]\n"
+	    exit 8
+	else
+	    echo "[   OK    ]\n"
+	    exit 0
+	fi
+    done
+    if ! ripctl show fib >/dev/null 2>&1; then
+	if ! ripd -f $CONFIGURATION; then
+	    echo "[ WARNING ]\n"
+	    exit 8
+	else
+	    echo "[   OK    ]\n"
+	    exit 0
+	fi
+    fi
+else
+    echo "[   OK    ]\n"
+fi
+
+echo "Applying new configuration:    "
+for script in /etc/rc.d/ripd /usr/local/etc/rc.d/ripd
+do
+    test -x $script || continue
+    if ! $script reload >/dev/null 2>&1; then
+	echo "[ WARNING ]\n"
+	exit 21
+    else
+	echo "[   OK    ]\n"
+    fi
+done
+
+exit 0

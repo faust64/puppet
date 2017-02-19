@@ -1,0 +1,6 @@
+[app-pickup]
+exten => _**.,1,Pickup(${EXTEN:2}&${EXTEN:2}@ext-local&${EXTEN:2}@from-internal&${EXTEN:2}@from-internal-xfer&${EXTEN:2}@from-did-direct&LC-${EXTEN:2}@from-internal&LC-${EXTEN:2}@from-internal-xfer&FMPR-${EXTEN:2}@from-internal&FMPR-${EXTEN:2}@from-internal-xfer&FMPR-${EXTEN:2}@from-did-direct)
+exten => _**.,n,Hangup
+<% @extensions.each do |exten, extenhash| -%>exten => **<%=exten%>,1,Pickup(<%=exten%><% @pickup_contexts.each do |context| -%>&<%=exten%>@<%=context%>&LC-<%=exten%>@<%=context%>&FMPR-<%=exten%>@<%=context%><% end -%><% @ring_groups.each do |group, grouphash| -%><% grouphash['members'].each do |member| -%><% if member == exten -%>&<%=group%>@from-internal&<%=group%>@from-internal-xfer&<%=group%>@ext-group<% end -%><% end -%><% end -%>)
+exten => **<%=exten%>,n,Hangup
+<% end -%>

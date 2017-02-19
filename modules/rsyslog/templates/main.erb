@@ -1,0 +1,13 @@
+$ActionFileDefaultTemplate RSYSLOG_FileFormat
+$DirCreateMode 0755
+$FileOwner root
+$FileGroup <%=@gid_adm%>
+$FileCreateMode 0640
+$PreserveFQDN on
+$ModLoad imuxsock
+$ModLoad imklog
+<% if @operatingsystem != "OpenBSD" -%>$SystemLogRateLimitInterval 1
+$SystemLogRateLimitBurst 500
+<% end -%>$Umask 0022
+*.emerg :omusrmsg:*
+$IncludeConfig <%=@conf_dir%>/rsyslog.d/*.conf

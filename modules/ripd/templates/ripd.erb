@@ -1,0 +1,14 @@
+split-horizon <%=@rip_splithorizon_method%>
+<% if @rip_no_redistribute != false -%><% @rip_no_redistribute.each do |network| -%>no redistribute <%=network%>
+<% end -%><% end -%><% if @rip_redistribute != false -%><% @rip_redistribute.each do |network| -%>redistribute <%=network%>
+<% end -%><% end -%><% if @rip_map != false -%><% @rip_map.keys.sort.each do |iface| -%>
+interface <%=iface%> {<% if @rip_map[iface] == "passive" -%> passive <% else %>
+    auth-type <%=@rip_auth%>
+<% if @rip_auth == "crypt" -%>    auth-md-keyid <%=@rip_authid%>
+    auth-md <%=@rip_authid%> "<%=@rip_authkey%>"
+<% else -%>    auth-key "<%=@rip_authkey%>"
+<% end -%><% if @rip_map[iface] =~ /cost/ -%>    <%=@rip_map[iface]%>
+<% else -%>    cost 1
+<% end -%><% if iface =~ /carp/ -%>    demote carp
+<% end -%><% end -%>}
+<% end -%><% end -%>

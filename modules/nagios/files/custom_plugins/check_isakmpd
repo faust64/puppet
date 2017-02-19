@@ -1,0 +1,41 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+yo=`/sbin/ifconfig carp1 | grep -A4 MASTER | awk '/[ 	]inet[ 	]/{print $2;exit;}'`
+if test -z "$yo"; then
+    err=notrly
+elif ! ps ax | grep '[i]sakmpd -'; then
+    err=process
+elif ! netstat -lant | grep '\.500[ 	]*\*\.\*[ 	]*$'; then
+    err=socket
+fi >/dev/null 2>&1
+
+case "$err" in
+    process)
+	res=WARNING
+	msg=" - isakmpd not running!"
+	;;
+    socket)
+	res=WARNING
+	msg=" - isakmpd not listening?"
+	perfdata=" | 0"
+	;;
+    notrly)
+	res=OK
+	msg=" - BACKUP"
+	perfdata=" | 0"
+	;;
+    *)
+	res=OK
+	perfdata=" | 1"
+	;;
+esac
+
+echo "$res$msg$perfdata"
+eval res=\$$res
+exit $res

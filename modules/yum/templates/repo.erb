@@ -1,0 +1,12 @@
+[<%=@name%>]
+name=<%=@descr%>
+<% if @baseurl -%>baseurl=<%=@baseurl%>
+<% elsif @mirrorlist -%>mirrorlist=<%=@mirrorlist%>
+<% if @failover -%>failovermethod=<%=@failover%>
+<% end -%><% else -%>#NO SOURCE DEFINED!!
+<% end -%>enabled=<%=@enabled%>
+<% if @gpgkey -%>gpgcheck=1
+gpgkey=<%=@gpgkey%>
+<% else -%>gpgcheck=0
+<% end -%><% if @exclude -%>exclude=<%=@exclude%>
+<% end -%>

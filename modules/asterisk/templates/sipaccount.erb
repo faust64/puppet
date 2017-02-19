@@ -1,0 +1,26 @@
+[<%=@name%>]
+<% if @deny -%>deny=<%=@deny%>
+<% end -%>disallow=<%=@disallow%>
+allow=<%=@allow%>
+<% if @permit -%>permit=<%=@permit%>
+<% end -%><% if @limit -%>call-limit=<%=@limit%>
+<% end -%><% if @firstname and $lastname -%>callerid=<%=@lastname%> <%=@firstname%> <<%=@name%>>
+<% end -%><% if @callgroup -%>callgroup=<%=@callgroup%>
+<% end -%><% if @public == false -%>canreinvite=no
+<% end -%>context=<%=@context%>
+dial=SIP/<%=@name%>
+<% if @public == false -%>dtmfmode=<%=@dtmfmode%>
+<% end -%><% if @expires != false -%>expires=<%=@expires%>
+<% end -%><% if @fromdomain -%>fromdomain=<%=@fromdomain%>
+<% end -%><% if @fromuser -%>fromuser=<%=@fromuser%>
+<% end -%>host=<%=@host%>
+<% if @public == false -%>mailbox=<%=@name%>@default
+<% if @lsbdistcodename == "jessie" and @nat == "yes" -%>nat=force_rport,comedia
+<% else -%>nat=<%=@nat%>
+<% end -%><% end -%><% if @pickupgroup %>pickupgroup=<%=@pickupgroup%>
+<% end -%>port=<%=@port%>
+qualify=<%=@qualify%>
+<% if @sippass -%>secret=<%=@sippass%>
+<% end -%>type=<%=@type%>
+<% if @username -%>username=<%=@username%>
+<% end -%>

@@ -1,0 +1,22 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+PATH="/usr/local/sbin:/usr/sbin:/sbin:$PATH"
+export PATH
+
+if sudo riak-cs ping 2>&1 | grep pong >/dev/null; then
+    ret=OK
+    perfdata=" | 1"
+else
+    ret=CRITICAL
+    msg=" - riak-cs ping failed"
+    perfdata=" | 0"
+fi
+
+echo "$PRG $ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

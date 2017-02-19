@@ -1,0 +1,15 @@
+<% if @connect =~ /127\.0\.0\.1/ -%>client = no
+<% else -%>client = yes
+<% end -%>syslog = yes
+
+[<%=@name%>]
+accept = <%=@accept%>
+connect = <%=@connect%>
+<% if @connect =~ /127\.0\.0\.1/ -%><% if @true_certfile != false -%>cert = <%=@true_certfile%>
+<% end -%><% if @true_cafile != false -%>CAfile = <%=@true_cafile%>
+<% end -%><% if @true_keyfile != false -%>key = <%=@true_keyfile%>
+<% end -%><% else -%><% if @true_cafile != false -%>CAfile = <%=@true_cafile%>
+<% end -%><% end -%><% if @ciphers != false -%>ciphers = <%=@ciphers.join(':')%>
+<% end -%>sslVersion = <%=@sslversion%>
+<% if @options != false -%><% @options.each do |option| -%>options = <%=option%>
+<% end -%><% end -%>

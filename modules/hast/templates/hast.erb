@@ -1,0 +1,12 @@
+<% if @resources != false -%><% @resources.each do |resource, attributes| -%>resource <%=resource%>
+    local <%=attributes['disk']%>
+    on <%=attributes['left']%> {
+	remote <%=attributes['righthostname']%>
+	source <%=attributes['lefthostname']%>
+    }
+    on <%=attributes['right']%> {
+	remote <%=attributes['lefthostname']%>
+	source <%=attributes['righthostname']%>
+    }
+}
+<% end -%>

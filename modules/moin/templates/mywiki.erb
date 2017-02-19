@@ -1,0 +1,19 @@
+# -*- coding: iso-8859-1 -*-
+
+from farmconfig import FarmConfig
+
+class Config(FarmConfig):
+    sitename           = u'<%=@site_name%>'
+    interwikiname      = u'<%=@interwiki_name%>'
+    page_front_page    = u"<%=@front_page%>"
+    data_dir           = '<%=@lib_dir%>/wiki/data'
+    data_underlay_dir  = '<%=@underlay_dir%>'
+    superuser          = [ <% if @superuser != false -%><% @superuser.keys.each do |su| -%>u"<%=su%>",<% end -%><% end -%> ]
+<% if @superuser != false -%>    acl_rights_before  = u"<% @superuser.keys.each do |su| -%><%=su%>:<% if @superuser[su]['perms'] =~ /[a-z]/ -%><%=@superuser[su]['perms']%><% else -%>read,write,delete,revert,admin<% end -%> <% end -%>"
+<% end -%>    acl_rights_default = u"All:read"
+    mail_smarthost     = "<%=@mail_hub%>"
+    mail_from          = u"<%=@mail_from%>"
+    page_front_page    = u"<%=@front_page%>"
+
+    from MoinMoin.auth import GivenAuth
+    auth = [GivenAuth(env_var='REMOTE_USER', autocreate=True)]

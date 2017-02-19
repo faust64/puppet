@@ -1,0 +1,10 @@
+Client {
+    Address = <%=@fqdn%>
+    AutoPrune = yes
+    Catalog = MyCatalog
+    FDPort = <%=@file_daemon_port%>
+    File Retention = 90 days
+    Job Retention = 12 months
+    Name = <%=@fqdn%>-fd
+    Password = "<%=@file_daemon_pass%>"
+}

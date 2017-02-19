@@ -1,0 +1,50 @@
+#!/bin/sh
+
+export PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
+
+SITE="<%=@backupset.upcase%>"
+MAIL=/mail
+DEST=<%=@contact%>
+SUBJECT="Bacula $SITE"
+
+SD=<%=@storage_hostname%>
+if test -s <%=@conf_dir%>/export.conf; then
+    echo "No space data retrieved yet" | $MAIL -s "[CRITICAL] $SUBJECT" $DEST
+    exit 0
+fi
+. <%=@conf_dir%>/export.conf
+if ! test "$CAPACITY" -ge 0 -a "$LEFTSPACE" -ge 0; then
+    echo "Can't retrieve storage capacity and/or available space" | $MAIL -s "[CRITICAL] $SUBJECT" $DEST
+    exit 0
+elif which bacula-dir; then
+    if ! ps ax | grep '[b]acula-dir '; then
+	<% if @kernel == "Linux" -%>service <% else -%>/etc/rc.d/<% end -%>bacula-dir restart
+    fi
+fi >/dev/null 2>&1
+
+DATE_LASTDAY=$(echo 'list media pool=DailyPool' | bconsole | awk '{print $24}' | egrep "^[0-9]{4}\-[0-9]{2}\-[0-9]{2}" | sort | tail -n 1)
+BYTE_LASTDAY=$(echo 'list media' | bconsole | awk "/$DATE_LASTDAY/{print \$10}" | sed 's|,||g')
+DATE_LASTWEEK=$(echo 'list media pool=WeeklyPool' | bconsole | awk '{print $24}' | egrep "^[0-9]{4}\-[0-9]{2}\-[0-9]{2}" | sort | tail -n 1)
+BYTE_LASTWEEK=$(echo 'list media' | bconsole | awk "/$DATE_LASTWEEK/{print \$10}" | sed 's|,||g')
+DATE_LASTMONTH=$(echo 'list media pool=MonthlyPool' | bconsole | awk '{print $24}' | egrep "^[0-9]{4}\-[0-9]{2}\-[0-9]{2}" | sort | tail -n 1)
+BYTE_LASTMONTH=$(echo 'list media' | bconsole | awk "/$DATE_LASTMONTH/{print $10; exit;}' | sed 's|,||g')
+MANDATORYSPACE=$(echo "(4*$BYTE_LASTDAY+5*$BYTE_LASTWEEK+1*$BYTE_LASTMONTH)/1024/1024/1024" | bc)
+MINIMAL=$(echo "(4*$BYTE_LASTDAY+5*$BYTE_LASTWEEK+3*$BYTE_LASTMONTH)/1024/1024/1024" | bc)
+
+if test "$MANDATORYSPACE" -ge "$CAPACITY"; then
+    SUBJECT="[CRITICAL] $SUBJECT SPACE EMERGENCY!!"
+    echo -e "$SD:\nMandatory Space Needed: $MANDATORYSPACE Go\nActual SD Capacity: $CAPACITY Go" | $MAIL -s "$SUBJECT" $DEST
+else
+    if test "$MINIMAL" -ge "$CAPACITY"; then
+	SUBJECT="$SUBJECT SPACE ALERT"
+	echo -e "$SD:\nMinimal Space Needed: $MINIMAL Go\nActual SD Capacity: $CAPACITY Go" | $MAIL -s "$SUBJECT" $DEST
+    fi
+fi
+
+NEEDEDSPACE=$(echo $BYTE_LASTWEEK/1024/1024/1024 | bc)
+if test "$LEFTSPACE" -le "$NEEDEDSPACE"; then
+    SUBJECT="[WARNING] [Bacula $SITE LEFT SPACE ALERT"
+    echo -e "$SD:\nMinimal Left Space Needed: $NEEDEDSPACE Go\nActual SD Left Space: $LEFTSPACE Go" | $MAIL -s "$SUBJECT" $DEST
+fi
+
+exit 0

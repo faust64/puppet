@@ -1,0 +1,54 @@
+[
+<% if @do_riakcs -%> {riak_kv, [
+   {add_paths, ["/usr/lib/riak-cs/lib/riak_cs-<%=@riakcs_version%>/ebin"]},
+<% if @fullsync_downgrade -%>   {override_capability, [
+     {object_hash_version, [{use, legacy}] }
+    ]},
+<% end -%>   {storage_backend, riak_cs_kv_multi_backend},
+   {multi_backend_prefix_list, [{<<"0b:">>, be_blocks}]},
+   {multi_backend_default, be_default},
+   {multi_backend, [
+     {be_default, riak_kv_eleveldb_backend, [
+       {total_leveldb_mem_percent, 30},
+       {data_root, "/var/lib/riak/leveldb"}
+      ]},
+     {be_blocks, riak_kv_bitcask_backend, [
+       {data_root, "/var/lib/riak/bitcask"} ]}
+    ]}
+<% end -%><% if @enterprise -%><% if @do_riakcs -%>   ]},
+<% end -%> {riak_core, [
+<% if @do_ssl -%>  {ssl_enabled, true},
+  {certfile, '/etc/riak/ssl/replication.crt'},
+  {keyfile, '/etc/riak/ssl/replication.key'},
+  {cacertdir, '/etc/riak/ssl/'},
+<% end -%>  {cluster_mgr, {"0.0.0.0", 9080 } } ]},
+ {riak_repl, [
+   {data_root, "/var/lib/riak/riak_repl/"},
+   {max_fssource_cluster, 5},
+   {max_fssource_node, 1},
+   {max_fssink_node, 1},
+<% if @do_fullsync -%>   {fullsync_on_connect, true},
+   {fullsync_interval, 30},
+   {rtq_max_bytes, 104857600},
+<% else -%>    {fullsync_on_connect, false},
+<% end -%>   {proxy_get, disabled},
+   {rt_heartbeat_interval, 15},
+   {rt_heartbeat_timeout, 15},
+   {fullsync_use_background_manager, true}
+<% end -%>  ]},
+ {lager, [
+   {extra_sinks, [
+     {object_lager_event, [
+       {handlers, [
+         {lager_file_backend, [
+           {file, "/var/log/riak/object.log"},
+           {level, info},
+           {formatter_config, [date, " ", time, " [", severity, "] ", message, "\n"]}
+          ]}
+        ]},
+       {async_threshold, 500},
+       {async_threshold_window, 50}
+      ]}
+    ]}
+  ]}
+].

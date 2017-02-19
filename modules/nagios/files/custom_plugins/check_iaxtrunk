@@ -1,0 +1,42 @@
+#!/bin/sh
+
+export PATH="/usr/lib64/nagios/plugins:/usr/local/libexec/nagios:/usr/lib/nagios/plugins:/usr/local/sbin:/usr/sbin:$PATH"
+
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+ret=OK
+
+from=$(expr `awk '/domain/{print $2}' /etc/resolv.conf` : '\([^\.]*\)')
+to=$1
+title="IAX_${from}_to_$to"
+if test -z "$to"; then
+    msg=" - usage: `basename $0` trunk_name"
+    ret=UNKNOWN
+else
+    if test -s /etc/asterisk/iax.d/$to.conf; then
+	TO=to
+	remote=`awk -F= '/^host/{print $2}' /etc/asterisk/iax.d/$to.conf`
+    else
+	TO=`expr "$to" : '\([^_]*\).*'`
+	if test "$TO" != "$to"; then
+	    remote=sip.$TO.unetresgrossebite.com
+	else
+	    remote=asterisk.$TO
+	fi
+    fi
+    eval `sudo asterisk -rx "iax2 show peer $to" | awk '/[ 	]*Status[ 	]*:/{print "trkstate="$3" latency=\""$4" "$5"\""}'`
+    if test "$trkstate" != OK; then
+	ret=WARNING
+	perfdata=`check_ping -H $remote -w 60,20% -c 140,40% | sed "s/^[^|]*|//"`
+    else
+	latency=`echo "$latency" | sed 's|[^0-9]*||g'`
+	perfdata=`check_ping -H $remote -w 60,20% -c 140,40% | sed "s/^[^|]*|[^;]*;\(.*\)/rta=${latency}ms;\1/"`
+    fi
+    perfdata=" | $perfdata"
+fi
+
+echo "$title $ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

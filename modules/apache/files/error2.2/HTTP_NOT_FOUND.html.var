@@ -1,0 +1,46 @@
+Content-language: en
+Content-type: text/html; charset=ISO-8859-1
+Body:----------en--
+<!--#set var="TITLE" value="404: Object not found!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 404</h1>
+	    <p>This page is unavailable</p>
+	    <p>If you think this is a mistake, please contact admin@unetresgrossebite.com</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------en--
+
+Content-language: es
+Content-type: text/html; charset=ISO-8859-1
+Body:----------es--
+<!--#set var="CONTENT_LANGUAGE" value="es"
+--><!--#set var="TITLE" value="&iexcl;404: Objeto no encontrado!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERROR 404</h1>
+	    <p>Este pagina no ha sido localizado in este servidor.</p>
+	    <p>Si usted piensa que es un error, gracias ponerse en contacto con admin@unetresgrossebite.com</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------es--
+
+Content-language: fr
+Content-type: text/html; charset=ISO-8859-1
+Body:----------fr--
+<!--#set var="CONTENT_LANGUAGE" value="fr"
+--><!--#set var="TITLE" value="404 : Objet non trouv&eacute;!"
+--><!--#include virtual="include/top.html" -->
+    <div id="container">
+	<div id="inner">
+	    <h1>ERREUR 404</h1>
+	    <p>Cette page n'a pas &eacute;t&eacute; trouv&eacute; sur le serveur.</p>
+	    <p>Si vous pensez qu'il s'agit d'une erreur, merci de contacter admin@unetresgrossebite.com</p>
+	</div>
+    </div>
+<!--#include virtual="include/bottom.html" -->
+----------fr--

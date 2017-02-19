@@ -1,0 +1,28 @@
+#!/bin/sh
+
+HOOK_URL="<%=@slack_hook%>"
+SOURCE="ossec2slack"
+
+if test "x$1" = "xdelete"; then
+    exit 0
+fi
+ALERTID=$4
+RULEID=$5
+LOCAL=`dirname $0`
+ALERTTIME=`echo "$ALERTID" | cut -d  "." -f 1`
+ALERTLAST=`echo "$ALERTID" | cut -d  "." -f 2`
+
+# Logging
+cd $LOCAL/..
+PWD=`pwd`
+echo "`date` $0 $1 $2 $3 $4 $5 $6 $7 $8" >> ${PWD}/../logs/active-responses.log
+ALERTFULL=`grep -A 10 "$ALERTTIME" ${PWD}/../logs/alerts/alerts.log | grep -v ".$ALERTLAST: " -A 10 | grep -v "Src IP: " | grep -v "User: " |grep "Rule: " -A4 -B1 | cut -c -139 | sed 's/\"//g'`
+PAYLOAD='{"text": "'"$ALERTFULL"'"}'
+
+<% if @cache_ip != false -%><% @cache_ip.each do |host| -%>export https_proxy=http://<%=@host%>:3128/
+<% break -%><% end -%><% end -%>
+if ! echo "$hook" | grep hooks.slack.com >/dev/null; then
+    hook=https://hooks.slack.com/services/$hook
+fi
+curl -X POST --data-urlencode "payload=$PAYLOAD" $HOOK_URL >/dev/null 2>>$PWD/../logs/active-responses.log
+exit $?

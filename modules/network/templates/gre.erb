@@ -1,0 +1,5 @@
+<%=@innerlocal%> <%=@innerremote%> netmask <%=@innermask%> link0 up<% if @comment != false -%> description "<%=@comment%>"<% end -%> mtu <%=@mtu%>
+tunnel <%=@local%> <%=@remote%>
+<% if @routes -%><% @routes.each do |elt| -%><% if elt['net'] -%>!route add <%=elt['net'] -%> <% if elt['gw'] -%><%=elt['gw']%><% elsif @addr != false -%><%=@addr%><% else -%>-link -iface <%=@name%><% end -%>
+
+<% end -%><% end -%><% end -%>-inet6

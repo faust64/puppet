@@ -1,0 +1,51 @@
+<VirtualHost *:<%=@listen_ports['plain']%>>
+    ServerName <%=@name%>
+<% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
+<% end -%><% end -%>    ServerAdmin <%=@server_admin%>
+    ErrorLog <%=@log_dir%>/error-<%=@name%>.log
+    LogLevel warn
+    CustomLog <%=@log_dir%>/access-<%=@name%>.log combined
+<% if @listen_ports['ssl'] != false -%>    RewriteEngine On
+    RewriteRule ^/(.*) https://<%=@name%>/$1 [L,R]
+</VirtualHost>
+<VirtualHost *:<%=@listen_ports['ssl']%>>
+    ServerName <%=@name%>
+<% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
+<% end -%><% end -%>    ServerAdmin <%=@server_admin%>
+    ErrorLog <%=@log_dir%>/ssl-error-<%=@name%>.log
+    LogLevel warn
+<% if @stricttransport != false -%>    Header always set Strict-Transport-Security "<%=@stricttransport%>"
+<% end -%><% if @deny_frames == "remote" -%>    Header always set X-Frame-Options SAMEORIGIN
+<% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
+<% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
+<% end -%>    CustomLog <%=@log_dir%>/ssl-access-<%=@name%>.log combined
+    Include ssl.conf
+<% end -%>    RewriteEngine On
+    RewriteCond %{REQUEST_URI} !^/pakiti(.*)
+    RewriteCond %{REQUEST_URI} !^/feed(.*)
+    RewriteCond %{REQUEST_URI} !(.*).html.var$
+    RewriteRule ^/(.*) /pakiti/$1 [L,R]
+    DocumentRoot <%=@app_root%>
+
+    <Location />
+	DirectoryIndex index.php
+	Options +FollowSymLinks
+<% if @listen_ports['ssl'] != false and (@vhostldapauth == true or @vhostldapauth == "pubonly") -%>	Include authldap.conf
+<% elsif @version == "2.2" -%>	Order allow,deny
+	Allow from all
+<% else -%>	Require all granted
+<% end -%>    </Location>
+    <Location /feed/>
+	DirectoryIndex index.php
+	AuthType Basic
+	AuthName "Feed"
+	AuthBasicProvider file
+	AuthUserFile pakiti.htpasswd
+	Require valid-user
+<% if @version == "2.2" -%>	Options -All
+<% else -%>	Options None
+<% end -%>    </Location>
+<% if @listen_ports['ssl'] != false and (@vhostldapauth == true or @vhostldapauth == "pubonly") -%>    RewriteCond %{LA-U:REMOTE_USER} (.+)
+    RewriteRule . - [E=RU:%1]
+    RequestHeader set X-Remote-User %{RU}e env=RU
+<% end -%></VirtualHost>

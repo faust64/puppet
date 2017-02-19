@@ -1,0 +1,49 @@
+external_url 'http://gitlab.<%=@domain%>:81'
+gitlab_rails['gitlab_ssh_host'] = '<%=@fqdn%>'
+gitlab_rails['gitlab_email_enabled'] = true
+gitlab_rails['gitlab_email_from'] = 'git@<%=@rdomain%>'
+gitlab_rails['gitlab_email_display_name'] = 'GitLab'
+gitlab_rails['gitlab_restricted_visibility_levels'] = ['public', 'internal']
+gitlab_rails['gitlab_issue_closing_pattern'] = "((?:[Cc]los(?:e[sd]?|ing)|[Ff]ix(?:e[sd]|ing)?) +(?:(?:issues? +)?%{issue_ref}(?:(?:, *| +and +)?))+)"
+gitlab_rails['gitlab_default_projects_features_issues'] = true
+gitlab_rails['gitlab_default_projects_features_merge_requests'] = true
+gitlab_rails['gitlab_default_projects_features_wiki'] = true
+gitlab_rails['gitlab_default_projects_features_snippets'] = false
+gitlab_rails['gitlab_default_projects_features_builds'] = true
+gitlab_rails['gitlab_default_projects_features_container_registry'] = true
+gitlab_rails['gitlab_default_projects_limit'] = 0
+gitlab_rails['gitlab_repository_downloads_path'] = 'tmp/repositories'
+gitlab_rails['gravatar_plain_url'] = 'http://www.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon'
+gitlab_rails['gravatar_ssl_url'] = 'https://secure.gravatar.com/avatar/%{hash}?s=%{size}&d=identicon'
+gitlab_rails['webhook_timeout'] = 10
+<% if @ldap_slave != false and @ldap_searchuser != false and @ldap_user != false and @ldap_password != false -%>gitlab_rails['ldap_enabled'] = true
+gitlab_rails['ldap_servers'] = YAML.load <<-'EOS'
+  main:
+    label: 'LDAP'
+    host: '<%=@ldap_slave%>'
+    port: 636
+    uid: 'uid'
+    method: 'ssl'
+    bind_dn: '<%=@ldap_user%>'
+    password: '<%=@ldap_password%>'
+    allow_username_or_email_login: true
+    base: '<%=@ldap_searchuser%>'
+    user_filter: '<%=@ldap_userfilter%>'
+EOS
+<% end -%><% if @rootpw != false -%>gitlab_rails['initial_root_password'] = "<%=@rootpw%>"
+<% end -%><% if @smtp_host != false -%>gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "<%=@smtp_host%>"
+gitlab_rails['smtp_port'] = 25
+gitlab_rails['smtp_domain'] = "<%=@rdomain%>"
+<% end -%>user['git_user_email'] = "git@<%=@rdomain%>"
+nginx['redirect_http_to_https'] = false
+nginx['listen_addresses'] = [ '127.0.0.1' ]
+nginx['listen_port'] = 81
+<% if @github_appid and @github_appsecret -%>gitlab_rails['omniauth_providers'] = [ {
+    "name" => "github",
+    "app_id" => "<%=@github_appid%>",
+    "app_secret" => "<%=@github_appsecret%>",
+    "url" => "https://github.com/",
+    "args" => { "scope" => "user:email" }
+} ]
+<% end -%>

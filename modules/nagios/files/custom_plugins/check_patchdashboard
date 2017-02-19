@@ -1,0 +1,41 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+perfdata=0
+res=OK
+
+test "$1" && DB=$1 || DB=patches
+CUNTRUSTED=0
+CVULNERABLE=0
+QCOUNT='SELECT COUNT(server_name) FROM servers'
+QUNTRUSTED='SELECT server_name FROM servers WHERE trusted = false'
+QVULNERABLE='SELECT DISTINCT(server_name) FROM patches'
+
+CALL=`echo "$QCOUNT" | mysql --defaults-file=/etc/mysql/nagios.cnf -N $DB`
+for server in `echo $QUNTRUSTED | mysql --defaults-file=/etc/mysql/nagios.cnf -N $DB`
+do
+    res=CRITICAL
+    if test "$msg"; then
+	msg="$msg, "
+    fi
+    msg="$msg$server not trusted"
+    CUNTRUSTED=`expr $CUNTRUSTED + 1`
+done
+for server in `echo "$QVULNERABLE" | mysql --defaults-file=/etc/mysql/nagios.cnf -N $DB`
+do
+    test "$res" = OK && res=WARNING
+    if test "$msg"; then
+	msg="$msg, "
+    fi
+    msg="$msg$server known to be vulnerable"
+    CVULNERABLE=`expr $CVULNERABLE + 1`
+done
+perfdata="| $CALL;$CUNTRUSTED;$CVULNERABLE"
+
+echo "$res - $msg$perfdata"
+eval res=\$$res
+exit $res

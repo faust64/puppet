@@ -1,0 +1,154 @@
+physical_parent: eris.unetresgrossebite.com
+apt_cacher: false
+
+# Apache
+apache_letsencrypt: true
+
+# Autofs
+modeles_nas: false
+modeles_path: /media/backups
+modeles_nfs_opts: fstype=nfs4,ro,soft,intr
+
+# BlueMind
+bluemind_letsencrypt: true
+
+# Fail2ban
+fail2ban_ignoreips:
+  - 5.79.79.159
+  - 5.135.4.208/29
+  - 5.135.176.165/32
+  - 5.135.190.108/32
+  - 10.42.44.20
+  - 37.48.71.168
+  - 37.59.45.201
+  - 51.254.93.64/29
+  - 62.210.188.140
+  - 78.193.67.92
+  - 95.211.136.210/31
+  - 95.211.136.212
+  - 95.211.205.36
+  - 176.31.250.180/32
+  - 188.165.212.140
+  - 127.0.0.1/8
+
+# Icinga
+nagios_hostgroups:
+  - debian
+  - peerio
+
+# Munin
+munin_ip:
+  - 51.254.93.69
+
+# Nagios
+nagios_ip:
+  - 5.135.4.213
+nagios_no_parent: false
+
+# Named
+named_master: 78.193.67.92
+
+opendkim_trusted_hosts:
+  - 5.135.4.214/32
+  - 37.48.71.168/32
+  - 78.193.67.92/32
+
+# Unbound
+unbound_forwarders: false
+#unbound_forwarders:
+#  emma-earth.com:
+#    - 78.193.67.92
+#  emma-earth.fr:
+#    - 78.193.67.92
+#  emma-earth.net:
+#    - 78.193.67.92
+#  emma-earth.org:
+#    - 78.193.67.92
+#  undomaine.42:
+#    - 78.193.67.92
+#  unetresgrossebite.com:
+#    - 78.193.67.92
+unbound_recurse_networks:
+  - 5.79.79.190/32
+  - 5.135.4.208/29
+  - 5.135.176.165/32
+  - 5.135.190.108/32
+  - 37.48.71.168/31
+  - 37.48.71.170/32
+  - 37.59.45.201/32
+  - 51.254.93.64/29
+  - 62.210.188.140/32
+  - 95.211.136.210/31
+  - 95.211.136.212/32
+  - 95.211.205.36/32
+  - 176.31.250.180/32
+  - 188.165.212.140/32
+  - 212.83.154.64/32
+  - 212.83.154.66/31
+
+# OpenLDAP
+openldap_ldap_slave: sso.unetresgrossebite.com
+
+# OpenSSH
+ssh_port: 1022
+ssh_tcp_wrappers:
+  - 52.3.63.157/32
+  - 52.10.164.137/32
+  - 78.193.67.92/32
+  - 86.247.183.179/32
+  - 127.0.0.1/32
+
+# OpenVZ/Xen/KVM
+vz_default_bridge: br0
+vz_default_gateway: 127.0.0.1
+vz_default_netmask: 255.255.255.255
+
+# Pakiti
+pakiti_site_id: 3
+
+# PF
+dns_ip:
+  - 188.165.212.140
+  - 37.59.45.201
+ldap_ip:
+  - 5.135.4.212
+mail_ip:
+  - 5.135.4.214
+  - 51.254.93.64
+mail_mx: 5.135.4.214
+reverse_ip: false
+snmp_ip:
+  - 5.135.4.213
+dns_search: unetresgrossebite.com
+
+# PKI
+pki_master: pki.unetresgrossebite.com
+
+# Postfix
+postfix_letsencrypt: true
+postfix_routeto: deepthroat.unetresgrossebite.com
+
+# Rsyslog
+rsyslog_do_relp: true
+rsyslog_do_udp: false
+rsyslog_hub: 5.135.176.165
+rsyslog_via_stunnel: true
+
+# Spamassassin
+spamassassin_trusted_networks: 
+  - 5.135.4.208/29
+  - 5.135.176.165/32
+  - 5.135.190.108/32
+  - 37.59.45.201/32
+  - 51.254.93.64/29
+  - 95.211.136.210/31
+  - 95.211.136.212/32
+  - 95.211.205.36/32
+  - 176.31.250.180/32
+  - 188.165.212.140/32
+  - 212.83.154.64/32
+  - 212.83.154.66/31
+
+# WebServers
+csp_sources:
+  - unetresgrossebite.com

@@ -1,0 +1,728 @@
+[app-blackhole]
+exten => hangup,1,Noop(Blackhole Dest: Hangup)
+exten => hangup,n,Hangup
+exten => zapateller,1,Noop(Blackhole Dest: Play SIT Tone)
+exten => zapateller,n,Answer
+exten => zapateller,n,Zapateller()
+exten => musiconhold,1,Noop(Blackhole Dest: Put caller on hold forever)
+exten => musiconhold,n,Answer
+exten => musiconhold,n,MusicOnHold()
+exten => congestion,1,Noop(Blackhole Dest: Congestion)
+exten => congestion,n,Answer
+exten => congestion,n,Playtones(congestion)
+exten => congestion,n,Congestion(20)
+exten => congestion,n,Hangup
+exten => busy,1,Noop(Blackhole Dest: Busy)
+exten => busy,n,Answer
+exten => busy,n,Playtones(busy)
+exten => busy,n,Busy(20)
+exten => busy,n,Hangup
+exten => ring,1,Noop(Blackhole Dest: Ring)
+exten => ring,n,Answer
+exten => ring,n,Playtones(ring)
+exten => ring,n,Wait(300)
+exten => ring,n,Hangup
+
+[app-blacklist-check]
+exten => s,1,GotoIf($["${CALLERID(number)}" = "Unknown"]?check-blocked)
+exten => s,n,GotoIf($["${CALLERID(number)}" = "Unavailable"]?check-blocked)
+exten => s,n,GotoIf($["foo${CALLERID(number)}" = "foo"]?check-blocked:check)
+exten => s,n(check-blocked),GotoIf($["${DB(blacklist/blocked)}" = "1"]?blacklisted)
+exten => s,n(check),GotoIf($["${BLACKLIST()}"="1"]?blacklisted)
+exten => s,n,Set(CALLED_BLACKLIST=1)
+exten => s,n,Return()
+exten => s,n(blacklisted),Answer
+exten => s,n,Wait(1)
+exten => s,n,Zapateller()
+exten => s,n,Playback(ss-noservice)
+exten => s,n,Hangup
+
+[app-blacklist]
+exten => *30,1,Goto(app-blacklist-add,s,1)
+exten => *32,1,Goto(app-blacklist-last,s,1)
+exten => *31,1,Goto(app-blacklist-remove,s,1)
+
+[app-blacklist-add]
+exten => s,1,Answer
+exten => s,n,Wait(1)
+exten => s,n,Set(NumLoops=0)
+exten => s,n(start),Playback(enter-num-blacklist)
+exten => s,n,Set(TIMEOUT(digit)=5)
+exten => s,n,Set(TIMEOUT(response)=60)
+exten => s,n,Read(blacknr,then-press-pound,,,,)
+exten => s,n,SayDigits(${blacknr})
+exten => s,n,Playback(if-correct-press&digits/1)
+exten => s,n,Noop(Waiting for input)
+exten => s,n(end),WaitExten(60,)
+exten => s,n,Playback(sorry-youre-having-problems&goodbye)
+exten => 1,1,GotoIf($[ "${blacknr}" != ""]?:app-blacklist-add-invalid,s,1)
+exten => 1,n,Set(DB(blacklist/${blacknr})=1)
+exten => 1,n,Playback(num-was-successfully&added)
+exten => 1,n,Wait(1)
+exten => 1,n,Hangup
+
+[app-blacklist-add-invalid]
+exten => s,1,Set(NumLoops=$[${NumLoops} + 1])
+exten => s,n,Playback(pm-invalid-option)
+exten => s,n,GotoIf($[${NumLoops} < 3]?app-blacklist-add,s,start)
+exten => s,n,Playback(goodbye)
+exten => s,n,Hangup
+
+[app-blacklist-last]
+exten => s,1,Answer
+exten => s,n,Wait(1)
+exten => s,n,Set(lastcaller=${DB(CALLTRACE/${CALLERID(number)})})
+exten => s,n,GotoIf($[ $[ "${lastcaller}" = "" ] | $[ "${lastcaller}" = "unknown" ] ]?noinfo)
+exten => s,n,Playback(privacy-to-blacklist-last-caller&telephone-number)
+exten => s,n,SayDigits(${lastcaller})
+exten => s,n,Set(TIMEOUT(digit)=3)
+exten => s,n,Set(TIMEOUT(response)=7)
+exten => s,n,Playback(if-correct-press&digits/1)
+exten => s,n,Goto(end)
+exten => s,n(noinfo),Playback(unidentified-no-callback)
+exten => s,n,Hangup
+exten => s,n,Noop(Waiting for input)
+exten => s,n(end),WaitExten(60,)
+exten => s,n,Playback(sorry-youre-having-problems&goodbye)
+exten => 1,1,Set(DB(blacklist/${lastcaller})=1)
+exten => 1,n,Playback(num-was-successfully)
+exten => 1,n,Playback(added)
+exten => 1,n,Wait(1)
+exten => 1,n,Hangup
+
+[app-blacklist-remove]
+exten => s,1,Answer
+exten => s,n,Wait(1)
+exten => s,n,Playback(entr-num-rmv-blklist)
+exten => s,n,Set(TIMEOUT(digit)=5)
+exten => s,n,Set(TIMEOUT(response)=60)
+exten => s,n,Read(blacknr,then-press-pound,,,,)
+exten => s,n,SayDigits(${blacknr})
+exten => s,n,Playback(if-correct-press&digits/1)
+exten => s,n,Noop(Waiting for input)
+exten => s,n(end),WaitExten(60,)
+exten => s,n,Playback(sorry-youre-having-problems&goodbye)
+exten => 1,1,Noop(Deleting: blacklist/${blacknr} ${DB_DELETE(blacklist/${blacknr})})
+exten => 1,n,Playback(num-was-successfully&removed)
+exten => 1,n,Wait(1)
+exten => 1,n,Hangup
+
+[app-calltrace]
+exten => *69,1,Goto(app-calltrace-perform,s,1)
+
+[app-calltrace-perform]
+exten => s,1,Answer
+exten => s,n,Wait(1)
+exten => s,n,Macro(user-callerid,)
+exten => s,n,Playback(info-about-last-call&telephone-number)
+exten => s,n,Set(lastcaller=${DB(CALLTRACE/${AMPUSER})})
+exten => s,n,GotoIf($[ $[ "${lastcaller}" = "" ] | $[ "${lastcaller}" = "unknown" ] ]?noinfo)
+exten => s,n,SayDigits(${lastcaller})
+exten => s,n,Set(TIMEOUT(digit)=3)
+exten => s,n,Set(TIMEOUT(response)=7)
+exten => s,n,Background(to-call-this-number&press-1)
+exten => s,n,Goto(fin)
+exten => s,n(noinfo),Playback(from-unknown-caller)
+exten => s,n,Macro(hangupcall,)
+exten => s,n(fin),Noop(Waiting for input)
+exten => s,n,WaitExten(60,)
+exten => s,n,Playback(sorry-youre-having-problems&goodbye)
+exten => 1,1,Goto(from-internal,${lastcaller},1)
+exten => i,1,Playback(vm-goodbye)
+exten => i,n,Macro(hangupcall,)
+exten => t,1,Playback(vm-goodbye)
+exten => t,n,Macro(hangupcall,)
+
+[app-callwaiting-cwoff]
+exten => *71,1,Answer
+exten => *71,n,Wait(1)
+exten => *71,n,Macro(user-callerid,)
+exten => *71,n,Noop(Deleting: CW/${AMPUSER} ${DB_DELETE(CW/${AMPUSER})})
+exten => *71,n(hook_1),Playback(call-waiting&de-activated)
+exten => *71,n,Macro(hangupcall,)
+
+[app-callwaiting-cwon]
+exten => *70,1,Answer
+exten => *70,n,Wait(1)
+exten => *70,n,Macro(user-callerid,)
+exten => *70,n,Set(DB(CW/${AMPUSER})=ENABLED)
+exten => *70,n(hook_1),Playback(call-waiting&activated)
+exten => *70,n,Macro(hangupcall,)
+
+[app-cf-busy-off]
+exten => *91,1,Answer
+exten => *91,n,Wait(1)
+exten => *91,n,Macro(user-callerid,)
+exten => *91,n,Set(fromext=${AMPUSER})
+exten => *91,n,Noop(Deleting: CFB/${fromext} ${DB_DELETE(CFB/${fromext})})
+exten => *91,n(hook_1),Playback(call-fwd-on-busy&de-activated)
+exten => *91,n,Macro(hangupcall,)
+exten => _*91.,1,Answer
+exten => _*91.,n,Wait(1)
+exten => _*91.,n,Set(fromext=${EXTEN:3})
+exten => _*91.,n,Noop(Deleting: CFB/${fromext} ${DB_DELETE(CFB/${fromext})})
+exten => _*91.,n(hook_2),Playback(call-fwd-on-busy&for&extension)
+exten => _*91.,n,SayDigits(${fromext})
+exten => _*91.,n,Playback(cancelled)
+exten => _*91.,n,Macro(hangupcall,)
+
+[app-cf-busy-off-any]
+exten => *92,1,Answer
+exten => *92,n,Wait(1)
+exten => *92,n,Macro(user-callerid,)
+exten => *92,n,Playback(please-enter-your&extension)
+exten => *92,n,Read(fromext,then-press-pound,,,,)
+exten => *92,n,Set(fromext=${IF($["foo${fromext}"="foo"]?${AMPUSER}:${fromext})})
+exten => *92,n,Wait(1)
+exten => *92,n,Noop(Deleting: CFB/${fromext} ${DB_DELETE(CFB/${fromext})})
+exten => *92,n(hook_1),Playback(call-fwd-on-busy&for&extension)
+exten => *92,n,SayDigits(${fromext})
+exten => *92,n,Playback(cancelled)
+exten => *92,n,Macro(hangupcall,)
+
+[app-cf-busy-on]
+exten => *90,1,Answer
+exten => *90,n,Wait(1)
+exten => *90,n,Macro(user-callerid,)
+exten => *90,n,Playback(call-fwd-on-busy)
+exten => *90,n,Playback(please-enter-your&extension)
+exten => *90,n,Read(fromext,then-press-pound,,,,)
+exten => *90,n,Set(fromext=${IF($["foo${fromext}"="foo"]?${AMPUSER}:${fromext})})
+exten => *90,n,Wait(1)
+exten => *90,n(startread),Playback(ent-target-attendant)
+exten => *90,n,Read(toext,then-press-pound,,,,)
+exten => *90,n,GotoIf($["foo${toext}"="foo"]?startread)
+exten => *90,n,Wait(1)
+exten => *90,n,Set(DB(CFB/${fromext})=${toext})
+exten => *90,n(hook_1),Playback(call-fwd-on-busy&for&extension)
+exten => *90,n,SayDigits(${fromext})
+exten => *90,n,Playback(is-set-to)
+exten => *90,n,SayDigits(${toext})
+exten => *90,n,Macro(hangupcall,)
+exten => _*90.,1,Answer
+exten => _*90.,n,Wait(1)
+exten => _*90.,n,Macro(user-callerid,)
+exten => _*90.,n,Set(fromext=${AMPUSER})
+exten => _*90.,n,Set(toext=${EXTEN:3})
+exten => _*90.,n,Set(DB(CFB/${fromext})=${toext})
+exten => _*90.,n(hook_2),Playback(call-fwd-on-busy&for&extension)
+exten => _*90.,n,SayDigits(${fromext})
+exten => _*90.,n,Playback(is-set-to)
+exten => _*90.,n,SayDigits(${toext})
+exten => _*90.,n,Macro(hangupcall,)
+
+[app-cf-off]
+exten => *73,1,Answer
+exten => *73,n,Wait(1)
+exten => *73,n,Macro(user-callerid,)
+exten => *73,n,Set(fromext=${AMPUSER})
+exten => *73,n,Noop(Deleting: CF/${fromext} ${DB_DELETE(CF/${fromext})})
+exten => *73,n,Set(STATE=UNKNOWN)
+exten => *73,n,Gosub(app-cf-off,sstate,1)
+exten => *73,n(hook_1),Playback(call-fwd-unconditional&de-activated)
+exten => *73,n,Macro(hangupcall,)
+exten => _*73.,1,Answer
+exten => _*73.,n,Wait(1)
+exten => _*73.,n,Set(fromext=${EXTEN:3})
+exten => _*73.,n,Noop(Deleting: CF/${fromext} ${DB_DELETE(CF/${fromext})})
+exten => _*73.,n,Set(STATE=UNKNOWN)
+exten => _*73.,n,Gosub(app-cf-off,sstate,1)
+exten => _*73.,n(hook_2),Playback(call-fwd-unconditional&for&extension)
+exten => _*73.,n,SayDigits(${fromext})
+exten => _*73.,n,Playback(cancelled)
+exten => _*73.,n,Macro(hangupcall,)
+exten => sstate,1,Set(DEVICE_STATE(Custom:CF${fromext})=${STATE})
+exten => sstate,n,Set(DEVICES=${DB(AMPUSER/${fromext}/device)})
+exten => sstate,n,GotoIf($["${DEVICES}" = "" ]?return)
+exten => sstate,n,Set(LOOPCNT=${FIELDQTY(DEVICES,&)})
+exten => sstate,n,Set(ITER=1)
+exten => sstate,n(begin),Set(DEVICE_STATE(Custom:DEVCF${CUT(DEVICES,&,${ITER})})=${STATE})
+exten => sstate,n,Set(ITER=$[${ITER} + 1])
+exten => sstate,n,GotoIf($[${ITER} <= ${LOOPCNT}]?begin)
+exten => sstate,n(return),Return()
+
+[app-cf-off-any]
+exten => *74,1,Answer
+exten => *74,n,Wait(1)
+exten => *74,n,Macro(user-callerid,)
+exten => *74,n,Playback(please-enter-your&extension)
+exten => *74,n,Read(fromext,then-press-pound,,,,)
+exten => *74,n,Set(fromext=${IF($["foo${fromext}"="foo"]?${AMPUSER}:${fromext})})
+exten => *74,n,Wait(1)
+exten => *74,n,Noop(Deleting: CF/${fromext} ${DB_DELETE(CF/${fromext})})
+exten => *74,n,Set(STATE=UNKNOWN)
+exten => *74,n,Gosub(app-cf-off-any,sstate,1)
+exten => *74,n(hook_1),Playback(call-fwd-unconditional&for&extension)
+exten => *74,n,SayDigits(${fromext})
+exten => *74,n,Playback(cancelled)
+exten => *74,n,Macro(hangupcall,)
+exten => sstate,1,Set(DEVICE_STATE(Custom:CF${fromext})=${STATE})
+exten => sstate,n,Set(DEVICES=${DB(AMPUSER/${fromext}/device)})
+exten => sstate,n,GotoIf($["${DEVICES}" = "" ]?return)
+exten => sstate,n,Set(LOOPCNT=${FIELDQTY(DEVICES,&)})
+exten => sstate,n,Set(ITER=1)
+exten => sstate,n(begin),Set(DEVICE_STATE(Custom:DEVCF${CUT(DEVICES,&,${ITER})})=${STATE})
+exten => sstate,n,Set(ITER=$[${ITER} + 1])
+exten => sstate,n,GotoIf($[${ITER} <= ${LOOPCNT}]?begin)
+exten => sstate,n(return),Return()
+
+[app-cf-on]
+exten => *72,1,Answer
+exten => *72,n,Wait(1)
+exten => *72,n,Macro(user-callerid,)
+exten => *72,n,Playback(call-fwd-unconditional)
+exten => *72,n,Playback(please-enter-your&extension)
+exten => *72,n,Read(fromext,then-press-pound,,,,)
+exten => *72,n,Set(fromext=${IF($["foo${fromext}"="foo"]?${AMPUSER}:${fromext})})
+exten => *72,n,Wait(1)
+exten => *72,n(startread),Playback(ent-target-attendant)
+exten => *72,n,Read(toext,then-press-pound,,,,)
+exten => *72,n,GotoIf($["foo${toext}"="foo"]?startread)
+exten => *72,n,Wait(1)
+exten => *72,n,Set(DB(CF/${fromext})=${toext})
+exten => *72,n,Set(STATE=BUSY)
+exten => *72,n,Gosub(app-cf-on,sstate,1)
+exten => *72,n(hook_1),Playback(call-fwd-unconditional&for&extension)
+exten => *72,n,SayDigits(${fromext})
+exten => *72,n,Playback(is-set-to)
+exten => *72,n,SayDigits(${toext})
+exten => *72,n,Macro(hangupcall,)
+exten => _*72.,1,Answer
+exten => _*72.,n,Wait(1)
+exten => _*72.,n,Macro(user-callerid,)
+exten => _*72.,n,Set(fromext=${AMPUSER})
+exten => _*72.,n,Set(toext=${EXTEN:3})
+exten => _*72.,n,Set(DB(CF/${fromext})=${toext})
+exten => _*72.,n,Set(STATE=BUSY)
+exten => _*72.,n,Gosub(app-cf-on,sstate,1)
+exten => _*72.,n(hook_2),Playback(call-fwd-unconditional&for&extension)
+exten => _*72.,n,SayDigits(${fromext})
+exten => _*72.,n,Playback(is-set-to)
+exten => _*72.,n,SayDigits(${toext})
+exten => _*72.,n,Macro(hangupcall,)
+exten => sstate,1,Set(DEVICE_STATE(Custom:CF${fromext})=${STATE})
+exten => sstate,n,Set(DEVICES=${DB(AMPUSER/${fromext}/device)})
+exten => sstate,n,GotoIf($["${DEVICES}" = "" ]?return)
+exten => sstate,n,Set(LOOPCNT=${FIELDQTY(DEVICES,&)})
+exten => sstate,n,Set(ITER=1)
+exten => sstate,n(begin),Set(DEVICE_STATE(Custom:DEVCF${CUT(DEVICES,&,${ITER})})=${STATE})
+exten => sstate,n,Set(ITER=$[${ITER} + 1])
+exten => sstate,n,GotoIf($[${ITER} <= ${LOOPCNT}]?begin)
+exten => sstate,n(return),Return()
+
+[app-cf-unavailable-off]
+exten => *53,1,Answer
+exten => *53,n,Wait(1)
+exten => *53,n,Macro(user-callerid,)
+exten => *53,n,Set(fromext=${AMPUSER})
+exten => *53,n,Noop(Deleting: CFU/${fromext} ${DB_DELETE(CFU/${fromext})})
+exten => *53,n(hook_1),Playback(call-fwd-no-ans&de-activated)
+exten => *53,n,Macro(hangupcall,)
+exten => _*53.,1,Answer
+exten => _*53.,n,Wait(1)
+exten => _*53.,n,Set(fromext=${EXTEN:3})
+exten => _*53.,n,Noop(Deleting: CFU/${fromext} ${DB_DELETE(CFU/${fromext})})
+exten => _*53.,n(hook_2),Playback(call-fwd-no-ans&for&extension)
+exten => _*53.,n,SayDigits(${fromext})
+exten => _*53.,n,Playback(cancelled)
+exten => _*53.,n,Macro(hangupcall,)
+
+[app-cf-unavailable-on]
+exten => *52,1,Answer
+exten => *52,n,Wait(1)
+exten => *52,n,Macro(user-callerid,)
+exten => *52,n,Playback(call-fwd-no-ans)
+exten => *52,n,Playback(please-enter-your&extension)
+exten => *52,n,Read(fromext,then-press-pound,,,,)
+exten => *52,n,Set(fromext=${IF($["foo${fromext}"="foo"]?${AMPUSER}:${fromext})})
+exten => *52,n,Wait(1)
+exten => *52,n(startread),Playback(ent-target-attendant)
+exten => *52,n,Read(toext,then-press-pound,,,,)
+exten => *52,n,GotoIf($["foo${toext}"="foo"]?startread)
+exten => *52,n,Wait(1)
+exten => *52,n,Set(DB(CFU/${fromext})=${toext})
+exten => *52,n(hook_1),Playback(call-fwd-no-ans&for&extension)
+exten => *52,n,SayDigits(${fromext})
+exten => *52,n,Playback(is-set-to)
+exten => *52,n,SayDigits(${toext})
+exten => *52,n,Macro(hangupcall,)
+exten => _*52.,1,Answer
+exten => _*52.,n,Wait(1)
+exten => _*52.,n,Macro(user-callerid,)
+exten => _*52.,n,Set(fromext=${AMPUSER})
+exten => _*52.,n,Set(toext=${EXTEN:3})
+exten => _*52.,n,Set(DB(CFU/${fromext})=${toext})
+exten => _*52.,n(hook_2),Playback(call-fwd-no-ans&for&extension)
+exten => _*52.,n,SayDigits(${fromext})
+exten => _*52.,n,Playback(is-set-to)
+exten => _*52.,n,SayDigits(${toext})
+exten => _*52.,n,Macro(hangupcall,)
+
+[app-cf-toggle]
+exten => *740,1,Answer
+exten => *740,n,Wait(1)
+exten => *740,n,Macro(user-callerid,)
+exten => *740,n,Set(fromext=${AMPUSER})
+exten => *740,n,GotoIf($["${DB(CF/${fromext})}" = ""]?activate:deactivate)
+exten => *740,n(activate),Playback(ent-target-attendant)
+exten => *740,n,Read(toext,then-press-pound,,,,)
+exten => *740,n,GotoIf($["${toext}"=""]?activate)
+exten => *740,n,Wait(1)
+exten => *740,n(toext),Set(DB(CF/${fromext})=${toext})
+exten => *740,n,Set(STATE=BUSY)
+exten => *740,n,Gosub(app-cf-toggle,sstate,1)
+exten => *740,n(hook_on),Playback(call-fwd-unconditional&for&extension)
+exten => *740,n,SayDigits(${fromext})
+exten => *740,n,Playback(is-set-to)
+exten => *740,n,SayDigits(${toext})
+exten => *740,n,Macro(hangupcall,)
+exten => *740,n(setdirect),Answer
+exten => *740,n,Wait(1)
+exten => *740,n,Macro(user-callerid,)
+exten => *740,n,Goto(toext)
+exten => *740,n(deactivate),Noop(Deleting: CF/${fromext} ${DB_DELETE(CF/${fromext})})
+exten => *740,n,Set(STATE=UNKNOWN)
+exten => *740,n,Gosub(app-cf-toggle,sstate,1)
+exten => *740,n(hook_off),Playback(call-fwd-unconditional&de-activated)
+exten => *740,n,Macro(hangupcall,)
+exten => sstate,1,Set(DEVICE_STATE(Custom:CF${fromext})=${STATE})
+exten => sstate,n,Set(DEVICES=${DB(AMPUSER/${fromext}/device)})
+exten => sstate,n,GotoIf($["${DEVICES}" = "" ]?return)
+exten => sstate,n,Set(LOOPCNT=${FIELDQTY(DEVICES,&)})
+exten => sstate,n,Set(ITER=1)
+exten => sstate,n(begin),Set(DEVICE_STATE(Custom:DEVCF${CUT(DEVICES,&,${ITER})})=${STATE})
+exten => sstate,n,Set(ITER=$[${ITER} + 1])
+exten => sstate,n,GotoIf($[${ITER} <= ${LOOPCNT}]?begin)
+exten => sstate,n(return),Return()
+
+[app-chanspy]
+exten => 555,1,Macro(user-callerid,)
+exten => 555,n,Answer
+exten => 555,n,Wait(1)
+exten => 555,n,ChanSpy()
+exten => 555,n,Hangup
+
+[app-dialvm]
+exten => *98,1,Answer
+exten => *98,n(start),Wait(1)
+exten => *98,n,Noop(app-dialvm: Asking for mailbox)
+exten => *98,n,Read(MAILBOX,vm-login,,,3,2)
+exten => *98,n(check),Noop(app-dialvm: Got Mailbox ${MAILBOX})
+exten => *98,n,Macro(get-vmcontext,${MAILBOX})
+exten => *98,n,MailBoxExists(${MAILBOX}@${VMCONTEXT})
+exten => *98,n,GotoIf($["${VMBOXEXISTSSTATUS}" = "SUCCESS"]?good:bad)
+exten => *98,n,Macro(hangupcall,)
+exten => *98,n(good),Noop(app-dialvm: Good mailbox ${MAILBOX}@${VMCONTEXT})
+exten => *98,n,VoiceMailMain(${MAILBOX}@${VMCONTEXT})
+exten => *98,n,GotoIf($["${IVR_RETVM}" = "RETURN" & "${IVR_CONTEXT}" != ""]?playret)
+exten => *98,n,Macro(hangupcall,)
+exten => *98,n(bad),Noop(app-dialvm: BAD mailbox ${MAILBOX}@${VMCONTEXT})
+exten => *98,n,Wait(1)
+exten => *98,n,Noop(app-dialvm: Asking for password so people can't probe for existence of a mailbox)
+exten => *98,n,Read(FAKEPW,vm-password,,,3,2)
+exten => *98,n,Noop(app-dialvm: Asking for mailbox again)
+exten => *98,n,Read(MAILBOX,vm-incorrect-mailbox,,,3,2)
+exten => *98,n,Goto(check)
+exten => *98,n,Macro(hangupcall,)
+exten => *98,n(playret),Playback(beep&you-will-be-transfered-menu&silence/1)
+exten => *98,n,Goto(${IVR_CONTEXT},return,1)
+exten => _*98.,1,Answer
+exten => _*98.,n,Wait(1)
+exten => _*98.,n,Macro(get-vmcontext,${EXTEN:3})
+exten => _*98.,n,VoiceMailMain(${EXTEN:3}@${VMCONTEXT})
+exten => _*98.,n,GotoIf($["${IVR_RETVM}" = "RETURN" & "${IVR_CONTEXT}" != ""]?${IVR_CONTEXT},return,1)
+exten => _*98.,n,Macro(hangupcall,)
+
+[app-dictate-record]
+exten => *34,1,Answer
+exten => *34,n,Macro(user-callerid,)
+exten => *34,n,Noop(CallerID is ${AMPUSER})
+exten => *34,n,Set(DICTENABLED=${DB(AMPUSER/${AMPUSER}/dictate/enabled)})
+exten => *34,n,GotoIf($[$["x${DICTENABLED}"="x"]|$["x${DICTENABLED}"="xdisabled"]]?nodict:dictok)
+exten => *34,n(nodict),Playback(feature-not-avail-line)
+exten => *34,n,Hangup
+exten => *34,n(dictok),Dictate(${ASTVARLIBDIR}/sounds/dictate/${AMPUSER})
+exten => *34,n,Macro(hangupcall,)
+
+[app-dictate-send]
+exten => *35,1,Answer
+exten => *35,n,Macro(user-callerid,)
+exten => *35,n,Noop(CallerID is ${AMPUSER})
+exten => *35,n,Set(DICTENABLED=${DB(AMPUSER/${AMPUSER}/dictate/enabled)})
+exten => *35,n,GotoIf($[$["x${DICTENABLED}"="x"]|$["x${DICTENABLED}"="xdisabled"]]?nodict:dictok)
+exten => *35,n(nodict),Playback(feature-not-avail-line)
+exten => *35,n,Hangup
+exten => *35,n(dictok),Read(DICTFILE,enter-filename-short,,,,)
+exten => *35,n,Set(DICTEMAIL=${DB(AMPUSER/${AMPUSER}/dictate/email)})
+exten => *35,n,Set(DICTFMT=${DB(AMPUSER/${AMPUSER}/dictate/format)})
+exten => *35,n,Set(NAME=${DB(AMPUSER/${AMPUSER}/cidname)})
+exten => *35,n,Playback(dictation-being-processed)
+exten => *35,n,System(${ASTVARLIBDIR}/bin/audio-email.pl --file ${ASTVARLIBDIR}/sounds/dictate/${AMPUSER}/${DICTFILE}.raw --attachment dict-${DICTFILE} --format ${DICTFMT} --to ${DICTEMAIL} --subject "Dictation from ${NAME} Attached")
+exten => *35,n,Playback(dictation-sent)
+exten => *35,n,Macro(hangupcall,)
+
+[app-directory]
+exten => #,1,Answer
+exten => #,n,Wait(1)
+exten => #,n,AGI(directory,${DIR-CONTEXT},from-did-direct,${DIRECTORY:0:1}${DIRECTORY_OPTS})
+exten => #,n,Playback(vm-goodbye)
+exten => #,n,Hangup
+exten => i,1,Playback(privacy-incorrect)
+
+[app-dnd-off]
+exten => *79,1,Answer
+exten => *79,n,Wait(1)
+exten => *79,n,Macro(user-callerid,)
+exten => *79,n,Noop(Deleting: DND/${AMPUSER} ${DB_DELETE(DND/${AMPUSER})})
+exten => *79,n,Set(STATE=NOT_INUSE)
+exten => *79,n,Gosub(app-dnd-off,sstate,1)
+exten => *79,n(hook_1),Playback(do-not-disturb&de-activated)
+exten => *79,n,Macro(hangupcall,)
+exten => sstate,1,Set(DEVICE_STATE(Custom:DND${AMPUSER})=${STATE})
+exten => sstate,n,Set(DEVICES=${DB(AMPUSER/${AMPUSER}/device)})
+exten => sstate,n,GotoIf($["${DEVICES}" = "" ]?return)
+exten => sstate,n,Set(LOOPCNT=${FIELDQTY(DEVICES,&)})
+exten => sstate,n,Set(ITER=1)
+exten => sstate,n(begin),Set(DEVICE_STATE(Custom:DEVDND${CUT(DEVICES,&,${ITER})})=${STATE})
+exten => sstate,n,Set(ITER=$[${ITER} + 1])
+exten => sstate,n,GotoIf($[${ITER} <= ${LOOPCNT}]?begin)
+exten => sstate,n(return),Return()
+
+[app-dnd-on]
+exten => *78,1,Answer
+exten => *78,n,Wait(1)
+exten => *78,n,Macro(user-callerid,)
+exten => *78,n,Set(DB(DND/${AMPUSER})=YES)
+exten => *78,n,Set(STATE=BUSY)
+exten => *78,n,Gosub(app-dnd-on,sstate,1)
+exten => *78,n(hook_1),Playback(do-not-disturb&activated)
+exten => *78,n,Macro(hangupcall,)
+exten => sstate,1,Set(DEVICE_STATE(Custom:DND${AMPUSER})=${STATE})
+exten => sstate,n,Set(DEVICES=${DB(AMPUSER/${AMPUSER}/device)})
+exten => sstate,n,GotoIf($["${DEVICES}" = "" ]?return)
+exten => sstate,n,Set(LOOPCNT=${FIELDQTY(DEVICES,&)})
+exten => sstate,n,Set(ITER=1)
+exten => sstate,n(begin),Set(DEVICE_STATE(Custom:DEVDND${CUT(DEVICES,&,${ITER})})=${STATE})
+exten => sstate,n,Set(ITER=$[${ITER} + 1])
+exten => sstate,n,GotoIf($[${ITER} <= ${LOOPCNT}]?begin)
+exten => sstate,n(return),Return()
+
+[app-dnd-toggle]
+exten => *76,1,Answer
+exten => *76,n,Wait(1)
+exten => *76,n,Macro(user-callerid,)
+exten => *76,n,GotoIf($["${DB(DND/${AMPUSER})}" = ""]?activate:deactivate)
+exten => *76,n(activate),Set(DB(DND/${AMPUSER})=YES)
+exten => *76,n,Set(STATE=BUSY)
+exten => *76,n,Gosub(app-dnd-toggle,sstate,1)
+exten => *76,n(hook_on),Playback(do-not-disturb&activated)
+exten => *76,n,Macro(hangupcall,)
+exten => *76,n(deactivate),Noop(Deleting: DND/${AMPUSER} ${DB_DELETE(DND/${AMPUSER})})
+exten => *76,n,Set(STATE=NOT_INUSE)
+exten => *76,n,Gosub(app-dnd-toggle,sstate,1)
+exten => *76,n(hook_off),Playback(do-not-disturb&de-activated)
+exten => *76,n,Macro(hangupcall,)
+exten => sstate,1,Set(DEVICE_STATE(Custom:DND${AMPUSER})=${STATE})
+exten => sstate,n,Set(DEVICES=${DB(AMPUSER/${AMPUSER}/device)})
+exten => sstate,n,GotoIf($["${DEVICES}" = "" ]?return)
+exten => sstate,n,Set(LOOPCNT=${FIELDQTY(DEVICES,&)})
+exten => sstate,n,Set(ITER=1)
+exten => sstate,n(begin),Set(DEVICE_STATE(Custom:DEVDND${CUT(DEVICES,&,${ITER})})=${STATE})
+exten => sstate,n,Set(ITER=$[${ITER} + 1])
+exten => sstate,n,GotoIf($[${ITER} <= ${LOOPCNT}]?begin)
+exten => sstate,n(return),Return()
+
+[app-echo-test]
+exten => *43,1,Answer
+exten => *43,n,Wait(1)
+exten => *43,n,Playback(demo-echotest)
+exten => *43,n,Echo()
+exten => *43,n,Playback(demo-echodone)
+exten => *43,n,Hangup
+
+[app-fax]
+exten => 666,1,Set(FAX_RX_EMAIL=<%=@fax_to%>)
+exten => 666,n,Goto(ext-fax,s,1)
+exten => h,1,Macro(hangupcall,)
+
+[app-fmf-toggle]
+exten => *21,1,Goto(app-fmf-toggle,s,start)
+exten => s,1(start),Answer
+exten => s,n,Wait(1)
+exten => s,n,Macro(user-callerid,)
+exten => s,n,GotoIf($["${DB(AMPUSER/${AMPUSER}/followme/ddial)}" = "EXTENSION"]?activate)
+exten => s,n,GotoIf($["${DB(AMPUSER/${AMPUSER}/followme/ddial)}" = "DIRECT"]?deactivate:end)
+exten => s,n(deactivate),Set(DB(AMPUSER/${AMPUSER}/followme/ddial)=EXTENSION)
+exten => s,n,Set(STATE=NOT_INUSE)
+exten => s,n,Gosub(app-fmf-toggle,sstate,1)
+exten => s,n(hook_off),Playback(followme&de-activated)
+exten => s,n(end),Macro(hangupcall,)
+exten => s,n(activate),Set(DB(AMPUSER/${AMPUSER}/followme/ddial)=DIRECT)
+exten => s,n,Set(STATE=INUSE)
+exten => s,n,Gosub(app-fmf-toggle,sstate,1)
+exten => s,n(hook_on),Playback(followme&activated)
+exten => s,n,Macro(hangupcall,)
+exten => sstate,1,Set(DEVICES=${DB(AMPUSER/${AMPUSER}/device)})
+exten => sstate,n,GotoIf($["${DEVICES}" = "" ]?return)
+exten => sstate,n,Set(LOOPCNT=${FIELDQTY(DEVICES,&)})
+exten => sstate,n,Set(ITER=1)
+exten => sstate,n(begin),Set(DEVICE_STATE(Custom:FOLLOWME${CUT(DEVICES,&,${ITER})})=${STATE})
+exten => sstate,n,Set(ITER=$[${ITER} + 1])
+exten => sstate,n,GotoIf($[${ITER} <= ${LOOPCNT}]?begin)
+exten => sstate,n(return),Return()
+
+[app-pbdirectory]
+exten => 411,1,Goto(pbdirectory,1)
+exten => pbdirectory,1,Answer
+exten => pbdirectory,n,Wait(1)
+exten => pbdirectory,n,Macro(user-callerid,)
+exten => pbdirectory,n,AGI(pbdirectory)
+exten => pbdirectory,n,GotoIf($["${dialnumber}"=""]?hangup,1)
+exten => pbdirectory,n,Noop(Got number to dial: ${dialnumber})
+exten => pbdirectory,n,Dial(Local/${dialnumber}@from-internal/n,)
+exten => hangup,1,Hangup
+
+[app-queue-toggle]
+exten => s,1(start),Answer
+exten => s,n,Wait(1)
+exten => s,n,Macro(user-callerid,)
+exten => s,n,Set(QUEUESTAT=LOGGEDOUT)
+exten => s,n,AGI(queue_devstate.agi,getqueues,${AMPUSER})
+exten => s,n,GotoIf($["${QUEUESTAT}" = "LOGGEDOUT"]?activate)
+exten => s,n,GotoIf($["${QUEUESTAT}" = "LOGGEDIN"]?deactivate)
+exten => s,n,GotoIf($["${QUEUESTAT}" = "STATIC"]?static:end)
+exten => s,n(deactivate),Noop(Agent Logged out)
+exten => s,n,Macro(toggle-del-agent,)
+exten => s,n,Set(STATE=NOT_INUSE)
+exten => s,n,Gosub(sstate,1)
+exten => s,n,Playback(agent-loggedoff)
+exten => s,n,Macro(hangupcall,)
+exten => s,n(activate),Noop(Agent Logged In)
+exten => s,n,Macro(toggle-add-agent,)
+exten => s,n,Set(STATE=INUSE)
+exten => s,n,Gosub(sstate,1)
+exten => s,n,Playback(agent-loginok)
+exten => s,n,SayDigits(${CALLBACKNUM})
+exten => s,n,Macro(hangupcall,)
+exten => s,n(static),Noop(User is a Static Agent)
+exten => s,n,Set(STATE=INUSE)
+exten => s,n,Gosub(sstate,1)
+exten => s,n,Playback(agent-loginok)
+exten => s,n,Macro(hangupcall,)
+exten => sstate,1,Set(DEVICES=${DB(AMPUSER/${AMPUSER}/device)})
+exten => sstate,n,GotoIf($["${DEVICES}" = "" ]?return)
+exten => sstate,n,Set(LOOPCNT=${FIELDQTY(DEVICES,&)})
+exten => sstate,n,Set(ITER=1)
+exten => sstate,n(begin),Set(DEVICE_STATE(Custom:QUEUE${CUT(DEVICES,&,${ITER})}*${QUEUENO})=${STATE})
+exten => sstate,n,Set(ITER=$[${ITER} + 1])
+exten => sstate,n,GotoIf($[${ITER} <= ${LOOPCNT}]?begin)
+exten => sstate,n(return),Return()
+
+[app-recordings]
+exten => *77,1,Macro(user-callerid,)
+exten => *77,n,Wait(2)
+exten => *77,n,Macro(systemrecording,dorecord)
+exten => *99,1,Macro(user-callerid,)
+exten => *99,n,Wait(2)
+exten => *99,n,Macro(systemrecording,docheck)
+
+[app-speakextennum]
+exten => *65,1,Answer
+exten => *65,n,Wait(1)
+exten => *65,n,Macro(user-callerid,)
+exten => *65,n,Playback(your)
+exten => *65,n,Playback(extension)
+exten => *65,n,Playback(number)
+exten => *65,n,Playback(is)
+exten => *65,n,SayDigits(${AMPUSER})
+exten => *65,n,Wait(2)
+exten => *65,n,Hangup
+
+[app-speakingclock]
+exten => *60,1,Answer
+exten => *60,n,Wait(1)
+exten => *60,n,Set(NumLoops=0)
+exten => *60,n(start),Set(FutureTime=$[${EPOCH} + 11])
+exten => *60,n,Playback(at-tone-time-exactly)
+exten => *60,n,GotoIf($["${TIMEFORMAT}" = "kM"]?hr24format)
+exten => *60,n,SayUnixTime(${FutureTime},,IM 'and' S 'seconds' p)
+exten => *60,n,Goto(waitloop)
+exten => *60,n(hr24format),SayUnixTime(${FutureTime},,kM 'and' S 'seconds')
+exten => *60,n(waitloop),Set(TimeLeft=$[${FutureTime} - ${EPOCH}])
+exten => *60,n,GotoIf($[${TimeLeft} < 1]?playbeep)
+exten => *60,n,Wait(1)
+exten => *60,n,Goto(waitloop)
+exten => *60,n(playbeep),Playback(beep)
+exten => *60,n,Wait(5)
+exten => *60,n,Set(NumLoops=$[${NumLoops} + 1])
+exten => *60,n,GotoIf($[${NumLoops} < 5]?start)
+exten => *60,n,Playback(goodbye)
+exten => *60,n,Hangup
+
+[app-speeddial]
+exten => _*0.,1,Macro(user-callerid,)
+exten => _*0.,n,Set(SPEEDDIALLOCATION=${EXTEN:2})
+exten => _*0.,n(lookup),Macro(speeddial-lookup,${SPEEDDIALLOCATION},${AMPUSER})
+exten => _*0.,n,GotoIf($["${SPEEDDIALNUMBER}"=""]?failed)
+exten => _*0.,n,Dial(Local/${SPEEDDIALNUMBER}@from-internal/n,)
+exten => _*0.,lookup+101(failed),Playback(speed-dial-empty)
+exten => _*0.,n,Congestion()
+exten => *75,1,Goto(app-speeddial-set,s,1)
+
+[app-speeddial-set]
+exten => s,1,Macro(user-callerid,)
+exten => s,n(setloc),Read(newlocation,speed-enterlocation,,,,)
+exten => s,n(lookup),Macro(speeddial-lookup,${newlocation},${AMPUSER})
+exten => s,n(lookup),GotoIf($["${SPEEDDIALNUMBER}"!=""]?conflicts)
+exten => s,n(setnum),Read(newnum,speed-enternumber,,,,)
+exten => s,n(success),Set(DB(AMPUSER/${AMPUSER}/speeddials/${newlocation})=${newnum})
+exten => s,n,Playback(speed-dial)
+exten => s,n,SayDigits(${newlocation})
+exten => s,n,Playback(is-set-to)
+exten => s,n,SayDigits(${newnum})
+exten => s,n,Hangup
+exten => s,n(conflicts),Playback(speed-dial)
+exten => s,n,SayDigits(${newlocation})
+exten => s,n,Playback(is-in-use)
+exten => s,n,Background(press-1&to-listen-to-it&press-2&to-enter-a-diff&location&press-3&to-change&telephone-number)
+exten => s,n,WaitExten(60,)
+exten => 1,1,Playback(speed-dial)
+exten => 1,n,SayDigits(${newlocation})
+exten => 1,n,Playback(is-set-to)
+exten => 1,n,SayDigits(${SPEEDDIALNUMBER})
+exten => 1,n,Goto(s,conflicts)
+exten => 2,1,Goto(s,setloc)
+exten => 3,1,Goto(s,setnum)
+exten => t,1,Congestion()
+
+[app-userlogonoff]
+exten => *12,1,Macro(user-logoff,)
+exten => *12,n(hook_off),Hangup
+exten => *11,1,Macro(user-logon,)
+exten => *11,n(hook_on_1),Hangup
+exten => _*11.,1,Macro(user-logon,${EXTEN:3},)
+exten => _*11.,n(hook_on_2),Hangup
+
+[app-vmmain]
+exten => *97,1,Answer
+exten => *97,n,Wait(1)
+exten => *97,n,Macro(user-callerid,)
+exten => *97,n,Macro(get-vmcontext,${AMPUSER})
+exten => *97,n(check),MailBoxExists(${AMPUSER}@${VMCONTEXT})
+exten => *97,n,GotoIf($["${VMBOXEXISTSSTATUS}" = "SUCCESS"]?mbexist)
+exten => *97,n,VoiceMailMain()
+exten => *97,n,GotoIf($["${IVR_RETVM}" = "RETURN" & "${IVR_CONTEXT}" != ""]?playret)
+exten => *97,n,Macro(hangupcall,)
+exten => *97,check+101(mbexist),VoiceMailMain(${AMPUSER}@${VMCONTEXT})
+exten => *97,n,GotoIf($["${IVR_RETVM}" = "RETURN" & "${IVR_CONTEXT}" != ""]?playret)
+exten => *97,n,Macro(hangupcall,)
+exten => *97,n(playret),Playback(beep&you-will-be-transfered-menu&silence/1)
+exten => *97,n,Goto(${IVR_CONTEXT},return,1)
+
+[app-zapbarge]
+exten => 888,1,Macro(user-callerid,)
+exten => 888,n,Set(GROUP()=${CALLERID(number)})
+exten => 888,n,Answer
+exten => 888,n,Wait(1)
+exten => 888,n,DAHDIBarge()
+exten => 888,n,Hangup

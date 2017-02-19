@@ -1,0 +1,14 @@
+<% [ "ossec", "alerts/alerts", "archives/archives", "firewall/firewall" ].each do |watch| -%><% if @version >= 7 -%>input(type="imfile"
+      File="<%=@ossec_dir%>/logs/<%=watch%>.log"
+      statefile="<%=@ossec_dir%>/logs/.<%=watch%>.log"
+      Tag="ossec-<%=watch.gsub(/^.*\//, '')%>: "
+      Severity="<% if watch == "alerts/alerts" -%>error<% else -%>info<% end -%>"
+      Facility="local7")
+<% else -%>$InputFileName <%=@ossec_dir%>/<%=watch%>.log
+$InputFileTag ossec-<%=watch.gsub(/^.*\//, '')%>:
+$InputFileStateFile ossec-<%=watch.gsub(/^.*\//, '')%>
+<% if watch == "alerts/alerts" -%>$InputFileSeverity error
+<% else -%>$InputFileSeverity info
+<% end -%>$InputFileFacility local7
+$InputRunFileMonitor
+<% end -%><% end -%>

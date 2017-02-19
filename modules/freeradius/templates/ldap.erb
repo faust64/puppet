@@ -1,0 +1,19 @@
+ldap {
+    server = <%=@ldap_slave%>
+    identity = "<%=@ldap_account%>"
+    password = <%=@ldap_passphrase%>
+    basedn = "<%=@ldap_base%>"
+    filter = "(&(!(pwdAccountLockedTime=*))(uid=%{%{Stripped-User-Name}:-%{User-Name}}))"
+    port = 636
+    ldap_connections_number = 5
+    timeout = 4
+    timelimit = 3
+    net_timeout = 1
+    tls {
+	cacertfile = <%=@cert_dir%>/ca.crt
+	require_cert = "demand"
+    }
+    access_attr = "uid"
+    dictionary_mapping = ${confdir}/ldap.attrmap
+    edir_account_policy_check = no
+}

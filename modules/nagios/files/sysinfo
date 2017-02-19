@@ -1,0 +1,95 @@
+#!/bin/sh
+#set -x
+
+if test "`id -u`" -ne 0; then
+    echo "$0 not running as root!"
+    exit
+elif test "$1"; then
+    do_disk=false
+    do_info=false
+    do_mem=false
+    do_power=false
+    do_temp=false
+    verbose=false
+    while test "$1"
+    do
+	case "$1" in
+	    disk)
+		do_disk=true
+		;;
+	    info)
+		do_info=true
+		;;
+	    memory)
+		do_mem=true
+		;;
+	    power)
+		do_power=true
+		;;
+	    temp)
+		do_temp=true
+		;;
+	    verbose)
+		verbose=true
+		;;
+	    *)
+		echo "Unknown query $1" >&2
+		;;
+	esac
+	shift
+    done
+else
+    do_disk=true
+    do_info=true
+    do_mem=true
+    do_power=true
+    do_temp=true
+    verbose=true
+fi
+
+if $do_info; then
+    modelB=`lsusb -t | grep -c smsc95xx`
+    SerialNum=`awk '/^Serial/{print $3}' /proc/cpuinfo`
+    if test "$modelB" = 1; then
+	echo "Model: B"
+    else
+	echo "Model: A"
+    fi
+    echo "Serial: $SerialNum"
+    echo "Firmware: `/opt/vc/bin/vcgencmd version | grep -v Broadcom`"
+    if $verbose; then
+	for codec in MPG2 WVC1
+	do
+	    echo "Codec $codec: `/opt/vc/bin/vcgencmd codec_enabled $codec | awk -F= '{print $2}'`"
+	done
+    fi
+fi
+if $do_mem; then
+    sysmem=`/opt/vc/bin/vcgencmd get_mem arm | sed 's/[A-Za-z]*//g' | cut -c 2-`
+    gpumem=`/opt/vc/bin/vcgencmd get_mem gpu | sed 's/[A-Za-z]*//g' | cut -c 2-`
+    totalmem=`expr $sysmem + $gpumem`
+    echo "Memory: ${totalmem}MB"
+    if $verbose; then
+	echo "  * System installed memory: ${sysmem}MB"
+	echo "  * GPU memory: ${gpumem}MB"
+    fi
+fi
+if $do_disk; then
+    fdiskOutput=`fdisk -l /dev/mmcblk0 | head -n 2 | tail -n 1 | awk '{print $3" "$4}' | sed 's|[ ,]*||g'`
+    echo "SD card capacity: $fdiskOutput"
+fi
+if $do_power; then
+    for probe in core sdram_c sdram_p
+    do
+	echo "Power $probe: `/opt/vc/bin/vcgencmd measure_volts $probe | awk -F= '{print $2}'`"
+    done
+    OverVolt=`awk '/^Revision/{print $3}' /proc/cpuinfo | sed 's|[A-Za-z]*||g'`
+    if test "$OverVolt" -gt 1000; then
+	echo "Overvoltage has been applied!" >&2
+    fi
+fi
+if $do_temp; then
+    echo "Temp: `/opt/vc/bin/vcgencmd measure_temp | awk -F= '{print $2}' | sed 's|..$||'`C"
+fi
+
+exit 0

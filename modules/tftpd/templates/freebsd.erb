@@ -1,0 +1,17 @@
+menu background boot-screens/splash.png
+include boot-screens/stdmenu.cfg
+menu hshift 19
+menu width 40
+menu margin 0
+
+menu title FreeBSD
+    menu title FreeBSD
+	menu label FreeBSD
+	menu exit
+<% @distribs.each do |dist| -%><% [ "i386", "amd64" ].each do |arch| -%>    label -
+	menu label <%=dist%> <%=arch%>
+	kernel memdisk
+	initrd installers/freebsd-<%=dist%>/<%=arch%>/FreeBSD-<%=dist%>-RELEASE-<%=arch%>-bootonly.iso
+	append iso bigraw
+<% end -%><% end -%>
+menu end

@@ -1,0 +1,11 @@
+<IfModule alias_module>
+    Alias		/robots.txt	/var/www/robots.txt
+<% if @icon_dir != "" -%>    Alias		/icons/		"<%=@icon_dir%>/"
+    <Directory "<%=@icons_dir%>/">
+	Options				FollowSymLinks
+	AllowOverride			None
+<% if @version == "2.2" -%>	Order				allow,deny
+	Allow from			all
+<% else -%>	Require all			granted
+<% end -%>    </Directory>
+<% end -%></IfModule>

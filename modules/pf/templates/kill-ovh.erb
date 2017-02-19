@@ -1,0 +1,16 @@
+#!/bin/sh
+
+<% if @asterisks != false -%>asterisk="<% @asterisks.each do |host| -%><%=host%><% break -%><% end -%>"
+<% else -%>asterisk=127.0.0.1
+<% end -%>ovh=91.121.129.0/24
+pubs="<% @main_networks.each do |ifhash| -%><% if ifhash['gw'] =~ /[0-9]\.[0-9]/ and ifhash['carpaddr'] =~ /[0-9]\.[0-9]/ -%> <%=ifhash['carpaddr']%><% elsif ifhash['gw'] =~ /[0-9]\.[0-9]/ and ifhash['addr'] =~ /[0-9]\.[0-9]/ -%> <%=ifhash['addr']%><% end -%><% end -%>"
+
+/usr/bin/sudo /sbin/pfctl -k $asterisk -k $ovh
+/usr/bin/sudo /sbin/pfctl -k $ovh -k $asterisk
+for ip in $pubs
+do
+    /usr/bin/sudo /sbin/pfctl -k $ip -k $ovh
+    /usr/bin/sudo /sbin/pfctl -k $ovh -k $ip
+done
+
+exit 0

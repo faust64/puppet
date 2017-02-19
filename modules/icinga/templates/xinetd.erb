@@ -1,0 +1,17 @@
+service livestatus
+{
+    type        = UNLISTED
+    port        = 5667
+    socket_type = stream
+    protocol    = tcp
+    wait        = no
+    cps         = 100 3
+    instances   = 500
+    per_source  = 250
+    flags       = NODELAY
+    user        = <%=@runtime_user%>
+    server      = /usr/bin/unixcat
+    server_args = <%=@lib_dir%>/rw/live
+    only_from   = <% if @clients != false -%><% @clients.join(" ")%> <% end -%>127.0.0.1
+    disable     = no
+}

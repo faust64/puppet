@@ -1,0 +1,6 @@
+[general]
+bindaddr = <%=@listen%>
+enabled = yes
+port = 5038
+<% @ami.each do |nick, userhash| -%><% if userhash['user'] =~ /[a-z]/ and userhash['passphrase'] =~ /[a-z]/ -%>#include manager.d/<%=nick%>.conf
+<% end -%><% end -%>

@@ -1,0 +1,13 @@
+<% if @rsyslog_version >= 7 -%>input(type="imfile"
+      File="/var/log/fail2ban.log"
+      statefile="/var/log/.fail2ban.log"
+      Tag="fail2ban: "
+      Severity="info"
+      Facility="local5")
+<% else -%>$InputFileName /var/log/fail2ban.log
+$InputFileTag fail2ban:
+$InputFileStateFile fail2ban
+$InputFileSeverity info
+$InputFileFacility local5
+$InputRunFileMonitor
+<% end -%>

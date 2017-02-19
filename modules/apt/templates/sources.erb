@@ -1,0 +1,10 @@
+<% if @architecture == "armv6l" -%>deb http://mirrordirector.raspbian.org/raspbian/ <%=@lsbdistcodename%> main contrib non-free rpi
+<% elsif @operatingsystem == "Debian" -%>deb http://ftp.debian.org/debian <%=@lsbdistcodename%> main contrib non-free
+<% if @lsbdistcodename != "sid" -%>deb http://ftp.debian.org/debian <%=@lsbdistcodename%>-updates main contrib non-free
+deb http://security.debian.org <%=@lsbdistcodename%>/updates main contrib non-free
+<% end -%><% elsif @operatingsystem == "Ubuntu" -%>deb http://archive.ubuntu.com/ubuntu <%=@lsbdistcodename%> main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu <%=@lsbdistcodename%>-updates main restricted universe multiverse
+deb http://security.ubuntu.com/ubuntu <%=@lsbdistcodename%>-security main restricted universe multiverse
+deb http://archive.ubuntu.com/ubuntu/ <%=@lsbdistcodename%>-backports main restricted universe multiverse
+deb http://archive.canonical.com/ubuntu <%=@lsbdistcodename%> partner
+<% end -%>

@@ -1,0 +1,87 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides: redis-sentinel
+# Required-Start: $syslog $remote_fs
+# Required-Stop: $syslog $remote_fs
+# Should-Start: $local_fs
+# Should-Stop: $local_fs
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: redis-sentinel - Persistent key-value db
+# Description: redis-sentinel - Persistent key-value db
+### END INIT INFO
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/bin/redis-sentinel
+DAEMON_ARGS=/etc/redis/sentinel.conf
+NAME=redis-sentinel
+DESC=redis-sentinel
+
+RUNDIR=/var/run/redis
+PIDFILE=$RUNDIR/redis-sentinel.pid
+
+test -x $DAEMON || exit 0
+
+for i in redis-server $NAME
+do
+    if test -r /etc/default/$i; then
+	. /etc/default/$i
+    fi
+done
+
+. /lib/lsb/init-functions
+
+set -e
+
+case "$1" in
+    start)
+	echo -n "Starting $DESC: "
+	mkdir -p $RUNDIR
+	touch $PIDFILE
+	chown redis:redis $RUNDIR $PIDFILE
+	chmod 755 $RUNDIR
+
+	if test -n "$ULIMIT"; then
+	    ulimit -n $ULIMIT
+	fi
+
+	if start-stop-daemon --start --quiet --umask 007 --make-pidfile --pidfile $PIDFILE --chuid redis:redis -b --exec $DAEMON -- $DAEMON_ARGS; then
+	    echo "$NAME."
+	else
+	    echo "failed"
+	fi
+	;;
+    stop)
+	echo -n "Stopping $DESC: "
+	if start-stop-daemon --stop --retry forever/TERM/1 --quiet --oknodo --pidfile $PIDFILE --exec $DAEMON; then
+	    echo "$NAME."
+	else
+	    echo "failed"
+	fi
+	rm -f $PIDFILE
+	sleep 1
+	;;
+
+    restart|force-reload)
+	$0 stop
+	$0 start
+	;;
+
+    status)
+	echo -n "$DESC is "
+	if test -s "$PIDFILE"; then
+	    if ps ax | grep "^[ \t]*`cat $PIDFILE`[ \t]*" | grep redis-sentinel >/dev/null; then
+		echo "running"
+		exit 0
+	    fi
+	fi
+	echo "not running"
+	exit 1
+	;;
+
+    *)
+	echo "Usage: /etc/init.d/$NAME {start|stop|restart|force-reload|status}" >&2
+	exit 1
+	;;
+esac
+
+exit 0

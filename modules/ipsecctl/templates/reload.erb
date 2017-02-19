@@ -1,0 +1,109 @@
+#!/bin/sh
+
+export PATH=/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin
+
+Prg=`basename $0`
+DEST=<%=@alerts%>
+
+checktunnel()
+{
+    local attempt gw here name remote yosoy
+
+    gw=$4
+    here=$2
+    name=$1
+    remote=$5
+    yosoy=$3
+
+    attempt=0
+    while test $attempt -lt 3
+    do
+	ping -c 1 -w 2 -S $here $gw && break
+	attempt=`expr $attempt + 1`
+	sleep 1
+    done >/dev/null 2>&1
+    if test $attempt -ge 3; then
+	echo "$name unreachable" >>/tmp/$Prg.report
+	return
+    fi
+
+    attempt=0
+    while test $attempt -lt 3
+    do
+	ping -c 1 -w 2 -S $yosoy $remote && break
+	attempt=`expr $attempt + 1`
+	sleep 1
+    done >/dev/null 2>&1
+    if test $attempt -lt 3; then
+	return
+    fi
+
+<% if @backend == "isakmpd" -%>    if isakctl down $name >/dev/null 2>&1; then
+	sleep 1
+	kill_state $gw $here
+	if isakctl up $name >/dev/null 2>&1; then
+	    attempt=0
+	    while test $attempt -lt 10
+	    do
+		ping -c 1 -w 2 -S $yosoy $remote && break
+		attempt=`expr $attempt + 1`
+		sleep 1
+	    done >/dev/null 2>&1
+	    if test $attempt -lt 10; then
+		echo "$name recovered" >>/tmp/$Prg.report
+		return
+	    fi
+	fi
+    fi
+<% end -%>    echo "$name unable to recover" >>/tmp/$Prg.report
+}
+
+if test "`ifconfig carp | awk 'BEGIN{c=0}{if ($2 == "MASTER") c = c + 1}END{print c}'`" -lt 2; then
+    exit 0
+fi
+
+ipsec_resync >/dev/null 2>&1
+>/tmp/$Prg.report
+
+for vid in 70 90 30 20
+do
+    hereiam=`ifconfig carp$vid 2>/dev/null | awk '/[ 	]inet[ 	]/{print $2}'`
+    test "$hereiam" && break
+done
+
+if test -z "$hereiam"; then
+    echo "Can't find about some local IP to pass our tunnels" >/tmp/$Prg.report
+else
+    cd /etc/ipsec.d
+    ls -1 | while read file
+    do
+	if grep "^[^#]*/$file['\"]$" /etc/ipsec.conf >/dev/null; then
+	    locgw=`awk '/ local /{print $0}' "$file" | sed 's|.* local \([^ ]*\).*|\1|'`
+	    remgw=`awk '/ peer /{print $0}' "$file" | sed 's|.* peer \([^ ]*\).*|\1|'`
+	    icmpproof=`awk -F= '/^#remoteproof/{print $2}' "$file"`
+	    lochost=`grep ' from ' "$file" | sed 's|.* from [^0-9]*\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*|\1|' | grep -E '[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*' || echo nonono`
+	    remhost=`grep ' to ' "$file" | sed 's|.* to [^0-9]*\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*|\1|' | grep -E '[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*' || echo nonono`
+	    if test "$locgw" -a "$remgw" -a "$icmpproof"; then
+		checktunnel "$file" $locgw $hereiam $remgw $icmpproof &
+	    elif ifconfig | grep "$lochost" >/dev/null; then
+		checktunnel "$file" $locgw $lochost $remgw $remhost &
+	    fi
+	fi
+    done
+fi
+
+sleep 60
+if grep 'unable to recover' /tmp/$Prg.report; then
+    SUBJECT='[WARNING] Unable to recover some tunnels'
+elif grep 'unreachable' /tmp/$Prg.report; then
+    SUBJECT='[ERROR] Unable to reach some gateways'
+elif test -s /tmp/$Prg.report; then
+    SUBJECT='[REPORT] Succesfully reloaded tunnels'
+else
+    rm -f /tmp/$Prg.report
+    exit 0
+fi >/dev/null 2>&1
+cat /tmp/$Prg.report | mail -s "$SUBJECT" $DEST
+rm -f /tmp/$Prg.report
+
+exit 0

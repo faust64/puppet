@@ -1,0 +1,17 @@
+<% if @with_icinga -%>enable_icinga_features = 1
+<% end -%><% if @with_shinken -%>enable_shinken_features = 1
+<% end -%>
+
+<Component Thruk::Backend>
+<% @backends.each do |back, backhash| -%>    <peer>
+	name = <%=back%>
+	type = <%=backhash['type']%>
+	hidden = <%=backhash['hidden']%>
+	<options>
+<% if backhash['host'] -%>	    peer = <%=backhash['host']%>:5667
+<% elsif backhash['socket'] -%>	    peer = <%=backhash['socket']%>
+<% else -%># can not configure such backend
+# <%=backhash%>
+<% end -%>	</options>
+    </peer>
+<% end -%></Component>

@@ -1,0 +1,103 @@
+error_page 400 = @bad_request;
+error_page 401 = @unauthorized;
+error_page 403 = @forbidden;
+error_page 404 = @not_found;
+error_page 405 = @method_not_allowed;
+error_page 408 = @request_timeout;
+error_page 410 = @gone;
+error_page 411 = @length_required;
+error_page 412 = @precondition_failed;
+error_page 413 = @request_entity_too_large;
+error_page 414 = @uri_too_large;
+error_page 415 503 = @service_unavailable;
+error_page 500 = @isr;
+error_page 501 = @not_implemented;
+error_page 502 = @bad_gateway;
+error_page 506 = @variant_varying;
+
+recursive_error_pages on;
+
+location @bad_request {
+    root <%=@conf_dir%>/error/;
+    try_files /400.html /HTTP_BAD_REQUEST.html =404;
+    internal;
+}
+location @unauthorized {
+    root <%=@conf_dir%>/error/;
+    try_files /401.html /HTTP_UNAUTHORIZED.html =404;
+    internal;
+}
+location @forbidden {
+    root <%=@conf_dir%>/error/;
+    try_files /403.html /HTTP_FORBIDDEN.html =404;
+    internal;
+}
+location @not_found {
+    root <%=@conf_dir%>/error/;
+    try_files /404.html /HTTP_NOT_FOUND.html /au/secours;
+    internal;
+}
+location @method_not_allowed {
+    root <%=@conf_dir%>/error/;
+    try_files /405.html /HTTP_METHOD_NOT_ALLOWED.html =404;
+    internal;
+}
+location @request_timeout {
+    root <%=@conf_dir%>/error/;
+    try_files /408.html /HTTP_REQUEST_TIME_OUT.html =404;
+    internal;
+}
+location @gone {
+    root <%=@conf_dir%>/error/;
+    try_files /410.html /HTTP_GONE.html =404;
+    internal;
+}
+location @length_required {
+    root <%=@conf_dir%>/error/;
+    try_files /411.html /HTTP_LENGTH_REQUIRED.html =404;
+    internal;
+}
+location @precondition_failed {
+    root <%=@conf_dir%>/error/;
+    try_files /412.html /HTTP_PRECONDITION_FAILED.html =404;
+    internal;
+}
+location @request_entity_too_large {
+    root <%=@conf_dir%>/error/;
+    try_files /413.html /HTTP_REQUEST_ENTITY_TOO_LARGE.html =404;
+    internal;
+}
+location @uri_too_large {
+    root <%=@conf_dir%>/error/;
+    try_files /414.html /HTTP_REQUEST_URI_TOO_LARGE.html =404;
+    internal;
+}
+location @service_unavailable {
+    root <%=@conf_dir%>/error/;
+    try_files /415.html /503.html /HTTP_SERVICE_UNAVAILABLE.html =404;
+    internal;
+}
+location @isr {
+    root <%=@conf_dir%>/error/;
+    try_files /500.html /HTTP_INTERNAL_SERVER_ERROR.html =404;
+    internal;
+}
+location @not_implemented {
+    root <%=@conf_dir%>/error/;
+    try_files /501.html /HTTP_NOT_IMPLEMENTED.html =404;
+    internal;
+}
+location @bad_gateway {
+    root <%=@conf_dir%>/error/;
+    try_files /502.html /HTTP_BAD_GATEWAY.html =404;
+    internal;
+}
+location @variant_varying {
+    root <%=@conf_dir%>/error/;
+    try_files /506.html /HTTP_VARIANT_ALSO_VARIES.html =404;
+    internal;
+}
+location /error/ {
+    root <%=@conf_dir%>/error/;
+    try_files $uri webserver-background.jpg;
+}

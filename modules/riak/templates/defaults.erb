@@ -1,0 +1,7 @@
+<% if @db_drive -%>if ! mount /var/lib/riak >/dev/null; then
+    exit 1 #missing data disk, won't start
+fi
+<% end -%><% if (@operatingsystem == "Ubuntu" and @lsbdistcodename != "xenial") or (@operatingsystem == "Debian" and @lsbdistcodename != "jessie") -%>if ! ulimit -n 65536 >/dev/null 2>&1; then
+    echo WARNING: setting ulimit failed
+fi
+<% end -%>

@@ -1,0 +1,13 @@
+<% if @version >= 7 -%>input(type="imfile"
+      File="/var/log/spamassassin/spamd.log"
+      statefile="/var/log/spamassassin/.spamd.log"
+      Tag="spamassassin: "
+      Severity="info"
+      Facility="local7")
+<% else -%>$InputFileName /var/log/spamassassin/spamd.log
+$InputFileTag spamassassin
+$InputFileStateFile spamassassin
+$InputFileSeverity info
+$InputFileFacility local7
+$InputRunFileMonitor
+<% end -%>

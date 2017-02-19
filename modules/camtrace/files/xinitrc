@@ -1,0 +1,22 @@
+#!/bin/sh
+
+export LANG="en_US.ISO8859-1"
+
+usrres=$HOME/.Xresources
+usrmap=$HOME/.Xmodmap
+
+sysres=/usr/local/lib/X11/xinit/.Xresources
+sysmap=/usr/local/lib/X11/xinit/.Xmodmap
+
+# merge in defaults and keymaps
+
+test -f $sysres && xrdb -merge $sysres
+test -f $sysmap && xmodmap $sysmap
+
+test -f $usrres && xrdb -merge $usrres
+test -f $usrmap && xmodmap $usrmap
+
+# start some nice programs
+openbox-session &
+
+exec lxpanel

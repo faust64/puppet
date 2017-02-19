@@ -1,0 +1,210 @@
+additional_classes:
+  - Fail2ban
+  - Firehol
+
+# Firehol
+firehol_interfaces:
+  - name: eth0
+    description: WAN
+    protection: strong
+    allow:
+      - server icmp accept
+      - server http accept
+      - server https accept
+      - server custom openssh "tcp/1022" default accept
+      - server custom munin "tcp/4949" default accept src "$office_networks"
+      - server custom nrpe "tcp/5666" default accept src "$office_networks"
+      - client all accept
+
+# Letsencrypt
+letsencrypt_renew_day: 20
+letsencrypt_renew_hour: 22
+letsencrypt_renew_min: 44
+
+# Icinga
+icinga_check_domains:
+  - unetresgrossebite.com
+icinga_check_ssl:
+  - bacula.unetresgrossebite.com
+  - blog.unetresgrossebite.com
+  - gitlab.unetresgrossebite.com
+  - owncloud.unetresgrossebite.com
+  - play.unetresgrossebite.com
+  - racktables.unetresgrossebite.com
+  - repository.unetresgrossebite.com
+  - smokeping.unetresgrossebite.com
+  - sso.unetresgrossebite.com
+  - tvschedule.unetresgrossebite.com
+  - wiki.unetresgrossebite.com
+icinga_static_devices:
+  bloblb1.prod.peerio.com:
+    host_ipaddress: 52.91.96.93
+    host_parents: route53-prod.amazonaws.com
+    srvclass: peerioblob
+  bloblb2.prod.peerio.com:
+    host_ipaddress: 54.204.82.86
+    host_parents: route53-prod.amazonaws.com
+    srvclass: peerioblob
+  bloblb1.dr.peerio.com:
+    host_ipaddress: 54.149.57.234
+    host_parents: route53-dr.amazonaws.com
+    srvclass: peerioblob
+  bloblb2.dr.peerio.com:
+    host_ipaddress: 54.191.37.231
+    host_parents: route53-dr.amazonaws.com
+    srvclass: peerioblob
+  codedeploy-prod.amazonaws.com:
+    host_ipaddress: us-east-1
+    host_parents: route53-prod.amazonaws.com
+    srvclass: codedeploy
+# codedeploy-dr.amazonaws.com:
+#   host_ipaddress: us-west-2
+#   host_parents: route53-dr.amazonaws.com
+#   srvclass: codedeploy
+# dns01.fanswifi.com:
+#   host_ipaddress: 161.202.32.212
+#   srvclass: customer
+# dns02.fanswifi.com:
+#   host_ipaddress: 161.202.165.174
+#   srvclass: customer
+  ec2-prod.amazonaws.com:
+    host_ipaddress: us-east-1
+    host_parents: route53-prod.amazonaws.com
+    srvclass: ec2
+  ec2-dr.amazonaws.com:
+    host_ipaddress: us-west-2
+    host_parents: route53-dr.amazonaws.com
+    srvclass: ec2
+  elasticache-prod.amazonaws.com:
+    host_ipaddress: us-east-1
+    host_parents: route53-prod.amazonaws.com
+    srvclass: elasticache
+  elasticache-dr.amazonaws.com:
+    host_ipaddress: us-west-2
+    host_parents: route53-dr.amazonaws.com
+    srvclass: elasticache
+  elb-prod.amazonaws.com:
+    host_ipaddress: us-east-1
+    host_parents: route53-prod.amazonaws.com
+    srvclass: elb
+  elb-dr.amazonaws.com:
+    host_ipaddress: us-west-2
+    host_parents: route53-dr.amazonaws.com
+    srvclass: elb
+# ipbx.geneopedia.com:
+#   host_ipaddress: 162.251.155.1
+#   srvclass: customer
+  ghostlb1.prod.peerio.com:
+    host_ipaddress: 52.91.96.93
+    host_parents: route53-prod.amazonaws.com
+    srvclass: peerioghost
+  ghostlb2.prod.peerio.com:
+    host_ipaddress: 54.204.82.86
+    host_parents: route53-prod.amazonaws.com
+    srvclass: peerioghost
+  ghostlb1.dr.peerio.com:
+    host_ipaddress: 54.149.57.234
+    host_parents: route53-dr.amazonaws.com
+    srvclass: peerioghost
+  ghostlb2.dr.peerio.com:
+    host_ipaddress: 54.191.37.231
+    host_parents: route53-dr.amazonaws.com
+    srvclass: peerioghost
+  lb1.prod.peerio.com:
+    host_ipaddress: 52.91.96.93
+    host_parents: route53-prod.amazonaws.com
+    srvclass: peerio
+  lb2.prod.peerio.com:
+    host_ipaddress: 54.204.82.86
+    host_parents: route53-prod.amazonaws.com
+    srvclass: peerio
+  lb1.dr.peerio.com:
+    host_ipaddress: 54.149.57.234
+    host_parents: route53-dr.amazonaws.com
+    srvclass: peerio
+  lb2.dr.peerio.com:
+    host_ipaddress: 54.191.37.231
+    host_parents: route53-dr.amazonaws.com
+    srvclass: peerio
+# nebula.surfscriptpro.com:
+#   host_ipaddress: 192.99.160.94
+#   srvclass: customer
+# pki.digitalocean.peerio.com:
+#   host_ipaddress: 159.203.22.84
+#   srvclass: linux
+# repository.digitalocean.peerio.com:
+#   host_ipaddress: 159.203.4.138
+#   srvclass: linux
+  route53-prod.amazonaws.com:
+    host_ipaddress: us-east-1
+    srvclass: route53
+  route53-dr.amazonaws.com:
+    host_ipaddress: us-west-2
+    srvclass: route53
+  sharklb1.prod.peerio.com:
+    host_ipaddress: 52.91.96.93
+    host_parents: route53-prod.amazonaws.com
+    srvclass: peerioshark
+  sharklb2.prod.peerio.com:
+    host_ipaddress: 54.204.82.86
+    host_parents: route53-prod.amazonaws.com
+    srvclass: peerioshark
+  sharklb1.dr.peerio.com:
+    host_ipaddress: 54.149.57.234
+    host_parents: route53-dr.amazonaws.com
+    srvclass: peerioshark
+  sharklb2.dr.peerio.com:
+    host_ipaddress: 54.191.37.231
+    host_parents: route53-dr.amazonaws.com
+    srvclass: peerioshark
+  site.awsprod.peerio.com:
+    host_ipaddress: 54.158.19.52
+    host_parents: route53-prod.amazonaws.com
+    srvclass: peeriosite
+  site.productiondr.peerio.com:
+    host_ipaddress: 54.213.148.112
+    host_parents: route53-dr.amazonaws.com
+    srvclass: peeriosite
+# vps1.nebula.surfscriptpro.com:
+#   host_ipaddress: 158.69.153.16
+#   host_parents: nebula.surfscriptpro.com
+#   srvclass: cpanel
+# vps2.nebula.surfscriptpro.com:
+#   host_ipaddress: 158.69.153.17
+#   host_parents: nebula.surfscriptpro.com
+#   srvclass: cpanel
+# vps3.nebula.surfscriptpro.com:
+#   host_ipaddress: 158.69.153.18
+#   host_parents: nebula.surfscriptpro.com
+#   srvclass: cpanel
+# vps4.nebula.surfscriptpro.com:
+#   host_ipaddress: 158.69.153.19
+#   host_parents: nebula.surfscriptpro.com
+#   srvclass: cpanel
+# vps5.nebula.surfscriptpro.com:
+#   host_ipaddress: 158.69.153.20
+#   host_parents: nebula.surfscriptpro.com
+#   srvclass: cpanel
+# vps6.nebula.surfscriptpro.com:
+#   host_ipaddress: 158.69.153.21
+#   host_parents: nebula.surfscriptpro.com
+#   srvclass: cpanel
+# vps7.nebula.surfscriptpro.com:
+#   host_ipaddress: 158.69.153.22
+#   host_parents: nebula.surfscriptpro.com
+#   srvclass: cpanel
+# vps8.nebula.surfscriptpro.com:
+#   host_ipaddress: 158.69.153.23
+#   host_parents: nebula.surfscriptpro.com
+#   srvclass: cpanel
+
+# Icinga
+icinga_collect_domains:
+  - emma-earth.com
+  - peerio.biz
+  - unetresgrossebite.com
+
+# PF
+dns_ip:
+  - 188.165.212.140
+  - 37.59.45.201

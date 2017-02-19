@@ -1,0 +1,18 @@
+default_path		/bin:/usr/bin:/usr/local/bin:
+default_xserver		<%=@xbin%>
+xserver_arguments	<%=@server_args%>
+halt_cmd		/sbin/shutdown -p now
+reboot_cmd		/sbin/shutdown -r now
+<% if @console_cmd -%>console_cmd		<%=@console_cmd%>
+<% end -%><% if @suspend_cmd -%>suspend_cmd		<%=@suspend_cmd%>
+<% end -%>xauth_path		<%=@xauth%>
+authfile		<%=@run_dir%>/slim.auth
+login_cmd		exec /bin/sh - ~/.xinitrc %session
+sessions		<%=@window_mgr%>
+shutdown_msg		The system is powering down...
+reboot_msg		The system is rebooting...
+<% if @autologin -%>default_user		<%=@runtime_user%>
+auto_login		true
+<% end -%><% if @theme -%>current_theme		<%=@theme%>
+<% end -%>lockfile		<%=@run_dir%>/slim.pid
+logfile			/var/log/slim.log

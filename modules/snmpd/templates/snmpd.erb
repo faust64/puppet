@@ -1,0 +1,11 @@
+<% if @newer_syntax -%>rocommunity <%=@snmp_community%>
+syscontact "Waldo (root@<%=@fqdn%>)"
+syslocation "<%=@snmp_location%>"
+sysservices <%=@snmp_sysservices%>
+<% else -%>listen on <%=@listen%>
+<% if @new_syntax -%>ro<% else -%>read-only <% end -%>community <%=@snmp_community%>
+system contact "Waldo (root@<%=@fqdn%>)"
+system description "<%=@operatingsystem%>-<%=@kernelversion%>-<%=@architecture%>"
+system location "<%=@snmp_location%>"
+system services <%=@snmp_sysservices%>
+<% end -%>

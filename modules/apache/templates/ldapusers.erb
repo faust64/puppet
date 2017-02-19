@@ -1,0 +1,6 @@
+<AuthnProviderAlias ldap ldapserver>
+    AuthLDAPURL ldaps://<% if @ldap_slave != false -%><%=@ldap_slave%><% else -%><%=@fqdn%><% end -%>/<%=@user_base%>?uid?sub?(objectClass=*)
+</AuthnProviderAlias>
+<AuthzProviderAlias ldap-group users>
+    AuthLDAPURL ldaps://<% if @ldap_slave != false -%><%=@ldap_slave%><% else -%><%=@fqdn%><% end -%>/<%=@user_base%>?uid?sub?(objectClass=*)
+</AuthzProviderAlias>

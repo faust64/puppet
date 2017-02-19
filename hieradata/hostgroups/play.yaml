@@ -1,0 +1,31 @@
+additional_classes:
+  - Subsonic
+
+# Apache
+apache_keepalive: "On"
+apache_listen_ports:
+  plain: 80
+  ssl: 443
+apache_rsyslog: true
+
+# Fail2ban
+fail2ban_do_badbots: true
+fail2ban_do_web_abuses: true
+
+# Nagios
+nagios_load_crit_threshold: "2.3,2.4,2.4"
+nagios_load_warn_threshold: "2.0,2.0,2.0"
+nagios_partitions_watchlist:
+  root: /
+  subsonic: /var/music
+
+# Nginx
+#nginx_collectd: true
+nginx_munin: true
+nginx_rsyslog: true
+
+# Subsonic
+subsonic_allocate: 512
+subsonic_message: "__Welcome to Mephitheque\\!__\\r\\n\\r\\n\\\\ \\\\\\r\\n\\r\\nHere is a bunch of poor download choices"
+subsonic_subtitle: ""
+subsonic_title: "Welcome to Mephitheque\\!"

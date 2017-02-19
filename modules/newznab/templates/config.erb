@@ -1,0 +1,35 @@
+<?php
+
+define('DB_TYPE', 'mysql');
+define('DB_HOST', 'localhost');
+define('DB_PORT', 3306);
+define('DB_USER', '<%=@mysql_user%>');
+define('DB_PASSWORD', '<%=@mysql_pass%>');
+define('DB_NAME', '<%=@mysql_db%>');
+define('DB_INNODB', true);
+define('DB_PCONNECT', true);
+define('DB_ERRORMODE', PDO::ERRMODE_SILENT);
+
+define('LDAP_BACKEND', 'ldaps://<%=@ldap_slave%>');
+define('LDAP_OBJECT_LOGIN', '<%=@ldap_object_login%>');
+define('LDAP_OBJECT_MAIL', '<%=@ldap_object_mail%>');
+define('LDAP_TYPE', 'ldap');
+define('LDAP_USER_BASE', '<%=@ldap_user_base%>');
+define('LDAP_VERSION', 3);
+
+define('NNTP_USERNAME', '<%=@nntp_user%>');
+define('NNTP_PASSWORD', '<%=@nntp_pass%>');
+define('NNTP_SERVER', '<%=@nntp_host%>');
+define('NNTP_PORT', '443');
+define('NNTP_SSLENABLED', true);
+
+<% if @with_cache == false -%>define('CACHEOPT_METHOD', 'none');
+
+<% else -%>define('CACHEOPT_METHOD', 'memcache');
+define('CACHEOPT_TTLFAST', '120');
+define('CACHEOPT_TTLMEDIUM', '600');
+define('CACHEOPT_TTLSLOW', '1800');
+define('CACHEOPT_MEMCACHE_SERVER', '<%=@with_cache%>');
+define('CACHEOPT_MEMCACHE_PORT', '11211');
+
+<% end -%>require("automated.config.php");

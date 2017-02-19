@@ -1,0 +1,25 @@
+<IfModule mod_ssl.c>
+    SSLRandomSeed		startup builtin
+    SSLRandomSeed		startup file:/dev/<% if @kernel == "Linux" -%>u<% end -%>random 512
+    SSLRandomSeed		connect builtin
+    SSLRandomSeed		connect file:/dev/<% if @kernel == "Linux" -%>u<% end -%>random 512
+    <IfModule mod_mime.c>
+	AddType			application/x-x509-ca-cert .crt
+	AddType			application/x-pkcs7-crl .crl
+    </IfModule>
+    SSLPassPhraseDialog		builtin
+    SSLSessionCache		shmcb:<%=@run_dir%>/ssl_scache(512000)
+    SSLSessionCacheTimeout	300
+<% if @modssl_bc == true -%>    SSLCipherSuite		EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES128-SHA256:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES128-GCM-SHA256:AES256-SHA256:AES128-SHA256:AES256-SHA:AES128-SHA:DES-CBC3-SHA:HIGH:!aNULL:!eNULL:!EXPORT:!DES:!MD5:!PSK:!RC4
+<% else -%>    SSLCipherSuite		EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH
+<% end -%>    SSLHonorCipherOrder		On
+<% if @lsbdistcodename == "wheezy" or @lsbdistcodename == "jessie" or @lsbdistcodename == "precise" or @lsbdistcodename == "trusty" -%>    SSLProtocol			-ALL +TLSv1.2 +TLSv1.1 +TLSv1
+<% else -%>    SSLProtocol			ALL -SSLv2 -SSLv3
+<% end -%><% if @lsbdistcodename == "jessie" or @lsbdistcodename == "trusty" -%><% if 0 == 1 -%>jessie is 2.4.10, trusty 2.4.7, this one requires 2.4.12:    SSLSessionTickets		Off
+<% end -%>    SSLCompression		off
+    SSLUseStapling		off #for now/implement http://wiki.cacert.org/OcspResponder
+    SSLStaplingCache		"shmcb:/tmp/stapling-cache(150000)"
+<% if @lsbdistcodename == "jessie" -%>    Mutex			file:<%=@run_dir%> ssl-cache
+<% else -%>    Mutex			sysvsem default
+<% end -%><% else -%>    SSLMutex			file:<%=@run_dir%>/ssl_mutex
+<% end -%></IfModule>

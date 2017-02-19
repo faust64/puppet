@@ -1,0 +1,21 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+if ! ps ax | grep '/[n]scd$' >/dev/null 2>&1; then
+    res=CRITICAL
+    msg=" - Credential cacher is not running"
+    perfdata=" | 0"
+else
+    perfdata=" | 1"
+fi
+
+test -z "$res" && res=OK
+
+echo "$res$msg$perfdata"
+eval res=\$$res
+exit $ret

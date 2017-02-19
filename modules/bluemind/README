@@ -1,0 +1,10 @@
+!WARNING!
+
+I don't see a way to properly deploy a bluemind from scratch
+- especially due to a few user inputs while running bm setup script
+Moreover, the administration interface allowing you to customize various
+settings related to postfix, nginx, cyrus or java: I would avoid overriding
+any of these with my modules.
+Thus, this module assumes you've already installed and configured bm on
+your system (in my case, 3.5.2). We would stick to monitoring/supervision
+and logs management.
