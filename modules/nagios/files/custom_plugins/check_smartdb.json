@@ -665,7 +665,7 @@
 			"Perfs" : ["194"]
 		},
 		"Hitachi/HGST Travelstar" : {
-			"Device" : ["HGST HTE725050A7E630"],
+			"Device" : ["HGST HTE725050A7E630", "HGST HUS724020ALA640"],
 			"ID#" : {
 				"1" : "VALUE", # Raw Read Error Rate
 				"3" : "VALUE", # Spin Up Time
