@@ -13,5 +13,8 @@ class certbot::config {
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/le_renew";
+	"Purge Certbot daily renewal script":
+	    ensure  => absent,
+	    path    => "/etc/cron.d/certbot";
     }
 }

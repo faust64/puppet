@@ -15,4 +15,7 @@ class certbot::debian {
     common::define::package {
 	"certbot":
     }
+
+    Common::Define::Package["certbot"]
+	-> File["Purge Certbot daily renewal script"]
 }
