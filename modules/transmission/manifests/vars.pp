@@ -18,6 +18,7 @@ class transmission::vars {
     $rpc_passphrase     = hiera("transmission_rpc_passphrase")
     $runtime_group      = hiera("transmission_runtime_group")
     $runtime_user       = hiera("transmission_runtime_user")
+    $slack_hook         = hiera("transmission_slack_hook_uri")
     $srvname            = hiera("transmission_service_name")
     $store_dir          = hiera("transmission_store_dir")
 }

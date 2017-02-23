@@ -2,48 +2,52 @@ class transmission::webapp {
     $rdomain   = $transmission::vars::rdomain
     $store_dir = $transmission::vars::store_dir
 
-    if ($hostname == "transmission") {
-	$maliases = [ "$hostname.$rdomain" ]
+    if ($domain != $rdomain) {
+	$reverse  = "transmission.$rdomain"
+	$dreverse = "what.$rdomain"
+	$aliases  = [ $reverse ]
+	$daliases = [ $dreverse ]
     } else {
-	$maliases = [ "$hostname.$rdomain", "transmission.$rdomain" ]
+	include apache
+
+	$reverse  = false
+	$aliases  = false
+	$daliases = false
+	$dreverse = false
     }
-    $daliases = [ "what.$rdomain", "torrents.$domain", "torrents.$rdomain" ]
 
     if (defined(Class[Apache])) {
 	apache::define::vhost {
-	    "transmission.$domain":
-		aliases       => $maliases,
+	    "seedbox.$domain":
+		aliases       => $aliases,
 		app_port      => 9091,
 		require       => Service[$transmission::vars::srvname],
-		vhostldapauth => false,
 		vhostsource   => "app_proxy",
-		with_reverse  => "$hostname.$rdomain";
+		with_reverse  => $reverse;
 	    "what.$domain":
 		aliases       => $daliases,
 		app_root      => "$store_dir/downloads/complete",
-		autoindex     => true,
 		require       => File["Prepare completed downloads directory"],
-		vhostldapauth => false,
-		with_reverse  => "what.$rdomain";
+		with_reverse  => $dreverse;
 	}
     } else {
 	include nginx
 
 	nginx::define::vhost {
-	    "transmission.$domain":
-		aliases       => $maliases,
+	    "seedbox.$domain":
+		aliases       => $aliases,
 		app_port      => 9091,
 		require       => Service[$transmission::vars::srvname],
 		vhostldapauth => false,
 		vhostsource   => "app_proxy",
-		with_reverse  => "$hostname.$rdomain";
+		with_reverse  => $reverse;
 	    "what.$domain":
 		aliases       => $daliases,
 		app_root      => "$store_dir/downloads/complete",
 		autoindex     => true,
 		require       => File["Prepare completed downloads directory"],
 		vhostldapauth => false,
-		with_reverse  => "what.$rdomain";
+		with_reverse  => $dreverse;
 	}
     }
 }

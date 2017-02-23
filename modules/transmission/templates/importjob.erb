@@ -1,0 +1,28 @@
+#!/bin/sh
+
+QUEUE="<%=@store_dir%>/downloads/queue"
+PERMS=<%=@runtime_user%>:<%=@runtime_group%>
+<% if @slack_hook != false -%>HOOK_URL=<%=@slack_hook%>
+<% end -%>WATCH=/root/queue
+
+if ! test -d "$QUEUE"; then
+    exit 1
+fi
+for d in $WATCH
+do
+    if test -d "$d"; then
+	find "$d" -name "*.torrent" | while read line
+	    do
+		if test -f "$line" -a -s "$line"; then
+		    chown $PERMS "$line"
+		    chmod 0644 "$line"
+		    mv "$line" "$QUEUE/"
+		    if test "$HOOK_URL" -a -x /usr/local/bin/slack; then
+			/usr/local/bin/slack $HOOK_URL "REPORT: importing $line"
+		    fi
+		fi
+	    done
+    fi
+done
+
+exit 0

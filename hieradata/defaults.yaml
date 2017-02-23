@@ -2390,6 +2390,7 @@ transmission_rpc_skip_auth: false
 transmission_runtime_group: root
 transmission_runtime_user: root
 transmission_service_name: transmission-daemon
+transmission_slack_hook_uri: false
 transmission_store_dir: /home/transmission-daemon
 
 # Tunner

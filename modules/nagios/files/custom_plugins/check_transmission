@@ -7,7 +7,7 @@ WARNING=1
 CRITICAL=2
 UNKNOWN=3
 
-eval getdownwarn=200 getdowncrit=1000 getupwarn=200 getupcrit=1000
+eval getdownwarn=200 getdowncrit=1000 getupwarn=200 getupcrit=1000 user= pass=
 
 while test $# -gt 1
 do
@@ -23,27 +23,17 @@ do
     esac
 done
 
-if ! transmission-remote -l >/dev/null 2>&1; then
+if ! transmission-remote -n "$user:$pass" -l >/dev/null 2>&1; then
     ret=UNKNOWN
     msg=" - unable to contact transmission daemon"
     perfdata=" | 0,0,0;0,0,0"
 else
     if test "$hostname"; then
-	if test "$user"; then
-	    if test "$pass"; then
-		getdownrate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote "$hostname" -n "$user":"$pass" -l | grep Sum | tail -1 | awk '{print int($(NF))}'`
-		getuprate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote "$hostname" -n "$user":"$pass" -l | grep Sum | tail -1 | awk '{print int($(NF-1))}'`
-	    else
-		getdownrate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote "$hostname" -n "$user": -l | grep Sum | tail -1 | awk '{print int($(NF))}'`
-		getuprate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote "$hostname" -n "$user": -l | grep Sum | tail -1 | awk '{print int($(NF-1))}'`
-	    fi
-	else
-	    getdownrate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote "$hostname" -l | grep Sum | tail -1 | awk '{print int($(NF))}'`
-	    getuprate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote "$hostname" -l | grep Sum | tail -1 | awk '{print int($(NF-1))}'`
-	fi
+	getdownrate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote "$hostname" -n "$user:$pass" -l | grep Sum | tail -1 | awk '{print int($(NF))}'`
+	getuprate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote "$hostname" -n "$user:$pass" -l | grep Sum | tail -1 | awk '{print int($(NF-1))}'`
     else
-	getdownrate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote -l | grep Sum | tail -1 | awk '{print int($(NF))}'`
-	getuprate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote -l | grep Sum | tail -1 | awk '{print int($(NF-1))}'`
+	getdownrate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote -n "$user:$pass" -l | grep Sum | tail -1 | awk '{print int($(NF))}'`
+	getuprate=`echo '{"method":"torrent-get","tag":1,"arguments":{"fields":["rateUpload","rateDownload"]}}' | transmission-remote -n "$user:$pass" -l | grep Sum | tail -1 | awk '{print int($(NF-1))}'`
     fi
 
     if test -z "$getdownrate" -o -z "$getuprate"; then
