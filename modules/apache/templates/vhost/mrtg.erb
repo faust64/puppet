@@ -5,7 +5,8 @@
     ErrorLog <%=@log_dir%>/error-<%=@name%>.log
     LogLevel warn
     CustomLog <%=@log_dir%>/access-<%=@name%>.log combined
-<% if @listen_ports['ssl'] != false -%>    RewriteEngine On
+<% if @referrerpolicy != false -%>    Header always set Referrer-Policy "<%=@referrerpolicy%>"
+<% end -%><% if @listen_ports['ssl'] != false -%>    RewriteEngine On
     RewriteRule ^/(.*) https://mrtg.<%=@domain%>/$1 [L,R]
 </VirtualHost>
 <VirtualHost *:<%=@listen_ports['ssl']%>>
@@ -15,6 +16,7 @@
     ErrorLog <%=@log_dir%>/ssl-error-<%=@name%>.log
     LogLevel warn
 <% if @stricttransport != false -%>    Header always set Strict-Transport-Security "<%=@stricttransport%>"
+<% end -%><% if @referrerpolicy != false -%>    Header always set Referrer-Policy "<%=@referrerpolicy%>"
 <% end -%><% if @deny_frames == "remote" -%>    Header always set X-Frame-Options SAMEORIGIN
 <% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
 <% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff

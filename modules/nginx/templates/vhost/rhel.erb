@@ -5,6 +5,7 @@ server {
     error_log <%=@log_dir%>/error-<%=@name%>.log;
     access_log <%=@log_dir%>/access-<%=@name%>.log main;
 <% if @deny_frames == true -%>    add_header X-Frame-Options DENY;
+<% end -%><% if @referrerpolicy != false -%>    add_header Referrer-Policy "<%=@referrerpolicy%>";
 <% end -%><% if @nosniff == true -%>    add_header X-Content-Type-Options nosniff;
 <% end -%><% if @listen_ports['ssl'] != false -%>    rewrite ^/(.*) https://<%=@name%>/$1;
 }
@@ -21,6 +22,7 @@ server {
     ssl_prefer_server_ciphers on;
     ssl_session_cache shared:SSL:10m;
 <% if @stricttransport != false -%>    add_header Strict-Transport-Security "<%=@stricttransport%>";
+<% end -%><% if @referrerpolicy != false -%>    add_header Referrer-Policy "<%=@referrerpolicy%>";
 <% end -%><% if @deny_frames == true -%>    add_header X-Frame-Options DENY;
 <% end -%><% if @nosniff == true -%>    add_header X-Content-Type-Options nosniff;
 <% end -%><% if 0 == 1 -%># Require nginx 1.5.9

@@ -6,6 +6,7 @@
     LogLevel warn
     CustomLog <%=@log_dir%>/access-<%=@name%>.log combined
 <% if @csp_name != false and @csp_policies[@csp_name] =~ /self/ -%>    Header set Content-Security-Policy "default-src 'self'<% if @csp_sources != false -%> http://*.<%=@csp_sources.join(' http://*.')%> https://*.<%=@csp_sources.join(' https://*.')%><% end -%> <%=@csp_policies[@csp_name]%><% if @csp_report != false -%> report-uri <%=@csp_report%><% end -%>"
+<% end -%><% if @referrerpolicy != false -%>    Header always set Referrer-Policy "<%=@referrerpolicy%>"
 <% end -%><% if @deny_frames == "remote" -%>    Header always set X-Frame-Options SAMEORIGIN
 <% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
 <% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
@@ -29,6 +30,7 @@
     ErrorLog <%=@log_dir%>/ssl-error-<%=@name%>.log
     LogLevel warn
 <% if @csp_name != false and @csp_policies[@csp_name] =~ /self/ -%>    Header set Content-Security-Policy "default-src 'self'<% if @csp_sources != false -%> http://*.<%=@csp_sources.join(' http://*.')%> https://*.<%=@csp_sources.join(' https://*.')%><% end -%> <%=@csp_policies[@csp_name]%><% if @csp_report != false -%> report-uri <%=@csp_report%><% end -%>"
+<% end -%><% if @referrerpolicy != false -%>    Header always set Referrer-Policy "<%=@referrerpolicy%>"
 <% end -%><% if @stricttransport != false -%>    Header always set Strict-Transport-Security "<%=@stricttransport%>"
 <% end -%><% if @deny_frames == "remote" -%>    Header always set X-Frame-Options SAMEORIGIN
 <% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY

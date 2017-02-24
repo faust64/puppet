@@ -21,6 +21,7 @@
     ErrorLog <%=@log_dir%>/ssl-error-<%=@name%>.log
     LogLevel warn
 <% if @stricttransport != false -%>    Header always set Strict-Transport-Security "<%=@stricttransport%>"
+<% end -%><% if @referrerpolicy != false -%>    Header always set Referrer-Policy "<%=@referrerpolicy%>"
 <% end -%><% if @deny_frames == "remote" -%>    Header always set X-Frame-Options SAMEORIGIN
 <% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
 <% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff

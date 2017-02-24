@@ -7,6 +7,7 @@
     CustomLog <%=@log_dir%>/access-<%=@name%>.log combined
 <% if @deny_frames == "remote" -%>    Header always set X-Frame-Options SAMEORIGIN
 <% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
+<% end -%><% if @referrerpolicy != false -%>    Header always set Referrer-Policy "<%=@referrerpolicy%>"
 <% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
 <% end -%><% if @xss_protection == true -%>    Header always set X-Xss-Protection "1; mode=block"
 <% end -%><% if @listen_ports['ssl'] != false -%>    RewriteEngine On
@@ -21,6 +22,7 @@
 <% if @stricttransport != false -%>    Header always set Strict-Transport-Security "<%=@stricttransport%>"
 <% end -%><% if @deny_frames == "remote" -%>    Header always set X-Frame-Options SAMEORIGIN
 <% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
+<% end -%><% if @referrerpolicy != false -%>    Header always set Referrer-Policy "<%=@referrerpolicy%>"
 <% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
 <% end -%><% if @xss_protection == true -%>    Header always set X-Xss-Protection "1; mode=block"
 <% end -%>    CustomLog <%=@log_dir%>/ssl-access-<%=@name%>.log combined

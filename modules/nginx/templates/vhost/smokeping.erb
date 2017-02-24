@@ -7,6 +7,7 @@ server
     access_log <%=@log_dir%>/access-<%=@name%>.log main;
 <% if @csp_name != false and @csp_policies[@csp_name] =~ /self/ -%>    add_header Content-Security-Policy "default-src 'self'<% if @csp_sources != false -%> http://*.<%=@csp_sources.join(' http://*.')%> https://*.<%=@csp_sources.join(' https://*.')%><% end -%> <%=@csp_policies[@csp_name]%><% if @csp_report != false -%> report-uri <%=@csp_report%><% end -%>";
 <% end -%><% if @deny_frames == true -%>    add_header X-Frame-Options DENY;
+<% end -%><% if @referrerpolicy != false -%>    add_header Referrer-Policy "<%=@referrerpolicy%>";
 <% end -%><% if @nosniff == true -%>    add_header X-Content-Type-Options nosniff;
 <% end -%><% if @xss_protection == true -%>    add_header X-XSS-Protection "1; mode=block";
 <% end -%><% if @listen_ports['ssl'] != false -%>    rewrite ^/(.*) https://<%=@name%>/$1;
@@ -20,6 +21,7 @@ server
     error_log <%=@log_dir%>/ssl-error-<%=@name%>.log;
     access_log <%=@log_dir%>/ssl-access-<%=@name%>.log main;
 <% if @csp_name != false and @csp_policies[@csp_name] =~ /self/ -%>    add_header Content-Security-Policy "default-src 'self'<% if @csp_sources != false -%> https://*.<%=@csp_sources.join(' https://*.')%><% end -%> <%=@csp_policies[@csp_name]%><% if @csp_report != false -%> report-uri <%=@csp_report%><% end -%>";
+<% end -%><% if @referrerpolicy != false -%>    add_header Referrer-Policy "<%=@referrerpolicy%>";
 <% end -%><% if @stricttransport != false -%>    add_header Strict-Transport-Security "<%=@stricttransport%>";
 <% end -%><% if @public_key_pins != false -%>    add_header Public-Key Pins 'pin-sha256="<%=@public_key_pins.join('"; pin-sha256="')%>"; max-age=<%=@hpkp_max_age%>; includeSubDomains<% if @hpkp_report != false -%>; report-uri="<%=@hpkp_report%>"<% end -%>';
 <% end -%><% if @deny_frames == true -%>    add_header X-Frame-Options DENY;
