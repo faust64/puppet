@@ -15,8 +15,8 @@
 <% else -%>    ProxyPreserveHost <%=@preserve_host%>
     ProxyPass / <%=@app_proto%>://127.0.0.1:<%=@app_port%>/
     ProxyPassReverse / <%=@app_proto%>://127.0.0.1:<%=@app_port%>/
-    ProxyErrorOverride On
-<% end -%></VirtualHost>
+<% if @noerrors == false -%>    ProxyErrorOverride On
+<% end -%><% end -%></VirtualHost>
 <VirtualHost *:<%=@listen_ports['ssl']%>>
     ServerName <%=@name%>
 <% if @aliases != false -%><% @aliases.each do |dname| -%>    ServerAlias <%=dname%>
@@ -38,8 +38,8 @@
 <% end -%>    ProxyPreserveHost <%=@preserve_host%>
     ProxyPass / <%=@app_proto%>://127.0.0.1:<%=@app_port%>/
     ProxyPassReverse / <%=@app_proto%>://127.0.0.1:<%=@app_port%>/
-    ProxyErrorOverride On
-<% if @vhostldapauth == true or @vhostldapauth == "pubonly" -%>    <Location />
+<% if @noerrors == false -%>    ProxyErrorOverride On
+<% end -%><% if @vhostldapauth == true or @vhostldapauth == "pubonly" -%>    <Location />
 	Include authldap.conf
 <% if @vhostldapauth == "pubonly" -%>	Include allow.conf
 <% end -%>    </Location>
