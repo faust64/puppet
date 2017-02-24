@@ -56,7 +56,7 @@ Change your working directory to `/etc/puppetlabs/code/environments/`, clone thi
 
 ```
 test -d production && mv production production.orig
-git clone https://github.com/faust64/puppet4 production
+git clone https://github.com/faust64/puppet production
 ```
 
 To avoid filling your Puppetmaster filesystem with reports, add some daily job running the following:
