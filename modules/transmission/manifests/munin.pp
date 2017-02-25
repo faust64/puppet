@@ -5,13 +5,9 @@ class transmission::munin {
 		include muninnode
 	    }
 
-	    $conf_dir = $transmission::vars::munin_conf_dir
+	    include common::libs::perljsonrpc
 
-	    case $operatingsystem {
-		"Debian", "Ubuntu": {
-		    $dependency = "libjson-rpc-perl"
-		}
-	    }
+	    $conf_dir = $transmission::vars::munin_conf_dir
 
 	    muninnode::define::probe {
 		$transmission::vars::munin_probes:
@@ -28,15 +24,6 @@ class transmission::munin {
 		    path    => "$conf_dir/plugin-conf.d/transmission.conf",
 		    require => File["Prepare Munin-node plugin-conf directory"],
 		    source  => "puppet:///modules/transmission/munin.conf";
-	    }
-
-	    if ($dependency) {
-		common::define::package {
-		    $dependency:
-		}
-
-		Package[$dependency]
-		    -> File["Install transmission munin probe configuration"]
 	    }
 	} else {
 	    muninnode::define::probe {
