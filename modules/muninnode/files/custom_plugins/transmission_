@@ -1,10 +1,10 @@
 #!/usr/bin/perl
 
 use strict;
-use JSON::RPC::Client;
+use JSON::RPC::Legacy::Client;
 use JSON;
 
-my $username = $ENV{'username'} || '';
+my $username = $ENV{'username'} || 'transmission';
 my $password = $ENV{'password'} || '';
 my $host = $ENV{'host'} || '127.0.0.1';
 my $port = $ENV{'port'} || 9091;
@@ -68,7 +68,7 @@ elsif (exists $ARGV[0] and $ARGV[0] eq "config")
 else
 {
     my $uri = "http://$host:$port/transmission/rpc";
-    my $client = new JSON::RPC::Client;
+    my $client = new JSON::RPC::Legacy::Client;
     my @content;
 
     $client->ua->credentials("$host:$port",'Transmission',$username,$password);
