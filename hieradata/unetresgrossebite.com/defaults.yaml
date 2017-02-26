@@ -85,8 +85,6 @@ unbound_recurse_networks:
   - 95.211.205.36/32
   - 176.31.250.180/32
   - 188.165.212.140/32
-  - 212.83.154.64/32
-  - 212.83.154.66/31
 
 # OpenLDAP
 openldap_ldap_slave: sso.unetresgrossebite.com
@@ -149,8 +147,6 @@ spamassassin_trusted_networks:
   - 95.211.205.36/32
   - 176.31.250.180/32
   - 188.165.212.140/32
-  - 212.83.154.64/32
-  - 212.83.154.66/31
 
 # WebServers
 csp_sources:
