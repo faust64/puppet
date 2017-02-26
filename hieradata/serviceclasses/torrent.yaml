@@ -11,5 +11,9 @@ apache_mod_proxy_http: true
 apache_munin: true
 apache_rsyslog: true
 
+# Fail2ban
+fail2ban_do_badbots: true
+fail2ban_do_web_abuses: true
+
 # Transmission
 transmission_munin: true
