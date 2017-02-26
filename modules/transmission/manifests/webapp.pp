@@ -21,6 +21,7 @@ class transmission::webapp {
 	    "seedbox.$domain":
 		aliases       => $aliases,
 		app_port      => 9091,
+		noerrors      => true,
 		require       => Service[$transmission::vars::srvname],
 		vhostsource   => "app_proxy",
 		with_reverse  => $reverse;
@@ -37,6 +38,7 @@ class transmission::webapp {
 	    "seedbox.$domain":
 		aliases       => $aliases,
 		app_port      => 9091,
+		noerrors      => true,
 		require       => Service[$transmission::vars::srvname],
 		vhostldapauth => false,
 		vhostsource   => "app_proxy",
