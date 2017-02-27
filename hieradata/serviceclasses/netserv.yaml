@@ -1,6 +1,12 @@
 additional_classes:
-  - Named
+  - Aptcacherng
   - Openldap
+  - Iscdhcpserver
+  - Squid
+  - Tftpd
 
 # Bind
 rndc_conf_dir: /etc/bind
+
+# Squid
+squid_wat_do: cache
