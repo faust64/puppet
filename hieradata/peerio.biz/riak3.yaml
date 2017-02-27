@@ -1,8 +1,0 @@
-additional_classes:
-  - Riak
-
-munin_nat_addr: 62.210.188.140
-munin_nat_port: 4902
-nagios_nat_listenaddr: 62.210.188.140
-nagios_nrpe_nat_port: 5602
-riak_listen: 10.43.0.102
