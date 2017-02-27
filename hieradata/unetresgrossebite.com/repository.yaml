@@ -64,17 +64,3 @@ office_networks:
   "ovh#2": 51.254.93.64/29
   "soyoustart#1": 188.165.212.140/32
   "soyoustart#2": 37.59.45.201/32
-  "peeriostress#1": 52.91.247.102/32
-  "peeriostress#2": 54.87.226.23/32
-  "peeriostress#3": 54.165.194.75/32
-  "peeriostress#4": 54.146.150.147/32
-  "peeriostress#5": 52.201.236.81/32
-  "peeriostress#6": 54.90.239.33/32
-  "peeriostress#7": 52.90.98.122/32
-  "peeriostress#8": 54.197.1.121/32
-  "peeriostress#9": 54.146.163.228/32
-  "peeriostress#10": 54.172.238.233/32
-  "peeriostress#11": 54.157.202.140/32
-  "peeriostress#12": 52.91.49.50/32
-  "peeriostress#13": 54.172.185.8/32
-  "peeriostress#14": 54.146.230.45/32
