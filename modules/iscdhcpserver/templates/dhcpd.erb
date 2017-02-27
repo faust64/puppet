@@ -21,8 +21,7 @@ option PXE.mtftp-delay code 5 = unsigned integer 8;
 option PXE.discovery-control code 6 = unsigned integer 8;
 option PXE.discovery-mcast-addr code 7 = ip-address;
 
-<% if @dhcp_ip[1] -%>
-failover peer "dhcp-failover"
+<% if @dhcp_ip[1] -%>failover peer "dhcp-failover"
 {
     <% if @ipaddress == @dhcp_ip[0] -%>primary<% else -%>secondary<% end -%>;
     address			<%=@ipaddress%>;
@@ -36,8 +35,7 @@ failover peer "dhcp-failover"
 <% if @ipaddress == @dhcp_ip[0] -%>
     split			128;
 <% end -%>}
-<% end -%>
-if substring(option vendor-class-identifier,0,4) = "MSFT"
+<% end -%><% if 0 == 1 -%>if substring(option vendor-class-identifier,0,4) = "MSFT"
 {
     option domain-name-servers	<% if @ad_ip != false -%><% @ad_ip.each do |host| -%><%=host%>, <% break -%><% end -%><% end -%><% @dns_ip.each do |host| -%><%=host%>, <% end -%><%=@dns_ip[0]%>;
 }
@@ -45,7 +43,7 @@ else
 {
     option domain-name-servers	<% @dns_ip.each do |host| -%><%=host%>, <% end -%><%=@dns_ip[0]%>;
 }
-
+<% end -%>
 class "pxeclt1"
 {
     match if option vendor-class-identifier = "d-i";
@@ -85,26 +83,29 @@ zone dhcp.<%=@domain%>.
     next-server			<%=@pxe_ip%>;
 <% end %>    pool
     {
-<% if netmsk == 24 -%><% netstop = netid -%><% elsif netmsk == 23 -%><% netstop = netid + 1 -%><% elsif netmsk == 22 -%><% netstop = netid + 3 -%><% elsif netmsk == 21 -%><% netstop = netid + 7 -%><% elsif netmsk == 20 -%><% netstop = netid + 15 -%><% elsif netmsk == 19 -%><% netstop = netid + 31 -%><% elsif netmsk == 18 -%><% netstop = netid + 63 -%><% elsif netmsk == 17 -%><% netstop = netid + 127 -%><% elsif netmsk == 16 -%><% netstop = 32 -%><% end -%>	range			10.<%=@office_netids[@mydomain]%>.<%=netid%>.10 10.<%=@office_netids[@mydomain]%>.<%=netstop%>.150;
-	option domain-name	"dhcp.<%=@all_networks[vlanname]['dns']%>.<%=@mydomain%> <%=@all_networks[vlanname]['dns']%>.<%=@mydomain%>";
-	deny			dynamic bootp clients;
-	deny			members of "pxeclt1";
-	deny			members of "pxeclt2";
-	deny			members of "pxeclt3";
-	deny			members of "pxeclt4";
-<% if @dhcp_ip[1] -%>
-	failover peer		"dhcp-failover";
+<% if netmsk == 24 -%><% netstop = netid -%><% elsif netmsk == 23 -%><% netstop = netid + 1 -%><% elsif netmsk == 22 -%><% netstop = netid + 3 -%><% elsif netmsk == 21 -%><% netstop = netid + 7 -%><% elsif netmsk == 20 -%><% netstop = netid + 15 -%><% elsif netmsk == 19 -%><% netstop = netid + 31 -%><% elsif netmsk == 18 -%><% netstop = netid + 63 -%><% elsif netmsk == 17 -%><% netstop = netid + 127 -%><% elsif netmsk == 16 -%><% netstop = 32 -%><% end -%>	range				10.<%=@office_netids[@mydomain]%>.<%=netid%>.10 10.<%=@office_netids[@mydomain]%>.<%=netstop%>.150;
+	option domain-name		"dhcp.<%=@all_networks[vlanname]['dns']%>.<%=@mydomain%> <%=@all_networks[vlanname]['dns']%>.<%=@mydomain%>";
+<% if not @all_networks[vlanname]['dnsip'].nil? and @all_networks[vlanname]['dnsip'] -%>	option domain-name-servers	<%=@all_networks[vlanname]['dnsip'].join(', ')%>;
+<% else -%>	option domain-name-servers	<% @dns_ip.join(', ')%>;
+<% end -%>	deny				dynamic bootp clients;
+	deny				members of "pxeclt1";
+	deny				members of "pxeclt2";
+	deny				members of "pxeclt3";
+	deny				members of "pxeclt4";
+<% if @dhcp_ip[1] -%>	failover peer			"dhcp-failover";
 <% end -%>
     }
     pool
     {
-	range			10.<%=@office_netids[@mydomain]%>.<%=netstop%>.151 10.<%=@office_netids[@mydomain]%>.<%=netstop%>.254;
-	option domain-name	"<%=@all_networks[vlanname]['dns']%>.<%=@mydomain%>";
-	allow			members of "pxeclt1";
-	allow			members of "pxeclt2";
-	allow			members of "pxeclt3";
-	allow			members of "pxeclt4";
-	max-lease-time		1800;
+	range				10.<%=@office_netids[@mydomain]%>.<%=netstop%>.151 10.<%=@office_netids[@mydomain]%>.<%=netstop%>.254;
+	option domain-name		"<%=@all_networks[vlanname]['dns']%>.<%=@mydomain%>";
+<% if not @all_networks[vlanname]['dnsip'].nil? and @all_networks[vlanname]['dnsip'] -%>	option domain-name-servers	<%=@all_networks[vlanname]['dnsip'].join(', ')%>;
+<% else -%>	option domain-name-servers	<% @dns_ip.join(', ')%>;
+<% end -%>	allow				members of "pxeclt1";
+	allow				members of "pxeclt2";
+	allow				members of "pxeclt3";
+	allow				members of "pxeclt4";
+	max-lease-time			1800;
     }
 }
 
