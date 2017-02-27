@@ -35,6 +35,7 @@ snmp_conf_dir: /etc/snmp
 smokeping_share_dir: /usr/share/smokeping
 
 # Squid
+squid_cache_dir: /var/spool/squid3
 squid_conf_dir: /etc/squid3
 squid_command: squid3
 squid_error_dir: /usr/share/squid3/errors
