@@ -389,21 +389,6 @@ thruk_home_link: http://unetresgrossebite.com
 transmission_contact: samuel@unetresgrossebite.com
 
 # Unbound
-#FIXME: defined in intra/firewall
-unbound_forwarders:
-  emma-earth.com:
-    - 10.42.44.100
-  emma-earth.fr:
-    - 10.42.44.100
-  emma-earth.net:
-    - 10.42.44.100
-  emma-earth.org:
-    - 10.42.44.100
-  undomaine.42:
-    - 10.42.44.100
-  unetresgrossebite.com:
-    - 10.42.44.100
-#/FIXME
 unbound_recurse_networks:
   - 10.42.0.0/16
   - 10.43.0.0/23
