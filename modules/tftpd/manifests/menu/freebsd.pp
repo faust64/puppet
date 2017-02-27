@@ -1,6 +1,6 @@
 class tftpd::menu::freebsd {
 #   $distribs = [ "10.1", "9.2", "8.4" ]
-    $distribs = [ "10.3", "10.2", "10.1" ]
+    $distribs = [ "11.0", "10.3", "10.2", "10.1" ]
     $root_dir = $tftpd::vars::root_dir
 
     tftpd::define::get_freebsd {

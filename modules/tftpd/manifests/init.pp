@@ -20,7 +20,7 @@ class tftpd {
     include tftpd::menu::coreos
     include tftpd::menu::debian
     include tftpd::menu::fedora
-#   include tftpd::menu::freebsd
+    include tftpd::menu::freebsd
     include tftpd::menu::mfsbsd
     include tftpd::menu::openbsd
     include tftpd::menu::opensuse
