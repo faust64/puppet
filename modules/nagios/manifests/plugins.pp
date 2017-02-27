@@ -2,7 +2,7 @@ class nagios::plugins {
     file {
 	"Install Nagios custom plugins":
 	    group   => hiera("gid_zero"),
-	    ignore  => [ ".svn", ".git" ],
+	    ignore  => [ ".svn", ".git", "check_dhcp" ],
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $nagios::vars::nagios_plugins_dir,
