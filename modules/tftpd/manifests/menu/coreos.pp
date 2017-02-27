@@ -1,5 +1,5 @@
 class tftpd::menu::coreos {
-    $distribs = [ "899.15.0", "835.9.0", "766.5.0" ]
+    $distribs = [ "1235.12.0", "1185.5.0", "1122.3.0" ]
     $keys     = $tftpd::vars::ssh_keys
     $password = $tftpd::vars::default_pass
     $root_dir = $tftpd::vars::root_dir
