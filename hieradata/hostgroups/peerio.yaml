@@ -1,18 +1,10 @@
 additional_classes:
-# - Nodejs
   - Peerio
 
 # Apache
 apache_listen_ports:
   plain: 80
   ssl: 443
-
-# NodeJS
-#nodejs_force_version: 6.9.1
-##nodejs_from_sources: true
-#nodejs_pm2_home: /var/lib/pm2
-#nodejs_pm2_group: peerioadmin
-#nodejs_pm2_user: peerioadmin
 
 # Peerio
 peerio_munin: true
