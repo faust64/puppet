@@ -1,6 +1,6 @@
 class tftpd::menu::opensuse {
     $distribs = [ "13.2", "13.1" ]
-    $distribswtf = [ "42.1" ]
+    $distribswtf = [ "42.2", "42.1" ]
     $root_dir = $tftpd::vars::root_dir
 
     tftpd::define::get_opensuse {
