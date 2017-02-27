@@ -1,6 +1,6 @@
 class tftpd::menu::mfsbsd {
     $distribs    = [ "10.0", "9.2", "9.1", "9.0", "8.4", "8.3" ]
-    $distribswtf = [ "10.3", "10.2", "10.1" ]
+    $distribswtf = [ "11.0", "10.3", "10.2", "10.1" ]
     $root_dir    = $tftpd::vars::root_dir
 
     tftpd::define::get_mfsbsd {

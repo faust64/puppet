@@ -30,7 +30,7 @@ define tftpd::define::get_mfsbsd($arch = [ "i386", "amd64" ]) {
 
 	    exec {
 		"Download mfsBSD $fname image":
-		    command => "$download http://mfsbsd.vx.sk/files/images/$release/$archi/mfsbsd-$fname.img",
+		    command => "$download http://mfsbsd.vx.sk/files/images/$release/$archi/mfsbsd-$fname.img || $download http://mfsbsd.vx.sk/files/images/$release/mfsbsd-$fname.img",
 		    creates => "$root_dir/installers/mfsbsd-$name/$archi/mfsbsd-$fname.img",
 		    cwd     => "$root_dir/installers/mfsbsd-$name/$archi",
 		    path    => "/usr/local/bin:/usr/bin:/bin",
