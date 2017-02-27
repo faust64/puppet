@@ -112,8 +112,9 @@ done
 
 if $RELOAD; then
     if nsd-checkconf <%=@conf_dir%>/nsd.conf; then
-	service nsd reload
-    fi
+<% if @kernel == "Linux" -%>	service nsd reload
+<% else -%>	/etc/rc.d/nsd reload
+<% end -%>    fi
 fi
 
 exit 0

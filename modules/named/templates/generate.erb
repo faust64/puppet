@@ -168,8 +168,9 @@ done
 
 if $RELOAD; then
     if named-checkconf; then
-	service $NAMED_SERVICE reload
-    fi
+<% if @kernel == "Linux" -%>	service $NAMED_SERVICE reload
+<% else -%>	/etc/rc.d/$NAMED_SERVICE reload
+<% end -%>    fi
 fi
 
 exit 0
