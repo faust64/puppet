@@ -4,7 +4,7 @@ option domain-name "dhcp.<%=@domain%>";
 option domain-name-servers 8.8.4.4;
 <% end -%>
 <% @local_networks[@domain].each do |net| -%><% vlanname = net['name'] -%><% if @all_networks[vlanname]['dhcp'] == true -%><% if net['netid'] =~ /[0-9]/ -%><% netid = net['netid'].to_i -%><% else -%><% netid = @all_networks[vlanname]['netid'].to_i -%><% end -%><% if net['netmsk'].to_i > 0 -%><% netmsk = net['netmsk'].to_i -%><% else -%><% netmsk = @all_networks[vlanname]['netmsk'].to_i -%><% end -%><% if netmsk == 24 -%><% netstop = netid -%><% elsif netmsk == 23 -%><% netstop = netid + 1 -%><% elsif netmsk == 22 -%><% netstop = netid + 3 -%><% elsif netmsk == 21 -%><% netstop = netid + 7 -%><% elsif netmsk == 20 -%><% netstop = netid + 15 -%><% elsif netmsk == 19 -%><% netstop = netid + 31 -%><% elsif netmsk == 18 -%><% netstop = netid + 63 -%><% elsif netmsk == 17 -%><% netstop = netid + 127 -%><% elsif netmsk == 16 -%><% netstop = 32 -%><% end -%>
-subnet 10.<%=@office_netids[@domain]%>.<%=netid%>.0 netmask <%=@netmask_crsp[netmsk]%>
+subnet 10.<%=@office_netids[@domain]%>.<%=netid%>.0 netmask <%=@netmask_crsp[netmsk.to_s]%>
 {
     option routers	10.<%=@office_netids[@domain]%>.<%=netid%>.1;
     range		10.<%=@office_netids[@domain]%>.<%=netid%>.10 10.<%=@office_netids[@domain]%>.<%=netstop%>.150;
