@@ -11,24 +11,10 @@ class freeradius::ssl {
 	    require => File["Prepare Freeradius for further configuration"];
     }
 
-    pki::define::get {
-	"$fqdn freeradius certificate":
+    pki::define::wrap {
+	$freeradius::vars::service_name:
 	    ca      => "auth",
-	    notify  => Service[$freeradius::vars::service_name],
-	    require => File["Prepare Freeradius ssl directory"],
-	    target  => "$conf_dir/certs/ssl",
-	    what    => "certificate";
-	"$fqdn freeradius key":
-	    ca      => "auth",
-	    notify  => Service[$freeradius::vars::service_name],
-	    require => Pki::Define::Get["$fqdn freeradius certificate"],
-	    target  => "$conf_dir/certs/ssl",
-	    what    => "key";
-	"auth PKI service chain":
-	    ca      => "auth",
-	    notify  => Service[$freeradius::vars::service_name],
-	    require => Pki::Define::Get["$fqdn freeradius key"],
-	    target  => "$conf_dir/certs/ssl",
-	    what    => "chain";
+	    reqfile => "Prepare Freeradius ssl directory",
+	    within  => "$conf_dir/certs/ssl";
     }
 }
