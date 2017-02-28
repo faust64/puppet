@@ -15,11 +15,11 @@ icinga_collect_domains:
 icinga_static_devices:
   eros.adm.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.242.13
-#   host_parents: zeus.intra.unetresgrossebite.com
+    host_parents: zeus.intra.unetresgrossebite.com
     srvclass: network
   gaia.adm.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.242.15
-#   host_parents: io.intra.unetresgrossebite.com
+    host_parents: io.intra.unetresgrossebite.com
     srvclass: network
   nikea.adm.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.242.10
