@@ -37,24 +37,11 @@ class postfix::relay {
 		within  => "$conf_dir/ssl";
 	}
     } else {
-	pki::define::get {
-	    "Mail server certificate":
+	pki::define::wrap {
+	    "postfix":
 		ca      => "mail",
-		notify  => Service["postfix"],
-		require => File["Prepare Postfix SSL directory"],
-		target  => "$conf_dir/ssl";
-	    "Mail server key":
-		ca      => "mail",
-		notify  => Service["postfix"],
-		require => Pki::Define::Get["Mail server certificate"],
-		target  => "$conf_dir/ssl",
-		what    => "key";
-	    "Mail server ssl chain":
-		ca      => "mail",
-		notify  => Service["postfix"],
-		require => Pki::Define::Get["Mail server key"],
-		target  => "$conf_dir/ssl",
-		what    => "chain";
+		reqfile => "Prepare Postfix SSL directory",
+		within  => "$conf_dir/ssl";
 	}
     }
 }
