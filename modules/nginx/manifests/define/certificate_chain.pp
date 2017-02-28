@@ -4,8 +4,7 @@ define nginx::define::certificate_chain($server_certificate       = "server.crt"
 					$certificate_path         = false) {
     if ($certificate_path) {
 	$look = $certificate_path
-    }
-    else {
+    } else {
 	$conf_dir = $nginx::vars::conf_dir
 	$look     = "$conf_dir/ssl"
     }

@@ -14,6 +14,9 @@ class freeradius::ssl {
     pki::define::wrap {
 	$freeradius::vars::service_name:
 	    ca      => "auth",
+	    group   => $freeradius::vars::runtime_group,
+	    mode    => "0640",
+	    owner   => root,
 	    reqfile => "Prepare Freeradius ssl directory",
 	    within  => "$conf_dir/certs/ssl";
     }

@@ -22,6 +22,9 @@ class peerio::riakssl {
 		pki::define::wrap {
 		    "pm2":
 			ca      => "riak",
+			group   => $peerio::vars::runtime_group,
+			mode    => "0640",
+			owner   => root,
 			prefix  => "client",
 			reqfile => "Prepare Peerio Riak SSL configuration directory",
 			within  => "$conf_dir/ssl";

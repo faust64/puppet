@@ -40,6 +40,9 @@ class postfix::relay {
 	pki::define::wrap {
 	    "postfix":
 		ca      => "mail",
+		group   => hiera("gid_zero"),
+		mode    => "0640",
+		owner   => root,
 		reqfile => "Prepare Postfix SSL directory",
 		within  => "$conf_dir/ssl";
 	}

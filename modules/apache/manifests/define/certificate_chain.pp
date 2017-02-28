@@ -30,5 +30,12 @@ define apache::define::certificate_chain($server_certificate       = "server.crt
 		    Exec["Concatenate certificate chain and server certificate into $name"]
 		],
 	    unless   => "test -s dh$server_certificate_full";
+	"Set permissions to apache dhfull $name":
+	    command  => "chown 0:0 dh$server_certificate_full && chmod 0640 dh$server_certificate_full",
+	    cwd      => $look,
+	    notify   => Service[$apache::vars::service_name],
+	    path     => "/usr/bin:/bin",
+	    require  => Exec["Concatenate dh params to $name certificate"],
+	    unless   => "stat -c %u%g%a dh$server_certificate_full | grep 00640";
     }
 }

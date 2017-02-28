@@ -53,20 +53,17 @@ define openvpn::define::server($bridge  = "gre42",
 	    $w2 = "255"
 	    $w3 = "255"
 	    $w4 = "254"
-	}
-	elsif ($netmsk < 16) {
+	} elsif ($netmsk < 16) {
 	    $w1 = $b1
 	    $w2 = $b2 + $finc
 	    $w3 = "255"
 	    $w4 = "254"
-	}
-	elsif ($netmsk < 24) {
+	} elsif ($netmsk < 24) {
 	    $w1 = $b1
 	    $w2 = $b2
 	    $w3 = $b3 + $finc
 	    $w4 = "254"
-	}
-	else {
+	} else {
 	    $w1 = $b1
 	    $w2 = $b2
 	    $w3 = $b3
@@ -177,6 +174,26 @@ define openvpn::define::server($bridge  = "gre42",
 		require => Pki::Define::Get["OpenVPN server chain"],
 		target  => $confdir,
 		what    => "dh";
+	}
+
+# dangerously approximative/would need to fix pki::define::wrap
+# currently notifying the Service whose name matches pki::define::wrap
+# instance title. OpenVPN is driven by an Exec ...
+	exec {
+	    "Set proper permissions to OpenVPN server key":
+		command => "chmod 0640 server.key",
+		cwd     => $confdir,
+		notify  => Exec["Reload OpenVPN services"],
+		path    => "/usr/bin:/bin",
+		require => Pki::Define::Get["OpenVPN server key"],
+		unless  => "stat -c 0%a server.key | grep $mode";
+	    "Set proper permissions to OpenVPN dh params":
+		command => "chmod 0640 dh.pem",
+		cwd     => $confdir,
+		notify  => Exec["Reload OpenVPN services"],
+		path    => "/usr/bin:/bin",
+		require => Pki::Define::Get["OpenVPN server key"],
+		unless  => "stat -c 0%a dh.pem | grep $mode";
 	}
 
 	File <<| tag == "VPN-CRL" |>>

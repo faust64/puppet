@@ -1,5 +1,8 @@
 define pki::define::wrap($ca      = "web",
 			 $do      = "all",
+			 $owner   = false,
+			 $group   = false,
+			 $mode    = false,
 			 $prefix  = "server",
 			 $reqfile = "Prepare apache ssl directory",
 			 $within  = false) {
@@ -33,6 +36,37 @@ define pki::define::wrap($ca      = "web",
 		    what    => "key";
 	    }
 
+	    if ($owner) {
+		exec {
+		    "Set proper owner to $fqdn $prefix key":
+			command => "chown $owner $prefix.key",
+			cwd     => $within,
+			path    => "/usr/bin:/bin",
+			require => Pki::Define::Get["$fqdn $prefix key"],
+			unless  => "stat -c %U $prefix.key | grep $owner";
+		}
+	    }
+	    if ($group) {
+		exec {
+		    "Set proper group to $fqdn $prefix key":
+			command => "chown :$group $prefix.key",
+			cwd     => $within,
+			path    => "/usr/bin:/bin",
+			require => Pki::Define::Get["$fqdn $prefix key"],
+			unless  => "stat -c %G $prefix.key | grep $group";
+		}
+	    }
+	    if ($mode) {
+		exec {
+		    "Set proper permissions to $fqdn $prefix key":
+			command => "chmod $mode $prefix.key",
+			cwd     => $within,
+			path    => "/usr/bin:/bin",
+			require => Pki::Define::Get["$fqdn $prefix key"],
+			unless  => "stat -c 0%a $prefix.key | grep $mode";
+		}
+	    }
+
 	    if (! defined(Pki::Define::Get["PKI $ca service chain"])) {
 		pki::define::get {
 		    "PKI $ca service chain":
@@ -46,7 +80,7 @@ define pki::define::wrap($ca      = "web",
 
 	    if ($ca == "web") {
 		exec {
-		    "Concatenate dhparam to server certificate":
+		    "Concatenate dhparam to $prefix certificate":
 			command => "cat $prefix.crt dh.pem >dh$prefix.crt",
 			creates => "$within/dh$prefix.crt",
 			cwd     => $within,
@@ -57,11 +91,42 @@ define pki::define::wrap($ca      = "web",
 
 		if (defined(Exec["Generate nginx dh.pem"])) {
 		    Exec["Generate nginx dh.pem"]
-			-> Exec["Concatenate dhparam to server certificate"]
+			-> Exec["Concatenate dhparam to $prefix certificate"]
 		}
 		if (defined(Exec["Generate apache dh.pem"])) {
 		    Exec["Generate apache dh.pem"]
-			-> Exec["Concatenate dhparam to server certificate"]
+			-> Exec["Concatenate dhparam to $prefix certificate"]
+		}
+
+		if ($owner) {
+		    exec {
+			"Set proper owner to $fqdn $prefix dh concatenation":
+			    command => "chown $owner dh$prefix.crt",
+			    cwd     => $within,
+			    path    => "/usr/bin:/bin",
+			    require => Exec["Concatenate dhparam to $prefix certificate"],
+			    unless  => "stat -c %U dh$prefix.crt | grep $owner";
+		    }
+		}
+		if ($group) {
+		    exec {
+			"Set proper group to $fqdn $prefix dh concatenation":
+			    command => "chown :$group dh$prefix.crt",
+			    cwd     => $within,
+			    path    => "/usr/bin:/bin",
+			    require => Exec["Concatenate dhparam to $prefix certificate"],
+			    unless  => "stat -c %G dh$prefix.crt | grep $group";
+		    }
+		}
+		if ($mode) {
+		    exec {
+			"Set proper permissions to $fqdn $prefix dh concatenation":
+			    command => "chmod $mode dh$prefix.crt",
+			    cwd     => $within,
+			    path    => "/usr/bin:/bin",
+			    require => Exec["Concatenate dhparam to $prefix certificate"],
+			    unless  => "stat -c 0%a dh$prefix.crt | grep $mode";
+		    }
 		}
 	    }
 	}

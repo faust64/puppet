@@ -14,6 +14,9 @@ define stunnel::define::pkiwrap($ca = "web",
 	hiera("stunnel_service_name"):
 	    ca      => $ca,
 	    do      => $do,
+	    group   => hiera("gid_zero"),
+	    mode    => "0640",
+	    owner   => root,
 	    reqfile => "Prepare stunnel $name certificates directory",
 	    within  => "/etc/stunnel/ssl/$name";
     }

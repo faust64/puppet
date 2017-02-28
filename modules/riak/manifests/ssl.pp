@@ -23,6 +23,9 @@ class riak::ssl {
     pki::define::wrap {
 	"riak":
 	    ca      => "riak",
+	    group   => $riak::vars::runtime_group,
+	    mode    => "0640",
+	    owner   => root,
 	    reqfile => "Prepare Riak SSL configuration directory",
 	    within  => "/etc/riak/ssl";
     }

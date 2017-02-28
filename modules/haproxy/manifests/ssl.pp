@@ -15,6 +15,9 @@ class haproxy::ssl {
 		    if (! defined(Pki::Define::Wrap[$haproxy::vars::service_name])) {
 			pki::define::wrap {
 			    $haproxy::vars::service_name:
+				group   => $haproxy::vars::runtime_group,
+				mode    => "0640",
+				owner   => root,
 				reqfile => "Prepare HAproxy ssl directory",
 				within  => "$conf_dir/ssl";
 			}

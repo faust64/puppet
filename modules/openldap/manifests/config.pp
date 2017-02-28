@@ -43,6 +43,9 @@ class openldap::config {
     pki::define::wrap {
 	$openldap::vars::service_name:
 	    ca      => "auth",
+	    group   => $runtime_group,
+	    mode    => "0640",
+	    owner   => root,
 	    reqfile => "Prepare OpenLDAP SSL directory",
 	    within  => "$conf_dir/ssl";
     }

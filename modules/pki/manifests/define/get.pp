@@ -46,12 +46,4 @@ define pki::define::get($ca     = "web",
 	    path        => "/usr/bin:/bin",
 	    refreshonly => true;
     }
-
-#    if ($what == "key") {
-#	file {
-#	    "Set proper permissions on $target/$dest":
-#		mode  => "0640",
-#		path  => "$target/$dest";
-#	}
-#    }
 }

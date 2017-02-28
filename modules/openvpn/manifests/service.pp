@@ -28,15 +28,13 @@ class openvpn::service {
 
 	    if ($ovpn['netmsk']) {
 		$netmsk = $ovpn['netmsk']
-	    }
-	    else {
+	    } else {
 		$netmsk = $local_openvpns[$ovpnname]['netmsk']
 	    }
 
 	    if ($ovpn['port']) {
 		$port = $ovpn['port']
-	    }
-	    else {
+	    } else {
 		$port = $local_openvpns[$ovpnname]['port']
 	    }
 
@@ -50,8 +48,7 @@ class openvpn::service {
 
 	    if ($is_server and $local_openvpns[$ovpnname]['filter']) {
 		$conn_filter = $local_openvpns[$ovpnname]['filter']
-	    }
-	    else {
+	    } else {
 		$conn_filter = $openvpn_default_flt
 	    }
 
