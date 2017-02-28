@@ -141,7 +141,7 @@ nagios_no_parent: true
 
 # Named
 named_contact: admin@unetresgrossebite.com
-named_master: 10.42.44.100
+#named_master: 10.42.44.100
 named_zones_check:
   - emma-earth.com
   - emma-earth.fr
