@@ -34,41 +34,16 @@ class openldap::config {
 	    owner   => $runtime_user,
 	    path    => "$conf_dir/slapd.conf",
 	    require => File["Prepare OpenLDAP for further configuration"];
-	"Set permissions on certificate key":
-	    group   => $runtime_group,
-	    mode    => "0640",
-	    owner   => root,
-	    path    => "$conf_dir/ssl/server.key";
     }
 
     openldap::define::schema {
 	[ "UTGB", "asterisk", "dlz", "dhcp", "kerberos", "openssh-lpk", "samba" ]:
     }
 
-    pki::define::get {
-	"$fqdn ldap certificate":
+    pki::define::wrap {
+	$openldap::vars::service_name:
 	    ca      => "auth",
-	    notify  => Service[$openldap::vars::service_name],
-	    require => File["Prepare OpenLDAP SSL directory"],
-	    target  => "$conf_dir/ssl",
-	    what    => "certificate";
-	"$fqdn ldap key":
-	    ca      => "auth",
-	    notify  => Service[$openldap::vars::service_name],
-	    require => Pki::Define::Get["$fqdn ldap certificate"],
-	    target  => "$conf_dir/ssl",
-	    what    => "key";
-	"PKI auth service chain":
-	    ca      => "auth",
-	    notify  => Service[$openldap::vars::service_name],
-	    require => Pki::Define::Get["$fqdn ldap key"],
-	    target  => "$conf_dir/ssl",
-	    what    => "chain";
+	    reqfile => "Prepare OpenLDAP SSL directory",
+	    within  => "$conf_dir/ssl";
     }
-
-    Pki::Define::Get["$fqdn ldap certificate"]
-	-> Pki::Define::Get["$fqdn ldap key"]
-	-> Pki::Define::Get["PKI auth service chain"]
-	-> File["Set permissions on certificate key"]
-	-> Service[$openldap::vars::service_name]
 }
