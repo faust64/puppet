@@ -17,6 +17,12 @@ class packages::rhel {
 	    owner   => root,
 	    path    => "$web_root/rhel",
 	    require => File["Prepare www directory"];
+	"Install rhel repository metadata generator":
+	    content => template("packages/update_rpms.erb"),
+	    group   => hiera("gid_zero"),
+	    mode    => "0755",
+	    owner   => root,
+	    path    => "/usr/local/sbin/update_rpms";
     }
 
     if (defined(Class[Apache])) {

@@ -1,7 +1,13 @@
 class packages::tools {
-    if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+    if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu"
+	or $operatingsystem == "CentOS" or $operatingsystem == "RedHat") {
 	common::define::package {
-	    "reprepro":
+	    [ "createrepo", "reprepro" ]:
+	}
+
+	if (defined(File["Install rhel repository metadata generator"])) {
+	    Common::Define::Package["createrepo"]
+		-> File["Install rhel repository metadata generator"]
 	}
     }
 

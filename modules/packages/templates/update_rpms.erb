@@ -1,0 +1,13 @@
+#!/bin/sh
+
+umask 022
+cd <%=@web_root%>/rhel
+
+ls | while read dist
+do
+    if find "$dist" -name '*.rpm' | grep rpm >/dev/null; then
+	createrepo $dist/$arch
+    fi
+done
+
+exit 0

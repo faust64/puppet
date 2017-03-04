@@ -49,7 +49,8 @@ define apache::define::vhost($aliases         = false,
 	    $name:
 	}
 
-	if (defined(Pki::Define::Get["$fqdn server certificate"])) {
+	if (defined(Pki::Define::Get["$fqdn server certificate"])
+	    and defined(Pki::Define::Get["PKI web service chain"])) {
 	    Pki::Define::Get["$fqdn server certificate"]
 		-> Pki::Define::Get["PKI web service chain"]
 		-> Apache::Define::Certificate_chain[$name]
