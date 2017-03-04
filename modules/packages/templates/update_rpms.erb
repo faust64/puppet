@@ -6,7 +6,7 @@ cd <%=@web_root%>/rhel
 ls | while read dist
 do
     if find "$dist" -name '*.rpm' | grep rpm >/dev/null; then
-	createrepo $dist/$arch
+	createrepo $dist
     fi
 done
 
