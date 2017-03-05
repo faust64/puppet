@@ -2,8 +2,8 @@ class tftpd {
     include nginx
     include tftpd::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include tftpd::debian
 	}
 	"OpenBSD": {

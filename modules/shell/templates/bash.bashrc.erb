@@ -1,5 +1,5 @@
 test -z "$PS1" && return
-<% if @operatingsystem == "Debian" -%>test -z "$debian_chroot" -a -r /etc/debian_chroot && debian_chroot=$(cat /etc/debian_chroot)
+<% if @operatingsystem == "Debian" or @myoperatingsystem == "Devuan" -%>test -z "$debian_chroot" -a -r /etc/debian_chroot && debian_chroot=$(cat /etc/debian_chroot)
 <% end -%>test -f /etc/bash_completion && . /etc/bash_completion
 export EDITOR=vi
 export FACTERLIB=/opt/puppetlabs/puppet/cache/lib/facter

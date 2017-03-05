@@ -1,11 +1,11 @@
 class mongodb {
     include mongodb::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include mongodb::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include mongodb::debian
 	}
 	default: {

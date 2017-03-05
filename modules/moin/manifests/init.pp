@@ -1,8 +1,8 @@
 class moin {
     include moin::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include moin::debian
 	}
 	default: {

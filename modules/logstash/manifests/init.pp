@@ -8,8 +8,8 @@ class logstash {
     include logstash::vars
     include logstash::geoip
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include logstash::debian
 	}
 	default: {

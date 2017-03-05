@@ -1,11 +1,11 @@
 class java {
     include java::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include java::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include java::debian
 	}
 	default: {

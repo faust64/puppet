@@ -1,6 +1,6 @@
 class common::libs::perlrrds {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    $what = "librrds-perl"
 	}
 	"CentOS", "RedHat": {

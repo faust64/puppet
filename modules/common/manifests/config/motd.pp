@@ -1,10 +1,10 @@
 class common::config::motd {
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    $showarch    = $architecture
 	    $showversion = $operatingsystemrelease
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    $showarch    = $hardwaremodel
 	    $showversion = $lsbdistcodename
 	}

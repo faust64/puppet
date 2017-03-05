@@ -1,0 +1,5 @@
+#WARNING: this is a copy of Devuan-jessie.yaml
+#         as of right now, operatingsystem returns with Linux
+#         see https://tickets.puppetlabs.com/browse/FACT-1579
+snmp_uptodate_new: true
+rsyslog_version: 8

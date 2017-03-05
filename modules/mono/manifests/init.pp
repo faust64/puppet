@@ -1,6 +1,6 @@
 class mono {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include mono::debian
 	}
 	default: {

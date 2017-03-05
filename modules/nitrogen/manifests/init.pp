@@ -1,11 +1,11 @@
 class nitrogen {
     include nitrogen::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include nitrogen::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include nitrogen::debian
 	}
 	"FreeBSD": {

@@ -1,8 +1,8 @@
 class iscdhcpserver {
     include iscdhcpserver::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include iscdhcpserver::debian
 	}
 	"OpenBSD": {

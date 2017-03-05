@@ -1,6 +1,6 @@
 class common::libs::perlredis {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    $what = "libredis-perl"
 	}
     }

@@ -1,9 +1,9 @@
 class common::tools::make {
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    $what = "make"
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    $what = [ "build-essential", "make" ]
 	}
     }

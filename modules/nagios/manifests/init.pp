@@ -1,11 +1,11 @@
 class nagios {
     include nagios::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include nagios::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include nagios::debian
 	}
 	"FreeBSD": {

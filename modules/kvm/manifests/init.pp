@@ -3,12 +3,12 @@ class kvm {
     include common::tools::kpartx
     include common::tools::uuid
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include kvm::rhel
 	}
 	"FreeBSD": { }
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include kvm::debian
 	}
 	default: {

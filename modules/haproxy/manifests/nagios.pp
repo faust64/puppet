@@ -59,7 +59,8 @@ class haproxy::nagios {
 		    $connect = [ "-u", "http://$hname$uri", "-H", $listen, "-p", $port ]
 		}
 	    } elsif ($command == "check_mysql") {
-		if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+		if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+		    or $operatingsystem == "Ubuntu") {
 		    $dep = "mysql-client"
 		} elsif ($operatingsystem == "CentOS" or $operatingsystem == "RedHat") {
 		    $dep = "mysql"
@@ -81,7 +82,8 @@ class haproxy::nagios {
 		    $connect = [ "-H", $listen, "-P", $port ]
 		}
 	    } elsif ($command == "check_pgsql") {
-		if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+		if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+		    or $operatingsystem == "Ubuntu") {
 		    $dep = "libpq-dev"
 		} elsif ($operatingsystem == "CentOS" or $operatingsystem == "RedHat") {
 		    $dep = "postgresql-libs"

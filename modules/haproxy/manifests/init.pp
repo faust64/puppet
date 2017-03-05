@@ -1,8 +1,8 @@
 class haproxy {
     include haproxy::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include haproxy::debian
 	}
 	default: {

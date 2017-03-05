@@ -37,6 +37,10 @@ class common::debian {
 	common::define::package {
 	    "debian-keyring":
 	}
+    } elsif ($myoperatingsystem == "Devuan") {
+	common::define::package {
+	    "devuan-keyring":
+	}
     } elsif ($operatingsystem == "Ubuntu") {
 	common::define::package {
 	    [ "apport", "biosdevname", "whoopsie" ]:

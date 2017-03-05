@@ -16,8 +16,8 @@ class php::moduledependencies {
 	    common::define::package {
 		"php-curl":
 	    }
-	} elsif ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu"
-	    or $operatingsystem == "FreeBSD") {
+	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    common::define::package {
 		"php5-curl":
 	    }
@@ -29,7 +29,8 @@ class php::moduledependencies {
 	}
     }
     if ($php::vars::mod_ftp == true) {
-	if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"php-net-ftp":
 	    }
@@ -44,8 +45,8 @@ class php::moduledependencies {
 	    common::define::package {
 		"php-gd":
 	    }
-	} elsif ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu"
-	    or $operatingsystem == "FreeBSD") {
+	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    common::define::package {
 		"php5-gd":
 	    }
@@ -56,7 +57,8 @@ class php::moduledependencies {
 	    common::define::package {
 		"php-php-gettext":
 	    }
-	} elsif ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"php-gettext":
 	    }
@@ -67,14 +69,16 @@ class php::moduledependencies {
 	}
     }
     if ($php::vars::mod_gmp == true) {
-	if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"php5-gmp":
 	    }
 	}
     }
     if ($php::vars::mod_intl == true) {
-	if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"php5-intl":
 	    }
@@ -85,7 +89,8 @@ class php::moduledependencies {
 	    common::define::package {
 		"php-jsonlint":
 	    }
-	} elsif ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"php-services-json":
 	    }
@@ -100,15 +105,16 @@ class php::moduledependencies {
 	    common::define::package {
 		"php-ldap":
 	    }
-	} elsif ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu"
-	    or $operatingsystem == "FreeBSD") {
+	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    common::define::package {
 		"php5-ldap":
 	    }
 	}
     }
     if ($php::vars::mod_ldap_pecl == true) {
-	if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"php-net-ldap2":
 	    }
@@ -130,8 +136,8 @@ class php::moduledependencies {
 	    common::define::package {
 		"php-mcrypt":
 	    }
-	} elsif ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu"
-	    or $operatingsystem == "FreeBSD") {
+	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    common::define::package {
 		"php5-mcrypt":
 	    }
@@ -142,15 +148,16 @@ class php::moduledependencies {
 	    common::define::package {
 		"php-memcache":
 	    }
-	} elsif ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu"
-	    or $operatingsystem == "FreeBSD") {
+	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    common::define::package {
 		"php5-memcache":
 	    }
 	}
     }
     if ($php::vars::mod_mysqlnd == true) {
-	if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"php5-mysqlnd":
 	    }
@@ -160,8 +167,8 @@ class php::moduledependencies {
 	    common::define::package {
 		"php-mysql":
 	    }
-	} elsif ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu"
-	    or $operatingsystem == "FreeBSD") {
+	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    common::define::package {
 		"php5-mysql":
 	    }
@@ -172,8 +179,8 @@ class php::moduledependencies {
 	    common::define::package {
 		"php-pgsql":
 	    }
-	} elsif ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu"
-	    or $operatingsystem == "FreeBSD") {
+	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    common::define::package {
 		"php5-pgsql":
 	    }
@@ -184,8 +191,8 @@ class php::moduledependencies {
 	    common::define::package {
 		"php-snmp":
 	    }
-	} elsif ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu"
-	    or $operatingsystem == "FreeBSD") {
+	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    common::define::package {
 		"php5-snmp":
 	    }
@@ -199,7 +206,8 @@ class php::moduledependencies {
 #		"php-sqlite":
 #	    }
 #	}
-	if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"php5-sqlite":
 	    }
@@ -233,8 +241,8 @@ class php::moduledependencies {
 	    common::define::package {
 		"php-xmlrpc":
 	    }
-	} elsif ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu"
-	    or $operatingsystem == "FreeBSD") {
+	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    common::define::package {
 		"php5-xmlrpc":
 	    }

@@ -1,8 +1,8 @@
 class freeradius {
     include freeradius::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include freeradius::debian
 	}
 	"OpenBSD": {

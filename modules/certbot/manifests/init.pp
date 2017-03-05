@@ -1,8 +1,8 @@
 class certbot {
     include certbot::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include certbot::debian
 	}
 	default: {

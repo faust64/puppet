@@ -1,8 +1,8 @@
 class xen {
     include xen::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include xen::debian
 	}
 	default: {

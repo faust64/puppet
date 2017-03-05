@@ -1,14 +1,14 @@
 class openldap {
     include openldap::client
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    class {
 		openldap::rhel:
 		    server => true;
 	    }
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    class {
 		openldap::debian:
 		    server => true;

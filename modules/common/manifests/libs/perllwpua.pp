@@ -1,6 +1,6 @@
 class common::libs::perllwpua {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    $what = "liblwp-useragent-determined-perl"
 	}
 	"CentOS", "RedHat": {

@@ -1,8 +1,8 @@
 class collectd {
     include collectd::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include collectd::debian
 	}
 	"CentOS", "RedHat": {

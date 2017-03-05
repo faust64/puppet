@@ -1,6 +1,6 @@
 class common::tools::uuid {
-    case $operatingsystem {
-	"CentOS", "Debian", "RedHat", "Ubuntu": {
+    case $myoperatingsystem {
+	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {
 	    $what = "uuid"
 	}
     }

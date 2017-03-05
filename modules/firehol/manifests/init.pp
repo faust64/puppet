@@ -1,8 +1,8 @@
 class firehol {
     include firehol::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include firehol::debian
 	}
 	default: {

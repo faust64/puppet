@@ -2,8 +2,8 @@ class owncloud {
     include openldap::client
     include owncloud::vars
 
-    case $operatingsystem {
-	"Debian": {
+    case $myoperatingsystem {
+	"Debian", "Devuan": {
 	    include owncloud::debian
 	}
 	default: {

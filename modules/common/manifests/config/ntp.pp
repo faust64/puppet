@@ -4,8 +4,8 @@ class common::config::ntp {
     $minute     = hiera("ntp_update_minute")
     $upstream   = hiera("ntp_upstream")
 
-    case $operatingsystem {
-	"CentOS", "Debian", "RedHat", "Ubuntu": {
+    case $myoperatingsystem {
+	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {
 	    common::define::package {
 		"ntp":
 	    }

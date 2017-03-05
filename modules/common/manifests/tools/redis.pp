@@ -1,6 +1,6 @@
 class common::tools::redis {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    $what = "redis-tools"
 	}
     }

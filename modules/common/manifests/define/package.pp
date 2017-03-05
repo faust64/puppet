@@ -44,21 +44,27 @@ define common::define::package($ensure   = "present",
 	$the_source = false
     }
 
-    if ($provider and ! defined(Package[$name])) {
+    if ($myoperatingsystem == "Devuan" and $provider == false) {
+	$myprovider = "apt"
+    } else {
+	$myprovider = $provider
+    }
+
+    if ($myprovider and ! defined(Package[$name])) {
 	if ($the_source) {
 	    if ($options) {
 		package {
 		    $name:
 			ensure          => $ensure,
 			install_options => $options,
-			provider        => $provider,
+			provider        => $myprovider,
 			source          => $the_source;
 		}
 	    } else {
 		package {
 		    $name:
 			ensure          => $ensure,
-			provider        => $provider,
+			provider        => $myprovider,
 			source          => $the_source;
 		}
 	    }
@@ -67,13 +73,13 @@ define common::define::package($ensure   = "present",
 		$name:
 		    ensure          => $ensure,
 		    install_options => $options,
-		    provider        => $provider;
+		    provider        => $myprovider;
 	    }
 	} else {
 	    package {
 		$name:
 		    ensure          => $ensure,
-		    provider        => $provider;
+		    provider        => $myprovider;
 	    }
 	}
     } elsif (! defined(Package[$name])) {
@@ -106,7 +112,7 @@ define common::define::package($ensure   = "present",
 	}
     }
 
-    if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+    if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan" or $operatingsystem == "Ubuntu") {
 	if ($name != "apt-cacher-ng") {
 	    File["Install APT main configuration"]
 		-> Package[$name]

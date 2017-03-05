@@ -1,8 +1,8 @@
 class peerio {
     include peerio::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include peerio::debian
 	}
 	default: {

@@ -1,6 +1,6 @@
 class common::libs::rubybundler {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    $what = "ruby-bundler"
 	}
     }

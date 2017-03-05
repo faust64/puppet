@@ -1,9 +1,9 @@
 class curl {
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include curl::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include curl::debian
 	}
 	"FreeBSD": {

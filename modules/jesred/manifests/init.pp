@@ -1,8 +1,8 @@
 class jesred {
     include jesred::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include jesred::debian
 	}
 	default: {

@@ -1,9 +1,9 @@
 class chromium {
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include chromium::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include chromium::debian
 	}
 	"FreeBSD": {

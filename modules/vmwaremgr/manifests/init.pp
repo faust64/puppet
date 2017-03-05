@@ -1,8 +1,8 @@
 class vmwaremgr {
     include vmwaremgr::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include vmwaremgr::debian
 	}
 	default: {

@@ -11,8 +11,8 @@ class wifimgr {
 	include java
     }
 
-    case $operatingsystem {
-	"Debian": {
+    case $myoperatingsystem {
+	"Debian", "Devuan": {
 	    include wifimgr::debian
 	}
 	default: {

@@ -18,7 +18,7 @@ class common::physical::netpackages {
 	    [ "ethtool", "iftop" ]:
 	}
 
-	if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan" or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"arping":
 	    }

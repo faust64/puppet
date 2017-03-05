@@ -1,8 +1,8 @@
 class iscsiinitiator {
     include iscsiinitiator::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include iscsiinitiator::debian
 	}
 	"CentOS", "RedHat": {

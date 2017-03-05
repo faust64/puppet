@@ -2,8 +2,8 @@ class sonarr {
     include sonarr::vars
     include mono
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include sonarr::debian
 	}
 	default: {

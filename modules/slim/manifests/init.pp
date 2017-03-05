@@ -1,11 +1,11 @@
 class slim($window_manager = "openbox") {
     include slim::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include slim::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include slim::debian
 	}
 	"FreeBSD": {

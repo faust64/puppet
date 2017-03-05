@@ -1,8 +1,8 @@
 class smokeping {
     include smokeping::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include smokeping::debian
 	}
 	default: {

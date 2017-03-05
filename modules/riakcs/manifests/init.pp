@@ -12,8 +12,8 @@ class riakcs {
 	include riak
     }
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include riakcs::debian
 	}
 	default: {

@@ -1,6 +1,6 @@
 class common::libs::exif {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    $what = "libimage-exiftool-perl"
 	}
     }

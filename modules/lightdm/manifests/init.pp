@@ -1,11 +1,11 @@
 class lightdm {
     include lightdm::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include lightdm::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include lightdm::debian
 	}
 	"FreeBSD": {

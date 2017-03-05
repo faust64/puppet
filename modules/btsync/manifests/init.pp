@@ -1,8 +1,8 @@
 class btsync {
     include btsync::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include btsync::debian
 	}
 	default: {

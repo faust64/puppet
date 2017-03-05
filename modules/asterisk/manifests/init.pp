@@ -1,11 +1,11 @@
 class asterisk {
     include asterisk::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include asterisk::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include asterisk::debian
 	}
 	default: {

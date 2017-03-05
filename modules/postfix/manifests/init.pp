@@ -1,11 +1,11 @@
 class postfix {
     include postfix::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include postfix::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include postfix::debian
 	}
 	default: {

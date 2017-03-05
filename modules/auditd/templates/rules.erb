@@ -12,7 +12,7 @@
 -w /etc/security/opasswd -p wa -k identity
 <% end -%><% if @architecture == "x86_64" or @architecture == "amd64" -%>-a exit,always -F arch=b64 -S sethostname -S setdomainname -k system-locale
 <% end -%>-a exit,always -F arch=b32 -S sethostname -S setdomainname -k system-locale
-<% if @operatingsystem == "Debian" or @operatingsystem == "Ubuntu" -%>-w /etc/issue -p wa -k system-locale
+<% if @operatingsystem == "Debian" or @myoperatingsystem == "Devuan" or @operatingsystem == "Ubuntu" -%>-w /etc/issue -p wa -k system-locale
 -w /etc/issue.net -p wa -k system-locale
 -w /etc/network -p wa -k system-locale
 <% elsif @operatingsystem == "CentOS" or @operatingsystem == "RedHat" -%>-w /etc/sysconfig/network -p wa -k system-locale

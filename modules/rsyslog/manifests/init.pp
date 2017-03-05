@@ -1,11 +1,11 @@
 class rsyslog {
     include rsyslog::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include rsyslog::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include rsyslog::debian
 	}
 	"FreeBSD": {

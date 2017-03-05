@@ -1,8 +1,8 @@
 class ossec {
     include ossec::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include ossec::debian
 	}
 	"FreeBSD": {

@@ -3,11 +3,11 @@ class mrtg {
     include common::libs::perlrrds
     include common::libs::rrdtool
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include mrtg::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include mrtg::debian
 	}
 	default: {

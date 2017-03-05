@@ -1,5 +1,6 @@
 class auditd::grub {
-    if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+    if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	or $operatingsystem == "Ubuntu") {
 	common::define::lined {
 	    "Set audit=1 to grub configuration":
 		line    => 'GRUB_CMDLINE_LINUX="audit=1"',

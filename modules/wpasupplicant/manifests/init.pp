@@ -1,11 +1,11 @@
 class wpasupplicant {
     include wpasupplicant::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include wpasupplicant::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include wpasupplicant::debian
 	}
 	"FreeBSD": { }

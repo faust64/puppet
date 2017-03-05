@@ -1,9 +1,9 @@
 class python {
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include python::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include python::debian
 	}
 	"FreeBSD": {

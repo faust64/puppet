@@ -2,19 +2,20 @@ class common::config::cron {
     $allowed_users = hiera("cron_allowed_users")
     $cron_srvname  = hiera("cron_service_name")
 
-    if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
-	Package {
+    if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	or $operatingsystem == "Ubuntu") {
+	common::define::package {
 	    "cron":
 	}
 
-	Package["cron"]
+	Common::Define::Package["cron"]
 	    -> File["Restrict access to crontab"]
     } elsif ($operatingsystem == "CentOS" or $operatingsystem == "RedHat") {
-	Package {
+	common::define::package {
 	    "cronie":
 	}
 
-	Package["cronie"]
+	Common::Define::Package["cronie"]
 	    -> File["Restrict access to crontab"]
     } elsif ($operatingsystem == "FreeBSD") {
 	common::define::lined {
@@ -26,9 +27,9 @@ class common::config::cron {
 	}
     }
 
-    if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu"
-	or $operatingsystem == "CentOS" or $operatingsystem == "RedHat"
-	or $operatingsystem == "FreeBSD") {
+    if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	or $operatingsystem == "Ubuntu" or $operatingsystem == "CentOS"
+	or $operatingsystem == "RedHat" or $operatingsystem == "FreeBSD") {
 	file {
 	    "Restrict access to crontab":
 		ensure => present,
@@ -38,8 +39,9 @@ class common::config::cron {
 		path   => "/etc/crontab";
 	}
     }
-    if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu"
-	or $operatingsystem == "CentOS" or $operatingsystem == "RedHat") {
+    if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	or $operatingsystem == "Ubuntu" or $operatingsystem == "CentOS"
+	or $operatingsystem == "RedHat") {
 	file {
 	    "Set proper permissions to cron.d":
 		ensure => directory,

@@ -1,12 +1,12 @@
 class memcache {
     include memcache::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include memcache::rhel
 	    include memcache::configrh
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include memcache::debian
 	    include memcache::configdeb
 	}

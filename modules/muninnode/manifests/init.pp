@@ -1,11 +1,11 @@
 class muninnode {
     include muninnode::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include muninnode::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include muninnode::debian
 	}
 	"FreeBSD": {

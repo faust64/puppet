@@ -1,8 +1,8 @@
 class apache {
     include apache::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include apache::debian
 
 	    Class[Apache::Debian]

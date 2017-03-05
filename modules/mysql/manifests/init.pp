@@ -1,11 +1,11 @@
 class mysql {
     include mysql::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include mysql::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include mysql::debian
 	}
 	default: {

@@ -1,6 +1,6 @@
 class common::libs::perljson {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    $what = "libjson-perl"
 	}
 	"CentOS", "RedHat": {

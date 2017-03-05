@@ -1,8 +1,8 @@
 class kibana {
     include kibana::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include kibana::debian
 	}
 	default: {

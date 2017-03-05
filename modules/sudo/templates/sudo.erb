@@ -1,4 +1,4 @@
-<% if @operatingsystem == "CentOS" or @operatingsystem == "Debian" or @operatingsystem == "RedHat" or @operatingsystem == "Ubuntu" -%>Defaults        env_reset
+<% if @operatingsystem == "CentOS" or @operatingsystem == "Debian" or @myoperatingsystem == "Devuan" or @operatingsystem == "RedHat" or @operatingsystem == "Ubuntu" -%>Defaults        env_reset
 Defaults        mail_badpass
 Defaults        secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 root            ALL=(ALL:ALL) ALL

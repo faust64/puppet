@@ -1,5 +1,5 @@
 define common::define::insertmodule() {
-    if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+    if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan" or $operatingsystem == "Ubuntu") {
 	exec {
 	    "Insert module $name":
 		command => "modprobe $name && echo $name >>modules",

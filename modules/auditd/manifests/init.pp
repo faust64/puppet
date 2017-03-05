@@ -1,8 +1,8 @@
 class auditd {
     include auditd::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include auditd::debian
 	}
 	"CentOS", "RedHat": {

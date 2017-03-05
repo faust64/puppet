@@ -2,11 +2,11 @@ class libvirt {
     include libvirt::vars
     include python
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include libvirt::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include libvirt::debian
 	}
 	"FreeBSD": {

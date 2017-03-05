@@ -2,11 +2,11 @@ class openvpn {
     include openvpn::vars
     include openvpn::scripts
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include openvpn::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include openvpn::debian
 	}
 	"OpenBSD": {

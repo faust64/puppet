@@ -1,11 +1,11 @@
 class xinetd {
     include xinetd::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include xinetd::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include xinetd::debian
 	}
 	default: {

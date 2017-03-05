@@ -1,8 +1,8 @@
 class riak {
     include riak::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include riak::debian
 	}
 	default: {

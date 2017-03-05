@@ -1,8 +1,8 @@
 class flumotion {
     include flumotion::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include flumotion::debian
 	}
 	default: {

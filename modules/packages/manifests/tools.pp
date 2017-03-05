@@ -1,6 +1,7 @@
 class packages::tools {
-    if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu"
-	or $operatingsystem == "CentOS" or $operatingsystem == "RedHat") {
+    if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	or $operatingsystem == "Ubuntu" or $operatingsystem == "CentOS"
+	or $operatingsystem == "RedHat") {
 	common::define::package {
 	    [ "createrepo", "reprepro" ]:
 	}

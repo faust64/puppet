@@ -3,11 +3,11 @@
 class postgres {
     include postgres::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include postgres::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include postgres::debian
 	}
 	"FreeBSD": {

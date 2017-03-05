@@ -1,8 +1,8 @@
 class ssh {
     include ssh::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include ssh::debian
 	}
 	"CentOS", "RedHat": {

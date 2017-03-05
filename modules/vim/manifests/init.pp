@@ -1,9 +1,9 @@
 class vim {
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include vim::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include vim::debian
 	}
 	"FreeBSD": {

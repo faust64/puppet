@@ -1,7 +1,7 @@
 <% if @kernel == "Linux" -%>[accounting_ipv4_*]
 user root
     
-<% end -%><% if @operatingsystem == "Debian" or @operatingsystem == "Ubuntu" -%>[apt]
+<% end -%><% if @operatingsystem == "Debian" or @myoperatingsystem == "Devuan" or @operatingsystem == "Ubuntu" -%>[apt]
 user root
 
 <% end -%>[df*]

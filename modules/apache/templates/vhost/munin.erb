@@ -31,13 +31,13 @@
     Include ssl.conf
 <% end -%>    DocumentRoot <%=@app_root%>
     Alias /munin <%=@app_root%>
-<% if @operatingsystem == "Debian" or @operatingsystem == "Ubuntu" -%>    ScriptAlias /munin-cgi/munin-cgi-graph /usr/lib/munin/cgi/munin-cgi-graph
+<% if @operatingsystem == "Debian" or @myoperatingsystem == "Devuan" or @operatingsystem == "Ubuntu" -%>    ScriptAlias /munin-cgi/munin-cgi-graph /usr/lib/munin/cgi/munin-cgi-graph
     ScriptAlias /munin-cgi/munin-cgi-html /usr/lib/munin/cgi/munin-cgi-html
 <% elsif @operatingsystem == "CentOS" or @operatingsystem == "RedHat" -%>    ScriptAlias /cgi-bin/munin-cgi-graph /var/www/cgi-bin/munin-cgi-graph
     ScriptAlias /cgi-bin/munin-cgi-html /var/www/cgi-bin/munin-cgi-html
 <% else -%>    ScriptAlias /cgi-bin/munin-cgi-graph /usr/lib/cgi-bin/munin-cgi-graph
     ScriptAlias /cgi-bin/munin-cgi-html /usr/lib/cgi-bin/munin-cgi-html
-<% end -%><% if @operatingsystem == "Debian" or @operatingsystem == "Ubuntu" -%>    <Location /munin-cgi/munin-cgi-graph>
+<% end -%><% if @operatingsystem == "Debian" or @myoperatingsystem == "Devuan" or @operatingsystem == "Ubuntu" -%>    <Location /munin-cgi/munin-cgi-graph>
 <% else -%>    <Location /cgi-bin/munin-cgi-graph>
 <% end -%><% if @version == "2.2" -%>	Order allow,deny
 	Allow from all
@@ -46,7 +46,7 @@
 	    SetHandler fastcgi-script
 	</IfModule>
     </Location>
-<% if @operatingsystem == "Debian" or @operatingsystem == "Ubuntu" -%>    <Location /munin-cgi/munin-cgi-html>
+<% if @operatingsystem == "Debian" or @myoperatingsystem == "Devuan" or @operatingsystem == "Ubuntu" -%>    <Location /munin-cgi/munin-cgi-html>
 <% else -%>    <Location /cgi-bin/munin-cgi-html>
 <% end -%><% if @version == "2.2" -%>	Order allow,deny
 	Allow from all

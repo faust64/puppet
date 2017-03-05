@@ -24,7 +24,7 @@ class ossec::debian {
 	    url => "http://ossec.wazuh.com/repos/apt/conf/ossec-key.gpg.key";
     }
 
-    if ($operatingsystem == "Debian") {
+    if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan") {
 	$baseurl = "http://ossec.wazuh.com/repos/apt/debian"
     } else {
 	$baseurl = "http://ossec.wazuh.com/repos/apt/ubuntu"

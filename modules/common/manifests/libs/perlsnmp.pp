@@ -1,6 +1,6 @@
 class common::libs::perlsnmp {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    $what = "libsnmp-perl"
 	}
 	"CentOS", "RedHat": {

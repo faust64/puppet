@@ -1,11 +1,11 @@
 class logrotate {
     include logrotate::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include logrotate::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include logrotate::debian
 	}
 	default: {

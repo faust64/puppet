@@ -1,8 +1,8 @@
 class aide {
     include aide::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include aide::debian
 	}
 	"CentOS", "RedHat": {

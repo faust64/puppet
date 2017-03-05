@@ -1,11 +1,11 @@
 class pnp4nagios {
     include pnp4nagios::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include pnp4nagios::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include pnp4nagios::debian
 	}
 	default: {

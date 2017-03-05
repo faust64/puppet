@@ -13,8 +13,8 @@ class matchbox {
 	include vlc
     }
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include matchbox::debian
 	}
 	default: {

@@ -1,9 +1,9 @@
 class qemu {
     include qemu::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": { }
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include qemu::debian
 	}
 	"FreeBSD": {

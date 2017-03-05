@@ -1,11 +1,11 @@
 class opendkim {
     include opendkim::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include opendkim::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include opendkim::debian
 	}
 	"OpenBSD": {

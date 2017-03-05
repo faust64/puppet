@@ -2,8 +2,8 @@ class wordpress {
     include wordpress::vars
     include common::tools::unzip
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include wordpress::debian
 	}
 	default: {

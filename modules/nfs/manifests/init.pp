@@ -1,8 +1,8 @@
 class nfs {
     include nfs::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include nfs::debian
 	}
 	"CentOS", "RedHat": {

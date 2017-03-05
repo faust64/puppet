@@ -1,8 +1,8 @@
 class clamav {
     include clamav::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include clamav::debian
 	}
 	default: {

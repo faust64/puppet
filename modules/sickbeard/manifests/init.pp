@@ -3,8 +3,8 @@ class sickbeard {
     include sickbeard::install
     include common::tools::pip
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include sickbeard::debian
 	}
 	default: {

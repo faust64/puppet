@@ -1,6 +1,6 @@
 class common::libs::perlwww {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    $what = "libwww-perl"
 	}
 	"CentOS", "RedHat": {

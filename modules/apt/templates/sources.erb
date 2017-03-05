@@ -1,4 +1,7 @@
 <% if @architecture == "armv6l" -%>deb http://mirrordirector.raspbian.org/raspbian/ <%=@lsbdistcodename%> main contrib non-free rpi
+<% elsif @myoperatingsystem == "Devuan" -%>deb http://auto.mirror.devuan.org/merged/ <%=@lsbdistcodename%> main contrib non-free
+deb http://auto.mirror.devuan.org/merged/ <%=@lsbdistcodename%>-security main contrib non-free
+deb http://auto.mirror.devuan.org/merged/ <%=@lsbdistcodename%>-updates main contrib non-free
 <% elsif @operatingsystem == "Debian" -%>deb http://ftp.debian.org/debian <%=@lsbdistcodename%> main contrib non-free
 <% if @lsbdistcodename != "sid" -%>deb http://ftp.debian.org/debian <%=@lsbdistcodename%>-updates main contrib non-free
 deb http://security.debian.org <%=@lsbdistcodename%>/updates main contrib non-free

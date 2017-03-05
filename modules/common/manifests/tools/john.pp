@@ -1,6 +1,6 @@
 class common::tools::john {
-    case $operatingsystem {
-	"Debian", "Fedora", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Fedora", "Ubuntu": {
 	    $what = "john"
 	}
 	"Gentoo": {

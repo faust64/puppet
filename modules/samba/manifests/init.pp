@@ -1,11 +1,11 @@
 class samba {
     include samba::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include samba::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include samba::debian
 	}
 	default: {

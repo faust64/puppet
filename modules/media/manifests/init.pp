@@ -3,8 +3,8 @@ class media {
     include common::libs::exif
     include media::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include media::debian
 	}
 	default: {

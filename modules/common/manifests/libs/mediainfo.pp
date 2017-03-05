@@ -1,6 +1,6 @@
 class common::libs::mediainfo {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    $what = "mediainfo"
 	}
     }

@@ -1,6 +1,6 @@
 class common::libs::rubylog4r {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    $what = "ruby-log4r"
 	}
     }

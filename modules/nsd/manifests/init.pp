@@ -1,8 +1,8 @@
 class nsd {
     include nsd::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include nsd::debian
 	}
 	"OpenBSD": {

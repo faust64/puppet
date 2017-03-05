@@ -1,6 +1,6 @@
 class common::libs::perljsonrpc {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    $what = "libjson-rpc-perl"
 	}
 	"CentOS", "RedHat": {

@@ -1,6 +1,6 @@
 class common::libs::rrdtool {
-    case $operatingsystem {
-	"CentOS", "Debian", "RedHat", "Ubuntu": {
+    case $myoperatingsystem {
+	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {
 	    $what = "rrdtool"
 	}
     }

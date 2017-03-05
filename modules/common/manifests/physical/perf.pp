@@ -7,7 +7,7 @@ class common::physical::perf {
 		"linux-tools-$kernelrelease"
 	    ]:
 	}
-    } elsif ($operatingsystem == "Debian") {
+    } elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan") {
 	common::define::package {
 	    [ "linux-tools" ]:
 	}

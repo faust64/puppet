@@ -1,0 +1,55 @@
+download_cmd: wget
+gid_adm: adm
+gid_zero: root
+service_dir: /etc/init.d
+
+# Apache
+apache_error_dir: /usr/share/apache2/error
+apache_icons_dir: /usr/share/apache2/icons
+
+# Nagios
+nagios_hostgroup: devuan-servers
+nagios_iconimage: utgb/devuan.png
+nagios_iconimagealt: devuan
+nagios_statusmapimage: utgb/devuan.gd2
+nagios_nrpe_service_name: nagios-nrpe-server
+
+# NFS
+nfs_service_name: nfs-kernel-server
+
+# Nginx
+nginx_cgi_socket: /var/run/fcgiwrap.socket
+nginx_runtime_user: www-data
+
+# OpenSSH
+ssh_service_name: ssh
+
+# PHP - usual suspects
+#php_mod_pdo: true
+#php_mod_mysqli: true
+
+# SNMP
+snmp_conf_dir: /etc/snmp
+
+# Smokeping
+smokeping_share_dir: /usr/share/smokeping
+
+# Squid
+squid_cache_dir: /var/spool/squid3
+squid_conf_dir: /etc/squid3
+squid_command: squid3
+squid_error_dir: /usr/share/squid3/errors
+squid_log_dir: /var/log/squid3
+squid_service_name: squid3
+squid_spool_dir: /var/spool/squid3
+
+# Stunnel
+stunnel_service_name: stunnel4
+
+# Tor
+tor_runtime_user: debian-tor
+
+# Transmission
+transmission_runtime_group: debian-transmission
+transmission_runtime_user: debian-transmission
+transmission_store_dir: /home/debian-transmission

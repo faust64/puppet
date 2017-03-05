@@ -1,8 +1,8 @@
 class jenkins {
     include jenkins::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include jenkins::debian
 	}
 	default: {

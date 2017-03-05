@@ -1,11 +1,11 @@
 class opennebula {
     include opennebula::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include opennebula::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include opennebula::debian
 	}
 	default: {

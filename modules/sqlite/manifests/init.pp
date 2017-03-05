@@ -1,6 +1,6 @@
 class sqlite {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include sqlite::debian
 	}
 	default: {

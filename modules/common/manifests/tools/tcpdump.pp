@@ -1,6 +1,6 @@
 class common::tools::tcpdump {
-    case $operatingsystem {
-	"CentOS", "Debian", "RedHat", "Ubuntu": {
+    case $myoperatingsystem {
+	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {
 	    $what = "tcpdump"
 	}
     }

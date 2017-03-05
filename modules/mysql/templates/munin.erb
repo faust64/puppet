@@ -3,5 +3,5 @@ env.warning 0
 env.critical 0
 
 [mysql*]
-<% if @operatingsystem == "Debian" or @operatingsystem == "Ubuntu" %>env.mysqlopts --defaults-file=/etc/mysql/debian.cnf
+<% if @operatingsystem == "Debian" or @myoperatingsystem == "Devuan" or @operatingsystem == "Ubuntu" %>env.mysqlopts --defaults-file=/etc/mysql/debian.cnf
 <% end -%>user root

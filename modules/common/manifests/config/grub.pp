@@ -1,8 +1,8 @@
 class common::config::grub {
     $grub_admins = hiera("grub_admin_users")
 
-    case $operatingsystem {
-	"CentOS", "Debian", "RedHat", "Ubuntu": {
+    case $myoperatingsystem {
+	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {
 # one of my oldest XEN PV had no grub:
 # /etc/grub.d from grub-common
 # /usr/sbin/update-grub from grub2-common
@@ -29,7 +29,7 @@ class common::config::grub {
 	    path    => "/boot/grub/grub.cfg";
     }
 
-    if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+    if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan" or $operatingsystem == "Ubuntu") {
 	file {
 	    "Ensure /etc/default/grub present":
 		ensure => present,

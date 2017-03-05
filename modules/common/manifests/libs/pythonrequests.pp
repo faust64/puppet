@@ -1,6 +1,6 @@
 class common::libs::pythonrequests {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    $what = "python-requests"
 	}
     }

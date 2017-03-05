@@ -1,6 +1,6 @@
 class common::libs::perlcachecache {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    $what = "libcache-cache-perl"
 	}
 	"CentOS", "RedHat": {

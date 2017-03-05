@@ -1,11 +1,11 @@
 class unbound {
     include unbound::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include unbound::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include unbound::debian
 	}
 	"OpenBSD": {

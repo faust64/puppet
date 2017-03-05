@@ -1,8 +1,8 @@
 class transmission {
     include transmission::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include transmission::debian
 	}
 	default: {

@@ -1,8 +1,8 @@
 class stunnel {
     include stunnel::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include stunnel::debian
 	}
 	default: {

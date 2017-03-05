@@ -1,6 +1,6 @@
 class unionfs {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include unionfs::debian
 	}
 	default: {

@@ -5,8 +5,8 @@ class common {
     stage { "gnou": }
     stage { "libellule": }
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 #FIXME: should be included everywhere, not implemented yet
 # openbsd to check
 # pending rhel env installation

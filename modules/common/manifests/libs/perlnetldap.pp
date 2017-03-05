@@ -1,6 +1,6 @@
 class common::libs::perlnetldap {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    $what = "libnet-ldap-perl"
 	}
     }

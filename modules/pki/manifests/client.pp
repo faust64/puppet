@@ -1,9 +1,9 @@
 class pki::client {
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include pki::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include pki::debian
 	}
 	"FreeBSD": {

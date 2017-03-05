@@ -1,11 +1,11 @@
 class subversion {
     include subversion::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include subversion::redHat
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include subversion::debian
 	}
 	"FreeBSD": {

@@ -1,6 +1,6 @@
 class docker {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include docker::debian
 	}
 	default: {

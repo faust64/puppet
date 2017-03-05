@@ -1,6 +1,6 @@
 class pixelserver {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include pixelserver::debian
 	}
 	default: {

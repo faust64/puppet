@@ -1,11 +1,11 @@
 class thruk {
     include thruk::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include thruk::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include thruk::debian
 	}
 	default: {

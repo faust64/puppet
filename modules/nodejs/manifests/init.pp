@@ -3,8 +3,8 @@ class nodejs {
     include common::tools::make
 
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include nodejs::debian
 	}
 	default: {

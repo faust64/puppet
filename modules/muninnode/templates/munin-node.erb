@@ -16,6 +16,6 @@ pid_file	<%=@munin_run_dir%>/munin-node.pid
 ignore_file	~$
 ignore_file	\.bak$
 ignore_file	%$
-<% if @operatingsystem == "Debian" or @operatingsystem == "Ubuntu" -%>ignore_file	\.dpkg-(tmp|new|old|dist)$
+<% if @operatingsystem == "Debian" or @myoperatingsystem == "Devuan" or @operatingsystem == "Ubuntu" -%>ignore_file	\.dpkg-(tmp|new|old|dist)$
 <% end -%><% if @operatingsystem == "CentOS" or @operatingsystem == "RedHat" -%>ignore_file	\.rpm(save|new)$
 <% end -%>ignore_file	\.pod$

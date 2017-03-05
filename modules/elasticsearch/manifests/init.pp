@@ -5,8 +5,8 @@ class elasticsearch {
     include common::tools::pip
     include elasticsearch::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include elasticsearch::debian
 	}
 	default: {

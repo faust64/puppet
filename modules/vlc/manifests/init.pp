@@ -1,11 +1,11 @@
 class vlc {
     include vlc::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include vlc::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include vlc::debian
 	}
 	"FreeBSD": {

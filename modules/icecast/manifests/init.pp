@@ -2,11 +2,11 @@ class icecast {
     include icecast::vars
     include apache::utils
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include icecast::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include icecast::debian
 	}
 	default: {

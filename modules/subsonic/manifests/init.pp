@@ -8,11 +8,11 @@ class subsonic {
     include common::tools::ffmpeg
     include common::tools::lame
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include subsonic::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include subsonic::debian
 	}
 	default: {

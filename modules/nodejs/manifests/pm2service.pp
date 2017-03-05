@@ -10,6 +10,7 @@ class nodejs::pm2service {
     $sudo_conf_d   = $nodejs::vars::sudo_conf_dir
 
     if (($operatingsystem == "Debian" and $lsbdistcodename == "wheezy")
+	or $myoperatingsystem == "Devuan"
 	or ($operatingsystem == "Ubuntu" and $lsbdistcodename == "trusty")) {
 	file {
 	    "Install pm2 init script":

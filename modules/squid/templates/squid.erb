@@ -10,7 +10,7 @@ maximum_object_size <%=@max_object_size%>
 cache_effective_group <%=@runtime_group%>
 <% end -%>hosts_file /etc/hosts
 mail_from squid@<%=@fqdn%>
-<% if @apt_cacher and (@operatingsystem == "Debian" or @operatingsystem == "Ubuntu") -%>redirect_children 1
+<% if @apt_cacher and (@operatingsystem == "Debian" or @myoperatingsystem == "Devuan" or @operatingsystem == "Ubuntu") -%>redirect_children 1
 redirect_program /usr/lib/squid/jesred
 <% end -%>cache_mgr <%=@contact%>
 logfile_rotate <%=@rotate%>

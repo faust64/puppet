@@ -17,7 +17,7 @@ class bacula::director {
 
     include mysql
 
-    if ($operatingsystem == "Debian") {
+    if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan") {
 	$init = "/usr/share/bacula-director/make_mysql_tables"
     } else {
 	$init = false

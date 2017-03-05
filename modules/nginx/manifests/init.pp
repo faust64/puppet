@@ -1,11 +1,11 @@
 class nginx {
     include nginx::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include nginx::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include nginx::debian
 	}
 	"OpenBSD": {

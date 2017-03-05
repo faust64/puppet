@@ -39,6 +39,18 @@ class icinga::debian {
 
 	Apt::Define::Repo["backports"]
 	    -> Package["check-mk-livestatus"]
+    } elsif ($myoperatingsystem == "Devuan") {
+	if (! defined(Apt::Define::Repo["backports"])) {
+	    apt::define::repo {
+		"backports":
+		    baseurl  => "http://auto.mirror.devuan.org/merged",
+		    branches => "main contrib non-free",
+		    codename => "$lsbdistcodename-backports";
+	    }
+	}
+
+	Apt::Define::Repo["backports"]
+	    -> Package["check-mk-livestatus"]
     }
 
     common::define::package {

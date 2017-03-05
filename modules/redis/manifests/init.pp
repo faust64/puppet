@@ -1,8 +1,8 @@
 class redis {
     include redis::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include redis::debian
 	}
 	default: {

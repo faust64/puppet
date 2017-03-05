@@ -2,11 +2,11 @@ class munin {
     include munin::vars
     include rrdcached
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include munin::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include munin::debian
 	}
 	default: {

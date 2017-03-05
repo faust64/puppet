@@ -15,11 +15,11 @@ class openbox($dm             = "lightdm",
 	include nitrogen
     }
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include openbox::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include openbox::debian
 	}
 	"FreeBSD": {

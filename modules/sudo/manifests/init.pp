@@ -1,11 +1,11 @@
 class sudo {
     include sudo::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include sudo::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include sudo::debian
 	}
 	"FreeBSD": {

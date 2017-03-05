@@ -3,8 +3,7 @@ class pki {
 
     if ($fqdn == $pki::vars::pki_master) {
 	include pki::master
-    }
-    else {
+    } else {
 	include pki::client
     }
 }

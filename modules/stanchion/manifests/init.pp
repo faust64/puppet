@@ -1,8 +1,8 @@
 class stanchion {
     include stanchion::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include stanchion::debian
 	}
 	default: {

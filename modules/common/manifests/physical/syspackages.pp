@@ -19,7 +19,7 @@ class common::physical::syspackages {
 	}
     }
 
-    if ($operatingsystem == "Debian") {
+    if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan") {
 	common::define::package {
 	    "locales-all":
 	}
@@ -30,7 +30,7 @@ class common::physical::syspackages {
 	}
     }
     if (hiera("has_lm_sensors")) {
-	if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan" or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"lm-sensors":
 	    }

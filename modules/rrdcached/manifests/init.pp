@@ -1,8 +1,8 @@
 class rrdcached {
     include rrdcached::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include rrdcached::debian
 	}
 	default: {

@@ -1,6 +1,6 @@
 class common::config::mlocate {
-    case $operatingsystem {
-	"CentOS", "Debian", "RedHat", "Ubuntu": {
+    case $myoperatingsystem {
+	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {
 	    common::define::package {
 		"mlocate":
 		    ensure => absent;

@@ -7,8 +7,8 @@ class diffuseur {
     include flumotion
     include vlc
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include diffuseur::debian
 	}
 	default: {

@@ -1,8 +1,8 @@
 class terminator {
     include terminator::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include terminator::debian
 	}
 	default: {

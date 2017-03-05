@@ -6,7 +6,7 @@ class opennebula::debian {
 	    url => "http://downloads.opennebula.org/repo/$operatingsystem/repo.key";
     }
 
-    if ($operatingsystem == "Debian") {
+    if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan") {
 	$baseurl = "repo/$nebula_vers/Debian/$lsbmajdistrelease/"
     } elsif ($operatingsystem == "Ubuntu") {
 	$baseurl = "repo/$nebula_vers/Ubuntu/$operatingsystemrelease/"

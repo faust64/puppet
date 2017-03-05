@@ -1,11 +1,11 @@
 class rsync {
     include rsync::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include rsync::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include rsync::debian
 	}
 	"FreeBSD": {

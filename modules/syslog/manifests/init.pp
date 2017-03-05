@@ -1,6 +1,6 @@
 class syslog {
-    case $operatingsystem {
-	"CentOS", "Debian", "Ubuntu", "RedHat": {
+    case $myoperatingsystem {
+	"CentOS", "Debian", "Devuan", "Ubuntu", "RedHat": {
 	    include rsyslog
 	}
 	"FreeBSD", "OpenBSD": {

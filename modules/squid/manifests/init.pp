@@ -1,11 +1,11 @@
 class squid {
     include squid::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include squid::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include squid::debian
 	}
 	"OpenBSD": {

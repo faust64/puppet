@@ -8,7 +8,8 @@ class apache::moduledependencies {
 	}
     }
     if ($apache::vars::mod_fcgid == true) {
-	if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"libapache2-mod-fcgid":
 	    }
@@ -25,7 +26,8 @@ class apache::moduledependencies {
 
 	    Package["fcgi"]
 		-> Apache::Define::Module["cgid"]
-	} elsif ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"libapache2-mod-fastcgi":
 	    }
@@ -60,7 +62,8 @@ class apache::moduledependencies {
 	Class[Php]
 	    -> Service[$apache::vars::service_name]
 
-	if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"libapache2-mod-php5":
 		    require => Package["php5"];
@@ -71,7 +74,8 @@ class apache::moduledependencies {
 	}
     }
     if ($apache::vars::mod_xsendfile == true) {
-	if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"libapache2-mod-xsendfile":
 	    }
@@ -119,7 +123,8 @@ class apache::moduledependencies {
 	    Package["mod_dav_ssl"]
 		-> Apache::Define::Module["dav_svn"]
 	}
-	if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"libapache2-svn":
 	    }
@@ -129,7 +134,8 @@ class apache::moduledependencies {
 	}
     }
     if ($apache::vars::mod_python == true) {
-	if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"libapache2-mod-python":
 	    }
@@ -139,7 +145,8 @@ class apache::moduledependencies {
 	}
     }
     if ($apache::vars::mod_security == true) {
-	if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"libapache2-modsecurity":
 	    }
@@ -156,7 +163,8 @@ class apache::moduledependencies {
 	}
     }
     if ($apache::vars::mod_wsgi == true) {
-	if ($operatingsystem == "Debian" or $operatingsystem == "Ubuntu") {
+	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"libapache2-mod-wsgi":
 	    }

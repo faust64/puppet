@@ -1,8 +1,8 @@
 class dhcpd {
     include dhcpd::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    notify { "Use ISCDHCPDSERVER module instead!": }
 	}
 	"OpenBSD": {

@@ -1,8 +1,8 @@
 class aptcacherng {
     include aptcacherng::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include aptcacherng::debian
 	}
 	default: {

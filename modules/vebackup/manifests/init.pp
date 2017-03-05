@@ -8,11 +8,11 @@ class vebackup($do_kvm    = false,
 	include rsync::nagios
     }
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include vebackup::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include vebackup::debian
 	}
 	default: {

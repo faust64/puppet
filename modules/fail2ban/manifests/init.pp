@@ -1,11 +1,11 @@
 class fail2ban {
     include fail2ban::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include fail2ban::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include fail2ban::debian
 	}
 	"FreeBSD": {

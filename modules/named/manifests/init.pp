@@ -1,8 +1,8 @@
 class named {
     include named::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include named::debian
 	}
 	"OpenBSD": {

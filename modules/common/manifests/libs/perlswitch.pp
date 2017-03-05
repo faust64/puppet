@@ -1,6 +1,6 @@
 class common::libs::perlswitch {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    $what = "libswitch-perl"
 	}
     }

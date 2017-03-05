@@ -1,11 +1,11 @@
 class saslauthd {
     include saslauthd::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include saslauthd::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include saslauthd::debian
 	}
 	default: {

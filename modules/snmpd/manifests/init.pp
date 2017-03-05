@@ -3,11 +3,11 @@ class snmpd {
     include snmpd::config
     include common::libs::snmp
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include snmpd::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include snmpd::debian
 	}
 	"FreeBSD": {

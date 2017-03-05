@@ -9,6 +9,9 @@ class ifstated {
 	"OpenBSD": {
 	    include ifstated::openbsd
 	}
+	default: {
+	    common::define::patchneeded { "ifstated": }
+	}
     }
 
     include ifstated::key

@@ -1,8 +1,8 @@
 class puppet {
     include puppet::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include puppet::debian
 	}
 	"OpenBSD": {

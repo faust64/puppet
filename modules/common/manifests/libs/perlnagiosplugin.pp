@@ -1,6 +1,6 @@
 class common::libs::perlnagiosplugin {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    $what = "libnagios-plugin-perl"
 	}
     }

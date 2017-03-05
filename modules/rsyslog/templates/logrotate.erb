@@ -7,7 +7,7 @@
     notifempty
     rotate 2
     postrotate
-<% if @operatingsystem == "Debian" -%>	invoke-rc.d rsyslog rotate >/dev/null
+<% if @operatingsystem == "Debian" or @myoperatingsystem == "Devuan" -%>	invoke-rc.d rsyslog rotate >/dev/null
 <% elsif @operatingsystem == "Ubuntu" -%>	service rsyslog rotate >/dev/null 2>&1 || true
 <% else -%>	/bin/kill -HUP `cat /var/run/syslogd.pid 2>/dev/null` 2>/dev/null || true
 <% end -%>    endscript
@@ -31,7 +31,7 @@
     weekly
     sharedscripts
     postrotate
-<% if @operatingsystem == "Debian" -%>	invoke-rc.d rsyslog rotate >/dev/null
+<% if @operatingsystem == "Debian" or @myoperatingsystem == "Devuan" -%>	invoke-rc.d rsyslog rotate >/dev/null
 <% elsif @operatingsystem == "Ubuntu" -%>	service rsyslog rotate >/dev/null 2>&1 || true
 <% else -%>	/bin/kill -HUP `cat /var/run/syslogd.pid 2>/dev/null` 2>/dev/null || true
 <% end -%>    endscript

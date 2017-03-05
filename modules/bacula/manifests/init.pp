@@ -1,11 +1,11 @@
 class bacula {
     include bacula::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include bacula::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include bacula::debian
 	}
 	default: {

@@ -1,6 +1,6 @@
 class common::tools::pip {
-    case $operatingsystem {
-	"CentOS", "Debian", "RedHat", "Ubuntu": {
+    case $myoperatingsystem {
+	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {
 	    $what = "python-pip"
 	}
 	"FreeBSD", "OpenBSD": {

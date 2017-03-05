@@ -6,8 +6,8 @@ class collection3 {
 	include collectd
     }
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include collection3::debian
 	}
 	default: {

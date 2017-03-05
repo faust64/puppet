@@ -1,8 +1,8 @@
 class rkhunter {
     include rkhunter::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include rkhunter::debian
 	}
 	"CentOS", "RedHat": {

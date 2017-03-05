@@ -2,8 +2,8 @@ class common::config::mail {
     if (hiera("postfix_routeto") == $fqdn) {
 	include bluemind
     } else {
-	case $operatingsystem {
-	    "Debian", "CentOS", "RedHat", "Ubuntu": {
+	case $myoperatingsystem {
+	    "Debian", "Devuan", "CentOS", "RedHat", "Ubuntu": {
 		include postfix
 	    }
 	    "FreeBSD": {

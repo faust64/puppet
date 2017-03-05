@@ -1,6 +1,6 @@
 #!/bin/sh
 
-who | awk '{print $1" "$<% if @operatingsystem == "Debian" or @operatingsystem == "Ubuntu" -%>5<% else -%>6<% end -%>}' | sort | awk '
+who | awk '{print $1" "$<% if @operatingsystem == "Debian" or @myoperatingsystem == "Devuan" or @operatingsystem == "Ubuntu" -%>5<% else -%>6<% end -%>}' | sort | awk '
     BEGIN {
 	cnt  = 0
 	last = "noon"

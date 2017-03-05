@@ -1,6 +1,6 @@
 class common::tools::unzip {
-    case $operatingsystem {
-	"CentOS", "Debian", "FreeBSD", "OpenBSD", "RedHat", "Ubuntu": {
+    case $myoperatingsystem {
+	"CentOS", "Debian", "Devuan", "FreeBSD", "OpenBSD", "RedHat", "Ubuntu": {
 	    $what = "unzip"
 	}
     }

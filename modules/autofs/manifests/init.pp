@@ -1,11 +1,11 @@
 class autofs {
     include autofs::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include autofs::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include autofs::debian
 	}
 	default: {

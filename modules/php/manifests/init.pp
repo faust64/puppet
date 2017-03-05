@@ -2,11 +2,11 @@ class php {
     include php::vars
     include php::config
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include php::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include php::debian
 	}
 	"FreeBSD": {

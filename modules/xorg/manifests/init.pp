@@ -1,11 +1,11 @@
 class xorg {
     include xorg::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include xorg::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include xorg::debian
 	}
 	"FreeBSD": {

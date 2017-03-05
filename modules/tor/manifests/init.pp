@@ -1,8 +1,8 @@
 class tor {
     include tor::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include tor::debian
 	}
 	default: {

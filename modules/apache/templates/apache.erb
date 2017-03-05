@@ -3,7 +3,7 @@ ServerName		<%=@fqdn%>
 ServerAdmin		<%=@server_admin%>
 ServerTokens		OS
 ServerSignature		On
-<% if @operatingsystem == "Debian" or @operatingsystem == "Ubuntu" -%><% if @version == "2.4" -%>Mutex			file:/var/lock/apache2 default
+<% if @operatingsystem == "Debian" or @myoperatingsystem == "Devuan" or @operatingsystem == "Ubuntu" -%><% if @version == "2.4" -%>Mutex			file:/var/lock/apache2 default
 <% else -%>LockFile		/var/lock/apache2/accept.lock
 <% end -%><% end -%>PidFile			run/<%=@service_name%>.pid
 Timeout			<%=@timeout%>

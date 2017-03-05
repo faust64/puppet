@@ -1,8 +1,8 @@
 class spamassassin {
     include spamassassin::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include spamassassin::debian
 	}
 	default: {

@@ -1,6 +1,6 @@
 class midori {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include midori::debian
 	}
 	"FreeBSD": {

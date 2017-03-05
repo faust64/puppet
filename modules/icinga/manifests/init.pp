@@ -1,11 +1,11 @@
 class icinga {
     include icinga::vars
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include icinga::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include icinga::debian
 	}
 	default: {

@@ -1,8 +1,8 @@
 class cups {
     include cups::vars
 
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    include cups::debian
 	}
 	"FreeBSD": {
