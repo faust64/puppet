@@ -12,6 +12,11 @@ bacula_file_daemon_fileset:
   - /etc/letsencrypt
   - /media/backups
 
+# Cron
+cron_allowed_users:
+  - root
+  - mirrors
+
 # Letsencrypt
 letsencrypt_renew_day: 4
 letsencrypt_renew_hour: 22
