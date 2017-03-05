@@ -20,7 +20,7 @@ class transmission::config {
 	    path    => $conf_dir;
 	"Install transmission main configuration":
 	    content => template("transmission/config.erb"),
-	    group   => $transmission::vars::runtime_group,
+	    group   => hiera("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service[$transmission::vars::srvname],
 	    owner   => $transmission::vars::runtime_user,
@@ -37,7 +37,7 @@ class transmission::config {
 	    force   => true,
 	    notify  => Service[$transmission::vars::srvname],
 	    path    => "$lib_dir/info/settings.json",
-	    target  => "$conf_dir/settings.json",
-	    require => File["Install transmission main configuration"];
+	    require => File["Install transmission main configuration"],
+	    target  => "$conf_dir/settings.json";
     }
 }
