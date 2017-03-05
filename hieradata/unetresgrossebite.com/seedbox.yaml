@@ -13,7 +13,7 @@ bacula_file_daemon_fileset:
   - /media/backups
 
 # Letsencrypt
-letsencrypt_renew_day: 22
+letsencrypt_renew_day: 4
 letsencrypt_renew_hour: 22
 letsencrypt_renew_min: 4
 
