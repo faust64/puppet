@@ -1,0 +1,5 @@
+additional_classes:
+  - Iscsiinitiator
+
+# KVM
+virtual_default_vg: data

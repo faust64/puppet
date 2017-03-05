@@ -1,9 +1,7 @@
 additional_classes:
-# - Iscsiinitiator
   - Kvm
   - Qemu
   - Libvirt
-  - Unbound
 # - Vlist
 
 # Apache
