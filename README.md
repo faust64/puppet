@@ -71,8 +71,13 @@ To deploy an agent, having trusted its public IP (update required in `hieradata/
 
 ```
 apt-get update ; apt-get upgrade ; apt-get dist-upgrade ; apt-get autoremove --purge ; apt-get install ca-certificates lsb-release
-wget https://apt.puppetlabs.com/puppetlabs-release-pc1-jessie.deb
-dpkg -i puppetlabs-release-pc1-jessie.deb 
+if grep -E '(devuan|trusty)' /etc/apt/sources.list >/dev/null; then
+    dist=trusty
+else
+    dist=jessie
+fi
+wget https://apt.puppetlabs.com/puppetlabs-release-pc1-$dist.deb
+dpkg -i puppetlabs-release-pc1-$dist.deb
 apt-get update
 apt-get install puppet-agent
 export FQDN=`hostname -f`
