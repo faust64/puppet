@@ -8,6 +8,7 @@ nagios_hostgroups:
   - ap
   - cam
   - debian
+  - devuan
   - freebsd
   - network
   - openbsd
