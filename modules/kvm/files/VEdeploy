@@ -337,6 +337,8 @@ parse_args()
 	FILEMODEL=`pwd`/$1
     elif test -f $1; then
 	FILEMODEL=$1
+    elif test -f $MODEL_DIR/$1.img.gz; then
+	FILEMODEL=$MODEL_DIR/$1.img.gz
     elif test -f $MODEL_DIR/$1.gz; then
 	FILEMODEL=$MODEL_DIR/$1.gz
     else
@@ -439,9 +441,11 @@ EOF
 	fi
     fi
 
-    if test -f etc/debian_version; then
+    if test -f etc/debian_version -o -f etc/devuan_version; then
 	eval archives=false version=
-	if grep -q 5.[0-9] etc/debian_version; then
+	if test -f etc/devuan_version; then
+	    version=`cat etc/devuan_version`
+	elif grep -q 5.[0-9] etc/debian_version; then
 	    version=lenny
 	    archives=true
 	elif grep -q 6.[0-9] etc/debian_version; then
@@ -456,7 +460,13 @@ EOF
 	fi
 
 	if test "$version"; then
-	    if $archives; then
+	    if test -f etc/devuan_version; then
+		cat <<EOF
+deb http://auto.mirror.devuan.org/merged/ $version main contrib non-free
+deb http://auto.mirror.devuan.org/merged/ $version-security main contrib non-free
+deb http://auto.mirror.devuan.org/merged/ $version-updates main contrib non-free
+EOF
+	    elif $archives; then
 		cat <<EOF
 deb http://archive.debian.org/debian $version main contrib non-free
 deb http://archive.debian.org/debian-security $version/updates main contrib non-free
