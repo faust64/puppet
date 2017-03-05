@@ -11,8 +11,9 @@ class aptcacherng::config {
 	    source  => "puppet:///modules/aptcacherng/main";
 	"Install apt-cacher-ng security configuration":
 	    content => template("aptcacherng/security.erb"),
-	    group   => hiera("gid_zero"),
-	    mode    => "0644",
+	    group   => apt-cacher-ng,
+	    mode    => "0640",
+	    notify  => Service["apt-cacher-ng"],
 	    owner   => root,
 	    path    => "/etc/apt-cacher-ng/security.conf",
 	    require => File["Install apt-cacher-ng main configuration"];
