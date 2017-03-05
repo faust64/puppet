@@ -1,4 +1,4 @@
-physical_parent: oizis.adm.intra.unetresgrossebite.com
+physical_parent: nemesis.adm.intra.unetresgrossebite.com
 
 # Isc-dhcp-server
 dhcpd_collect_static_leases:
@@ -13,7 +13,7 @@ dhcpd_collect_static_leases:
 nagios_no_parent: false
 
 # OpenLDAP
-ldap_id: 42
+ldap_id: 41
 openldap_ldap_slave: sso.unetresgrossebite.com
 
 # TFTPD
