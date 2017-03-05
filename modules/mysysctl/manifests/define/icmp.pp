@@ -1,6 +1,6 @@
 class mysysctl::define::icmp {
-    case $operatingsystem {
-	"CentOS", "Debian", "RedHat", "Ubuntu": {
+    case $myoperatingsystem {
+	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {
 	    $bcast_id = "net.ipv4.icmp_echo_ignore_broadcasts"
 	    $bogus_id = "net.ipv4.icmp_ignore_bogus_error_responses"
 	}

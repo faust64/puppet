@@ -1,6 +1,6 @@
 class mysysctl::define::ipv6 {
-    case $operatingsystem {
-	"CentOS", "Debian", "RedHat", "Ubuntu": {
+    case $myoperatingsystem {
+	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {
 	    $ar_all     = "net.ipv6.conf.all.accept_redirects"
 	    $ar_default = "net.ipv6.conf.default.accept_redirects"
 	    $ra_all     = "net.ipv6.conf.all.accept_ra"

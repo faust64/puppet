@@ -2,8 +2,8 @@ define mysysctl::define::syn($backlog    = 4096,
 			     $cacheblim  = 100,
 			     $cachesize  = 1024,
 			     $syncookies = 1) {
-    case $operatingsystem {
-	"CentOS", "Debian", "RedHat", "Ubuntu": {
+    case $myoperatingsystem {
+	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {
 	    $syncookies_id    = "net.ipv4.tcp_syncookies"
 	    $synbacklog_id    = "net.ipv4.tcp_max_syn_backlog"
 	    $syncachehsize_id = false

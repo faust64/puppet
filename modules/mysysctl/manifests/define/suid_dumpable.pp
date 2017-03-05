@@ -1,6 +1,6 @@
 class mysysctl::define::suid_dumpable {
-    case $operatingsystem {
-	"CentOS", "Debian", "RedHat", "Ubuntu": {
+    case $myoperatingsystem {
+	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {
 	    $sysctl_id = "fs.suid_dumpable"
 	}
     }

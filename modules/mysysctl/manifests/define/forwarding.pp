@@ -1,8 +1,8 @@
 class mysysctl::define::forwarding {
     $forward = hiera("ip_forwarding")
 
-    case $operatingsystem {
-	"CentOS", "Debian", "RedHat", "Ubuntu": {
+    case $myoperatingsystem {
+	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {
 	    $all_send_redir_id = "net.ipv4.conf.all.send_redirects"
 	    $def_send_redir_id = "net.ipv4.conf.default.send_redirects"
 	    $sysctl_id         = "net.ipv4.ip_forward"

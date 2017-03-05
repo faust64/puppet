@@ -5,8 +5,8 @@ class mysysctl::define::martians($do_martians = hiera("do_martians")) {
 	$val = "0"
     }
 
-    case $operatingsystem {
-	"CentOS", "Debian", "RedHat", "Ubuntu": {
+    case $myoperatingsystem {
+	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {
 	    $sysctl_all     = "net.ipv4.conf.all.log_martians"
 	    $sysctl_default = "net.ipv4.conf.default.log_martians"
 	}

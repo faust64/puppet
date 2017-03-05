@@ -1,8 +1,8 @@
 class mysysctl::define::rpf {
     $reverse_path_filtering = hiera("reverse_path_filtering")
 
-    case $operatingsystem {
-	"CentOS", "Debian", "RedHat", "Ubuntu": {
+    case $myoperatingsystem {
+	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {
 	    $all_rpf_id       = "net.ipv4.conf.all.rp_filter"
 	    $def_rpf_id       = "net.ipv4.conf.default.rp_filter"
 	    $all_src_route_id = "net.ipv4.conf.all.accept_source_route"

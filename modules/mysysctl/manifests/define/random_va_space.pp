@@ -1,6 +1,6 @@
 class mysysctl::define::random_va_space {
-    case $operatingsystem {
-	"CentOS", "Debian", "RedHat", "Ubuntu": {
+    case $myoperatingsystem {
+	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {
 	    $sysctl_id = "kernel.randomize_va_space"
 	}
 	default: {
