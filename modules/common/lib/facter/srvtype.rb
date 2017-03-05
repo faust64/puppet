@@ -20,7 +20,7 @@ Facter.add("srvtype") do
 	    "peerio"
 	when /blog|cv|miner|myartgallery|myisp|play|reader|wallet|wiki|www/
 	    "hosting"
-	when /eris|gaia|geras|ker/
+	when /eris|gaia|geras|ker|nemesis/
 	    "kvm"
 	when /cerbero|echidna|hermes|aphrodite/
 	    "kvmvz"
@@ -36,7 +36,7 @@ Facter.add("srvtype") do
 	    "netserv"
 	when /couchpotato|newznab|nzbindex|sab|sickbeard|tvschedule/
 	    "nzb"
-	when /momos|moros|nemesis|thanatos/
+	when /momos|moros|thanatos/
 	    "opennebula"
 	when /drive|owncloud|media|packages|pxe|pydio|repository/
 	    "repo"
