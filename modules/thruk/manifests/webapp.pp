@@ -11,6 +11,14 @@ class thruk::webapp {
     $tconf_dir = $thruk::vars::conf_dir
     $wconf_dir = $thruk::vars::apache_conf_dir
 
+    if ($domain != $rdomain) {
+	$reverse = "thruk.$rdomain"
+	$aliases = [ $reverse ]
+    } else {
+	$reverse = false
+	$aliases = false
+    }
+
     file {
 	"Drop thruk default web configuration":
 	    ensure  => absent,
@@ -62,10 +70,10 @@ class thruk::webapp {
 
     apache::define::vhost {
 	"thruk.$domain":
-	    aliases      => [ "thruk.$rdomain" ],
+	    aliases      => $aliases,
 	    app_root     => $base_dir,
 	    deny_frames  => false,
 	    vhostsource  => "thruk",
-	    with_reverse => "thruk.$rdomain";
+	    with_reverse => $reverse;
     }
 }

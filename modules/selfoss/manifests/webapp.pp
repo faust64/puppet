@@ -2,7 +2,13 @@ class selfoss::webapp {
     $rdomain  = $selfoss::vars::rdomain
     $web_root = $selfoss::vars::web_root
 
-    $aliases  = [ "rss.$domain", "rss.$rdomain", "reader.$domain", "reader.$rdomain", "selfoss.$rdomain" ]
+    if ($domain != $rdomain) {
+	$reverse = "selfoss.$rdomain"
+	$aliases = [ $reverse, "rss.$domain", "rss.$rdomain", "reader.$domain", "reader.$rdomain" ]
+    } else {
+	$reverse = false
+	$aliases = [ "rss.$domain", "reader.$domain" ]
+    }
 
     if (! defined(Class[Apache])) {
 	include apache
@@ -34,6 +40,6 @@ class selfoss::webapp {
 	    allow_override => "all",
 	    app_root       => "$web_root/selfoss",
 	    vhostldapauth  => false,
-	    with_reverse   => "selfoss.$rdomain";
+	    with_reverse   => $reverse;
     }
 }

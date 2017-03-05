@@ -12,7 +12,7 @@ class subversion::webapp {
 	$aliases = [ $reverse, "svn.$domain", "svn.$rdomain", "websvn.$domain", "websvn.$rdomain" ]
     } else {
 	$reverse = false
-	$aliases = [ "svn.$domain", "svn.$rdomain", "websvn.$domain", "websvn.$rdomain" ]
+	$aliases = [ "svn.$domain", "websvn.$domain" ]
     }
 
     file {
@@ -22,7 +22,6 @@ class subversion::webapp {
 	    path    => "$web_root/websvn",
 	    target  => "/usr/share/websvn",
 	    require => File["Prepare www directory"];
-
 	"Install subversion repositories root":
 	    ensure  => directory,
 	    group   => hiera("gid_zero"),
@@ -47,9 +46,9 @@ class subversion::webapp {
 
     apache::define::vhost {
 	"sources.$domain":
-	    aliases       => [ "sources.$rdomain", "svn.$domain", "svn.$rdomain", "websvn.$domain", "websvn.$rdomain" ],
+	    aliases       => $aliases,
 	    vhostldapauth => true,
 	    vhostsource   => "subversion",
-	    with_reverse  => "sources.$rdomain";
+	    with_reverse  => $reverse;
     }
 }

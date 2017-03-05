@@ -6,7 +6,14 @@ class mrtg::webapp {
     $rdomain       = $mrtg::vars::rdomain
     $repo          = $mrtg::vars::repo
     $weekday_start = $mrtg::vars::weekday_start
-    $aliases       = [ "mrtg.$rdomain" ]
+
+    if ($domain != $rdomain) {
+	$reverse   = "mrtg.$rdomain"
+	$aliases   = [ $reverse ]
+    } else {
+	$reverse   = false
+	$aliases   = false
+    }
 
     file {
 	"Prepare mrtg webapp directory":
@@ -41,7 +48,6 @@ class mrtg::webapp {
 	    owner   => root,
 	    path    => "/var/www/mrtg/vortex",
 	    require => File["Prepare mrtg webapp directory"];
-
 	"Install mrtg main webapp":
 	    group   => hiera("gid_zero"),
 	    mode    => "0644",
@@ -70,7 +76,6 @@ class mrtg::webapp {
 	    path    => "/var/www/mrtg/js/lightbox-2.6.min.js",
 	    require => File["Prepare mrtg webapp js directory"],
 	    source  => "puppet:///modules/mrtg/js/lightbox-2.6.min.js";
-
 	"Install mrtg webapp css - munin":
 	    group   => hiera("gid_zero"),
 	    mode    => "0644",
@@ -104,7 +109,6 @@ class mrtg::webapp {
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/var/www/mrtg/js/config.js";
-
 	"Install mrtg webapp index.html":
 	    group   => hiera("gid_zero"),
 	    mode    => "0644",
@@ -132,6 +136,6 @@ class mrtg::webapp {
 	    aliases       => $aliases,
 	    preserve_host => "Off",
 	    vhostsource   => "mrtg",
-	    with_reverse  => "mrtg.$rdomain";
+	    with_reverse  => $reverse;
     }
 }

@@ -6,6 +6,14 @@ class pakitiserver::webapp {
     $http_passphrase = $pakitiserver::vars::http_passphrase
     $http_user       = $pakitiserver::vars::http_user
 
+    if ($domain != $rdomain) {
+	$reverse = "pakiti.$rdomain"
+	$aliases = [ $reverse ]
+    } else {
+	$reverse = false
+	$aliases = false
+    }
+
     exec {
 	"Install pakiti clients htpasswd":
 	    command => "htpasswd -b -c pakiti.htpasswd '$http_user' '$http_passphrase'",
@@ -34,10 +42,10 @@ class pakitiserver::webapp {
 
     apache::define::vhost {
 	"pakiti.$domain":
-	    aliases       => [ "pakiti.$rdomain" ],
+	    aliases       => $aliases,
 	    app_root      => "/usr/share/pakiti/www",
 	    vhostldapauth => true,
 	    vhostsource   => "pakiti",
-	    with_reverse  => "pakiti.$rdomain";
+	    with_reverse  => $reverse;
     }
 }

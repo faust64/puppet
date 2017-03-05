@@ -5,7 +5,14 @@ class collection3::webapp {
 
     $rdomain  = $collection3::vars::rdomain
     $web_root = $collection3::vars::web_root
-    $aliases  = [ "collectd.$domain", "collectd.$rdomain", "collection.$rdomain" ]
+
+    if ($domain == $rdomain) {
+	$reverse = "collection.$rdomain"
+	$aliases = [ $reverse, "collectd.$domain", "collectd.$rdomain" ]
+    } else {
+	$reverse = false
+	$aliases = [ "collectd.$domain" ]
+    }
 
     apache::define::vhost {
 	"collection.$domain":
@@ -15,6 +22,6 @@ class collection3::webapp {
 	    options        => "+ExecCGI",
 	    vhostldapauth  => false,
 	    vhostsource    => "collection",
-	    with_reverse   => "collection.$rdomain";
+	    with_reverse   => $reverse;
     }
 }

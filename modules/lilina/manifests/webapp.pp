@@ -2,7 +2,13 @@ class lilina::webapp {
     $rdomain  = $lilina::rdomain
     $web_root = $lilina::vars::web_root
 
-    $aliases   = [ "lilina.$rdomain" ]
+    if ($domain != $rdomain) {
+	$reverse = "lilina.$rdomain"
+	$aliases = [ $reverse ]
+    } else {
+	$reverse = false
+	$aliases = false
+    }
 
     if (! defined(Class[Apache])) {
 	include apache
@@ -13,7 +19,7 @@ class lilina::webapp {
 	    aliases        => $aliases,
 	    allow_override => "all",
 	    app_root       => "$web_root/lilina",
-	    vhostldapauth => false,
-	    with_reverse  => "lilina.$rdomain";
+	    vhostldapauth  => false,
+	    with_reverse   => $reverse;
     }
 }

@@ -2,7 +2,13 @@ class tinytinyrss::webapp {
     $rdomain  = $tinytinyrss::vars::rdomain
     $web_root = $tinytinyrss::vars::web_root
 
-    $aliases  = [ "ttrss.$domain", "ttrss.$rdomain", "tinytinyrss.$rdomain" ]
+    if ($domain != $rdomain) {
+	$reverse = "tinytinyrss.$rdomain"
+	$aliases = [ $reverse, "ttrss.$domain", "ttrss.$rdomain" ]
+    } else {
+	$reverse = false
+	$aliases = [ "ttrss.$domain" ]
+    }
 
     if (! defined(Class[Apache])) {
 	include apache
@@ -18,6 +24,6 @@ class tinytinyrss::webapp {
 	    app_root       => "$web_root/ttrss",
 	    deny_frames    => false,
 	    vhostldapauth  => "applicative",
-	    with_reverse   => "ttrss.$rdomain";
+	    with_reverse   => $reverse;
     }
 }

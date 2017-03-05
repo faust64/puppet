@@ -1,7 +1,13 @@
 class sonarr::webapp {
     $rdomain = $sonarr::vars::rdomain
 
-    $aliases = [ "nzbdrone.$rdomain", "nzbdrone.$domain" ]
+    if ($domain != $rdomain) {
+	$reverse = "sonarr.$rdomain"
+	$aliases = [ $reverse, "nzbdrone.$domain", "nzbdrone.$rdomain" ]
+    } else {
+	$reverse = false
+	$aliases = [ "nzbdrone.$domain" ]
+    }
 
     if (defined(Class["apache"])) {
 	apache::define::vhost {
@@ -13,7 +19,7 @@ class sonarr::webapp {
 		require       => Service["sonarr"],
 		vhostldapauth => false,
 		vhostsource   => "app_proxy",
-		with_reverse  => "sonarr.$rdomain";
+		with_reverse  => $reverse;
 	}
     } else {
 	include nginx
@@ -27,7 +33,7 @@ class sonarr::webapp {
 		require       => Service["sonarr"],
 		vhostldapauth => false,
 		vhostsource   => "app_proxy",
-		with_reverse  => "sonarr.$rdomain";
+		with_reverse  => $reverse;
 	}
     }
 }

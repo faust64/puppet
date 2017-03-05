@@ -3,7 +3,13 @@ class ossec::webapp {
     $rdomain   = $ossec::vars::rdomain
 #   $web_admin = $ossec::vars::web_admin
 #   $web_pass  = $ossec::vars::web_pass
-    $aliases  = [ "ossec.$rdomain" ]
+    if ($domain != $rdomain) {
+	$reverse  = "ossec.$rdomain"
+	$aliases  = [ $reverse ]
+    } else {
+	$reverse  = false
+	$aliases  = false
+    }
 
     include common::tools::unzip
 
@@ -18,7 +24,7 @@ class ossec::webapp {
 		app_root      => "/usr/share/ossec-web-ui",
 		require       => File["Link OSSEC runtime directory to master"],
 		vhostldapauth => false,
-		with_reverse  => "ossec.$rdomain";
+		with_reverse  => $reverse;
 	}
     } else {
 	nginx::define::vhost {
@@ -30,7 +36,7 @@ class ossec::webapp {
 		require         => File["Link OSSEC runtime directory to master"],
 		vhostldapauth   => false,
 		with_php_fpm    => "ossec",
-		with_reverse    => "ossec.$rdomain";
+		with_reverse    => $reverse;
 	}
     }
 
