@@ -24,10 +24,10 @@ class openldap::vars {
     $the_dir               = hiera("openldap_dir_dir")
     $web_front             = hiera("openldap_web_front")
 
-    case $operatingsystem {
-	"CentOS", "RedHat":	{ $cert_dir = "/etc/pki/tls/certs" }
-	"Debian", "Ubuntu":	{ $cert_dir = "/etc/ssl/certs" }
-	"FreeBSD":              { $cert_dir = "/usr/local/share/certs" }
-	"OpenBSD":              { $cert_dir = "/etc/ssl" }
+    case $myoperatingsystem {
+	"CentOS", "RedHat":		{ $cert_dir = "/etc/pki/tls/certs" }
+	"Debian", "Devuan", "Ubuntu":	{ $cert_dir = "/etc/ssl/certs" }
+	"FreeBSD":			{ $cert_dir = "/usr/local/share/certs" }
+	"OpenBSD":			{ $cert_dir = "/etc/ssl" }
     }
 }

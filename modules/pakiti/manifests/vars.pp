@@ -7,11 +7,11 @@ class pakiti::vars {
     $sudo_conf_dir       = hiera("sudo_conf_dir")
     $upstream            = hiera("pakiti_upstream")
 
-    case $operatingsystem {
-	"CentOS", "RedHat":	{ $cert_dir = "/etc/pki/tls/certs" }
-	"Debian", "Ubuntu":	{ $cert_dir = "/etc/ssl/certs" }
-	"FreeBSD":              { $cert_dir = "/usr/local/share/certs" }
-	"OpenBSD":              { $cert_dir = "/etc/ssl" }
+    case $myoperatingsystem {
+	"CentOS", "RedHat":		{ $cert_dir = "/etc/pki/tls/certs" }
+	"Debian", "Devuan", "Ubuntu":	{ $cert_dir = "/etc/ssl/certs" }
+	"FreeBSD":			{ $cert_dir = "/usr/local/share/certs" }
+	"OpenBSD":			{ $cert_dir = "/etc/ssl" }
 	default: {
 	    common::define::patchneeded { "pakiti": }
 	}

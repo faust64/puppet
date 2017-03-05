@@ -1,6 +1,6 @@
 class apache::utils {
-    case $operatingsystem {
-	"Debian", "Ubuntu": {
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
 	    $pkgname = "apache2-utils"
 	}
 	"CentOS", "RedHat": {

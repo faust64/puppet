@@ -9,8 +9,8 @@ class asterisk::munin {
 	    $conf_dir = $asterisk::vars::munin_conf_dir
 	    $creds    = $asterisk::vars::ami['munin']
 
-	    case $operatingsystem {
-		"Debian", "Ubuntu": {
+	    case $myoperatingsystem {
+		"Debian", "Devuan", "Ubuntu": {
 		    $dependency = "libnet-telnet-perl"
 		}
 		"CentOS", "RedHat": {

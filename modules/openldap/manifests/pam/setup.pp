@@ -1,11 +1,11 @@
 class openldap::pam::setup($with_session = false) {
     include openldap::client
 
-    case $operatingsystem {
+    case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include openldap::pam::rhel
 	}
-	"Debian", "Ubuntu": {
+	"Debian", "Devuan", "Ubuntu": {
 	    include openldap::pam::debian
 	}
     }

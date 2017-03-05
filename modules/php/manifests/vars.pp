@@ -76,12 +76,16 @@ class php::vars {
     } elsif ($check_fpm == true or defined(Class[Nginx])) {
 	$is_cli  = false
 	$is_fpm  = true
-	case $operatingsystem {
+	case $myoperatingsystem {
 	    "CentOS", "RedHat": {
 		$srvname = "php-fpm"
 	    }
-	    "Debian", "Ubuntu": {
-		$srvname = "php5-fpm"
+	    "Debian", "Devuan", "Ubuntu": {
+		if ($lsbdistcodename == "xenial") {
+		    $srvname = "php7-fpm"
+		} else {
+		    $srvname = "php5-fpm"
+		}
 	    }
 	}
     } else {

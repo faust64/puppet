@@ -7,11 +7,11 @@ class openldap::client {
     $ldap_slave = $openldap::vars::ldap_slave
 
     if (! defined(Class[Openldap])) {
-	case $operatingsystem {
+	case $myoperatingsystem {
 	    "CentOS", "RedHat": {
 		include openldap::rhel
 	    }
-	    "Debian", "Ubuntu": {
+	    "Debian", "Devuan", "Ubuntu": {
 		include openldap::debian
 	    }
 	    "OpenBSD": {

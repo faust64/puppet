@@ -16,15 +16,14 @@ class freeradius::vars {
 
     if ($ldap_slave_primary) {
 	$ldap_slave = $ldap_slave_primary
-    }
-    else {
+    } else {
 	$ldap_slave = $ldap_slave_fallback
     }
 
-    case $operatingsystem {
-	"CentOS", "RedHat":	{ $cert_dir = "/etc/pki/tls/certs" }
-	"Debian", "Ubuntu":	{ $cert_dir = "/etc/ssl/certs" }
-	"FreeBSD":              { $cert_dir = "/usr/local/share/certs" }
-	"OpenBSD":              { $cert_dir = "/etc/ssl" }
+    case $myoperatingsystem {
+	"CentOS", "RedHat":		{ $cert_dir = "/etc/pki/tls/certs" }
+	"Debian", "Devuan", "Ubuntu":	{ $cert_dir = "/etc/ssl/certs" }
+	"FreeBSD":			{ $cert_dir = "/usr/local/share/certs" }
+	"OpenBSD":			{ $cert_dir = "/etc/ssl" }
     }
 }
