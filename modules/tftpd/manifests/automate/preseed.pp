@@ -1,4 +1,25 @@
 class tftpd::automate::preseed {
+    tftpd::define::ps_devuan {
+	"kvm-auto":
+	    autopart => true,
+	    server   => "kvm";
+	"kvm-man":
+	    server   => "kvm";
+	"xen-auto":
+	    autopart => true,
+	    server   => "xen";
+	"xen-man":
+	    server   => "xen";
+	"server-auto":
+	    autopart => true,
+	    server   => true;
+	"server-man":
+	    server   => true;
+	"desktop-auto":
+	    autopart => true;
+	"desktop-man":
+    }
+
     tftpd::define::ps_debian {
 	"squeeze-vz-auto":
 	    autopart => true,

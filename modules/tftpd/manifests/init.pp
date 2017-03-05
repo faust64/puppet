@@ -19,6 +19,7 @@ class tftpd {
     include tftpd::menu::centos
     include tftpd::menu::coreos
     include tftpd::menu::debian
+    include tftpd::menu::devuan
     include tftpd::menu::fedora
     include tftpd::menu::freebsd
     include tftpd::menu::mfsbsd
