@@ -43,5 +43,5 @@ SecArgumentSeparator &
 SecCookieFormat 0
 <% if @office_networks != false -%><% @office_networks.keys.each_with_index do |entry, idx| -%><% net = @office_networks[entry] -%>SecRule REMOTE_HOST "@ipmatch <%=net.gsub(/\/32/, '')%>" \
 <% ruleid = 200042 + idx -%>    "id:'<%=ruleid%>',phase:2,t:none,pass,nolog,noauditlog,ctl:ruleRemovebyID=330039"
-<% end -%><% end -%>SecRule REMOTE_HOST "@ipmatch 127.0.0.0/8" \
+<% end -%><% end -%>SecRule REMOTE_HOST "@ipmatch 127.0.0.0/16" \
     "id:'20420',phase:2,t:none,pass,nolog,noauditlog,ctl:ruleRemovebyID=330039"
