@@ -377,7 +377,7 @@ terminator_history: 1000000
 peerio_contact: samuel@unetresgrossebite.com
 
 # TFTPD
-pxe_ip: 10.42.44.45
+pxe_ip: 10.42.44.100
 pxe_packages_repository: repository.unetresgrossebite.com
 pxe_reference_repository: netserv.vms.intra.unetresgrossebite.com
 

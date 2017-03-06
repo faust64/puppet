@@ -80,9 +80,9 @@ blacklist:
   - 88.171.146.19
   - 194.250.231.251
 #dns_masters:
-#  - 10.42.44.45
+#  - 10.42.44.100
 #ldap_masters:
-#  - 10.42.44.45
+#  - 10.42.44.100
 pf_skip_gre: true
 pf_state_policy: floating
 vpnserver_if: vlan4
