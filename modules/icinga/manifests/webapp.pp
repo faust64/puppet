@@ -12,12 +12,21 @@ class icinga::webapp {
     $share_dir    = $icinga::vars::share_dir
     $short_domain = $icinga::vars::short_domain
     $web_dir      = $icinga::vars::apache_conf_dir
+
     if ($domain != $rdomain) {
-	$reverse = "icinga.$rdomain"
-	$aliases = [ $reverse ]
+	$reverse     = "icinga.$rdomain"
+	if ($hostname == "icinga") {
+	    $aliases = [ $reverse, "monitor.$rdomain", "monitor.$domain" ]
+	} else {
+	    $aliases = [ $reverse, "monitor.$rdomain", "icinga.$domain" ]
+	}
     } else {
-	$reverse = false
-	$aliases = false
+	$reverse     = false
+	if ($hostname == "icinga") {
+	    $aliases = [ "monitor.$rdomain", "monitor.$domain" ]
+	} else {
+	    $aliases = [ "monitor.$rdomain", "icinga.$domain" ]
+	}
     }
 
     if ($icinga::vars::pnp == true) {
