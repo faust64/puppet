@@ -1,5 +1,5 @@
 nagios_no_parent: false
-physical_parent: thanatos.ceph.intra.unetresgrossebite.com
+physical_parent: nemesis.adm.intra.unetresgrossebite.com
 with_collectd: false
 
 # Apache
