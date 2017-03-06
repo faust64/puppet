@@ -551,8 +551,11 @@ ve_disk()
 		exit 1
 	    fi
 	fi
+	if ! ( echo d ; echo n ; echo p ; echo 1 ; echo ; echo ; echo w ) | fdisk /dev/$KVM_STORAGE/$VHOST-root; then
+	    echo Make sure previous logs show our partition grew to drive boundaries
+	fi
 	if ! kpartx -av /dev/$KVM_STORAGE/$VHOST-root; then
-	    echo "Failed scanning VE partitions"
+	    echo Failed scanning VE partitions
 	    exit 1
 	fi
 	count=10
@@ -566,11 +569,15 @@ ve_disk()
 	    sleep 1
 	done
 	if ! test -L /dev/mapper/$KVM_STORAGE-$VHOST--root1; then
-	    echo "Failed mapping VE partitions"
+	    echo Failed mapping VE partitions
 	    kpartx -dv /dev/$KVM_STORAGE/$VHOST-root
 	    exit 1
 	elif ! tune2fs -i 360d -c 50 /dev/mapper/$KVM_STORAGE-$VHOST--root1; then
-	    echo "Unable to set e2fs max mount and total mount limits"
+	    echo Unable to set e2fs max mount and total mount limits
+	elif ! e2fsck -f /dev/mapper/$KVM_STORAGE-$VHOST--root1; then
+	    echo Failed checking xvda1 filesystem
+	elif ! resize2fs /dev/mapper/$KVM_STORAGE-$VHOST--root1; then
+	    echo Failed growing xvda1 filesystem to partition boundaries
 	fi
     fi
     test -d $CHROOT || mkdir -p $CHROOT
@@ -579,7 +586,7 @@ ve_disk()
 	sync
     fi
     if ! mount /dev/mapper/$KVM_STORAGE-$VHOST--root1 $CHROOT; then
-	echo "Failed mounting VE rootfs"
+	echo Failed mounting VE rootfs
 	exit 1
     fi
 
