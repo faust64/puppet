@@ -20,4 +20,9 @@ class logstash::vars {
 	$geodb       = "GeoLite2-City.mmdb"
 	$installpath = "/usr/share/logstash"
     }
+    if (defined(Class[Ossec]) and hiera("ossec_manager") == false) {
+	$do_ossec = true
+    } else {
+	$do_ossec = false
+    }
 }

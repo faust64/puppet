@@ -20,7 +20,20 @@ input {
 	port  => 6968
 	tags  => [ "firewall" ]
     }
-    file {
+<% if @do_ossec -%>    file {
+	codec => multiline {
+		pattern => "^\*\*"
+		negate  => true
+		what    => "previous"
+	    }
+	path  => "/var/ossec/logs/alerts/alerts.log"
+	tags  => [ "ossec" ]
+    }
+<% else -%>    <% if @do_tcp -%>tc<% else -%>ud<% end -%>p {
+	port  => 6967
+	tags  => [ "ossec" ]
+    }
+<% end -%>    file {
 	path => "/tmp/logstash_check.in"
 	tags => [ "_check_logstash" ]
     }
@@ -48,6 +61,27 @@ filter {
 
 	mutate {
 	    convert => [ "[geoip][coordinates]", "float" ]
+	}
+    }
+    if "ossec" in [tags] {
+	grok {
+<% if @do_ossec -%>	    match => [ "message", "(?m)\*\* Alert %{DATA:timestamp_seconds}:%{SPACE}%{WORD}?%{SPACE}\- %{DATA:ossec_group},\n%{YEAR} %{SYSLOGTIMESTAMP:syslog_timestamp} \(%{DATA:reporting_host}\) %{IP:reporting_ip}\-\>%{DATA:reporting_source}\nRule: %{NONNEGINT:rule_number} \(level %{NONNEGINT:severity}\) \-\> '%{DATA:signature}'\n%{GREEDYDATA:remaining_message}" ]
+	    match => [ "message", "(?m)\*\* Alert %{DATA:timestamp_seconds}:%{SPACE}%{WORD}?%{SPACE}\- %{DATA:ossec_group},\n%{YEAR} %{SYSLOGTIMESTAMP:syslog_timestamp} %{DATA:reporting_host}\-\>%{DATA:reporting_source}\nRule: %{NONNEGINT:rule_number} \(level %{NONNEGINT:severity}\) \-\> '%{DATA:signature}'\n%{GREEDYDATA:remaining_message}" ]
+<% else -%>	    match => [ "message", "%{SYSLOGTIMESTAMP:timestamp_seconds} %{SYSLOGHOST:reporting_source} %{DATA:ossec_group}: Alert Level: %{BASE10NUM:severity}; Rule: %{BASE10NUM:rule_number} - %{GREEDYDATA:signature}; Location: %{GREEDYDATA:remaining_message}" ]
+<% end -%>	}
+
+	mutate {
+	    convert      => [ "severity", "integer" ]
+	    replace      => [ "@message", "%{real_message}" ]
+	    replace      => [ "@fields.hostname", "%{reporting_host}" ]
+	    add_field    => [ "@fields.product", "ossec" ]
+	    add_field    => [ "raw_message", "%{message}" ]
+	    add_field    => [ "ossec_server", "%{host}" ]
+	    remove_field => [ "type", "syslog_program", "syslog_timestamp",
+				"reporting_host", "message", "syslog_host",
+				"timestamp_seconds", "real_message",
+				"remaining_message", "path", "host",
+				"syslog_pid", "@version", "type", "host" ]
 	}
     }
     if "web" in [tags] {

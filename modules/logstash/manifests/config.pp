@@ -1,4 +1,5 @@
 class logstash::config {
+    $do_ossec      = $logstash::vars::do_ossec
     $do_relp       = $logstash::vars::do_relp
     $do_tcp        = $logstash::vars::do_tcp
     $do_udp        = $logstash::vars::do_udp
