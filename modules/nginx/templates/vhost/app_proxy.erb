@@ -41,8 +41,7 @@ server {
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_prefer_server_ciphers on;
     ssl_session_cache shared:SSL:10m;
-<% if 0 == 1 -%># Require nginx 1.5.9
-    ssl_session_tickets off;
+<% if @lsbdistcodename != "trusty" and @lsbdistcodename != "wheezy" -%>    ssl_session_tickets off;
 <% end -%>    ssl_certificate <%=@conf_dir%>/ssl/server-full.crt;
     ssl_certificate_key <%=@conf_dir%>/ssl/server.key;
     ssl_dhparam /etc/nginx/ssl/dh.pem;

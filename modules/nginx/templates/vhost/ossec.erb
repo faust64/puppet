@@ -10,6 +10,24 @@ server {
 <% end -%><% if @nosniff == true -%>    add_header X-Content-Type-Options nosniff;
 <% end -%><% if @xss_protection == true -%>    add_header X-XSS-Protection "1; mode=block";
 <% end -%><% if @listen_ports['ssl'] != false -%><% if @nohttpsrewrite == true -%>    root <%=@app_root%>/;
+    location ~ \.sh(/|$) {
+	deny all;
+    }
+    location ~ ossec_conf\.php(/|$) {
+	deny all;
+    }
+    location ~ /\. {
+	deny all;
+    }
+    location /lib/ {
+	deny all;
+    }
+    location /site/ {
+	deny all;
+    }
+    location /tmp/ {
+	deny all;
+    }
 <% if @with_php_fpm != false -%>    location ~ [^/]\.php(/|$) {
 	fastcgi_split_path_info ^(.+?\.php)(/.*)$;
 	if (!-f $document_root$fastcgi_script_name) {
@@ -52,6 +70,24 @@ server {
     ssl_certificate_key <%=@conf_dir%>/ssl/server.key;
     ssl_dhparam /etc/nginx/ssl/dh.pem;
 <% end -%>    root <%=@app_root%>/;
+    location ~ \.sh(/|$) {
+	deny all;
+    }
+    location ~ ossec_conf\.php(/|$) {
+	deny all;
+    }
+    location ~ /\. {
+	deny all;
+    }
+    location /lib/ {
+	deny all;
+    }
+    location /site/ {
+	deny all;
+    }
+    location /tmp/ {
+	deny all;
+    }
 <% if @with_php_fpm != false -%>    location ~ [^/]\.php(/|$) {
 	fastcgi_split_path_info ^(.+?\.php)(/.*)$;
 	if (!-f $document_root$fastcgi_script_name) {

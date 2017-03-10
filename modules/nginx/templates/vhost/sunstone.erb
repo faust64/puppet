@@ -35,8 +35,7 @@ server {
 <% end -%><% if @deny_frames == true -%>    add_header X-Frame-Options DENY;
 <% end -%><% if @nosniff == true -%>    add_header X-Content-Type-Options nosniff;
 <% end -%><% if @xss_protection == true -%>    add_header X-XSS-Protection "1; mode=block";
-<% end -%><% if 0 == 1 -%># Require nginx 1.5.9
-    ssl_session_tickets off;
+<% end -%><% if @lsbdistcodename != "trusty" and @lsbdistcodename != "wheezy" -%>    ssl_session_tickets off;
 <% end -%>    ssl_certificate <%=@conf_dir%>/ssl/server-full.crt;
     ssl_certificate_key <%=@conf_dir%>/ssl/server.key;
     ssl_dhparam /etc/nginx/ssl/dh.pem;
