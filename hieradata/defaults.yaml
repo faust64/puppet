@@ -551,6 +551,7 @@ haproxy_ssl_bind_ciphers:
 haproxy_ssl_bind_options:
   - no-sslv3
   - no-tlsv10
+  - no-tls-tickets
 haproxy_stats_listen: 127.0.0.1
 haproxy_stats_passphrase: secret
 haproxy_stats_port: 1664
