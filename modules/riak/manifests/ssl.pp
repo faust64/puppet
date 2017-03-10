@@ -14,7 +14,7 @@ class riak::ssl {
 	"Prepare Riak SSL configuration directory":
 	    ensure  => directory,
 	    group   => $riak::vars::runtime_group,
-	    mode    => "0750",
+	    mode    => "0751",
 	    owner   => root,
 	    path    => "/etc/riak/ssl",
 	    require => File["Prepare riak for further configuration"];

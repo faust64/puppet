@@ -25,6 +25,7 @@ import sys
 import requests
 import os
 
+ca = os.getenv('riak_ca','False')
 host = os.getenv('riak_host','127.0.0.1')
 port = os.getenv('riak_port',8098)
 path = os.getenv('riak_path','stats')
@@ -36,9 +37,9 @@ def autoconf():
 
 def get_stats():
     if basic != False:
-        r = requests.get("{}://{}@{}:{}/{}".format(proto,basic,host,port,path), verify=False)
+        r = requests.get("{}://{}@{}:{}/{}".format(proto,basic,host,port,path), verify=ca)
     else:
-        r = requests.get("{}://{}:{}/{}".format(proto,host,port,path))
+        r = requests.get("{}://{}:{}/{}".format(proto,host,port,path), verify=ca)
     return r.json()
 
 def config():
