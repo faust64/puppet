@@ -11,7 +11,8 @@ class asterisk::nagios {
 	    use           => "critical-service";
 	"channels":
 	    description   => "$fqdn channels availability",
-	    servicegroups => "pbx";
+	    servicegroups => "pbx",
+	    use           => "meh-service";
     }
 
     file {
