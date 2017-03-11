@@ -41,6 +41,7 @@ class common::config::mail {
 		    "-H $target",
 		    "-p 25"
 		],
-	    servicegroups => "netservices";
+	    servicegroups => "netservices",
+	    use           => "meh-service";
     }
 }
