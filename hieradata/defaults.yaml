@@ -599,6 +599,43 @@ icinga_lib_dir: /var/lib/icinga
 icinga_livestatus_clients: false
 icinga_log_dir: /var/log/icinga
 icinga_run_dir: /var/run/icinga
+icinga_service_classes:
+  critical:
+    check_interval: "2"
+    max_check_attempts: "3"
+    notification_interval: "30"
+    retry_check_interval: "1"
+    timeperiod: 24x7
+  error:
+    check_interval: "5"
+    max_check_attempts: "2"
+    notification_interval: "180"
+    retry_check_interval: "3"
+    timeperiod: 24x7
+  meh:
+    check_interval: "10"
+    max_check_attempts: "3"
+    notification_interval: "360"
+    retry_check_interval: "5"
+    timeperiod: 24x7
+  jobs:
+    check_interval: "60"
+    max_check_attempts: "2"
+    notification_interval: "720"
+    retry_check_interval: "5"
+    timeperiod: 24x7
+  status:
+    check_interval: "1440"
+    max_check_attempts: "2"
+    notification_interval: "4320"
+    retry_check_interval: "20"
+    timeperiod: 24x7
+  warning:
+    check_interval: "1440"
+    max_check_attempts: "6"
+    notification_interval: "4320"
+    retry_check_interval: "20"
+    timeperiod: 24x7
 icinga_service_groups:
   authentication:
     aalias: Authentication Services
@@ -640,43 +677,6 @@ icinga_service_groups:
     aalias: VPN Services
   webservices:
     aalias: Web Services
-icinga_service_classes:
-  critical:
-    check_interval: "2"
-    max_check_attempts: "3"
-    notification_interval: "30"
-    retry_check_interval: "1"
-    timeperiod: 24x7
-  error:
-    check_interval: "5"
-    max_check_attempts: "2"
-    notification_interval: "180"
-    retry_check_interval: "3"
-    timeperiod: 24x7
-  meh:
-    check_interval: "10"
-    max_check_attempts: "3"
-    notification_interval: "360"
-    retry_check_interval: "5"
-    timeperiod: 24x7
-  jobs:
-    check_interval: "60"
-    max_check_attempts: "2"
-    notification_interval: "720"
-    retry_check_interval: "5"
-    timeperiod: 24x7
-  status:
-    check_interval: "1440"
-    max_check_attempts: "2"
-    notification_interval: "4320"
-    retry_check_interval: "20"
-    timeperiod: 24x7
-  warning:
-    check_interval: "1440"
-    max_check_attempts: "6"
-    notification_interval: "4320"
-    retry_check_interval: "20"
-    timeperiod: 24x7
 icinga_share_dir: /usr/share/icinga
 icinga_slack_hook_uri: false
 icinga_static_devices: false
