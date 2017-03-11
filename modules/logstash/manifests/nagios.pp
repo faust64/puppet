@@ -24,6 +24,7 @@ class logstash::nagios {
 		    File["Ensure check_logstash input file owned by nagios"],
 		    File["Ensure check_logstash output file owned by logstash"]
 		],
-	    servicegroups => "system";
+	    servicegroups => "system",
+	    use           => "meh-service";
     }
 }
