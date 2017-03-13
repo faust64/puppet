@@ -19,6 +19,7 @@ class logstash::nagios {
     nagios::define::probe {
 	"logstash":
 	    description   => "$fqdn Logstash status",
+	    pluginargs    => [ "-w", "660", "-c", "1200" ],
 	    require       =>
 		[
 		    File["Ensure check_logstash input file owned by nagios"],
