@@ -8,7 +8,7 @@ class ceph::debian {
 
     apt::define::repo {
 	"ceph":
-	    baseurl  => "http://ceph.com/debian-$codename/",
+	    baseurl  => "http://download.ceph.com/debian-$codename/",
 	    codename => $lsbdistcodename,
 	    require  => Apt::Define::Aptkey["security@ceph.com"];
     }
