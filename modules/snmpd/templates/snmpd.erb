@@ -2,6 +2,7 @@
 syscontact "Waldo (root@<%=@fqdn%>)"
 syslocation "<%=@snmp_location%>"
 sysservices <%=@snmp_sysservices%>
+includeAllDisks 10%
 <% else -%>listen on <%=@listen%>
 <% if @new_syntax -%>ro<% else -%>read-only <% end -%>community <%=@snmp_community%>
 system contact "Waldo (root@<%=@fqdn%>)"
