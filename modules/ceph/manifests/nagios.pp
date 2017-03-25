@@ -3,7 +3,7 @@ class ceph::nagios {
 	include sudo
 
 	$client      = $ceph::vars::nagios_ceph_client
-	$keyring     = $ceph::vars::nagios_ceph_keyring
+	$keyring     = $ceph::vars::nagios_ceph_keyring_path
 	$nagios_user = $ceph::vars::nagios_runtime_user
 	$plugindir   = $ceph::vars::plugins_dir
 	$sudo_conf_d = $ceph::vars::sudo_conf_dir
@@ -14,7 +14,7 @@ class ceph::nagios {
 		pluginargs  =>
 		    [
 			"--id $client",
-			"--keyring $keyring"
+			"--keyring /etc/ceph/$keyring"
 		    ],
 		use         => "critical-service";
 	}
