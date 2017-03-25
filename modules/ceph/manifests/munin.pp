@@ -20,7 +20,11 @@ class ceph::munin {
 
 	    muninnode::define::probe {
 		$ceph::vars::munin_probes:
-		    require => File["Install ceph munin probe configuration"]
+		    require =>
+			[
+			    Common::Define::Package["ceph-common"],
+			    File["Install ceph munin probe configuration"]
+			];
 	    }
 	} else {
 	    muninnode::define::probe {

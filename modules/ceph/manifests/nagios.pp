@@ -16,6 +16,7 @@ class ceph::nagios {
 			"--id $client",
 			"--keyring /etc/ceph/$keyring"
 		    ],
+		require     => Common::Define::Package["ceph-common"],
 		use         => "critical-service";
 	}
 
@@ -31,6 +32,7 @@ class ceph::nagios {
 				    "-I $hname"
 				],
 			    pluginconf  => "cephmon",
+			    require     => Common::Define::Package["ceph-common"],
 			    use         => "critical-service";
 		    }
 		}
@@ -45,6 +47,11 @@ class ceph::nagios {
 					"-I $osd"
 				    ],
 				pluginconf  => "cephosd",
+				require     =>
+				    [
+					Common::Define::Package["ceph-common"],
+					File["Add nagios user to sudoers for ceph querying"]
+				    ],
 				use         => "critical-service";
 			}
 		    }

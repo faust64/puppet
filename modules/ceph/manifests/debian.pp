@@ -12,4 +12,12 @@ class ceph::debian {
 	    codename => $lsbdistcodename,
 	    require  => Apt::Define::Aptkey["security@ceph.com"];
     }
+
+    if ($ceph::vars::do_dashboard or
+	$ceph::vars::with_nagios or
+	$ceph::vars::munin_probes) {
+	common::define::package {
+	    "ceph-common":
+	}
+    }
 }

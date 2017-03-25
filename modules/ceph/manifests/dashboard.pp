@@ -61,6 +61,7 @@ class ceph::dashboard {
 	    app_root      => "/usr/share/ceph-dash",
 	    require       =>
 		[
+		    Common::Define::Package["ceph-common"],
 		    Common::Define::Package["flask"],
 		    File["Install ceph-dash configuration"]
 		],
