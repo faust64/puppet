@@ -7,16 +7,65 @@ CRITICAL_LEVEL=${critical_level:-"90"}
 POOLS=`rados lspools`
 test -z "$POOLS" && exit 0
 
+convert()
+{
+    eval `echo $@ | sed 's|\([0-9]*\)\([KMGTP]\)|val=\1 unit=\2 pfx=|'`
+    case "$unit" in
+	K)
+	    if test $val -lt 10; then
+		pfx=0.00000000
+	    elif test $val -lt 100; then
+		pfx=0.0000000
+	    else
+		pfx=0.000000
+	    fi
+	    ;;
+	M)
+	    if test $val -lt 10; then
+		pfx=0.00000
+	    elif test $val -lt 100; then
+		pfx=0.0000
+	    elif test $val -lt 1000; then
+		pfx=0.000
+	    elif test $val -lt 10000; then
+		pfx=0.00
+	    elif test $val -lt 100000; then
+		pfx=0.0
+	    elif test $val -lt 1000000; then
+		pfx=0.
+	    fi
+	    ;;
+	G)
+	    if test $val -lt 10; then
+		pfx=0.00
+	    elif test $val -lt 100; then
+		pfx=0.0
+	    elif test $val -lt 1000; then
+		pfx=0.
+	    else
+		val=`echo $val | sed 's|\([0-9]*\)\([0-9][0-9][0-9]\)|\1.\2|'`
+	    fi
+	    ;;
+	P)
+	    sfx=000
+	    ;;
+	*)
+	    ;;
+    esac
+    echo $pfx$val$sfx
+}
+
 if test "$1" = autoconf; then
     echo yes
     exit 0
-elif test "$1" = config; then
+fi
+CAPACITY=$(convert `rados df | awk '/^[ \t]*total_space/{print $2}'`)
+if test "$1" = config; then
     echo 'graph_title CEPH capacity'
     echo 'graph_category ceph'
     echo 'graph_vlabel TB'
     echo 'graph_info CEPH cluster capacity'
     echo 'graph_args --base 1000 -l 0'
-    CAPACITY=$(expr `rados df | awk '/^[ \t]*total space/{print $3}'` '*' 1024)
     WARNING=$(echo "scale=2;$CAPACITY * ($WARNING_LEVEL/100)" | bc -l | cut -d '.' -f 1)
     CRITICAL=$(echo "scale=2;$CAPACITY * ($CRITICAL_LEVEL/100)" | bc -l | cut -d '.' -f 1)
     echo "capacity.label Capacity"
@@ -30,8 +79,9 @@ elif test "$1" = config; then
         echo "${pool}.draw AREA"
     done
 else
-    echo capacity.value $(expr `rados df | awk '/^[ \t]*total space/{print $3}'` '*' 1024)
-    echo used.value $(expr `rados df | awk '/^[ \t]*total used/{print $3}'` '*' 1024)
+    used=$(convert `rados df | awk '/^[ \t]*total_used/{print $2}'`)
+    echo capacity.value $CAPACITY
+    echo used.value $used
     for pool in $POOLS
     do
 	echo ${pool}.value $(expr `rados -p $pool df | awk "/^$pool[ \t]*/{print \\$2}"` '*' 1024)

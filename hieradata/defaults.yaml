@@ -309,9 +309,9 @@ ceph_munin_probes:
   - ceph_usage
 ceph_nagios: false
 ceph_nagios_client: nagios
-ceph_nagios_keyring_path: false
+ceph_nagios_keyring_path: ceph.client.nagios.keyring
 ceph_nagios_map: false
-ceph_version: hammer
+ceph_version: kraken
 
 # ClamAV
 clamav_contact: false

@@ -2,6 +2,7 @@ additional_classes:
   - Ceph
 
 # Apache
+apache_mod_headers: true
 apache_mod_wsgi: true
 
 # Nagios
