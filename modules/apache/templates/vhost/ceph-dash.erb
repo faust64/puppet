@@ -27,13 +27,13 @@
 <% end -%><% if @xss_protection == true -%>    Header always set X-Xss-Protection "1; mode=block"
 <% end -%>    CustomLog <%=@log_dir%>/ssl-access-<%=@name%>.log combined
     Include ssl.conf
-<% end -%>    WSGIApplicationGroup %{GLOBAL}
-    WSGIDaemonProcess cephdash user=<%=scope.lookupvar('apache::vars::runtime_user')%> group=<%=scope.lookupvar('apache::vars::runtime_group')%> processes=<%=@wsgi_child%> threads=<%=@wsgi_threads%> maximum-requests=<%=@wsgi_max%> umask=<%=@wsgi_umask%>
+<% end -%>    WSGIDaemonProcess cephdash user=<%=scope.lookupvar('apache::vars::runtime_user')%> group=<%=scope.lookupvar('apache::vars::runtime_group')%> processes=<%=@wsgi_child%> threads=<%=@wsgi_threads%> maximum-requests=<%=@wsgi_max%> umask=<%=@wsgi_umask%>
     WSGIPassAuthorization On
     WSGIScriptAlias / /usr/share/ceph-dash/contrib/wsgi/cephdash.wsgi
-    WSGIProcessGroup cephdash
     WSGIErrorOverride On
     <Directory <%=@app_root%>>
+	WSGIApplicationGroup %{GLOBAL}
+	WSGIProcessGroup cephdash
 <% if @allow_override != false -%>	AllowOverride <%=@allow_override%>
 <% end -%><% if @options != false -%>	Options <%=@options%>
 <% end -%><% if @listen_ports['ssl'] != false and (@vhostldapauth == true or @vhostldapauth == "pubonly") -%>	Include authldap.conf
