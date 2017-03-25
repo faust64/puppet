@@ -178,22 +178,22 @@ NODE ceph1
     ICON 60 60 /var/www/wmap/images/disk.png
 
 NODE ceph1disk1
-    LABEL ceph-15
+    LABEL ceph-00
     POSITION ceph1 0 60
-    TARGET gauge:/var/www/mrtg/helios/helios.disk.49.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/helios/10.42.242.14.disk.58.rrd:ds0:ds1
     MAXVALUE 1.9T
 
 NODE ceph1disk2
-    LABEL ceph-16
+    LABEL ceph-12
     POSITION ceph1 0 80
-    TARGET gauge:/var/www/mrtg/helios/helios.disk.50.rrd:ds0:ds1
-    MAXVALUE 920G
+    TARGET gauge:/var/www/mrtg/helios/10.42.242.14.disk.57.rrd:ds0:ds1
+    MAXVALUE 927G
 
 NODE ceph1disk3
-    LABEL ceph-17
+    LABEL ceph-20
     POSITION ceph1 0 100
-    TARGET gauge:/var/www/mrtg/helios/helios.disk.48.rrd:ds0:ds1
-    MAXVALUE 920G
+    TARGET gauge:/var/www/mrtg/helios/10.42.242.14.disk.56.rrd:ds0:ds1
+    MAXVALUE 927G
 
 NODE ceph2
     POSITION 643 520
@@ -204,22 +204,22 @@ NODE ceph2
     ICON 60 60 /var/www/wmap/images/disk.png
 
 NODE ceph2disk1
-    LABEL ceph-12
+    LABEL ceph-01
     POSITION ceph2 0 60
-    TARGET gauge:/var/www/mrtg/selene/selene.disk.49.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/selene/10.42.242.16.disk.56.rrd:ds0:ds1
     MAXVALUE 1.9T
 
 NODE ceph2disk2
-    LABEL ceph-13
+    LABEL ceph-11
     POSITION ceph2 0 80
-    TARGET gauge:/var/www/mrtg/selene/selene.disk.50.rrd:ds0:ds1
-    MAXVALUE 2.8T
+    TARGET gauge:/var/www/mrtg/selene/10.42.242.16.disk.58.rrd:ds0:ds1
+    MAXVALUE 927G
 
 NODE ceph2disk3
-    LABEL ceph-14
+    LABEL ceph-22
     POSITION ceph2 0 100
-    TARGET gauge:/var/www/mrtg/selene/selene.disk.48.rrd:ds0:ds1
-    MAXVALUE 920G
+    TARGET gauge:/var/www/mrtg/selene/10.42.242.16.disk.57.rrd:ds0:ds1
+    MAXVALUE 2.8T
 
 NODE ceph3
     POSITION 254 520
@@ -230,27 +230,27 @@ NODE ceph3
     ICON 60 60 /var/www/wmap/images/disk.png
 
 NODE ceph3disk1
-    LABEL ceph-4
+    LABEL ceph-26
     POSITION ceph3 0 60
-    TARGET gauge:/var/www/mrtg/eos/eos.disk.50.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/eos/10.42.242.18.disk.56.rrd:ds0:ds1
     MAXVALUE 470G
 
 NODE ceph3disk2
-    LABEL ceph-5
+    LABEL ceph-27
     POSITION ceph3 0 80
-    TARGET gauge:/var/www/mrtg/eos/eos.disk.49.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/eos/10.42.242.18.disk.57.rrd:ds0:ds1
     MAXVALUE 3.7T
 
 NODE ceph3disk3
-    LABEL ceph-6
+    LABEL ceph-28
     POSITION ceph3 0 100
-    TARGET gauge:/var/www/mrtg/eos/eos.disk.51.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/eos/10.42.242.18.disk.58.rrd:ds0:ds1
     MAXVALUE 3.7T
 
 NODE ceph3disk4
-    LABEL ceph-7
+    LABEL ceph-29
     POSITION ceph3 0 120
-    TARGET gauge:/var/www/mrtg/eos/eos.disk.48.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/eos/10.42.242.18.disk.59.rrd:ds0:ds1
     MAXVALUE 3.7T
 
 NODE ceph4
@@ -262,27 +262,27 @@ NODE ceph4
     ICON 60 60 /var/www/wmap/images/disk.png
 
 NODE ceph4disk1
-    LABEL ceph-8
+    LABEL ceph-02
     POSITION ceph4 0 60
-    TARGET gauge:/var/www/mrtg/hemara/hemara.disk.48.rrd:ds0:ds1
-    MAXVALUE 460G
+    TARGET gauge:/var/www/mrtg/hemara/10.42.242.19.disk.58.rrd:ds0:ds1
+    MAXVALUE 461G
 
 NODE ceph4disk2
-    LABEL ceph-9
+    LABEL ceph-07
     POSITION ceph4 0 80
-    TARGET gauge:/var/www/mrtg/hemara/hemara.disk.51.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/hemara/10.42.242.19.disk.56.rrd:ds0:ds1
     MAXVALUE 3.7T
 
 NODE ceph4disk3
-    LABEL ceph-10
+    LABEL ceph-14
     POSITION ceph4 0 100
-    TARGET gauge:/var/www/mrtg/hemara/hemara.disk.50.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/hemara/10.42.242.19.disk.57.rrd:ds0:ds1
     MAXVALUE 3.7T
 
 NODE ceph4disk4
-    LABEL ceph-11
+    LABEL ceph-18
     POSITION ceph4 0 120
-    TARGET gauge:/var/www/mrtg/hemara/hemara.disk.49.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/hemara/10.42.242.19.disk.59.rrd:ds0:ds1
     MAXVALUE 2.8T
 
 NODE ceph5
@@ -294,27 +294,27 @@ NODE ceph5
     ICON 60 60 /var/www/wmap/images/disk.png
 
 NODE ceph5disk1
-    LABEL ceph-0
+    LABEL ceph-04
     POSITION ceph5 0 60
-    TARGET gauge:/var/www/mrtg/nyx/nyx.disk.49.rrd:ds0:ds1
-    MAXVALUE 470G
+    TARGET gauge:/var/www/mrtg/nyx/10.42.242.20.disk.59.rrd:ds0:ds1
+    MAXVALUE 472G
 
 NODE ceph5disk2
-    LABEL ceph-1
+    LABEL ceph-08
     POSITION ceph5 0 80
-    TARGET gauge:/var/www/mrtg/nyx/nyx.disk.48.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/nyx/10.42.242.20.disk.56.rrd:ds0:ds1
     MAXVALUE 3.7T
 
 NODE ceph5disk3
-    LABEL ceph-2
+    LABEL ceph-17
     POSITION ceph5 0 100
-    TARGET gauge:/var/www/mrtg/nyx/nyx.disk.50.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/nyx/10.42.242.20.disk.57.rrd:ds0:ds1
     MAXVALUE 3.7T
 
 NODE ceph5disk4
-    LABEL ceph-3
+    LABEL ceph-24
     POSITION ceph5 0 120
-    TARGET gauge:/var/www/mrtg/nyx/nyx.disk.51.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/nyx/10.42.242.20.disk.58.rrd:ds0:ds1
     MAXVALUE 3.7T
 
 NODE ceph6
@@ -326,27 +326,27 @@ NODE ceph6
     ICON 60 60 /var/www/wmap/images/disk.png
 
 NODE ceph6disk1
-    LABEL ceph-18
+    LABEL ceph-06
     POSITION ceph6 0 60
-    TARGET gauge:/var/www/mrtg/erebe/erebe.disk.49.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/erebe/10.42.242.22.disk.59.rrd:ds0:ds1
     MAXVALUE 442G
 
 NODE ceph6disk2
-    LABEL ceph-19
+    LABEL ceph-10
     POSITION ceph6 0 80
-    TARGET gauge:/var/www/mrtg/erebe/erebe.disk.48.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/erebe/10.42.242.22.disk.57.rrd:ds0:ds1
     MAXVALUE 2.8T
 
 NODE ceph6disk3
-    LABEL ceph-20
+    LABEL ceph-16
     POSITION ceph6 0 100
-    TARGET gauge:/var/www/mrtg/erebe/erebe.disk.51.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/erebe/10.42.242.22.disk.56.rrd:ds0:ds1
     MAXVALUE 1.9T
 
 NODE ceph6disk4
     LABEL ceph-21
     POSITION ceph6 0 120
-    TARGET gauge:/var/www/mrtg/erebe/erebe.disk.50.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/erebe/10.42.242.22.disk.58.rrd:ds0:ds1
     MAXVALUE 2.8T
 
 NODE ceph7
@@ -358,21 +358,21 @@ NODE ceph7
     ICON 60 60 /var/www/wmap/images/disk.png
 
 NODE ceph7disk1
-    LABEL ceph-22
+    LABEL ceph-03
     POSITION ceph7 0 60
-    TARGET gauge:/var/www/mrtg/aether/aether.disk.49.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/aether/10.42.242.23.disk.58.rrd:ds0:ds1
     MAXVALUE 3.7T
 
 NODE ceph7disk2
-    LABEL ceph-23
+    LABEL ceph-13
     POSITION ceph7 0 80
-    TARGET gauge:/var/www/mrtg/aether/aether.disk.50.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/aether/10.42.242.23.disk.57.rrd:ds0:ds1
     MAXVALUE 1.9T
 
 NODE ceph7disk3
-    LABEL ceph-24
+    LABEL ceph-19
     POSITION ceph7 0 100
-    TARGET gauge:/var/www/mrtg/aether/aether.disk.48.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/aether/10.42.242.23.disk.56.rrd:ds0:ds1
     MAXVALUE 442G
 
 NODE ceph8
@@ -384,28 +384,28 @@ NODE ceph8
     ICON 60 60 /var/www/wmap/images/disk.png
 
 NODE ceph8disk1
-    LABEL ceph-25
+    LABEL ceph-05
     POSITION ceph8 0 60
-    TARGET gauge:/var/www/mrtg/ouranos/10.42.242.24.disk.48.rrd:ds0:ds1
-    MAXVALUE 442G
+    TARGET gauge:/var/www/mrtg/ouranos/10.42.242.24.disk.57.rrd:ds0:ds1
+    MAXVALUE 461G
 
 NODE ceph8disk2
-    LABEL ceph-26
+    LABEL ceph-09
     POSITION ceph8 0 80
-    TARGET gauge:/var/www/mrtg/ouranos/10.42.242.24.disk.49.rrd:ds0:ds1
+    TARGET gauge:/var/www/mrtg/ouranos/10.42.242.24.disk.56.rrd:ds0:ds1
     MAXVALUE 2.8T
 
 NODE ceph8disk3
-    LABEL ceph-27
+    LABEL ceph-15
     POSITION ceph8 0 100
-    TARGET gauge:/var/www/mrtg/ouranos/10.42.242.24.disk.51.rrd:ds0:ds1
-    MAXVALUE 3.7T
+    TARGET gauge:/var/www/mrtg/ouranos/10.42.242.24.disk.58.rrd:ds0:ds1
+    MAXVALUE 2.8T
 
 NODE ceph8disk4
-    LABEL ceph-28
+    LABEL ceph-23
     POSITION ceph8 0 120
-    TARGET gauge:/var/www/mrtg/ouranos/10.42.242.24.disk.52.rrd:ds0:ds1
-    MAXVALUE 2.8T
+    TARGET gauge:/var/www/mrtg/ouranos/10.42.242.24.disk.59.rrd:ds0:ds1
+    MAXVALUE 3.7T
 
 NODE ap1
     POSITION 700 710
