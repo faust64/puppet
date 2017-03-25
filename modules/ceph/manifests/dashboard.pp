@@ -1,4 +1,7 @@
 class ceph::dashboard {
+    if (! defined(Class[common::tools::pip])) {
+	include common::tools::pip
+    }
     if (! defined(Class[git])) {
 	include git
     }
@@ -17,6 +20,12 @@ class ceph::dashboard {
 	    local_container => "/usr/share",
 	    repository      => "https://github.com/Crapworks/ceph-dash",
 	    update          => false;
+    }
+
+    common::define::package {
+	"flask":
+	    provider => "pip",
+	    require  => Class[Common::Tools::Pip];
     }
 
     exec {
@@ -49,7 +58,12 @@ class ceph::dashboard {
     apache::define::vhost {
 	"dashboard.$domain":
 	    aliases       => $aliases,
-	    require       => File["Install ceph-dash configuration"],
+	    app_root      => "/usr/share/ceph-dash",
+	    require       =>
+		[
+		    Common::Define::Package["flask"],
+		    File["Install ceph-dash configuration"]
+		],
 	    vhostldapauth => false,
 	    vhostsource   => "ceph-dash",
 	    with_reverse  => "dashboard.$rdomain";
