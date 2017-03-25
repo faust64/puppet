@@ -13,7 +13,7 @@ class ceph::munin {
 		    mode    => "0644",
 		    notify  => Service[$ceph::vars::munin_service_name],
 		    owner   => root,
-		    path    => "$conf_dir/ceph.conf",
+		    path    => "$conf_dir/plugin-conf.d/ceph.conf",
 		    require => File["Prepare Munin-node plugin-conf directory"],
 		    source  => "puppet:///modules/ceph/munin.conf";
 	    }
