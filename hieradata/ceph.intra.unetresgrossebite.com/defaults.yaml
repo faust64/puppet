@@ -14,8 +14,8 @@ ssh_tcp_wrappers:
   - 127.0.0.1/32
 
 # OpenVZ
-vz_default_bridge: br4
-vz_default_gateway: 10.42.44.1
+vz_default_bridge: br10
+vz_default_gateway: 10.42.46.1
 vz_default_netmask: 255.255.255.0
 
 # PF
@@ -36,3 +36,4 @@ rsync_clients:
 
 dns_search: ceph.intra.unetresgrossebite.com intra.unetresgrossebite.com unetresgrossebite.com
 root_domain: intra.unetresgrossebite.com
+pki_public: pki.adm.intra.unetresgrossebite.com
