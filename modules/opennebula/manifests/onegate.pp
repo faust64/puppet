@@ -27,7 +27,7 @@ class opennebula::onegate {
 
 	common::define::lined {
 	    "Configure OneGate HTTPS Endpoint":
-		line    => ":ssl_server: https://$hname:443/",
+		line    => ":ssl_server: https://$hname.$domain:443/",
 		match   => ":ssl_server: https://",
 		notify  => Service["opennebula-gate"],
 		path    => "/etc/one/onegate-server.conf",

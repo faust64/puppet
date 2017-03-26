@@ -2,6 +2,11 @@ class opennebula::controller {
     $ldap_base   = $opennebula::vars::ldap_base
     $ldap_slave  = $opennebula::vars::ldap_slave
     $nebula_vers = $opennebula::vars::version
+    $onegate     = $opennebula::vars::onegate
+
+    if (! defined(Class[nginx])) {
+	include nginx
+    }
 
     common::define::package {
 	"opennebula":
@@ -14,6 +19,17 @@ class opennebula::controller {
 	    "opennebula":
 		dbpass => $opennebula::vars::db_pass,
 		dbuser => $opennebula::vars::db_user;
+	}
+    }
+
+    if ($nginx::vars::listen_ports['ssl'] != false) {
+	common::define::lined {
+	    "Set OneGate Endpoint":
+		line    => "ONEGATE_ENDPOINT = \"https://$onegate.$domain/\"",
+		match   => "ONEGATE_ENDPOINT = ",
+		notify  => Service["opennebula"],
+		path    => "/etc/one/oned.conf",
+		require => Common::Define::Package["opennebula"];
 	}
     }
 

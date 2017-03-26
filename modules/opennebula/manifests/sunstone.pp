@@ -1,4 +1,5 @@
 class opennebula::sunstone {
+    $controller    = $opennebula::vars::controller
     $runtime_group = $opennebula::vars::runtime_group
     $runtime_user  = $opennebula::vars::runtime_user
 
@@ -71,11 +72,26 @@ class opennebula::sunstone {
 			Common::Define::Lined["Set Sunstone VNCproxy SSL certificate"],
 			Common::Define::Lined["Set Sunstone VNCproxy SSL key"]
 		    ];
+	    "Configure Sunstone listening on loopback":
+		line    => ":host: 127.0.0.1",
+		match   => ":host: ",
+		notify  => Service["opennebula-sunstone"],
+		path    => "/etc/one/sunstone-server.conf",
+		require => Common::Define::Package["opennebula-sunstone"];
 	}
     }
 
     common::define::package {
 	"opennebula-sunstone":
+    }
+
+    common::define::lined {
+	"Plug Sunstone to OpenNebula Controller":
+	    line    => ":one_xmlrpc: http://$controller:2633/RPC2",
+	    match   => ":one_xmlrpc: http://",
+	    notify  => Service["opennebula-sunstone"],
+	    path    => "/etc/one/sunstone-server.conf",
+	    require => Common::Define::Package["opennebula-sunstone"];
     }
 
     exec {
