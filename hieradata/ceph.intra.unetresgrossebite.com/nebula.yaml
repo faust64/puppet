@@ -11,7 +11,3 @@ mysql_bind_addr: 10.42.46.254
 
 # Nagios
 nagios_no_parent: false
-
-# OpenNebula
-nebula_class: sunstone
-nebula_datastore0: false

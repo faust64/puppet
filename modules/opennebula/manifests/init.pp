@@ -13,11 +13,22 @@ class opennebula {
 	}
     }
 
-    if ($opennebula::vars::nebula_class == "compute"
-	and $opennebula::vars::datastore0 != false) {
+    if ($srvtype == "opennebula" and $opennebula::vars::controller != false) {
 	include opennebula::compute
-    } elsif ($opennebula::vars::nebula_class == "sunstone") {
-	include opennebula::sunstone
-	include opennebula::nagios
+    } else {
+	if ($opennebula::vars::do_controller) {
+	    include opennebula::controller
+	    include opennebula::nagios
+	}
+	if ($opennebula::vars::do_oneflow) {
+	    include opennebula::oneflow
+	}
+	if ($opennebula::vars::do_onegate) {
+	    include opennebula::onegate
+	}
+	if ($opennebula::vars::do_sunstone) {
+	    include opennebula::sunstone
+	}
+	include opennebula::service
     }
 }

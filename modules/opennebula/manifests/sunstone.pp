@@ -1,78 +1,104 @@
 class opennebula::sunstone {
     $runtime_group = $opennebula::vars::runtime_group
     $runtime_user  = $opennebula::vars::runtime_user
-    $ldap_base     = $opennebula::vars::ldap_base
-    $ldap_slave    = $opennebula::vars::ldap_slave
 
-    if ($opennebula::vars::db_backend == "mysql") {
-	include mysql
-
-# for some reason, msuser & mspw facts don't work on ubuntu
-# facter -p returns the proper value
-# puppetmaster's /var/lib/puppet/yaml/facts/XXX.yaml is consistent with facter -p
-# however, even a notify in mysql manifests shows these variables as empty
-#	mysql::define::create_database {
-#	    "opennebula":
-#		dbpass => $opennebula::vars::db_pass,
-#		dbuser => $opennebula::vars::db_user;
-#	}
+    if (! defined(Class[nginx])) {
+	include nginx
     }
 
-    include nginx
+    include common::libs::curlopenssl
+    include common::libs::rubydev
+    include common::tools::gcc
+    include common::tools::make
 
     if ($nginx::vars::listen_ports['ssl'] == false) {
-	$strict = "max-age=63072000; includeSubdomains; preload"
+	$strict         = "max-age=63072000; includeSubdomains; preload"
     } else {
-#FIXME: should enable SSL on VNC proxy
-	$strict = false
+	$nginx_conf_dir = $nginx::vars::conf_dir
+	$strict         = false
+
+	file {
+	    "Prepare Sunstone SSL directory":
+		ensure  => directory,
+		group   => $opennebula::vars::runtime_group,
+		mode    => "0750",
+		owner   => $opennebula::vars::runtime_user,
+		path    => "/etc/one/ssl",
+		require => Common::Define::Package["opennebula-sunstone"];
+	}
+
+	each(["crt", "key"]) |$ext| {
+	    exec {
+		"Copy Nginx certificate ($ext) to Sunstone":
+		    command => "cp -p $nginx_conf_dir/ssl/server.$ext server.$ext",
+		    cwd     => "/etc/one/ssl",
+		    path    => "/usr/bin:/bin",
+		    unless  => "cmp $nginx_conf_dir/ssl/server.$ext server.$ext",
+		    require => File["Prepare Sunstone SSL directory"];
+	    }
+
+	    file {
+		"Set proper permissions to Sunstone certificate ($ext)":
+		    ensure  => present,
+		    group   => $opennebula::vars::runtime_group,
+		    mode    => "0640",
+		    owner   => $opennebula::vars::runtime_user,
+		    path    => "/etc/one/ssl/server.$ext",
+		    require => Exec["Copy Nginx certificate ($ext) to Sunstone"];
+	    }
+	}
+
+	common::define::lined {
+	    "Set Sunstone VNCproxy SSL key":
+		line    => ":vnc_proxy_key: /etc/one/ssl/server.key",
+		match   => ":vnc_proxy_key:",
+		notify  => Service["opennebula-sunstone"],
+		path    => "/etc/one/sunstone-server.conf",
+		require => File["Set proper permissions to Sunstone certificate (key)"];
+	    "Set Sunstone VNCproxy SSL certificate":
+		line    => ":vnc_proxy_cert: /etc/one/ssl/server.crt",
+		match   => ":vnc_proxy_cert:",
+		notify  => Service["opennebula-sunstone"],
+		path    => "/etc/one/sunstone-server.conf",
+		require => File["Set proper permissions to Sunstone certificate (crt)"];
+	    "Enable Sunstone VNCproxy SSL support":
+		line    => ":vnc_proxy_support_wss: yes",
+		match   => ":vnc_proxy_support_wss:",
+		notify  => Service["opennebula-sunstone"],
+		path    => "/etc/one/sunstone-server.conf",
+		require =>
+		    [
+			Common::Define::Lined["Set Sunstone VNCproxy SSL certificate"],
+			Common::Define::Lined["Set Sunstone VNCproxy SSL key"]
+		    ];
+	}
     }
 
     common::define::package {
 	"opennebula-sunstone":
     }
 
-    common::define::service {
-	"opennebula-sunstone":
-	    require => Package["opennebula-sunstone"];
-    }
-
-    nfs::define::share {
-	"OpenNebula":
-	    options => [ "rw", "sync", "no_subtree_check", "root_squash" ],
-	    path    => "/var/lib/one/",
-	    to      => [ "*" ];
-    }
-
     exec {
+	"Install opennebula gems":
+	    command => "echo y | ./install_gems >geminstall.log 2>&1",
+	    creates => "/usr/share/one/geminstall.log",
+	    cwd     => "/usr/share/one",
+	    path    => "/usr/share/one:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin",
+	    require =>
+		[
+		    Class[Common::Libs::Curlopenssl],
+		    Class[Common::Libs::Rubydev],
+		    Class[Common::Tools::Gcc],
+		    Class[Common::Tools::Make],
+		    Common::Define::Package["opennebula-sunstone"]
+		];
 	"Copy local ssh key to authorized keys":
 	    command => "cat id_rsa.pub >authorized_keys",
 	    cwd     => "/var/lib/one/.ssh",
 	    path    => "/usr/bin:/bin",
-	    require => Package["opennebula-sunstone"],
+	    require => Common::Define::Package["opennebula-sunstone"],
 	    user    => $runtime_user,
 	    unless  => "test -s authorized_keys";
-    }
-
-    Exec <<| tag == "nebula-compute-host" |>>
-
-    file {
-	"Install sunstone auth ldap configuration":
-	    content => template("opennebula/auth.erb"),
-	    group   => hiera("gid_zero"),
-	    mode    => "0644",
-	    notify  => Service["opennebula-sunstone"],
-	    owner   => root,
-	    path    => "/etc/one/auth/ldap_auth.conf",
-	    require => Package["opennebula-sunstone"];
-    }
-
-    file_line {
-	"Enable sunstone ldap authentication":
-	    line    => '    authn = "default,ssh,x509,ldap,server_cipher,server_x509"',
-	    match   => "    authn =",
-	    notify  => Service["opennebula-sunstone"],
-	    path    => "/etc/one/oned.conf",
-	    require => File["Install sunstone auth ldap configuration"];
     }
 
     nginx::define::vhost {
@@ -83,4 +109,7 @@ class opennebula::sunstone {
 	    stricttransport => $strict,
 	    vhostsource     => "sunstone";
     }
+
+    Common::Define::Package["opennebula-sunstone"]
+	-> Common::Define::Package["opennebula-common"]
 }

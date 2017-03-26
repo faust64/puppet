@@ -1279,15 +1279,21 @@ openldap_service_name: slapd
 openldap_web_front: true
 
 # OpenNebula
-nebula_class: manager
-nebula_datastore0: false
+nebula_controller: false
 nebula_db_backend: sqlite
 nebula_db_passphrase: onepass
 nebula_db_user: oneadmin
+nebula_do_oneflow: false
+nebula_do_onegate: false
+nebula_do_sunstone: false
+nebula_oneflow: false
+nebula_oneflow_gw: localhost
+nebula_onegate: false
+nebula_onegate_gw: localhost
 nebula_runtime_group: oneadmin
 nebula_runtime_user: oneadmin
 nebula_searchuser: ou=users,dc=example,dc=com
-nebula_version: 4.14
+nebula_version: 5.2
 
 # OpenSMTPD
 mail_masquerade: false

@@ -3,3 +3,6 @@ mysql_provider: mariadb
 
 # OpenNebula
 nebula_db_backend: mysql
+nebula_do_oneflow: true
+nebula_do_onegate: true
+nebula_do_sunstone: true

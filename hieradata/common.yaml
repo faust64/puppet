@@ -187,6 +187,7 @@ openldap_ssp_mail_from: admin@unetresgrossebite.com
 openldap_web_front: false
 
 # Opennebula
+nebula_controller: nebula.ceph.intra.unetresgrossebite.com
 nebula_searchuser: ou=users,dc=unetresgrossebite,dc=com
 
 # OpenSMTPD

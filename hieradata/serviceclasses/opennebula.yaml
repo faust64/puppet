@@ -18,12 +18,12 @@ collectd_default_plugins:
     IgnoreSelected: true
   interface:
     Interface:
-      - bond0
       - br0
       - br4
       - br7
       - br8
       - br11
+      - br10
       - br42
   load: false
   memory: false
@@ -54,10 +54,6 @@ nagios_smart_disks:
 
 # NTP
 ntp_update_minute: 23
-
-# OpenNebula
-nebula_class: compute
-nebula_datastore0: nebula.ceph.intra.unetresgrossebite.com
 
 # OpenSSH
 ssh_tcp_wrappers:
