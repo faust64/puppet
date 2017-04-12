@@ -4,9 +4,15 @@ class tor::debian {
 	    keyid => "886DDD89";
     }
 
+    apt::define::repo {
+	"tor":
+	    baseurl => "http://deb.torproject.org/torproject.org",
+	    require => Apt::Define::Aptkey["tor"];
+    }
+
     common::define::package {
 	"tor":
-	    require => Apt::Define::Aptkey["tor"]
+	    require => Apt::Define::Repo["tor"];
     }
 
     file {

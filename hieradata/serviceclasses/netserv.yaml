@@ -4,6 +4,7 @@ additional_classes:
   - Iscdhcpserver
   - Squid
   - Tftpd
+  - Tor
 
 # Bind
 rndc_conf_dir: /etc/bind
