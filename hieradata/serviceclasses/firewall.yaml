@@ -66,7 +66,9 @@ allowed_tcp_ports:
   - 5222
   - "8080:8090"
   - 8140
+  - 9001
   - 9418
+  - 9869
   - 11371
 allowed_udp_ports:
   - time
