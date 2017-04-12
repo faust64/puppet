@@ -2,7 +2,7 @@ class certbot::jobs {
     if ($certbot::vars::renew_day and $certbot::vars::renew_hour and $certbot::vars::renew_min) {
 	cron {
 	    "Renew Certbot certificates":
-		command  => "/usr/local/sbin/le_renew",
+		command  => "/usr/local/sbin/le_renew >/dev/null 2>&1",
 		hour     => $certbot::vars::renew_hour,
 		minute   => $certbot::vars::renew_min,
 		monthday => $certbot::vars::renew_day,
