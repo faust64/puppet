@@ -11,7 +11,7 @@ mspass="<% if @mspw != "" -%>-p<%=@mspw%><% end -%>"
 dbdir=<%=@dumpdir%>
 fail=0
 
-for database in `echo show databases | mysql -Nu$msuser $mspass | grep -v _schema`
+for database in `echo show databases | mysql -Nu$msuser $mspass | grep -Ev '(_schema|lost\+found)'`
 do
     if ! mysqldump -u$msuser $mspass $database 2>&1 | gzip - >$dbdir/$database<% if @rolling_backup -%>-`date +%s`<% end -%>; then
 	echo "Failed to either dump or write to disk the dump of $database (/$dbdir/$database)"
