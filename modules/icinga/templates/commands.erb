@@ -15,7 +15,7 @@ define command {
 
 define command {
     command_name	notify-service-by-slack
-    command_line	/usr/local/bin/slack <%=@slack_hook_uri%> "$NOTIFICATIONTYPE$: $SERVICEDESC$@$HOSTNAME$ is $SERVICESTATE$ with $SERVICEOUTPUT$"
+    command_line	/usr/local/bin/slack <%=@slack_hook_uri%> "$NOTIFICATIONTYPE$: $SERVICEDESC$ is $SERVICESTATE$ with $SERVICEOUTPUT$"
 }
 
 <% end -%>define command {
