@@ -77,3 +77,7 @@ icinga_static_devices:
     host_ipaddress: 10.42.242.246
     host_parents: gaia.adm.intra.unetresgrossebite.com
     srvclass: pdu
+  poseidon.vms.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.44.150
+    host_parents: nikea.adm.intra.unetresgrossebite.com
+    srvclass: printer

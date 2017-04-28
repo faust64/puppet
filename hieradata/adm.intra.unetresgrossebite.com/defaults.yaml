@@ -13,6 +13,7 @@ nagios_hostgroups:
   - network
   - openbsd
   - phone
+  - printer
   - pdu
   - ubuntu
 nagios_ip:
