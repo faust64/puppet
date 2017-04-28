@@ -4,7 +4,7 @@ class cups::nagios {
 	    nagios::define::probe {
 		"cups_printer_$printer":
 		    description   => "$fqdn printer $printer",
-		    pluginargs    => [ "-h", $fqdn, "-p", $printer ],
+		    pluginargs    => [ "-h", $cups::vars::listen_addr, "-p", $printer ],
 		    pluginconf    => "printer",
 		    servicegroups => "netservices",
 		    use           => "jobs-service";
