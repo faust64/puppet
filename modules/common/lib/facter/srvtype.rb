@@ -14,7 +14,7 @@ Facter.add("srvtype") do
 	    "ci"
 	when /diffuseur/
 	    "diffuseur"
-	when /hesperus|cronos|nebula|nscache|patchdashboard|pakiti|pki|puppet|racktables|reverse|squid|thruk|torproxy|vlist|vmwaremgr|vpn|wifimgr/
+	when /cups|cronos|hesperus|nebula|nscache|patchdashboard|pakiti|pki|puppet|racktables|reverse|squid|thruk|torproxy|vlist|vmwaremgr|vpn|wifimgr/
 	    "exploit"
 	when /peerio|cs0|lbstore|lbfront|lbdb|lbriak|mongo|percona|riak|redis/
 	    "peerio"
