@@ -8,6 +8,7 @@ class cups::vars {
     $rsyslog_conf_dir     = hiera("rsyslog_conf_dir")
     $rsyslog_service_name = hiera("rsyslog_service_name")
     $rsyslog_version      = hiera("rsyslog_version")
+    $run_dir              = hiera("cups_run_dir")
     $runtime_group        = hiera("cups_runtime_group")
     $runtime_user         = hiera("cups_runtime_user")
     $service_name         = hiera("cups_service_name")
@@ -32,5 +33,13 @@ class cups::vars {
 	}
     } else {
 	$listen_addr = "127.0.0.1"
+    }
+    case $myoperatingsystem {
+	"Debian", "Devuan", "Ubuntu": {
+	    $sysadmin = hiera("cups_lpadmin")
+	}
+	default: {
+	    $sysadmin = hiera("gid_zero")
+	}
     }
 }

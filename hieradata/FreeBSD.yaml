@@ -30,6 +30,7 @@ cron_deny: /var/cron/deny
 
 # Cups
 cups_conf_dir: /usr/local/etc/cups
+cups_run_dir: /var/run
 cups_service_name: cupsd
 cups_share_dir: /usr/local/share/cups
 

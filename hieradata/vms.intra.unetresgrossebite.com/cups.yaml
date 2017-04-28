@@ -1,0 +1,9 @@
+physical_parent: oneiroi.adm.intra.unetresgrossebite.com
+
+# Cups
+cups_with_hplip: false
+# fetching HPLIP from http://prdownloads.sourceforge.net/hplip/hplip-3.16.11.run
+# see https://ubuntuforums.org/showthread.php?t=2350001
+
+# Nagios
+nagios_no_parent: false

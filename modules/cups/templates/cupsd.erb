@@ -1,6 +1,7 @@
 LogLevel warn
+MaxLogSize 0
 Listen <%=@listen%>:631
-Listen /var/run/cups.sock
+Listen <%=@run_dir%>/cups.sock
 Browsing On
 BrowseLocalProtocols dnssd
 DefaultAuthType Basic

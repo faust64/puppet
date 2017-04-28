@@ -7,7 +7,9 @@ class cups::config {
     $log_dir     = $cups::vars::log_dir
     $permissions = $cups::vars::permissions
     $ruser       = $cups::vars::runtime_user
+    $run_dir     = $cups::vars::run_dir
     $share_dir   = $cups::vars::share_dir
+    $sysadmin    = $cups::vars::sysadmin
 
     file {
 	"Prepare cups for further configuration":
@@ -48,7 +50,8 @@ class cups::config {
 	    require => File["Prepare cups for further configuration"];
 	"Install cups main configuration":
 	    content => template("cups/cupsd.erb"),
-	    mode    => "0640",
+	    group   => $cups::vars::runtime_group,
+	    mode    => "0644",
 	    notify  => Service[$cups::vars::service_name],
 	    owner   => root,
 	    path    => "$conf_dir/cupsd.conf",

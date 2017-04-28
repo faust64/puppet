@@ -363,6 +363,7 @@ cron_service_name: cron
 # Cups
 cups_conf_dir: /etc/cups
 cups_log_dir: /var/log/cups
+cups_lpadmin: lpadmin
 cups_nagios_printers: false
 cups_permissions:
   /:
@@ -374,11 +375,12 @@ cups_permissions:
     Order: allow,deny
     Require: user @SYSTEM
 cups_public: false
+cups_run_dir: /var/run/cups
 cups_runtime_group: cups
 cups_runtime_user: cups
 cups_service_name: cups
 cups_share_dir: /usr/share/cups
-cups_with_hplip: true
+cups_with_hplip: false
 
 # DHCPD
 dhcpd_collect_static_leases: false

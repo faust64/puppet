@@ -1,0 +1,23 @@
+additional_classes:
+  - Cups
+
+# Cups
+cups_with_hplip: true
+
+# Cups
+cups_nagios_printers:
+  - poseidon
+cups_permissions:
+  /:
+    Allow: from 10.42/15
+    Order: allow,deny
+  /admin:
+    Allow: from 10.42.42/24
+    Order: allow,deny
+  /admin/conf:
+    Allow: from 10.42.42/24
+    AuthType: Default
+    Order: allow,deny
+    Require: user @SYSTEM
+    Satisfy: any
+cups_public: true
