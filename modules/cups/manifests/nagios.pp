@@ -14,7 +14,7 @@ class cups::nagios {
 	nagios::define::probe {
 	    "cups_queue":
 		description   => "$fqdn local print queue",
-		pluginargs    => [ "-H", $fqdn ],
+		pluginargs    => [ "-H", $cups::vars::listen_addr ],
 		servicegroups => "netservices",
 		use           => "warning-service";
 	}
@@ -27,7 +27,7 @@ class cups::nagios {
 	    "cups_queue":
 		dependency    => "$fqdn local printers",
 		description   => "$fqdn local print queue",
-		pluginargs    => [ "-H", $fqdn ],
+		pluginargs    => [ "-H", $cups::vars::listen_addr ],
 		servicegroups => "netservices",
 		use           => "warning-service";
 	}
