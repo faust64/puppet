@@ -55,7 +55,7 @@ msg=" `$LPSTAT -h $host -p $printer`"
 case $msg in
     *Rejecting*)			res=CRITICAL	;;
     *Unable*|*disabled*)		res=UNKNOWN	;;
-    *idle*|*printing*)			res=OK		;;
+    *)					res=OK		;;
 esac
 
 echo "$res$msg"
