@@ -6,7 +6,7 @@
 <% end -%>RANDOM_NUMBER=`od -An -N2 -d /dev/random`
 TMPFILE=/tmp/suspicious.$$
 WAIT_TIME=`expr 1 + $RANDOM_NUMBER % \( 1800 - 1 \)`
-PERM_EXCLUDE="(/usr/share/ossec-wui-master/tmp|/var/www/nnplus|/var/lib/btsync|/media/backups/bluemind)"
+PERM_EXCLUDE="(/usr/share/ossec-wui-master/tmp|/var/www/nnplus|/var/lib/btsync|/media/backups/bluemind|/var/lib/hp/hplip.state)"
 SUID_EXCLUDE="<% if @suid_exclude != false -%>(^$<% @suid_exclude.each do |fl| -%>|<%=fl%><% end -%>)<% end -%>"
 
 sleep $WAIT_TIME
