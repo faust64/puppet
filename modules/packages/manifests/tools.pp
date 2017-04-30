@@ -1,4 +1,7 @@
 class packages::tools {
+    $sync_hook = $packages::vars::sync_hook
+    $web_root  = $packages::vars::web_root
+
     if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	or $operatingsystem == "Ubuntu" or $operatingsystem == "CentOS"
 	or $operatingsystem == "RedHat") {
@@ -14,11 +17,18 @@ class packages::tools {
 
     file {
 	"Install repo aspirator":
+	    content => template("packages/update_repository.erb"),
 	    group   => hiera("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/usr/local/sbin/repo_mirror",
-	    require => File["Prepare www directory"],
-	    source  => "puppet:///modules/packages/mirror_repository";
+	    require => File["Prepare www directory"];
+	"Install asterisk aspirator":
+	    content => template("packages/update_asterisk.erb"),
+	    group   => hiera("gid_zero"),
+	    mode    => "0755",
+	    owner   => root,
+	    path    => "/usr/local/sbin/asterisk_mirror",
+	    require => File["Prepare www directory"];
     }
 }

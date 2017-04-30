@@ -4,8 +4,8 @@ class packages {
     } else {
 	include nginx
     }
-    include packages::tools
     include packages::vars
+    include packages::tools
     include packages::bios
     include packages::camtrace
     include packages::debian

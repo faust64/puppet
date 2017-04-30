@@ -1,13 +1,13 @@
 #!/bin/sh
 
-ROOT=/var/www
+ROOT=<%=@web_root%>
 
 while test "$1"
 do
     case "$1" in
 	OpenBSD|openbsd|OPENBSD)
 	    ARCH=amd64
-	    VERS=5.8
+	    VERS=6.1
 	    if test "$2"; then
 		if test "$2" = amd64 -o "$2" = i386; then
 		    ARCH=$2

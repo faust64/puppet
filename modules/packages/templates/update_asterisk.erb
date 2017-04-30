@@ -1,0 +1,21 @@
+#!/bin/sh
+
+TARGET=<%=@web_root%>/asterisk
+TMPFILE=/tmp/.ast_update.$$
+RELEASES=http://downloads.asterisk.org/pub/telephony/asterisk/releases/
+
+if ! test -d $TARGET; then
+    echo missing target directory >&2
+    exit 1
+fi
+wget $RELEASES -O $TMPFILE
+grep asterisk-[0-9] $TMPFILE | awk -F '"' '/href.*tar/{print $8}' \
+    | while read line;
+	do
+	    test -f $line && echo $line exists && continue
+	    wget $RELEASES/$line
+	done
+
+rm -f $TMPFILE
+
+exit 0
