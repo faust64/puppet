@@ -1,5 +1,9 @@
 class packages::tools {
     $sync_hook = $packages::vars::sync_hook
+    $sync_host = $packages::vars::sync_host
+    $sync_path = $packages::vars::sync_path
+    $sync_port = $packages::vars::sync_port
+    $sync_user = $packages::vars::sync_user
     $web_root  = $packages::vars::web_root
 
     if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
@@ -30,5 +34,17 @@ class packages::tools {
 	    owner   => root,
 	    path    => "/usr/local/sbin/asterisk_mirror",
 	    require => File["Prepare www directory"];
+    }
+
+    if ($sync_host) {
+	file {
+	    "Install repository synchro script":
+		content => template("packages/sync_repository.erb"),
+		group   => hiera("gid_zero"),
+		mode    => "0755",
+		owner   => root,
+		path    => "/usr/local/sbin/pull_repository",
+		require => File["Prepare www directory"];
+	}
     }
 }

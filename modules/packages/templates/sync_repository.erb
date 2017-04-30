@@ -1,0 +1,25 @@
+#!/bin/sh
+<% if @sync_host -%>REMOTE_HOST=<%=@sync_host%>
+REMOTE_PATH=<%=@sync_path%>
+REMOTE_PORT=<%=@sync_port%>
+REMOTE_USER=<%=@sync_user%>
+<% end -%><% if @sync_hook -%>HOOK_URL=<%=@sync_hook%>
+<% end -%>hostname=`hostname -f || hostname`
+ret=1
+
+cd <%=@web_root%>
+
+if rsync -avWxP --exclude='*lost+found*' --exclude='*modeles/virtualbox-peerio*' --rsh="ssh -p$REMOTE_PORT" --delete $REMOTE_USER@$REMOTE_HOST:$REMOTE_PATH/ .; then
+    ret=0
+    if test "$HOOK_URL" -a -x /usr/local/bin/slack; then
+	/usr/local/bin/slack $HOOK_URL "REPORT: done with UTGB repo on $hostname"
+    else
+	echo DONE
+    fi
+elif test "$HOOK_URL" -a -x /usr/local/bin/slack; then
+    /usr/local/bin/slack $HOOK_URL "WARNING: rsync failed syncing UTGB repo on $hostname"
+else
+    echo FAIL
+fi
+
+exit $ret

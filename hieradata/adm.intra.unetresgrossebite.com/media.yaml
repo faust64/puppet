@@ -20,8 +20,9 @@ nagios_partitions_watchlist:
 
 # Packages
 apache_web_root: /goinfre/packages
-packages_is_apache: false
 packages_do_nfs: false
+packages_is_apache: false
+packages_sync_remote_host: repository.unetresgrossebite.com
 
 # Subsonic
 subsonic_do_flac: true
