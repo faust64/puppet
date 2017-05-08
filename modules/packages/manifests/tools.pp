@@ -46,5 +46,14 @@ class packages::tools {
 		path    => "/usr/local/sbin/pull_repository",
 		require => File["Prepare www directory"];
 	}
+
+	cron {
+	    "Sync repository from $sync_host":
+		command => "/usr/local/sbin/pull_repository >/dev/null 2>&1",
+		hour    => "9",
+		minute  => "31",
+		require => File["Install repository synchro script"],
+		user    => root;
+	}
     }
 }
