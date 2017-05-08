@@ -15,16 +15,17 @@ define racktables::define::register_nic() {
 	}
     } elsif ($name =~ /venet/) {
 	$hwtype = 31
+	$label = "$fqdn $name"
     } elsif ($name =~ /vnet/) {
 	$hwtype = 33
+	$label = "$fqdn $name"
     } elsif ($name =~ /trunk/ or $name =~ /lagg/ or $name =~ /bond/
 	or $name =~ /gif/ or $name =~ /gre/
 	or $name =~ /br/ or $name =~ /vlan/) {
 	$hwtype = 1469
+	$label = "$fqdn $name"
     } else {
 	$hwtype = 24
-    }
-    if ($label == undef) {
 	$label = "$fqdn $name"
     }
 
