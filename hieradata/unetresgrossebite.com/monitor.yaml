@@ -91,6 +91,70 @@ icinga_static_devices:
     host_ipaddress: us-west-2
     host_parents: route53-dr.amazonaws.com
     srvclass: elb
+  ibblob1.prod.peerio.com:
+    host_ipaddress: 54.198.78.160
+    host_parents: route53-prod.amazonaws.com
+    srvclass: peerioiceblobprod
+  ibblob2.prod.peerio.com:
+    host_ipaddress: 52.72.185.246
+    host_parents: route53-prod.amazonaws.com
+    srvclass: peerioiceblobprod
+  ibblob1.dr.peerio.com:
+    host_ipaddress: 34.209.85.135
+    host_parents: route53-dr.amazonaws.com
+    srvclass: peerioiceblobdr
+  ibblob2.dr.peerio.com:
+    host_ipaddress: 54.202.5.217
+    host_parents: route53-dr.amazonaws.com
+    srvclass: peerioiceblobdr
+  ibmail1.prod.peerio.com:
+    host_ipaddress: 54.198.78.160
+    host_parents: route53-prod.amazonaws.com
+    srvclass: peeriomail
+  ibmail2.prod.peerio.com:
+    host_ipaddress: 52.72.185.246
+    host_parents: route53-prod.amazonaws.com
+    srvclass: peeriomail
+  ibmail1.dr.peerio.com:
+    host_ipaddress: 34.209.85.135
+    host_parents: route53-dr.amazonaws.com
+    srvclass: peeriomail
+  ibmail2.dr.peerio.com:
+    host_ipaddress: 54.202.5.217
+    host_parents: route53-dr.amazonaws.com
+    srvclass: peeriomail
+  ibshark1.prod.peerio.com:
+    host_ipaddress: 54.198.78.160
+    host_parents: route53-prod.amazonaws.com
+    srvclass: peerioshark
+  ibshark2.prod.peerio.com:
+    host_ipaddress: 52.72.185.246
+    host_parents: route53-prod.amazonaws.com
+    srvclass: peerioshark
+  ibshark1.dr.peerio.com:
+    host_ipaddress: 34.209.85.135
+    host_parents: route53-dr.amazonaws.com
+    srvclass: peerioshark
+  ibshark2.dr.peerio.com:
+    host_ipaddress: 54.202.5.217
+    host_parents: route53-dr.amazonaws.com
+    srvclass: peerioshark
+  ibws1.prod.peerio.com:
+    host_ipaddress: 54.198.78.160
+    host_parents: route53-prod.amazonaws.com
+    srvclass: peerioicebear
+  ibws2.prod.peerio.com:
+    host_ipaddress: 52.72.185.246
+    host_parents: route53-prod.amazonaws.com
+    srvclass: peerioicebear
+  ibws1.dr.peerio.com:
+    host_ipaddress: 34.209.85.135
+    host_parents: route53-dr.amazonaws.com
+    srvclass: peerioicebear
+  ibws2.dr.peerio.com:
+    host_ipaddress: 54.202.5.217
+    host_parents: route53-dr.amazonaws.com
+    srvclass: peerioicebear
 # ipbx.geneopedia.com:
 #   host_ipaddress: 162.251.155.1
 #   srvclass: customer

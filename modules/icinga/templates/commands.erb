@@ -44,6 +44,26 @@ define command {
 }
 
 define command {
+    command_name	check-peerioicebear
+    command_line	<%=@plugindir%>/check_http -H 'icebear.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -s 'Peerio server'
+}
+
+define command {
+    command_name	check-peerioiceblobprod
+    command_line	<%=@plugindir%>/check_http -H 'iceblobvirginia.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -s 'Peerio objects gateway'
+}
+
+define command {
+    command_name	check-peerioiceblobdr
+    command_line	<%=@plugindir%>/check_http -H 'icebloboregon.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -s 'Peerio objects gateway'
+}
+
+define command {
+    command_name	check-peeriomail
+    command_line	<%=@plugindir%>/check_http -H 'mail.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -u https://mail.peerio.com/v2/ping
+}
+
+define command {
     command_name	check-peerioshark
     command_line	<%=@plugindir%>/check_http -H 'account.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -s 'Peerio Customer Login' -f follow
 }

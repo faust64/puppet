@@ -36,13 +36,13 @@ define icinga::define::static($host_contact   = "root",
 	    $src            = "servers/aws"
 	    $statusmapimage = "utgb/aws.gd2"
 	}
-	"cpanel", "customer", "linux", "nas", "peerio", "vmware": {
+	"cpanel", "customer", "linux", "nas", "vmware": {
 	    $iconimagealt   = $srvclass
 	    $iconimage      = "utgb/$srvclass.png"
 	    $src            = "servers/$srvclass"
 	    $statusmapimage = "utgb/$srvclass.gd2"
 	}
-	"peerioblob", "peerioghost", "peerioshark", "peeriosite": {
+	"peerio", "peerioblob", "peerioghost", "peerioicebear", "peerioiceblobprod", "peerioiceblobdr", "peeriomail", "peerioshark", "peeriosite": {
 	    $iconimagealt   = "peerio"
 	    $iconimage      = "utgb/peerio.png"
 	    $src            = "servers/peerio"
