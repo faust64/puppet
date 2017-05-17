@@ -1,9 +1,15 @@
 class git::vars {
+    $backup_github        = hiera("git_backup_github")
     $backup_dir           = hiera("gitlab_backups_dir")
     $contact              = hiera("backup_contact")
     $author_name          = hiera("git_gitmaster_name")
     $author_email         = hiera("git_gitmaster_mail")
     $download             = hiera("download_cmd")
+    $gh_backup_org        = hiera("github_backups_organization")
+    $gh_backup_slack_hook = hiera("github_backups_slack_hook")
+    $gh_backup_token      = hiera("github_backups_token")
+    $gh_backup_username   = hiera("github_backups_username")
+    $gh_backup_dir        = hiera("github_backups_dir")
     $github_appid         = hiera("gitlab_github_appid")
     $github_appsecret     = hiera("gitlab_github_appsecret")
     $gitlist_vers         = "0.5.0"

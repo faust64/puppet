@@ -1,0 +1,156 @@
+#!/bin/sh
+# based on https://gist.github.com/darktim/5582423
+
+<% if @contact != false -%>DEST=<%=@contact%>
+<% end -%>DO_ORG=false
+FQDN=`hostname -f 2>/dev/null || hostname`
+GHBU_API=${GHBU_API-"https://api.github.com"}
+GHBU_BACKUP_DIR=<%=@backup_dir%>
+GHBU_GITHOST=${GHBU_GITHOST-"github.com"}
+GHBU_GIT_CLONE_CMD="git clone --quiet --mirror git@${GHBU_GITHOST}:"
+<% if @github_org != false -%>GHBU_ORG=<%=@github_org%>
+<% end -%>GHBU_PASSWD=<%=@github_token%>
+GHBU_PRUNE_OLD=${GHBU_PRUNE_OLD-true}
+GHBU_PRUNE_AFTER_N_DAYS=${GHBU_PRUNE_AFTER_N_DAYS-3}
+GHBU_UNAME=<%=@github_username%>
+PAGE=0
+<% if @slack_hook != false -%>SLACK_HOOK=<%=@slack_hook%>
+<% end -%>TMPFILE=/tmp/`basename $0`.$$
+TSTAMP=`date "+%Y%m%d-%H%M"`
+
+if test "$GHBU_ORG"; then
+    DO_ORG=true
+else
+    GHBU_ORG=GHBU_UNAME
+fi
+rm -f $TMPFILE
+
+function notify()
+{
+    if test -x /usr/local/bin/slack -a "$SLACK_HOOK"; then
+	echo $@ >>$TMPFILE
+    elif test "$DEST"; then
+	echo $@ >>$TMPFILE
+    else
+	echo $@ ; echo ""
+    fi
+}
+
+function exitNotify()
+{
+    local ret SUBJECT purgeTmpfile
+
+    purgeTmpfile=true
+    test "$1" && ret=$1 || ret=1
+    if test "$ret" -eq 0 >/dev/null 2>&1; then
+	SUBJECT=REPORT
+    elif test "$ret" -gt 0 >/dev/null 2>&1; then
+	SUBJECT=WARNING
+    else
+	ret=2
+	SUBJECT=CRITICAL
+    fi
+    if test -s $TMPFILE -a "$SLACK_HOOK" -a -x /usr/local/bin/slack; then
+	if grep 'Can not write to ' $TMPFILE >/dev/null; then
+	    SLACKMSG="cannot write to backup directory"
+	elif grep 'Failed querying for' $TMPFILE >/dev/null; then
+	    SLACKMSG="failed querying for $GHBU_ORG repositories"
+	elif grep 'Failed cloning.*repository$' $TMPFILE >/dev/null; then
+	    SLACKMSG=`awk '/Failed cloning .* repository$/{print $3}' $TMPFILE | tr '\n' ',' | sed -e 's|,$||' -e 's|,|, |g' -e "s|$GHBU_ORG/||g"`
+	    SLACKMSG="failed cloning $SLACKMSG"
+	elif test "$SUBJECT" = REPORT; then
+	    SLACKMSG=`awk '/Successfully backed up .* repository$/{print $4}' $TMPFILE | tr '\n' ',' | sed -e 's|,$||' -e 's|,|, |g' -e "s|$GHBU_ORG/||g"`
+	    SLACKMSG="successfully backed up $SLACKMSG"
+	else
+	    SLACKMSG="unexpected error - please debug, output kept in $TMPFILE"
+	    purgeTmpfile=false
+	fi
+	/usr/local/bin/slack $SLACK_HOOK "$SUBJECT GitHub backup on $FQDN $SLACKMSG" >/dev/null 2>&1
+    elif test -s $TMPFILE -a "$DEST"; then
+	cat $TMPFILE | mail -s "[$SUBJECT] backing up GitHub on $FQDN" $DEST
+    fi
+    if $purgeTmpfile; then
+	rm -f $TMPFILE
+    fi
+    exit $ret
+}
+
+function tgz()
+{
+    if ! tar zcf $1.tar.gz $1; then
+	return 1
+    fi
+    rm -rf $1
+}
+
+notify "=== INITIALIZING ==="
+notify "Using backup directory $GHBU_BACKUP_DIR"
+mkdir -p $GHBU_BACKUP_DIR
+if ! test -w $GHBU_BACKUP_DIR -a -d $GHBU_BACKUP_DIR; then
+    notify "Can not write to $GHBU_BACKUP_DIR"
+    exitNotify
+fi
+cd $GHBU_BACKUP_DIR
+
+if $DO_ORG; then
+    if ! curl --silent -u $GHBU_UNAME:$GHBU_PASSWD $GHBU_API/orgs/$GHBU_ORG/repos\?page=$PAGE\&per_page=90 -q -k | grep "\"name\"" | awk -F': "' '{print $2}' | sed -e 's/",//g' >/dev/null; then
+	notify "Failed querying for $GHBU_ORG repositories"
+	exitNotify
+    fi
+elif ! curl --silent -u $GHBU_UNAME:$GHBU_PASSWD $GHBU_API/user/repos\?page=$PAGE&per_page=90 -q -k | grep "\"name\"" | awk -F': "' '{print $2}' | sed -e 's/",//g' >/dev/null; then
+    notify "Failed querying for $GHBU_ORG repositories"
+    exitNotify
+fi
+
+notify "Fetching list of repositories for $GHBU_ORG..."
+while :
+do
+    PAGE=`expr $PAGE + 1`
+    if $DO_ORG; then
+	REPOLIST_TMP=`curl --silent -u $GHBU_UNAME:$GHBU_PASSWD $GHBU_API/orgs/$GHBU_ORG/repos\?page=$PAGE\&per_page=90 -q -k | grep "\"name\"" | awk -F': "' '{print $2}' | sed -e 's/",//g'`
+    else
+	REPOLIST_TMP=`curl --silent -u $GHBU_UNAME:$GHBU_PASSWD $GHBU_API/user/repos\?page=$PAGE&per_page=90 -q -k | grep "\"name\"" | awk -F': "' '{print $2}' | sed -e 's/",//g'`
+    fi
+    test -z "$REPOLIST_TMP" && break
+    REPOLIST="$REPOLIST $REPOLIST_TMP"
+done
+
+notify "found `echo $REPOLIST | wc -w` repositories"
+for REPO in $REPOLIST
+do
+    notify "Processing $GHBU_ORG/$REPO"
+    if ! $GHBU_GIT_CLONE_CMD$GHBU_ORG/$REPO.git ./$GHBU_ORG-$REPO-$TSTAMP.git >/dev/null 2>&1; then
+	notify "Failed cloning $GHBU_ORG/$REPO repository"
+	continue
+    elif ! tgz $GHBU_ORG-$REPO-$TSTAMP.git; then
+	notify "Failed compressing $GHBU_ORG/$REPO"
+    else
+	notify "Successfully backed up $GHBU_ORG/$REPO repository"
+    fi
+    if ! $GHBU_GIT_CLONE_CMD$GHBU_ORG/$REPO.wiki.git ./$GHBU_ORG-$REPO.wiki-$TSTAMP.git >/dev/null 2>&1; then
+	notify "No wiki found for $GHBU_ORG/$REPO"
+    elif ! tgz $GHBU_ORG-$REPO.wiki-$TSTAMP.git; then
+	notify "Failed compressing $GHBU_ORG/$REPO wiki"
+    else
+	notify "Successfully backed up $GHBU_ORG/$REPO wiki"
+    fi
+    if ! curl --silent -u $GHBU_UNAME:$GHBU_PASSWD $GHBU_API/repos/$GHBU_ORG/$REPO/issues -q >$GHBU_ORG-$REPO.issues-$TSTAMP 2>/dev/null; then
+	notify "Failed cloning $GHBU_ORG/$REPO issues"
+    elif ! tgz $GHBU_ORG-$REPO.issues-$TSTAMP; then
+	notify "Failed compressing $GHBU_ORG/$REPO issues"
+    else
+	notify "Successfully backed up $GHBU_ORG/$REPO issues"
+    fi
+done
+
+if $GHBU_PRUNE_OLD; then
+    notify "=== PRUNING ==="
+    notify "Pruning backup files $GHBU_PRUNE_AFTER_N_DAYS days old or older"
+    notify "Found `find $GHBU_BACKUP_DIR -name '*.tar.gz' -mtime +$GHBU_PRUNE_AFTER_N_DAYS | wc -l` files to prune"
+    find $GHBU_BACKUP_DIR -name '*.tar.gz' -mtime +$GHBU_PRUNE_AFTER_N_DAYS -exec rm -f {} >/dev/null \; && notify Done pruning backups || notify Failed pruning backups
+#FIXME: when a repository was deleted from GitHub, we should NEVER prune the very last backup
+fi
+
+notify "=== DONE ==="
+
+exitNotify 0

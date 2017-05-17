@@ -6,4 +6,7 @@ class git::webapp {
 	include git::gitlab
 	include git::rsyslog
     }
+    if ($git::vars::backup_github) {
+	include git::github
+    }
 }

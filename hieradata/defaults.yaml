@@ -495,9 +495,15 @@ tmp_target_device: false
 # Git
 git_gitmaster_mail: root@example.com
 git_gitmaster_name: MintBerryCrunch
+git_backup_github: false
 git_repo_root: /home/git
 git_with_gitlist: false
 git_with_gitlab: false
+github_backups_organization: PeerioTechnologies
+github_backups_slack_hook: false
+github_backups_token: false
+github_backups_username: myBackupUser
+github_backups_dir: /media/backups
 gitlab_backups_dir: /media/backups
 gitlab_github_appid: false
 gitlab_github_appsecret: false
