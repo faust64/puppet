@@ -65,7 +65,7 @@ exitNotify()
 	    SLACKMSG="unexpected error - please debug, output kept in $TMPFILE"
 	    purgeTmpfile=false
 	fi
-	/usr/local/bin/slack $SLACK_HOOK "$SUBJECT GitHub backup on $FQDN $SLACKMSG" >/dev/null 2>&1
+	/usr/local/bin/slack $SLACK_HOOK "$SUBJECT: GitHub backup on $FQDN $SLACKMSG" >/dev/null 2>&1
     elif test -s $TMPFILE -a "$DEST"; then
 	cat $TMPFILE | mail -s "[$SUBJECT] backing up GitHub on $FQDN" $DEST
     fi
