@@ -15,6 +15,16 @@ class git::github {
 		owner   => root,
 		path    => "/usr/local/sbin/GitHubbackup";
 	}
+
+	cron {
+	    "Backup GitHub Repositories":
+		command => "/usr/local/sbin/GitHubbackup >/dev/null 2>&1",
+		hour    => 18,
+		minute  => 18,
+		require => File["Install GitHub backup script"],
+		user    => root;
+	}
+
     } else {
 	notify {
 	    "GitHub backups enabled while API username and or token are not defined":
