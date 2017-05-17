@@ -25,7 +25,7 @@ else
 fi
 rm -f $TMPFILE
 
-function notify()
+notify()
 {
     if test -x /usr/local/bin/slack -a "$SLACK_HOOK"; then
 	echo $@ >>$TMPFILE
@@ -36,7 +36,7 @@ function notify()
     fi
 }
 
-function exitNotify()
+exitNotify()
 {
     local ret SUBJECT purgeTmpfile
 
@@ -75,7 +75,7 @@ function exitNotify()
     exit $ret
 }
 
-function tgz()
+tgz()
 {
     if ! tar zcf $1.tar.gz $1; then
 	return 1
