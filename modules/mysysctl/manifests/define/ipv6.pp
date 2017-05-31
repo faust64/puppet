@@ -33,7 +33,7 @@ class mysysctl::define::ipv6 {
 	common::define::lined {
 	    "Set $ar_all":
 		line    => "$ar_all=0",
-		match   => "^$ar_all",
+		match   => "^$ar_all[ 	=]",
 		notify  => Exec["Apply $ar_all"],
 		path    => "/etc/sysctl.conf",
 		require => File["Ensure sysctl.conf present"];
@@ -51,7 +51,7 @@ class mysysctl::define::ipv6 {
 	common::define::lined {
 	    "Set $ar_default":
 		line    => "$ar_default=0",
-		match   => "^$ar_default",
+		match   => "^$ar_default[ 	=]",
 		notify  => Exec["Apply $ar_default"],
 		path    => "/etc/sysctl.conf",
 		require => File["Ensure sysctl.conf present"];
@@ -69,7 +69,7 @@ class mysysctl::define::ipv6 {
 	common::define::lined {
 	    "Set $ra_all":
 		line    => "$ra_all=0",
-		match   => "^$ra_all",
+		match   => "^$ra_all[ 	=]",
 		notify  => Exec["Apply $ra_all"],
 		path    => "/etc/sysctl.conf",
 		require => File["Ensure sysctl.conf present"];
@@ -87,7 +87,7 @@ class mysysctl::define::ipv6 {
 	common::define::lined {
 	    "Set $ra_default":
 		line    => "$ra_default=0",
-		match   => "^$ra_default",
+		match   => "^$ra_default[ 	=]",
 		notify  => Exec["Apply $ra_default"],
 		path    => "/etc/sysctl.conf",
 		require => File["Ensure sysctl.conf present"];
@@ -105,7 +105,7 @@ class mysysctl::define::ipv6 {
 	common::define::lined {
 	    "Set $v6_all":
 		line    => "$v6_all=0",
-		match   => "^$v6_all",
+		match   => "^$v6_all[ 	=]",
 		notify  => Exec["Apply $v6_all"],
 		path    => "/etc/sysctl.conf",
 		require => File["Ensure sysctl.conf present"];
@@ -123,7 +123,7 @@ class mysysctl::define::ipv6 {
 	common::define::lined {
 	    "Set $v6_loop":
 		line    => "$v6_loop=0",
-		match   => "^$v6_loop",
+		match   => "^$v6_loop[ 	=]",
 		notify  => Exec["Apply $v6_loop"],
 		path    => "/etc/sysctl.conf",
 		require => File["Ensure sysctl.conf present"];
@@ -141,7 +141,7 @@ class mysysctl::define::ipv6 {
 	common::define::lined {
 	    "Set $v6_default":
 		line    => "$v6_default=0",
-		match   => "^$v6_default",
+		match   => "^$v6_default[ 	=]",
 		notify  => Exec["Apply $v6_default"],
 		path    => "/etc/sysctl.conf",
 		require => File["Ensure sysctl.conf present"];
