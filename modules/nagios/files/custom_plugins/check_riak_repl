@@ -2,6 +2,7 @@
 
 VALUE=`date +%s`
 PRG=`basename $0`
+TIMEOUT=3
 OK=0
 WARNING=1
 CRITICAL=2
@@ -11,63 +12,91 @@ export PATH
 ret=UNKNOWN
  
 test -s /etc/nagios/riak.cfg && . /etc/nagios/riak.cfg
-if test -z "$LEFT_NODE"; then
-    LEFT_NODE=`riak-admin cluster status | awk '/(C).*valid/{print $3}' | cut -d@ -f2`
-fi
-if test -z "$RIGHT_NODE"; then
-    RIGHT_NODE=`riak-repl status | awk -F, '/socket,\[{peername,/{print $3}' | cut -d: -f1 | sed 's|"||'`
-fi
-if test -z "`riak-repl connections 2>/dev/null | grep :9080`"; then
-    msg=" - replication not configured"
-elif test -z "$LEFT_NODE" -o -z "$RIGHT_NODE"; then
-    msg=" - failed identifying a node in each cluster"
-else
-    if test "$RIAK_CA"; then
-	PROTO=https
-	OPTS="--cacert $RIAK_CA"
-    else
-	PROTO=http
-	OPTS=
-    fi
-    if test "$LOCAL_USER"; then
-	if test "$LOCAL_PASS"; then
-	    AUTHSTR="$LOCAL_USER:$LOCAL_PASS@"
-	else
-	    AUTHSTR="$LOCAL_USER@"
-	fi
-    else
-	AUTHSTR=
-    fi
-    if test "$LEFT_NODE" = "`hostname -f`"; then
-	msg=" - only running on $LEFT_NODE"
-	ret=OK
-    elif /sbin/ifconfig | grep $LEFT_NODE >/dev/null 2>&1; then
-	msg=" - only running on $LEFT_NODE"
-	ret=OK
-    elif ! curl $OPTS -s -X PUT -d "$VALUE" $PROTO://$AUTHSTR$LEFT_NODE:8098/riak/replCheck/c1; then
-	msg=" - failed running PUT"
-    else
-	CHECKPUT_LEFT=`curl $OPTS -s $PROTO://$AUTHSTR$LEFT_NODE:8098/riak/replCheck/c1`
-	if test "$VALUE" != "$CHECKPUT_LEFT"; then
-	    ret=CRITICAL
-	    msg=" - PUT failed ($VALUE/$CHECKPUT_LEFT)"
-	else
-	    if test "$REMOTE_USER"; then
-		if test "$REMOTE_PASS"; then
-		    AUTHSTR="$REMOTE_USER:$REMOTE_PASS@"
-		else
-		    AUTHSTR="$REMOTE_USER@"
-		fi
-	    else
-		AUTHSTR=
-	    fi
-	    CHECKREPL_RIGHT=`curl $OPTS -s $PROTO://$AUTHSTR$RIGHT_NODE:8098/riak/replCheck/c1`
 
-	    if test "$VALUE" != "$CHECKREPL_RIGHT"; then
-		msg=" - $LEFT_NODE to $RIGHT_NODE inconsistent ($VALUE/$CHECKREPL_RIGHT)"
+if test "$1" = -t -a "$2"; then
+    TIMEOUT=$2
+fi
+for retry in everyone knows its butters
+do
+    LEFT_NODE=`riak-admin cluster status | awk '/(C).*valid/{print $3}' | cut -d@ -f2`
+    test "$LEFT_NODE" && break
+    sleep 1
+done
+
+if test -z "$LEFT_NODE"; then
+    msg=" - failed identifying local cluster leader"
+elif ! /sbin/ifconfig | grep $LEFT_NODE >/dev/null 2>&1; then
+    msg=" - only running on $LEFT_NODE"
+    ret=OK
+else
+    if test -z "$RIGHT_NODE"; then
+	for retry in mint berry crunch
+	do
+	    RIGHT_NODE=`riak-repl status | awk -F, '/socket,\[{peername,/{print $3}' | cut -d: -f1 | sed 's|"||'`
+	    test "$RIGHT_NODE" && break
+	    sleep 1
+	done
+    fi
+    NOREPL=true
+    for retry in the stick of truth
+    do
+	if test "`riak-repl connections 2>/dev/null | grep :9080`"; then
+	    NOREPL=false
+	fi
+    done
+    if $NOREPL; then
+	msg=" - replication not configured"
+    elif test -z "$RIGHT_NODE"; then
+	msg=" - failed identifying remote cluster leader"
+    else
+	if test "$RIAK_CA"; then
+	    LEFT_NODE_TARGET=`hostname -f`
+	    PROTO=https
+	    OPTS="--cacert $RIAK_CA"
+	else
+	    LEFT_NODE_TARGET=$LEFT_NODE
+	    PROTO=http
+	    OPTS=
+	fi
+	if test "$LOCAL_USER"; then
+	    if test "$LOCAL_PASS"; then
+		AUTHSTR="$LOCAL_USER:$LOCAL_PASS@"
 	    else
-		msg=" - $LEFT_NODE to $RIGHT_NODE consistent"
-		ret=OK
+		AUTHSTR="$LOCAL_USER@"
+	    fi
+	else
+	    AUTHSTR=
+	fi
+	if ! curl $OPTS -s -X PUT -d "$VALUE" $PROTO://$AUTHSTR$LEFT_NODE_TARGET:8098/riak/replCheck/c1; then
+	    msg=" - failed running PUT"
+	else
+	    for retry in `seq 1 $TIMEOUT`
+	    do
+		CHECKPUT_LEFT=`curl $OPTS -s $PROTO://$AUTHSTR$LEFT_NODE_TARGET:8098/riak/replCheck/c1`
+		test "$VALUE" = "$CHECKPUT_LEFT" && break
+		sleep 1
+	    done
+	    if test "$VALUE" != "$CHECKPUT_LEFT"; then
+		ret=CRITICAL
+		msg=" - PUT was not written locally ($VALUE/$CHECKPUT_LEFT)"
+	    else
+		if test "$REMOTE_USER"; then
+		    if test "$REMOTE_PASS"; then
+			AUTHSTR="$REMOTE_USER:$REMOTE_PASS@"
+		    else
+			AUTHSTR="$REMOTE_USER@"
+		    fi
+		else
+		    AUTHSTR=
+		fi
+		CHECKREPL_RIGHT=`curl $OPTS -s $PROTO://$AUTHSTR$RIGHT_NODE:8098/riak/replCheck/c1`
+		if test "$VALUE" != "$CHECKREPL_RIGHT"; then
+		    msg=" - $LEFT_NODE_TARGET to $RIGHT_NODE inconsistent ($VALUE/$CHECKREPL_RIGHT)"
+		    ret=WARNING
+		else
+		    msg=" - $LEFT_NODE_TARGET to $RIGHT_NODE consistent"
+		    ret=OK
+		fi
 	    fi
 	fi
     fi
