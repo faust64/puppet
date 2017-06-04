@@ -71,6 +71,18 @@ define pki::define::ca($parent = false) {
 	}
     } else {
 	exec {
+#	    "Build CA":
+#		command => ". /root/vars ; build-ca",
+#		cwd     => "/home/pki/$name",
+#		unless  => test -s ca.crt -a ca.key",
+#		path    => "/usr/bin:/bin",
+#		require =>
+#		    [
+#			File["Install $name openssl.cnf"],
+#			File["Install $name openssl.altnames.cnf"],
+#			File["Install empty index for $name"],
+#			File["Install initial serial for $name"]
+#		    ];
 	    "Copy CA $name to www":
 		command => "cp -p ca.crt /var/www/ca.crt",
 		cwd     => "/home/pki/$name",
