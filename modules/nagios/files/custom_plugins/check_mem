@@ -124,6 +124,14 @@ else
 	else
 	    ret=CRITICAL
 	fi
+    elif test -d /var/lib/riak; then
+	if test $freemb -lt 96; then
+	    ret=CRITICAL
+	elif test $freemb -lt 128; then
+	    ret=WARNING
+	else
+	    ret=OK
+	fi
     elif test $freemb -lt 128; then
 	ret=CRITICAL
     elif test $freemb -lt 392; then
