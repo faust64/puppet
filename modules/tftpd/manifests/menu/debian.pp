@@ -1,5 +1,5 @@
 class tftpd::menu::debian {
-    $distribs    = [ "jessie", "wheezy", "squeeze" ]
+    $distribs    = [ "stretch", "jessie", "wheezy", "squeeze" ]
     $locale      = $tftpd::vars::locale
     $locale_long = $tftpd::vars::locale_long
     $root_dir    = $tftpd::vars::root_dir

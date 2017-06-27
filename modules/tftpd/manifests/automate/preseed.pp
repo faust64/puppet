@@ -80,6 +80,32 @@ class tftpd::automate::preseed {
 	    debvers  => "wheezy";
 	"wheezy-desktop-man":
 	    debvers  => "wheezy";
+	"jessie-kvm-auto":
+	    autopart => true,
+	    debvers  => "jessie",
+	    server   => "kvm";
+	"jessie-kvm-man":
+	    debvers  => "jessie",
+	    server   => "kvm";
+	"jessie-xen-auto":
+	    autopart => true,
+	    debvers  => "jessie",
+	    server   => "xen";
+	"jessie-xen-man":
+	    debvers  => "jessie",
+	    server   => "xen";
+	"jessie-server-auto":
+	    autopart => true,
+	    debvers  => "jessie",
+	    server   => true;
+	"jessie-server-man":
+	    debvers  => "jessie",
+	    server   => true;
+	"jessie-desktop-auto":
+	    autopart => true,
+	    debvers  => "jessie";
+	"jessie-desktop-man":
+	    debvers  => "jessie";
 	"kvm-auto":
 	    autopart => true,
 	    server   => "kvm";
@@ -127,6 +153,32 @@ class tftpd::automate::preseed {
 	    ubvers   => "precise";
 	"precise-desktop-man":
 	    ubvers   => "precise";
+	"trusty-kvm-auto":
+	    autopart => true,
+	    ubvers   => "trusty",
+	    server   => "kvm";
+	"trusty-kvm-man":
+	    ubvers   => "trusty",
+	    server   => "kvm";
+	"trusty-xen-auto":
+	    autopart => true,
+	    ubvers   => "trusty",
+	    server   => "xen";
+	"trusty-xen-man":
+	    ubvers   => "trusty",
+	    server   => "xen";
+	"trusty-server-auto":
+	    autopart => true,
+	    ubvers   => "trusty",
+	    server   => true;
+	"trusty-server-man":
+	    ubvers   => "trusty",
+	    server   => true;
+	"trusty-desktop-auto":
+	    autopart => true,
+	    ubvers   => "trusty";
+	"trusty-desktop-man":
+	    ubvers   => "trusty";
 	"kvm-auto":
 	    autopart => true,
 	    server   => "kvm";

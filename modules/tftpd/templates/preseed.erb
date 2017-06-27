@@ -86,7 +86,7 @@ d-i passwd/username string syn
 d-i passwd/user-password-crypted password <%=@password%>
 <% end -%>d-i grub-installer/only_debian boolean true
 d-i grub-installer/with_other_os boolean false
-<% if @debvers == "jessie" -%>d-i grub-installer/bootdev string /dev/sda
+<% if @debvers == "jessie" or @debvers == "stretch" -%>d-i grub-installer/bootdev string /dev/sda
 <% end -%>d-i preseed/late_command string \
 <% if @server != false -%>    echo -e '[main]\nlogdir=/var/log/puppet\nvardir=/var/lib/puppet\nssldir=/var/lib/puppet/ssl\nrundir=/var/run/puppet\nfactpath=$vardir/lib/facter\npluginsync=true\n\n[agent]\nserver=<%=@ppmaster%>\nreports = tagmail,store,log\nreport=true\nruninterval = 21600\nsplaylimit = 21600\nrrdinterval = 21600\npuppetport = 8139\nlisten = true\nconfigtimeout = 300' >/target/etc/puppet/puppet.conf; \
     sed -i 's|allow-hotplug|auto|g' /target/etc/network/interfaces; \
