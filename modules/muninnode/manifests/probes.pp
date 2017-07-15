@@ -53,12 +53,18 @@ class muninnode::probes {
 	}
     }
 
-    if ($swapsize != undef and $swapsize =~ /[1-9]/) {
-	muninnode::define::probe { "swap": }
-    } else {
-	muninnode::define::probe {
-	    "swap":
-		status => "absent";
+    if (getvar('::swapsize')) {
+	if ($swapsize =~ /[1-9]/) {
+	    $swapstatus = "present"
+	} else {
+	    $swapstatus = "absent"
 	}
+    } else {
+	$swapstatus = "absent"
+    }
+
+    muninnode::define::probe {
+	"swap":
+	    status => $swapstatus;
     }
 }
