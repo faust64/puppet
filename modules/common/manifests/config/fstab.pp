@@ -18,7 +18,7 @@ class common::config::fstab {
     if ($srvtype != "opennebula" and $hostname != "nebula"
 	and $hostname != "puppetserver" and $hostname != "puppet"
 	and $hostname != "wifimgr" and $hostname != "monitor"
-	and $hostname != "deepthroat") {
+	and $hostname != "deepthroat" and $hostname != "logmaster") {
 # can't be applied as is, on icinga servers, bluemind, puppetserver, unifi and opennebula hosts:
 # (/var/log/icinga/icinga.log) Error: Failed to safely copy module '/usr/lib/check_mk/livestatus.o' to '/tmp/icinganebmodK9aU8W'. The module will not be loaded
 # (/var/log/one/oned.log) Command execution fail: 'if [ -x "/var/tmp/one/im/run_probes" ]; then /var/tmp/one/im/run_probes kvm /var/lib/one//datastores 4124 20 5 XXX
@@ -63,7 +63,7 @@ class common::config::fstab {
 	    if ($srvtype != "opennebula" and $hostname != "nebula"
 		and $hostname != "puppet" and $hostname != "puppetserver"
 		and $hostname != "wifimgr" and $hostname != "monitor"
-		and $hostname != "deepthroat") {
+		and $hostname != "deepthroat" and $hostname != "logmaster") {
 		Common::Define::Mountpoint["Mount /tmp on $dev as $fs"]
 		    -> Exec["Add noexec mount option to tmp partition"]
 
@@ -76,7 +76,7 @@ class common::config::fstab {
 	    if ($srvtype != "opennebula" and $hostname != "nebula"
 		and $hostname != "puppet" and $hostname != "puppetserver"
 		and $hostname != "wifimgr" and $hostname != "monitor"
-		and $hostname != "deepthroat") {
+		and $hostname != "deepthroat" and $hostname != "logmaster") {
 		Common::Define::Mountpoint["Mount /tmp on $dev as $fs"]
 		    -> Exec["Add noexec mount option to tmp partition"]
 
