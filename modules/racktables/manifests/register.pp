@@ -50,7 +50,7 @@ class racktables::register {
 #		}
 #	    }
 #	}
-    } elsif ($parent) {
+    } elsif (getvar("::parent")) {
 	racktables::define::register_attach { $parent: }
     }
 
