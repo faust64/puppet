@@ -8,7 +8,7 @@ class elasticsearch::nagios {
 	    servicegroups => "databases";
     }
 
-    if ($version == "5.x") {
+    if ($elasticsearch::vars::version == "5.x") {
 	Exec["Define Elasticsearch number_of_replicas"]
 	    -> Nagios::Define::Probe["elasticsearch"]
     }
