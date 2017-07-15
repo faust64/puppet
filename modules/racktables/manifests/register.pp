@@ -10,7 +10,7 @@ class racktables::register {
 	    object_type => $object_type;
     }
 
-    if ($productname) {
+    if (getvar("::productname")) {
 	if (! ($productname =~ /Standard PC/
 	      or $productname =~ /System Product Name/
 	      or $productname =~ /HVM domU/)) {
