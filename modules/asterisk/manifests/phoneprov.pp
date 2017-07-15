@@ -12,7 +12,7 @@ class asterisk::phoneprov {
     $ntp_upstream   = $asterisk::vars::ntp_upstream
     $srv_root       = $asterisk::vars::webserver_root
     $syslog_host    = $asterisk::vars::syslog_host
-    $tz             = $asterisk::vars::tz
+    $tz             = $asterisk::vars::timezone
     $vlan_sip       = $asterisk::vars::vlan_sip
     $vlan_users     = $asterisk::vars::vlan_users
 

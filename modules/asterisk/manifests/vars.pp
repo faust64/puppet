@@ -37,6 +37,7 @@ class asterisk::vars {
     $munin_conf_dir       = lookup("munin_conf_dir")
     $munin_monitored      = lookup("asterisk_munin")
     $munin_probes         = lookup("asterisk_munin_probes")
+    $munin_service_name   = lookup("munin_node_service_name")
     $nagios_runtime_group = lookup("nagios_runtime_group")
     $nagios_runtime_user  = lookup("nagios_runtime_user")
     $ntp_upstream         = lookup("ntp_upstream")

@@ -23,9 +23,6 @@ define asterisk::define::siptrunk($allow      = "alaw,ulaw",
 				  $register   = false,
 				  $type       = "peer",
 				  $username   = false) {
-    $confdir   = $asterisk::vars::nagios_conf_dir
-    $plugindir = $asterisk::vars::nagios_plugins_dir
-
     asterisk::define::sipaccount {
 	$name:
 	    allow      => $allow,
