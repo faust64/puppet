@@ -5,9 +5,9 @@ define subversion::define::workdir($local_container = false,
 				   $svn_username    = false,
 				   $update          = true) {
     if ($local_container and $repository) {
-	$owner_real      = $owner      ? { false => 0,     default => $owner }
-	$group_real      = $group      ? { false => 0,     default => $group }
-	$local_name_real = $local_name ? { false => $name, default => $local_name }
+	$owner_real      = getvar("::owner") ? { false => 0,     default => $owner }
+	$group_real      = getvar("::group") ? { false => 0,     default => $group }
+	$local_name_real = $local_name       ? { false => $name, default => $local_name }
 
 	if (!defined(Class[Subversion])) {
 	    include subversion
