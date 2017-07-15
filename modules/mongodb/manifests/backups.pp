@@ -7,7 +7,7 @@ class mongodb::backups {
 	file {
 	    "Install MongoDB backup script":
 		content => template("mongodb/backup.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0750",
 		owner   => root,
 		path    => "/usr/local/sbin/mongodb_backup";

@@ -12,26 +12,26 @@ class xen::config {
     file {
 	"Prepare Xen for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/xen";
 	"Prepare Xen VE configuration directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/xen/conf",
 	    require => File["Prepare Xen for further configuration"];
 	"Prepare Xen VE autoboot directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/xen/auto",
 	    require => File["Prepare Xen for further configuration"];
 	"Install xl configuration":
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0600",
 	    owner  => root,
 	    path   => "/etc/xen/xl.conf",
@@ -42,7 +42,7 @@ class xen::config {
 	file {
 	    "Install custom Xen configuration":
 		content => template("openvz/virtual.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		owner   => root,
 		path    => "/etc/virtual.conf";

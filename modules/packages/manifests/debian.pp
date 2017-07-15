@@ -12,21 +12,21 @@ class packages::debian {
     file {
 	"Install debian repository root":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$web_root/debian",
 	    require => File["Prepare www directory"];
 	"Install debian repository configuration directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$web_root/debian/conf",
 	    require => File["Install debian repository root"];
 
 	"Install debian repository public key":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$web_root/debian/public.key",
@@ -34,14 +34,14 @@ class packages::debian {
 	    source  => "puppet:///modules/packages/public.key";
 
 	"Install debian repository distributions configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$web_root/debian/conf/distributions",
 	    require => File["Install debian repository configuration directory"],
 	    source  => "puppet:///modules/packages/distributions";
 	"Install debian repository options configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$web_root/debian/conf/options",

@@ -1,5 +1,5 @@
 class tunner::vars {
-    $download = hiera("download_cmd")
-    $driver   = hiera("tunner_driver")
-    $provider = hiera("tunner_driver_provider")
+    $download = lookup("download_cmd")
+    $driver   = lookup("tunner_driver")
+    $provider = lookup("tunner_driver_provider")
 }

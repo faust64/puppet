@@ -5,7 +5,7 @@ class tinytinyrss::scripts {
     file {
 	"Install tinytinyrss update script":
 	    content => template("tinytinyrss/update.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/update_tinytinyrss_subscriptions";

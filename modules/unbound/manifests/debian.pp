@@ -13,7 +13,7 @@ class unbound::debian {
     if ($lsbdistcodename == "squeeze" or $lsbdistcodename == "wheezy" or $lsbdistcodename == "jessie") {
 	file {
 	    "Patch unbound init script":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		notify  => Service["unbound"],
 		owner   => root,
@@ -26,7 +26,7 @@ class unbound::debian {
     file {
 	"Install unbound service defaults":
 	    content => template("unbound/defaults.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["unbound"],
 	    owner   => root,

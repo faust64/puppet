@@ -11,7 +11,7 @@ define network::interfaces::openbsd::pfsync($parent = false,
 	file {
 	    $fname:
 		content => template("network/pfsync.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0640",
 		notify  => Exec["Reload pfsync0 configuration"],
 		owner   => root;

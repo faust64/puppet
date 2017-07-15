@@ -5,7 +5,7 @@ class stunnel::debian {
 
     file {
 	"Install stunnel service defaults":
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0644",
 	    notify => Service[$stunnel::vars::srvname],
 	    owner  => root,

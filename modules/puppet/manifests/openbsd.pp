@@ -6,7 +6,7 @@ class puppet::openbsd {
 	    "Install OpenBSD puppet rc script":
 		ensure  => present,
 		force   => true,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0555",
 		owner   => root,
 		path    => "/etc/rc.d/puppetd",

@@ -7,7 +7,7 @@ class apache::modsecurity {
     file {
 	"Install mod_security main configuration":
 	    content => template("apache/mod_security.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$srvname],
 	    owner   => root,

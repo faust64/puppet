@@ -49,14 +49,14 @@ class php::rhel {
 	file {
 	    "Prepare PHP fpm configuration directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "$conf_dir/fpm",
 		require => File["Link php.d to debian-like configuration directory"];
 	    "Prepare PHP fpm pools configuration directory":
 		ensure  => directory
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "$conf_dir/fpm/pool.d",

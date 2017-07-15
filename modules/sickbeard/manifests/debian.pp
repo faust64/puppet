@@ -7,7 +7,7 @@ class sickbeard::debian {
 
     file {
 	"Install sickbeard init script":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    notify  => Service["sickbeard"],
 	    owner   => root,
@@ -16,7 +16,7 @@ class sickbeard::debian {
 	    require => Exec["Extract sickbeard"];
 	"Install sickbeard service defaults":
 	    content => template("sickbeard/defaults.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["sickbeard"],
 	    owner   => root,

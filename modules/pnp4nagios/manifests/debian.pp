@@ -15,7 +15,7 @@ class pnp4nagios::debian {
 	    path    => "$apache_conf_dir/conf.d/pnp4nagios.conf";
 	"Install pnp4nagios service defaults":
 	    content => template("pnp4nagios/debian-defaults.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$pnp4nagios::vars::service_name],
 	    owner   => root,

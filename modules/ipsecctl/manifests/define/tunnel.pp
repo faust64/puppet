@@ -14,7 +14,7 @@ define ipsecctl::define::tunnel($dhgroup       = $ipsecctl::vars::ipsec_defaults
     file {
 	"IPSEC tunnel to $name":
 	    content => template("ipsecctl/tunnel.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    notify  => Exec["Reload ipsec configuration"],
 	    owner   => root,

@@ -21,7 +21,7 @@ class squid::config {
     file {
 	"Prepare Squid for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
@@ -40,7 +40,7 @@ class squid::config {
 
 	"Install Squid main configuration":
 	    content => template("squid/squid.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$squid::vars::service_name],
 	    owner   => root,
@@ -48,7 +48,7 @@ class squid::config {
 	    require => File["Install Squid nocache ACL configuration"];
 	"Install Squid nocache ACL configuration":
 	    content => template("squid/nocache.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$squid::vars::service_name],
 	    owner   => root,

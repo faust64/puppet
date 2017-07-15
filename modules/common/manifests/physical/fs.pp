@@ -1,6 +1,6 @@
 class common::physical::fs {
-    $mountpoints = hiera("fstab_mountpoint")
-    $root_is_ro  = hiera("fstab_root_ro")
+    $mountpoints = lookup("fstab_mountpoint")
+    $root_is_ro  = lookup("fstab_root_ro")
 
     if ($mountpoints) {
 	class {

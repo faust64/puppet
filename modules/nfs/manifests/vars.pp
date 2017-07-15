@@ -1,3 +1,3 @@
 class nfs::vars {
-    $srvname = hiera("nfs_service_name")
+    $srvname = lookup("nfs_service_name")
 }

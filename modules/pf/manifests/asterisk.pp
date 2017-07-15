@@ -24,7 +24,7 @@ class pf::asterisk {
     file {
 	"Add asterisk user to sudoers for kill_ovh_states":
 	    content => template("pf/asterisk.sudoers.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0440",
 	    owner   => root,
 	    path    => "$sudo_conf_d/sudoers.d/asterisk-pf",

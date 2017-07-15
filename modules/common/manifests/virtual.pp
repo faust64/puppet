@@ -16,7 +16,7 @@ class common::virtual {
 		path    => "/usr/sbin:/usr/bin:/bin";
 	}
     }
-    if (hiera("vps_with_munin") == true) {
+    if (lookup("vps_with_munin") == true) {
 	include muninnode
     }
 }

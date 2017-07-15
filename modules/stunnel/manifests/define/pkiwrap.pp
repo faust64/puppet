@@ -3,7 +3,7 @@ define stunnel::define::pkiwrap($ca = "web",
     file {
 	"Prepare stunnel $name certificates directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/stunnel/ssl/$name",
@@ -11,10 +11,10 @@ define stunnel::define::pkiwrap($ca = "web",
     }
 
     pki::define::wrap {
-	hiera("stunnel_service_name"):
+	lookup("stunnel_service_name"):
 	    ca      => $ca,
 	    do      => $do,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    owner   => root,
 	    reqfile => "Prepare stunnel $name certificates directory",

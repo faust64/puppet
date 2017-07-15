@@ -13,7 +13,7 @@ define php::define::module($modpriority = 20,
 	"Install PHP module $name loading":
 	    content => template("php/modules/$modsource.erb"),
 	    ensure  => $ensure,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$conf_dir/mods-available/$name.ini",

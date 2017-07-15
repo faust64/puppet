@@ -1,6 +1,6 @@
 define icinga::define::contact($aalias         = $name,
 			       $doslack        = false,
-			       $contact        = hiera("contact_alerts"),
+			       $contact        = lookup("contact_alerts"),
 			       $notify_options = "w,u,c,r",
 			       $notify_period  = "24x7") {
     $conf_dir = $icinga::vars::nagios_conf_dir
@@ -8,7 +8,7 @@ define icinga::define::contact($aalias         = $name,
     file {
 	"Install Icinga $name contact configuration":
 	    content => template("icinga/contact.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Refresh Icinga configuration"],
 	    owner   => root,

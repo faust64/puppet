@@ -22,14 +22,14 @@ class packages::tools {
     file {
 	"Install repo aspirator":
 	    content => template("packages/update_repository.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/usr/local/sbin/repo_mirror",
 	    require => File["Prepare www directory"];
 	"Install asterisk aspirator":
 	    content => template("packages/update_asterisk.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/usr/local/sbin/asterisk_mirror",
@@ -40,7 +40,7 @@ class packages::tools {
 	file {
 	    "Install repository synchro script":
 		content => template("packages/sync_repository.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "/usr/local/sbin/pull_repository",

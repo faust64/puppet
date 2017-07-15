@@ -5,7 +5,7 @@ class firehol::debian {
 
     file {
 	"Install Firehol defaults configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Common::Define::Service["firehol"],
 	    owner   => root,

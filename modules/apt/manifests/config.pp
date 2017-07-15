@@ -6,26 +6,26 @@ class apt::config {
     file {
 	"Prepare APT for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/apt/sources.list.d";
 	"Prepare APT preferences directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/apt/preferences.d";
 	"Install APT main configuration":
 	    content => template("apt/apt.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Update APT local cache"],
 	    owner   => root,
 	    path    => "/etc/apt/apt.conf";
 	"Install APT default sources list":
 	    content => template("apt/sources.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Update APT local cache"],
 	    owner   => root,

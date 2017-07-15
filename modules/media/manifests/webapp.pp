@@ -18,7 +18,7 @@ class media::webapp {
 
     file {
 	"Install fake-index-redirecting-to-plex":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    require => Nginx::Define::Vhost["plex.$domain"],

@@ -9,13 +9,13 @@ class isakmpd::config {
     file {
 	"Prepare Isakmpd for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Install Isakmpd main configuration":
 	    content => template("isakmpd/isakmpd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service["isakmpd"],
 	    owner   => root,

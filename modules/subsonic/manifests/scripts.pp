@@ -1,7 +1,7 @@
 class subsonic::scripts {
     file {
 	"Install subsonic database wipe script":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/subsonic_wipe_db",
@@ -12,7 +12,7 @@ class subsonic::scripts {
     if (defined(Class[Common::Tools::Flac])) {
 	file {
 	    "Install flac2mp3 script":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "/usr/local/bin/flac2mp3",

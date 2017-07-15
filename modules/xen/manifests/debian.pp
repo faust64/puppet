@@ -15,18 +15,18 @@ class xen::debian {
 
     file {
 	"Set Xen defaults":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/default/xendomains",
 	    require => File["Install xl configuration"],
 	    source  => "puppet:///modules/xen/xendomains";
 	"Set Xen toolstack":
-	    group  => hiera("gid_zero"),
-	    mode   => "0644",
-	    owner  => root,
-	    path   => "/etc/default/xen",
-	    source => "puppet:///modules/xen/toolstack";
+	    group   => lookup("gid_zero"),
+	    mode    => "0644",
+	    owner   => root,
+	    path    => "/etc/default/xen",
+	    source  => "puppet:///modules/xen/toolstack";
     }
 
     common::define::lined {

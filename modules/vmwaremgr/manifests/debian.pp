@@ -6,7 +6,7 @@ class vmwaremgr::debian {
     file {
 	"Let's fuck with vSphereCLI installer":
 	    content => "ubuntu",
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/vsphere-release";

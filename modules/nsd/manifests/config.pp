@@ -9,20 +9,20 @@ class nsd::config {
     file {
 	"Prepare NSD for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Prepare NSD services configuration directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/nsd.conf.d",
 	    require => File["Prepare NSD for further configuration"];
 	"Install NSD server configuration":
 	    content => template("nsd/server.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["nsd"],
 	    owner   => root,
@@ -30,7 +30,7 @@ class nsd::config {
 	    require => File["Prepare NSD services configuration directory"];
 	"Install NSD main configuration":
 	    content => template("nsd/nsd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["nsd"],
 	    owner   => root,

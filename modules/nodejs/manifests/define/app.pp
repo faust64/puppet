@@ -38,7 +38,7 @@ define nodejs::define::app($appdeps   = false,
 	    if ($appsrc) {
 		file {
 		    "Install $name nodejs application":
-			group   => hiera("gid_zero"),
+			group   => lookup("gid_zero"),
 			ignore  => [ ".svn", ".git" ],
 			notify  => $do_notify,
 			owner   => root,

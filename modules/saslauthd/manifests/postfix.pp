@@ -10,7 +10,7 @@ class saslauthd::postfix {
     file {
 	"Prepare Postfix SASL configuration directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$postfix_conf_dir/sasl",
@@ -21,14 +21,14 @@ class saslauthd::postfix {
 		];
 	"Install Postfix spool var directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$spool_dir/var",
 	    require => File["Prepare Postfix SASL configuration directory"];
 	"Install Postfix spool var/run directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$spool_dir/var/run",
@@ -42,7 +42,7 @@ class saslauthd::postfix {
 	    require => File["Install Postfix spool var/run directory"];
 	"Install Postfix SASL configuration":
 	    content => template("saslauthd/smtpd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["postfix"],
 	    owner   => root,

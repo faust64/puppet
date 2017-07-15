@@ -1,7 +1,7 @@
 class patchdashboard::register {
     $db_name  = "patchdashboard"
-    $download = hiera("download_cmd")
-    $upstream = hiera("patchdashboard_upstream")
+    $download = lookup("download_cmd")
+    $upstream = lookup("patchdashboard_upstream")
 
     if ($upstream) {
 	if (! defined(Class[curl])) {

@@ -12,7 +12,7 @@ class rsyslog::collect {
 	file {
 	    "Install rsyslog collect configuration":
 		content => template("rsyslog/collect.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0600",
 		notify  => Service[$rsyslog::vars::service_name],
 		owner   => root,

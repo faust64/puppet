@@ -20,7 +20,7 @@ class owncloud::config {
     file {
 	"Prepare owncloud for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => $owncloud::vars::runtime_user,
 	    path    => "$web_root/config";

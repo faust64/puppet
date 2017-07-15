@@ -1,7 +1,7 @@
 class common::freebsd {
-    $ports     = hiera("deported_ports")
-    $download  = hiera("download_cmd")
-    $with_dbus = hiera("freebsd_with_dbus")
+    $ports     = lookup("deported_ports")
+    $download  = lookup("download_cmd")
+    $with_dbus = lookup("freebsd_with_dbus")
 
     case $kernelversion {
 	/9\.[1-9]/, /[1-9][0-9]\./: {
@@ -27,19 +27,19 @@ class common::freebsd {
     file {
 	"Prepare FreeBSD services configuration directory":
 	    ensure => directory,
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0755",
 	    owner  => root,
 	    path   => "/etc/rc.conf.d";
 	"Install FreeBSD free command":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/usr/local/bin/free",
 	    source  => "puppet:///modules/common/fbsd/free";
 	"Ensure /boot/loader.conf exists":
 	    content => "",
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/boot/loader.conf",

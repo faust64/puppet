@@ -5,7 +5,7 @@ define tftpd::define::get_centos($arch = [ "i386", "x86_64" ]) {
     file {
 	"Prepare CentOS$name root directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$root_dir/installers/centos${name}",
@@ -16,7 +16,7 @@ define tftpd::define::get_centos($arch = [ "i386", "x86_64" ]) {
 	file {
 	    "Prepare CentOS$name $archi directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "$root_dir/installers/centos${name}/$archi",

@@ -74,7 +74,7 @@ class opennebula::controller {
     file {
 	"Install OpenNebula auth ldap configuration":
 	    content => template("opennebula/auth.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["opennebula"],
 	    owner   => root,

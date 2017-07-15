@@ -5,7 +5,7 @@ class subsonic::rsyslog {
 
     file {
 	"Install subsonic rsyslog main configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service[$subsonic::vars::rsyslog_service_name],
 	    owner   => root,

@@ -5,7 +5,7 @@ class git::config {
     file {
 	"Install root .gitconfig":
 	    content => template("git/config.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/root/.gitconfig";

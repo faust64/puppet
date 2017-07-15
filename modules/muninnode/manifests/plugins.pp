@@ -1,7 +1,7 @@
 class muninnode::plugins {
     file {
 	"Install Munin custom plugins":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    ignore  => [ ".svn", ".git" ],
 	    mode    => "0755",
 	    owner   => root,

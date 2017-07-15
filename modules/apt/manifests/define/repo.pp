@@ -13,7 +13,7 @@ define apt::define::repo($baseurl  = "http://ftp.debian.org/debian",
 	    Package["apt-transport-https"]
 		-> File["APT $name source.list"]
 
-	    if (hiera("apt_cacher") != false) {
+	    if (lookup("apt_cacher") != false) {
 		$urlary = split($baseurl, '/')
 
 		apt::define::bypass_proxy {
@@ -26,7 +26,7 @@ define apt::define::repo($baseurl  = "http://ftp.debian.org/debian",
 	file {
 	    "APT $name source.list":
 		content => template("apt/source.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		notify  => Exec["Update APT local cache"],
 		owner   => root,

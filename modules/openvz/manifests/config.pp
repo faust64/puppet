@@ -12,20 +12,20 @@ class openvz::config {
 
     file {
 	"Install vz main configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/vz/vz.conf",
 	    source  => "puppet:///modules/openvz/vz.conf";
 	"Install vznet configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/vz/vznet.conf",
 	    source  => "puppet:///modules/openvz/vznet.conf";
 	"Install custom OpenVZ configuration":
 	    content => template("openvz/virtual.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/virtual.conf";

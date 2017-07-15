@@ -25,7 +25,7 @@ class kibana::debian {
     if ($lsbdistcodename == "wheezy") {
 	file {
 	    "Install Kibana init script":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		notify  => Service["kibana"],
 		owner   => root,

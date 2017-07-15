@@ -4,7 +4,7 @@ class ossec::authd {
     file {
 	"Install ossec-authd service script":
 	    content => template("ossec/authd.rc.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/ossec-authd";

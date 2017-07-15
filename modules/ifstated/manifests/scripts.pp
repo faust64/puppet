@@ -6,20 +6,20 @@ class ifstated::scripts {
 
     file {
 	"Ifstated application script":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/ifstated_resync",
 	    source  => "puppet:///modules/ifstated/resync";
 	"Install custom UPTIME command":
 	    content => template("ifstated/uptime.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/usr/local/bin/myuptime";
 	"Install custom REBOOT command":
 	    content => template("ifstated/reboot.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/myreboot";

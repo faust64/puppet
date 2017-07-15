@@ -34,12 +34,12 @@ class samba::config {
     file {
 	"Prepare samba for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/samba";
 	"Install samba local configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["samba"],
 	    owner   => root,
@@ -48,7 +48,7 @@ class samba::config {
 	    require => File["Prepare samba for further configuration"];
 	"Install samba main configuration":
 	    content => template("samba/smb.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Set samba admin credentials"],
 	    owner   => root,

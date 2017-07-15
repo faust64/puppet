@@ -1,5 +1,5 @@
 class sonarr::vars {
-    $rdomain       = hiera("root_domain")
-    $runtime_group = hiera("sonarr_runtime_group")
-    $runtime_user  = hiera("sonarr_runtime_user")
+    $rdomain       = lookup("root_domain")
+    $runtime_group = lookup("sonarr_runtime_group")
+    $runtime_user  = lookup("sonarr_runtime_user")
 }

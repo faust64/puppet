@@ -4,7 +4,7 @@ class reverse::config {
     file {
 	"Prepare reverse htpasswd directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/htpasswd",

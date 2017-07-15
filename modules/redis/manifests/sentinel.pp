@@ -22,7 +22,7 @@ class redis::sentinel {
     file {
 	"Install Redis Sentinel configuration":
 	    content => template("redis/sentinel.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    notify  => Service["redis-sentinel"],
 	    owner   => $redis::vars::runtime_user,

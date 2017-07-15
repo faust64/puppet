@@ -1,9 +1,9 @@
 class openbox::vars {
-    $autostart      = hiera("openbox_autostart_cmd")
-    $autostart_file = hiera("openbox_autostart_file")
-    $download       = hiera("download_cmd")
-    $home_dir       = hiera("generic_home_dir")
-    $repo           = hiera("puppet_http_repo")
-    $runtime_group  = hiera("generic_group")
-    $runtime_user   = hiera("generic_user")
+    $autostart      = lookup("openbox_autostart_cmd")
+    $autostart_file = lookup("openbox_autostart_file")
+    $download       = lookup("download_cmd")
+    $home_dir       = lookup("generic_home_dir")
+    $repo           = lookup("puppet_http_repo")
+    $runtime_group  = lookup("generic_group")
+    $runtime_user   = lookup("generic_user")
 }

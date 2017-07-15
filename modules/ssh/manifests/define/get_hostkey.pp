@@ -1,5 +1,5 @@
 define ssh::define::get_hostkey($user = "root",
-				$port = hiera("ssh_port")) {
+				$port = lookup("ssh_port")) {
     if ($user == "root") {
 	exec {
 	    "Insert $name ssh host key on port $port to root trusted hosts":

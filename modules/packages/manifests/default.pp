@@ -14,7 +14,7 @@ class packages::default {
     file {
 	"Install VMs default authorized keys":
 	    owner   => root,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    path    => "$web_root/authorized_keys",
 	    require => File["Prepare www directory"],

@@ -13,20 +13,20 @@ class mysql::scripts {
     file {
 	"Install mysql_toolbox":
 	    content => template("mysql/toolbox.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/mysql_toolbox",
 	    require => Service[$mysql::vars::service_name];
 	"Install mysql_backup":
 	    content => template("mysql/backup.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/mysql_backup",
 	    require => Service[$mysql::vars::service_name];
 	"Install sqlite2mysql":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/usr/local/bin/sqlite2mysql",

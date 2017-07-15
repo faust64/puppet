@@ -11,20 +11,20 @@ class collectd::config {
     file {
 	"Prepare collectd for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Prepare collectd plugins configuration directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/collectd.d",
 	    require => File["Prepare collectd for further configuration"];
 	"Install collectd main configuration":
 	    content => template("collectd/config.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["collectd"],
 	    owner   => root,
@@ -32,7 +32,7 @@ class collectd::config {
 	    require => File["Prepare collectd plugins configuration directory"];
 	"Install collection main configuration":
 	    content => template("collectd/collection.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["collectd"],
 	    owner   => root,

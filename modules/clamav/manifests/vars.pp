@@ -1,6 +1,6 @@
 class clamav::vars {
-    $conf_dir   = hiera("clamav_conf_dir")
-    $contact    = hiera("clamav_contact")
-    $scan_dir   = hiera("clamav_scan_dir")
-    $slack_hook = hiera("clamav_slack_hook_uri")
+    $conf_dir   = lookup("clamav_conf_dir")
+    $contact    = lookup("clamav_contact")
+    $scan_dir   = lookup("clamav_scan_dir")
+    $slack_hook = lookup("clamav_slack_hook_uri")
 }

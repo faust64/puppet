@@ -2,7 +2,7 @@ class nodejs::customservice {
     if ($lsbdistcodename == "wheezy" or $lsbdistcodename == "trusty") {
 	file {
 	    "Install Node.JS service init script":
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0755",
 		notify => Service["nodejs"],
 		owner  => root,
@@ -12,14 +12,14 @@ class nodejs::customservice {
     } else {
 	file {
 	    "Install Node.JS service init script":
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0755",
 		notify => Service["nodejs"],
 		owner  => root,
 		path   => "/usr/local/sbin/nodejsservice",
 		source => "puppet:///modules/nodejs/debian.rc";
 	    "Install Node.JS systemd service declaration":
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0644",
 		notify  => Exec["Reload systemd configuration"],
 		owner  => root,

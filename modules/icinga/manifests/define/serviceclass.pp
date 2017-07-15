@@ -10,7 +10,7 @@ define icinga::define::serviceclass($check_interval        = 1440,
     file {
 	"Install Icinga $name service class declaration":
 	    content => template("icinga/service.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Refresh Icinga configuration"],
 	    owner   => root,

@@ -5,7 +5,7 @@ class miniflux::scripts {
     file {
 	"Install miniflux update script":
 	    content => template("miniflux/update.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/update_miniflux_subscriptions";

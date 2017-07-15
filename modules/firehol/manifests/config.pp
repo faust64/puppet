@@ -5,13 +5,13 @@ class firehol::config {
     file {
 	"Prepare Firehol for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/firehol";
 	"Install Firehol main configuration":
 	    content => template("firehol/firehol.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Common::Define::Service["firehol"],
 	    owner   => root,

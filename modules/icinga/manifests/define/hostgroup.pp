@@ -9,7 +9,7 @@ define icinga::define::hostgroup($hostgroup_name  = "${name}-servers",
     file {
 	"Install Icinga $name hostgroup declaration":
 	    content => template("icinga/hostgroup.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Refresh Icinga configuration"],
 	    owner   => root,
@@ -18,7 +18,7 @@ define icinga::define::hostgroup($hostgroup_name  = "${name}-servers",
 # Warning: Object definition type 'hostextinfo' is DEPRECATED
 #	"Install Icinga $name extended host data":
 #	    content => template("icinga/extinfo.erb"),
-#	    group   => hiera("gid_zero"),
+#	    group   => lookup("gid_zero"),
 #	    mode    => "0644",
 #	    notify  => Exec["Refresh Icinga configuration"],
 #	    owner   => root,

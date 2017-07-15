@@ -5,7 +5,7 @@ class bluemind::rsyslog {
 
     file {
 	"Install bluemind rsyslog main configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$bluemind::vars::rsyslog_service_name],
 	    owner   => root,

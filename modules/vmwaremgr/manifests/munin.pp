@@ -16,7 +16,7 @@ class vmwaremgr::munin {
 
     file {
 	"Install VMWare munin probe configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$vmwaremgr::vars::munin_service_name],
 	    owner   => root,

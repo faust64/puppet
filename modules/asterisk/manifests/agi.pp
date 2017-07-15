@@ -22,7 +22,7 @@ class asterisk::agi {
     file {
 	"Install custom dialparties.agi":
 	    content => template("asterisk/dialparties.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$data_dir/agi-bin/dialparties.agi",

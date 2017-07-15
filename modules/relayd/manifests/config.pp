@@ -11,7 +11,7 @@ class relayd::config {
     file {
 	"Relayd main configuration":
 	    content => template("relayd/relayd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service["relayd"],
 	    owner   => root,

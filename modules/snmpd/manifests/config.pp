@@ -17,7 +17,7 @@ class snmpd::config {
     file {
 	"SNMPd main configuration":
 	    content => template("snmpd/snmpd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service["snmpd"],
 	    owner   => root,

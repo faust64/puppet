@@ -2,7 +2,7 @@ class subsonic::collect {
     file {
 	"Prepare subsonic remotes directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/var/subsonic/remotes",

@@ -38,7 +38,7 @@ class logstash::geoip {
 	    file {
 		"Prepare to add GeoIP type to $index":
 		    content => template("logstash/index.erb"),
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0644",
 		    notify  => Exec["Register GeoIP type to $index"],
 		    owner   => root,

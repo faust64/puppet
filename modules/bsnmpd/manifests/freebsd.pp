@@ -1,7 +1,7 @@
 class bsnmpd::freebsd {
     file {
 	"Enable bsnmpd service":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["bsnmpd"],
 	    owner   => root,

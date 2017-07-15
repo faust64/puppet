@@ -19,7 +19,7 @@ class rsyslog::store {
 	file {
 	    "Install rsyslog store configuration":
 		content => template("rsyslog/store-$srctemplate.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0600",
 		notify  => Service[$rsyslog::vars::service_name],
 		owner   => root,

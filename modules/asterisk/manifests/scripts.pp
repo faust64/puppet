@@ -8,7 +8,7 @@ class asterisk::scripts {
     file {
 	"Install phone pre-configuration script":
 	    content => template("asterisk/phone_setup.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/phone_setup",
@@ -22,25 +22,25 @@ class asterisk::scripts {
 	    require => File["Prepare Asterisk AGI directory"];
 	"Install asterisk trunks reloading main script":
 	    content => template("asterisk/check_trunks.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/check_trunks";
 	"Install asterisk sip trunk reloading script":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/usr/local/bin/sip_edit",
 	    source  => "puppet:///modules/asterisk/sip_edit";
 	"Install asterisk iax trunk reloading script":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/usr/local/bin/trunk_edit",
 	    source  => "puppet:///modules/asterisk/trunk_edit";
 	"Install Aastra directory generation script":
 	    content => template("asterisk/aastra_directory.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    notify  => Exec["Update Aastra directory"],
 	    owner   => root,

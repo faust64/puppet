@@ -6,13 +6,13 @@ class smokeping::config {
     file {
 	"Prepare smokeping for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Prepare smokeping config.d directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/config.d",
@@ -20,7 +20,7 @@ class smokeping::config {
 
 	"Install smokeping targets configuration":
 	    content => template("smokeping/targets.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["smokeping"],
 	    owner   => root,

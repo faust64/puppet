@@ -23,7 +23,7 @@ class muninnode::config {
 	file {
 	    "Install munin-node run directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => $munin_user,
 		path    => $munin_run_dir,
@@ -37,14 +37,14 @@ class muninnode::config {
 	file {
 	    "Install Munin-node pooler probes directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "$conf_dir/plugins-pool",
 		require => File["Prepare Munin for further configuration"];
 	    "Install Munin-node pooler script":
 		content => template("muninnode/pooler.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0750",
 		owner   => root,
 		path    => "/usr/local/sbin/munin-pool",
@@ -55,14 +55,14 @@ class muninnode::config {
     file {
 	"Prepare Munin for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir,
 	    require => Common::Define::Lined["Ensure munin knows where to listen"];
 	"Prepare Munin-node plugins directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/plugins",
@@ -83,7 +83,7 @@ class muninnode::config {
 	    require => File["Prepare Munin for further configuration"];
 	"Munin-Node configuration file":
 	    content => template("muninnode/munin-node.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$muninnode::vars::munin_node_service_name],
 	    owner   => root,
@@ -91,7 +91,7 @@ class muninnode::config {
 	    require => File["Prepare Munin-node logs directory"];
 	"Munin-node default probes configuration file":
 	    content => template("muninnode/plugin-conf.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$muninnode::vars::munin_node_service_name],
 	    owner   => root,

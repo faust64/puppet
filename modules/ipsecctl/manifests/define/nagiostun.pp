@@ -9,7 +9,7 @@ define ipsecctl::define::nagiostun() {
 	file {
 	    "Add nagios user to sudoers for check_ipsec probe":
 		content => template("ipsecctl/nagios.sudoers.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0440",
 		owner   => root,
 		path    => "$sudo_conf_d/sudoers.d/nagios-ipsecctl",

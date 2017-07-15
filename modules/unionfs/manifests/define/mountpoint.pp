@@ -1,5 +1,5 @@
 define unionfs::define::mountpoint($dir   = false,
-				   $group = hiera("gid_zero"),
+				   $group = lookup("gid_zero"),
 				   $mode  = "01777",
 				   $opts  = "defaults",
 				   $owner = "root") {
@@ -21,14 +21,14 @@ define unionfs::define::mountpoint($dir   = false,
 #		group   => $group,
 #		mode    => "$mode",
 #		owner   => $owner,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "01777",
 		owner   => root,
 		path    => "${dir}_rw",
 		require => File["Install mount_unionfs script"];
 	    "Prepare $name runtime directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "$mode",
 		owner   => root,
 		path    => $dir,

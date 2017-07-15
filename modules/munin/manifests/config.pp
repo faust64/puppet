@@ -11,14 +11,14 @@ class munin::config {
 	    path    => "$web_root/munin";
 	"Install munin default configuration":
 	    content => template("munin/munin.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$conf_dir/munin.conf",
 	    require => File["Prepare Munin for further configuration"];
 	"Prepare munin supervised hosts directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/munin-conf.d",

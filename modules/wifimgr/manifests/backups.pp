@@ -2,7 +2,7 @@ class wifimgr::backups {
     file {
 	"Prepare UniFi configuration dump directory":
 	    ensure => directory,
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0710",
 	    owner  => root,
 	    path   => $wifimgr::vars::dumpdir;

@@ -1,8 +1,8 @@
 class common::physical::reboot {
-    $mday   = hiera("reboot_month_day")
-    $wday   = hiera("reboot_week_day")
-    $hour   = hiera("reboot_hour")
-    $minute = hiera("reboot_minute")
+    $mday   = lookup("reboot_month_day")
+    $wday   = lookup("reboot_week_day")
+    $hour   = lookup("reboot_hour")
+    $minute = lookup("reboot_minute")
 
     if ($wday and $hour and $minute) {
 	cron {

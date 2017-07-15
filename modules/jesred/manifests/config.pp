@@ -7,19 +7,19 @@ class jesred::config {
     file {
 	"Install jesred main configuration":
 	    content => template("jesred/config.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/jesred.conf";
 	"Install jesred rules configuration":
 	    content => template("jesred/rules.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/jesred.rules";
 	"Install jesred acl configuration":
 	    content => template("jesred/acl.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/jesred.acl";

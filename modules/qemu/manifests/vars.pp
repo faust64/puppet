@@ -1,3 +1,3 @@
 class qemu::vars {
-    $has_kvm = hiera("qemu_has_kvm")
+    $has_kvm = lookup("qemu_has_kvm")
 }

@@ -1,4 +1,4 @@
-class mysysctl::define::martians($do_martians = hiera("do_martians")) {
+class mysysctl::define::martians($do_martians = lookup("do_martians")) {
     if ($do_martians == true) {
 	$val = "1"
     } else {

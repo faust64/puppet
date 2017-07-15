@@ -1,5 +1,5 @@
 class mysysctl::define::forwarding {
-    $forward = hiera("ip_forwarding")
+    $forward = lookup("ip_forwarding")
 
     case $myoperatingsystem {
 	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {

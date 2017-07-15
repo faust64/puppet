@@ -21,13 +21,13 @@ class wordpress::config {
     file {
 	"Install wordpress main configuration":
 	    content => template("wordpress/config.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$conf_dir/config-$rdomain.php";
 	"Install wordpress main htaccess":
 	    content => template("wordpress/htaccess.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$usr_dir/.htaccess",

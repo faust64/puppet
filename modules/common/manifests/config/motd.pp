@@ -21,7 +21,7 @@ class common::config::motd {
     file {
 	"Install system motd":
 	    content => template("common/motd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/motd";
@@ -30,7 +30,7 @@ class common::config::motd {
     if ($operatingsystem == "FreeBSD") {
 	file {
 	    "Install motd updater rc script":
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0555",
 		owner  => root,
 		path   => "/etc/rc.d/motd",

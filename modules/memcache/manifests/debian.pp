@@ -5,7 +5,7 @@ class memcache::debian {
 
     file {
 	"Install memcached service defaults":
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0644",
 	    notify => Service[$memcache::vars::service_name],
 	    owner  => root,

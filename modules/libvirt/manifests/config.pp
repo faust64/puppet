@@ -5,27 +5,27 @@ class libvirt::config {
     file {
 	"Prepare libvirt for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/libvirt";
 	"Install qemu configuration file":
 	    content => template("libvirt/qemu.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    owner   => root,
 	    path    => "/etc/libvirt/qemu.conf",
 	    require => File["Prepare libvirt for further configuration"];
 	"Prepare libvirt qemu configuration directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/libvirt/qemu",
 	    require => File["Prepare libvirt for further configuration"];
 	"Prepare libvirt autostart configuration directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/libvirt/qemu/autostart",

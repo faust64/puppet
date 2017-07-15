@@ -45,7 +45,7 @@ class php::debian {
 	    target  => "$conf_dir/conf.d";
 	"Prepare PHP cgi configuration directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/cgi",
@@ -77,14 +77,14 @@ class php::debian {
 	file {
 	    "Prepare PHP fpm configuration directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "$conf_dir/fpm",
 		require => File["Prepare PHP for further configuration"];
 	    "Prepare PHP fpm pools configuration directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "$conf_dir/fpm/pool.d",
@@ -119,7 +119,7 @@ class php::debian {
 	file {
 	    "Prepare PHP apache configuration directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "$conf_dir/apache2",

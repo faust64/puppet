@@ -7,7 +7,7 @@ class shell::profile {
     file {
 	"Prepare Profile for further configuration":
 	    ensure => directory,
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0755",
 	    owner  => root,
 	    path   => "/etc/profile.d";
@@ -17,13 +17,13 @@ class shell::profile {
 	file {
 	    "Install root profile configuration":
 		content => template("shell/profile.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		owner   => root,
 		path    => "/root/.profile";
 	    "Install skel profile configuration":
 		content => template("shell/profile.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		owner   => root,
 		path    => "/etc/skel/.profile";
@@ -33,18 +33,18 @@ class shell::profile {
 	    "Install default profile configuration":
 		content => template("shell/profile.erb"),
 		owner   => root,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		path    => "/etc/profile";
 	    "Install root profile configuration":
 		content => template("shell/shellstart.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		owner   => root,
 		path    => "/root/.profile";
 	    "Install skel profile configuration":
 		content => template("shell/shellstart.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		owner   => root,
 		path    => "/etc/skel/.profile";

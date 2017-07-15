@@ -9,7 +9,7 @@ class certbot::config {
     file {
 	"Install Certbot renewal script":
 	    content => template("certbot/renew.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/le_renew";

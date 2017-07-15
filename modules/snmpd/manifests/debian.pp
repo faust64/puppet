@@ -5,7 +5,7 @@ class snmpd::debian {
 
     file {
 	"Install snmpd service defaults":
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0644",
 	    notify => Service["snmpd"],
 	    owner  => root,

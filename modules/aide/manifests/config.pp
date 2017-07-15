@@ -6,13 +6,13 @@ class aide::config {
     file {
 	"Prepare aide for further configuration":
 	    ensure  => directory,
-	    group   => $gid_zero,
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Install aide main configuration":
 	    content => template("aide/config.erb"),
-	    group   => $gid_zero,
+	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    owner   => root,
 	    path    => "$conf_dir/aide.conf",

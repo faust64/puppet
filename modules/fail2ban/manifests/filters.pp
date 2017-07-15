@@ -3,7 +3,7 @@ class fail2ban::filters {
 
     file {
 	"Install Fail2ban custom filters":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    ignore  => [ ".svn", ".git" ],
 	    notify  => Service["fail2ban"],
 	    owner   => root,

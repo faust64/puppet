@@ -1,6 +1,6 @@
 define asterisk::define::route($cidforce = false,
 			       $intra    = false,
-			       $patterns = hiera("asterisk_public_patterns"),
+			       $patterns = lookup("asterisk_public_patterns"),
 			       $remote   = false,
 			       $routes   = false) {
     $conf_dir     = $asterisk::vars::conf_dir

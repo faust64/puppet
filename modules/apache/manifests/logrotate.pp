@@ -8,7 +8,7 @@ class apache::logrotate {
     file {
 	"Install apache logrotate configuration":
 	    content => template("apache/logrotate.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/logrotate.d/$srvname",

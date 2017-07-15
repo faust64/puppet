@@ -5,7 +5,7 @@ class pf::gre {
     file {
 	"Pf GRE configuration":
 	    content => template("pf/gre.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload pf configuration"],
 	    owner   => root,

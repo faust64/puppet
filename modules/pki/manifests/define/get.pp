@@ -2,8 +2,8 @@ define pki::define::get($ca     = "web",
 			$prefix = "server",
 			$target = "/root",
 			$what   = "certificate") {
-    $download = hiera("download_cmd")
-    $master   = hiera("pki_master")
+    $download = lookup("download_cmd")
+    $master   = lookup("pki_master")
 
     if ($download == "wget") {
 	$cmd = "$download --no-check-certificate --no-proxy"

@@ -6,8 +6,8 @@ define nginx::define::vhost($aliases         = false,
 			    $autoindex       = false,
 			    $csp_name        = false,
 			    $deny_frames     = true,
-			    $fpm_runtime_grp = hiera("apache_runtime_group"),
-			    $fpm_runtime_usr = hiera("apache_runtime_user"),
+			    $fpm_runtime_grp = lookup("apache_runtime_group"),
+			    $fpm_runtime_usr = lookup("apache_runtime_user"),
 			    $konami_location = false,
 			    $noerrors        = false,
 			    $nohttpsrewrite  = false,
@@ -56,7 +56,7 @@ define nginx::define::vhost($aliases         = false,
 	file {
 	    "Nginx $name vhost configuration":
 		content      => template("nginx/vhost/$vhostsource.erb"),
-		group        => hiera("gid_zero"),
+		group        => lookup("gid_zero"),
 		mode         => "0644",
 		notify       => Service["nginx"],
 		owner        => root,
@@ -68,7 +68,7 @@ define nginx::define::vhost($aliases         = false,
 		if (! defined(File["Install Nginx fastcgi params"])) {
 		    file {
 			"Install Nginx fastcgi params":
-			    group   => hiera("gid_zero"),
+			    group   => lookup("gid_zero"),
 			    mode    => "0644",
 			    notify  => Service["nginx"],
 			    owner   => root,
@@ -117,7 +117,7 @@ define nginx::define::vhost($aliases         = false,
 		file {
 		    "Enable Nginx rsyslog vhost $name configuration":
 			content => template("nginx/rsyslog-vhost.erb"),
-			group   => hiera("gid_zero"),
+			group   => lookup("gid_zero"),
 			mode    => "0600",
 			notify  => Service[$nginx::vars::rsyslog_service_name],
 			owner   => root,

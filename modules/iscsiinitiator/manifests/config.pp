@@ -22,20 +22,20 @@ class iscsiinitiator::config {
     file {
 	"Prepare iSCSI for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Install iSCSId configuration":
 	    content => template("iscsiinitiator/iscsid.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    owner   => root,
 	    path    => "$conf_dir/iscsid.conf",
 	    require => File["Prepare iSCSI for further configuration"];
 	"Install local initiator name":
 	    content => template("iscsiinitiator/name.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$conf_dir/initiatorname.iscsi",

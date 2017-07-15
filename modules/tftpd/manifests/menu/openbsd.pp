@@ -9,7 +9,7 @@ class tftpd::menu::openbsd {
     file {
 	"Install pxe openbsd boot-screen":
 	    content => template("tftpd/openbsd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$root_dir/boot-screens/openbsd.cfg",
@@ -20,13 +20,13 @@ class tftpd::menu::openbsd {
 		];
 	"Install pxe openbsd /etc directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$root_dir/etc",
 	    require => File["Prepare pxe server root"];
 	"Instapp pxe openbsd /etc/boot.conf":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$root_dir/etc/boot.conf",

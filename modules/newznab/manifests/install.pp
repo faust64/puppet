@@ -28,14 +28,14 @@ class newznab::install {
     file {
 	"Set proper permissions to Newznab nzbfiles directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => $newznab::vars::runtime_user,
 	    path    => "$web_root/nnplus/nzbfiles",
 	    require => Subversion::Define::Workdir["nnplus"];
 	"Set proper permissions to Newznab smartty cache":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => $newznab::vars::runtime_user,
 	    path    => "$web_root/nnplus/www/lib/smarty/templates_c",
@@ -46,7 +46,7 @@ class newznab::install {
 	file {
 	    "Set proper permissions to Newznab $folder covers":
 		ensure => directory,
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0755",
 		owner  => $newznab::vars::runtime_user,
 		path   => "$web_root/nnplus/www/covers/$folder",

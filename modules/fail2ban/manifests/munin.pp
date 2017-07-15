@@ -13,7 +13,7 @@ class fail2ban::munin {
 
 	    file {
 		"Install fail2ban munin probe configuration":
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0644",
 		    notify  => Service[$fail2ban::vars::munin_service_name],
 		    owner   => root,

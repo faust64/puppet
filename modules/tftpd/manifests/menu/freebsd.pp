@@ -10,7 +10,7 @@ class tftpd::menu::freebsd {
     file {
 	"Install pxe freebsd boot-screen":
 	    content => template("tftpd/freebsd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$root_dir/boot-screens/freebsd.cfg",

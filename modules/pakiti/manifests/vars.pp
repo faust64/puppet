@@ -1,11 +1,11 @@
 class pakiti::vars {
-    $conf_dir            = hiera("pakiti_conf_dir")
-    $http_passphrase     = hiera("pakiti_http_passphrase")
-    $http_user           = hiera("pakiti_http_user")
-    $nagios_runtime_user = hiera("nagios_runtime_user")
-    $site_id             = hiera("pakiti_site_id")
-    $sudo_conf_dir       = hiera("sudo_conf_dir")
-    $upstream            = hiera("pakiti_upstream")
+    $conf_dir            = lookup("pakiti_conf_dir")
+    $http_passphrase     = lookup("pakiti_http_passphrase")
+    $http_user           = lookup("pakiti_http_user")
+    $nagios_runtime_user = lookup("nagios_runtime_user")
+    $site_id             = lookup("pakiti_site_id")
+    $sudo_conf_dir       = lookup("sudo_conf_dir")
+    $upstream            = lookup("pakiti_upstream")
 
     case $myoperatingsystem {
 	"CentOS", "RedHat":		{ $cert_dir = "/etc/pki/tls/certs" }

@@ -20,7 +20,7 @@ class openldap::munin {
 	    file {
 		"Install openldap munin probe configuration":
 		    content => template("openldap/munin.erb"),
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0644",
 		    notify  => Service[$openldap::vars::munin_service_name],
 		    owner   => root,

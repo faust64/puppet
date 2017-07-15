@@ -6,7 +6,7 @@ class icinga::localchecks {
 	file {
 	    "Install domains check configuration":
 		content => template("icinga/check_domains.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		notify  => Exec["Refresh Icinga configuration"],
 		owner   => root,
@@ -29,7 +29,7 @@ class icinga::localchecks {
 	file {
 	    "Install ssl check configuration":
 		content => template("icinga/check_ssl.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		notify  => Exec["Refresh Icinga configuration"],
 		owner   => root,

@@ -12,7 +12,7 @@ class sickbeard::config {
     file {
 	"Prepare sickbeard for further configuration":
 	    ensure   => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => $sickbeard::vars::runtime_user,
 	    path    => $conf_dir;

@@ -1,7 +1,7 @@
 class sendmail::vars {
-    $accept_domains = hiera("sendmail_accept_domains")
-    $alias_dir      = hiera("mail_alias_dir")
-    $mail_ip        = hiera("mail_ip")
-    $mail_mx        = hiera("mail_mx")
-    $mail_recipient = hiera("mail_recipient")
+    $accept_domains = lookup("sendmail_accept_domains")
+    $alias_dir      = lookup("mail_alias_dir")
+    $mail_ip        = lookup("mail_ip")
+    $mail_mx        = lookup("mail_mx")
+    $mail_recipient = lookup("mail_recipient")
 }

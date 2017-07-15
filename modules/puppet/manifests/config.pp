@@ -9,20 +9,20 @@ class puppet::config {
     file {
 	"Prepare Puppet for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Puppet main configuration":
 	    content => template("puppet/puppet.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Common::Define::Service[$puppet::vars::puppet_srvname],
 	    owner   => root,
 	    path    => "$conf_dir/puppet.conf",
 	    require => File["Puppet auth configuration"];
 	"Puppet auth configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Common::Define::Service[$puppet::vars::puppet_srvname],
 	    owner   => root,
@@ -30,7 +30,7 @@ class puppet::config {
 	    require => File["Prepare Puppet for further configuration"],
 	    source  => "puppet:///modules/puppet/auth.conf";
 	"Puppet profile configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/profile.d/puppet-agent.sh",

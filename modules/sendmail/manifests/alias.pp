@@ -13,7 +13,7 @@ class sendmail::alias {
     file {
 	"Ensure aliases.db is present":
 	    content => "",
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    notify  => Exec["Postmap alias database"],
 	    owner   => root,

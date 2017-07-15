@@ -11,7 +11,7 @@ class tftpd::menu::debian {
     file {
 	"Install pxe debian boot-screen":
 	    content => template("tftpd/debian.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$root_dir/boot-screens/debian.cfg",

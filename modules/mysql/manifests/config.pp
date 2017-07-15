@@ -59,13 +59,13 @@ class mysql::config {
     file {
 	"Prepare MySQL included configuration directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $include_dir;
 	"Install MySQL main configuration":
 	    content => template("mysql/my.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$mysql::vars::service_name],
 	    owner   => root,
@@ -77,7 +77,7 @@ class mysql::config {
 	file {
 	    "Prepare MySQL for further configuration":
 		ensure => directory,
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0755",
 		owner  => root,
 		path   => $conf_dir;

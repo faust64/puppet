@@ -36,7 +36,7 @@ class thruk::webapp {
 	    require => Package["thruk"];
 	"Don't know / don't ask - ETC":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/var/cache/thruk/ttc_33/etc",

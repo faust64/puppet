@@ -5,7 +5,7 @@ class peerio::rsyslog {
     file {
 	"Install peerio rsyslog main configuration":
 	    content => template("peerio/rsyslog.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service[$peerio::vars::rsyslog_service_name],
 	    owner   => root,

@@ -75,63 +75,63 @@ class pf::config {
     file {
 	"Pf Configuration directory":
 	    ensure => directory,
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0755",
 	    owner  => root,
 	    path   => "/etc/pf.d";
 
 	"Pf Interfaces Configuration":
 	    content => template("pf/ifs.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload pf configuration"],
 	    owner   => root,
 	    path    => "/etc/pf.d/IFS";
 	"Pf Alias Configuration":
 	    content => template("pf/alias.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload pf configuration"],
 	    owner   => root,
 	    path    => "/etc/pf.d/Alias";
 	"Pf Policy Configuration":
 	    content => template("pf/policy.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload pf configuration"],
 	    owner   => root,
 	    path    => "/etc/pf.d/Policy";
 	"Pf Redundancy Configuration":
 	    content => template("pf/redundancy.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload pf configuration"],
 	    owner   => root,
 	    path    => "/etc/pf.d/Redundancy";
 	"Pf NAT Configuration":
 	    content => template("pf/nat.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload pf configuration"],
 	    owner   => root,
 	    path    => "/etc/pf.d/NAT";
 	"Pf SIP Configuration":
 	    content => template("pf/sip.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload pf configuration"],
 	    owner   => root,
 	    path    => "/etc/pf.d/SIP";
 	"Pf Local Services Configuration":
 	    content => template("pf/services.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload pf configuration"],
 	    owner   => root,
 	    path    => "/etc/pf.d/Services";
 	"PF global ACL Configuration":
 	    content => template("pf/intranet.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload pf configuration"],
 	    owner   => root,
@@ -139,7 +139,7 @@ class pf::config {
 	    require => File["Pf Configuration directory"];
 	"Pf Main Configuration":
 	    content => template("pf/pf.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload pf configuration"],
 	    owner   => root,

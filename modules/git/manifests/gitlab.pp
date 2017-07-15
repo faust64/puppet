@@ -28,7 +28,7 @@ class git::gitlab {
     file {
 	"Install GitLab main configuration":
 	    content => template("git/gitlab.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Refresh gitlab configuration"],
 	    owner   => root,
@@ -36,7 +36,7 @@ class git::gitlab {
 	    require => Package["gitlab-ce"];
 	"Install gitlab backup script":
 	    content => template("git/gitlab_backup.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/GitLabbackup";

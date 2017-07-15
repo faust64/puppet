@@ -8,19 +8,19 @@ class transmission::scripts {
     file {
 	"Install transmission unregistered torrents checker":
 	    content => template("transmission/check.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/usr/local/bin/check_unregistered";
 	"Install transmission unregistered torrents cleaner":
 	    content => template("transmission/purge.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/remove_unregistered";
 	"Install transmission import job":
 	    content => template("transmission/importjob.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/transmission_import";

@@ -12,14 +12,14 @@ class packages::freebsd {
     file {
 	"Install freebsd repository root":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$web_root/freebsd",
 	    require => File["Prepare www directory"];
 	"Install freebsd_build_latests scripts":
 	    content => template("packages/freebsd_build_latests.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0751",
 	    owner   => root,
 	    path    => "/usr/local/sbin/freebsd_build_latests",

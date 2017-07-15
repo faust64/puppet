@@ -22,7 +22,7 @@ class nagios::freebsd {
 	    path    => "/usr/local/etc/nrpe.cfg",
 	    target  => "$conf_dir/nrpe.cfg";
 	"Enable nrpe service":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$srvname],
 	    owner   => root,

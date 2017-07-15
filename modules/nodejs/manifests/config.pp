@@ -2,7 +2,7 @@ class nodejs::config {
     if ($nodejs::vars::service_name == "pm2") {
 	$runtime_group = $nodejs::vars::pm2_group
     } else {
-	$runtime_group = hiera("gid_zero")
+	$runtime_group = lookup("gid_zero")
     }
 
     file {

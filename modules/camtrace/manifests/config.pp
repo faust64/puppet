@@ -15,7 +15,7 @@ class camtrace::config {
 	    require => Class[Xorg];
 	"Install camtrace sudoers configuration":
 	    content => template("camtrace/sudoers.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0440",
 	    owner   => root,
 	    path    => "$sudo_conf_dir/sudoers.d/camtrace",

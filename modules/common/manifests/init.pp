@@ -10,7 +10,7 @@ class common {
 #FIXME: should be included everywhere, not implemented yet
 # openbsd to check
 # pending rhel env installation
-	    if (hiera("ossec_manager") != false) {
+	    if (lookup("ossec_manager") != false) {
 		include ossec
 	    }
 	    include common::debian
@@ -19,7 +19,7 @@ class common {
 	    include common::rhel
 	}
 	"FreeBSD": {
-	    if (hiera("ossec_manager") != false) {
+	    if (lookup("ossec_manager") != false) {
 		include ossec
 	    }
 	    include common::freebsd
@@ -51,13 +51,13 @@ class common {
 	include common::config::wget
 	include logrotate
     }
-    if (hiera("with_nagios") == true) {
+    if (lookup("with_nagios") == true) {
 	include nagios
     }
-    if (hiera("with_auditd") == true) {
+    if (lookup("with_auditd") == true) {
 	include auditd
     }
-    if (hiera("with_aide") == true) {
+    if (lookup("with_aide") == true) {
 	include aide
     }
 
@@ -81,16 +81,16 @@ class common {
 	include puppet
     }
 
-    if (hiera("do_pakiti")) {
+    if (lookup("do_pakiti")) {
 	include pakiti
     }
-    if (hiera("do_rkhunter")) {
+    if (lookup("do_rkhunter")) {
 	include rkhunter
     }
-    if (hiera("do_patchdashboard")) {
+    if (lookup("do_patchdashboard")) {
 	include patchdashboard::register
     }
-    if (hiera("do_racktables")) {
+    if (lookup("do_racktables")) {
 	include racktables::register
     }
     include rsync

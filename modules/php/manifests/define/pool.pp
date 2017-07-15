@@ -1,10 +1,10 @@
 define php::define::pool($ensure        = "present",
-			 $listen_group  = hiera("apache_runtime_group"),
-			 $listen_user   = hiera("apache_runtime_user"),
+			 $listen_group  = lookup("apache_runtime_group"),
+			 $listen_user   = lookup("apache_runtime_user"),
 			 $poolrsyslog   = false,
 			 $root_dir      = "/",
-			 $runtime_group = hiera("apache_runtime_group"),
-			 $runtime_user  = hiera("apache_runtime_user"),
+			 $runtime_group = lookup("apache_runtime_group"),
+			 $runtime_user  = lookup("apache_runtime_user"),
 			 $socket        = "/var/run/php5-fpm.$name.sock") {
     $conf_dir         = $php::vars::conf_dir
     $rsyslog_conf_dir = $php::vars::rsyslog_conf_dir
@@ -15,7 +15,7 @@ define php::define::pool($ensure        = "present",
 	    file {
 		"Install php-fpm log directory":
 		    ensure => directory,
-		    group  => hiera("gid_zero"),
+		    group  => lookup("gid_zero"),
 		    mode   => "0755",
 		    owner  => root,
 		    path   => "/var/log/php-fpm";
@@ -39,7 +39,7 @@ define php::define::pool($ensure        = "present",
 		require => File["Install php-fpm log directory"];
 	    "Install $name fpm pool":
 		content => template("php/pool.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		notify  => Service[$php::vars::srvname],
 		owner   => root,
@@ -56,7 +56,7 @@ define php::define::pool($ensure        = "present",
 	    file {
 		"Enable php-fpm pool $name rsyslog configuration":
 		    content => template("php/rsyslog.erb"),
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0600",
 		    notify  => Service[$php::vars::rsyslog_service_name],
 		    owner   => root,

@@ -58,12 +58,12 @@ class riak::debian {
 	file {
 	    "Prepare Riak systemd service configuration":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "/etc/systemd/system/riak.service.d";
 	    "Install Riak systemd configuration":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		owner   => root,
 		notify  => Exec["Reload systemd configuration"],
@@ -87,7 +87,7 @@ class riak::debian {
     file {
 	"Install Riak defaults configuration":
 	    content => template("riak/defaults.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["riak"],
 	    owner   => root,

@@ -9,7 +9,7 @@ define tftpd::define::get_fedora($arch     = [ "i386", "x86_64" ],
     file {
 	"Prepare Fedora$name root directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$root_dir/installers/fedora${name}",
@@ -20,7 +20,7 @@ define tftpd::define::get_fedora($arch     = [ "i386", "x86_64" ],
 	file {
 	    "Prepare Fedora$name $family directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "$root_dir/installers/fedora${name}/$family",
@@ -31,7 +31,7 @@ define tftpd::define::get_fedora($arch     = [ "i386", "x86_64" ],
 	    file {
 		"Prepare Fedora$name $family $archi directory":
 		    ensure  => directory,
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0755",
 		    owner   => root,
 		    path    => "$root_dir/installers/fedora${name}/$family/$archi",

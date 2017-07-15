@@ -26,7 +26,7 @@ define tftpd::define::ps_devuan($autopart = false,
     file {
 	"Install devuan ${debvers}_$hosttype$pssuffix":
 	    content => template("tftpd/preseed.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "${basepath}_$hosttype$pssuffix",

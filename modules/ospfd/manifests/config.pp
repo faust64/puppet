@@ -23,7 +23,7 @@ class ospfd::config {
     file {
 	"Install Ospfd configuration":
 	    content => template("ospfd/ospfd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload ospf configuration"],
 	    owner   => root,

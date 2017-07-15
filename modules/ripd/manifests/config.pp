@@ -12,7 +12,7 @@ class ripd::config {
     file {
 	"Install Ripd configuration":
 	    content => template("ripd/ripd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload rip configuration"],
 	    owner   => root,

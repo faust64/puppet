@@ -3,7 +3,7 @@ class common::physical::syspackages {
 	"smartmontools":
     }
 
-    if (hiera("no_linprocfs") == false) {
+    if (lookup("no_linprocfs") == false) {
 	common::define::package {
 	    [ "htop", "lsof" ]:
 	}
@@ -24,18 +24,18 @@ class common::physical::syspackages {
 	    "locales-all":
 	}
     }
-    if (hiera("has_serial_io")) {
+    if (lookup("has_serial_io")) {
 	common::define::package {
 	    "minicom":
 	}
     }
-    if (hiera("has_lm_sensors")) {
+    if (lookup("has_lm_sensors")) {
 	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan" or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"lm-sensors":
 	    }
 
-	    if (hiera("with_nagios") == true) {
+	    if (lookup("with_nagios") == true) {
 		Package["lm-sensors"]
 		    -> Nagios::Define::Probe["sensors"]
 	    }

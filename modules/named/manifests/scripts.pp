@@ -13,7 +13,7 @@ class named::scripts {
 	file {
 	    "Install update_directory script":
 		content => template("named/update_directory.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0750",
 		owner   => root,
 		path    => "/usr/local/sbin/update_directory";
@@ -40,46 +40,46 @@ class named::scripts {
 
 	file {
 	    "Install zonedit.sh":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0700",
 		owner   => root,
 		path    => "/usr/local/sbin/zonedit.sh",
 		source  => "puppet:///modules/named/zonedit.sh";
 	    "Install checkzone":
 		content => template("named/checkzone.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0700",
 		owner   => root,
 		path    => "/usr/local/sbin/checkzone";
 	    "Install dnschk":
 		content => template("named/dnschk.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0700",
 		owner   => root,
 		path    => "/usr/local/sbin/dnschk";
 
 	    "Install split-horizon generator share directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "/usr/share/dnsgen";
 	    "Install split-horizon generator ressources directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "/usr/share/dnsgen/ressources",
 		require => File["Install split-horizon generator share directory"];
 	    "Install split-horizon generator SOA template":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0700",
 		owner   => root,
 		path    => "/usr/share/dnsgen/ressources/soa",
 		require => File["Install split-horizon generator ressources directory"],
 		source  => "puppet:///modules/named/soa";
 	    "Install split-horizon generator generic vars":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0700",
 		owner   => root,
 		path    => "/usr/share/dnsgen/ressources/vars",
@@ -88,7 +88,7 @@ class named::scripts {
 		source  => "puppet:///modules/named/vars";
 	    "Install split-horizon generator public-view directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "/usr/share/dnsgen/public-view.d",
@@ -96,7 +96,7 @@ class named::scripts {
 #then, create your own ${something}-view.d
 	    "Install split-horizon generator":
 		content => template("named/generate.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0700",
 		owner   => root,
 		path    => "/usr/local/sbin/dnsgen",

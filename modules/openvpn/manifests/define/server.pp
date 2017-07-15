@@ -76,7 +76,7 @@ define openvpn::define::server($bridge  = "gre42",
     file {
 	"OpenVPN $name tunnel configuration":
 	    content => template("openvpn/server.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Reload OpenVPN services"],
 	    owner   => root,
@@ -129,7 +129,7 @@ define openvpn::define::server($bridge  = "gre42",
 	file {
 	    "Install iptables NAT configuration":
 		content => template("openvpn/iptables_nat.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0600",
 		notify  => Exec["Reload iptables configuration"],
 		owner   => root,
@@ -137,7 +137,7 @@ define openvpn::define::server($bridge  = "gre42",
 		require => File["Install iptables application script"];
 	    "Install openvpn rsyslog $name configuration":
 		content => template("openvpn/rsyslog.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0600",
 		notify  => Service[$openvpn::vars::rsyslog_service_name],
 		owner   => root,

@@ -6,7 +6,7 @@ class memcache::configrh {
     file {
 	"Install memcache sysconfig configuration":
 	    content => template("memcache/sysconfig.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$memcache::vars::service_name],
 	    owner   => root,

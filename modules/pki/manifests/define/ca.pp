@@ -5,28 +5,28 @@ define pki::define::ca($parent = false) {
     file {
 	"Prepare pki $name directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0711",
 	    owner   => root,
 	    path    => "/home/pki/$name",
 	    require => File["Prepare pki root directory"];
 	"Install $name openssl.cnf":
 	    content => template("pki/openssl.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/home/pki/$name/openssl.cnf",
 	    require => File["Prepare pki $name directory"];
 	"Install $name openssl.altnames.cnf":
 	    content => template("pki/openssl.altnames.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/home/pki/$name/openssl.altnames.cnf",
 	    require => File["Prepare pki $name directory"];
 	"Install empty index for $name":
 	    content => "",
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    owner   => root,
 	    path    => "/home/pki/$name/index.txt",
@@ -35,7 +35,7 @@ define pki::define::ca($parent = false) {
 	"Install initial serial for $name":
 	    content => "00
 ",
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    owner   => root,
 	    path    => "/home/pki/$name/serial",

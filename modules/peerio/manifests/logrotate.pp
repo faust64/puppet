@@ -6,7 +6,7 @@ class peerio::logrotate {
     file {
 	"Install peerio logrotate configuration":
 	    content => template("peerio/logrotate.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/logrotate.d/pm2.conf",

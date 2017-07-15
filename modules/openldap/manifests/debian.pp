@@ -32,7 +32,7 @@ class openldap::debian($server = false) {
 	file {
 	    "Install OpenLDAP service defaults":
 		content => template("openldap/debian-defaults.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		notify  => Service[$openldap::vars::service_name],
 		owner   => root,

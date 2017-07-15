@@ -1,11 +1,11 @@
 class shell::vars {
-    $access_class = hiera("access_class")
-    $charset      = hiera("locale_charset")
-    $locale       = hiera("locale_LOCALE")
-    $prompt_color = hiera("prompt_color")
-    $prompt_style = hiera("prompt_style")
-    $http_proxy   = hiera("squid_ip")
-    $no_proxy_for = hiera("squid_exceptions")
+    $access_class = lookup("access_class")
+    $charset      = lookup("locale_charset")
+    $locale       = lookup("locale_LOCALE")
+    $prompt_color = lookup("prompt_color")
+    $prompt_style = lookup("prompt_style")
+    $http_proxy   = lookup("squid_ip")
+    $no_proxy_for = lookup("squid_exceptions")
 
     if ($prompt_style) {
 	$style = $prompt_style

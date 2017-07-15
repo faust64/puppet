@@ -13,27 +13,27 @@ class icinga::logos {
     file {
 	"Prepare Icinga share directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $share_dir;
 	"Prepare Icinga htdocs directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$share_dir/htdocs",
 	    require => File["Prepare Icinga share directory"];
 	"Prepare Icinga images directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$share_dir/htdocs/images",
 	    require => File["Prepare Icinga htdocs directory"];
 	"Prepare Icinga logos directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$share_dir/htdocs/images/logos",

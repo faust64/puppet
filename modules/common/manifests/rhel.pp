@@ -8,7 +8,7 @@ class common::rhel {
 
     file {
 	"Disable selinux":
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0644",
 	    owner  => root,
 	    path   => "/etc/sysconfig/selinux",

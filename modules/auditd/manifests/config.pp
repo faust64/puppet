@@ -2,7 +2,7 @@ class auditd::config {
     $buf_size    = $auditd::vars::buffer_size
     $conf_dir    = $auditd::vars::conf_dir
     $contact     = $auditd::vars::contact
-    $gid_zero    = hiera("gid_zero")
+    $gid_zero    = lookup("gid_zero")
     $keep        = $auditd::vars::keep
     $logfilesize = $auditd::vars::max_logfile_size
     $plugins_dir = $auditd::vars::plugins_conf_dir

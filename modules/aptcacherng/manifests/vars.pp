@@ -1,3 +1,3 @@
 class aptcacherng::vars {
-    $passphrase = hiera("apt_cacher_passphrase")
+    $passphrase = lookup("apt_cacher_passphrase")
 }

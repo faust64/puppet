@@ -11,7 +11,7 @@ define network::interfaces::openbsd::gre($comment     = false,
     if (! defined(File["Install grectl"])) {
 	file {
 	    "Install grectl":
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0750",
 		owner  => root,
 		path   => "/usr/local/sbin/grectl",
@@ -27,7 +27,7 @@ define network::interfaces::openbsd::gre($comment     = false,
 	file {
 	    $fname:
 		content => template("network/gre.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0640",
 		notify  => Exec["Reload gre$name configuration"],
 		owner   => root;

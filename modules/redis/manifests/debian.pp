@@ -7,7 +7,7 @@ class redis::debian {
 
     file {
 	"Install Redis defaults configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$service_name],
 	    owner   => root,
@@ -19,7 +19,7 @@ class redis::debian {
 	if ($lsbdistcodename == "wheezy" or $lsbdistcodename == "trusty") {
 	    file {
 		"Install Sentinel init script":
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0755",
 		    notify  => Service["redis-sentinel"],
 		    owner   => root,
@@ -29,13 +29,13 @@ class redis::debian {
 	} else {
 	    file {
 		"Install Sentinel init script":
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0750",
 		    owner   => root,
 		    path    => "/usr/local/sbin/redissentinelservice",
 		    source  => "puppet:///modules/redis/sentinel-init";
 		"Install Sentinel systemd script":
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0755",
 		    notify  =>
 			[

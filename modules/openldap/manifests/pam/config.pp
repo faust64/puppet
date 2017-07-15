@@ -5,7 +5,7 @@ class openldap::pam::config {
     file {
 	"Install libnss-ldap configuration":
 	    content => template("openldap/libnss.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/libnss-ldap.conf";
@@ -15,7 +15,7 @@ class openldap::pam::config {
 	    path    => "/etc/pam_ldap.conf",
 	    target  => "/etc/libnss-ldap.conf";
 	"Install nsswitch.conf":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/nsswitch.conf",

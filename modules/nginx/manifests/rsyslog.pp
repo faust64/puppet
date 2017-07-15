@@ -8,7 +8,7 @@ class nginx::rsyslog {
     file {
 	"Install nginx rsyslog main configuration":
 	    content => template("nginx/rsyslog.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service[$nginx::vars::rsyslog_service_name],
 	    owner   => root,

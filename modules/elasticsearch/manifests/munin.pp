@@ -19,7 +19,7 @@ class elasticsearch::munin {
 	    file {
 		"Install elasticsearch munin probe configuration":
 		    content => template("elasticsearch/munin.erb"),
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0644",
 		    notify  => Service[$elasticsearch::vars::munin_service_name],
 		    owner   => root,

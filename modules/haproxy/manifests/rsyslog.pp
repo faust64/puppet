@@ -7,7 +7,7 @@ class haproxy::rsyslog {
     file {
 	"Install HAproxy rsyslog configuration":
 	    content => template("haproxy/rsyslog.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service[$haproxy::vars::rsyslog_service_name],
 	    owner   => root,

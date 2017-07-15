@@ -1,3 +1,3 @@
 class ftpproxy::vars {
-    $main_networks = hiera("net_ifs")
+    $main_networks = lookup("net_ifs")
 }

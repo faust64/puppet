@@ -40,14 +40,14 @@ class ceph::dashboard {
     file {
 	"Set permissions on ceph-dash keyring":
 	    ensure  => present,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    owner   => $ceph::vars::apache_runtime_user,
 	    path    => "/usr/share/ceph-dash/$keyring",
 	    require => Exec["Copy dashboard keyring to ceph-dash"];
 	"Install ceph-dash configuration":
 	    content => template("ceph/ceph-dash.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$ceph::vars::apache_service],
 	    owner   => root,

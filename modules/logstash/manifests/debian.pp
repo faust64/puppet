@@ -25,7 +25,7 @@ class logstash::debian {
     if ($lsbdistcodename == "wheezy") {
 	file {
 	    "Install Logstash init script":
-		group   => hiera("gid_adm"),
+		group   => lookup("gid_adm"),
 		mode    => "0755",
 		notify  => Service["logstash"],
 		owner   => root,

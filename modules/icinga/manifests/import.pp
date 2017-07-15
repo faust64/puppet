@@ -5,7 +5,7 @@ class icinga::import {
     file {
 	"Install Icinga generic host configuration":
 	    content => template("icinga/generic-host.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Refresh Icinga configuration"],
 	    owner   => root,
@@ -13,14 +13,14 @@ class icinga::import {
 	    require => File["Prepare Icinga imported configuration directory"];
 	"Install Icinga generic service configuration":
 	    content => template("icinga/generic-service.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Refresh Icinga configuration"],
 	    owner   => root,
 	    path    => "$conf_dir/import.d/generic-service.cfg",
 	    require => File["Prepare Icinga imported configuration directory"];
 	"Install Icinga generic timeperiods configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Refresh Icinga configuration"],
 	    owner   => root,

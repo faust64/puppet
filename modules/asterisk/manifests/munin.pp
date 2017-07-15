@@ -26,7 +26,7 @@ class asterisk::munin {
 	    file {
 		"Install asterisk munin probe configuration":
 		    content => template("asterisk/munin.erb"),
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0644",
 		    notify  => Service[$asterisk::vars::munin_service_name],
 		    owner   => root,

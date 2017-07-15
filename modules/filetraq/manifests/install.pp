@@ -7,13 +7,13 @@ class filetraq::install {
     file {
 	"Install Filetraq script":
 	    content => template("filetraq/filetraq.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "$bin_dir/filetraq";
 	"Prepare Filetraq for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0711",
 	    owner   => root,
 	    path    => $conf_include;
@@ -31,7 +31,7 @@ class filetraq::install {
 	file {
 	    "Prepare Filetraq main configuration directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0711",
 		owner   => root,
 		path    => $conf_dir;

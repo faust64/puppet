@@ -7,7 +7,7 @@ define pf::define::glpi($debug   = false,
     file {
 	"Pf GLPI configuration":
 	    content => template("pf/glpi.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload pf configuration"],
 	    owner   => root,

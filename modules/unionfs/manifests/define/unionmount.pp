@@ -17,7 +17,7 @@ define unionfs::define::unionmount($dir  = false,
 	file {
 	    "Prepare $name read-write directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => $mode,
 		owner   => root,
 		path    => $dir,

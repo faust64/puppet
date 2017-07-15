@@ -2,14 +2,14 @@ class common::config::passwd {
     file {
 	"Set /etc/passwd permissions":
 	    ensure  => present,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/passwd",
 	    replace => no;
 	"Set /etc/group permissions":
 	    ensure  => present,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/group",
@@ -31,14 +31,14 @@ class common::config::passwd {
 	    $spwd_gid  = "_shadow"
 	    $spwd_mode = "0640"
 	} else {
-	    $spwd_gid  = hiera("gid_zero")
+	    $spwd_gid  = lookup("gid_zero")
 	    $spwd_mode = "0600"
 	}
 
 	file {
 	    "Set /etc/pwd.db permissions":
 		ensure  => present,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		owner   => root,
 		path    => "/etc/pwd.db",

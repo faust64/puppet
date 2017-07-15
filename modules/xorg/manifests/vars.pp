@@ -1,8 +1,8 @@
 class xorg::vars {
-    $home_dir      = hiera("generic_home_dir")
-    $pass          = hiera("generic_pass")
-    $runtime_group = hiera("generic_group")
-    $runtime_user  = hiera("generic_user")
-    $user_groups   = hiera("generic_groups")
-    $with_audio    = hiera("xorg_with_audio")
+    $home_dir      = lookup("generic_home_dir")
+    $pass          = lookup("generic_pass")
+    $runtime_group = lookup("generic_group")
+    $runtime_user  = lookup("generic_user")
+    $user_groups   = lookup("generic_groups")
+    $with_audio    = lookup("xorg_with_audio")
 }

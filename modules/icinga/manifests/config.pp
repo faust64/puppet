@@ -45,7 +45,7 @@ class icinga::config {
     file {
 	"Install Livestatus xinetd configuration":
 	    content => template("icinga/xinetd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$icinga::vars::xinetd_service_name],
 	    owner   => root,
@@ -82,7 +82,7 @@ class icinga::config {
 	    target  => "$nagios_conf_dir/import.d";
 	"Install devices querying configuration":
 	    content => template("icinga/check_devices.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["icinga"],
 	    owner   => root,
@@ -90,7 +90,7 @@ class icinga::config {
 	    require => File["Install check_nrpe plugin configuration"];
 	"Install check_nrpe plugin configuration":
 	    content => template("icinga/check_nrpe.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["icinga"],
 	    owner   => root,

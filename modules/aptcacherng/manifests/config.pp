@@ -3,7 +3,7 @@ class aptcacherng::config {
 
     file {
 	"Install apt-cacher-ng main configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    ignore  => [ ".svn", ".git" ],
 	    owner   => root,
 	    path    => "/etc/apt-cacher-ng",

@@ -6,27 +6,27 @@ class tftpd::config {
     file {
 	"Prepare pxe server root":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $root_dir;
 	"Prepare pxelinux.cfg directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$root_dir/pxelinux.cfg",
 	    require => File["Prepare pxe server root"];
 	"Prepare boot-screens directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$root_dir/boot-screens",
 	    require => File["Prepare pxe server root"];
 	"Prepare installers directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$root_dir/installers",
@@ -36,7 +36,7 @@ class tftpd::config {
 	    force   => true,
 	    path    => "/srv/tftp";
 	"Install pxelinux.cfg default configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$root_dir/pxelinux.cfg/default",

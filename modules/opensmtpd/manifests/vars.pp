@@ -1,9 +1,9 @@
 class opensmtpd::vars {
-    $alias_dir       = hiera("mail_alias_dir")
-    $bin_dir         = hiera("opensmtpd_bin_dir")
-    $conf_dir        = hiera("opensmtpd_conf_dir")
-    $lib_dir         = hiera("opensmtpd_lib_dir")
-    $mail_ip         = hiera("mail_ip")
-    $mail_masquerade = hiera("mail_masquerade")
-    $mail_recipient  = hiera("mail_recipient")
+    $alias_dir       = lookup("mail_alias_dir")
+    $bin_dir         = lookup("opensmtpd_bin_dir")
+    $conf_dir        = lookup("opensmtpd_conf_dir")
+    $lib_dir         = lookup("opensmtpd_lib_dir")
+    $mail_ip         = lookup("mail_ip")
+    $mail_masquerade = lookup("mail_masquerade")
+    $mail_recipient  = lookup("mail_recipient")
 }

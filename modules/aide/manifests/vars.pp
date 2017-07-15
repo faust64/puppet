@@ -1,5 +1,5 @@
 class aide::vars {
-    $conf_dir = hiera("aide_conf_dir")
-    $contact  = hiera("aide_contact")
-    $db_dir   = hiera("aide_database_dir")
+    $conf_dir = lookup("aide_conf_dir")
+    $contact  = lookup("aide_contact")
+    $db_dir   = lookup("aide_database_dir")
 }

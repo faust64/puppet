@@ -2,7 +2,7 @@ class mysql::backups {
     file {
 	"Prepare MySQL dump directory":
 	    ensure => directory,
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0710",
 	    owner  => root,
 	    path   => $mysql::vars::dumpdir;

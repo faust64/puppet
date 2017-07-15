@@ -4,7 +4,7 @@ class pf::rip {
     file {
 	"Pf RIP Configuration":
 	    content => template("pf/rip.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload pf configuration"],
 	    owner   => root,

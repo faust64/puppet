@@ -9,7 +9,7 @@ class ceph::munin {
 
 	    file {
 		"Install ceph munin probe configuration":
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0644",
 		    notify  => Service[$ceph::vars::munin_service_name],
 		    owner   => root,

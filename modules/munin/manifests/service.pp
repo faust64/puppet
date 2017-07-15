@@ -3,7 +3,7 @@ class munin::service {
 	file {
 	    "Install Munin cron jobs":
 		source  => "puppet:///modules/munin/cron",
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		owner   => root,
 		path    => "/etc/cron.d/munin",

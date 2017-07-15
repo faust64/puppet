@@ -8,17 +8,17 @@ class unionfs::config {
 	    dir   => "/var/log";
 	"postfix":
 	    dir   => "/var/lib/postfix",
-	    group => hiera("postfix_runtime_group"),
-	    owner => hiera("postfix_runtime_user");
+	    group => lookup("postfix_runtime_group"),
+	    owner => lookup("postfix_runtime_user");
 	"spool":
 	    dir   => "/var/spool";
 	"sudo":
 	    dir   => "/var/lib/sudo",
 	    mode  => "0700";
 	"puppet":
-	    dir   => hiera("puppet_var_dir"),
-	    group => hiera("puppet_runtime_group"),
+	    dir   => lookup("puppet_var_dir"),
+	    group => lookup("puppet_runtime_group"),
 	    mode  => "0775",
-	    owner => hiera("puppet_runtime_user");
+	    owner => lookup("puppet_runtime_user");
     }
 }

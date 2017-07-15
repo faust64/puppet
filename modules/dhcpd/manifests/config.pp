@@ -11,7 +11,7 @@ class dhcpd::config {
 	file {
 	    "Prepare DHCPD for further configuration":
 		ensure => directory,
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0755",
 		owner  => root,
 		path   => $conf_dir;
@@ -24,7 +24,7 @@ class dhcpd::config {
     file {
 	"Install DHCPD main configuration":
 	    content => template("dhcpd/dhcpd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["dhcpd"],
 	    owner   => root,

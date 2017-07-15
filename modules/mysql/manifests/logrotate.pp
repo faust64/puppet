@@ -7,7 +7,7 @@ class mysql::logrotate {
     file {
 	"Install mysql logrotate configuration":
 	    content => template("mysql/logrotate.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    owner   => root,
 	    path    => "/etc/logrotate.d/$service_name",
 	    require => File["Prepare Logrotate for further configuration"];

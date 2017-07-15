@@ -8,7 +8,7 @@ define tftpd::define::get_opensuse($arch = [ "i386", "x86_64" ]) {
     file {
 	"Prepare OpenSuSE$name root directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$root_dir/installers/opensuse${name}",
@@ -19,7 +19,7 @@ define tftpd::define::get_opensuse($arch = [ "i386", "x86_64" ]) {
 	file {
 	    "Prepare OpenSuSE$name $archi directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "$root_dir/installers/opensuse${name}/$archi",

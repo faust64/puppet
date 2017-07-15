@@ -125,7 +125,7 @@ define icinga::define::static($host_contact   = "root",
     file {
 	"Install Icinga $name static probes configuration":
 	    content => template("icinga/$src.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Refresh Icinga configuration"],
 	    owner   => root,

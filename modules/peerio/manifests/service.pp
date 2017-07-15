@@ -15,7 +15,7 @@ class peerio::service {
 	file {
 	    "Install pm2 init sudoers":
 		content => template("peerio/init.sudoers.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0440",
 		owner   => root,
 		path    => "$sudo_conf_d/sudoers.d/pm2-$runtime_user",
@@ -72,7 +72,7 @@ class peerio::service {
 		if (! defined(File["Install Zendesk hourly job"])) {
 		    file {
 			"Install Zendesk hourly job":
-			    group   => hiera("gid_zero"),
+			    group   => lookup("gid_zero"),
 			    mode    => "0755",
 			    owner   => root,
 			    path    => "/etc/cron.daily/zendesk-shark",
@@ -85,7 +85,7 @@ class peerio::service {
 		if (! defined(File["Install Stats daily job"])) {
 		    file {
 			"Install Stats daily job":
-			    group   => hiera("gid_zero"),
+			    group   => lookup("gid_zero"),
 			    mode    => "0755",
 			    owner   => root,
 			    path    => "/etc/cron.daily/peerio-stats",
@@ -98,7 +98,7 @@ class peerio::service {
 		if (! defined(File["Install Kuemanager weekly job"])) {
 		    file {
 			"Install Kuemanager weekly job":
-			    group   => hiera("gid_zero"),
+			    group   => lookup("gid_zero"),
 			    mode    => "0755",
 			    owner   => root,
 			    path    => "/etc/cron.weekly/peerio-redis",

@@ -15,13 +15,13 @@ class iscdhcpserver::config {
     file {
 	"Prepare isc-dhcp-server for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => $dhcp_conf_dir;
 	"Install isc-dhcp-server main configuration":
 	    content => template("iscdhcpserver/dhcpd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$iscdhcpserver::vars::service_name],
 	    owner   => root,
@@ -29,7 +29,7 @@ class iscdhcpserver::config {
 	    require => File["Prepare isc-dhcp-server for further configuration"];
 	"Install rndc.key":
 	    content => template("named/rndc.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    notify  => Service[$iscdhcpserver::vars::service_name],
 	    owner   => root,
@@ -38,7 +38,7 @@ class iscdhcpserver::config {
 	"Ensure dhcpd.local is there":
 	    content => "# Local definitions go there
 ",
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$iscdhcpserver::vars::service_name],
 	    owner   => root,

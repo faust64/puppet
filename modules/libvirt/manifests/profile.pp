@@ -7,7 +7,7 @@ class libvirt::profile {
     file {
 	"Install libvirt profile configuration":
 	    content => template("libvirt/profile.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/profile.d/virsh.sh",

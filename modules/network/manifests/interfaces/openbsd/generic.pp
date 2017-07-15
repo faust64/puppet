@@ -17,7 +17,7 @@ define network::interfaces::openbsd::generic($addr       = false,
 	file {
 	    "Install $name interface configuration":
 		content => template("network/generic.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0640",
 		notify  => Exec["Reload $name configuration"],
 		owner   => root,

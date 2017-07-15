@@ -13,13 +13,13 @@ class elasticsearch::config {
     file {
 	"Prepare elasticsearch for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/elasticsearch";
 	"Install elasticsearch main configuration":
 	    content => template("elasticsearch/elasticsearch.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["elasticsearch"],
 	    owner   => root,

@@ -5,7 +5,7 @@ class pakiti::scripts {
     file {
 	"Install Pakiti script":
 	    content => template("pakiti/pakiti.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/sbin/pakiti2-client";

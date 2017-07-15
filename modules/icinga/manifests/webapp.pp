@@ -32,7 +32,7 @@ class icinga::webapp {
     if ($icinga::vars::pnp == true) {
 	file {
 	    "Install Icinga pnp popup SSI":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		owner   => root,
 		path    => "$share_dir/htdocs/ssi/status-header.ssi",
@@ -44,7 +44,7 @@ class icinga::webapp {
     file {
 	"Install Icinga CGI configuration":
 	    content => template("icinga/cgi.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["icinga"],
 	    owner   => root,

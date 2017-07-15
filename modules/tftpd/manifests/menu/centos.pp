@@ -12,7 +12,7 @@ class tftpd::menu::centos {
     file {
 	"Install pxe centos boot-screen":
 	    content => template("tftpd/centos.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$root_dir/boot-screens/centos.cfg",

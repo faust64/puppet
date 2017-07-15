@@ -7,7 +7,7 @@ class riak::rsyslog {
     file {
 	"Install riak rsyslog main configuration":
 	    content => template("riak/rsyslog.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service[$riak::vars::rsyslog_service_name],
 	    owner   => root,

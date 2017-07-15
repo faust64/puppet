@@ -4,7 +4,7 @@ class rsyslog::tls {
     file {
 	"Prepare rsyslog for tls configuration directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "$conf_dir/rsyslog.tls",
@@ -14,7 +14,7 @@ class rsyslog::tls {
     pki::define::wrap {
 	$rsyslog::vars::service_name:
 	    ca      => "log",
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    owner   => root,
 	    reqfile => "Prepare rsyslog for further configuration",

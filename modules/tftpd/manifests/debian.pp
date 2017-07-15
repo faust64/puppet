@@ -9,7 +9,7 @@ class tftpd::debian {
     file {
 	"Install tftpd service defaults":
 	    content => template("tftpd/tftpd-hpa.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Common::Define::Service["tftpd-hpa"],
 	    owner   => root,

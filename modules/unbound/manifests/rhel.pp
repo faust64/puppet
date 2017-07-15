@@ -5,7 +5,7 @@ class unbound::rhel {
 
     file {
 	"Install unbound service defaults":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["unbound"],
 	    owner   => root,

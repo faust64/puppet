@@ -10,7 +10,7 @@ class nginx::ssl {
     } elsif ($nginx::vars::pki_master != $fqdn) {
 	pki::define::wrap {
 	    "nginx":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0640",
 		owner   => root,
 		reqfile => "Prepare nginx ssl directory",

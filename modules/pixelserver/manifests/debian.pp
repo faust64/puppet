@@ -1,7 +1,7 @@
 class pixelserver::debian {
     file {
 	"Install pixelserver rc script":
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0755",
 	    notify => Service["pixelserver"],
 	    owner  => root,
@@ -12,14 +12,14 @@ class pixelserver::debian {
     if ($lsbdistcodename == "jessie") {
 	file {
 	    "Install pixelservice script":
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0750",
 		notify => Service["pixelserver"],
 		owner  => root,
 		path   => "/usr/local/sbin/pixelservice",
 		source => "puppet:///modules/pixelserver/debian.rc";
 	    "Install pixelserver systemd service declaration":
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0644",
 		notify  => Exec["Reload systemd configuration"],
 		owner  => root,

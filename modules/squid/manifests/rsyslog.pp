@@ -7,7 +7,7 @@ class squid::rsyslog {
     file {
 	"Install squid rsyslog main configuration":
 	    content => template("squid/rsyslog.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service[$squid::vars::rsyslog_service_name],
 	    owner   => root,

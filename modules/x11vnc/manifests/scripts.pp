@@ -6,13 +6,13 @@ class x11vnc::scripts {
     file {
 	"Install x11-VNC init script":
 	    content => template("x11vnc/init.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$service_dir/x11vnc";
 	"Install x11-VNC wrapper script":
 	    content => template("x11vnc/wrapper.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/usr/local/bin/vncwrapper";

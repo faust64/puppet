@@ -12,7 +12,7 @@ class pf::qos {
     file {
 	"Pf QoS Configuration":
 	    content => template("pf/qos.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload pf configuration"],
 	    owner   => root,
@@ -20,7 +20,7 @@ class pf::qos {
 	    require => File["Pf Configuration directory"];
 	"Pf Shaping Configuration":
 	    content => template("pf/shaping.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload pf configuration"],
 	    owner   => root,

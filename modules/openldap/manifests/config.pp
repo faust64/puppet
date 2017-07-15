@@ -21,14 +21,14 @@ class openldap::config {
 	    require => File["Prepare OpenLDAP for further configuration"];
 	"Prepare OpenLDAP schema directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/schema",
 	    require => File["Prepare OpenLDAP for further configuration"];
 	"Install OpenLDAP main configuration":
 	    content => template("openldap/slapd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service[$openldap::vars::service_name],
 	    owner   => $runtime_user,

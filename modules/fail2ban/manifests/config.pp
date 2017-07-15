@@ -26,13 +26,13 @@ class fail2ban::config {
     file {
 	"Prepare Fail2ban for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Install Fail2ban jail configuration":
 	    content => template("fail2ban/jail.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["fail2ban"],
 	    owner   => root,
@@ -40,7 +40,7 @@ class fail2ban::config {
 	    require => File["Install Fail2ban custom filters"];
 	"Install fail2ban recidivists log":
 	    content => "",
-	    group   => hiera("gid_adm"),
+	    group   => lookup("gid_adm"),
 	    mode    => "0640",
 	    notify  => Service["fail2ban"],
 	    owner   => root,
@@ -52,7 +52,7 @@ class fail2ban::config {
     if ($slack_hook) {
 	file {
 	    "Install Fail2ban slack notification configuration":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		notify  => Service["fail2ban"],
 		owner   => root,
@@ -61,7 +61,7 @@ class fail2ban::config {
 		source  => "puppet:///modules/fail2ban/slack.conf";
 	    "Install Fail2ban slack notification script":
 		content => template("fail2ban/slack.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0750",
 		owner   => root,
 		path    => "$conf_dir/slack_notify.sh",

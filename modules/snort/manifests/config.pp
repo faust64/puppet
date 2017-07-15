@@ -7,13 +7,13 @@ class snort::config {
     file {
 	"Prepare Snort for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Prepare Snort rules directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/rules",
@@ -26,7 +26,7 @@ class snort::config {
 	    path    => $snort::vars::log_dir;
 	"Install Snort main configuration":
 	    content => template("snort/snort.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["snort"],
 	    owner   => root,
@@ -34,7 +34,7 @@ class snort::config {
 	    require => File["Prepare Snort for further configuration"];
 	"Install Snort local configuration":
 	    content => template("snort/default_rules.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["snort"],
 	    owner   => root,

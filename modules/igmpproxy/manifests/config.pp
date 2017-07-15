@@ -5,7 +5,7 @@ class igmpproxy::config {
     file {
 	"Install IGMP proxy main configuration":
 	    content => template("igmpproxy/config.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/igmpproxy.conf";

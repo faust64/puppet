@@ -8,7 +8,7 @@ class cups::rsyslog {
     file {
 	"Install cups rsyslog main configuration":
 	    content => template("cups/rsyslog.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service[$cups::vars::rsyslog_service_name],
 	    owner   => root,

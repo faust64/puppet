@@ -7,7 +7,7 @@ class spamassassin::rsyslog {
     file {
 	"Install spamassassin rsyslog main configuration":
 	    content => template("spamassassin/rsyslog.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service[$spamassassin::vars::rsyslog_service_name],
 	    owner   => root,

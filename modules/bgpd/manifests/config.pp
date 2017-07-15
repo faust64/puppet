@@ -19,7 +19,7 @@ class bgpd::config {
     file {
 	"Install Bgpd configuration":
 	    content => template("bgpd/bgpd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload bgp configuration"],
 	    owner   => root,

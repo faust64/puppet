@@ -1,5 +1,5 @@
 class mysysctl::define::rpf {
-    $reverse_path_filtering = hiera("reverse_path_filtering")
+    $reverse_path_filtering = lookup("reverse_path_filtering")
 
     case $myoperatingsystem {
 	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {

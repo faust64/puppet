@@ -1,4 +1,4 @@
 class firehol::vars {
-    $ifs              = hiera("firehol_interfaces")
-    $office_networks  = hiera("office_networks")
+    $ifs             = lookup("firehol_interfaces")
+    $office_networks = lookup("office_networks")
 }

@@ -4,7 +4,7 @@ class owncloud::scripts {
     file {
 	"Install owncloud backup script":
 	    content => template("owncloud/backup.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/OCbackup";

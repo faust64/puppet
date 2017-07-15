@@ -16,7 +16,7 @@ define network::interfaces::openbsd::vlan($addr     = "127.0.0.1",
 	file {
 	    "Install vlan$vvid interface configuration":
 		content => template("network/vlan.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0640",
 		notify  => Exec["Reload vlan$vvid configuration"],
 		owner   => root,
@@ -29,14 +29,14 @@ define network::interfaces::openbsd::vlan($addr     = "127.0.0.1",
 	    file {
 		"Install L2 filter configuration on $name":
 		    content => template("network/l2filter.erb"),
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0640",
 		    notify  => Exec["Refresh $name L2 filter"],
 		    owner   => root,
 		    path    => "/etc/filter.$name.conf";
 		"Mount L2 filtered bridge upon $name":
 		    content => template("network/bridge-rule.erb"),
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0640",
 		    notify  => Exec["Refresh $name L2 filter"],
 		    owner   => root,

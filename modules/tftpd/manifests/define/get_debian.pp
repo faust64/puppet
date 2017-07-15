@@ -5,7 +5,7 @@ define tftpd::define::get_debian($arch = [ "i386", "amd64" ]) {
     file {
 	"Prepare Debian $name root directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$root_dir/installers/$name",
@@ -16,7 +16,7 @@ define tftpd::define::get_debian($arch = [ "i386", "amd64" ]) {
 	file {
 	    "Prepare Debian $name $archi directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "$root_dir/installers/$name/$archi",

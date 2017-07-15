@@ -47,7 +47,7 @@ class apache::moduledependencies {
     if ($apache::vars::mod_mime == true) {
 	file {
 	    "Install apache MIME magic configuration":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		notify  => Service[$apache::vars::service_name],
 		owner   => root,

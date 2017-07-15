@@ -4,8 +4,8 @@ define apache::define::module($customconf    = false,
     $conf_dir   = $apache::vars::conf_dir
     $charset    = $apache::vars::charset
     $icon_dir   = $apache::vars::icons_dir
-    $modsec_dir = hiera("apache_mod_security_datadir")
-    $modssl_bc  = hiera("apache_ssl_ciphers_backward_compatibility")
+    $modsec_dir = lookup("apache_mod_security_datadir")
+    $modssl_bc  = lookup("apache_ssl_ciphers_backward_compatibility")
     $srvname    = $apache::vars::service_name
     $run_dir    = "/var/run/$srvname"
     $version    = $apache::vars::version
@@ -13,7 +13,7 @@ define apache::define::module($customconf    = false,
     file {
 	"Install apache module $name loading":
 	    content => template("apache/modules/load.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$srvname],
 	    owner   => root,
@@ -65,7 +65,7 @@ define apache::define::module($customconf    = false,
 	file {
 	    "Install apache module $name configuration":
 		content => template($thesource),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		notify  => Service[$srvname],
 		owner   => root,

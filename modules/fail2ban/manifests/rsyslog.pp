@@ -9,7 +9,7 @@ class fail2ban::rsyslog {
     file {
 	"Install Fail2ban rsyslog configuration":
 	    content => template("fail2ban/rsyslog.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$fail2ban::vars::rsyslog_service_name],
 	    owner   => root,

@@ -4,7 +4,7 @@ class subsonic::register {
     @@file {
 	"Register $fqdn for subsonic sync":
 	    content => template("subsonic/clientsync.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    owner   => root,
 	    path    => "/var/subsonic/remotes/$fqdn",

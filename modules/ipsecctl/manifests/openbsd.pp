@@ -17,7 +17,7 @@ class ipsecctl::openbsd {
     file {
 	"Install Ipsecctl main configuration":
 	    content => template("ipsecctl/ipsec.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload ipsec configuration"],
 	    owner   => root,

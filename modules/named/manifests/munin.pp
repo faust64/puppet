@@ -16,7 +16,7 @@ class named::munin {
 	    file {
 		"Install named munin probe configuration":
 		    content => template("named/munin.erb"),
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0644",
 		    notify  => Service[$named::vars::munin_service_name],
 		    owner   => root,

@@ -11,27 +11,27 @@ class spamassassin::config {
     file {
 	"Prepare spamassassin for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Install spamassassin log directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => $spamassassin::vars::runtime_user,
 	    path    => "/var/log/spamassassin",
 	    require => File["Prepare spamassassin for further configuration"];
 	"Prepare spamassassin user configuration directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0711",
 	    owner   => root,
 	    path    => "/root/.spamassassin",
 	    require => File["Prepare spamassassin for further configuration"];
 	"Install spamassassin local configuration":
 	    content => template("spamassassin/local.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["spamassassin"],
 	    owner   => root,

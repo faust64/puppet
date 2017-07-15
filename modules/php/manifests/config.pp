@@ -17,27 +17,27 @@ class php::config {
      file {
 	"Prepare PHP for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Prepare PHP cli configuration directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/cli",
 	    require => File["Prepare PHP for further configuration"];
 	"Prepare PHP modules available directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/mods-available",
 	    require => File["Prepare PHP for further configuration"];
 	"Prepare PHP modules enabled directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/conf.d",
@@ -45,7 +45,7 @@ class php::config {
 
 	"Install PHP main configuration":
 	    content => template("php/php.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$conf_dir/cli/php.ini",

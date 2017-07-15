@@ -6,13 +6,13 @@ class spamassassin::learn {
     file {
 	"Install sa-learn-cyrus configuration":
 	    content => template("spamassassin/sa-learn.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$conf_dir/sa-learn-cyrus.conf",
 	    require => File["Prepare spamassassin for further configuration"];
 	"Install sa-learn-cyrus script":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/sa-learn-cyrus",

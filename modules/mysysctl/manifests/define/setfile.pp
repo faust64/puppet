@@ -2,7 +2,7 @@ define mysysctl::define::setfile($source = false) {
     if ($source) {
 	file {
 	    "Install $name sysctl configuration":
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0644",
 		notify => Exec["Import $name sysctl configuration"],
 		owner  => root,

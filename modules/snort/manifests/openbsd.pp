@@ -12,7 +12,7 @@ class snort::openbsd {
     file {
 	"Install Snort rc script":
 	    content => template("snort/rc.obsd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0555",
 	    owner   => root,
 	    path    => "/etc/rc.d/snort",

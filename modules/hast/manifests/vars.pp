@@ -1,3 +1,3 @@
 class hast::vars {
-    $resources = hiera("hast_resources")
+    $resources = lookup("hast_resources")
 }

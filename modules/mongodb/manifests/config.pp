@@ -26,7 +26,7 @@ class mongodb::config {
 	file {
 	    "Install MongoDB main configuration":
 		content => template("mongodb/mongodb.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		notify  => Service["mongodb"],
 		owner   => root,
@@ -41,7 +41,7 @@ class mongodb::config {
 	file {
 	    "Install MongoDB main configuration":
 		content => template("mongodb/mongodb.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		owner   => root,
 		path    => "$conf_dir/mongodb.conf",

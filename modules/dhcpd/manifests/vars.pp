@@ -1,9 +1,9 @@
 class dhcpd::vars {
-    $all_networks           = hiera_hash("vlan_database")
-    $dns_ip                 = hiera("dns_ip")
-    $conf_dir               = hiera("dhcpd_conf_dir")
-    $local_networks         = hiera("active_vlans")
-    $netmask_correspondance = hiera("netmask_correspondance")
-    $netids                 = hiera("office_netids")
-    $pxe_ip                 = hiera("pxe_ip")
+    $all_networks           = lookup("vlan_database", {merge => hash})
+    $dns_ip                 = lookup("dns_ip")
+    $conf_dir               = lookup("dhcpd_conf_dir")
+    $local_networks         = lookup("active_vlans")
+    $netmask_correspondance = lookup("netmask_correspondance")
+    $netids                 = lookup("office_netids")
+    $pxe_ip                 = lookup("pxe_ip")
 }

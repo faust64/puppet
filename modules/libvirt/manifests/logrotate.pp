@@ -1,7 +1,7 @@
 class libvirt::logrotate {
     file {
 	"Install libvirt logrotate configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/logrotate.d/libvirtd",

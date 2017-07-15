@@ -11,7 +11,7 @@ class apache::ssl {
     } elsif ($apache::vars::pki_master != $fqdn) {
 	pki::define::wrap {
 	    $apache::vars::service_name:
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0640",
 		owner   => root,
 		reqfile => "Prepare apache ssl directory",
@@ -43,7 +43,7 @@ class apache::ssl {
     file {
 	"Install apache ssl generic configuration":
 	    content => template("apache/ssl.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$apache::vars::service_name],
 	    owner   => root,

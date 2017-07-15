@@ -8,7 +8,7 @@ class memcache::configdeb {
 	file {
 	    "Prepare memcache for further configuration":
 		ensure => directory,
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0755",
 		owner  => root,
 		path   => $conf_dir;
@@ -21,7 +21,7 @@ class memcache::configdeb {
     file {
 	"Install memcache main configuration":
 	    content => template("memcache/config.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$memcache::vars::service_name],
 	    owner   => root,

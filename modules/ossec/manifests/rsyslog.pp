@@ -8,7 +8,7 @@ class ossec::rsyslog {
     file {
 	"Install ossec rsyslog configuration":
 	    content => template("ossec/rsyslog.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service[$ossec::vars::rsyslog_service_name],
 	    owner   => root,

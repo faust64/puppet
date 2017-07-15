@@ -1,4 +1,4 @@
 class igmpproxy::vars {
-    $all_networks   = hiera_hash("vlan_database")
-    $local_networks = hiera("active_vlans")
+    $all_networks   = lookup("vlan_database", {merge => hash})
+    $local_networks = lookup("active_vlans")
 }

@@ -5,7 +5,7 @@ define tftpd::define::get_omsa($arch = [ "x86_64" ], $kernelvers = "2.6.32-431.e
     file {
 	"Prepare OMSA$name root directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$root_dir/installers/omsa${name}",
@@ -16,7 +16,7 @@ define tftpd::define::get_omsa($arch = [ "x86_64" ], $kernelvers = "2.6.32-431.e
 	file {
 	    "Prepare OMSA$name $archi directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "$root_dir/installers/omsa${name}/$archi",

@@ -9,7 +9,7 @@ class tftpd::menu::centos {
     file {
 	"Install pxe OMSA boot-screen":
 	    content => template("tftpd/omsa.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$root_dir/boot-screens/omsa.cfg",

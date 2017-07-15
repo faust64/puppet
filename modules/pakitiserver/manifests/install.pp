@@ -38,14 +38,14 @@ class pakitiserver::install {
 
     file {
 	"Install cve sql init":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    owner   => root,
 	    path    => "/root/cve.sql",
 	    require => Exec["Extract Pakiti web app"],
 	    source  => "puppet:///modules/pakitiserver/cve.sql";
 	"Install repositories sql init":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    owner   => root,
 	    path    => "/root/repositories.sql",

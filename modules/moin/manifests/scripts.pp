@@ -6,7 +6,7 @@ class moin::scripts {
     file {
 	"Install MoinMoin site backup script":
 	    content => template("moin/backup.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/MMbackup",

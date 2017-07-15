@@ -11,13 +11,13 @@ class common::physical::main {
     include mysysctl::define::nopowerdown
     include mrtg::register
 
-    if (hiera("with_collectd") == true) {
+    if (lookup("with_collectd") == true) {
 	include collectd
     }
-    if (hiera("with_munin") == true) {
+    if (lookup("with_munin") == true) {
 	include common::physical::munin
     }
-    if (hiera("with_nagios") == true) {
+    if (lookup("with_nagios") == true) {
 	include common::physical::nagios
     }
 
@@ -27,7 +27,7 @@ class common::physical::main {
 	include snmpd
     }
 
-    if ($kernel == "Linux" and hiera("nagios_md_raid") == false) {
+    if ($kernel == "Linux" and lookup("nagios_md_raid") == false) {
 	class {
 	    common::free:
 		stage => "antilope";

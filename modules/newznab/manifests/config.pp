@@ -15,7 +15,7 @@ class newznab::config {
     file {
 	"Install Newznab main configuration":
 	    content => template("newznab/config.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$web_root/nnplus/www/config.php",

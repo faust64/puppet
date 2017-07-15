@@ -4,7 +4,7 @@ define icinga::define::servicegroup($aalias = $name) {
     file {
 	"Install Icinga $name service group declaration":
 	    content => template("icinga/servicegroup.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Refresh Icinga configuration"],
 	    owner   => root,

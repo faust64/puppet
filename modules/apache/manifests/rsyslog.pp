@@ -8,7 +8,7 @@ class apache::rsyslog {
     file {
 	"Install apache rsyslog main configuration":
 	    content => template("apache/rsyslog.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service[$apache::vars::rsyslog_service_name],
 	    owner   => root,

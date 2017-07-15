@@ -37,12 +37,12 @@ class stanchion::debian {
 	file {
 	    "Prepare Stanchion systemd service configuration":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "/etc/systemd/system/stanchion.service.d";
 	    "Install Stanchion systemd configuration":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		owner   => root,
 		notify  => Exec["Reload systemd configuration"],
@@ -58,7 +58,7 @@ class stanchion::debian {
     file {
 	"Install Stanchion defaults configuration":
 	    content => template("riak/defaults.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["stanchion"],
 	    owner   => root,

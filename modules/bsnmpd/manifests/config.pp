@@ -7,7 +7,7 @@ class bsnmpd::config {
     file {
 	"BSNMPd main configuration":
 	    content => template("bsnmpd/bsnmpd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["bsnmpd"],
 	    owner   => root,

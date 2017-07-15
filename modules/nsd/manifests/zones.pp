@@ -6,14 +6,14 @@ class nsd::zones {
     file {
 	"Prepare NSD zones directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $zones_dir,
 	    require => File["Prepare NSD for further configuration"];
 	"Install NSD zones configuration":
 	    content => template("nsd/zones.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    notify  => Service["nsd"],
 	    owner   => root,

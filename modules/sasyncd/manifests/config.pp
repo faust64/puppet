@@ -8,7 +8,7 @@ class sasyncd::config {
     file {
 	"Sasyncd configuration":
 	    content => template("sasyncd/sasyncd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service["sasyncd"],
 	    owner   => root,

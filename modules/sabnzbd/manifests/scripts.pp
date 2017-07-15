@@ -8,13 +8,13 @@ class sabnzbd::scripts {
     file {
 	"Install applicative backup script":
 	    content => template("sabnzbd/backup.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/SABbackup";
 	"Install post-process-all script":
 	    content => template("sabnzbd/post_process.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/bin/post_process_all",

@@ -13,24 +13,24 @@ class riak::scripts {
     file {
 	"Install Riak backup script":
 	    content => template("riak/backup.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/riak_backup";
 	"Install Riak service hack script":
 	    content => template("riak/hack.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/riak_hack";
 	"Install Riak join script":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/riak_join_hack",
 	    source  => "puppet:///modules/riak/join-hack";
 	"Install Riak commit script":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/riak_commit_hack",

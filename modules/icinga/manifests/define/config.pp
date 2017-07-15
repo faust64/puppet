@@ -11,7 +11,7 @@ define icinga::define::config($probes = "objects") {
     file {
 	"Install Icinga $name":
 	    content => template("icinga/icinga.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$conf_dir/$name";

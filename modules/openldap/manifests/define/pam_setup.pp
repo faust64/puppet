@@ -1,7 +1,7 @@
 define openldap::define::pam_setup() {
     file {
 	"Install $name pam configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/pam.d/$name",

@@ -8,7 +8,7 @@ class transmission::debian {
     file {
 	"Install transmission service defaults":
 	    content => template("transmission/defaults.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$transmission::vars::srvname],
 	    owner   => root,

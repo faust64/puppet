@@ -25,14 +25,14 @@ class bacula::console {
 	    require => File["Prepare Bacula for further configuration"];
 	"Install Bacula check-status script":
 	    content => template("bacula/status.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0740",
 	    owner   => root,
 	    path    => "/usr/local/sbin/bacula_check_status",
 	    require => File["Install Bacula console configuration"];
 	"Install Bacula check-space script":
 	    content => template("bacula/checkspace.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0740",
 	    owner   => root,
 	    path    => "/usr/local/sbin/bacula_check_space",

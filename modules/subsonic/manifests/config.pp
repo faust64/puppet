@@ -9,7 +9,7 @@ class subsonic::config {
     file {
 	"Install subsonic.properties":
 	    content => "",
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/var/subsonic/subsonic.properties",

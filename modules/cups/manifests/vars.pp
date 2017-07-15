@@ -1,20 +1,20 @@
 class cups::vars {
-    $conf_dir             = hiera("cups_conf_dir")
-    $gid_zero             = hiera("gid_zero")
-    $log_dir              = hiera("cups_log_dir")
-    $nagios_printers      = hiera("cups_nagios_printers")
-    $permissions          = hiera("cups_permissions")
-    $public               = hiera("cups_public")
-    $rsyslog_conf_dir     = hiera("rsyslog_conf_dir")
-    $rsyslog_service_name = hiera("rsyslog_service_name")
-    $rsyslog_version      = hiera("rsyslog_version")
-    $run_dir              = hiera("cups_run_dir")
-    $runtime_group        = hiera("cups_runtime_group")
-    $runtime_user         = hiera("cups_runtime_user")
-    $service_name         = hiera("cups_service_name")
-    $share_dir            = hiera("cups_share_dir")
-    $snmp_community       = hiera("snmp_community")
-    $with_hplip           = hiera("cups_with_hplip")
+    $conf_dir             = lookup("cups_conf_dir")
+    $gid_zero             = lookup("gid_zero")
+    $log_dir              = lookup("cups_log_dir")
+    $nagios_printers      = lookup("cups_nagios_printers")
+    $permissions          = lookup("cups_permissions")
+    $public               = lookup("cups_public")
+    $rsyslog_conf_dir     = lookup("rsyslog_conf_dir")
+    $rsyslog_service_name = lookup("rsyslog_service_name")
+    $rsyslog_version      = lookup("rsyslog_version")
+    $run_dir              = lookup("cups_run_dir")
+    $runtime_group        = lookup("cups_runtime_group")
+    $runtime_user         = lookup("cups_runtime_user")
+    $service_name         = lookup("cups_service_name")
+    $share_dir            = lookup("cups_share_dir")
+    $snmp_community       = lookup("snmp_community")
+    $with_hplip           = lookup("cups_with_hplip")
 
     if ($permissions["/admin"] != false) {
 	if ($permissions["/admin"]["Allow"] =~ /[0-9]\.[0-9]/) {
@@ -36,10 +36,10 @@ class cups::vars {
     }
     case $myoperatingsystem {
 	"Debian", "Devuan", "Ubuntu": {
-	    $sysadmin = hiera("cups_lpadmin")
+	    $sysadmin = lookup("cups_lpadmin")
 	}
 	default: {
-	    $sysadmin = hiera("gid_zero")
+	    $sysadmin = lookup("gid_zero")
 	}
     }
 }

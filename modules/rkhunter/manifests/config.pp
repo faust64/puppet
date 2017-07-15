@@ -23,7 +23,7 @@ class rkhunter::config {
 	file {
 	    "Prepare rkhunter for further configuration":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => $conf_dir;
@@ -36,7 +36,7 @@ class rkhunter::config {
     file {
 	"Install rkhunter main configuration":
 	    content => template("rkhunter/config.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$conf_dir/rkhunter.conf",
@@ -62,7 +62,7 @@ class rkhunter::config {
 	file {
 	    "Prepare rkhunter log directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0750",
 		owner   => root,
 		path    => $log_dir;

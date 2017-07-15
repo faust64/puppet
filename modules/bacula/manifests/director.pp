@@ -32,7 +32,7 @@ class bacula::director {
 
     file {
 	"Install Bacula MySQL configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$bacula::vars::mysql_service_name],
 	    owner   => root,
@@ -41,7 +41,7 @@ class bacula::director {
 	    source  => "puppet:///modules/bacula/innodb.conf";
 	"Prepare Bacula custom scripts directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/scripts",

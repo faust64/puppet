@@ -5,7 +5,7 @@ define opendkim::define::keydir($mydomain = $name) {
 	file {
 	    "Prepare opendkim keys directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "$conf_dir/dkim.d/keys",

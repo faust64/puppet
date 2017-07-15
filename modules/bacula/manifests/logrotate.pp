@@ -4,7 +4,7 @@ class bacula::logrotate {
     file {
 	"Install bacula logrotate configuration":
 	    content => template("bacula/logrotate.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/logrotate.d/bacula-common",

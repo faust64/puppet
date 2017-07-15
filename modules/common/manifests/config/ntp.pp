@@ -1,8 +1,8 @@
 class common::config::ntp {
-    $method     = hiera("ntp_method")
-    $driftfile  = hiera("ntp_driftfile")
-    $minute     = hiera("ntp_update_minute")
-    $upstream   = hiera("ntp_upstream")
+    $method     = lookup("ntp_method")
+    $driftfile  = lookup("ntp_driftfile")
+    $minute     = lookup("ntp_update_minute")
+    $upstream   = lookup("ntp_upstream")
 
     case $myoperatingsystem {
 	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {
@@ -51,7 +51,7 @@ class common::config::ntp {
 	file {
 	    "Install ntp default configuration":
 		content => template("common/ntp.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		owner   => root,
 		path    => "/etc/ntp.conf";

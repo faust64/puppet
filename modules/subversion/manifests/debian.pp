@@ -10,7 +10,7 @@ class subversion::debian {
 
 	file {
 	    "Install websvn deb configuration":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		owner   => root,
 		path    => "/etc/websvn/svn_deb_conf.inc",

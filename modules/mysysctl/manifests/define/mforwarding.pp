@@ -1,5 +1,5 @@
 class mysysctl::define::mforwarding {
-    $mforward = hiera("igmp_forwarding")
+    $mforward = lookup("igmp_forwarding")
 
     case $operatingsystem {
 	"OpenBSD": {

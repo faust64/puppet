@@ -7,7 +7,7 @@ class mysql::rsyslog {
     file {
 	"Install mysql rsyslog main configuration":
 	    content => template("mysql/rsyslog.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service[$mysql::vars::rsyslog_srvname],
 	    owner   => root,

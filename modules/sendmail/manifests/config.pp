@@ -5,20 +5,20 @@ class sendmail::config {
     file {
 	"Prepare sendmail for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/mail";
 	"Install sendmail accepted domains configuration":
 	    content => template("sendmail/local-host-names.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/mail/local-host-names",
 	    require => File["Prepare sendmail for further configuration"];
 	"Install sendmail submit configuration":
 	    content => template("sendmail/submit.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Refresh submit configuration"],
 	    owner   => root,
@@ -26,7 +26,7 @@ class sendmail::config {
 	    require => File["Install sendmail accepted domains configuration"];
 	"Install sendmail main configuration":
 	    content => template("sendmail/sendmail.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Refresh submit configuration"],
 	    owner   => root,

@@ -18,7 +18,7 @@ class nginx::config {
 	file {
 	    "Prepare www directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => $web_root;
@@ -28,13 +28,13 @@ class nginx::config {
     file {
 	"Prepare Nginx for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Prepare nginx sites-available directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    notify  => Service["nginx"],
 	    owner   => root,
@@ -42,7 +42,7 @@ class nginx::config {
 	    require => File["Prepare Nginx for further configuration"];
 	"Prepare nginx sites-enabled directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    notify  => Service["nginx"],
 	    owner   => root,
@@ -50,7 +50,7 @@ class nginx::config {
 	    require => File["Prepare Nginx for further configuration"];
 	"Prepare nginx conf.d directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    notify  => Service["nginx"],
 	    owner   => root,
@@ -58,14 +58,14 @@ class nginx::config {
 	    require => File["Prepare Nginx for further configuration"];
 	"Prepare nginx ssl directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/ssl",
 	    require => File["Prepare Nginx for further configuration"];
 	"Prepare nginx log directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    notify  => Service["nginx"],
 	    owner   => root,
@@ -73,7 +73,7 @@ class nginx::config {
 
 	"Install nginx main configuration":
 	    content => template("nginx/nginx.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["nginx"],
 	    owner   => root,
@@ -81,7 +81,7 @@ class nginx::config {
 	    require => File["Prepare Nginx for further configuration"];
 	"Install nginx admin allow filter configuration":
 	    content => template("nginx/admin.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["nginx"],
 	    owner   => root,
@@ -89,14 +89,14 @@ class nginx::config {
 	    require => File["Prepare Nginx for further configuration"];
 	"Install nginx allow configuration":
 	    content => template("nginx/allow.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["nginx"],
 	    owner   => root,
 	    path    => "$conf_dir/allow.conf",
 	    require => File["Prepare Nginx for further configuration"];
 	"Install nginx mime.types configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["nginx"],
 	    owner   => root,

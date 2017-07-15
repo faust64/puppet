@@ -5,7 +5,7 @@ define icinga::define::contact_group($aalias  = $name,
     file {
 	"Install Icinga $name contact_group configuration":
 	    content => template("icinga/contact_group.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Refresh Icinga configuration"],
 	    owner   => root,

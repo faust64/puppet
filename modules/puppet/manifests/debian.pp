@@ -3,7 +3,7 @@ class puppet::debian {
 
     file {
 	"Install puppet default service configuration":
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0644",
 	    owner  => root,
 	    path   => "/etc/default/puppet",

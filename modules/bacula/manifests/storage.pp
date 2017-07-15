@@ -78,7 +78,7 @@ class bacula::storage {
 	    require => File["Install Bacula storage directory"];
 	"Install Bacula storage space fact script":
 	    content => template("bacula/getspace.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/bin/bacula_get_space";
@@ -87,7 +87,7 @@ class bacula::storage {
 #    @@file {
 #	"Bacula storage space data":
 #	    content => template("bacula/export.erb"),
-#	    group   => hiera("gid_zero"),
+#	    group   => lookup("gid_zero"),
 #	    mode    => "0644",
 #	    owner   => root,
 #	    path    => "$remote_conf_dir/export.conf",

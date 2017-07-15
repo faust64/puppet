@@ -5,7 +5,7 @@ class aide::scripts {
     file {
 	"Install AIDE check script":
 	    content => template("aide/check.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/check_aide",

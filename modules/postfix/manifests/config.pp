@@ -15,7 +15,7 @@ class postfix::config {
 	file {
 	    "Install Postfix masquerade configuration":
 		content => template("postfix/masquerade.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		notify  => Service["postfix"],
 		owner   => root,
@@ -28,7 +28,7 @@ class postfix::config {
 	file {
 	    "Install postfix transports configuration":
 		content => template("postfix/transports.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		notify  => Exec["Refresh transports database"],
 		owner   => root,
@@ -49,13 +49,13 @@ class postfix::config {
     file {
 	"Prepare postfix for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Install postfix main configuration":
 	    content => template("postfix/main.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["postfix"],
 	    owner   => root,
@@ -63,7 +63,7 @@ class postfix::config {
 	    require => File["Prepare postfix for further configuration"];
 	"Install postfix master configuration":
 	    content => template("postfix/master.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["postfix"],
 	    owner   => root,

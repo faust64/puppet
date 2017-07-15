@@ -1,5 +1,5 @@
 class packages {
-    if (hiera("packages_is_apache")) {
+    if (lookup("packages_is_apache")) {
 	include apache
     } else {
 	include nginx

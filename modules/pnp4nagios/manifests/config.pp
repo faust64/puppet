@@ -10,7 +10,7 @@ class pnp4nagios::config {
     file {
 	"Prepare pnp4nagios for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
@@ -21,14 +21,14 @@ class pnp4nagios::config {
 	    require => File["Prepare pnp4nagios for further configuration"];
 	"Install npcd main configuration":
 	    content => template("pnp4nagios/npcd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$pnp4nagios::vars::service_name],
 	    owner   => root,
 	    path    => "$conf_dir/npcd.cfg",
 	    require => File["Prepare pnp4nagios logs directory"];
 	"Install pnp4nagios templates configurations":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Refresh Icinga configuration"],
 	    owner   => root,
@@ -36,14 +36,14 @@ class pnp4nagios::config {
 	    require => File["Prepare pnp4nagios for further configuration"],
 	    source  => "puppet:///modules/pnp4nagios/templates.cfg";
 	"Install pnp4nagios check_vzload plugin":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$data_dir/html/templates.dist/check_vzload.php",
 	    require => File["Prepare pnp4nagios for further configuration"],
 	    source  => "puppet:///modules/pnp4nagios/check_vzload.php";
 	"Install pnp4nagios service_box view":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$data_dir/html/application/views/service_box.php",

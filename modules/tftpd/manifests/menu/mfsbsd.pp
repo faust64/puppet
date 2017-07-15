@@ -12,7 +12,7 @@ class tftpd::menu::mfsbsd {
     file {
 	"Install pxe mfsbsd boot-screen":
 	    content => template("tftpd/mfsbsd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$root_dir/boot-screens/mfsbsd.cfg",

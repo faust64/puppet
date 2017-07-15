@@ -1,4 +1,4 @@
-define riak::define::ciphers($ciphers = hiera("riak_ciphers")) {
+define riak::define::ciphers($ciphers = lookup("riak_ciphers")) {
     $ciphersstr = join($ciphers, ':')
 
     exec {

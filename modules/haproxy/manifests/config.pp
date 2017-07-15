@@ -33,20 +33,20 @@ class haproxy::config {
     file {
 	"Prepare HAproxy for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Prepare HAproxy ssl directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/ssl",
 	    require => File["Prepare HAproxy for further configuration"];
 	"Install HAproxy alias configuration":
 	    content => template("haproxy/profile.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/profile.d/haproxy.sh";

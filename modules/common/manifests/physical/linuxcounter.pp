@@ -1,9 +1,9 @@
 class common::physical::linuxcounter {
-    $api_key     = hiera("lico_api_key")
+    $api_key     = lookup("lico_api_key")
     $machineid   = false
-    $update_day  = hiera("lico_update_day")
-    $update_hour = hiera("lico_update_hour")
-    $update_min  = hiera("lico_update_min")
+    $update_day  = lookup("lico_update_day")
+    $update_hour = lookup("lico_update_hour")
+    $update_min  = lookup("lico_update_min")
     $updatekey   = false
 
     if (! defined(Class[curl])) {
@@ -25,13 +25,13 @@ class common::physical::linuxcounter {
 	file {
 	    "Prepare LinuxConter for further configuration":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0700",
 		owner   => root,
 		path    => "/root/.linuxcounter";
 	    "Install LinuxConter initial configuration":
 		content => template("common/lico.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0600",
 		owner   => root,
 		path    => "/root/.linuxcounter/$hostname",
@@ -45,7 +45,7 @@ class common::physical::linuxcounter {
 	file {
 	    "Install lsb-release on BSD":
 		content => template("common/lsb-release.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		owner   => root,
 		path    => "/etc/lsb-release";
@@ -57,7 +57,7 @@ class common::physical::linuxcounter {
 
     file {
 	"Install linux-counter update script":
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0755",
 	    owner  => root,
 	    path   => "/usr/local/bin/lico-update",

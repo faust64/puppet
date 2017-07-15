@@ -21,7 +21,7 @@ class nginx::munin {
 	    file {
 		"Install nginx munin probe configuration":
 		    content => template("nginx/munin.erb"),
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0644",
 		    notify  => Service[$nginx::vars::munin_service_name],
 		    owner   => root,

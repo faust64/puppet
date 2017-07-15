@@ -8,7 +8,7 @@ class reverse::scripts {
     file {
 	"Install reverse vhost creation script":
 	    content => template("reverse/new_reverse.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/new_reverse.sh";

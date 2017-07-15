@@ -1,6 +1,6 @@
 class miniflux::vars {
-    $download     = hiera("download_cmd")
-    $rdomain      = hiera("root_domain")
-    $runtime_user = hiera("apache_runtime_user")
-    $web_root     = hiera("apache_web_root")
+    $download     = lookup("download_cmd")
+    $rdomain      = lookup("root_domain")
+    $runtime_user = lookup("apache_runtime_user")
+    $web_root     = lookup("apache_web_root")
 }

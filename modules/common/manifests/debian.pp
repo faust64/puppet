@@ -2,7 +2,7 @@ class common::debian {
     include apt
     include mysysctl
 
-    $iface = hiera("ifplugd_iface")
+    $iface = lookup("ifplugd_iface")
 
     common::define::package {
 	[ "bc", "bsd-mailx", "coreutils", "dnsutils", "expect", "less",
@@ -13,13 +13,13 @@ class common::debian {
     file {
 	"Setup rcS configuration":
 	    content => template("common/rcS.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/default/rcS";
 	"Set default ifplugd configuration - even if packages absent":
 	    content => template("common/ifplugd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/default/ifplugd";
@@ -49,7 +49,7 @@ class common::debian {
 
 	file {
 	    "Install CIS Ubuntu modprobe configuration":
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0644",
 		owner  => root,
 		path   => "/etc/modprobe.d/CIS.conf",

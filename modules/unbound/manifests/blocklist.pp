@@ -4,7 +4,7 @@ class unbound::blocklist {
 
     file {
 	"Install custom dns blacklist":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Regenerate unbound blocklist.conf"],
 	    owner   => root,
@@ -13,7 +13,7 @@ class unbound::blocklist {
 	    source  => "puppet:///modules/unbound/dns_blacklist";
 	"Install empty blocklist.conf":
 	    content => "",
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Regenerate unbound blocklist.conf"],
 	    owner   => root,

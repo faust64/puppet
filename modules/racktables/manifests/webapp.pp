@@ -39,7 +39,7 @@ class racktables::webapp {
 	    path    => "$web_root/racktables/inc/secret.php",
 	    require => Exec["Install racktables wwwroot"];
 	"Install racktables dictionnary patch":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    owner   => root,
 	    path    => "/root/patch_dictionary.sql",

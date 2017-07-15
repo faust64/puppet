@@ -9,7 +9,7 @@ class tftpd::menu::fedora {
     file {
 	"Install pxe fedora boot-screen":
 	    content => template("tftpd/fedora.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$root_dir/boot-screens/fedora.cfg",

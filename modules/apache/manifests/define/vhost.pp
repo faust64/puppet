@@ -64,7 +64,7 @@ define apache::define::vhost($aliases         = false,
 	file {
 	    "Apache $name vhost configuration":
 		content      => template("apache/vhost/$vhostsource.erb"),
-		group        => hiera("gid_zero"),
+		group        => lookup("gid_zero"),
 		mode         => "0644",
 		notify       => Service[$apache::vars::service_name],
 		owner        => root,
@@ -90,7 +90,7 @@ define apache::define::vhost($aliases         = false,
 		file {
 		    "Enable Apache rsyslog vhost $name configuration":
 			content => template("apache/rsyslog-vhost.erb"),
-			group   => hiera("gid_zero"),
+			group   => lookup("gid_zero"),
 			mode    => "0600",
 			notify  => Service[$apache::vars::rsyslog_service_name],
 			owner   => root,

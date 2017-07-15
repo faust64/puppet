@@ -9,7 +9,7 @@ define tftpd::define::ui_openbsd() {
     file {
 	"Install openbsd unattended installation input":
 	    content => template("tftpd/ui-openbsd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$root_dir/install.conf",

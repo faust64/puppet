@@ -4,7 +4,7 @@ class rsyslog::logrotate {
     file {
 	"Install rsyslog logrotate configuration":
 	    content => template("rsyslog/logrotate.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    owner   => root,
 	    path    => "/etc/logrotate.d/$srvname",
 	    require => File["Prepare Logrotate for further configuration"];

@@ -7,7 +7,7 @@ class nginx::custom {
 
     file {
 	"Install Nginx error messages":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    ignore  => [ ".svn", ".git" ],
 	    owner   => root,
 	    path    => $error_dir,
@@ -15,7 +15,7 @@ class nginx::custom {
 	    require => File["Prepare Nginx for further configuration"],
 	    source  => "puppet:///modules/nginx/error";
 	"Install robots.txt (nginx)":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$web_root/robots.txt",

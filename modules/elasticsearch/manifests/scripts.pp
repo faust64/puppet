@@ -7,21 +7,21 @@ class elasticsearch::scripts {
 
     file {
 	"Install elasticsearch log purge scripts":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/elasticsearch_log_cleanup",
 	    source  => "puppet:///modules/elasticsearch/logpurge";
 	"Install elasticsearch idx close script":
 	    content => template("elasticsearch/close.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/elasticsearch_close",
 	    require => Common::Define::Package["elasticsearch-curator"];
 	"Install elasticsearch idx purge script":
 	    content => template("elasticsearch/purge.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/elasticsearch_cleanup",

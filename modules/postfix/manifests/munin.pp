@@ -5,7 +5,7 @@ class postfix::munin {
 		include muninnode
 	    }
 
-	    $adm      = hiera("gid_adm")
+	    $adm      = lookup("gid_adm")
 	    $conf_dir = $postfix::vars::munin_conf_dir
 
 	    muninnode::define::probe {
@@ -16,7 +16,7 @@ class postfix::munin {
 	    file {
 		"Install postfix munin probe configuration":
 		    content => template("postfix/munin.erb"),
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0644",
 		    notify  => Service[$postfix::vars::munin_service_name],
 		    owner   => root,

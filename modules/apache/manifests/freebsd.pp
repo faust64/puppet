@@ -5,7 +5,7 @@ class apache::freebsd {
 
     file {
 	"Enable apache22 service":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$apache::vars::service_name],
 	    owner   => root,

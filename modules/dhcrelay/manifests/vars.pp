@@ -1,9 +1,9 @@
 class dhcrelay::vars {
-    $all_networks   = hiera("active_vlans")
-    $dhcp_ip        = hiera("dhcp_ip")
-    $do_relay_dhcp  = hiera("ifstated_dhcrelay")
+    $all_networks   = lookup("active_vlans")
+    $dhcp_ip        = lookup("dhcp_ip")
+    $do_relay_dhcp  = lookup("ifstated_dhcrelay")
     $local_networks = $all_networks[$domain]
-    $vlan_database  = hiera("vlan_database")
+    $vlan_database  = lookup("vlan_database")
 
     if ($do_relay_dhcp and $dhcp_ip) {
 #can not use multiple `-i' in openbsd. works with freebsd though, ...

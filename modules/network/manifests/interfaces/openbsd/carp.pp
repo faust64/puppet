@@ -1,10 +1,10 @@
 define network::interfaces::openbsd::carp($vhid       = 1,
 					  $addr       = "127.0.0.1",
-					  $advbase    = hiera("carp_advbase"),
-					  $advskew    = hiera("carp_advskew"),
+					  $advbase    = lookup("carp_advbase"),
+					  $advskew    = lookup("carp_advskew"),
 					  $addr_alias = false,
 					  $bcast      = false,
-					  $carp_pass  = hiera("carp_pass"),
+					  $carp_pass  = lookup("carp_pass"),
 					  $nmask      = "255.0.0.0",
 					  $root_if    = false,
 					  $routes     = false,
@@ -14,7 +14,7 @@ define network::interfaces::openbsd::carp($vhid       = 1,
     if (! defined(File["Install carpctl"])) {
 	file {
 	    "Install carpctl":
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0750",
 		owner  => root,
 		path   => "/usr/local/sbin/carpctl",
@@ -30,7 +30,7 @@ define network::interfaces::openbsd::carp($vhid       = 1,
 	file {
 	    "Install carp$vhid interface configuration":
 		content => template("network/carp.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0640",
 		notify  => Exec["Reload carp$vhid configuration"],
 		owner   => root,

@@ -6,7 +6,7 @@ class clamav::scripts {
     file {
 	"Install ClamAV scanning script":
 	    content => template("clamav/scan.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/usr/local/bin/clamav_scan";

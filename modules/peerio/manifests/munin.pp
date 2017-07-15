@@ -54,7 +54,7 @@ class peerio::munin {
 			file {
 			    "Install Redis backends munin configuration":
 				content => template("peerio/munin-redis.erb"),
-				group   => hiera("gid_zero"),
+				group   => lookup("gid_zero"),
 				mode    => "0644",
 				notify  => Service[$peerio::vars::munin_service_name],
 				owner   => root,
@@ -91,7 +91,7 @@ class peerio::munin {
 	    file {
 		"Install peerio munin probes configuration":
 		    content => template("peerio/munin-peerio.erb"),
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0644",
 		    notify  => Service[$peerio::vars::munin_service_name],
 		    owner   => root,

@@ -14,7 +14,7 @@ class opendkim::debian {
 
     file {
 	"Install opendkim service defaults":
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0644",
 	    notify => Service["opendkim"],
 	    owner  => root,

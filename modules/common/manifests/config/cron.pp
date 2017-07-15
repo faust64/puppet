@@ -1,6 +1,6 @@
 class common::config::cron {
-    $allowed_users = hiera("cron_allowed_users")
-    $cron_srvname  = hiera("cron_service_name")
+    $allowed_users = lookup("cron_allowed_users")
+    $cron_srvname  = lookup("cron_service_name")
 
     if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	or $operatingsystem == "Ubuntu") {
@@ -33,7 +33,7 @@ class common::config::cron {
 	file {
 	    "Restrict access to crontab":
 		ensure => present,
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0400",
 		owner  => root,
 		path   => "/etc/crontab";
@@ -45,31 +45,31 @@ class common::config::cron {
 	file {
 	    "Set proper permissions to cron.d":
 		ensure => directory,
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0755",
 		owner  => root,
 		path   => "/etc/cron.d";
 	    "Set proper permissions to cron.daily":
 		ensure => directory,
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0755",
 		owner  => root,
 		path   => "/etc/cron.daily";
 	    "Set proper permissions to cron.hourly":
 		ensure => directory,
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0755",
 		owner  => root,
 		path   => "/etc/cron.hourly";
 	    "Set proper permissions to cron.monthly":
 		ensure => directory,
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0755",
 		owner  => root,
 		path   => "/etc/cron.monthly";
 	    "Set proper permissions to cron.weekly":
 		ensure => directory,
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0755",
 		owner  => root,
 		path   => "/etc/cron.weekly";
@@ -79,24 +79,24 @@ class common::config::cron {
     file {
 	"Install cron allowed users list":
 	    content => template("common/job-allow.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0400",
 	    owner   => root,
-	    path    => hiera("cron_allow");
+	    path    => lookup("cron_allow");
 	"Ensure cron denied users list absent":
 	    ensure  => absent,
 	    force   => true,
-	    path    => hiera("cron_deny");
+	    path    => lookup("cron_deny");
 	"Install at allowed users list":
 	    content => template("common/job-allow.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0400",
 	    owner   => root,
-	    path    => hiera("at_allow");
+	    path    => lookup("at_allow");
 	"Ensure at denied users list absent":
 	    ensure  => absent,
 	    force   => true,
-	    path    => hiera("at_deny");
+	    path    => lookup("at_deny");
     }
 
     common::define::service {

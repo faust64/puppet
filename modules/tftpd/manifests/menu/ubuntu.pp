@@ -11,7 +11,7 @@ class tftpd::menu::ubuntu {
     file {
 	"Install pxe ubuntu boot-screen":
 	    content => template("tftpd/ubuntu.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$root_dir/boot-screens/ubuntu.cfg",

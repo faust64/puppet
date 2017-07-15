@@ -11,7 +11,7 @@ class rsyslog::retransmit {
 	file {
 	    "Install rsyslog retransmit configuration":
 		content => template("rsyslog/retransmit.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0600",
 		notify  => Service[$rsyslog::vars::service_name],
 		owner   => root,

@@ -25,7 +25,7 @@ class btsync::debian {
     file {
 	"Install service defaults":
 	    content => template("btsync/defaults.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    notify  => Service["btsync"],

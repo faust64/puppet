@@ -2,7 +2,7 @@ class pakitiserver::service {
     if ($kernel == "Linux") {
 	file {
 	    "Install Pakiti Server daily cron":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0750",
 		owner   => root,
 		path    => "/etc/cron.daily/pakiti2-server-update",

@@ -5,7 +5,7 @@ class munin::logrotate {
     file {
 	"Install munin logrotate configuration":
 	    content => template("munin/logrotate.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    owner   => root,
 	    path    => "/etc/logrotate.d/munin",
 	    require => File["Prepare Logrotate for further configuration"];

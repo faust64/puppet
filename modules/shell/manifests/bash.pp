@@ -7,18 +7,18 @@ class shell::bash {
     file {
 	"Main Bash configuration":
 	    content => template("shell/bash.bashrc.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/bash.bashrc";
 	"Bash root configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/root/.bashrc",
 	    source  => "puppet:///modules/shell/user.bashrc";
 	"Bash skel configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/skel/.bashrc",

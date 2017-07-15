@@ -29,7 +29,7 @@ class openldap::webapp {
 	file {
 	    "Install Self-Service-Password main configuration":
 		content => template("openldap/ssp.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		owner   => root,
 		path    => "/usr/share/self-service-password/conf/config.inc.php";

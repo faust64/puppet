@@ -12,7 +12,7 @@ class packages::lxc {
     file {
 	"Install lxc repository root":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$web_root/lxc",

@@ -24,7 +24,7 @@ class thruk::debian {
     file {
 	"Install Thruk service defaults":
 	    content => template("thruk/defaults.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["thruk"],
 	    owner   => root,

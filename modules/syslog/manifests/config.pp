@@ -26,14 +26,14 @@ class syslog::config {
     file {
 	"Install Syslog main configuration":
 	    content      => template("syslog/syslog.erb"),
-	    group        => hiera("gid_zero"),
+	    group        => lookup("gid_zero"),
 	    mode         => "0644",
 	    notify       => Service["syslogd"],
 	    owner        => root,
 	    path         => "/etc/syslog.conf";
 	"Install Newsyslog main configuration":
 	    content      => template("syslog/newsyslog.erb"),
-	    group        => hiera("gid_zero"),
+	    group        => lookup("gid_zero"),
 	    mode         => "0644",
 	    owner        => root,
 	    path         => "/etc/newsyslog.conf";

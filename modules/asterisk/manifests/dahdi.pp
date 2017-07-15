@@ -7,12 +7,12 @@ class asterisk::dahdi {
     file {
 	"Prepare Dahdi for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $dahdi_conf;
 	"Install Dahdi driver modules loading configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["dahdi"],
 	    owner   => root,
@@ -21,7 +21,7 @@ class asterisk::dahdi {
 	    source  => "puppet:///modules/asterisk/dahdi_modules";
 	"Install Dahdi driver configuration":
 	    content => template("asterisk/dahdi_system.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["dahdi"],
 	    owner   => root,

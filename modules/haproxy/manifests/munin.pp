@@ -21,7 +21,7 @@ class haproxy::munin {
 	    file {
 		"Install HAproxy munin probe configuration":
 		    content => template("haproxy/munin.erb"),
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0644",
 		    notify  => Service[$haproxy::vars::munin_service_name],
 		    owner   => root,

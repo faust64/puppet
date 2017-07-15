@@ -14,7 +14,7 @@ class openvz::common {
     file {
 	"Prepare our vz root directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/vz";

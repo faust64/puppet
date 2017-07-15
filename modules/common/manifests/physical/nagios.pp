@@ -1,6 +1,6 @@
 class common::physical::nagios {
-    $smart_disks = hiera("nagios_smart_disks")
-    $lm_sensors  = hiera("has_lm_sensors")
+    $smart_disks = lookup("nagios_smart_disks")
+    $lm_sensors  = lookup("has_lm_sensors")
 
     if ($lm_sensors) {
 	nagios::define::probe {
@@ -14,14 +14,14 @@ class common::physical::nagios {
 	include sudo
 	include common::libs::perlconfigjson
 
-	$nagios_user = hiera("nagios_runtime_user")
-	$plugindir   = hiera("nagios_plugins_dir")
-	$sudo_conf_d = hiera("sudo_conf_dir")
+	$nagios_user = lookup("nagios_runtime_user")
+	$plugindir   = lookup("nagios_plugins_dir")
+	$sudo_conf_d = lookup("sudo_conf_dir")
 
 	file {
 	    "Add nagios user to sudoers for smartmontools":
 		content => template("common/smartmontools.sudoers.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0440",
 		owner   => root,
 		path    => "$sudo_conf_d/sudoers.d/nagios-smartmontools",

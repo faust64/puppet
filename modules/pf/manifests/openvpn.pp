@@ -51,7 +51,7 @@ class pf::openvpn {
 		    file {
 			"Pf OpenVPN $nicname configuration":
 			    content => template("pf/ovpn-rset.erb"),
-			    group   => hiera("gid_zero"),
+			    group   => lookup("gid_zero"),
 			    mode    => "0600",
 			    notify  => Exec["Reload pf configuration"],
 			    owner   => root,

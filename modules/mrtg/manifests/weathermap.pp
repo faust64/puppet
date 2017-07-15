@@ -23,7 +23,7 @@ class mrtg::weathermap {
 
     file {
 	"Install weathermap php configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/var/www/wmap/weathermap.conf",

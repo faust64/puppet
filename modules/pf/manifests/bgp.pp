@@ -5,7 +5,7 @@ class pf::bgp {
     file {
 	"Pf BGP Configuration":
 	    content => template("pf/bgp.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload pf configuration"],
 	    owner   => root,

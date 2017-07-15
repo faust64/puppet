@@ -20,7 +20,7 @@ define pf::define::vlan($as_if    = false,
 	file {
 	    "Pf LAN $vlanname configuration":
 		content => template("pf/private-rset.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0600",
 		notify  => Exec["Reload pf configuration"],
 		owner   => root,

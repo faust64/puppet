@@ -55,7 +55,7 @@ class nagios::debian {
 	    "armv6l": {
 		file {
 		    "Install minimalistic sysinfo script":
-			group   => hiera("gid_zero"),
+			group   => lookup("gid_zero"),
 			mode    => "0755",
 			owner   => root,
 			path    => "/usr/local/bin/sysinfo",

@@ -6,19 +6,19 @@ class clamav::config {
     file {
 	"Prepare ClamAV for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Install ClamAV job configuration":
 	    content => template("clamav/job.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    owner   => root,
 	    path    => "$conf_dir/job.conf",
 	    require => File["Prepare ClamAV for further configuration"];
 	"Install Freshclam configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0444",
 	    owner   => root,
 	    path    => "$conf_dir/freshclam.conf",

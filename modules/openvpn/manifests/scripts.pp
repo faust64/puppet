@@ -13,24 +13,24 @@ class openvpn::scripts {
     file {
 	"OpenVPN application script":
 	    content => template("openvpn/resync.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/openvpn_resync";
 	"OpenVPN connection validation script":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/openvpn_connect.sh",
 	    source  => "puppet:///modules/openvpn/connect.sh";
 	"OpenVPN deconnection validation script":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/openvpn_disconnect.sh",
 	    source  => "puppet:///modules/openvpn/disconnect.sh";
 	"OpenVPN WhoisThere script":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/usr/local/sbin/openvpn_whoisthere",

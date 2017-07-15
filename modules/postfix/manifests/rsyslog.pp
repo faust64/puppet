@@ -11,7 +11,7 @@ class postfix::rsyslog {
 	    require => Package["postfix"];
 	"Install rsyslog postfix listener":
 	    content => template("postfix/rsyslog.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service[$postfix::vars::rsyslog_service_name],
 	    owner   => root,

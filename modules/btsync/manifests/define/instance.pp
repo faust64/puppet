@@ -7,7 +7,7 @@ define btsync::define::instance($shared_folders = false) {
     file {
 	"Install btsync $name instance":
 	    content => template("btsync/instance.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    notify  => Service["btsync"],
 	    owner   => root,

@@ -14,7 +14,7 @@ class riak::munin {
 	    file {
 		"Install riak munin probe configuration":
 		    content => template("riak/munin.erb"),
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0640",
 		    notify  => Service[$riak::vars::munin_service_name],
 		    owner   => root,

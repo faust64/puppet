@@ -5,13 +5,13 @@ class kibana::config {
     file {
 	"Prepare kibana for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/kibana";
 	"Install Kibana main configuration":
 	    content => template("kibana/config.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["kibana"],
 	    owner   => root,

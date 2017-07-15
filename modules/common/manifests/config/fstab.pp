@@ -1,6 +1,6 @@
 class common::config::fstab {
-    $tmpdev = hiera("tmp_target_device")
-    $tmpfs  = hiera("tmp_fs")
+    $tmpdev = lookup("tmp_target_device")
+    $tmpfs  = lookup("tmp_fs")
 
     exec {
 	"Add nodev mount option to non-root partitions":

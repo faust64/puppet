@@ -1,5 +1,5 @@
 class nodejs::pm2config {
-    if ($nodejs::vars::pm2_group != hiera("gid_zero")) {
+    if ($nodejs::vars::pm2_group != lookup("gid_zero")) {
 	if (! defined(Group[$nodejs::vars::pm2_group])) {
 	    group {
 		$nodejs::vars::pm2_group:

@@ -12,7 +12,7 @@ class vebackup::config {
     file {
 	"Prepare VMs dump directory":
 	    ensure => directory,
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0755",
 	    owner  => root,
 	    path   => "/media/backups/$jumeau";
@@ -22,7 +22,7 @@ class vebackup::config {
 	file {
 	    "Prepare OpenVZ dump directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "/media/backups/$jumeau/vz",
@@ -42,7 +42,7 @@ class vebackup::config {
 	file {
 	    "Prepare KVM dump directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "/media/backups/$jumeau/vz",

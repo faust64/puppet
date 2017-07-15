@@ -48,7 +48,7 @@ define muninnode::define::probe($config      = false,
 	    file {
 		"Install plugin $name configuration":
 		    content => template("muninnode/plugin-conf/$config.erb"),
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0644",
 		    owner   => root,
 		    path    => "$conf_dir/plugin-conf.d/$name.conf",

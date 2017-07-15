@@ -1,6 +1,6 @@
 class common::config::dns {
-    $dns_ip = hiera("dns_ip")
-    $search = hiera("dns_search")
+    $dns_ip = lookup("dns_ip")
+    $search = lookup("dns_search")
 
     if ($operatingsystem == "Ubuntu" and $lsbdistcodename == "trusty") {
 	$dest = "/etc/resolvconf/resolv.conf.d/original"
@@ -9,7 +9,7 @@ class common::config::dns {
     file {
 	"Install resolv.conf":
 	    content => template("common/resolv.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => $dest;

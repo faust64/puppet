@@ -7,18 +7,18 @@ class shell::ksh {
     file {
 	"Main Ksh configuration":
 	    content => template("shell/ksh.kshrc.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/ksh.kshrc";
 	"Ksh root configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    source  => "puppet:///modules/shell/user.kshrc",
 	    path    => "/root/.kshrc";
 	"Ksh skel configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    source  => "puppet:///modules/shell/user.kshrc",

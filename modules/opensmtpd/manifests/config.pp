@@ -9,13 +9,13 @@ class opensmtpd::config {
     file {
 	"Install mailer configuration":
 	    content => template("opensmtpd/mailer.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/mailer.conf";
 	"Install OpenSMTPD main configuration":
 	    content => template("opensmtpd/opensmtpd.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["smtpd"],
 	    owner   => root,

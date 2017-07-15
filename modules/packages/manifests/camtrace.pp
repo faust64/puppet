@@ -12,7 +12,7 @@ class packages::camtrace {
     file {
 	"Install camtrace repository root":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$web_root/camtrace",

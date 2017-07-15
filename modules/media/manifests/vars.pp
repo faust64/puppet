@@ -1,6 +1,6 @@
 class media::vars {
-    $music     = hiera("media_subsonic")
-    $rdomain   = hiera("root_domain")
-    $sickbeard = hiera("media_sickbeard")
-    $web_root  = hiera("media_web_root")
+    $music     = lookup("media_subsonic")
+    $rdomain   = lookup("root_domain")
+    $sickbeard = lookup("media_sickbeard")
+    $web_root  = lookup("media_web_root")
 }

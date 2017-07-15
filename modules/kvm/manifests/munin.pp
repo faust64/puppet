@@ -9,7 +9,7 @@ class kvm::munin {
 
 	    file {
 		"Install KVM munin probe configuration":
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0644",
 		    notify  => Service[$kvm::vars::munin_service_name],
 		    owner   => root,

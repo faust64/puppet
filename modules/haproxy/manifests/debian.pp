@@ -23,7 +23,7 @@ class haproxy::debian {
 
     file {
 	"Install HAproxy service defaults":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$haproxy::vars::service_name],
 	    owner   => root,

@@ -5,13 +5,13 @@ class rsyslog::config {
     file {
 	"Prepare rsyslog for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/rsyslog.d";
 	"Install rsyslog main configuration":
 	    content => template("rsyslog/main.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    notify  => Service[$rsyslog::vars::service_name],

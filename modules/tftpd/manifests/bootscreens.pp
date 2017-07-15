@@ -9,20 +9,20 @@ class tftpd::bootscreens {
     file {
 	"Install pxe main boot-screen":
 	    content => template("tftpd/main.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$root_dir/boot-screens/main.cfg",
 	    require => File["Prepare boot-screens directory"];
 	"Install tools boot-screen":
 	    content => template("tftpd/tools.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$root_dir/boot-screens/tools.cfg",
 	    require => File["Prepare boot-screens directory"];
 	"Install stdmenu boot-screen":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$root_dir/boot-screens/stdmenu.cfg",

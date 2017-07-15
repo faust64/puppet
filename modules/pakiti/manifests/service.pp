@@ -2,7 +2,7 @@ class pakiti::service {
     if ($kernel == "Linux") {
 	file {
 	    "Install Pakiti daily cron":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0750",
 		owner   => root,
 		path    => "/etc/cron.daily/pakiti2-client-update",
@@ -12,7 +12,7 @@ class pakiti::service {
     } else {
 	file {
 	    "Install Pakiti update script":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0750",
 		owner   => root,
 		path    => "/usr/local/sbin/pakiti2-client-update",

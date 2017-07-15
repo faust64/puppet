@@ -21,7 +21,7 @@ class php::munin {
 
 	    file {
 		"Install php-apc php script":
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0644",
 		    owner   => root,
 		    path    => "$web_root/apc_info.php",
@@ -29,7 +29,7 @@ class php::munin {
 		    source  => "puppet:///modules/php/apc_info.php";
 		"Install php-apc munin probe configuration":
 		    content => template("php/munin.erb"),
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0644",
 		    notify  => Service[$php::vars::munin_service_name],
 		    owner   => root,

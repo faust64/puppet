@@ -10,7 +10,7 @@ class git::github {
 	file {
 	    "Install GitHub backup script":
 		content => template("git/github_backup.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0750",
 		owner   => root,
 		path    => "/usr/local/sbin/GitHubbackup";

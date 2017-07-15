@@ -1,13 +1,13 @@
 define collectd::define::plugin($source = "$name",
 				$status = "present") {
-    $conf_dir  = hiera("collectd_conf_dir")
-    $web_ports = hiera("apache_listen_ports")
+    $conf_dir  = lookup("collectd_conf_dir")
+    $web_ports = lookup("apache_listen_ports")
 
     if ($status == "present") {
 	file {
 	    "Configure collectd $name plugin":
 		content => template("collectd/plugin/$source.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		notify  => Service["collectd"],
 		owner   => root,
@@ -19,7 +19,7 @@ define collectd::define::plugin($source = "$name",
 	    "Configure collectd $name plugin":
 		content => template("collectd/plugin/$source.erb"),
 		ensure  => absent,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		notify  => Service["collectd"],
 		owner   => root,

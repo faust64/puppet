@@ -45,7 +45,7 @@ define network::interfaces::main($faddr    = false,
 	    } else {
 		$shortmask = 24
 	    }
-	    $hostid    = hiera("hostid")
+	    $hostid    = lookup("hostid")
 	    $carp_addr = regsubst($network, '^(\d+)\.(\d+)\.(\d+)\.(\d+)$',
 				  '\1.\2.\3.1')
 	    if ($shortmask > 0) {

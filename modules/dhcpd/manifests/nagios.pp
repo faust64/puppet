@@ -1,5 +1,5 @@
 class dhcpd::nagios {
-    $plugindir = hiera("nagios_plugins_dir")
+    $plugindir = lookup("nagios_plugins_dir")
 
     exec {
 	"Setuid check_dhcp":

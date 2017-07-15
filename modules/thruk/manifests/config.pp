@@ -17,34 +17,34 @@ class thruk::config {
     file {
 	"Prepare Thruk for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Prepare Thruk plugins configuration directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/plugins",
 	    require => File["Prepare Thruk for further configuration"];
 	"Prepare Thruk plugins-available configuration directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/plugins/plugins-available",
 	    require => File["Prepare Thruk plugins configuration directory"];
 	"Prepare Thruk plugins-enabled configuration directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/plugins/plugins-enabled",
 	    require => File["Prepare Thruk plugins configuration directory"];
 
 	"Install Thruk CGI configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["thruk"],
 	    owner   => root,
@@ -53,7 +53,7 @@ class thruk::config {
 	    source  => "puppet:///modules/thruk/cgi.cfg";
 	"Install Thruk local configuration":
 	    content => template("thruk/local.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["thruk"],
 	    owner   => root,
@@ -61,7 +61,7 @@ class thruk::config {
 	    require => File["Install Thruk CGI configuration"];
 	"Install Thruk main configuration":
 	    content => template("thruk/thruk.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["thruk"],
 	    owner   => root,

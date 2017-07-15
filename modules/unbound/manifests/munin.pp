@@ -17,7 +17,7 @@ class unbound::munin {
 	    file {
 		"Install unbound munin probe configuration":
 		    content => template("unbound/munin.erb"),
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0644",
 		    notify  => Service[$unbound::vars::munin_service_name],
 		    owner   => root,

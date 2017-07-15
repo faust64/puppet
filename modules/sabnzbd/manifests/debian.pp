@@ -31,7 +31,7 @@ class sabnzbd::debian {
     file {
 	"Install sabnzbdplus service defaults":
 	    content => template("sabnzbd/defaults.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$sabnzbd::vars::service_name],
 	    owner   => root,

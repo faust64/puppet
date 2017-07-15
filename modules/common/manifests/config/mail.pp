@@ -1,5 +1,5 @@
 class common::config::mail {
-    if (hiera("postfix_routeto") == $fqdn) {
+    if (lookup("postfix_routeto") == $fqdn) {
 	include bluemind
     } else {
 	case $myoperatingsystem {

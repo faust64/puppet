@@ -6,7 +6,7 @@ class sickbeard::scripts {
     file {
 	"Install SickBeard backup script":
 	    content => template("sickbeard/backup.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/SickBeardbackup";

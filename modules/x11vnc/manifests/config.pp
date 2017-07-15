@@ -14,12 +14,12 @@ class x11vnc::config {
     file {
 	"Install x11-VNC wrapper configuration":
 	    content => template("x11vnc/vncvars.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/usr/local/etc/vncvars";
 	"Install x11-VNC vncpasswd":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    notify  => Service["x11vnc"],
 	    owner   => $runs_as,

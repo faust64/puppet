@@ -6,7 +6,7 @@ class rsync::rhel {
     if ($rsync::vars::shares or $rsync::vars::clients) {
 	file {
 	    "Install Rsync xinetd configuration":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		notify  => Service[$rsync::vars::service_name],
 		owner   => root,

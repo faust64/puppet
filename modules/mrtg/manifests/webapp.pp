@@ -18,7 +18,7 @@ class mrtg::webapp {
     file {
 	"Prepare mrtg webapp directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/var/www/mrtg",
@@ -29,88 +29,88 @@ class mrtg::webapp {
 		];
 	"Prepare mrtg webapp css directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/var/www/mrtg/css",
 	    require => File["Prepare mrtg webapp directory"];
 	"Prepare mrtg webapp js directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/var/www/mrtg/js",
 	    require => File["Prepare mrtg webapp directory"];
 	"Prepare mrtg vortex directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/var/www/mrtg/vortex",
 	    require => File["Prepare mrtg webapp directory"];
 	"Install mrtg main webapp":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/var/www/mrtg/js/mrtg.js",
 	    require => File["Prepare mrtg webapp js directory"],
 	    source  => "puppet:///modules/mrtg/js/mrtg.js";
 	"Install mrtg webapp dependency - jquery":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/var/www/mrtg/js/jquery-1.10.2.min.js",
 	    require => File["Prepare mrtg webapp js directory"],
 	    source  => "puppet:///modules/mrtg/js/jquery-1.10.2.min.js";
 	"Install mrtg webapp dependency - modernizr":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/var/www/mrtg/js/modernizr.custom.js",
 	    require => File["Prepare mrtg webapp js directory"],
 	    source  => "puppet:///modules/mrtg/js/modernizr.custom.js";
 	"Install mrtg webapp dependency - lightbox":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/var/www/mrtg/js/lightbox-2.6.min.js",
 	    require => File["Prepare mrtg webapp js directory"],
 	    source  => "puppet:///modules/mrtg/js/lightbox-2.6.min.js";
 	"Install mrtg webapp css - munin":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/var/www/mrtg/css/style.css",
 	    require => File["Prepare mrtg webapp js directory"],
 	    source  => "puppet:///modules/mrtg/css/style.css";
 	"Install mrtg webapp css - screen":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/var/www/mrtg/css/screen.css",
 	    require => File["Prepare mrtg webapp js directory"],
 	    source  => "puppet:///modules/mrtg/css/screen.css";
 	"Install mrtg webapp css - lightbox":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/var/www/mrtg/css/lightbox.css",
 	    require => File["Prepare mrtg webapp js directory"],
 	    source  => "puppet:///modules/mrtg/css/lightbox.css";
 	"Install mrtg webapp sources configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/var/www/mrtg/js/sources.js",
 	    source  => "puppet:///modules/mrtg/webapp/$domain";
 	"Install mrtg webapp office configuration":
 	    content => template("mrtg/config.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/var/www/mrtg/js/config.js";
 	"Install mrtg webapp index.html":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/var/www/mrtg/index.html",

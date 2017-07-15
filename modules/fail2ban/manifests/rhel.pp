@@ -7,7 +7,7 @@ class fail2ban::rhel {
 
     file {
 	"Install RHEL cpanel configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$conf_dir/action.d/csf-ip-deny.conf",

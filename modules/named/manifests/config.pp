@@ -29,7 +29,7 @@ class named::config {
 
 	"Install named main configuration":
 	    content => template("named/named.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$named::vars::service_name],
 	    owner   => root,
@@ -37,7 +37,7 @@ class named::config {
 	    require => File["Prepare named for further configuration"];
 	"Install named local configuration":
 	    content => template("named/local.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$named::vars::service_name],
 	    owner   => root,
@@ -45,7 +45,7 @@ class named::config {
 	    require => File["Prepare named for further configuration"];
 	"Install named default zones configuration":
 	    content => template("named/default-zones.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$named::vars::service_name],
 	    owner   => root,
@@ -53,7 +53,7 @@ class named::config {
 	    require => File["Prepare named for further configuration"];
 	"Install named options configuration":
 	    content => template("named/options.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$named::vars::service_name],
 	    owner   => root,
@@ -65,7 +65,7 @@ class named::config {
 		];
 	"Install named rndc configuration":
 	    content => template("named/rndc.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    notify  => Service[$named::vars::service_name],
 	    owner   => $named::vars::runtime_user,

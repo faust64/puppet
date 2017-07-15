@@ -16,7 +16,7 @@ class slim::config {
 	file {
 	    "Prepare Slim for further configuration":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => $conf_dir;
@@ -29,7 +29,7 @@ class slim::config {
     file {
 	"Install Slim configuration":
 	    content => template("slim/slim.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$conf_dir/slim.conf";

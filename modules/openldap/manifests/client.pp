@@ -26,13 +26,13 @@ class openldap::client {
     file {
 	"Prepare OpenLDAP for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Install OpenLDAP client minimal configuration":
 	    content => template("openldap/ldap.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$conf_dir/ldap.conf",

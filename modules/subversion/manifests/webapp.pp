@@ -24,19 +24,19 @@ class subversion::webapp {
 	    require => File["Prepare www directory"];
 	"Install subversion repositories root":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/home/svn";
 	"Install subversion default access file":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/home/svn/access",
 	    require => File["Install subversion repositories root"],
 	    source  => "puppet:///modules/subversion/access";
 	"Install subversion RO user htaccess":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/home/svn/htpasswd",

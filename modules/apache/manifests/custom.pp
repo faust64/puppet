@@ -7,7 +7,7 @@ class apache::custom {
 
     file {
 	"Install Apache error messages":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    ignore  => [ ".svn", ".git" ],
 	    owner   => root,
 	    path    => $error_dir,
@@ -20,7 +20,7 @@ class apache::custom {
 	    path    => "$web_root/include",
 	    target  => "$error_dir/include";
 	"Install robots.txt (apache)":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$web_root/robots.txt",

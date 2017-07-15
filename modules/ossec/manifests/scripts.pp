@@ -6,7 +6,7 @@ class ossec::scripts {
 	file {
 	    "Install OSSEC slack notification script":
 		content => template("ossec/slack.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0750",
 		owner   => root,
 		path    => "/var/ossec/active-response/bin/ossec-slack.sh";

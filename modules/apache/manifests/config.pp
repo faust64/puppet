@@ -30,7 +30,7 @@ class apache::config {
 	file {
 	    "Prepare www directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => $web_root;
@@ -40,14 +40,14 @@ class apache::config {
     file {
 	"Prepare Apache for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    notify  => Service[$apache::vars::service_name],
 	    owner   => root,
 	    path    => $conf_dir;
 	"Prepare apache sites-available directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    notify  => Service[$apache::vars::service_name],
 	    owner   => root,
@@ -55,7 +55,7 @@ class apache::config {
 	    require => File["Prepare Apache for further configuration"];
 	"Prepare apache sites-enabled directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    notify  => Service[$apache::vars::service_name],
 	    owner   => root,
@@ -63,7 +63,7 @@ class apache::config {
 	    require => File["Prepare Apache for further configuration"];
 	"Prepare apache mods-available directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    notify  => Service[$apache::vars::service_name],
 	    owner   => root,
@@ -71,7 +71,7 @@ class apache::config {
 	    require => File["Prepare Apache for further configuration"];
 	"Prepare apache mods-enabled directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    notify  => Service[$apache::vars::service_name],
 	    owner   => root,
@@ -79,14 +79,14 @@ class apache::config {
 	    require => File["Prepare Apache for further configuration"];
 	"Prepare apache ssl directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/ssl",
 	    require => File["Prepare Apache for further configuration"];
 	"Prepare apache conf.d directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    notify  => Service[$apache::vars::service_name],
 	    owner   => root,
@@ -115,7 +115,7 @@ class apache::config {
 
 	"Install apache main configuration":
 	    content => template("apache/apache.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$apache::vars::service_name],
 	    owner   => root,
@@ -123,7 +123,7 @@ class apache::config {
 	    require => File["Prepare Apache for further configuration"];
 	"Install apache error configuration":
 	    content => template("apache/error.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$apache::vars::service_name],
 	    owner   => root,
@@ -131,7 +131,7 @@ class apache::config {
 	    require => File["Prepare Apache for further configuration"];
 	"Install apache admin allow filter configuration":
 	    content => template("apache/admin.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$apache::vars::service_name],
 	    owner   => root,
@@ -139,7 +139,7 @@ class apache::config {
 	    require => File["Prepare Apache for further configuration"];
 	"Install apache ldapauth configuration":
 	    content => template("apache/authldap.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$apache::vars::service_name],
 	    owner   => root,
@@ -147,7 +147,7 @@ class apache::config {
 	    require => File["Prepare Apache for further configuration"];
 	"Install apache sslproxy configuration":
 	    content => template("apache/sslproxy.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$apache::vars::service_name],
 	    owner   => root,
@@ -155,7 +155,7 @@ class apache::config {
 	    require => File["Prepare Apache for further configuration"];
 	"Install apache allow configuration":
 	    content => template("apache/allow.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$apache::vars::service_name],
 	    owner   => root,
@@ -163,7 +163,7 @@ class apache::config {
 	    require => File["Prepare Apache for further configuration"];
 	"Install apache ports configuration":
 	    content => template("apache/ports.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$apache::vars::service_name],
 	    owner   => root,
@@ -171,7 +171,7 @@ class apache::config {
 	    require => File["Prepare Apache for further configuration"];
 	"Install apache environ variables":
 	    content => template("apache/envvars.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$apache::vars::service_name],
 	    owner   => root,
@@ -228,7 +228,7 @@ class apache::config {
     if ($operatingsystem == "FreeBSD") {
 	file {
 	    "Set FreeBSD AcceptFilter":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		notify  => Service[$apache::vars::service_name],
 		path    => "$conf_dir/conf.d/no-accf.conf",
@@ -257,7 +257,7 @@ class apache::config {
 	file {
 	    "Install Apache default ldap authentication parameters":
 		content => template("apache/ldapusers.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		notify  => Service[$service_name],
 		owner   => root,

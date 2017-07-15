@@ -25,7 +25,7 @@ class elasticsearch::debian {
     file {
 	"Install elasticsearch service defaults":
 	    content => template("elasticsearch/defaults.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["elasticsearch"],
 	    owner   => root,

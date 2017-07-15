@@ -25,7 +25,7 @@ class ifstated::config {
 	file {
 	    "Install alternative gateway configuration":
 		content => template("network/gateway.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0640",
 		owner   => root,
 		path    => "/etc/myigate";
@@ -37,7 +37,7 @@ class ifstated::config {
     file {
 	"Ifstated configuration":
 	    content => template("ifstated/ifstated.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    notify  => Exec["Reload Ifstated configuration"],
 	    owner   => root,

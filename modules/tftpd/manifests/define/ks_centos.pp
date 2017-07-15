@@ -23,7 +23,7 @@ define tftpd::define::ks_centos($autopart = false,
     file {
 	"Install centos${rhelvers}-${rhelarch}_$hosttype$kssuffix":
 	    content => template("tftpd/ks-centos.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$basepath${rhelvers}-${rhelarch}_$hosttype$kssuffix",

@@ -1,7 +1,7 @@
 class fail2ban::scripts {
     file {
 	"Install unban script":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/fail2ban-unban",

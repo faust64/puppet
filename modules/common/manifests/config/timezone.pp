@@ -1,5 +1,5 @@
 class common::config::timezone {
-    $timezone = hiera("locale_tz")
+    $timezone = lookup("locale_tz")
 
     file {
 	"Set localtime":

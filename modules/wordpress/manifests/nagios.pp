@@ -16,7 +16,7 @@ class wordpress::nagios {
     file {
 	"Install wordpress version.php":
 	    content => template("wordpress/version.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$usr_dir/wp-version.php",

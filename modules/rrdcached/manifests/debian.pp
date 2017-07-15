@@ -8,7 +8,7 @@ class rrdcached::debian {
     file {
 	"Install rrdcached service defaults":
 	    content => template("rrdcached/defaults.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["rrdcached"],
 	    owner   => root,

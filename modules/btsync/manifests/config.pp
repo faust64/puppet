@@ -2,7 +2,7 @@ class btsync::config {
     file {
 	"Prepare btsync for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/btsync";

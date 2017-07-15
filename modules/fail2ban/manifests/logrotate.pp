@@ -4,7 +4,7 @@ class fail2ban::logrotate {
     file {
 	"Install Fail2ban logrotate configuration":
 	    content => template("fail2ban/logrotate.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/logrotate.d/fail2ban",

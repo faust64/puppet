@@ -15,7 +15,7 @@ class icecast::config {
     file {
 	"Prepare Icecast for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;

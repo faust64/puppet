@@ -19,25 +19,25 @@ class pki::scripts {
     file {
 	"Install dead_certs script":
 	    content => template("pki/dead_certs.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0700",
 	    owner   => root,
 	    path    => "/usr/local/bin/dead_certs";
 	"Install google_domains_lookup script":
 	    content => template("pki/google_domains_lookup.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0700",
 	    owner   => root,
 	    path    => "/usr/local/bin/google_domains_lookup";
 	"Install makecert script":
 	    content => template("pki/makecert.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0700",
 	    owner   => root,
 	    path    => "/home/pki/vpn/makecert";
 	"Install makevpn scripts":
 	    content => template("pki/makevpn.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0700",
 	    owner   => root,
 	    path    => "/home/openvpn/makevpn",

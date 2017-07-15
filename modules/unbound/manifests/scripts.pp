@@ -5,7 +5,7 @@ class unbound::scripts {
     file {
 	"Install blocklist generation script":
 	    content => template("unbound/blockgen.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    notify  => Exec["Regenerate unbound blocklist.conf"],
 	    owner   => root,
@@ -16,7 +16,7 @@ class unbound::scripts {
     if ($unbound::vars::fail2ban_unbound == true) {
 	file {
 	    "Install unbound stats script":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "/usr/local/bin/unbound_stats",

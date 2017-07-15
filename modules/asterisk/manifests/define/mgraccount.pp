@@ -1,8 +1,8 @@
 define asterisk::define::mgraccount($allow      = false,
 				    $passphrase = false,
-				    $readperms  = hiera("asterisk_ami_permissions"),
+				    $readperms  = lookup("asterisk_ami_permissions"),
 				    $user       = false,
-				    $writeperms = hiera("asterisk_ami_permissions")) {
+				    $writeperms = lookup("asterisk_ami_permissions")) {
     $conf_dir = $asterisk::vars::conf_dir
 
     if ($user =~ /[a-z]/ and $passphrase =~ /[a-z]/) {

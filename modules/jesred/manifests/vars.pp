@@ -1,6 +1,6 @@
 class jesred::vars {
-    $apt_cacher  = hiera("apt_cacher")
-    $log_dir     = hiera("squid_log_dir")
-    $regexplist  = hiera("jesred_regexpr")
-    $rewrite_for = hiera("jesred_rewrite_for")
+    $apt_cacher  = lookup("apt_cacher")
+    $log_dir     = lookup("squid_log_dir")
+    $regexplist  = lookup("jesred_regexpr")
+    $rewrite_for = lookup("jesred_rewrite_for")
 }

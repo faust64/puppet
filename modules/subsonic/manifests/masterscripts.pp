@@ -8,7 +8,7 @@ class subsonic::masterscripts {
     file {
 	"Install subsonic sync script":
 	    content => template("subsonic/sync.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/subsonic_sync_remotes",

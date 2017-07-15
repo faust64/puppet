@@ -3,7 +3,7 @@ class mrtg::collect {
 
     file {
 	"Install MRTG generic host template":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/var/www/mrtg/generic.htp",

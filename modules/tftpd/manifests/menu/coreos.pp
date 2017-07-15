@@ -11,7 +11,7 @@ class tftpd::menu::coreos {
     file {
 	"Install pxe coreos boot-screen":
 	    content => template("tftpd/coreos.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$root_dir/boot-screens/coreos.cfg",
@@ -22,14 +22,14 @@ class tftpd::menu::coreos {
 		];
 	"Install coreos cloud-config directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$root_dir/cloud-config",
 	    require => File["Prepare pxe server root"];
 	"Install coreos default cloud-config":
 	    content => template("tftpd/cloud-config.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$root_dir/cloud-config/default.yml",

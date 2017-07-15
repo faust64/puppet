@@ -1,5 +1,5 @@
 class common::config::grub {
-    $grub_admins = hiera("grub_admin_users")
+    $grub_admins = lookup("grub_admin_users")
 
     case $myoperatingsystem {
 	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {
@@ -23,7 +23,7 @@ class common::config::grub {
     file {
 	"Set proper permissions to /boot/grub/grub.cfg":
 	    ensure  => present,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0440",
 	    owner   => root,
 	    path    => "/boot/grub/grub.cfg";
@@ -33,7 +33,7 @@ class common::config::grub {
 	file {
 	    "Ensure /etc/default/grub present":
 		ensure => present,
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0644",
 		owner  => root,
 		path   => "/etc/default/grub";
@@ -105,7 +105,7 @@ class common::config::grub {
 	    "$do grub password configuration":
 		content => template("common/grub-passwd.erb"),
 		ensure  => $ensure,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		notify  => Exec["Re-generate grub configuration"],
 		owner   => root,

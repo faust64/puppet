@@ -18,20 +18,20 @@ class nagios::config {
     file {
 	"Prepare nagios nrpe for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Prepare nagios nrpe probes configuration directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$conf_dir/nrpe.d",
 	    require => File["Prepare nagios nrpe for further configuration"];
 	"Install nagios nrpe main configuration":
 	    content => template("nagios/nrpe.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service[$nagios::vars::nrpe_service_name],
 	    owner   => root,

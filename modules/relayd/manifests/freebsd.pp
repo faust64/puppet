@@ -5,7 +5,7 @@ class ospfd::freebsd {
 
     file {
 	"Enable relayd service":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["relayd"],
 	    owner   => root,

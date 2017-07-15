@@ -10,14 +10,14 @@ class tftpd::webapp {
     file {
 	"Prepare preseed directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$root_dir/preseed",
 	    require => File["Prepare pxe server root"];
 	"Prepare kickstart directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$root_dir/ks",

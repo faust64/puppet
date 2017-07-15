@@ -18,7 +18,7 @@ class openvz::nagios {
     file {
 	"Install Nagios OpenVZ sudoers configuration":
 	    content => template("openvz/nagios.sudoers.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0440",
 	    owner   => root,
 	    path    => "$sudo_conf_dir/sudoers.d/nagios-openvz",

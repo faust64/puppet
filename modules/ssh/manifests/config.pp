@@ -64,14 +64,14 @@ class ssh::config {
 
     file {
 	"Install ssh-check script":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/usr/local/bin/ssh-check",
 	    source  => "puppet:///modules/ssh/check";
 	"Make sure /root/.ssh exists":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/root/.ssh";
@@ -81,20 +81,20 @@ class ssh::config {
 	    path   => "/root/.ssh/authorized_keys2";
 	"Prepare root known_hosts":
 	    ensure  => present,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/root/.ssh/known_hosts",
 	    require => Exec["Generate root RSA key"];
 	"Set proper permissions to sshd_config":
 	    ensure  => present,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    owner   => root,
 	    path    => "/etc/ssh/sshd_config";
 	"Install ssh_config":
 	    content => template("ssh/client.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/ssh/ssh_config";

@@ -14,13 +14,13 @@ class transmission::config {
     file {
 	"Prepare transmission for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "02755",
 	    owner   => $transmission::vars::runtime_user,
 	    path    => $conf_dir;
 	"Install transmission main configuration":
 	    content => template("transmission/config.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service[$transmission::vars::srvname],
 	    owner   => $transmission::vars::runtime_user,

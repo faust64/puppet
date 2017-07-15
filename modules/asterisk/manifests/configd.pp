@@ -7,7 +7,7 @@ class asterisk::configd {
     file {
 	"Prepare Asterisk for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
@@ -133,7 +133,7 @@ class asterisk::configd {
 	    require => File["Prepare Asterisk for further configuration"];
 	"Prepare Asterisk lib directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $asterisk::vars::lib_dir,

@@ -7,7 +7,7 @@ class asterisk::rsyslog {
     file {
 	"Install asterisk rsyslog main configuration":
 	    content => template("asterisk/rsyslog.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service[$asterisk::vars::rsyslog_service_name],
 	    owner   => root,

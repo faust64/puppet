@@ -8,7 +8,7 @@ define yum::define::repo($baseurl    = false,
     file {
 	"Install $name YUM repository":
 	    content => template("yum/repo.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/yum.repos.d/$name.repo",

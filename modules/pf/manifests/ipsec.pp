@@ -10,7 +10,7 @@ class pf::ipsec {
     file {
 	"Pf IPSEC configuration":
 	    content => template("pf/ipsec.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Exec["Reload pf configuration"],
 	    owner   => root,

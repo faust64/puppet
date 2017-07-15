@@ -1,5 +1,5 @@
 class mysysctl::define::ifqmaxlen {
-    $maxlen = hiera("ifqmaxlen")
+    $maxlen = lookup("ifqmaxlen")
 
     case $operatingsystem {
 	"FreeBSD": {

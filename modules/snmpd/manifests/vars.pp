@@ -1,9 +1,9 @@
 class snmpd::vars {
-    $snmp_community    = hiera("snmp_community")
-    $snmp_conf_dir     = hiera("snmp_conf_dir")
-    $snmp_listenaddr   = hiera("snmp_listenaddr")
-    $snmp_location     = hiera("snmp_location")
-    $snmp_new_syntax   = hiera("snmp_uptodate")
-    $snmp_newer_syntax = hiera("snmp_uptodate_new")
-    $snmp_sysservices  = hiera("snmp_sysservices")
+    $snmp_community    = lookup("snmp_community")
+    $snmp_conf_dir     = lookup("snmp_conf_dir")
+    $snmp_listenaddr   = lookup("snmp_listenaddr")
+    $snmp_location     = lookup("snmp_location")
+    $snmp_new_syntax   = lookup("snmp_uptodate")
+    $snmp_newer_syntax = lookup("snmp_uptodate_new")
+    $snmp_sysservices  = lookup("snmp_sysservices")
 }

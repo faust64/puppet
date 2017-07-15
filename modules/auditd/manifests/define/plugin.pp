@@ -17,7 +17,7 @@ define auditd::define::plugin($active    = true,
 	"Install auditd plugin $name configuration":
 	    content => template("auditd/plugins/$source.erb"),
 	    ensure  => $ensure,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    notify  => Service["auditd"],
 	    owner   => root,

@@ -7,7 +7,7 @@ class peerio::nagios {
     file {
 	"Install Peerio Nagios sudoers configuration":
 	    content => template("peerio/nagios.sudoers.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0440",
 	    owner   => root,
 	    path    => "$sudo_conf_d/sudoers.d/nagios-peerio",

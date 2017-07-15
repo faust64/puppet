@@ -17,7 +17,7 @@ class ipfw::config {
     file {
 	"Install ipfw main configuration":
 	    content => template("ipfw/ipfw.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["ipfw"],
 	    owner   => root,

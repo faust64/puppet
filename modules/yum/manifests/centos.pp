@@ -1,12 +1,12 @@
 class yum::centos {
     $arrayvers = split($operatingsystemrelease, '\.')
-    $download  = hiera("download_cmd")
+    $download  = lookup("download_cmd")
     $shortvers = $arrayvers[0]
 
     file {
 	"Install CentOS Base repository":
 	    content => template("yum/centos-base.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/yum.repos.d/CentOS-Base.repo",

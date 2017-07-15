@@ -73,7 +73,7 @@ class icinga::debian {
     file {
 	"Install Icinga service defaults":
 	    content => template("icinga/debian-defaults.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["icinga"],
 	    owner   => root,

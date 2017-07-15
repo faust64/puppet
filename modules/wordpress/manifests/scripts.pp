@@ -20,14 +20,14 @@ class wordpress::scripts {
 
     file {
 	"Set permissions to wp-cli":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/usr/local/bin/wp-cli",
 	    require => Exec["Install wp-cli"];
 	"Install Wordpress backup script":
 	    content => template("wordpress/backup.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/Wordpressbackup",
@@ -37,7 +37,7 @@ class wordpress::scripts {
     @@file {
 	"Install wordpress blacklist update script":
 	    content => template("wordpress/update_blacklist.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/wp_update_blacklist",

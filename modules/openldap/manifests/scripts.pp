@@ -4,7 +4,7 @@ class openldap::scripts {
     file {
 	"Install OpenLDAP backup script":
 	    content => template("openldap/backup.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/OpenLDAPbackup",

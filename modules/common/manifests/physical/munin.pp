@@ -1,19 +1,19 @@
 class common::physical::munin {
     include muninnode
 
-    $smart_disks = hiera("nagios_smart_disks")
-    $smart_temp  = hiera("munin_smart_temp")
+    $smart_disks = lookup("nagios_smart_disks")
+    $smart_temp  = lookup("munin_smart_temp")
 
     if ($smart_disks) {
 	include sudo
 
-	$munin_conf_dir = hiera("munin_conf_dir")
+	$munin_conf_dir = lookup("munin_conf_dir")
 
 	file {
 	    "Install Smart munin-node configuration":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
-		notify  => Service[hiera("munin_node_service_name")],
+		notify  => Service[lookup("munin_node_service_name")],
 		owner   => root,
 		path    => "$munin_conf_dir/plugin-conf.d/smart.conf",
 		require => File["Prepare Munin-node plugin-conf directory"],

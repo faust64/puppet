@@ -69,33 +69,33 @@ class pki::config {
     file {
 	"Prepare pki root directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0711",
 	    owner   => root,
 	    path    => "/home/pki";
 	"Prepare openvpn user certificates directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0711",
 	    owner   => root,
 	    path    => "/home/openvpn";
 
 	"Install pki muttrc":
 	    content => template("pki/muttrc.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/root/muttrc-vpn";
 	"Install pki mail template":
 	    content => template("pki/mailvpn.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/home/openvpn/mailvpn",
 	    require => File["Prepare openvpn user certificates directory"];
 	"Install pki vars":
 	    content => template("pki/vars.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    owner   => root,
 	    path    => "/root/vars";

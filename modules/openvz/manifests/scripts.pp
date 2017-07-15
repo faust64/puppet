@@ -5,7 +5,7 @@ class openvz::scripts {
 
     file {
 	"Install OpenVZ custom scripts":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    ignore  => [ ".svn", ".git" ],
 	    owner   => root,
 	    path    => "/usr/local/bin",
@@ -13,7 +13,7 @@ class openvz::scripts {
 	    source  => "puppet:///modules/openvz/bin";
 	"Install OpenVZ archive script":
 	    content => template("openvz/backup_vz_nas.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/bin/backup_vz_nas";

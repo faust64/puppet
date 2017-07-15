@@ -40,7 +40,7 @@ class riak::config {
 	    path    => "/etc/riak/advanced.config",
 	    require => File["Prepare riak for further configuration"];
 	"Install Riak limits configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    notify  => Service["riak"],

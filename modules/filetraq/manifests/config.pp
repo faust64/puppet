@@ -4,7 +4,7 @@ class filetraq::config {
     file {
 	"Install Filetraq main configuration":
 	    content => template("filetraq/main.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$conf_dir/filetraq.conf",

@@ -1,6 +1,6 @@
 define nagios::define::probe($args             = false,
 			     $command          = "check_$name",
-			     $contact_escalate = hiera("nagios_contact_escalate"),
+			     $contact_escalate = lookup("nagios_contact_escalate"),
 			     $description      = "$fqdn $name",
 			     $depexecfail      = "u,w,c",
 			     $escalate_first   = 1,
@@ -18,8 +18,8 @@ define nagios::define::probe($args             = false,
 			     $targetdir        = "/etc/nagios/import.d",
 			     $use              = "warning-service") {
     if ($is_nrpe) {
-	$natport  = hiera("nagios_nrpe_nat_port")
-	$realport = hiera("nagios_nrpe_port")
+	$natport  = lookup("nagios_nrpe_nat_port")
+	$realport = lookup("nagios_nrpe_port")
 	if ($natport) {
 	    $cmdhead = "check_nrpe_port!$natport!$command"
 	} elsif ($realport != 5666 and $realport != "5666") {
@@ -36,7 +36,7 @@ define nagios::define::probe($args             = false,
     } else {
 	$cmd     = $cmdhead
     }
-    $http_listen = hiera("apache_listen_ports")
+    $http_listen = lookup("apache_listen_ports")
 
     if ($pluginargs != false) {
 	$preargs   = join($pluginargs, ' ')
@@ -48,7 +48,7 @@ define nagios::define::probe($args             = false,
     $conf_dir  = $nagios::vars::nagios_conf_dir
     $plugindir = $nagios::vars::nagios_plugins_dir
 
-    if (hiera("with_nagios") == true) {
+    if (lookup("with_nagios") == true) {
 	if (! defined(Class[nagios])) {
 	    include nagios
 	}
@@ -105,7 +105,7 @@ define nagios::define::probe($args             = false,
 	    file {
 		"Install Nagios $name configuration":
 		    content => template("nagios/plugins/$pluginconf.erb"),
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0644",
 		    notify  => Service[$nagios::vars::nrpe_service_name],
 		    owner   => root,

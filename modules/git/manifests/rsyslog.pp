@@ -7,7 +7,7 @@ class git::rsyslog {
     file {
 	"Install git rsyslog main configuration":
 	    content => template("git/rsyslog.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service[$git::vars::rsyslog_service_name],
 	    owner   => root,

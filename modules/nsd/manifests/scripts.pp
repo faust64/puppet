@@ -8,7 +8,7 @@ class nsd::scripts {
     file {
 	"Install dnsgen script":
 	    content => template("nsd/generate.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/dnsgen";

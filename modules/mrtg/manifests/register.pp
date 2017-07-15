@@ -1,7 +1,7 @@
 class mrtg::register {
-    $mrtg_monitor    = hiera("mrtg_monitor")
-    $snmp_community  = hiera("snmp_community")
-    $snmp_listenaddr = hiera("snmp_listenaddr")
+    $mrtg_monitor    = lookup("mrtg_monitor")
+    $snmp_community  = lookup("snmp_community")
+    $snmp_listenaddr = lookup("snmp_listenaddr")
 
     if ($snmp_community and $mrtg_monitor) {
 	@@file {

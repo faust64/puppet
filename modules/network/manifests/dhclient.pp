@@ -5,7 +5,7 @@ class network::dhclient {
 	file {
 	    "Ensure dhclient doesn't wipe out our resolv.conf":
 		content => template("network/dhclient.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		owner   => root,
 		path    => "/etc/dhclient.conf";

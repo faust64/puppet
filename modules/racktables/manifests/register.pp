@@ -1,8 +1,8 @@
 class racktables::register {
     $ifs           = $interfaces.split(',')
-    $object_type   = hiera("racktables_object_id")
+    $object_type   = lookup("racktables_object_id")
     $officearray   = $domain.split('\.')
-    $physparents   = hiera("physical_parent")
+    $physparents   = lookup("physical_parent")
     $short_office  = $officearray[0]
 
     racktables::define::register_host {
@@ -40,7 +40,7 @@ class racktables::register {
 # can't insert into Link table
 # complains about not being able to directly update Port table
 # still looking...
-#	    $lookup = hiera("physical_parent_$parent")
+#	    $lookup = lookup("physical_parent_$parent")
 #	    if ($lookup) {
 #		each ($lookup) |$link| {
 #		    racktables::define::register_link {

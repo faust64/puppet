@@ -13,7 +13,7 @@ class puppet::patches::openbsd {
     if ($withruby == "1.8") {
 	file {
 	    "OpenBSD Service Management":
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0644",
 		owner  => root,
 		path   => "/usr/local/lib/ruby/site_ruby/$withruby/puppet/provider/service/openbsd.rb",
@@ -22,7 +22,7 @@ class puppet::patches::openbsd {
     } elsif ($withruby == "2.2" and versioncmp($kernelversion, '5.9') <= 0) {
 	file {
 	    "OpenBSD Service Management":
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0644",
 		owner  => root,
 		path   => "/usr/local/lib/ruby/site_ruby/$withruby/facter/util/memory.rb",
@@ -32,13 +32,13 @@ class puppet::patches::openbsd {
 
     file {
 	"OpenBSD Service Abstraction":
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0644",
 	    owner  => root,
 	    path   => "/usr/local/lib/ruby/site_ruby/$withruby/puppet/provider/service/init.rb",
 	    source => "puppet:///modules/puppet/$withruby/patched-init.rb";
 	"OpenBSD Group Management":
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0644",
 	    owner  => root,
 	    path   => "/usr/local/lib/ruby/site_ruby/$withruby/puppet/type/group.rb",
@@ -48,7 +48,7 @@ class puppet::patches::openbsd {
     if (versioncmp($kernelversion, '5.9') <= 0) {
 	file {
 	    "OpenBSD fact Interfaces not to include l2 filters":
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0644",
 		owner  => root,
 		path   => "/usr/local/lib/ruby/site_ruby/$withruby/facter/util/ip.rb",

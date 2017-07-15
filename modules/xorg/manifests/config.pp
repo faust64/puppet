@@ -31,7 +31,7 @@ class xorg::config {
     if ($xorg::vars::with_audio) {
 	file {
 	    "Install asound configuration":
-		group  => hiera("gid_zero"),
+		group  => lookup("gid_zero"),
 		mode   => "0644",
 		owner  => root,
 		path   => "/etc/asound.conf",

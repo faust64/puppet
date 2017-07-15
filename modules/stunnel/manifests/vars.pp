@@ -1,5 +1,5 @@
 class stunnel::vars {
-    $ciphers = hiera("stunnel_ciphers")
-    $options = hiera("stunnel_options")
-    $srvname = hiera("stunnel_service_name")
+    $ciphers = lookup("stunnel_ciphers")
+    $options = lookup("stunnel_options")
+    $srvname = lookup("stunnel_service_name")
 }

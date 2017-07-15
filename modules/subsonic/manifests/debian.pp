@@ -38,7 +38,7 @@ class subsonic::debian {
     file {
 	"Install subsonic service defaults":
 	    content => template("subsonic/defaults.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["subsonic"],
 	    owner   => root,

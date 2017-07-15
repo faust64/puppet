@@ -14,7 +14,7 @@ class moin::webapp {
     file {
 	"Prepare MoinMoin web root":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $web_dir;
@@ -24,7 +24,7 @@ class moin::webapp {
 	file {
 	    "Prepare MoinMoin cgi directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "$web_dir/wiki",
@@ -43,7 +43,7 @@ class moin::webapp {
 	file {
 	    "Prepare MoinMoin wsgi directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "$web_dir/wiki",

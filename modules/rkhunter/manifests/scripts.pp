@@ -6,7 +6,7 @@ class rkhunter::scripts {
 	file {
 	    "Install rkhunter slack script":
 		content => template("rkhunter/slack.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0750",
 		owner   => root,
 		path    => "/usr/local/sbin/rkhunter_slack",

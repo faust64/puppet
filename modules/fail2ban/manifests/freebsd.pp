@@ -8,14 +8,14 @@ class fail2ban::freebsd {
     file {
 	"Install FreeBSD pf configuration":
 	    content => template("fail2ban/bsd-pf.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["fail2ban"],
 	    owner   => root,
 	    path    => "$conf_dir/action.d/pf-drop-all.conf",
 	    require => File["Install FreeBSD pf anchor"];
 	"Install FreeBSD pf anchor":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$conf_dir/pf-anchor.conf",

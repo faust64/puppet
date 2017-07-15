@@ -1,5 +1,5 @@
 class rrdcached::vars {
-    $munin_group = hiera("munin_group")
-    $munin_user  = hiera("munin_user")
-    $opts        = hiera("rrdcached_opts")
+    $munin_group = lookup("munin_group")
+    $munin_user  = lookup("munin_user")
+    $opts        = lookup("rrdcached_opts")
 }

@@ -6,7 +6,7 @@ class newznab::scripts {
     file {
 	"Install newznab update script":
 	    content => template("newznab/update.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0700",
 	    owner   => root,
 	    path    => "/usr/local/sbin/newznab_update",

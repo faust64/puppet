@@ -26,28 +26,28 @@ class openvpn::config {
     file {
 	"Prepare OpenVPN for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $confdir,
 	    require => Group["OpenVPN runtime group"];
 	"Prepare OpenVPN certificates directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$confdir/certificates",
 	    require => File["Prepare OpenVPN for further configuration"];
 	"Prepare OpenVPN keys directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0710",
 	    owner   => root,
 	    path    => "$confdir/keys",
 	    require => File["Prepare OpenVPN for further configuration"];
 	"Prepare OpenVPN bins directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0711",
 	    owner   => root,
 	    path    => "$confdir/bin",
@@ -58,14 +58,14 @@ class openvpn::config {
 	file {
 	    "Prepare OpenVPN auth configuration directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0750",
 		owner   => root,
 		path    => "$confdir/auth",
 		require => File["Prepare OpenVPN for further configuration"];
 	    "Install OpenVPN auth ldap configuration":
 		content => template("openvpn/ldap.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0640",
 		notify  => Exec["Reload OpenVPN services"],
 		owner   => root,
@@ -78,12 +78,12 @@ class openvpn::config {
 	file {
 	    "Prepare iptables configuration directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0710",
 		owner   => root,
 		path    => "/etc/firewall";
 	    "Install iptables application script":
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0750",
 		owner   => root,
 		path    => "/etc/firewall/apply",

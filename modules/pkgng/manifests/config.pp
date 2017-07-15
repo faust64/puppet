@@ -6,26 +6,26 @@ class pkgng::config {
     file {
 	"Prepare pkgng for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/usr/local/etc/pkg";
 	"Prepare pkgng repos directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/usr/local/etc/pkg/repos",
 	    require => File["Prepare pkgng for further configuration"];
 	"Install pkgng repo configuration":
 	    content => template("pkgng/repo.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/usr/local/etc/pkg/repos/FreeBSD.conf",
 	    require => File["Prepare pkgng repos directory"];
 	"Install pkgng main configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/usr/local/etc/pkg.conf",

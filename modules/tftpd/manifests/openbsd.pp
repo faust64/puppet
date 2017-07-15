@@ -4,7 +4,7 @@ class tftpd::openbsd {
     file {
 	"Prepare tftpd parent directory":
 	    ensure => directory,
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0755",
 	    owner  => root,
 	    path   => "/srv";

@@ -3,7 +3,7 @@ class newznab::webapp {
     $web_root = $newznab::vars::web_root
     if ($domain != $rdomain) {
 	$reverse = "nzbindex.$rdomain"
-	$aliases  = [ $reverse, "nzbindex.$domain" ]
+	$aliases = [ $reverse, "nzbindex.$domain" ]
     } else {
 	$reverse = false
 	$aliases = false

@@ -5,7 +5,7 @@ class spamassassin::debian {
 
     file {
 	"Install spamassassin service defaults":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["spamassassin"],
 	    owner   => root,

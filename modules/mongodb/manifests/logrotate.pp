@@ -5,7 +5,7 @@ class mongodb::logrotate {
     file {
 	"Install mongodb logrotate configuration":
 	    content => template("mongodb/logrotate.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/logrotate.d/mongodb-server",

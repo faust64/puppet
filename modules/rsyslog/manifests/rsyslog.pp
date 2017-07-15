@@ -7,7 +7,7 @@ class rsyslog::rsyslog {
 
     file {
 	"Install rsyslog local configuration":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    notify  => Service[$rsyslog::vars::service_name],
 	    owner   => root,

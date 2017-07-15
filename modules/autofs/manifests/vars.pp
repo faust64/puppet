@@ -1,5 +1,5 @@
 class autofs::vars {
-    $conf_dir = hiera("autofs_conf_dir")
+    $conf_dir = lookup("autofs_conf_dir")
 
     if ($operatingsystem == "CentOS" or $operatingsystem == "RedHat") {
 	if ($operatingsystemrelease =~ /6\./) {

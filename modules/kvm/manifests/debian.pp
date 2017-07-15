@@ -5,7 +5,7 @@ class kvm::debian {
 
     file {
 	"Install libvirt-bin script":
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0755",
 	    owner  => root,
 	    path   => "/usr/local/bin/libvirt-bin",

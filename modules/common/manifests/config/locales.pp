@@ -1,6 +1,6 @@
 #class common::config::locales {
-#    $charset = hiera("locale_charset")
-#    $locale  = hiera("locale_LOCALE")
+#    $charset = lookup("locale_charset")
+#    $locale  = lookup("locale_LOCALE")
 #
 #    exec {
 #	"Generate required locales":

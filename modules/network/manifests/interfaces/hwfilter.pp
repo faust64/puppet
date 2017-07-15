@@ -8,7 +8,7 @@ define network::interfaces::hwfilter() {
 	file {
 	    "Install hwfilter propagation script":
 		content => template("network/l2propagate.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0750",
 		owner   => root,
 		path    => "/usr/local/sbin/l2propagate";

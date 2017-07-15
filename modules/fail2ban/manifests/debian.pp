@@ -5,7 +5,7 @@ class fail2ban::debian {
 
     file {
 	"Install Fail2ban service default":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["fail2ban"],
 	    owner   => root,

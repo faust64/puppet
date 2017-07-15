@@ -1,7 +1,7 @@
 class pixelserver::scripts {
     file {
 	"Install pixelserver":
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0750",
 	    notify => Service["pixelserver"],
 	    owner  => root,

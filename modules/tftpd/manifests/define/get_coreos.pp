@@ -5,7 +5,7 @@ define tftpd::define::get_coreos($arch = [ "amd64" ]) {
     file {
 	"Prepare CoreOS $name root directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "$root_dir/installers/coreos-$name",
@@ -16,7 +16,7 @@ define tftpd::define::get_coreos($arch = [ "amd64" ]) {
 	file {
 	    "Prepare CoreOS $name $archi directory":
 		ensure  => directory,
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		owner   => root,
 		path    => "$root_dir/installers/coreos-$name/$archi",

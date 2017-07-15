@@ -4,7 +4,7 @@ class bluemind::collect {
     @@file {
 	"Install Virtual Aliases configuration":
 	    content => "$virtual_alias_maps",
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Rehash Virtual Aliases configuration"],
 	    owner   => root,
@@ -13,7 +13,7 @@ class bluemind::collect {
 	    tag     => "postfix-$fqdn";
 	"Install Virtual Domains configuration":
 	    content => "$virtual_domains_maps",
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Rehash Virtual Domains configuration"],
 	    owner   => root,
@@ -22,7 +22,7 @@ class bluemind::collect {
 	    tag     => "postfix-$fqdn";
 	"Install Virtual Mailboxes configuration":
 	    content => "$virtual_mailbox_maps",
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Rehash Virtual Mailboxes configuration"],
 	    owner   => root,

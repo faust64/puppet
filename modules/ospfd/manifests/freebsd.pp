@@ -7,7 +7,7 @@ class ospfd::freebsd {
 
     file {
 	"Enable openospfd service":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Exec["Reload ospf configuration"],
 	    owner   => root,

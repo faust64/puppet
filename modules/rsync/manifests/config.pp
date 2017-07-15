@@ -7,7 +7,7 @@ class rsync::config {
 	file {
 	    "Install Rsync main configuration":
 		content => template("rsync/rsyncd.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		notify  => Service[$rsync::vars::service_name],
 		owner   => root,

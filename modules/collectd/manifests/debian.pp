@@ -5,7 +5,7 @@ class collectd::debian {
 
     file {
 	"Install collectd service defaults":
-	    group  => hiera("gid_zero"),
+	    group  => lookup("gid_zero"),
 	    mode   => "0644",
 	    notify => Service["collectd"],
 	    owner  => root,

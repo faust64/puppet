@@ -15,19 +15,19 @@ class logstash::config {
     file {
 	"Prepare logstash for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/logstash";
 	"Prepare logstash configuration directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/logstash/conf.d",
 	    require => File["Prepare logstash for further configuration"];
 	"Install Logstash custom patterns":
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    ignore  => [ ".svn", ".git" ],
 	    mode    => "0755",
 	    owner   => root,
@@ -37,7 +37,7 @@ class logstash::config {
 	    source  => "puppet:///modules/logstash/patterns";
 	"Install Logstash logs directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    notify  => Service["logstash"],
 	    owner   => $runtime_user,
@@ -45,7 +45,7 @@ class logstash::config {
 	    require => File["Prepare logstash for further configuration"];
 	"Install Logstash main configuration":
 	    content => template("logstash/config.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["logstash"],
 	    owner   => root,

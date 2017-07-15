@@ -8,7 +8,7 @@ class nginx::logrotate {
     file {
 	"Install nginx logrotate configuration":
 	    content => template("nginx/logrotate.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "/etc/logrotate.d/nginx",

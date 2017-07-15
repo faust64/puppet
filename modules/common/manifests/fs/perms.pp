@@ -1,12 +1,12 @@
 class common::fs::perms {
-    $contact      = hiera("generic_contact")
-    $slack_hook   = hiera("suspicious_slack_hook_uri")
-    $suid_exclude = hiera("fs_legit_suid")
+    $contact      = lookup("generic_contact")
+    $slack_hook   = lookup("suspicious_slack_hook_uri")
+    $suid_exclude = lookup("fs_legit_suid")
 
     file {
 	"Install permission lookup script":
 	    content => template("common/suspicious.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/perms_lookup";

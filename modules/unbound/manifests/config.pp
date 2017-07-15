@@ -16,13 +16,13 @@ class unbound::config {
     file {
 	"Prepare unbound for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Install unbound main configuration":
 	    content => template("unbound/unbound.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    notify  => Service["unbound"],
 	    owner   => root,

@@ -10,7 +10,7 @@ class icecast::debian {
     file {
 	"Install service defaults":
 	    content => template("icecast/debian-defaults.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    notify  => Service[$icecast::vars::service_name],

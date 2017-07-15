@@ -8,13 +8,13 @@ class matchbox::config {
     file {
 	"Install matchbox xinitrc":
 	    content => template("matchbox/xinitrc.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/boot/xinitrc";
 	"Install matchbox rc.local":
 	    content => template("matchbox/local.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/rc.local",

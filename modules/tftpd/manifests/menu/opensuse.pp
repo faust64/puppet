@@ -12,7 +12,7 @@ class tftpd::menu::opensuse {
     file {
 	"Install pxe opensuse boot-screen":
 	    content => template("tftpd/opensuse.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$root_dir/boot-screens/opensuse.cfg",

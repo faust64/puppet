@@ -10,7 +10,7 @@ class haproxy::collectd {
 	file {
 	    "Install HAproxy collectd sudoers":
 		content => template("haproxy/sudoers-collectd.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0440",
 		owner   => root,
 		path    => "/etc/sudoers.d/collectd-haproxy";

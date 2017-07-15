@@ -15,7 +15,7 @@ class nodejs::pm2service {
 	file {
 	    "Install pm2 init script":
 		content => template("nodejs/debian.rc.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		notify  => Service["pm2"],
 		owner   => root,
@@ -42,7 +42,7 @@ class nodejs::pm2service {
 	file {
 	    "Install pm2 rcd script":
 		content => template("nodejs/rcd.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0755",
 		notify  => Service["pm2"],
 		owner   => root,
@@ -83,7 +83,7 @@ class nodejs::pm2service {
 	    file {
 		"Install pm2 init sudoers":
 		    content => template("nodejs/init.sudoers.erb"),
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0440",
 		    owner   => root,
 		    path    => "$sudo_conf_d/sudoers.d/pm2-$runtime_user",

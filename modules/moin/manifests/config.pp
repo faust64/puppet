@@ -14,27 +14,27 @@ class moin::config {
     file {
 	"Prepare MoinMoin for further configuration":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $conf_dir;
 	"Install MoinMoin main configuration":
 	    content => template("moin/mywiki.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$conf_dir/mywiki.py",
 	    require => File["Prepare MoinMoin for further configuration"];
 	"Install MoinMoin farmconfig":
 	    content => template("moin/farmconfig.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$conf_dir/farmconfig.py",
 	    require => Exec["Move out initial farmconfig"];
 	"Prepare MoinMoin lib directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $lib_dir,

@@ -16,15 +16,15 @@ class bacula::webapp {
     file {
 	"Prepare bacula-web site directory":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => $web_dir;
 	"Set proper permissions on Smarty cache":
 	    ensure  => directory,
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
-	    owner   => hiera("apache_runtime_user"),
+	    owner   => lookup("apache_runtime_user"),
 	    path    => "$web_dir/application/view/cache",
 	    require =>
 		[
@@ -33,7 +33,7 @@ class bacula::webapp {
 		];
 	"Install bacula-web configuration":
 	    content => template("bacula/web.erb"),
-	    group   => hiera("apache_runtime_group"),
+	    group   => lookup("apache_runtime_group"),
 	    mode    => "0640",
 	    owner   => root,
 	    path    => "$web_dir/application/config/config.php",

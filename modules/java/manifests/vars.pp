@@ -1,3 +1,3 @@
 class java::vars {
-    $default_version = hiera("java_default_version")
+    $default_version = lookup("java_default_version")
 }

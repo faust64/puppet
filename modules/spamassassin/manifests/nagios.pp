@@ -20,7 +20,7 @@ class spamassassin::nagios {
     file {
 	"Add nagios user to sudoers for spamassassin sa-update querying":
 	    content => template("spamassassin/nagios.sudoers.erb"),
-	    group   => hiera("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0440",
 	    owner   => root,
 	    path    => "$sudo_conf_d/sudoers.d/nagios-spamassassin",

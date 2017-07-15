@@ -11,7 +11,7 @@ class muninnode::service {
 	file {
 	    "Install Munin-node cron jobs":
 		content => template("muninnode/cron.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0644",
 		owner   => root,
 		path    => "/etc/cron.d/munin-node",

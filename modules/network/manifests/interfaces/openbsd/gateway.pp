@@ -5,7 +5,7 @@ define network::interfaces::openbsd::gateway($gw = false) {
 	file {
 	    $fname:
 		content => template("network/gateway.erb"),
-		group   => hiera("gid_zero"),
+		group   => lookup("gid_zero"),
 		mode    => "0640",
 		owner   => root;
 	}

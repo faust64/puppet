@@ -3,9 +3,9 @@ define stunnel::define::tunnel($accept     = "127.0.0.1:65535",
 			       $cafile     = false,
 			       $certfile   = false,
 			       $connect    = false,
-			       $ciphers    = hiera("stunnel_ciphers"),
+			       $ciphers    = lookup("stunnel_ciphers"),
 			       $keyfile    = false,
-			       $options    = hiera("stunnel_options"),
+			       $options    = lookup("stunnel_options"),
 			       $sslversion = "all") {
     if (! defined(Class[stunnel])) {
 	include stunnel
@@ -44,9 +44,9 @@ define stunnel::define::tunnel($accept     = "127.0.0.1:65535",
 	    file {
 		"Install stunnel $name configuration":
 		    content => template("stunnel/tunnel.erb"),
-		    group   => hiera("gid_zero"),
+		    group   => lookup("gid_zero"),
 		    mode    => "0644",
-		    notify  => Service[hiera("stunnel_service_name")],
+		    notify  => Service[lookup("stunnel_service_name")],
 		    owner   => root,
 		    path    => "/etc/stunnel/$name.conf",
 		    require => File["Prepare stunnel for further configuration"];
