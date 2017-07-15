@@ -1,5 +1,5 @@
 define racktables::define::register_host($object_type = 4) {
-    if ($serialnumber != undef) {
+    if (getvar("::serialnumber")) {
 	if (! ($serialnumber == "" or $serialnumber =~ /Not Specified/ or $serialnumber =~ /To Be Filled By/ or $serialnumber =~ /System Serial Number/)) {
 	    $leserial = "\"$serialnumber\""
 	    $updatedobject = "SELECT name FROM Object WHERE asset_no = $leserial AND objtype_id = $object_type and label = \"$name\""
