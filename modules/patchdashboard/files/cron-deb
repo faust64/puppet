@@ -1,0 +1,8 @@
+#!/bin/sh
+
+RANDOM_NUMBER=`od -An -N2 -d /dev/random`
+WAIT_TIME=`expr \( 1 + $RANDOM_NUMBER % \( 45 - 1 \) \) '*' 60`
+sleep $WAIT_TIME #max: 45 minutes
+/usr/bin/apt-get update >/dev/null 2>&1
+
+exit 0

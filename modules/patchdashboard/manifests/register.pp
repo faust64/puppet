@@ -8,6 +8,20 @@ class patchdashboard::register {
 	    include curl
 	}
 
+	if ($myoperatingsystem == "Debian" or $myoperatingsystem == "Devuan" or $myoperatingsystem == "Ubuntu") {
+	    file {
+		"Schedule daily apt updates":
+		    group  => lookup("gid_zero"),
+		    mode     => "0755",
+		    owner  => "root",
+		    path   => "/etc/cron.daily/aptupdate",
+		    source => "puppet:///modules/patchdashboard/cron-deb";
+	    }
+
+	    File["Schedule daily apt updates"]
+		-> Exec["Download PatchDashboard client installer"]
+	}
+
 	exec {
 	    "Download PatchDashboard client installer":
 		command => "$download https://$upstream/client/client_installer.php && mv client_installer.php patchdashboard-register.sh && chmod +x patchdashboard-register.sh",
