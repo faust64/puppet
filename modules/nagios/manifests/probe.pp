@@ -229,7 +229,17 @@ class nagios::probe {
 	}
     }
 
-    if ($swapsize != undef and $swapsize =~ /[1-9]/) {
+    if (getvar('::swapsize')) {
+	if ($swapsize =~ /[1-9]/) {
+	    $doswap = true
+	} else {
+	    $doswap = false
+	}
+    } else {
+	$doswap = false
+    }
+
+    if ($doswap) {
 	nagios::define::probe {
 	    "swap":
 		description   => "$fqdn swap usage",
