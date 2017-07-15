@@ -1,13 +1,13 @@
-define subversion::define::workdir($local_container = false,
+define subversion::define::workdir($group_real      = lookup("gid_zero"),
+				   $local_container = false,
 				   $local_name      = $name,
+				   $owner_real      = "root",
 				   $repository      = false,
 				   $svn_password    = false,
 				   $svn_username    = false,
 				   $update          = true) {
     if ($local_container and $repository) {
-	$owner_real      = getvar("::owner") ? { false => 0,     default => $owner }
-	$group_real      = getvar("::group") ? { false => 0,     default => $group }
-	$local_name_real = $local_name       ? { false => $name, default => $local_name }
+	$local_name_real = $local_name ? { false => $name, default => $local_name }
 
 	if (!defined(Class[Subversion])) {
 	    include subversion

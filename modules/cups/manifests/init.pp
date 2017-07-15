@@ -16,12 +16,10 @@ class cups {
     include cups::config
     include cups::filetraq
     include cups::nagios
+    include cups::rsyslog
     include cups::service
 
     if ($kernel == "Linux") {
 	include cups::logrotate
-    }
-    if ($cups::vars::cups_rsyslog == true) {
-	include cups::rsyslog
     }
 }

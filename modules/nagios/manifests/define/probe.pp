@@ -45,8 +45,8 @@ define nagios::define::probe($args             = false,
 	$pluginarg = ""
     }
 
-    $conf_dir  = $nagios::vars::nagios_conf_dir
-    $plugindir = $nagios::vars::nagios_plugins_dir
+    $conf_dir  = lookup("nagios_conf_dir")
+    $plugindir = lookup("nagios_plugins_dir")
 
     if (lookup("with_nagios") == true) {
 	if (! defined(Class[nagios])) {

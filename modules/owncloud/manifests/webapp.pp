@@ -23,7 +23,7 @@ class owncloud::webapp {
 	$aliases = false
     }
 
-    if ($owncloud::vars::apache_vers == "2.2") {
+    if ($apache::vars::version == "2.2") {
 	$options  = "-Indexes"
 	$override = false
     } else {
