@@ -5,15 +5,15 @@ define nodejs::define::app($appdeps   = false,
 			   $apptar    = false,
 			   $appstatus = "enabled",
 			   $update    = false) {
+    if ($nodejs::vars::force_version) {
+	$nodepath = "/usr/local/nodejs/lib/node_modules/pm2/bin"
+    } else {
+	$nodepath = "/usr/local/lib/node_modules/pm2/bin"
+    }
     if ($appsrc or $appgit or $appsvn or $apptar) {
 	if ($nodejs::vars::service_name == "pm2") {
 	    $installpath = "/usr/share"
 	    $pm2home     = $nodejs::vars::pm2_home
-	    if ($nodejs::vars::force_version) {
-		$pm2path = "/usr/local/nodejs/lib/node_modules/pm2/bin
-	    } else {
-		$pm2path = "/usr/local/lib/node_modules/pm2/bin
-	    }
 
 	    if (! defined(Exec["Save pm2 processes"])) {
 		exec {
@@ -21,7 +21,7 @@ define nodejs::define::app($appdeps   = false,
 			command     => "pm2 save",
 			cwd         => "/",
 			environment => [ "PM2_HOME=$pm2home/.pm2" ],
-			path        => "$pm2path:/usr/local/bin:/usr/bin:/bin",
+			path        => "${nodepath}:/usr/local/bin:/usr/bin:/bin",
 			refreshonly => true;
 		}
 	    }
@@ -148,13 +148,13 @@ define nodejs::define::app($appdeps   = false,
 			environment => [ "PM2_HOME=$pm2home/.pm2" ],
 			refreshonly => true,
 			onlyif      => "pm2 show $name",
-			path        => "$pm2path:/usr/local/bin:/usr/bin:/bin";
+			path        => "${nodepath}:/usr/local/bin:/usr/bin:/bin";
 		    "Start $name nodejs application":
 			command     => "pm2 start ./app.js --name $name -i 2 --output /var/log/nodejs/$name.log --error /var/log/nodejs/$name.err",
 			cwd         => "$installpath/$name",
 			environment => [ "PM2_HOME=$pm2home/.pm2" ],
 			notify      => Exec["Save pm2 processes"],
-			path        => "$pm2path:/usr/local/bin:/usr/bin:/bin",
+			path        => "${nodepath}:/usr/local/bin:/usr/bin:/bin",
 			require     => Exec["Reload $name nodejs application"],
 			unless      => "pm2 show $name";
 		}
@@ -177,7 +177,7 @@ define nodejs::define::app($appdeps   = false,
 			environment => [ "PM2_HOME=$pm2home/.pm2" ],
 			notify      => Exec["Save pm2 processes"],
 			onlyif      => "pm2 show $name",
-			path        => "$pm2path:/usr/local/bin:/usr/bin:/bin",
+			path        => "${nodepath}:/usr/local/bin:/usr/bin:/bin",
 		}
 	    }
 	}
