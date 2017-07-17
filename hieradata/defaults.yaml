@@ -2439,12 +2439,6 @@ unbound_runtime_group: unbound
 unbound_runtime_user: unbound
 unbound_var_dir: /var/lib/unbound
 
-# Unifi
-unifi_keep_backup: true
-unifi_manager_passphrase: ubnt
-unifi_manager_user: ubnt
-unifi_site: default
-
 # Vebackup
 jumeau: false
 triplet: false

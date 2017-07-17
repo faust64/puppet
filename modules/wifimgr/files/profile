@@ -1,5 +1,0 @@
-#!/bin/sh
-
-if test `id -u` -eq 0 -a -s /usr/local/sbin/unifi_sh_api; then
-    . /usr/local/sbin/unifi_sh_api
-fi

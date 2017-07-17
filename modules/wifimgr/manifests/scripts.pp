@@ -3,27 +3,7 @@ class wifimgr::scripts {
     $aironet_pass = $wifimgr::vars::aironet_pass
     $aironet_user = $wifimgr::vars::aironet_user
     $contact      = $wifimgr::vars::contact
-    $dumpdir      = $wifimgr::vars::dumpdir
     $generate_len = $wifimgr::vars::generate_len
-    $manager_pass = $wifimgr::vars::manager_pass
-    $manager_user = $wifimgr::vars::manager_user
-    $site         = $wifimgr::vars::managed_site
-
-    file {
-	"Install UniFi SH API script":
-	    content => template("wifimgr/shapi.erb"),
-	    group   => lookup("gid_zero"),
-	    mode    => "0750",
-	    owner   => root,
-	    path    => "/usr/local/sbin/unifi_sh_api";
-	"Install UniFi configuration backup script":
-	    content => template("wifimgr/unifi_backup.erb"),
-	    group   => lookup("gid_zero"),
-	    mode    => "0750",
-	    owner   => root,
-	    path    => "/usr/local/sbin/unifi_backup",
-	    require => File["Install UniFi SH API script"];
-    }
 
     if ($aironet_host) {
 	file {

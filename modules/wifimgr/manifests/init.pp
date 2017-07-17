@@ -22,9 +22,4 @@ class wifimgr {
 
     include wifimgr::service
     include wifimgr::scripts
-    include wifimgr::profile
-
-    if ($wifimgr::vars::dumpdir) {
-	include wifimgr::backups
-    }
 }
