@@ -45,14 +45,6 @@ icinga_static_devices:
     host_ipaddress: 54.204.82.86
     host_parents: route53-prod.amazonaws.com
     srvclass: peerioblob
-  bloblb1.dr.peerio.com:
-    host_ipaddress: 54.149.57.234
-    host_parents: route53-dr.amazonaws.com
-    srvclass: peerioblob
-  bloblb2.dr.peerio.com:
-    host_ipaddress: 54.191.37.231
-    host_parents: route53-dr.amazonaws.com
-    srvclass: peerioblob
   codedeploy-prod.amazonaws.com:
     host_ipaddress: us-east-1
     host_parents: route53-prod.amazonaws.com
@@ -166,14 +158,6 @@ icinga_static_devices:
     host_ipaddress: 54.204.82.86
     host_parents: route53-prod.amazonaws.com
     srvclass: peerioghost
-  ghostlb1.dr.peerio.com:
-    host_ipaddress: 54.149.57.234
-    host_parents: route53-dr.amazonaws.com
-    srvclass: peerioghost
-  ghostlb2.dr.peerio.com:
-    host_ipaddress: 54.191.37.231
-    host_parents: route53-dr.amazonaws.com
-    srvclass: peerioghost
   lb1.prod.peerio.com:
     host_ipaddress: 52.91.96.93
     host_parents: route53-prod.amazonaws.com
@@ -181,14 +165,6 @@ icinga_static_devices:
   lb2.prod.peerio.com:
     host_ipaddress: 54.204.82.86
     host_parents: route53-prod.amazonaws.com
-    srvclass: peerio
-  lb1.dr.peerio.com:
-    host_ipaddress: 54.149.57.234
-    host_parents: route53-dr.amazonaws.com
-    srvclass: peerio
-  lb2.dr.peerio.com:
-    host_ipaddress: 54.191.37.231
-    host_parents: route53-dr.amazonaws.com
     srvclass: peerio
 # nebula.surfscriptpro.com:
 #   host_ipaddress: 192.99.160.94
