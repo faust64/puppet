@@ -189,14 +189,6 @@ icinga_static_devices:
     host_ipaddress: 54.204.82.86
     host_parents: route53-prod.amazonaws.com
     srvclass: peerioshark
-  sharklb1.dr.peerio.com:
-    host_ipaddress: 54.149.57.234
-    host_parents: route53-dr.amazonaws.com
-    srvclass: peerioshark
-  sharklb2.dr.peerio.com:
-    host_ipaddress: 54.191.37.231
-    host_parents: route53-dr.amazonaws.com
-    srvclass: peerioshark
   site.awsprod.peerio.com:
     host_ipaddress: 54.158.19.52
     host_parents: route53-prod.amazonaws.com
