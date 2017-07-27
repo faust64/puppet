@@ -1,9 +1,11 @@
 class apache::custom {
-    $download  = $apache::vars::download
-    $error_dir = $apache::vars::error_dir
-    $repo      = $apache::vars::repo
-    $version   = $apache::vars::version
-    $web_root  = $apache::vars::web_root
+    $download        = $apache::vars::download
+    $error_dir       = $apache::vars::error_dir
+    $repo            = $apache::vars::repo
+    $robots_allow    = $apache::vars::robots_allow
+    $robots_disallow = $apache::vars::robots_disallow
+    $version         = $apache::vars::version
+    $web_root        = $apache::vars::web_root
 
     file {
 	"Install Apache error messages":
@@ -20,12 +22,12 @@ class apache::custom {
 	    path    => "$web_root/include",
 	    target  => "$error_dir/include";
 	"Install robots.txt (apache)":
+	    content => template("apache/robots.erb"),
 	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$web_root/robots.txt",
-	    require => File["Prepare www directory"],
-	    source  => "puppet:///modules/apache/robots.txt";
+	    require => File["Prepare www directory"];
     }
 
     exec {

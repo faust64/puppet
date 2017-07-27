@@ -70,6 +70,8 @@ class apache::vars {
     $run_dir              = lookup("apache_run_dir")
     $runtime_group        = lookup("apache_runtime_group")
     $runtime_user         = lookup("apache_runtime_user")
+    $robots_allow         = lookup("apache_robots_allow")
+    $robots_disallow      = lookup("apache_robots_disallow")
     $rsyslog_conf_dir     = lookup("rsyslog_conf_dir")
     $rsyslog_service_name = lookup("rsyslog_service_name")
     $rsyslog_version      = lookup("rsyslog_version")

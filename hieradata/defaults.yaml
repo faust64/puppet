@@ -76,6 +76,8 @@ apache_munin_probes:
   - apache_accesses
   - apache_processes
   - apache_volume
+apache_robots_allow: false
+apache_robots_disallow: false
 apache_run_dir: /var/run
 apache_runtime_group: www-data
 apache_runtime_user: www-data

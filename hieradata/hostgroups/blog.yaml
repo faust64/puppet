@@ -12,6 +12,10 @@ apache_mod_php: true
 apache_mod_status: true
 apache_mpm: prefork
 apache_munin: true
+apache_robots_allow:
+  - '*'
+apache_robots_disallow:
+  - /wp-admin/
 apache_rsyslog: true
 
 # ClamAV

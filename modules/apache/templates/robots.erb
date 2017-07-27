@@ -1,0 +1,5 @@
+User-agent: *
+<% if @robots_disallow != false -%><% @robots_disallow.each do |path| -%>Disallow: <%=path%>
+<% end -%><% end -%><% if @robots_allow != false -%><% @robots_allow.each do |path| -%>Allow: <%=path%>
+<% end -%><% end -%><% if @robots_disallow == false and @robots_allow == false -%>Disallow: /
+<% end -%>
