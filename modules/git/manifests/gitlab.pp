@@ -77,13 +77,14 @@ class git::gitlab {
 
     apache::define::vhost {
 	"gitlab.$domain":
-	    aliases        => $aliases,
-	    app_port       => 81,
-	    csp_name       => false,
-	    require        => Package["gitlab-ce"],
-	    vhostldapauth  => "applicative",
-	    vhostsource    => "app_proxy",
-	    with_reverse   => $reverse,
-	    xss_protection => false;
+	    aliases         => $aliases,
+	    app_port        => 81,
+	    csp_name        => false,
+	    require         => Package["gitlab-ce"],
+	    stricttransport => false,
+	    vhostldapauth   => "applicative",
+	    vhostsource     => "app_proxy",
+	    with_reverse    => $reverse,
+	    xss_protection  => false;
     }
 }
