@@ -175,7 +175,7 @@ run_whois() {
 		error=0
 	fi
 
-	[ $error -eq 0 ] || die "$STATE_UNKNOWN" "UNKNOWN - WHOIS exited with error $error."
+	[ $error -eq 0 -o $error -eq 1 ] || die "$STATE_UNKNOWN" "UNKNOWN - WHOIS exited with error $error."
 }
 
 # Calculate days until expiration from whois output
