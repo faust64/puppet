@@ -28,7 +28,7 @@ class elasticsearch::jobs {
 		minute   => 12,
 		require  => File["Install elasticsearch idx close script"];
 	    "Purge elasticsearch logs":
-		command  => "/usr/local/sbin/elasticsearch_purge >/dev/null 2>&1",
+		command  => "/usr/local/sbin/elasticsearch_cleanup >/dev/null 2>&1",
 		hour     => $do_hour,
 		minute   => 15,
 		monthday => $do_mday,
