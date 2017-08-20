@@ -14,6 +14,6 @@ if ! echo "$hook" | grep hooks.slack.com >/dev/null; then
     hook=https://hooks.slack.com/services/$hook
 fi
 
-curl -s -d "payload=$json" "$hook"
+curl -s --data-urlencode "payload=$json" "$hook"
 
 exit $?
