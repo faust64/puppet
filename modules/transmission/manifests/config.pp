@@ -40,4 +40,12 @@ class transmission::config {
 	    require => File["Install transmission main configuration"],
 	    target  => "$conf_dir/settings.json";
     }
+
+    mysysctl::define::setfile {
+	"transmission":
+	    source => "transmission/sysctl.conf";
+    }
+
+    Mysysctl::Define::Setfile["transmission"]
+	-> Service[$transmission::vars::srvname]
 }
