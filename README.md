@@ -74,7 +74,23 @@ apt-get update ; apt-get upgrade ; apt-get dist-upgrade ; apt-get autoremove --p
 if grep -E '(devuan|trusty)' /etc/apt/sources.list >/dev/null; then
     dist=trusty
 else
-    dist=jessie
+    dist=`lsb_release -sc`
+fi
+if test "$dist" = squeeze; then
+    touch "/var/lib/dpkg/info/libreadline6:amd64.list"
+    cat <<EOF >>/var/lib/dpkg/status
+Package: libreadline6
+Status: install ok installed
+Priority: extra
+Section: libs
+Installed-Size: 104
+Maintainer: Samuel Martin Moro <samuel@unetresgrossebite.com>
+Architecture: amd64
+Multi-Arch: allowed
+Version: 6.0.0-1deb8u1
+Description: Dummy fake package to trick puppet-agent into installing.
+Original-Maintainer: Matthias Klose <doko@debian.org>
+EOF
 fi
 wget https://apt.puppetlabs.com/puppetlabs-release-pc1-$dist.deb
 dpkg -i puppetlabs-release-pc1-$dist.deb
