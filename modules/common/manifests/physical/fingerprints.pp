@@ -19,16 +19,18 @@ class common::physical::fingerprints {
     } elsif ($sshfp_rsa_sha1) {
 	ssh::define::declare_fingerprints { "RSA-$fqdn": }
     }
-    if ($sshfp_dsa_sha256) {
-	ssh::define::declare_fingerprints {
-	    "DSA-$fqdn":
-		hash    => "sha256",
-		keytype => "dsa";
-	}
-    } elsif ($sshfp_rsa_sha1) {
-	ssh::define::declare_fingerprints {
-	    "DSA-$fqdn":
-		keytype => "dsa";
+    if ($lsbdistcodename != "stretch" and $lsbdistcodename != "xenial") {
+	if ($sshfp_dsa_sha256) {
+	    ssh::define::declare_fingerprints {
+		"DSA-$fqdn":
+		    hash    => "sha256",
+		    keytype => "dsa";
+	    }
+	} elsif ($sshfp_rsa_sha1) {
+	    ssh::define::declare_fingerprints {
+		"DSA-$fqdn":
+		    keytype => "dsa";
+	    }
 	}
     }
 }

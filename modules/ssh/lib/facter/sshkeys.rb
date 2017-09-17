@@ -13,6 +13,8 @@ Facter.add("hostfingerprint") do
 	    %x{sed 's|[ 	]*$||g' /etc/ssh/ssh_host_ecdsa_key.pub}.chomp
 	elsif File.exist? "/etc/ssh/ssh_host_rsa_key.pub"
 	    %x{sed 's|[ 	]*$||g' /etc/ssh/ssh_host_rsa_key.pub}.chomp
+	elsif File.exist? "/etc/ssh/ssh_host_ed25519_key.pub"
+	    %x{sed 's|[ 	]*$||g' /etc/ssh/ssh_host_ed25519_key.pub}.chomp
 	elsif File.exist? "/etc/ssh/ssh_host_dsa_key.pub"
 	    %x{sed 's|[ 	]*$||g' /etc/ssh/ssh_host_dsa_key.pub}.chomp
 	end
@@ -22,6 +24,13 @@ Facter.add("sshfp_ecdsa_sha1") do
     setcode do
 	if File.exist? "/etc/ssh/ssh_host_ecdsa_key.pub"
 	    %x{awk '{print $2}' /etc/ssh/ssh_host_ecdsa_key.pub | openssl base64 -d -A 2>/dev/null | openssl sha1 2>/dev/null | awk '{print $2}'}.chomp
+	end
+    end
+end
+Facter.add("sshfp_ed25519_sha1") do
+    setcode do
+	if File.exist? "/etc/ssh/ssh_host_ed25519_key.pub"
+	    %x{awk '{print $2}' /etc/ssh/ssh_host_ed25519_key.pub | openssl base64 -d -A 2>/dev/null | openssl sha1 2>/dev/null | awk '{print $2}'}.chomp
 	end
     end
 end
