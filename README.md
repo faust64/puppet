@@ -76,7 +76,7 @@ if grep -E '(devuan|trusty)' /etc/apt/sources.list >/dev/null; then
 else
     dist=`lsb_release -sc`
 fi
-if test "$dist" = squeeze; then
+if test "$dist" = stretch; then
     touch "/var/lib/dpkg/info/libreadline6:amd64.list"
     cat <<EOF >>/var/lib/dpkg/status
 Package: libreadline6
