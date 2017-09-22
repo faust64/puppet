@@ -44,6 +44,21 @@ define command {
 }
 
 define command {
+    command_name	check-expandooicebear
+    command_line	<%=@plugindir%>/check_http -H 'login.expandoo.eu' -I "$HOSTADDRESS$" -p 443 --ssl -s 'Peerio server'
+}
+
+define command {
+    command_name	check-expandooiceblobprod
+    command_line	<%=@plugindir%>/check_http -H 'docs.expandoo.eu' -I "$HOSTADDRESS$" -p 443 --ssl -s 'Peerio objects gateway'
+}
+
+define command {
+    command_name	check-expandoomail
+    command_line	<%=@plugindir%>/check_http -H 'public.expandoo.eu' -I "$HOSTADDRESS$" -p 443 --ssl -u https://public.expandoo.eu/v2/ping
+}
+
+define command {
     command_name	check-peerioicebear
     command_line	<%=@plugindir%>/check_http -H 'icebear.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -s 'Peerio server'
 }

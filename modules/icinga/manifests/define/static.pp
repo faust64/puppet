@@ -42,7 +42,7 @@ define icinga::define::static($host_contact   = "root",
 	    $src            = "servers/$srvclass"
 	    $statusmapimage = "utgb/$srvclass.gd2"
 	}
-	"peerio", "peerioblob", "peerioghost", "peerioicebear", "peerioiceblobprod", "peerioiceblobdr", "peeriomail", "peerioshark", "peeriosite": {
+	"peerio", "peerioblob", "peerioghost", "peerioicebear", "peerioiceblobprod", "peerioiceblobdr", "peeriomail", "peerioshark", "peeriosite", "expandoo", "expandooblob", "expandooghost", "expandooicebear", "expandooiceblobprod", "expandooiceblobdr", "expandoomail", "expandooshark", "expandoosite": {
 	    $iconimagealt   = "peerio"
 	    $iconimage      = "utgb/peerio.png"
 	    $src            = "servers/peerio"

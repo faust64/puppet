@@ -83,6 +83,54 @@ icinga_static_devices:
     host_ipaddress: us-west-2
     host_parents: route53-dr.amazonaws.com
     srvclass: elb
+  ibblob1.prod.expandoo.lu:
+    host_ipaddress: 185.71.56.111
+    host_parents: route53-expandoo.amazonaws.com
+    srvclass: expandooiceblobprod
+  ibblob2.prod.expandoo.lu:
+    host_ipaddress: 185.71.56.112
+    host_parents: route53-expandoo.amazonaws.com
+    srvclass: expandooiceblobprod
+  ibblob3.prod.expandoo.lu:
+    host_ipaddress: 185.71.56.113
+    host_parents: route53-expandoo.amazonaws.com
+    srvclass: expandooiceblobprod
+  ibblob4.prod.expandoo.lu:
+    host_ipaddress: 185.71.56.114
+    host_parents: route53-expandoo.amazonaws.com
+    srvclass: expandooiceblobprod
+  ibmail1.prod.expandoo.lu:
+    host_ipaddress: 185.71.56.111
+    host_parents: route53-expandoo.amazonaws.com
+    srvclass: expandoomail
+  ibmail2.prod.expandoo.lu:
+    host_ipaddress: 185.71.56.112
+    host_parents: route53-expandoo.amazonaws.com
+    srvclass: expandoomail
+  ibmail3.prod.expandoo.lu:
+    host_ipaddress: 185.71.56.113
+    host_parents: route53-expandoo.amazonaws.com
+    srvclass: expandoomail
+  ibmail4.prod.expandoo.lu:
+    host_ipaddress: 185.71.56.114
+    host_parents: route53-expandoo.amazonaws.com
+    srvclass: expandoomail
+  ibws1.prod.expandoo.lu:
+    host_ipaddress: 185.71.56.111
+    host_parents: route53-expandoo.amazonaws.com
+    srvclass: expandooicebear
+  ibws2.prod.expandoo.lu:
+    host_ipaddress: 185.71.56.112
+    host_parents: route53-expandoo.amazonaws.com
+    srvclass: expandooicebear
+  ibws3.prod.expandoo.lu:
+    host_ipaddress: 185.71.56.113
+    host_parents: route53-expandoo.amazonaws.com
+    srvclass: expandooicebear
+  ibws4.prod.expandoo.lu:
+    host_ipaddress: 185.71.56.114
+    host_parents: route53-expandoo.amazonaws.com
+    srvclass: expandooicebear
   ibblob1.prod.peerio.com:
     host_ipaddress: 54.198.78.160
     host_parents: route53-prod.amazonaws.com
@@ -180,6 +228,9 @@ icinga_static_devices:
     srvclass: route53
   route53-dr.amazonaws.com:
     host_ipaddress: us-west-2
+    srvclass: route53
+  route53-expandoo.amazonaws.com:
+    host_ipaddress: eu-central-1
     srvclass: route53
   sharklb1.prod.peerio.com:
     host_ipaddress: 52.91.96.93
