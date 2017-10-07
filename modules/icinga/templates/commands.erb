@@ -112,8 +112,8 @@ define command {
     command_name	check-ssllabs
     command_line	<%=@plugindir%>/check_sslscan -H '$ARG1$' -c <%=@sslscan_critical%> -w <%=@sslscan_warning%>
 }
-<% if @dns_ip != false -%><% @dns_ip.sort.each do |host| -%>
-define command {
+
+<% if @dns_ip != false -%><% @dns_ip.sort.each do |host| -%>define command {
     command_name	check_nsdec
     command_line	<%=@plugindir%>/check_dns -H '$HOSTNAME$' -s <%=host%>
 }
@@ -121,4 +121,9 @@ define command {
 define command {
     command_name	check_nsrev
     command_line	<%=@plugindir%>/check_dns -H '$HOSTADDRESS$' -s <%=host%>
-}<% break -%><% end -%><% end -%>
+}
+
+<% break -%><% end -%><% end -%>define command {
+    command_name	check_dummy
+    command_line	/bin/echo OK
+}
