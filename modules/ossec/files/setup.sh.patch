@@ -1,0 +1,125 @@
+--- setup.sh.orig	2008-02-29 20:21:07.000000000 +0100
++++ setup.sh	2017-03-08 04:22:57.000000000 +0100
+@@ -2,35 +2,34 @@
+ # Setup script for OSSEC UI
+ # Author: Daniel B. Cid <dcid@ossec.net>
+ 
+-
+ # Finding my location
+-LOCAL=`dirname $0`;
++LOCAL=`dirname $0`
+ cd $LOCAL
+ PWD=`pwd`
+-ERRORS=0;
++ERRORS=0
+ 
+ # Looking for echo -n
+ ECHO="echo -n"
+ hs=`echo -n "a"`
+ if [ ! "X$hs" = "Xa" ]; then
+-    ls "/usr/ucb/echo" > /dev/null 2>&1
++    ls "/usr/ucb/echo" >/dev/null 2>&1
+     if [ $? = 0 ]; then
+-        ECHO="/usr/ucb/echo -n"
++	ECHO="/usr/ucb/echo -n"
+     else
+-        ECHO=echo
++	ECHO=echo
+     fi
+-fi        
++fi
+ 
+ # Looking for htpasswd
+ HTPWDCMD="htpasswd"
+-ls "`which $HTPWDCMD`" > /dev/null 2>&1
++ls "`which $HTPWDCMD`" >/dev/null 2>&1
+ if [ ! $? = 0 ]; then
+     HTPWDCMD="htpasswd2"
+-    ls "`which $HTPWDCMD`" > /dev/null 2>&1
++    ls "`which $HTPWDCMD`" >/dev/null 2>&1
+     if [ ! $? = 0 ]; then
+-        HTPWDCMD=""
+-    fi    
+-fi    
++	HTPWDCMD=""
++    fi
++fi
+ 
+ 
+ # Default options
+@@ -43,11 +42,11 @@
+ echo ""
+ 
+ 
+-ls $HT_DEFAULT > /dev/null 2>&1
++ls $HT_DEFAULT >/dev/null 2>&1
+ if [ ! $? = 0 ]; then
+-    echo "** ERROR: Could not find '$HT_DEFAULT'. Unable to continue."    
+-    ERRORS=1;
+-fi    
++    echo "** ERROR: Could not find '$HT_DEFAULT'. Unable to continue."
++    ERRORS=1
++fi
+ 
+ 
+ # 1- Create .htaccess blocking access to private directories.
+@@ -55,34 +54,37 @@
+ mkdir tmp >/dev/null 2>&1
+ chmod 777 tmp
+ for i in $PRIV_DIRS; do
+-    echo $HT_DIR_ACCESS > ./$i/.htaccess;
++    echo $HT_DIR_ACCESS >./$i/.htaccess
+ done
+ 
+-# 2- Create. htaccess blocking access to .sh and config files.    
+-echo $HT_FLZ_ACCESS > ./.htaccess;
+-echo "" >> ./.htaccess;
+-cat $HT_DEFAULT >> ./.htaccess;
++# 2- Create. htaccess blocking access to .sh and config files.
++echo $HT_FLZ_ACCESS >./.htaccess
++echo "" >>./.htaccess
++cat $HT_DEFAULT >>./.htaccess
+ 
+ 
+ # 3- Create password
+ while [ 1 ]; do
+     if [ "X$MY_USER" = "X" ]; then
+-        $ECHO "Username: "
+-        read MY_USER;
++	$ECHO "Username: "
++	read MY_USER
+     else
+-        break;
+-    fi        
++	break
++    fi
+ done
+ 
+ if [ "X$HTPWDCMD" = "X" ]; then
+-    echo "** ERROR: Could not find htpasswd. No password set."    
+-    ERRORS=1;
++    echo "** ERROR: Could not find htpasswd. No password set."
++    ERRORS=1
+ else
+-    $HTPWDCMD -c $PWD/.htpasswd $MY_USER
+-    if [ ! $? = 0 ]; then
+-        ERRORS=1;
+-    fi    
+-fi    
++    if test "X$MY_PASSWD" = X; then
++	if ! $HTPWDCMD -c $PWD/.htpasswd $MY_USER; then
++	    ERRORS=1
++	fi
++    elif ! $HTPWDCMD -c -b $PWD/.htpasswd $MY_USER "$MY_PASSWD"; then
++	ERRORS=1
++    fi
++fi
+ 
+ if [ $ERRORS = 0 ]; then
+     echo ""
+@@ -90,4 +92,4 @@
+ else
+     echo ""
+     echo "Setup failed to complete."
+-fi        
++fi

@@ -1,19 +1,21 @@
 class ossec::webapp {
-    $download  = $ossec::vars::download
-    $rdomain   = $ossec::vars::rdomain
-#   $web_admin = $ossec::vars::web_admin
-#   $web_pass  = $ossec::vars::web_pass
+    $download = $ossec::vars::download
+    $rdomain  = $ossec::vars::rdomain
+
     if ($domain != $rdomain) {
-	$reverse  = "ossec.$rdomain"
-	$aliases  = [ $reverse ]
+	$reverse = "ossec.$rdomain"
+	$aliases = [ $reverse ]
     } else {
-	$reverse  = false
-	$aliases  = false
+	$reverse = false
+	$aliases = false
     }
 
     include common::tools::unzip
 
     if (! defined(Class[Nginx])) {
+	$web_admin = $ossec::vars::web_admin
+	$web_pass  = $ossec::vars::web_pass
+
 	if (! defined(Class[Apache])) {
 	    include apache
 	}
@@ -22,9 +24,28 @@ class ossec::webapp {
 	    "ossec.$domain":
 		aliases       => $aliases,
 		app_root      => "/usr/share/ossec-web-ui",
-		require       => File["Link OSSEC runtime directory to master"],
+		require       => Exec["Install OSSEC web UI from sources"],
 		vhostldapauth => false,
 		with_reverse  => $reverse;
+	}
+
+	file {
+	    "Patch OSSEC manager setup script":
+		group   => lookup("gid_zero"),
+		mode    => "0750",
+		owner   => root,
+		path    => "/usr/share/ossec-web-ui/setup.sh",
+		require => File["Link OSSEC runtime directory to master"],
+		source  => "puppet:///modules/ossec/setup.sh";
+	}
+
+	exec {
+	    "Install OSSEC web UI from sources":
+		command     => "sh setup.sh",
+		cwd         => "/usr/share/ossec-web-ui",
+		environment => [ "MY_USER='$web_admin'", "MY_PASSWD='$web_pass'" ],
+		path        => "/usr/bin:/bin",
+		require     => File["Patch OSSEC manager setup script"];
 	}
     } else {
 	nginx::define::vhost {
@@ -35,8 +56,18 @@ class ossec::webapp {
 		fpm_runtime_usr => "ossec",
 		require         => File["Link OSSEC runtime directory to master"],
 		vhostldapauth   => false,
+		vhostsource     => "ossec",
 		with_php_fpm    => "ossec",
 		with_reverse    => $reverse;
+	}
+
+	file {
+	    "Set permissions to OSSEC web-ui tmp directory":
+		ensure  => directory,
+		group   => lookup("gid_zero"),
+		mode    => "0777",
+		owner   => root,
+		path    => "/usr/share/ossec-web-ui/tmp";
 	}
     }
 
@@ -53,13 +84,6 @@ class ossec::webapp {
 	    cwd         => "/usr/share",
 	    path        => "/usr/bin:/bin",
 	    refreshonly => true;
-#	"Install OSSEC web UI from sources":
-# FIXME: !DIY!
-#	    command     => "sh setup.sh",
-#	    cwd         => "/usr/share/ossec-web-ui",
-#	    environment => [ "MY_USER='$web_admin'" ],
-#	    path        => "/usr/bin:/bin",
-#	    require     => File["Link OSSEC runtime directory to master"];
     }
 
     file {
