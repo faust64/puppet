@@ -70,6 +70,7 @@ allowed_tcp_ports:
   - 9418
   - 9869
   - 11371
+  - 32400
 allowed_udp_ports:
   - time
   - ntp
