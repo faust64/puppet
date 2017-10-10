@@ -245,7 +245,7 @@ icinga_static_devices:
     host_parents: route53-prod.amazonaws.com
     srvclass: peeriosite
   site.productiondr.peerio.com:
-    host_ipaddress: 54.213.148.112
+    host_ipaddress: 54.245.149.112
     host_parents: route53-dr.amazonaws.com
     srvclass: peeriosite
 # vps1.nebula.surfscriptpro.com:
