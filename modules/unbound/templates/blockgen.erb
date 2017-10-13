@@ -8,8 +8,8 @@ TMPFILE=/tmp/gen.$$
 render_record()
 {
 #discard myftp.org: some friend of mine host his plex behind a myftp.org record,
-#I can't reach his setup otherwise, that makes me sad, ...
-    echo "$1" | grep myftp.org >/dev/null && return 0
+#discard piwik.org: can't download their last build if I can't reach their site
+    echo "$1" | grep -E (myftp|piwik).org' >/dev/null && return 0
     grep "\"$1\"" $TMPFILE >/dev/null && return 0
     echo "local-zone: \"$1\" redirect"
     echo "local-data: \"$1 A $ADDRESS\""
