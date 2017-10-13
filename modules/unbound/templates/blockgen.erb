@@ -21,16 +21,16 @@ if ! test -s winhelp-blocklist.txt; then
     curl http://winhelp2002.mvps.org/hosts.txt >winhelp-blocklist.txt
 fi
 if ! test -s pglyoyo-blocklist.txt; then
-    curl http://pgl.yoyo.org/as/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext >pglyoyo-blocklist.txt
+    curl "http://pgl.yoyo.org/adservers/serverlist.php?hostformat=unbound&showintro=0&mimetype=plaintext" >pglyoyo-blocklist.txt
 fi
 if ! test -s adaway-blocklist.txt; then
     curl https://adaway.org/hosts.txt >adaway-blocklist.txt
 fi
 
-for file in winhelp-blocklist.txt pglyoyo-blocklist.txt adaway-blocklist.txt
-do
-    grep -vE '^($|#)' $file | awk '/.\./{print $2}'
-done | sort -u | while read line
+(
+    awk '/^local-zone:.*redirect/{print $2}' /root/pglyoyo-blocklist.txt | sed 's|"||g'
+    cat winhelp-blocklist.txt adaway-blocklist.txt 2>/dev/null | grep -vE '^($|#|;)' | tr -d '\r' | awk '/.\./{print $2}' | grep -vE '[\[\]]'
+) | sort -fu | while read line
     do
 	render_record "$line"
     done >>$TMPFILE
@@ -44,9 +44,26 @@ fi
 
 if test -s $TMPFILE -a -d $CONFDIR; then
     if ! cmp $TMPFILE $CONFDIR/blocklist.conf >/dev/null 2>&1; then
-	mv $TMPFILE $CONFDIR/blocklist.conf
-	service unbound restart
-	RET=$?
+	if ! mv $CONFDIR/blocklist.conf $CONFDIR/blocklist.conf.backup; then
+	    echo "failed creating current blocklist backup" >&2
+	    RET=1
+	elif ! mv $TMPFILE $CONFDIR/blocklist.conf; then
+	    echo "failed installing new copy" >&2
+	    RET=1
+	elif ! unbound-checkconf; then
+	    echo "reverting configuration as of new snippet looks invalid" >&2
+	    mv $CONFDIR/blocklist.conf.backup $CONFDIR/blocklist.conf
+	    RET=1
+<% if @kernel == "Linux" -%>	elif test -x /bin/systemctl; then
+	    systemctl restart unbound
+	    RET=$?
+	else
+	    service unbound restart
+	    RET=$?
+<% else -%>	else
+	    /etc/rc.d/unbound restart
+	    RET=$?
+<% end -%>	fi
     else
 	echo "no modification, discarding generated file"
 	RET=0
