@@ -144,7 +144,7 @@ icinga_static_devices:
     host_parents: route53-dr.amazonaws.com
     srvclass: peerioiceblobdr
   ibblob2.dr.peerio.com:
-    host_ipaddress: 54.245.159.71
+    host_ipaddress: 54.213.135.75
     host_parents: route53-dr.amazonaws.com
     srvclass: peerioiceblobdr
   ibmail1.prod.peerio.com:
@@ -160,7 +160,7 @@ icinga_static_devices:
     host_parents: route53-dr.amazonaws.com
     srvclass: peeriomail
   ibmail2.dr.peerio.com:
-    host_ipaddress: 54.245.159.71
+    host_ipaddress: 54.213.135.75
     host_parents: route53-dr.amazonaws.com
     srvclass: peeriomail
   ibshark1.prod.peerio.com:
@@ -176,7 +176,7 @@ icinga_static_devices:
     host_parents: route53-dr.amazonaws.com
     srvclass: peerioshark
   ibshark2.dr.peerio.com:
-    host_ipaddress: 54.245.159.71
+    host_ipaddress: 54.213.135.75
     host_parents: route53-dr.amazonaws.com
     srvclass: peerioshark
   ibws1.prod.peerio.com:
@@ -192,7 +192,7 @@ icinga_static_devices:
     host_parents: route53-dr.amazonaws.com
     srvclass: peerioicebear
   ibws2.dr.peerio.com:
-    host_ipaddress: 54.245.159.71
+    host_ipaddress: 54.213.135.75
     host_parents: route53-dr.amazonaws.com
     srvclass: peerioicebear
 # ipbx.geneopedia.com:
