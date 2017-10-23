@@ -77,6 +77,7 @@ else
     dist=`lsb_release -sc`
 fi
 if test "$dist" = stretch; then
+    apt-get install dirmngr
     touch "/var/lib/dpkg/info/libreadline6:amd64.list"
     cat <<EOF >>/var/lib/dpkg/status
 Package: libreadline6
