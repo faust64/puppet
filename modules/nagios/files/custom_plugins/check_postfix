@@ -10,7 +10,7 @@ if ! test -x /usr/sbin/postfix -o -x /sbin/postfix; then
     ret=UNKNOWN
     msg=' - no postfix'
     perfdata=' | 0'
-elif ! ps ax | grep '[p]ostfix/master' >/dev/null; then
+elif ! ps ax | grep -E 'postfix/(sbin/|)master' >/dev/null; then
     ret=CRITICAL
     msg=' - postfix not running'
     perfdata=' | 0'
