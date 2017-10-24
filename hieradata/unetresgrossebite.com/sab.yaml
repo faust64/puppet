@@ -1,7 +1,7 @@
 additional_classes:
-  - Bacula
   - Fail2ban
   - Firehol
+#  - Bacula
 
 nagios_no_parent: true
 physical_parent: false
@@ -14,7 +14,7 @@ bacula_file_daemon_fileset:
 
 # Firehol
 firehol_interfaces:
-  - name: eth0
+  - name: enp1s0
     description: WAN
     protection: strong
     allow:
