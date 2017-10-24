@@ -2,6 +2,12 @@ class sabnzbd::webapp {
     $conf_dir = $sabnzbd::vars::conf_dir
     $rdomain  = $sabnzbd::vars::rdomain
 
+    common::define::package {
+	"sabyenc":
+	    provider => "pip",
+	    require  => Class[Common::Tools::Pip];
+    }
+
     if ($domain != $rdomain) {
 	$dreverse = "downloads.$domain"
 	$reverse  = "$fqdn.$domain"

@@ -1,5 +1,6 @@
 class sabnzbd {
     include sabnzbd::vars
+    include common::tools::pip
     include common::tools::unzip
     include sabnzbd::user
 
