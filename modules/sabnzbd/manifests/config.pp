@@ -14,17 +14,6 @@ class sabnzbd::config {
     $username      = $sabnzbd::vars::username
     $rss_source    = $sabnzbd::vars::rss_source
 
-    group {
-	$sabnzbd::vars::runtime_group:
-	   ensure => present;
-    }
-
-    user {
-	$sabnzbd::vars::runtime_user:
-	    gid     => $sabnzbd::vars::runtime_group,
-	    require => Group[$sabnzbd::vars::runtime_group];
-    }
-
     file {
 	"Prepare Sabnzbd for further configuration":
 	    ensure  => directory,

@@ -1,7 +1,8 @@
 class sabnzbd::service {
     common::define::service {
 	$sabnzbd::vars::service_name:
-	    ensure => running;
+	    ensure  => running,
+	    require => File["Install Sabnzbd main configuration"];
     }
 
     cron {

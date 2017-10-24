@@ -6,6 +6,8 @@ class sabnzbd::debian {
 	$codename = "precise"
     } elsif ($lsbdistcodename == "jessie") {
 	$codename = "precise"
+    } elsif ($lsbdistcodename == "stretch") {
+	$codename = "xenial"
     } else {
 	$codename = $lsbdistcodename
     }
@@ -23,8 +25,18 @@ class sabnzbd::debian {
 	    require  => Apt::Define::Aptkey["jcfp"];
     }
 
+    if ($lsbdistcodename == "stretch") {
+	common::define::package {
+	    "unrar-free":
+	}
+    } else {
+	common::define::package {
+	    "unrar":
+	}
+    }
+
     common::define::package {
-	[ "sabnzbdplus", "p7zip-full", "unrar" ]:
+	[ "sabnzbdplus", "p7zip-full" ]:
 	    require => Apt::Define::Repo["sabnzbd"];
     }
 

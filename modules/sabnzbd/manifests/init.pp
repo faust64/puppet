@@ -1,6 +1,7 @@
 class sabnzbd {
     include sabnzbd::vars
     include common::tools::unzip
+    include sabnzbd::user
 
     case $myoperatingsystem {
 	"Debian", "Devuan", "Ubuntu": {
