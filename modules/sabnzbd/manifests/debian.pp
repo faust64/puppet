@@ -36,7 +36,7 @@ class sabnzbd::debian {
     }
 
     common::define::package {
-	[ "sabnzbdplus", "p7zip-full" ]:
+	[ "sabnzbdplus", "p7zip-full", "par2" ]:
 	    require => Apt::Define::Repo["sabnzbd"];
     }
 
