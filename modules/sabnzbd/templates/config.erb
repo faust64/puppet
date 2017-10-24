@@ -8,7 +8,7 @@ allow_64bit_tools = 1
 rss_rate = 60
 https_key = server.key
 cleanup_list = .nfo, .nzb, .sfv, .md5sum, .jpg, .png
-cache_limit = ""
+cache_limit = 450M
 par_option = ""
 web_color = Default
 replace_spaces = 0
@@ -40,7 +40,7 @@ log_dir = logs
 admin_dir = admin
 nzb_backup_dir = ""
 tv_sort_countries = 1
-date_categories = tv
+date_categories = tv,
 ssl_type = v23
 date_sort_string = ""
 schedlines = ,
@@ -185,7 +185,7 @@ bandwidth_max = ""
 local_ranges = ,
 rating_filter_pause_spam = 0
 backup_for_duplicates = 1
-sched_converted = 1
+sched_converted = 2
 script_can_fail = 0
 bandwidth_perc = 0
 rating_filter_pause_video = 0
@@ -193,10 +193,22 @@ api_logging = 1
 rating_filter_abort_spam = 0
 allow_duplicate_files = 0
 fail_hopeless_jobs = 1
-fixed_ports = 0
+fixed_ports = 1
 html_login = 1
 prospective_par_download = 1
 propagation_delay = 0
+ssl_ciphers = ""
+series_propercheck = 1
+quick_check_ext_ignore = nfo, sfv, srr
+multipar = 0
+direct_unpack_tested = 0
+direct_unpack = 0
+url_base = /sabnzbd
+converted_nzo_pickles = 1
+direct_unpack_threads = 3
+history_retention = 0
+email_cats = *,
+reject_duplicate_files = 0
 [logging]
 max_log_size = 5242880
 log_level = 1
@@ -222,6 +234,7 @@ pp = ""
 name = <%=cat%>
 script = Default
 newzbin = <%=cat.upcase%>
+order = 0
 dir = <%=cat.upcase%>
 <% end -%>
 [[jose]]
@@ -230,6 +243,7 @@ pp = ""
 name = jose
 script = Default
 newzbin = jose
+order = 0
 dir = jose
 [[*]]
 priority = 0
@@ -237,6 +251,7 @@ pp = 3
 name = *
 script = post_process_all
 newzbin = ""
+order = 0
 dir = ""
 [servers]
 [[<%=@nntp_host%>:<%=@nntp_port%>]]
@@ -245,18 +260,17 @@ dir = ""
 enable = 1
 displayname = <%=@nntp_host%>:<%=@nntp_port%>
 name = <%=@nntp_host%>:<%=@nntp_port%>
-<% if @nntp_port == 443 -%>ssl_type = t1
-<% end -%>notes = ""
+notes = ""
 connections = <%=@nntp_max_conn%>
 <% if @nntp_port == 443 -%>ssl = 1
 <% else -%>ssl = 0
 <% end -%>host = <%=@nntp_host%>
 timeout = <%=@nntp_timeout%>
-send_group = 0
+<% if @nntp_port == 443 -%>ssl_verify = 2
+<% end -%>send_group = 0
 <% if @nntp_user != false and @nntp_pass != false -%>password = <%=@nntp_pass%>
 <% end -%>optional = 0
 port = <%=@nntp_port%>
-categories = Default,
 retention = 0
 [growl]
 growl_enable = 0
@@ -276,6 +290,7 @@ growl_prio_error = 0
 growl_prio_complete = 1
 growl_prio_pp = 0
 growl_prio_new_login = 0
+growl_cats = *,
 <% if @rss_source != false -%>[rss]
 <% @rss_source.keys.each do |src| -%>[[<%=src%>]]
 pp = ""
@@ -302,6 +317,7 @@ ncenter_prio_complete = 1
 ncenter_prio_pp = 0
 ncenter_prio_other = 0
 ncenter_prio_new_login = 0
+ncenter_cats = *,
 [pushover]
 pushover_prio_error = -2
 pushover_enable = 0
@@ -318,6 +334,9 @@ pushover_prio_failed = 1
 pushover_prio_download = -2
 pushover_userkey = ""
 pushover_prio_new_login = -3
+pushover_cats = *,
+pushover_emergency_expire = 3600
+pushover_emergency_retry = 60
 [prowl]
 prowl_prio_disk_full = 1
 prowl_prio_error = -3
@@ -332,6 +351,7 @@ prowl_prio_other = -3
 prowl_prio_complete = 0
 prowl_prio_queue_done = 0
 prowl_prio_new_login = -3
+prowl_cats = *,
 [acenter]
 acenter_prio_warning = 0
 acenter_prio_disk_full = 1
@@ -345,6 +365,7 @@ acenter_prio_download = 0
 acenter_prio_pp = 0
 acenter_prio_other = 0
 acenter_prio_new_login = 0
+acenter_cats = *,
 [ntfosd]
 ntfosd_prio_queue_done = 1
 ntfosd_enable = 1
@@ -358,6 +379,7 @@ ntfosd_prio_disk_full = 1
 ntfosd_prio_download = 0
 ntfosd_prio_failed = 1
 ntfosd_prio_new_login = 0
+ntfosd_cats = *,
 [pushbullet]
 pushbullet_prio_download = 0
 pushbullet_prio_queue_done = 0
@@ -373,6 +395,7 @@ pushbullet_prio_pp = 0
 pushbullet_prio_startup = 0
 pushbullet_prio_error = 0
 pushbullet_prio_new_login = 0
+pushbullet_cats = *,
 [nscript]
 nscript_prio_warning = 0
 nscript_prio_complete = 1
@@ -388,3 +411,4 @@ nscript_prio_startup = 1
 nscript_parameters = ""
 nscript_enable = 0
 nscript_prio_disk_full = 1
+nscript_cats = *,
