@@ -132,7 +132,7 @@ icinga_static_devices:
     host_parents: route53-expandoo.amazonaws.com
     srvclass: expandooicebear
   ibblob1.prod.peerio.com:
-    host_ipaddress: 54.198.78.160
+    host_ipaddress: 34.227.190.134
     host_parents: route53-prod.amazonaws.com
     srvclass: peerioiceblobprod
   ibblob2.prod.peerio.com:
@@ -148,7 +148,7 @@ icinga_static_devices:
     host_parents: route53-dr.amazonaws.com
     srvclass: peerioiceblobdr
   ibmail1.prod.peerio.com:
-    host_ipaddress: 54.198.78.160
+    host_ipaddress: 34.227.190.134
     host_parents: route53-prod.amazonaws.com
     srvclass: peeriomail
   ibmail2.prod.peerio.com:
@@ -164,7 +164,7 @@ icinga_static_devices:
     host_parents: route53-dr.amazonaws.com
     srvclass: peeriomail
   ibshark1.prod.peerio.com:
-    host_ipaddress: 54.198.78.160
+    host_ipaddress: 34.227.190.134
     host_parents: route53-prod.amazonaws.com
     srvclass: peerioshark
   ibshark2.prod.peerio.com:
@@ -180,7 +180,7 @@ icinga_static_devices:
     host_parents: route53-dr.amazonaws.com
     srvclass: peerioshark
   ibws1.prod.peerio.com:
-    host_ipaddress: 54.198.78.160
+    host_ipaddress: 34.227.190.134
     host_parents: route53-prod.amazonaws.com
     srvclass: peerioicebear
   ibws2.prod.peerio.com:
