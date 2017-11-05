@@ -1,2 +1,9 @@
-snmp_uptodate_new: true
 rsyslog_version: 8
+snmp_uptodate_new: true
+squid_cache_dir: /var/spool/squid3
+squid_conf_dir: /etc/squid3
+squid_command: squid3
+squid_error_dir: /usr/share/squid3/errors
+squid_log_dir: /var/log/squid3
+squid_service_name: squid3
+squid_spool_dir: /var/spool/squid3

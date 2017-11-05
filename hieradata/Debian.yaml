@@ -39,13 +39,13 @@ snmp_conf_dir: /etc/snmp
 smokeping_share_dir: /usr/share/smokeping
 
 # Squid
-squid_cache_dir: /var/spool/squid3
-squid_conf_dir: /etc/squid3
-squid_command: squid3
-squid_error_dir: /usr/share/squid3/errors
-squid_log_dir: /var/log/squid3
-squid_service_name: squid3
-squid_spool_dir: /var/spool/squid3
+squid_cache_dir: /var/spool/squid
+squid_conf_dir: /etc/squid
+squid_command: squid
+squid_error_dir: /usr/share/squid/errors
+squid_log_dir: /var/log/squid
+squid_service_name: squid
+squid_spool_dir: /var/spool/squid
 
 # Stunnel
 stunnel_service_name: stunnel4
