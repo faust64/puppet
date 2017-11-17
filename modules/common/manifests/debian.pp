@@ -10,6 +10,7 @@ class common::debian {
 	  "tcpd", "unattended-upgrades", "util-linux", "whois" ]:
     }
 
+# are these still relevant on Stretch? ifplugd & initscripts not installed
     file {
 	"Setup rcS configuration":
 	    content => template("common/rcS.erb"),
