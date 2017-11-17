@@ -12,31 +12,52 @@ class nodejs::debian {
 	    }
 
 	    Apt::Define::Repo["backports"]
-		-> Package["nodejs"]
-		-> Package["npm"]
+		-> Common::Define::Package["nodejs"]
+	}
+	if ($lsbdistcodename != "stretch") {
+	    common::define::package {
+		"npm":
+		    require =>
+			[
+			    Common::Define::Package["nodejs"],
+			    File["NPM needs node binary"]
+			];
+	    }
+
+	    if ($nodejs::vars::service_name == "nodejs") {
+		Common::Define::Package["npm"]
+		    -> File["Install Node.JS service init script"]
+		    -> Common::Define::Service[$nodejs::vars::service_name]
+	    } elsif ($nodejs::vars::service_name == "pm2") {
+		Common::Define::Package["npm"]
+		    -> Nodejs::Define::Module["pm2"]
+		    -> Common::Define::Service[$nodejs::vars::service_name]
+	    }
+
+	    file {
+		"NPM needs node binary":
+		    ensure  => link,
+		    path    => "/usr/bin/node",
+		    target  => "/usr/bin/nodejs";
+	    }
+
+	    Common::Define::Package["nodejs"]
+		-> File["NPM needs node binary"]
+	} else {
+#FIXME: stretch has no npm package, nor binary out of nodejs one?
+	    if ($nodejs::vars::service_name == "nodejs") {
+		Common::Define::Package["nodejs"]
+		    -> File["Install Node.JS service init script"]
+		    -> Common::Define::Service[$nodejs::vars::service_name]
+	    } elsif ($nodejs::vars::service_name == "pm2") {
+		Common::Define::Package["nodejs"]
+		    -> Nodejs::Define::Module["pm2"]
+		    -> Common::Define::Service[$nodejs::vars::service_name]
+	    }
 	}
 
 	common::define::package {
-	    [ "nodejs", "npm" ]:
-	}
-
-	file {
-	    "NPM needs node binary":
-		ensure  => link,
-		path    => "/usr/bin/node",
-		target  => "/usr/bin/nodejs";
-	}
-
-	Package["nodejs"]
-	    -> File["NPM needs node binary"]
-	    -> Package["npm"]
-
-	if ($nodejs::vars::service_name == "nodejs") {
-	    Package["npm"]
-		-> File["Install Node.JS service init script"]
-	} elsif ($nodejs::vars::service_name == "pm2") {
-	    Package["npm"]
-		-> Nodejs::Define::Module["pm2"]
+	    "nodejs":
 	}
     } elsif ($nodejs::vars::from_sources) {
 	exec {

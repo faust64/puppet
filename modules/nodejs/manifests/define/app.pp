@@ -1,10 +1,14 @@
-define nodejs::define::app($appdeps   = false,
-			   $appgit    = false,
-			   $appsrc    = false,
-			   $appsvn    = false,
-			   $apptar    = false,
-			   $appstatus = "enabled",
-			   $update    = false) {
+define nodejs::define::app($appdeps       = false,
+			   $appgit        = false,
+			   $appsrc        = false,
+			   $appsvn        = false,
+			   $apptar        = false,
+			   $appstatus     = "enabled",
+			   $dobower       = false,
+			   $submoduleinit = false,
+			   $startfork     = 2,
+			   $startwith     = "./app.js",
+			   $update        = false) {
     if ($nodejs::vars::force_version) {
 	$nodepath = "/usr/local/nodejs/lib/node_modules/pm2/bin"
     } else {
@@ -54,13 +58,25 @@ define nodejs::define::app($appdeps   = false,
 			-> File["Install $name nodejs application"]
 		}
 	    } elsif ($appgit) {
-		git::define::clone {
-		    $name:
-			local_container => $installpath,
-			local_name      => $name,
-			notify          => $do_notify,
-			repository      => $appgit,
-			update          => $update;
+		if ($submoduleinit) {
+		    git::define::clone {
+			$name:
+			    local_container => $installpath,
+			    local_name      => $name,
+			    notify          => $do_notify,
+			    repository      => $appgit,
+			    submoduleinit   => true,
+			    update          => $update;
+		    }
+		} else {
+		    git::define::clone {
+			$name:
+			    local_container => $installpath,
+			    local_name      => $name,
+			    notify          => $do_notify,
+			    repository      => $appgit,
+			    update          => $update;
+		    }
 		}
 	    } elsif ($appsvn) {
 		subversion::define::workdir {
@@ -110,6 +126,35 @@ define nodejs::define::app($appdeps   = false,
 			unless  => "test -d node_modules";
 		}
 
+		if ($dobower) {
+		    if (($nodejs::vars::service_name == "pm2" and $nodejs::vars::pm2_user == "root") or $nodejs::vars::service_name != "pm2") {
+			exec {
+			    "Install $name Bower dependencies":
+				command     => "bower install --allow-root",
+				cwd         => "$installpath/$name",
+				onlyif      => "test -s bower.json",
+				path        => "/usr/local/bin:/usr/bin:/bin",
+				require     => Exec["Install $name nodejs application"],
+				unless      => "test -d $installpath/$name/app/bower_components";
+			}
+		    } else {
+			$pm2home = $nodejs::vars::pm2_user
+
+#FIXME: should at least create target folder with proper permissions
+			exec {
+			    "Install $name Bower dependencies":
+				command     => "bower install",
+				cwd         => "$installpath/$name",
+				environment => [ "HOME=$pm2home" ],
+				onlyif      => "test -s bower.json",
+				path        => "/usr/local/bin:/usr/bin:/bin",
+				require     => Exec["Install $name nodejs application"],
+				unless      => "test -d $installpath/$name/app/bower_components",
+				user        => $nodejs::vars::pm2_user;
+			}
+		    }
+		}
+
 		if ($appsrc) {
 		    File["Install $name nodejs application"]
 			-> Exec["Install $name nodejs application"]
@@ -150,7 +195,7 @@ define nodejs::define::app($appdeps   = false,
 			onlyif      => "pm2 show $name",
 			path        => "${nodepath}:/usr/local/bin:/usr/bin:/bin";
 		    "Start $name nodejs application":
-			command     => "pm2 start ./app.js --name $name -i 2 --output /var/log/nodejs/$name.log --error /var/log/nodejs/$name.err",
+			command     => "pm2 start $startwith --name $name -i $startfork --output /var/log/nodejs/$name.log --error /var/log/nodejs/$name.err",
 			cwd         => "$installpath/$name",
 			environment => [ "PM2_HOME=$pm2home/.pm2" ],
 			notify      => Exec["Save pm2 processes"],

@@ -21,6 +21,10 @@ class nodejs {
 	nodejs::define::module { "pm2": }
 	include nodejs::pm2config
 	include nodejs::pm2service
+
+	Nodejs::Define::Module["pm2"]
+	    -> Class[Nodejs::Pm2config]
+	    -> Class[Nodejs::Pm2service]
     }
     if ($nodejs::vars::service_name) {
 	include nodejs::service

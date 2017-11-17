@@ -22,7 +22,7 @@ define nodejs::define::module($app     = false,
 		command => "npm install -g $name",
 		cwd     => "/",
 		path    => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-		unless  => "test -s $nodepath/$name/package.json";
+		unless  => "test -s $nodepath/$name/package.json -o -s /usr/lib/node_modules/$name/package.json";
 	}
     }
 }

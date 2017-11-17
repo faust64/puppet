@@ -71,9 +71,9 @@ class nodejs::pm2service {
 		"Install pm2 systemd service":
 		    command     => "pm2 startup systemd",
 		    cwd         => "/",
-		    environment => [ "PM2_HOME=/root/.pm2" ],
+		    environment => [ "USER=root", "PM2_HOME=/root/.pm2" ],
 		    path        => "$nodepath:/usr/local/bin:/usr/bin:/bin",
-		    unless      => "systemctl status pm2";
+		    unless      => "test -s /etc/systemd/system/pm2-root.service -o -s /lib/systemd/system/pm2.service";
 	    }
 	} else {
 	    if (! defined(Class[sudo])) {
@@ -99,10 +99,10 @@ class nodejs::pm2service {
 		"Install pm2 systemd service":
 		    command     => "sudo pm2 startup systemd",
 		    cwd         => "/",
-		    environment => [ "PM2_HOME=$pm2home/.pm2" ],
+		    environment => [ "USER=$runtime_user", "PM2_HOME=$pm2home/.pm2" ],
 		    path        => "$nodepath:/usr/local/bin:/usr/bin:/bin",
 		    require     => File["Install pm2 init sudoers"],
-		    unless      => "test -s /lib/systemd/system/pm2.service",
+		    unless      => "test -s /etc/systemd/system/pm2-${runtime_user}.service -o -s /lib/systemd/system/pm2.service",
 		    user        => $runtime_user;
 	    }
 	}
