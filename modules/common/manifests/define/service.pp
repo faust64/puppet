@@ -2,11 +2,12 @@ define common::define::service($enable     = true,
 			       $ensure     = "running",
 			       $hasrestart = true,
 			       $hasstatus  = true,
+			       $namehack   = $name,
 			       $pattern    = false,
 			       $statuscmd  = false) {
     if ($kernel == "Linux") {
 	service {
-	    $name:
+	    $namehack:
 		enable     => $enable,
 		ensure     => $ensure,
 		hasrestart => $hasrestart,
@@ -14,20 +15,19 @@ define common::define::service($enable     = true,
 		pattern    => $pattern,
 		status     => $statuscmd;
 	}
-    }
-    else {
+    } else {
 	if ($kernel =="OpenBSD") {
 	    $arrayvers = split($kernelversion, '\.')
 	    $major     = $arrayvers[0]
 
 	    if ($major == "4") {
 		File["Make sure we have a minimal RC set"]
-		    -> Service[$name]
+		    -> Service[$namehack]
 	    }
 	}
 
 	service {
-	    $name:
+	    $namehack:
 		ensure     => $ensure,
 		hasrestart => $hasrestart,
 		hasstatus  => $hasstatus,
