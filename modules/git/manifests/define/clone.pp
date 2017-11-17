@@ -62,7 +62,7 @@ define git::define::clone($branch          = "master",
 	if ($submoduleinit) {
 	    exec {
 		"GIT init submodule $name":
-		    command     => "git submodule update --init",
+		    command     => "git submodule update --recursive --init",
 		    cwd         => "$local_container/$local_name",
 		    path        => "/usr/local/bin:/usr/bin:/bin",
 		    refreshonly => true,
