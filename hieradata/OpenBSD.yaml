@@ -1,4 +1,5 @@
 download_cmd: ftp
+generic_nologin: /sbin/nologin
 gid_adm: wheel
 gid_zero: wheel
 openbsd_pkg_source: false

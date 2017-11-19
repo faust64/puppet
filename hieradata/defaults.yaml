@@ -10,6 +10,7 @@ generic_groups: users
 generic_home_dir: /home
 generic_pass: false
 generic_user: users
+generic_nologin: /usr/sbin/nologin
 
 # AIDE
 aide_conf_dir: /etc/aide
