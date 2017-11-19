@@ -48,6 +48,7 @@ class common {
 	include mysysctl::define::random_va_space
 	include mysysctl::define::suid_dumpable
 	include common::config::grub
+	include common::config::udev
 	include common::config::wget
 	include logrotate
     }
