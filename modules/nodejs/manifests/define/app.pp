@@ -8,6 +8,7 @@ define nodejs::define::app($appdeps       = false,
 			   $submoduleinit = false,
 			   $startfork     = 2,
 			   $startwith     = "./app.js",
+			   $startwithargs = false,
 			   $update        = false) {
     if ($nodejs::vars::force_version) {
 	$nodepath = "/usr/local/nodejs/lib/node_modules/pm2/bin"
@@ -194,14 +195,30 @@ define nodejs::define::app($appdeps       = false,
 			refreshonly => true,
 			onlyif      => "pm2 show $name",
 			path        => "${nodepath}:/usr/local/bin:/usr/bin:/bin";
-		    "Start $name nodejs application":
-			command     => "pm2 start $startwith --name $name -i $startfork --output /var/log/nodejs/$name.log --error /var/log/nodejs/$name.err",
-			cwd         => "$installpath/$name",
-			environment => [ "PM2_HOME=$pm2home/.pm2" ],
-			notify      => Exec["Save pm2 processes"],
-			path        => "${nodepath}:/usr/local/bin:/usr/bin:/bin",
-			require     => Exec["Reload $name nodejs application"],
-			unless      => "pm2 show $name";
+		}
+
+		if ($startwithargs) {
+		    exec {
+			"Start $name nodejs application":
+			    command     => "pm2 start $startwith --name $name -i $startfork --output /var/log/nodejs/$name.log --error /var/log/nodejs/$name.err -- $startwithargs",
+			    cwd         => "$installpath/$name",
+			    environment => [ "PM2_HOME=$pm2home/.pm2" ],
+			    notify      => Exec["Save pm2 processes"],
+			    path        => "${nodepath}:/usr/local/bin:/usr/bin:/bin",
+			    require     => Exec["Reload $name nodejs application"],
+			    unless      => "pm2 show $name";
+		    }
+		} else {
+		    exec {
+			"Start $name nodejs application":
+			    command     => "pm2 start $startwith --name $name -i $startfork --output /var/log/nodejs/$name.log --error /var/log/nodejs/$name.err",
+			    cwd         => "$installpath/$name",
+			    environment => [ "PM2_HOME=$pm2home/.pm2" ],
+			    notify      => Exec["Save pm2 processes"],
+			    path        => "${nodepath}:/usr/local/bin:/usr/bin:/bin",
+			    require     => Exec["Reload $name nodejs application"],
+			    unless      => "pm2 show $name";
+		    }
 		}
 	    }
 	} else {
