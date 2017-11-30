@@ -93,11 +93,11 @@ fi
 cd $GHBU_BACKUP_DIR
 
 if $DO_ORG; then
-    if ! curl --silent -u $GHBU_UNAME:$GHBU_PASSWD $GHBU_API/orgs/$GHBU_ORG/repos\?page=$PAGE\&per_page=90 -q -k | grep "\"name\"" | awk -F': "' '{print $2}' | sed -e 's/",//g' >/dev/null; then
+    if ! curl --silent -u $GHBU_UNAME:$GHBU_PASSWD $GHBU_API/orgs/$GHBU_ORG/repos\?page=$PAGE\&per_page=90 -q -k | grep -EA1 '^[ \t]*"id": [0-9]*,$' | awk -F': "' '/"name":/{print $2}' | sed -e 's/",//g' >/dev/null; then
 	notify "Failed querying for $GHBU_ORG repositories"
 	exitNotify
     fi
-elif ! curl --silent -u $GHBU_UNAME:$GHBU_PASSWD $GHBU_API/user/repos\?page=$PAGE&per_page=90 -q -k | grep "\"name\"" | awk -F': "' '{print $2}' | sed -e 's/",//g' >/dev/null; then
+elif ! curl --silent -u $GHBU_UNAME:$GHBU_PASSWD $GHBU_API/user/repos\?page=$PAGE&per_page=90 -q -k | grep -EA1 '^[ \t]*"id": [0-9]*,$' | awk -F': "' '/"name":/{print $2}' | sed -e 's/",//g' >/dev/null; then
     notify "Failed querying for $GHBU_ORG repositories"
     exitNotify
 fi
@@ -107,9 +107,9 @@ while :
 do
     PAGE=`expr $PAGE + 1`
     if $DO_ORG; then
-	REPOLIST_TMP=`curl --silent -u $GHBU_UNAME:$GHBU_PASSWD $GHBU_API/orgs/$GHBU_ORG/repos\?page=$PAGE\&per_page=90 -q -k | grep "\"name\"" | awk -F': "' '{print $2}' | sed -e 's/",//g'`
+	REPOLIST_TMP=`curl --silent -u $GHBU_UNAME:$GHBU_PASSWD $GHBU_API/orgs/$GHBU_ORG/repos\?page=$PAGE\&per_page=90 -q -k | grep -EA1 '^[ \t]*"id": [0-9]*,$' | awk -F': "' '/"name":/{print $2}' | sed -e 's/",//g'`
     else
-	REPOLIST_TMP=`curl --silent -u $GHBU_UNAME:$GHBU_PASSWD $GHBU_API/user/repos\?page=$PAGE&per_page=90 -q -k | grep "\"name\"" | awk -F': "' '{print $2}' | sed -e 's/",//g'`
+	REPOLIST_TMP=`curl --silent -u $GHBU_UNAME:$GHBU_PASSWD $GHBU_API/user/repos\?page=$PAGE&per_page=90 -q -k | grep -EA1 '^[ \t]*"id": [0-9]*,$' | awk -F': "' '/"name":/{print $2}' | sed -e 's/",//g'`
     fi
     test -z "$REPOLIST_TMP" && break
     REPOLIST="$REPOLIST $REPOLIST_TMP"
