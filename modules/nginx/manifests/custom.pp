@@ -1,9 +1,11 @@
 class nginx::custom {
-    $conf_dir  = $nginx::vars::conf_dir
-    $download  = $nginx::vars::download
-    $error_dir = $nginx::vars::error_dir
-    $repo      = $nginx::vars::repo
-    $web_root  = $nginx::vars::web_root
+    $conf_dir        = $nginx::vars::conf_dir
+    $download        = $nginx::vars::download
+    $error_dir       = $nginx::vars::error_dir
+    $robots_allow    = $nginx::vars::robots_allow
+    $robots_disallow = $nginx::vars::robots_disallow
+    $repo            = $nginx::vars::repo
+    $web_root        = $nginx::vars::web_root
 
     file {
 	"Install Nginx error messages":
@@ -15,12 +17,12 @@ class nginx::custom {
 	    require => File["Prepare Nginx for further configuration"],
 	    source  => "puppet:///modules/nginx/error";
 	"Install robots.txt (nginx)":
+	    content => template("apache/robots.erb"),
 	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
 	    path    => "$web_root/robots.txt",
-	    require => File["Prepare www directory"],
-	    source  => "puppet:///modules/apache/robots.txt";
+	    require => File["Prepare www directory"];
 	"Install Nginx error configuration":
 	    content => template("nginx/errors.erb"),
 	    mode    => "0644",

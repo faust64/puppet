@@ -28,6 +28,8 @@ class nginx::vars {
     $office_networks      = lookup("office_networks")
     $pki_master           = lookup("pki_master")
     $public_key_pins      = lookup("public_key_pins")
+    $robots_allow         = lookup("apache_robots_allow")
+    $robots_disallow      = lookup("apache_robots_disallow")
     $repo                 = lookup("puppet_http_repo")
     $runtime_group        = lookup("nginx_runtime_group")
     $runtime_user         = lookup("nginx_runtime_user")
