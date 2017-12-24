@@ -36,7 +36,6 @@ fail2ban_ignoreips:
 # Icinga
 nagios_hostgroups:
   - debian
-  - peerio
 
 # Munin
 munin_ip:
