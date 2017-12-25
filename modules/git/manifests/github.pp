@@ -24,7 +24,6 @@ class git::github {
 		require => File["Install GitHub backup script"],
 		user    => root;
 	}
-
     } else {
 	notify {
 	    "GitHub backups enabled while API username and or token are not defined":

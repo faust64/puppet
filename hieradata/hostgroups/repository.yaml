@@ -6,7 +6,7 @@ mod_autoindex: true
 apache_rsyslog: true
 
 # Git
-git_backup_github: true
+#git_backup_github: true
 git_with_gitlist: false
 git_with_gitlab: false
 github_backups_dir: /var/www/github
