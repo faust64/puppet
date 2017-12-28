@@ -90,7 +90,7 @@ dummy_checks()
 	fi
     fi
 
-    if xl list-vm | grep " $VHOST[ ]*$" >/dev/null 2>&1; then
+    if xl list | grep " $VHOST[ ]*$" >/dev/null 2>&1; then
 	echo "Container already running" >&2
 	exit 1
     elif test -e /dev/$XEN_STORAGE/$VHOST-root; then
