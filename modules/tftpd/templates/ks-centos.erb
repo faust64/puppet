@@ -1,7 +1,7 @@
 <% if @server -%>%include /tmp/pre_network
 firewall --disabled
 <% end -%>install
-url --url=http://mirrors.ircam.fr/pub/CentOS/<%=@rhelvers%>/os/<%=@rhelarch%>/<%=@use_proxy%>
+url --url=http://mirror.centos.org/centos/<%=@rhelvers%>/os/<%=@rhelarch%>/<%=@use_proxy%>
 auth --<% if @rhelvers == 6 -%>use<% else -%>enable<% end -%>shadow --passalgo=sha512
 <% if @password -%>rootpw --iscrypted <%=@password%>
 <% end -%>lang <%=@locale%>.<%=@charset%>
@@ -15,7 +15,7 @@ timezone --utc <%=@timezone%>
 zerombr
 clearpart --all --initlabel
 %include /tmp/pre_disk
-<% end -%>repo --name=updates --baseurl=http://mirrors.ircam.fr/pub/CentOS/<%=@rhelvers%>/updates/<%=@rhelarch%>/<%=@use_proxy%>
+<% end -%>repo --name=updates --baseurl=http://mirror.centos.org/centos/<%=@rhelvers%>/updates/<%=@rhelarch%>/<%=@use_proxy%>
 %include /tmp/pre_packages
 <% if @server -%>repo --name=epel --baseurl=http://mirrors.ircam.fr/pub/fedora/epel/<%=@rhelvers%>/<%=@rhelarch%>/<%=@use_proxy%>
 %include /tmp/pre_morerepo
