@@ -79,15 +79,15 @@ zone dhcp.<%=@domain%>.
 <% end %>subnet 10.<%=@office_netids[@mydomain]%>.<%=netid%>.0 netmask <%=@netmask_correspondance[netmsk.to_i]%>
 {
     option routers		10.<%=@office_netids[@mydomain]%>.<%=netid%>.1;
-<% if @pxe_ip != false -%>    filename			"pxelinux.0";
+    option domain-name		"dhcp.<%=@all_networks[vlanname]['dns']%>.<%=@mydomain%> <%=@all_networks[vlanname]['dns']%>.<%=@mydomain%>";
+<% if not @all_networks[vlanname]['dnsip'].nil? and @all_networks[vlanname]['dnsip'] -%>    option domain-name-servers	<%=@all_networks[vlanname]['dnsip'].join(', ')%>;
+<% else -%>    option domain-name-servers	<% @dns_ip.join(', ')%>;
+<% end -%><% if @pxe_ip != false -%>    filename			"pxelinux.0";
     next-server			<%=@pxe_ip%>;
-<% end %>    pool
+<% end -%>    pool
     {
 <% if netmsk == 24 -%><% netstop = netid -%><% elsif netmsk == 23 -%><% netstop = netid + 1 -%><% elsif netmsk == 22 -%><% netstop = netid + 3 -%><% elsif netmsk == 21 -%><% netstop = netid + 7 -%><% elsif netmsk == 20 -%><% netstop = netid + 15 -%><% elsif netmsk == 19 -%><% netstop = netid + 31 -%><% elsif netmsk == 18 -%><% netstop = netid + 63 -%><% elsif netmsk == 17 -%><% netstop = netid + 127 -%><% elsif netmsk == 16 -%><% netstop = 32 -%><% end -%>	range				10.<%=@office_netids[@mydomain]%>.<%=netid%>.10 10.<%=@office_netids[@mydomain]%>.<%=netstop%>.150;
-	option domain-name		"dhcp.<%=@all_networks[vlanname]['dns']%>.<%=@mydomain%> <%=@all_networks[vlanname]['dns']%>.<%=@mydomain%>";
-<% if not @all_networks[vlanname]['dnsip'].nil? and @all_networks[vlanname]['dnsip'] -%>	option domain-name-servers	<%=@all_networks[vlanname]['dnsip'].join(', ')%>;
-<% else -%>	option domain-name-servers	<% @dns_ip.join(', ')%>;
-<% end -%>	deny				dynamic bootp clients;
+	deny				dynamic bootp clients;
 	deny				members of "pxeclt1";
 	deny				members of "pxeclt2";
 	deny				members of "pxeclt3";
@@ -98,10 +98,7 @@ zone dhcp.<%=@domain%>.
     pool
     {
 	range				10.<%=@office_netids[@mydomain]%>.<%=netstop%>.151 10.<%=@office_netids[@mydomain]%>.<%=netstop%>.254;
-	option domain-name		"<%=@all_networks[vlanname]['dns']%>.<%=@mydomain%>";
-<% if not @all_networks[vlanname]['dnsip'].nil? and @all_networks[vlanname]['dnsip'] -%>	option domain-name-servers	<%=@all_networks[vlanname]['dnsip'].join(', ')%>;
-<% else -%>	option domain-name-servers	<% @dns_ip.join(', ')%>;
-<% end -%>	allow				members of "pxeclt1";
+	allow				members of "pxeclt1";
 	allow				members of "pxeclt2";
 	allow				members of "pxeclt3";
 	allow				members of "pxeclt4";
