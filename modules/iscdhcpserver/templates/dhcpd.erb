@@ -76,7 +76,7 @@ zone dhcp.<%=@domain%>.
     key				rndc-key;
 }
 
-<% end %>subnet 10.<%=@office_netids[@mydomain]%>.<%=netid%>.0 netmask <%=@netmask_correspondance[netmsk.to_s]%>
+<% end %>subnet 10.<%=@office_netids[@mydomain]%>.<%=netid%>.0 netmask <%=@netmask_correspondance[netmsk.to_i]%>
 {
     option routers		10.<%=@office_netids[@mydomain]%>.<%=netid%>.1;
 <% if @pxe_ip != false -%>    filename			"pxelinux.0";
