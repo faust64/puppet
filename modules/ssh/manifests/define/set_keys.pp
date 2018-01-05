@@ -8,8 +8,7 @@ define ssh::define::set_keys($credential = "undefined",
     if (($srvtype == "vz" or $srvtype == "kvm" or $srvtype == "kvmvz"
 	 or $srvtype == "xen") and $ssh::vars::vlist_hosts_list[$fqdn]) {
 	$access = $ssh::vars::vlist_hosts_list[$fqdn]
-    }
-    else {
+    } else {
 	$access = $ssh::vars::access_class
     }
 

@@ -22,7 +22,7 @@ Facter.add("srvtype") do
 	    "hosting"
 	when /eris|gaia|geras|ker|nemesis/
 	    "kvm"
-	when /cerbero|echidna|hermes|aphrodite/
+	when /hermes|aphrodite/
 	    "kvmvz"
 	when /kibana|estore|logmaster|lognfilter|syslog/
 	    "logs"
@@ -36,8 +36,10 @@ Facter.add("srvtype") do
 	    "netserv"
 	when /couchpotato|newznab|nzbindex|sab|sickbeard|tvschedule/
 	    "nzb"
-	when /momos|moros|thanatos/
+	when /cerbero|echidna/
 	    "opennebula"
+	when /momos|moros|thanatos|phoebe|crios|eurybie|hemara|ouranos|erebe/
+	    "openshift"
 	when /drive|owncloud|media|packages|pxe|pydio|repository/
 	    "repo"
 	when /samba/
@@ -46,7 +48,7 @@ Facter.add("srvtype") do
 	    "sources"
 	when /sso/
 	    "sso"
-	when /ceph|aether|eos|erebe|helios|hemara|nyx|ouranos|selene/
+	when /ceph|aether|eos|helios|nyx|selene/
 	    "store"
 	when /collectd|ganglia|lachesis|munin|mrtg|smokeping/
 	    "supervision"

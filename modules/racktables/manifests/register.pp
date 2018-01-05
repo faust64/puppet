@@ -64,7 +64,8 @@ class racktables::register {
 	    "xen-multi":
 		pluginalias => "XEN CPU/IO/Network usage";
 	}
-    } elsif ($srvtype == "kvm" or $srvtype == "kvmvz") {
+    } elsif ($srvtype == "kvm" or $srvtype == "kvmvz"
+	or $srvtype == "openshift") {
 	racktables::define::register_munin_graph {
 	    "kvm_io":
 		pluginalias => "KVM IO";

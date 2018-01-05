@@ -28,7 +28,9 @@ class pakiti::vars {
 		$ptag = "HOST_Ceph"
 	    }
 	}
-	"opennebula", "kvm", "kvmvz", "vz", "xen": { $ptag = "HOST_Vserver" }
+	"opennebula", "kvm", "kvmvz", "openshift", "vz", "xen": {
+	    $ptag = "HOST_Vserver"
+	}
 	"svn": { $ptag = "VM_Sources" }
 	default: {
 	    $newtype = $srvtype.capitalize

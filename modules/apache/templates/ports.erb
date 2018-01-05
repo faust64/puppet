@@ -1,7 +1,7 @@
-<% if @version == "2.2" -%><% if @listen_ports['plain'] != false -%>NameVirtualHost <% if @srvtype == "kvm" or @srvtype == "kvmvz" or @srvtype == "vz" or @srvtype == "xen" -%><%=@ipaddress%><% else -%>*<% end -%>:<%=@listen_ports['plain']%>
+<% if @version == "2.2" -%><% if @listen_ports['plain'] != false -%>NameVirtualHost <% if @srvtype == "kvm" or @srvtype == "kvmvz" or @srvtype == "openshift" or @srvtype == "vz" or @srvtype == "xen" -%><%=@ipaddress%><% else -%>*<% end -%>:<%=@listen_ports['plain']%>
 <% end -%><% end -%>Listen <%=@listen_ports['plain']%>
 <% if @listen_ports['ssl'] != false -%><% [ "ssl", "gnutls" ].each do |tenia| -%><IfModule mod_<%=tenia%>.c>
-<% if @version == "2.2" -%>    NameVirtualHost <% if @srvtype == "kvm" or @srvtype == "kvmvz" or @srvtype == "vz" or @srvtype == "xen" -%><%=@ipaddress%><% else -%>*<% end -%>:<%=@listen_ports['ssl']%>
+<% if @version == "2.2" -%>    NameVirtualHost <% if @srvtype == "kvm" or @srvtype == "kvmvz" or @srvtype == "openshift" or @srvtype == "vz" or @srvtype == "xen" -%><%=@ipaddress%><% else -%>*<% end -%>:<%=@listen_ports['ssl']%>
 <% end -%>    Listen <%=@listen_ports['ssl']%>
 </IfModule>
 <% end -%><% end -%>

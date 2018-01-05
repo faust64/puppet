@@ -11,7 +11,7 @@ MODEL_DIR=/media/modeles
 <% if @jumeau != false -%>REMOTE=<%=@jumeau%>
 <% end -%><% if @srvtype == "kvmvz" or @srvtype == "vz" -%>VZ_STORAGE=/vz/private
 <% if @cpumodel -%>CPUMODEL=<%=@cpumodel%>
-<% end -%><% elsif @srvtype == "kvm" -%>KVM_STORAGE=<%=@default_vg%>
+<% end -%><% elsif @srvtype == "kvm" or @srvtype == "openshift" -%>KVM_STORAGE=<%=@default_vg%>
 <% if @cpumodel -%>CPUMODEL=<%=@cpumodel%>
 <% end -%><% else -%>XEN_STORAGE=<%=@default_vg%>
 <% end -%>

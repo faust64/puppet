@@ -1,0 +1,40 @@
+#additional_classes:
+#  - Kvm
+#  - Qemu
+#  - Libvirt
+
+# Apache
+apache_mod_authldap: true
+apache_mod_proxy_http: true
+apache_listen_ports:
+  plain: 80
+  ssl: 443
+apache_rsyslog: true
+
+# Nagios
+nagios_load_crit_threshold: "8.0,8.0,8.0"
+nagios_load_warn_threshold: "7.7,7.7,7.7"
+nagios_no_parent: false
+nagios_partitions_watchlist:
+  boot: /boot
+  root: /
+nagios_procs_crit: 3000
+nagios_procs_warn: 2500
+nagios_runprocs_crit: 600
+nagios_runprocs_warn: 500
+nagios_smart_disks:
+  - sda
+
+# Qemu
+qemu_has_kvm: true
+
+# Racktables
+racktables_object_id: 4
+
+# SNMP
+snmp_sysservices: 4
+# L3: (bridges/venet) 2 ^ (3-1)
+
+# Sysctl
+do_martians: false
+ip_forwarding: 1
