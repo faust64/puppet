@@ -4,7 +4,11 @@ class common::libs::perlconfigjson {
 	    $what = "libconfig-json-perl"
 	}
 	"CentOS", "RedHat": {
-	    $what = "perl-Config-JSON"
+	    if ($os['release']['major'] == "7") {
+		$what = "perl-Config-Any"
+	    } else {
+		$what = "perl-Config-JSON"
+	    }
 	}
     }
 

@@ -28,8 +28,10 @@ Replace your `/etc/puppetlabs/puppet/hiera.yaml` with the following:
   - "%{domain}/%{srvtype}"
   - "%{domain}/defaults"
   - "%{domain}/%{operatingsystem}-%{lsbdistcodename}-%{architecture}"
+  - "%{domain}/%{operatingsystem}-%{os.release.major}-%{architecture}"
   - "%{domain}/%{operatingsystem}-%{operatingsystemrelease}-%{architecture}"
   - "%{domain}/%{operatingsystem}-%{lsbdistcodename}"
+  - "%{domain}/%{operatingsystem}-%{os.release.major}"
   - "%{domain}/%{operatingsystem}-%{operatingsystemrelease}"
   - "%{domain}/%{operatingsystem}-%{architecture}"
   - "%{domain}/%{operatingsystem}"
@@ -38,8 +40,10 @@ Replace your `/etc/puppetlabs/puppet/hiera.yaml` with the following:
   - "serviceclasses/%{srvtype}"
   - "%{operatingsystem}-%{lsbdistcodename}-%{architecture}"
   - "%{operatingsystem}-%{operatingsystemrelease}-%{architecture}"
+  - "%{operatingsystem}-%{os.release.major}-%{architecture}"
   - "%{operatingsystem}-%{lsbdistcodename}"
   - "%{operatingsystem}-%{operatingsystemrelease}"
+  - "%{operatingsystem}-%{os.release.major}"
   - "%{operatingsystem}-%{architecture}"
   - "%{operatingsystem}"
   - networks
@@ -70,33 +74,38 @@ find /var/lib/puppet/reports/ -type f -ctime +7 2>/dev/null | xargs -P 4 -n 20 r
 To deploy an agent, having trusted its public IP (update required in `hieradata/unetresgrossebite.com/puppet.yaml`), run the following:
 
 ```
-apt-get update ; apt-get upgrade ; apt-get dist-upgrade ; apt-get autoremove --purge ; apt-get install ca-certificates lsb-release
-if grep -E '(devuan|trusty)' /etc/apt/sources.list >/dev/null; then
-    dist=trusty
+if test -s /etc/centos-release; then
+    rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+    yum install puppet-agent -y
 else
-    dist=`lsb_release -sc`
+    apt-get update ; apt-get upgrade ; apt-get dist-upgrade ; apt-get autoremove --purge ; apt-get install ca-certificates lsb-release
+    if grep -E '(devuan|trusty)' /etc/apt/sources.list >/dev/null; then
+	dist=trusty
+    else
+	dist=`lsb_release -sc`
+    fi
+    if test "$dist" = stretch; then
+	apt-get install dirmngr
+	touch "/var/lib/dpkg/info/libreadline6:amd64.list"
+	cat <<EOF >>/var/lib/dpkg/status
+    Package: libreadline6
+    Status: install ok installed
+    Priority: extra
+    Section: libs
+    Installed-Size: 104
+    Maintainer: Samuel Martin Moro <samuel@unetresgrossebite.com>
+    Architecture: amd64
+    Multi-Arch: allowed
+    Version: 6.0.0-1deb8u1
+    Description: Dummy fake package to trick puppet-agent into installing.
+    Original-Maintainer: Matthias Klose <doko@debian.org>
+    EOF
+    fi
+    wget https://apt.puppetlabs.com/puppetlabs-release-pc1-$dist.deb
+    dpkg -i puppetlabs-release-pc1-$dist.deb
+    apt-get update
+    apt-get install puppet-agent
 fi
-if test "$dist" = stretch; then
-    apt-get install dirmngr
-    touch "/var/lib/dpkg/info/libreadline6:amd64.list"
-    cat <<EOF >>/var/lib/dpkg/status
-Package: libreadline6
-Status: install ok installed
-Priority: extra
-Section: libs
-Installed-Size: 104
-Maintainer: Samuel Martin Moro <samuel@unetresgrossebite.com>
-Architecture: amd64
-Multi-Arch: allowed
-Version: 6.0.0-1deb8u1
-Description: Dummy fake package to trick puppet-agent into installing.
-Original-Maintainer: Matthias Klose <doko@debian.org>
-EOF
-fi
-wget https://apt.puppetlabs.com/puppetlabs-release-pc1-$dist.deb
-dpkg -i puppetlabs-release-pc1-$dist.deb
-apt-get update
-apt-get install puppet-agent
 export FQDN=`hostname -f`
 echo "certname: $FQDN (Y/n)?"
 read a

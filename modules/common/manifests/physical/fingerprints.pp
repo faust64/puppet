@@ -19,7 +19,7 @@ class common::physical::fingerprints {
     } elsif ($sshfp_rsa_sha1) {
 	ssh::define::declare_fingerprints { "RSA-$fqdn": }
     }
-    if ($lsbdistcodename != "stretch" and $lsbdistcodename != "xenial") {
+    if ($lsbdistcodename != "stretch" and $lsbdistcodename != "xenial" and $os['release']['major'] != "7") {
 	if ($sshfp_dsa_sha256) {
 	    ssh::define::declare_fingerprints {
 		"DSA-$fqdn":

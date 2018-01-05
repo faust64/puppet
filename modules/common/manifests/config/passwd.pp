@@ -17,14 +17,16 @@ class common::config::passwd {
     }
 
     if ($kernel == "Linux") {
-	file {
-	    "Set /etc/shadow permissions":
-		ensure  => present,
-		group   => shadow,
-		mode    => "0640",
-		owner   => root,
-		path    => "/etc/shadow",
-		replace => no;
+	if ($os['release']['major'] != "7") {
+	    file {
+		"Set /etc/shadow permissions":
+		    ensure  => present,
+		    group   => shadow,
+		    mode    => "0640",
+		    owner   => root,
+		    path    => "/etc/shadow",
+		    replace => no;
+	    }
 	}
     } else {
 	if ($operatingsystem == "OpenBSD") {

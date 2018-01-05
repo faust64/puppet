@@ -20,7 +20,6 @@ nagios_smart_disks:
   - sdb
   - sdc
   - sdd
-  - sde
 
 # SNMP
 snmp_listenaddr: 10.42.242.24

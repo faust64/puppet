@@ -1,5 +1,8 @@
 physical_parent: eros.adm.intra.unetresgrossebite.com,hera.adm.intra.unetresgrossebite.com
 
+# Ceph
+ceph_do_libvirt: true
+
 # Fstab
 tmp_target_device: /dev/mapper/data-tmp
 
