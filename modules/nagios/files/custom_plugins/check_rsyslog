@@ -6,7 +6,13 @@ WARNING=1
 CRITICAL=2
 UNKNOWN=3
 
-if test -d /etc/init.d; then
+if test -d /lib/systemd; then
+    if ! systemctl status rsyslog >/dev/null; then
+	ret=CRITICAL
+	msg=" - rsyslog not running"
+	perfdata=" | 0"
+    fi
+elif test -d /etc/init.d; then
     if ! /etc/init.d/rsyslog status >/dev/null; then
 	ret=CRITICAL
 	msg=" - rsyslog not running"

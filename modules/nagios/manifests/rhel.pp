@@ -6,9 +6,11 @@ class nagios::rhel {
     if ($os['release']['major'] == "7") {
 	common::define::package {
 	    [
-		"nagios-plugins-disk", "nagios-plugins-load",
-		"nagios-plugins-procs", "nagios-plugins-swap",
-		"nagios-plugins-users"
+		"nagios-plugins-disk", "nagios-plugins-dns",
+		"nagios-plugins-load", "nagios-plugins-mailq",
+		"nagios-plugins-procs", "nagios-plugins-sensors",
+		"nagios-plugins-smtp", "nagios-plugins-ssh",
+		"nagios-plugins-swap", "nagios-plugins-users"
 	    ]:
 	}
     }
