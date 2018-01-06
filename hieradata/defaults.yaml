@@ -1521,6 +1521,7 @@ ssh_mac_algorithms:
   - umac-128-etm@openssh.com
 ssh_moduli_dir: /etc/ssh
 ssh_password_authentication: false
+ssh_permit_rootlogin: without-password
 ssh_port: 22
 ssh_service_name: sshd
 ssh_tcp_wrappers: false

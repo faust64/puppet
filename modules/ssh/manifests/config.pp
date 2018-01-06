@@ -4,6 +4,7 @@ class ssh::config {
     $mdir     = $ssh::vars::moduli_dir
     $port     = $ssh::vars::ssh_port
     $psk      = $ssh::vars::ssh_psk_auth
+    $rlogin   = $ssh::vars::permit_rootlogin
 
     if ($ssh::vars::ssh_kex_algos != false) {
 	$kex  = join($ssh::vars::ssh_kex_algos, ',')
@@ -141,11 +142,6 @@ class ssh::config {
 	    match  => "^IgnoreRhosts",
 	    notify => Service[$ssh::vars::ssh_service_name],
 	    path   => "/etc/ssh/sshd_config";
-	"Disable rhosts authentication (2/2)":
-	    line   => "RhostsRSAAuthentication no",
-	    match  => "^RhostsRSAAuthentication",
-	    notify => Service[$ssh::vars::ssh_service_name],
-	    path   => "/etc/ssh/sshd_config";
 	"Disable host based authentication":
 	    line   => "HostbasedAuthentication no",
 	    match  => "^HostbasedAuthentication",
@@ -157,7 +153,7 @@ class ssh::config {
 	    notify => Service[$ssh::vars::ssh_service_name],
 	    path   => "/etc/ssh/sshd_config";
 	"Restrict sshd root authentication":
-	    line   => "PermitRootLogin without-password",
+	    line   => "PermitRootLogin $rlogin",
 	    match  => "^PermitRootLogin",
 	    notify => Service[$ssh::vars::ssh_service_name],
 	    path   => "/etc/ssh/sshd_config";
@@ -206,9 +202,6 @@ class ssh::config {
 	    match  => "^ClientAliveCountMax",
 	    notify => Service[$ssh::vars::ssh_service_name],
 	    path   => "/etc/ssh/sshd_config";
-    }
-
-    file_line {
 	"Disable weak host keys (1/2)":
 	    ensure => "absent",
 	    line   => "HostKey /etc/ssh/ssh_host_dsa_key",
@@ -219,5 +212,15 @@ class ssh::config {
 	    line   => "HostKey /etc/ssh/ssh_host_ecdsa_key",
 	    notify => Service[$ssh::vars::ssh_service_name],
 	    path   => "/etc/ssh/sshd_config";
+    }
+
+    if ($os['release']['major'] != "7") {
+	common::define::lined {
+	    "Disable rhosts authentication (2/2)":
+		line   => "RhostsRSAAuthentication no",
+		match  => "^RhostsRSAAuthentication",
+		notify => Service[$ssh::vars::ssh_service_name],
+		path   => "/etc/ssh/sshd_config";
+	}
     }
 }

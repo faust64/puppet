@@ -3,6 +3,7 @@ class ssh::vars {
     $ciphers           = lookup("ssh_ciphers")
     $host_keys         = lookup("ssh_host_keys")
     $moduli_dir        = lookup("ssh_moduli_dir")
+    $permit_rootlogin  = lookup("ssh_permit_rootlogin")
     $restrict_to       = lookup("ssh_tcp_wrappers")
     $ssh_keys_database = lookup("ssh_keys_database")
     $ssh_kex_algos     = lookup("ssh_kex_algorithms")

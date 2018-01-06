@@ -3,6 +3,10 @@
 #  - Qemu
 #  - Libvirt
 
+# Don't do this ... Only needed until I'm done with virt-manager ...
+ssh_password_authentication: true
+ssh_permit_rootlogin: "yes"
+
 # Apache
 apache_mod_authldap: true
 apache_mod_proxy_http: true
