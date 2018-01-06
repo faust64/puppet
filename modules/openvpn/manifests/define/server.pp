@@ -182,7 +182,7 @@ define openvpn::define::server($bridge  = "gre42",
 	exec {
 	    "Set proper permissions to OpenVPN server key":
 		command => "chmod 0640 server.key",
-		cwd     => $confdir,
+		cwd     => "$confdir/keys",
 		notify  => Exec["Reload OpenVPN services"],
 		path    => "/usr/bin:/bin",
 		require => Pki::Define::Get["OpenVPN server key"],
@@ -192,7 +192,7 @@ define openvpn::define::server($bridge  = "gre42",
 		cwd     => $confdir,
 		notify  => Exec["Reload OpenVPN services"],
 		path    => "/usr/bin:/bin",
-		require => Pki::Define::Get["OpenVPN server key"],
+		require => Pki::Define::Get["OpenVPN server DH"],
 		unless  => "stat -c 0%a dh.pem | grep $mode";
 	}
 
