@@ -186,14 +186,14 @@ define openvpn::define::server($bridge  = "gre42",
 		notify  => Exec["Reload OpenVPN services"],
 		path    => "/usr/bin:/bin",
 		require => Pki::Define::Get["OpenVPN server key"],
-		unless  => "stat -c 0%a server.key | grep $mode";
+		unless  => "stat -c 0%a server.key | grep 0640";
 	    "Set proper permissions to OpenVPN dh params":
 		command => "chmod 0640 dh.pem",
 		cwd     => $confdir,
 		notify  => Exec["Reload OpenVPN services"],
 		path    => "/usr/bin:/bin",
 		require => Pki::Define::Get["OpenVPN server DH"],
-		unless  => "stat -c 0%a dh.pem | grep $mode";
+		unless  => "stat -c 0%a dh.pem | grep 0640";
 	}
 
 	File <<| tag == "VPN-CRL" |>>
