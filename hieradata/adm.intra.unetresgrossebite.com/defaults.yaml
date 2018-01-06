@@ -7,6 +7,7 @@ modeles_path: /goinfre/packages/modeles
 nagios_hostgroups:
   - ap
   - cam
+  - centos
   - debian
   - devuan
   - freebsd
