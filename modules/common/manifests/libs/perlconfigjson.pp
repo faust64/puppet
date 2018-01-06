@@ -5,7 +5,9 @@ class common::libs::perlconfigjson {
 	}
 	"CentOS", "RedHat": {
 	    if ($os['release']['major'] == "7") {
-		$what = [ "perl-Config-Any", "perl-Any-Moose" ]
+		include common::libs::perljson
+
+		$what = "perl-Any-Moose"
 
 		file {
 		    "Create perl-Config-JSON directory":
