@@ -1,1 +1,3 @@
 cron_service_name: crond
+nagios_runtime_group: nrpe
+nagios_runtime_user: nrpe

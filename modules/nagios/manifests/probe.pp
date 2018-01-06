@@ -1,7 +1,7 @@
 class nagios::probe {
     $hpraid      = $nagios::vars::watch_hpraid
     $mdraid      = $nagios::vars::watch_mdraid
-    $nagios_user = $nagios::vars::nagios_runtime_user
+    $nagios_user = $nagios::vars::runtime_user
 
     if ($virtual == "physical" or $virtual == "xen0" or $virtual == "openvzhn") {
 	include sudo

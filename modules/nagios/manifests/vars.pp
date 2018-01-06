@@ -18,7 +18,6 @@ class nagios::vars {
     $nagios_plugins_dir  = lookup("nagios_plugins_dir")
     $nagios_port         = lookup("nagios_nrpe_port")
     $nagios_run_dir      = lookup("nagios_run_dir")
-    $nagios_runtime_user = lookup("nagios_runtime_user")
     $no_parent           = lookup("nagios_no_parent")
     $nrpe_service_name   = lookup("nagios_nrpe_service_name")
     $nrpe_timeout        = lookup("nagios_nrpe_timeout")
