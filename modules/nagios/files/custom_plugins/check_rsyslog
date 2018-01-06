@@ -6,25 +6,31 @@ WARNING=1
 CRITICAL=2
 UNKNOWN=3
 
-if test -d /lib/systemd -a \( -x /bin/systemctl -o -x /usr/bin/systemctl \); then
-    if ! systemctl status rsyslog >/dev/null; then
-	ret=CRITICAL
-	msg=" - rsyslog not running"
-	perfdata=" | 0"
-    fi
-elif test -d /etc/init.d; then
-    if ! /etc/init.d/rsyslog status >/dev/null; then
-	ret=CRITICAL
-	msg=" - rsyslog not running"
-	perfdata=" | 0"
-    fi
-else
-    if ! /etc/rc.d/rsyslog status; then
-	ret=CRITICAL
-	msg=" - rsyslog not running"
-	perfdata=" | 0"
-    fi
+if ! ps ax | grep rsyslog >/dev/null 2>&1; then
+    ret=CRITICAL
+    msg=" - rsyslog not running"
+    perfdata=" | 0"
 fi
+#FML / dbus permission issue, somehow, ...
+#if test -d /lib/systemd -a \( -x /bin/systemctl -o -x /usr/bin/systemctl \); then
+#    if ! systemctl status rsyslog >/dev/null; then
+#	ret=CRITICAL
+#	msg=" - rsyslog not running"
+#	perfdata=" | 0"
+#    fi
+#elif test -d /etc/init.d; then
+#    if ! /etc/init.d/rsyslog status >/dev/null; then
+#	ret=CRITICAL
+#	msg=" - rsyslog not running"
+#	perfdata=" | 0"
+#    fi
+#else
+#    if ! /etc/rc.d/rsyslog status; then
+#	ret=CRITICAL
+#	msg=" - rsyslog not running"
+#	perfdata=" | 0"
+#    fi
+#fi
 #FIXME (?)
 #if test -z "$msg"; then
 #    if ! netstat -lan | grep '[:\.]514[ 	]*ESTABLISHED' >/dev/null; then
