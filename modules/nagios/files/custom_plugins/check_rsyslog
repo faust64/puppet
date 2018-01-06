@@ -6,7 +6,7 @@ WARNING=1
 CRITICAL=2
 UNKNOWN=3
 
-if test -d /lib/systemd; then
+if test -d /lib/systemd -a \( -x /bin/systemctl -o -x /usr/bin/systemctl \); then
     if ! systemctl status rsyslog >/dev/null; then
 	ret=CRITICAL
 	msg=" - rsyslog not running"
