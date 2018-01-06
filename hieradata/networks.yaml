@@ -31,6 +31,8 @@ active_openvpns:
     - { name: leaseweb, rootif: tun0 }
 # dedibox.unetresgrossebite.com:
 #   - { name: dedibox, rootif: tun0 }
+  friends.intra.unetresgrossebite.com:
+    - { name: friends, rootif: tun0 }
 # intra.unetresgrossebite.com:
 #   - { name: intra, rootif: tun1 }
 # vms.intra.unetresgrossebite.com:
@@ -45,6 +47,12 @@ openvpn_database:
   intra:
     mapto: vlan3
     netid: 10.242.2
+    netmsk: 24
+    port: 1194
+    server: true
+  friends:
+    mapto: vlan5
+    netid: 10.242.3
     netmsk: 24
     port: 1194
     server: true
