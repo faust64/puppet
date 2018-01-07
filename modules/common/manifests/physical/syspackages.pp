@@ -45,8 +45,10 @@ class common::physical::syspackages {
 		"lm_sensors":
 	    }
 
-	    Package["lm_sensors"]
-		-> Nagios::Define::Probe["sensors"]
+	    if (lookup("with_nagios") == true) {
+		Package["lm_sensors"]
+		    -> Nagios::Define::Probe["sensors"]
+	    }
 	}
     }
 }
