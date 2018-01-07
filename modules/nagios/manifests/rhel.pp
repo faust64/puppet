@@ -10,8 +10,19 @@ class nagios::rhel {
 		"nagios-plugins-load", "nagios-plugins-mailq",
 		"nagios-plugins-procs", "nagios-plugins-sensors",
 		"nagios-plugins-smtp", "nagios-plugins-ssh",
-		"nagios-plugins-swap", "nagios-plugins-users"
+		"nagios-plugins-users"
 	    ]:
+	}
+
+	if (getvar('::swapsize')) {
+	    $swapensure = "present"
+	} else {
+	    $swapensure = "absent"
+	}
+
+	common::define::package {
+	    "nagios-plugins-swap":
+		ensure => $swapensure;
 	}
     }
 
