@@ -1,5 +1,4 @@
 physical_parent: gaia.adm.intra.unetresgrossebite.com,rhea.adm.intra.unetresgrossebite.com
-with_nagios: false
 with_collectd: false
 
 # Collectd
