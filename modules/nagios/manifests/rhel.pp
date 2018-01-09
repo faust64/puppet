@@ -50,6 +50,12 @@ class nagios::rhel {
 	}
     }
 
+    if ($nagios::vars::watch_hpraid) {
+	common::define::package {
+	    "cciss_vol_status":
+	}
+    }
+
     Package["nrpe"]
 	-> File["Install Nagios custom plugins"]
 	-> File["Prepare nagios nrpe for further configuration"]
