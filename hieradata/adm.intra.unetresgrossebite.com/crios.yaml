@@ -10,7 +10,10 @@ lico_update_min: 53
 munin_node_listenaddr: 10.42.242.107
 
 # Nagios
+nagios_hp_raid:
+  - sda
 nagios_listenaddr: 10.42.242.107
+nagios_smart_disks: False
 
 # SNMP
 snmp_listenaddr: 10.42.242.107
