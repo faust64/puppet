@@ -13,6 +13,8 @@ class apache::modules {
 		modstatus     => true;
 	    "authz_default":
 		modstatus     => false;
+	    "lbmethod_byrequests":
+		modstatus     => $apache::vars::mod_proxy_balancer;
 	    "ldap":
 		customconf    => true,
 		modstatus     => $apache::vars::mod_ldap;
@@ -118,6 +120,8 @@ class apache::modules {
 	"setenvif":
 	    customconf    => true,
 	    modstatus     => $apache::vars::mod_setenvif;
+	"slotmem_shm":
+	    modstatus     => $apache::vars::mod_proxy_balancer;
 	"ssl":
 	    customconf    => true,
 	    modstatus     => $sslstatus;

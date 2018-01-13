@@ -4,6 +4,7 @@ with_collectd: false
 
 # Apache
 apache_collectd: false
+apache_mod_proxy_balancer: true
 
 # Pki
 pki_public: pki.adm.intra.unetresgrossebite.com
