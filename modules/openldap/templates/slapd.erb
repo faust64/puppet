@@ -153,6 +153,7 @@ access to attrs=uidNumber,gidNumber,homeDirectory,loginShell
 access to attrs=entryUUID,entryDN,createTimestamp,modifyTimestamp
     by dn="cn=bluemind,ou=services,<%=@suffix%>" read
     by dn="cn=repl,ou=services,<%=@suffix%>" read
+    by dn="cn=openshift,ou=services,<%=@suffix%>" read
     by * none
 access to attrs=startOfContract,employeeNumber
     by dn="cn=repl,ou=services,<%=@suffix%>" read
