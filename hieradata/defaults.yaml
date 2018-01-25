@@ -1890,6 +1890,7 @@ ui_openbsd_nics:
   - em2
   - em3
 pxe_root_dir: /srv/tftpboot
+satellite_repo: false
 tftp_runtime_user: tftp
 wds_ip: false
 

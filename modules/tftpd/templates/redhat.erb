@@ -1,0 +1,35 @@
+menu background boot-screens/splash.png
+include boot-screens/stdmenu.cfg
+menu hshift 19
+menu width 40
+menu margin 0
+
+menu title RedHat Systems
+    menu title RedHat Systems
+	menu label RedHat Systems
+	menu exit
+<% @distribs.each do |dist| -%><% [ "x86_64" ].each do |arch| -%><% sdist = dist.split('\.')[0] -%>    label -
+	menu label <%=dist%> <%=arch%> (KVM host auto part.)
+	kernel installers/redhat<%=dist%>/<%=arch%>/linux
+	append initrd=installers/redhat<%=dist%>/<%=arch%>/initrd.img ramdisk_size=100000 ksdevice=bootif ip=dhcp keymap=us ks=http://pxe.<%=@domain%>/ks/redhat<%=dist%>-<%=arch%>_server-auto.ks
+	IPAPPEND 2
+    label -
+	menu label <%=dist%> <%=arch%> (KVM host man part.)
+	kernel installers/redhat<%=dist%>/<%=arch%>/linux
+	append initrd=installers/redhat<%=dist%>/<%=arch%>/initrd.img ramdisk_size=100000 ksdevice=bootif ip=dhcp keymap=us ks=http://pxe.<%=@domain%>/ks/redhat<%=dist%>-<%=arch%>_server.ks
+	IPAPPEND 2
+    label -
+	menu label <%=dist%> <%=arch%> (Desktop auto part.)
+	kernel installers/redhat<%=dist%>/<%=arch%>/linux
+	append initrd=installers/redhat<%=dist%>/<%=arch%>/initrd.img ramdisk_size=100000 ksdevice=bootif ip=dhcp ks=http://pxe.<%=@domain%>/ks/redhat<%=dist%>-<%=arch%>_desktop-auto.ks
+	IPAPPEND 2
+    label -
+	menu label <%=dist%> <%=arch%> (Desktop man part.)
+	kernel installers/redhat<%=dist%>/<%=arch%>/linux
+	append initrd=installers/redhat<%=dist%>/<%=arch%>/initrd.img ramdisk_size=100000 ksdevice=bootif ip=dhcp ks=http://pxe.<%=@domain%>/ks/redhat<%=dist%>-<%=arch%>_desktop.ks
+    label -
+	menu label <%=dist%> <%=arch%>
+	kernel installers/redhat<%=dist%>/<%=arch%>/linux
+	append initrd=installers/redhat<%=dist%>/<%=arch%>/initrd.img inst.repo=<%=@rhrepo%>/server/<%=sdist%>/<%=dist%>/<%=arch%>/kickstart/
+<% end -%><% end -%>
+menu end

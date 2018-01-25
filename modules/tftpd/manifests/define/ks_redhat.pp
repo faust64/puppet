@@ -1,13 +1,15 @@
-define tftpd::define::ks_centos($autopart = false,
+define tftpd::define::ks_redhat($autopart = false,
 				$rhelarch = "x86_64",
-				$rhelvers = "7",
+				$rhelvers = "7.4",
 				$server   = false) {
     $charset      = $tftpd::vars::charset
     $password     = $tftpd::vars::default_pass
     $locale       = $tftpd::vars::locale_long
     $ntp_upstream = $tftpd::vars::ntp_upstream
     $ppmaster     = $tftpd::vars::puppetmaster
+    $rhrepo       = $tftpd::vars::rhrepo
     $root_dir     = $tftpd::vars::root_dir
+    $sdist        = split("$rhelvers", '\.')[0]
     $timezone     = $tftpd::vars::timezone
 
     if ($autopart) { $kssuffix = "-auto.ks" } else { $kssuffix = ".ks" }
@@ -17,11 +19,11 @@ define tftpd::define::ks_centos($autopart = false,
     if ($tftpd::vars::squid_ip) {
 	$use_proxy = " --proxy=http://proxy.$domain:3128"
     } else { $use_proxy = "" }
-    $basepath = "$root_dir/ks/centos"
+    $basepath = "$root_dir/ks/redhat"
 
     file {
-	"Install centos${rhelvers}-${rhelarch}_$hosttype$kssuffix":
-	    content => template("tftpd/ks-centos.erb"),
+	"Install redhat${rhelvers}-${rhelarch}_$hosttype$kssuffix":
+	    content => template("tftpd/ks-redhat.erb"),
 	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
