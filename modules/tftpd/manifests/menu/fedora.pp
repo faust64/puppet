@@ -1,8 +1,12 @@
 class tftpd::menu::fedora {
-    $distribs    = [ "25", "24", "23", "22", "21" ]
+#   $distribs    = [ "25", "24", "23", "22", "21" ]
+    $distribs    = [ "25", "24" ]
+    $distribswtf = [ "27", "26" ]
     $root_dir    = $tftpd::vars::root_dir
 
     tftpd::define::get_fedora {
+	$distribswtf:
+	    arch => [ "x86_64" ];
 	$distribs:
     }
 

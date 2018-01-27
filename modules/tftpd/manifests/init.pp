@@ -26,6 +26,7 @@ class tftpd {
     include tftpd::menu::openbsd
     include tftpd::menu::opensuse
     include tftpd::menu::redhat
+    include tftpd::menu::satellite
     include tftpd::menu::ubuntu
     include tftpd::automate::kickstart
     include tftpd::automate::preseed

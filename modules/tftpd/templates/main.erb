@@ -88,6 +88,11 @@ menu begin RedHat Systems
 	menu exit
     include boot-screens/redhat.cfg
 menu end
+<% if 0 == 1 -%>menu begin Satellite Auto-Registration
+    menu label Satellite Auto-Registration
+    kernel installers/satellite/ipxe.lkrn
+menu end
+<% end -%>
 menu begin Ubuntu Systems
     menu label Ubuntu Systems
 	menu label Ubuntu Systems

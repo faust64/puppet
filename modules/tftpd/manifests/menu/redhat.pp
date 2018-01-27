@@ -1,5 +1,6 @@
 class tftpd::menu::redhat {
     $distribs = [ "7.4" ]
+    $rhrepo   = $tftpd::vars::rhrepo
     $root_dir = $tftpd::vars::root_dir
 
     tftpd::define::get_redhat {

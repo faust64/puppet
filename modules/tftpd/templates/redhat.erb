@@ -8,7 +8,7 @@ menu title RedHat Systems
     menu title RedHat Systems
 	menu label RedHat Systems
 	menu exit
-<% @distribs.each do |dist| -%><% [ "x86_64" ].each do |arch| -%><% sdist = dist.split('\.')[0] -%>    label -
+<% @distribs.each do |dist| -%><% [ "x86_64" ].each do |arch| -%><% sdist = dist.split('.')[0] -%>    label -
 	menu label <%=dist%> <%=arch%> (KVM host auto part.)
 	kernel installers/redhat<%=dist%>/<%=arch%>/linux
 	append initrd=installers/redhat<%=dist%>/<%=arch%>/initrd.img ramdisk_size=100000 ksdevice=bootif ip=dhcp keymap=us ks=http://pxe.<%=@domain%>/ks/redhat<%=dist%>-<%=arch%>_server-auto.ks

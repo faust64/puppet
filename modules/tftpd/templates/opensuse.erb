@@ -12,9 +12,5 @@ menu title openSUSE Systems
 	menu label <%=dist%> <%=arch%>
 	kernel installers/opensuse<%=dist%>/<%=arch%>/linux
 	append initrd=installers/opensuse<%=dist%>/<%=arch%>/initrd splash=silent vga=0x314 showopts install=http://download.opensuse.org/distribution/<%=@name%>/repo/oss/
-<% end -%><% end -%><% @distribs.each do |dist| -%><% [ "x86_64", "i386" ].each do |arch| -%>    label -
-	menu label <%=dist%> <%=arch%>
-	kernel installers/opensuse<%=dist%>/<%=arch%>/linux
-	append initrd=installers/opensuse<%=dist%>/<%=arch%>/initrd splash=silent vga=0x314 showopts install=http://download.opensuse.org/distribution/<%=@name%>/repo/oss/
 <% end -%><% end -%>
 menu end

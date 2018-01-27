@@ -8,6 +8,11 @@ menu title Fedora Systems
     menu title Fedora Systems
 	menu label Fedora Systems
 	menu exit
+<% @distribswtf.each do |dist| -%><% [ "Server" ].each do |family| -%><% [ "x86_64" ].each do |arch| -%>    label -
+	menu label <%=dist%> <%=arch%> (<%=family%>)
+	kernel installers/fedora<%=dist%>/<%=family%>/<%=arch%>/linux
+	append initrd=installers/fedora<%=dist%>/<%=family%>/<%=arch%>/initrd.img inst.repo=http://dl.fedoraproject.org/pub/fedora/linux/releases/<%=dist%>/Server/<%=arch%>/os/
+<% end -%><% end -%><% end -%>
 <% @distribs.each do |dist| -%><% [ "Server" ].each do |family| -%><% [ "x86_64", "i386" ].each do |arch| -%>    label -
 	menu label <%=dist%> <%=arch%> (<%=family%>)
 	kernel installers/fedora<%=dist%>/<%=family%>/<%=arch%>/linux

@@ -1,0 +1,17 @@
+menu background boot-screens/splash.png
+include boot-screens/stdmenu.cfg
+menu hshift 19
+menu width 40
+menu margin 0
+
+menu title Satellite
+    menu title Satellite
+	menu label Satellite
+	menu exit
+<% @distribs.each do |dist| -%>    label -
+	menu label <%=dist%>
+	kernel memdisk
+	initrd installers/satellite-<%=dist%>/bootdisk.iso
+	append iso bigraw
+<% end -%>
+menu end
