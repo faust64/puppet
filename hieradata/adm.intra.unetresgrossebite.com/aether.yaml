@@ -3,6 +3,44 @@ physical_parent: gaia.adm.intra.unetresgrossebite.com,rhea.adm.intra.unetresgros
 # Collectd
 with_collectd: false
 
+# Commons - Perms check
+fs_legit_suid:
+  - /bin/mount
+  - /bin/ping
+  - /bin/ping6
+  - /bin/umount
+  - /bin/fusermount
+  - /bin/su
+  - /sbin/mount.nfs
+  - /usr/bin/chfn
+  - /usr/bin/chsh
+  - /usr/bin/cryptmount
+  - /usr/bin/fping
+  - /usr/bin/fping6
+  - /usr/bin/gpasswd
+  - /usr/bin/ksu
+  - /usr/bin/mtr
+  - /usr/bin/newgrp
+  - /usr/bin/passwd
+  - /usr/bin/pkexec
+  - /usr/bin/sudo
+  - /usr/bin/sudoedit
+  - /usr/lib/dbus-1.0/dbus-daemon-launch-helper
+  - /usr/lib/eject/dmcrypt-get-device
+  - /usr/lib/landscape/apt-update
+  - /usr/lib/nagios/plugins/check_dhcp
+  - /usr/lib/openssh/ssh-keysign
+  - /usr/lib/policykit-1/polkit-agent-helper-1
+  - /usr/lib/pt_chown
+  - /usr/lib/spice-gtk/spice-client-glib-usb-acl-helper
+  - /usr/lib/squid3/pinger
+  - /usr/lib/x86_64-linux-gnu/sssd/p11_child
+  - /usr/lib/x86_64-linux-gnu/sssd/ldap_child
+  - /usr/lib/x86_64-linux-gnu/sssd/selinux_child
+  - /usr/lib/x86_64-linux-gnu/sssd/krb5_child
+  - /usr/lib/x86_64-linux-gnu/sssd/proxy_child
+  - /var/lib/docker/aufs/diff/.*
+
 # LinuxCounter
 lico_update_day: 1
 lico_update_hour: 16
