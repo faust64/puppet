@@ -16,8 +16,9 @@ nagios_no_parent: false
 ldap_id: 41
 openldap_ldap_slave: sso.unetresgrossebite.com
 
-#PXE
-satellite_repo: http://satellite.vms.intra.unetresgrossebite.com/pulp/repos/UneTresGrosseBite/Library/content/dist/rhel
+# PXE
+satellite_ksroot: /pulp/repos/UneTresGrosseBite/Library/content/dist/rhel
+satellite_repo: satellite.vms.intra.unetresgrossebite.com
 
 # TFTPD
 pxe_reference_repository: false

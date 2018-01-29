@@ -1,9 +1,7 @@
 class tftpd::menu::satellite {
-    $distribs = [ "generic" ]
+    $rhrepo   = $tftpd::vars::rhrepo
     $root_dir = $tftpd::vars::root_dir
 
-# use hammer bootdisk generic on your satelliet host to generate bootdisk
-# or don't/fixme
     file {
 	"Install pxe satellite boot-screen":
 	    content => template("tftpd/satellite.erb"),

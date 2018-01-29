@@ -63,7 +63,7 @@ menu begin mfsBSD Systems
 	menu exit
     include boot-screens/mfsbsd.cfg
 menu end
-menu begin omsa
+menu begin OMSA
     menu label OMSA
 	menu label OMSA
 	menu exit
@@ -88,9 +88,12 @@ menu begin RedHat Systems
 	menu exit
     include boot-screens/redhat.cfg
 menu end
-<% if 0 == 1 -%>menu begin Satellite Auto-Registration
-    menu label Satellite Auto-Registration
-    kernel installers/satellite/ipxe.lkrn
+<% if @rhrepo != false -%>
+menu begin Satellite
+    menu label Satellite
+	menu label Satellite
+	menu exit
+    include boot-screens/satellite.cfg
 menu end
 <% end -%>
 menu begin Ubuntu Systems
@@ -99,7 +102,7 @@ menu begin Ubuntu Systems
 	menu exit
     include boot-screens/ubuntu.cfg
 menu end
-menu begin tools
+menu begin Utilities
     menu label Utilities
 	menu label Utilities
 	menu exit

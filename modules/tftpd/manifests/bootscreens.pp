@@ -3,6 +3,7 @@ class tftpd::bootscreens {
     $locale      = $tftpd::vars::locale
     $locale_long = $tftpd::vars::locale_long
     $repo        = $tftpd::vars::repo
+    $rhrepo      = $tftpd::vars::rhrepo
     $root_dir    = $tftpd::vars::root_dir
     $wds_ip      = $tftpd::vars::wds_ip
 

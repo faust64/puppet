@@ -1,6 +1,7 @@
 define tftpd::define::get_redhat($arch = [ "x86_64" ]) {
     $download = $tftpd::vars::download
     $rhrepo   = $tftpd::vars::rhrepo
+    $rhroot   = $tftpd::vars::rhroot
     $root_dir = $tftpd::vars::root_dir
     $sdist    = split("$name", '\.')[0]
 

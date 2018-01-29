@@ -1,7 +1,7 @@
 <% if @server -%>%include /tmp/pre_network
 firewall --disabled
 <% end -%>install
-url --url=<%=@rhrepo%>/server/<%=@sdist%>/<%=@rhelvers%>/<%=@rhelarch%>/kickstart/<%=@use_proxy%>
+url --url=http://<%=@rhrepo%><%=@rhroot%>/server/<%=@sdist%>/<%=@rhelvers%>/<%=@rhelarch%>/kickstart/<%=@use_proxy%>
 auth --<% if @rhelvers == 6 -%>use<% else -%>enable<% end -%>shadow --passalgo=sha512
 <% if @password -%>rootpw --iscrypted <%=@password%>
 <% end -%>lang <%=@locale%>.<%=@charset%>

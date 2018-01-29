@@ -8,6 +8,7 @@ define tftpd::define::ks_redhat($autopart = false,
     $ntp_upstream = $tftpd::vars::ntp_upstream
     $ppmaster     = $tftpd::vars::puppetmaster
     $rhrepo       = $tftpd::vars::rhrepo
+    $rhroot       = $tftpd::vars::rhroot
     $root_dir     = $tftpd::vars::root_dir
     $sdist        = split("$rhelvers", '\.')[0]
     $timezone     = $tftpd::vars::timezone

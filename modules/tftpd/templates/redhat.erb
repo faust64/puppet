@@ -30,6 +30,6 @@ menu title RedHat Systems
     label -
 	menu label <%=dist%> <%=arch%>
 	kernel installers/redhat<%=dist%>/<%=arch%>/linux
-	append initrd=installers/redhat<%=dist%>/<%=arch%>/initrd.img inst.repo=<%=@rhrepo%>/server/<%=sdist%>/<%=dist%>/<%=arch%>/kickstart/
+	append initrd=installers/redhat<%=dist%>/<%=arch%>/initrd.img inst.repo=http://<%=@rhrepo%><%=@rhroot%>/server/<%=sdist%>/<%=dist%>/<%=arch%>/kickstart/
 <% end -%><% end -%>
 menu end

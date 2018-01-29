@@ -8,10 +8,15 @@ menu title Satellite
     menu title Satellite
 	menu label Satellite
 	menu exit
-<% @distribs.each do |dist| -%>    label -
-	menu label <%=dist%>
-	kernel memdisk
-	initrd installers/satellite-<%=dist%>/bootdisk.iso
-	append iso bigraw
-<% end -%>
+#NOTE: following initrd & kernel can be found on rhel, using `yum install foreman-discovery-image`, into /srv/tftpboot/boot
+    label -
+	menu label Satellite Discovery
+	kernel installers/satellite/fdi-image-rhel_7-vmlinuz
+	append initrd=installers/satellite/fdi-image-rhel_7-img rootflags=loop root=live:/fdi.iso rootfstype=auto ro rd.live.image acpi=force rd.luks=0 rd.md=0 rd.dm=0 rd.lvm=0 rd.bootif=0 rd.neednet=0 nomodeset proxy.url=https://<%=@rhrepo%>:9090 proxy.type=proxy
+	ipappend 2
+#   label -
+#	menu label generic
+#	kernel memdisk
+#	initrd installers/satellite-generic/bootdisk.iso
+#	append iso bigraw
 menu end
