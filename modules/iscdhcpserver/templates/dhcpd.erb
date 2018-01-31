@@ -20,6 +20,7 @@ option PXE.mtftp-tmout code 4 = unsigned integer 8;
 option PXE.mtftp-delay code 5 = unsigned integer 8;
 option PXE.discovery-control code 6 = unsigned integer 8;
 option PXE.discovery-mcast-addr code 7 = ip-address;
+option arch code 93 = unsigned integer 16; #RFC4578
 
 <% if @dhcp_ip[1] -%>failover peer "dhcp-failover"
 {
