@@ -98,11 +98,11 @@ zone dhcp.<%=@domain%>.
     pool
     {
 <% if not @all_networks[vlanname]['pxesatellite'].nil? and @all_networks[vlanname]['pxesatellite'] == true -%>	if option arch = 00:06 {
-	    filename "pxelinux/bootia32.efi";
+	    filename "bootia32.efi";
 	} else if option arch = 00:07 {
-	    filename "pxelinux/bootx64.efi";
+	    filename "bootx64.efi";
 	} else {
-	    filename "pxelinux/pxelinux.0";
+	    filename "pxelinux.0";
 	}
 <% else -%>	filename			"pxelinux.0";
 <% end -%>
