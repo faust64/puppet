@@ -11,6 +11,7 @@ fs_legit_suid:
   - /bin/umount
   - /bin/fusermount
   - /bin/su
+  - /sbin/mount.cifs
   - /sbin/mount.nfs
   - /usr/bin/chfn
   - /usr/bin/chsh
