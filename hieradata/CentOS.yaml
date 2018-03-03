@@ -57,6 +57,7 @@ fs_legit_suid:
   - /usr/sbin/mount.nfs
   - /usr/sbin/pam_timestamp_check
   - /usr/sbin/unix_chkpwd
+  - /usr/sbin/userhelper
   - /usr/sbin/usernetctl
   - /usr/lib/polkit-1/polkit-agent-helper-1
   - /usr/lib64/dbus-1/dbus-daemon-launch-helper
