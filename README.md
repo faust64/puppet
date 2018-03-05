@@ -74,7 +74,7 @@ find /var/lib/puppet/reports/ -type f -ctime +7 2>/dev/null | xargs -P 4 -n 20 r
 To deploy an agent, having trusted its public IP (update required in `hieradata/unetresgrossebite.com/puppet.yaml`), run the following:
 
 ```
-if test -s /etc/centos-release; then
+if test -s /etc/centos-release -o -s /etc/redhat-release; then
     rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
     yum install puppet-agent -y
 else
