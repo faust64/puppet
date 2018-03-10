@@ -7,6 +7,9 @@ define pki::define::get($ca     = "web",
 
     if ($download == "wget") {
 	$cmd = "$download --no-check-certificate --no-proxy"
+
+	Common::Define::Package["wget"]
+	    -> Exec["Get $url $what from $master"]
     } elsif ($download == "curl") {
 	$cmd = "$download -k --noproxy"
     } else {
