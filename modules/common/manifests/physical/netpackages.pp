@@ -23,5 +23,10 @@ class common::physical::netpackages {
 		"arping":
 	    }
 	}
+	if ($operatingsystem == "CentOS" or $operatingsystem == "RedHat") {
+	    common::define::package {
+		"net-tools":
+	    }
+	}
     }
 }
