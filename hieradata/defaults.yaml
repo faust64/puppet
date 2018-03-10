@@ -782,6 +782,7 @@ kibana_prefix: logs
 # KVM
 kvm_collectd: false
 kvm_cpu_family: SandyBridge
+kvm_do_models: true
 kvm_munin_monitored: true
 kvm_munin_probes:
   - kvm_io
@@ -2596,13 +2597,13 @@ fs_legit_suid:
   - /usr/bin/pkexec
   - /usr/bin/sudo
   - /usr/bin/sudoedit
-  - /usr/lib/pt_chown
   - /usr/lib/dbus-1.0/dbus-daemon-launch-helper
   - /usr/lib/eject/dmcrypt-get-device
   - /usr/lib/landscape/apt-update
   - /usr/lib/nagios/plugins/check_dhcp
   - /usr/lib/openssh/ssh-keysign
   - /usr/lib/policykit-1/polkit-agent-helper-1
+  - /usr/lib/pt_chown
   - /usr/lib/spice-gtk/spice-client-glib-usb-acl-helper
   - /usr/lib/squid3/pinger
   - /var/lib/docker/aufs/diff/.*

@@ -3,6 +3,7 @@ class kvm::vars {
     $cpumodel           = lookup("kvm_cpu_family")
     $default_vg         = lookup("virtual_default_vg")
     $dns_ip             = lookup("dns_ip")
+    $do_models          = lookup("kvm_do_models")
     $has_openvz         = lookup("openvz_and_xen")
     $jumeau             = lookup("jumeau")
     $mail_hub           = lookup("mail_mx")

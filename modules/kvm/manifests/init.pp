@@ -16,10 +16,13 @@ class kvm {
 	}
     }
 
+    if ($kvm::vars::do_models) {
+	include kvm::modeles
+    }
+
     include kvm::backups
     include kvm::collectd
     include kvm::config
-    include kvm::modeles
     include kvm::munin
     include kvm::scripts
 }
