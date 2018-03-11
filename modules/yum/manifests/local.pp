@@ -1,6 +1,9 @@
 class yum::local {
     if ($operatingsystem == "CentOS") {
-	include yum::centos
+	class {
+	    yum::centos:
+		stage => "antilope";
+	}
     }
 
     case $architecture {

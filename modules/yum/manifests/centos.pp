@@ -13,7 +13,6 @@ class yum::centos {
 		command => "yum localinstall -y http://$supstream/pub/katello-ca-consumer-latest.noarch.rpm",
 		cwd     => "/",
 		path    => "/usr/sbin:/sbin:/usr/bin:/bin",
-		require => File["Prepare YUM for further configuration"],
 		unless  => "test -s /etc/pki/ca-trust/source/anchors/katello-server-ca.pem";
 	}
 
@@ -26,14 +25,14 @@ class yum::centos {
 		    require => Exec["Install Katello CA Consumer from Satellite upstream"],
 		    unless  => "test -s /etc/yum.repos.d/redhat.repo";
 	    }
-	}
 
-	each([ "CentOS-Base", "epel" ]) |$repo| {
-	    file {
-		"Purge $repo - should pull from Satellite upstream":
-		    ensure  => absent,
-		    path    => "/etc/yum.repos.d/$repo.repo",
-		    require => Exec["Install Katello CA Consumer from Satellite upstream"];
+	    each([ "CentOS-Base", "epel" ]) |$repo| {
+		file {
+		    "Purge $repo - should pull from Satellite upstream":
+			ensure  => absent,
+			path    => "/etc/yum.repos.d/$repo.repo",
+			require => Exec["Register against Katello"];
+		}
 	    }
 	}
     } else {
@@ -43,8 +42,7 @@ class yum::centos {
 		group   => lookup("gid_zero"),
 		mode    => "0644",
 		owner   => root,
-		path    => "/etc/yum.repos.d/CentOS-Base.repo",
-		require => File["Prepare YUM for further configuration"];
+		path    => "/etc/yum.repos.d/CentOS-Base.repo";
 	}
 
 	exec {
