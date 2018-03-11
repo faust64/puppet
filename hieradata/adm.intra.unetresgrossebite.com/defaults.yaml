@@ -54,6 +54,9 @@ snmp_ip:
 # Puppet
 puppet_apt_repo: http://repository.unetresgrossebite.com/debian
 
+# PXE
+satellite_repo: katello.vms.intra.unetresgrossebite.com
+
 # Rsync
 rsync_clients:
   - 10.42.242.0/24

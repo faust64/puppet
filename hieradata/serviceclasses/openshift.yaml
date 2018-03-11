@@ -28,6 +28,10 @@ nagios_smart_disks:
 # KVM
 kvm_do_models: false
 
+# PXE
+satellite_register_activationkey: AK-KVM
+satellite_register_organization: UTGB
+
 # Qemu
 qemu_has_kvm: true
 

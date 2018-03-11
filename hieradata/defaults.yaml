@@ -1892,6 +1892,8 @@ ui_openbsd_nics:
   - em3
 pxe_root_dir: /srv/tftpboot
 satellite_ksroot: false
+satellite_register_activationkey: false
+satellite_register_organization: false
 satellite_repo: false
 tftp_runtime_user: tftp
 wds_ip: false
