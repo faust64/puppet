@@ -4,7 +4,7 @@ Facter.add("srvtype") do
 	case hname
 	when /asterisk|obelisk/
 	    "asterisk"
-	when /freeradius|directory|auth/
+	when /freeradius|directory|auth|lemon/
 	    "auth"
 	when /bacula/
 	    "bacula"
