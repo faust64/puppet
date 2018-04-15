@@ -1,8 +1,12 @@
 class yum::local {
     if ($operatingsystem == "CentOS") {
-	class {
-	    yum::centos:
-		stage => "antilope";
+	if (lookup("satellite_repo") != false) {
+	    class {
+		yum::katello:
+		    stage => "antilope";
+	    }
+	} else {
+	    include yum::centos
 	}
     }
 
