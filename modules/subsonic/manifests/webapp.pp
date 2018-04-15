@@ -19,6 +19,7 @@ class subsonic::webapp {
 		csp_name        => "subsonic",
 		konami_location => $subsonic::vars::music_root,
 		require         => Service["subsonic"],
+		sslredirecthttp => true,
 		vhostldapauth   => "applicative",
 		vhostsource     => "app_proxy",
 		with_reverse    => $reverse;
@@ -35,6 +36,7 @@ class subsonic::webapp {
 		deny_frames     => false,
 		konami_location => $subsonic::vars::music_root,
 		require         => Service["subsonic"],
+		sslredirecthttp => true,
 		vhostldapauth   => "applicative",
 		vhostsource     => "app_proxy",
 		with_reverse    => $reverse;
