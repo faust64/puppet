@@ -12,6 +12,11 @@ if test -x /usr/local/bin/libvirt-bin; then
 	ret=CRITICAL
 	msg=' - libvirt not started | 0'
     fi
+elif test -s /usr/lib/systemd/system/libvirtd.service; then
+    if ! systemctl status libvirtd >/dev/null 2>&1; then
+	ret=CRITICAL
+	msg=' - libvirt not started | 0'
+    fi
 else
     ret=UNKNOWN
     msg=' - missing libvirt-bin script'
