@@ -97,7 +97,7 @@ vlan_database:
     name: Management
     dns: "adm"
     dnsip:
-      - 10.42.242.3
+      - 10.42.242.5
       - 10.42.242.5
     netid: "242"
     netmsk: 24
@@ -125,7 +125,7 @@ vlan_database:
     name: Users
     dns: "users"
     dnsip:
-      - 10.42.45.3
+      - 10.42.45.5
       - 10.42.45.5
     netid: "45"
     netmsk: 24
@@ -147,7 +147,7 @@ vlan_database:
     name: VirtServices
     dns: "vms"
     dnsip:
-      - 10.42.44.3
+      - 10.42.44.5
       - 10.42.44.5
     netid: "44"
     netmsk: 24
@@ -168,7 +168,7 @@ vlan_database:
     name: Friends
     dns: "friends"
     dnsip:
-      - 10.42.253.3
+      - 10.42.253.5
       - 10.42.253.5
     netid: "253"
     netmsk: 24
@@ -191,7 +191,7 @@ vlan_database:
     name: WiFi
     dns: "wifi"
     dnsip:
-      - 10.42.254.3
+      - 10.42.254.5
       - 10.42.254.5
     netid: "254"
     netmsk: 24
@@ -213,7 +213,7 @@ vlan_database:
     name: Plaristote
     dns: "plaristote"
     dnsip:
-      - 10.42.43.3
+      - 10.42.43.5
       - 10.42.43.5
     netid: "43"
     netmsk: 24
@@ -238,7 +238,7 @@ vlan_database:
     name: VoIP
     dns: "sip"
     dnsip:
-      - 10.42.41.3
+      - 10.42.41.5
       - 10.42.41.5
     netid: "41"
     netmsk: 24
@@ -262,7 +262,7 @@ vlan_database:
     name: Ceph
     dns: "ceph"
     dnsip:
-      - 10.42.46.3
+      - 10.42.46.5
       - 10.42.46.5
     netid: "46"
     netmsk: 24
@@ -282,7 +282,7 @@ vlan_database:
     name: VideoSurveillance
     dns: "surv"
     dnsip:
-      - 10.42.40.3
+      - 10.42.40.5
       - 10.42.40.5
     netid: "40"
     netmsk: 24
@@ -302,7 +302,7 @@ vlan_database:
     name: Faust
     dns: "faust"
     dnsip:
-      - 10.42.42.3
+      - 10.42.42.5
       - 10.42.42.5
     admin: true
     netid: "42"
@@ -334,7 +334,7 @@ vlan_database:
     name: Guests
     dns: "guests"
     dnsip:
-      - 10.42.252.3
+      - 10.42.252.5
       - 10.42.252.5
     netid: "252"
     netmsk: 24
@@ -365,7 +365,7 @@ office_networks:
   "kimsufi#4": 87.98.218.22/32
   "kimsufi#5": 37.187.108.35/32
   "gangbang": 78.193.67.92/32
-  "orange": 86.247.125.189/32
+  "orange": 90.92.189.25/32
   "ovh#1": 5.135.4.208/29
   "ovh#2": 51.254.93.64/29
   "soyoustart#1": 188.165.212.140/32
