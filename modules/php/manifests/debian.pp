@@ -1,12 +1,13 @@
 class php::debian {
     $conf_dir = $php::vars::conf_dir
+    $phpvers  = $php::vars::phpvers
 
     if ($php::vars::is_fpm == true) {
-	$pkgname = "php5-fpm"
+	$pkgname = "php${phpvers}-fpm"
     } elsif ($php::vars::is_cli == true) {
-	$pkgname = "php5-cli"
+	$pkgname = "php${phpvers}-cli"
     } else {
-	$pkgname = "php5"
+	$pkgname = "php${phpvers}"
     }
 
     common::define::package {
@@ -15,15 +16,15 @@ class php::debian {
 
     if ($php::vars::with_dev) {
 	common::define::package {
-	    "php5-dev":
+	    "php${phpvers}-dev":
 	}
 
-	Package["php5-dev"]
+	Package["php${phpvers}-dev"]
 	    -> Package[$pkgname]
     }
     if ($php::vars::with_apc) {
 	if ($lsbdistcodename == "jessie") {
-	    $apc = "php5-apcu"
+	    $apc = "php${phpvers}-apcu"
 	} else {
 	    $apc = "php-apc"
 	}

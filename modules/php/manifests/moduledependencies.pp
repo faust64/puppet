@@ -1,4 +1,6 @@
 class php::moduledependencies {
+    $phpvers = $php::vars::phpvers
+
     if ($php::vars::php_pear == true) {
 	common::define::package {
 	    "php-pear":
@@ -6,7 +8,7 @@ class php::moduledependencies {
     }
     if ($php::vars::mod_ctype == true and $operatingsystem == "FreeBSD") {
 	common::define::package {
-	    "php5-ctype":
+	    "php${phpvers}-ctype":
 	}
     }
     if ($php::vars::mod_curl == true) {
@@ -19,13 +21,13 @@ class php::moduledependencies {
 	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    common::define::package {
-		"php5-curl":
+		"php${phpvers}-curl":
 	    }
 	}
     }
     if ($php::vars::mod_dom == true and $operatingsystem == "FreeBSD") {
 	common::define::package {
-	    "php5-dom":
+	    "php${phpvers}-dom":
 	}
     }
     if ($php::vars::mod_ftp == true) {
@@ -36,7 +38,7 @@ class php::moduledependencies {
 	    }
 	} elsif ($operatingsystem == "FreeBSD") {
 	    common::define::package {
-		"php5-ftp":
+		"php${phpvers}-ftp":
 	    }
 	}
     }
@@ -48,7 +50,7 @@ class php::moduledependencies {
 	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    common::define::package {
-		"php5-gd":
+		"php${phpvers}-gd":
 	    }
 	}
     }
@@ -64,7 +66,7 @@ class php::moduledependencies {
 	    }
 	} elsif ($operatingsystem == "FreeBSD") {
 	    common::define::package {
-		"php5-gettext":
+		"php${phpvers}-gettext":
 	    }
 	}
     }
@@ -72,7 +74,7 @@ class php::moduledependencies {
 	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
-		"php5-gmp":
+		"php${phpvers}-gmp":
 	    }
 	}
     }
@@ -80,7 +82,7 @@ class php::moduledependencies {
 	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
-		"php5-intl":
+		"php${phpvers}-intl":
 	    }
 	}
     }
@@ -96,7 +98,7 @@ class php::moduledependencies {
 	    }
 	} elsif ($operatingsystem == "FreeBSD") {
 	    common::define::package {
-		"php5-json":
+		"php${phpvers}-json":
 	    }
 	}
     }
@@ -108,7 +110,7 @@ class php::moduledependencies {
 	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    common::define::package {
-		"php5-ldap":
+		"php${phpvers}-ldap":
 	    }
 	}
     }
@@ -127,7 +129,7 @@ class php::moduledependencies {
 	    }
 	} elsif ($operatingsystem == "FreeBSD") {
 	    common::define::package {
-		"php5-mbstring":
+		"php${phpvers}-mbstring":
 	    }
 	}
     }
@@ -139,7 +141,7 @@ class php::moduledependencies {
 	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    common::define::package {
-		"php5-mcrypt":
+		"php${phpvers}-mcrypt":
 	    }
 	}
     }
@@ -151,7 +153,7 @@ class php::moduledependencies {
 	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    common::define::package {
-		"php5-memcache":
+		"php${phpvers}-memcache":
 	    }
 	}
     }
@@ -159,7 +161,7 @@ class php::moduledependencies {
 	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
-		"php5-mysqlnd":
+		"php${phpvers}-mysqlnd":
 	    }
 	}
     } elsif ($php::vars::mod_mysql == true or $php::vars::mod_mysqli) {
@@ -170,7 +172,7 @@ class php::moduledependencies {
 	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    common::define::package {
-		"php5-mysql":
+		"php${phpvers}-mysql":
 	    }
 	}
     }
@@ -182,7 +184,7 @@ class php::moduledependencies {
 	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    common::define::package {
-		"php5-pgsql":
+		"php${phpvers}-pgsql":
 	    }
 	}
     }
@@ -194,7 +196,7 @@ class php::moduledependencies {
 	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    common::define::package {
-		"php5-snmp":
+		"php${phpvers}-snmp":
 	    }
 	}
     }
@@ -209,11 +211,11 @@ class php::moduledependencies {
 	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
-		"php5-sqlite":
+		"php${phpvers}-sqlite":
 	    }
 	} elsif ($operatingsystem == "FreeBSD") {
 	    common::define::package {
-		"php5-sqlite3":
+		"php${phpvers}-sqlite3":
 	    }
 	}
     }
@@ -232,7 +234,7 @@ class php::moduledependencies {
 	    }
 	} elsif ($operatingsystem == "FreeBSD") {
 	    common::define::package {
-		[ "php5-simplexml", "php5-xml" ]:
+		[ "php${phpvers}-simplexml", "php${phpvers}-xml" ]:
 	    }
 	}
     }
@@ -244,18 +246,18 @@ class php::moduledependencies {
 	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    common::define::package {
-		"php5-xmlrpc":
+		"php${phpvers}-xmlrpc":
 	    }
 	}
     }
     if ($php::vars::php_sessions == true and $operaintgsystem == "FreeBSD") {
 	common::define::package {
-	    "php5-session":
+	    "php${phpvers}-session":
 	}
     }
     if ($php::vars::mod_zlib == true and $operatingsystem == "FreeBSD") {
 	common::define::package {
-	    "php5-zlib":
+	    "php${phpvers}-zlib":
 	}
     }
     if ($php::vars::mod_pdo == true
