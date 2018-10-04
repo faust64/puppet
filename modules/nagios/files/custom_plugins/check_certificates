@@ -1,6 +1,6 @@
 #!/bin/sh
 
-LOOKUP="/etc/httpd /etc/apache2 /etc/apache /etc/nginx /etc/postfix /etc/exim4 /etc/courrier /usr/local/etc/apache22 /etc/riak /etc/openvpn /etc/unbound /etc/nsd /etc/letsencrypt/live /etc/haproxy /etc/stunnel/ssl"
+LOOKUP="/etc/httpd /etc/apache2 /etc/apache /etc/origin /etc/etcd /etc/nginx /etc/postfix /etc/exim4 /etc/courrier /usr/local/etc/apache22 /etc/riak /etc/openvpn /etc/unbound /etc/nsd /etc/letsencrypt/live /etc/haproxy /etc/stunnel/ssl"
 PRG=`basename $0`
 OK=0
 WARNING=1
