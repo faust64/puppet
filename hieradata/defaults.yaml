@@ -58,6 +58,7 @@ apache_mod_proxy_balancer: false
 apache_mod_proxy_connect: false
 apache_mod_proxy_ftp: false
 apache_mod_proxy_http: false
+apache_mod_proxy_wstunnel: false
 apache_mod_python: false
 apache_mod_reqtimeout: true
 apache_mod_rewrite: true

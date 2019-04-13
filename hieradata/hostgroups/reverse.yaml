@@ -13,6 +13,7 @@ apache_listen_ports:
   ssl: 443
 apache_mod_authldap: true
 apache_mod_proxy_http: true
+apache_mod_proxy_wstunnel: true
 apache_mod_security: true
 apache_munin: true
 apache_rsyslog: true

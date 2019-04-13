@@ -107,6 +107,8 @@ class apache::modules {
 	    modstatus     => $apache::vars::mod_proxy_ftp;
 	"proxy_http":
 	    modstatus     => $apache::vars::mod_proxy_http;
+	"proxy_wstunnel":
+	    modstatus     => $apache::vars::mod_proxy_wstunnel;
 	"python":
 	    modstatus     => $apache::vars::mod_python;
 	"reqtimeout":
