@@ -3,6 +3,9 @@ physical_parent: eros.adm.intra.unetresgrossebite.com,rhea.adm.intra.unetresgros
 # Collectd
 with_collectd: false
 
+# KVM
+kvm_cpu_family: Opteron_G3
+
 # LinuxCounter
 lico_update_day: 1
 lico_update_hour: 15

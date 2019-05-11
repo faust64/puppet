@@ -38,7 +38,7 @@ Facter.add("srvtype") do
 	    "nzb"
 	when /cerbero|echidna/
 	    "opennebula"
-	when /momos|moros|thanatos|phoebe|crios|eurybie|hemara|ouranos|erebe|helios|nyx|selene/
+	when /momos|moros|thanatos|phoebe|crios|eurybie|hemara|ouranos|erebe|helios|nyx|selene|aether/
 	    "openshift"
 	when /drive|owncloud|media|packages|pxe|pydio|repository/
 	    "repo"
@@ -48,7 +48,7 @@ Facter.add("srvtype") do
 	    "sources"
 	when /sso/
 	    "sso"
-	when /ceph|aether|eos/
+	when /ceph|eos/
 	    "store"
 	when /collectd|ganglia|lachesis|munin|mrtg|smokeping/
 	    "supervision"

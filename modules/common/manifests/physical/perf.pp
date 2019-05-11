@@ -8,8 +8,14 @@ class common::physical::perf {
 	    ]:
 	}
     } elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan") {
-	common::define::package {
-	    [ "linux-tools" ]:
+	if ($lsbdistcodename == "buster") {
+	    common::define::package {
+		[ "linux-perf-4.19" ]:
+	    }
+	} else {
+	    common::define::package {
+		[ "linux-tools" ]:
+	    }
 	}
     }
 }

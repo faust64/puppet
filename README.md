@@ -78,9 +78,27 @@ if test -s /etc/centos-release -o -s /etc/redhat-release; then
     rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
     yum install puppet-agent -y
 else
-    apt-get update ; apt-get upgrade ; apt-get dist-upgrade ; apt-get autoremove --purge ; apt-get install ca-certificates lsb-release
+    apt-get update ; apt-get upgrade ; apt-get dist-upgrade ; apt-get autoremove --purge ; apt-get install ca-certificates lsb-release wget
     if grep -E '(devuan|trusty)' /etc/apt/sources.list >/dev/null; then
 	dist=trusty
+    elif grep buster /etc/debian_version; then
+	cat <<EOF >>/var/lib/dpkg/status
+Package: libreadline6
+Status: install ok installed
+Priority: extra
+Section: libs
+Installed-Size: 1
+Maintainer: Debian QA Group <packages@qa.debian.org>
+Architecture: amd64
+Multi-Arch: same
+Source: readline5 (5.2+dfsg-3)
+Version: 6.2+dfsg-3+b13
+Depends: readline-common, libc6 (>= 2.15), libtinfo6 (>= 6)
+Description: puppet patch
+
+EOF
+	echo ./ >/var/lib/dpkg/info/libreadline6\:amd64.list
+	dist=yakkety
     else
 	dist=`lsb_release -sc`
     fi
