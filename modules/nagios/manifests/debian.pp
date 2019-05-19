@@ -3,7 +3,7 @@ class nagios::debian {
 	"nagios-nrpe-server":
     }
 
-    if ($lsbdistcodename == "jessie") {
+    if ($lsbdistcodename == "jessie" or $lsbdistcodename == "buster") {
 	common::define::package {
 	    "monitoring-plugins-standard":
 		options => [ "--no-install-recommends" ];
