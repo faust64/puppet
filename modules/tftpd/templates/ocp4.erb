@@ -1,0 +1,20 @@
+menu background boot-screens/splash.png
+include boot-screens/stdmenu.cfg
+menu hshift 19
+menu width 40
+menu margin 0
+
+menu title OCP4 RH-CoreOS Systems
+    menu title OCP4 RH-CoreOS Systems
+	menu label OCP4 RH-CoreOS Systems
+	menu exit
+<% @distribs.each do |dist| -%><% [ "x86_64" ].each do |arch| -%>   label -
+	menu label <%=dist%> <%=arch%> - bios
+	kernel installers/ocp4-rhcos-<%=dist%>/<%=arch%>/linux
+	append initrd=installers/ocp4-rhcos-<%=dist%>/<%=arch%>/initrd.gz coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://<%=@ipaddress%>/ocp4/rhcos-<%=dist%>-metal-bios.raw.gz coreos.inst.ignition_url=http://<%=@ipaddress%>/ocp4/config.ign
+    label -
+	menu label <%=dist%> <%=arch%> - uefi
+	kernel installers/ocp4-rhcos-<%=dist%>/<%=arch%>/linux
+	append initrd=installers/ocp4-rhcos-<%=dist%>/<%=arch%>/initrd.gz coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://<%=@ipaddress%>/ocp4/rhcos-<%=dist%>-metal-uefi.raw.gz coreos.inst.ignition_url=http://<%=@ipaddress%>/ocp4/config.ign
+<% end -%><% end -%>
+menu end

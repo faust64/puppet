@@ -23,6 +23,7 @@ class tftpd {
     include tftpd::menu::fedora
     include tftpd::menu::freebsd
     include tftpd::menu::mfsbsd
+    include tftpd::menu::ocp4
     include tftpd::menu::openbsd
     include tftpd::menu::opensuse
     include tftpd::menu::redhat
