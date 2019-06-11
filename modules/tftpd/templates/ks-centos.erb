@@ -143,6 +143,7 @@ iftop
 iotop
 puppet
 rsync
+virt-who
 <% end -%>-selinux-policy-targeted
 EOF
 echo "%end" >>/tmp/pre_packages
@@ -155,8 +156,9 @@ do
     PRECONFIG=`wget -q http://<%=@fqdn%>/ks/srvlist -O - | grep -i $MAC`
 
     if test "x$PRECONFIG" != x; then
-	eval `echo $PRECONFIG | awk '{print "HOSTNAME=" $1 " IPADDRESS=" $2 " NETMASK=" $3 " GATEWAY=" $4}'`
-	DNS=<%=@dns_one%>
+	eval `echo $PRECONFIG | awk '{print "HOSTNAME=" $1 " IPADDRESS=" $2 " NETMASK=" $3 " GATEWAY=" $4 " DNS=" $5}'`
+<% if 0 == 1 -%>	DNS=<%=@dns_one%>
+<% end -%>
     fi
 
 <% if @server %>    if test "$HOSTNAME" -a "$IPADDRESS" -a "$NETMASK" -a "$GATEWAY"; then
@@ -417,50 +419,53 @@ cat <<EOF >>/tmp/pre_network
 #PROJET $PROJET
 EOF
 
-<% if @autopart -%>VALIDHDD=$(for i in $(fdisk -l | grep "Disk /" | grep -v mapper | sed 's|Disk /dev/\([^:]*\):.*|\1|'); do REMOVABLE=$(cat /sys/block/$i/removable); if test "$REMOVABLE" = 0; then echo $i; fi; done | sort -u)
+<% if @autopart -%>VALIDHDD=$(for i in $(fdisk -l | grep "Disk /" | grep -vE '/dev/(loop|mapper)' | sed 's|Disk /dev/\([^:]*\):.*|\1|'); do REMOVABLE=$(cat /sys/block/$i/removable); if test "$REMOVABLE" = 0; then echo $i; fi; done | sort -u)
 NBVALIDHDD=`echo $VALIDHDD | wc -w`
 VIRTNAME=
 <% if @rhelvers == 7 -%>DEFAULTFS=xfs
 <% else -%>DEFAULTFS=ext4
 <% end -%>echo "# Disk partitioning information" >/tmp/pre_disk
-if test "$NBVALIDHDD" = 1 -o "$NBVALIDHDD" = 2; then
-    DRIVE1=`echo $VALIDHDD | awk '{print $1}'`
-    echo "bootloader --location=mbr --driveorder=$DRIVE1" >>/tmp/pre_bootloader
-    echo "## Primary partitions" >>/tmp/pre_disk
-    echo "part /boot --fstype=ext4 --asprimary --size=512 --ondisk=$DRIVE1" >>/tmp/pre_disk
-    echo "part pv.01 --grow --asprimary --size=1 --ondisk=$DRIVE1" >>/tmp/pre_disk
-    if test "$NBVALIDHDD" = 2; then
-	DRIVE2=`echo $VALIDHDD | awk '{print $2}'`
-	echo "part pv.02 --grow --asprimary --size=1 --ondisk=$DRIVE2" >>/tmp/pre_disk
-    fi
-    echo "## Volume groups" >>/tmp/pre_disk
-    echo "volgroup data --pesize=4096 pv.01" >>/tmp/pre_disk
-    if test "$NBVALIDHDD" = 2; then
-	echo "volgroup backup --pesize=4096 pv.02" >>/tmp/pre_disk
-    fi
-<% if @rhelvers == 6 -%>    if grep '^#OPENVZ y' /tmp/pre_morerepo; then
-	DEFAULTFS=ext3
-	VIRTROOT=/vz
-	VIRTNAME=vz
-    el<% else -%>    <% end -%>if grep '^#KVM y' /tmp/pre_morerepo; then
-	VIRTROOT=/var/lib/libvirt/images
-	VIRTNAME=kvm
-    fi >/dev/null
+DRIVE1=`echo $VALIDHDD | awk '{print $1}'`
+FIRSTSIZE=`parted -sm /dev/$DRIVE1 unit GB print | grep -e "$DRIVE1" | cut -d: -f2 | sed -e 's/GB$//'`
+if test -e /sys/firmware/efi -o "0$FIRSTSIZE" -gt 2100; then
+    echo "part biosboot --fstype=biosboot --size=1 --ondisk=$DRIVE1" >>/tmp/pre_disk
+fi
+echo "bootloader --location=mbr --driveorder=$DRIVE1" >>/tmp/pre_bootloader
+echo "## Primary partitions" >>/tmp/pre_disk
+echo "part /boot --fstype=ext4 --asprimary --size=512 --ondisk=$DRIVE1" >>/tmp/pre_disk
+echo "part pv.01 --grow --asprimary --size=1 --ondisk=$DRIVE1" >>/tmp/pre_disk
+if test "$NBVALIDHDD" = 2; then
+    DRIVE2=`echo $VALIDHDD | awk '{print $2}'`
+    echo "part pv.02 --grow --asprimary --size=1 --ondisk=$DRIVE2" >>/tmp/pre_disk
+fi
+echo "## Volume groups" >>/tmp/pre_disk
+echo "volgroup data --pesize=4096 pv.01" >>/tmp/pre_disk
+if test "$NBVALIDHDD" = 2; then
+    echo "volgroup backup --pesize=4096 pv.02" >>/tmp/pre_disk
+fi
+<% if @rhelvers == 6 -%>if grep '^#OPENVZ y' /tmp/pre_morerepo; then
+    DEFAULTFS=ext3
+    VIRTROOT=/vz
+    VIRTNAME=vz
+el<% else -%><% end -%>if grep '^#KVM y' /tmp/pre_morerepo; then
+    VIRTROOT=/var/lib/libvirt/images
+    VIRTNAME=kvm
+fi >/dev/null
 
-    cat <<EOF >>/tmp/pre_disk
+cat <<EOF >>/tmp/pre_disk
 ## Logical volumes for data
 logvol / --fstype=$DEFAULTFS --name=root --vgname=data --size=2048
 logvol /tmp --fstype=$DEFAULTFS --name=tmp --vgname=data --size=512
 logvol /usr --fstype=$DEFAULTFS --name=usr --vgname=data --size=4096
 logvol /var --fstype=$DEFAULTFS --name=var --vgname=data --size=3072
 EOF
-    if test -z "$VIRTNAME"; then
-	cat <<EOF >>/tmp/pre_disk
+if test -z "$VIRTNAME"; then
+    cat <<EOF >>/tmp/pre_disk
 <% if @rhelvers == 6 -%>logvol /home --fstype=$DEFAULTFS --name=home --vgname=data --size=1 --grow --percent=90
 <% else -%>logvol /home --fstype=$DEFAULTFS --name=home --vgname=data --size=1 --grow --maxsize=1000000000
 <% end -%>EOF
-    elif test "$NBVALIDHDD" = 2; then
-	cat <<EOF >>/tmp/pre_disk
+elif test "$NBVALIDHDD" = 2; then
+    cat <<EOF >>/tmp/pre_disk
 <% if @rhelvers == 6 -%>logvol $VIRTROOT --fstype=$DEFAULTFS --name=$VIRTNAME --vgname=data --size=1 --grow --percent=95
 <% else -%>logvol $VIRTROOT --fstype=$DEFAULTFS --name=$VIRTNAME --vgname=data --size=1 --grow --maxsize=1000000000
 <% end -%>## Logical volumes for backups
@@ -468,15 +473,14 @@ logvol swap --name=swap --vgname=backup --size=4096
 <% if @rhelvers == 6 -%>logvol /media/backups --fstype=$DEFAULTFS --name=backups --vgname=backup --size=1 --grow --percent=95
 <% else -%>logvol /media/backups --fstype=$DEFAULTFS --name=backups --vgname=backup --size=1 --grow --maxsize=1000000000
 <% end -%>EOF
-    else
-	cat <<EOF >>/tmp/pre_disk
+else
+    cat <<EOF >>/tmp/pre_disk
 logvol swap --name=swap --vgname=data --size=4096
 <% if @rhelvers == 6 -%>logvol $VIRTROOT --fstype=$DEFAULTFS --name=$VIRTNAME --vgname=data --size=1 --grow --percent=43
 logvol /media/backups --fstype=$DEFAULTFS --name=backups --vgname=data --size=1 --grow --percent=47
 <% else -%>logvol $VIRTROOT --fstype=$DEFAULTFS --name=$VIRTNAME --vgname=data --percent=43
 logvol /media/backups --fstype=$DEFAULTFS --name=backups --vgname=data --size=1 --grow --maxsize=1000000000
 <% end -%>EOF
-    fi
 fi
 <% end -%>
 clear

@@ -18,6 +18,7 @@ firehol_interfaces:
       - server smtp accept
       - server smtp accept src "$office_networks"
       - server smtps accept
+      - server http accept
       - server https accept
       - server custom openssh "tcp/1022" default accept
       - server custom munin "tcp/4949" default accept src "$office_networks"

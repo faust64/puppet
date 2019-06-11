@@ -37,4 +37,27 @@ class tftpd::automate::kickstart {
 	    autopart => true;
 	"desktop-manual-64b":
     }
+
+    tftpd::define::ks_redhat {
+	"auto6-64b":
+	    autopart => true,
+	    rhelvers => 6.9,
+	    server   => true;
+	"manual6-64b":
+	    rhelvers => 6.9,
+	    server   => true;
+	"desktop-auto6-64b":
+	    autopart => true,
+	    rhelvers => 6.9;
+	"desktop-manual6-64b":
+	    rhelvers => 6.9;
+	"auto-64b":
+	    autopart => true,
+	    server   => true;
+	"manual-64b":
+	    server   => true;
+	"desktop-auto-64b":
+	    autopart => true;
+	"desktop-manual-64b":
+    }
 }

@@ -74,32 +74,33 @@ find /var/lib/puppet/reports/ -type f -ctime +7 2>/dev/null | xargs -P 4 -n 20 r
 To deploy an agent, having trusted its public IP (update required in `hieradata/unetresgrossebite.com/puppet.yaml`), run the following:
 
 ```
-if test -s /etc/centos-release; then
+if test -s /etc/centos-release -o -s /etc/redhat-release; then
     rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
     yum install puppet-agent -y
 else
-    apt-get update ; apt-get upgrade ; apt-get dist-upgrade ; apt-get autoremove --purge ; apt-get install ca-certificates lsb-release
+    apt-get update ; apt-get upgrade ; apt-get dist-upgrade ; apt-get autoremove --purge ; apt-get install ca-certificates lsb-release wget
     if grep -E '(devuan|trusty)' /etc/apt/sources.list >/dev/null; then
 	dist=trusty
-    else
-	dist=`lsb_release -sc`
-    fi
-    if test "$dist" = stretch; then
-	apt-get install dirmngr
-	touch "/var/lib/dpkg/info/libreadline6:amd64.list"
+    elif grep buster /etc/debian_version; then
 	cat <<EOF >>/var/lib/dpkg/status
 Package: libreadline6
 Status: install ok installed
 Priority: extra
 Section: libs
-Installed-Size: 104
-Maintainer: Samuel Martin Moro <samuel@unetresgrossebite.com>
+Installed-Size: 1
+Maintainer: Debian QA Group <packages@qa.debian.org>
 Architecture: amd64
-Multi-Arch: allowed
-Version: 6.0.0-1deb8u1
-Description: Dummy fake package to trick puppet-agent into installing.
-Original-Maintainer: Matthias Klose <doko@debian.org>
+Multi-Arch: same
+Source: readline5 (5.2+dfsg-3)
+Version: 6.2+dfsg-3+b13
+Depends: readline-common, libc6 (>= 2.15), libtinfo6 (>= 6)
+Description: puppet patch
+
 EOF
+	echo ./ >/var/lib/dpkg/info/libreadline6\:amd64.list
+	dist=yakkety
+    else
+	dist=`lsb_release -sc`
     fi
     wget https://apt.puppetlabs.com/puppetlabs-release-pc1-$dist.deb
     dpkg -i puppetlabs-release-pc1-$dist.deb

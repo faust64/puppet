@@ -108,15 +108,17 @@ else
 	    ret=OK
 	fi
     elif test -d /var/lib/libvirt/qemu; then
-	if test $freemb -lt 128; then
+	if test "$match" = Swap; then
+	    ret=OK
+	elif test $freemb -lt 96; then
 	    ret=CRITICAL
-	elif test $freemb -lt 256; then
+	elif test $freemb -lt 128; then
 	    ret=WARNING
 	else
 	    ret=OK
 	fi
     elif test $totmb -lt 8000; then
-	test "$match" = Swap && threshold=91 || threshold=88
+	test "$match" = Swap && threshold=99 || threshold=88
 	if test `expr $totmb '*' $threshold / 100` -gt `expr $usedmb - $cachemb`; then
 	    ret=OK
 	elif test `expr $totmb '*' 94 / 100` -gt `expr $usedmb - $cachemb`; then
@@ -125,16 +127,20 @@ else
 	    ret=CRITICAL
 	fi
     elif test -d /var/lib/riak; then
-	if test $freemb -lt 96; then
+	if test "$match" = Swap; then
+	    ret=OK
+	elif test $freemb -lt 96; then
 	    ret=CRITICAL
 	elif test $freemb -lt 128; then
 	    ret=WARNING
 	else
 	    ret=OK
 	fi
+    elif test "$match" = Swap; then
+	ret=OK
     elif test $freemb -lt 128; then
 	ret=CRITICAL
-    elif test $freemb -lt 392; then
+    elif test $freemb -lt 256; then
 	ret=WARNING
     else
 	ret=OK

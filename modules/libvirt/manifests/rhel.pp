@@ -1,6 +1,6 @@
 class libvirt::rhel {
     common::define::package {
-	[ "libvirt", "python-virtinst", "virt-top" ]:
+	[ "libvirt", "virt-install", "virt-top" ]:
     }
 
     if ($os['release']['major'] != "7") {

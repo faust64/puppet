@@ -36,7 +36,7 @@ define tftpd::define::get_coreos($arch = [ "amd64" ]) {
 		cwd     => "$root_dir/installers/coreos-$name/$archi",
 		path    => "/usr/local/bin:/usr/bin:/bin",
 		require => File["Prepare CoreOS $name $archi directory"],
-		timeout => 600;
+		timeout => 900;
 	}
 
 	Exec["Download CoreOS $name $archi linux"]

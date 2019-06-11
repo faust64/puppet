@@ -1,9 +1,22 @@
 class libvirt::debian {
-    common::define::package {
-	[ "libvirt-bin", "virtinst", "virt-top" ]:
+    if ($lsbdistcodename == "buster") {
+	$virtpkg = "libvirt-clients"
+
+	common::define::package {
+	    "libvirt-daemon-system":
+	}
+
+	Package["libvirt-daemon-system"]
+	    -> Package[$virtpkg]
+    } else {
+	$virtpkg = "libvirt-bin"
     }
 
-    Package["libvirt-bin"]
+    common::define::package {
+	[ $virtpkg, "virtinst", "virt-top" ]:
+    }
+
+    Package[$virtpkg]
 	-> File["Install libvirt-shut"]
 	-> File["Install qemu configuration file"]
 	-> File["Install libvirt logrotate configuration"]

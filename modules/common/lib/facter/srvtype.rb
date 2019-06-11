@@ -4,7 +4,7 @@ Facter.add("srvtype") do
 	case hname
 	when /asterisk|obelisk/
 	    "asterisk"
-	when /freeradius|directory|auth/
+	when /freeradius|directory|auth|lemon/
 	    "auth"
 	when /bacula/
 	    "bacula"
@@ -38,7 +38,7 @@ Facter.add("srvtype") do
 	    "nzb"
 	when /cerbero|echidna/
 	    "opennebula"
-	when /momos|moros|thanatos|phoebe|crios|eurybie|hemara|ouranos|erebe/
+	when /momos|moros|thanatos|phoebe|crios|eurybie|hemara|ouranos|erebe|helios|nyx|selene|aether/
 	    "openshift"
 	when /drive|owncloud|media|packages|pxe|pydio|repository/
 	    "repo"
@@ -48,7 +48,7 @@ Facter.add("srvtype") do
 	    "sources"
 	when /sso/
 	    "sso"
-	when /ceph|aether|eos|helios|nyx|selene/
+	when /ceph|eos/
 	    "store"
 	when /collectd|ganglia|lachesis|munin|mrtg|smokeping/
 	    "supervision"

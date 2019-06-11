@@ -63,7 +63,7 @@ menu begin mfsBSD Systems
 	menu exit
     include boot-screens/mfsbsd.cfg
 menu end
-menu begin omsa
+menu begin OMSA
     menu label OMSA
 	menu label OMSA
 	menu exit
@@ -82,13 +82,27 @@ menu begin openSUSE Systems
 	menu exit
     include boot-screens/opensuse.cfg
 menu end
+menu begin RedHat Systems
+    menu label RedHat Systems
+	menu label RedHat Systems
+	menu exit
+    include boot-screens/redhat.cfg
+menu end
+<% if @rhrepo != false -%>
+menu begin Satellite
+    menu label Satellite
+	menu label Satellite
+	menu exit
+    include boot-screens/satellite.cfg
+menu end
+<% end -%>
 menu begin Ubuntu Systems
     menu label Ubuntu Systems
 	menu label Ubuntu Systems
 	menu exit
     include boot-screens/ubuntu.cfg
 menu end
-menu begin tools
+menu begin Utilities
     menu label Utilities
 	menu label Utilities
 	menu exit

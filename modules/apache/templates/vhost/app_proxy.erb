@@ -31,6 +31,7 @@
 <% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
 <% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
 <% end -%><% if @xss_protection == true -%>    Header always set X-Xss-Protection "1; mode=block"
+<% end -%><% if @sslredirecthttp -%>    Header edit Location "(^http://)" "https://"
 <% end -%>    CustomLog <%=@log_dir%>/ssl-access-<%=@name%>.log combined
     Include ssl.conf
 <% end -%><% if 0 == 1 -%>    <Location /↑↑↓↓←→←→BA/>

@@ -1,7 +1,10 @@
-physical_parent: eros.adm.intra.unetresgrossebite.com,hestia.adm.intra.unetresgrossebite.com
+physical_parent: ponos.adm.intra.unetresgrossebite.com
 
 # Collectd
 with_collectd: false
+
+# KVM
+kvm_cpu_family: Opteron_G3
 
 # LinuxCounter
 lico_update_day: 1
@@ -18,7 +21,6 @@ nagios_smart_disks:
   - sdb
   - sdc
   - sdd
-  - sde
 
 # SNMP
 snmp_listenaddr: 10.42.242.20

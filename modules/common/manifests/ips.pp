@@ -5,9 +5,9 @@ class common::ips {
 	    or $nic =~ /carp/ or $nic =~ /rl/ or $nic =~ /re/ or $nic =~ /lagg/
 	    or $nic =~ /bond[0-9]*$/ or $nic =~ /br/ or $nic =~ /p[0-9]p/
 	    or $nic =~ /trunk/) {
-	    if (! ($nic =~ /\./)) {
-		$ipaddr = inline_template("<%=@ipaddress_${::nic}%>")
-		$hwaddr = inline_template("<%=@macaddress_${::nic}%>")
+	    if (! ($nic =~ /\./ or $nic =~ /-/)) {
+		$ipaddr = inline_template("<%=@ipaddress_${nic}%>")
+		$hwaddr = inline_template("<%=@macaddress_${nic}%>")
 
 		if ($ipaddr =~ /[0-9]\.[0-9]/) {
 		    common::define::static_lease {

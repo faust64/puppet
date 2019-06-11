@@ -1,7 +1,7 @@
-#additional_classes:
-#  - Kvm
-#  - Qemu
-#  - Libvirt
+additional_classes:
+  - Kvm
+  - Qemu
+  - Libvirt
 
 # Apache
 apache_mod_authldap: true
@@ -24,6 +24,13 @@ nagios_runprocs_crit: 600
 nagios_runprocs_warn: 500
 nagios_smart_disks:
   - sda
+
+# KVM
+kvm_do_models: false
+
+# PXE
+satellite_register_activationkey: AK-KVM
+satellite_register_organization: UTGB
 
 # Qemu
 qemu_has_kvm: true

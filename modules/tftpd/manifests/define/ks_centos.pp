@@ -16,8 +16,7 @@ define tftpd::define::ks_centos($autopart = false,
     else { $dns_one = "8.8.8.8" }
     if ($tftpd::vars::squid_ip) {
 	$use_proxy = " --proxy=http://proxy.$domain:3128"
-    }
-    else { $use_proxy = "" }
+    } else { $use_proxy = "" }
     $basepath = "$root_dir/ks/centos"
 
     file {

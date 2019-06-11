@@ -47,6 +47,7 @@ class apache::vars {
     $mod_proxy_connect    = lookup("apache_mod_proxy_connect")
     $mod_proxy_ftp        = lookup("apache_mod_proxy_ftp")
     $mod_proxy_http       = lookup("apache_mod_proxy_http")
+    $mod_proxy_wstunnel   = lookup("apache_mod_proxy_wstunnel")
     $mod_python           = lookup("apache_mod_python")
     $mod_reqtimeout       = lookup("apache_mod_reqtimeout")
     $mod_rewrite          = lookup("apache_mod_rewrite")

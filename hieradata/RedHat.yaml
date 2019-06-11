@@ -23,6 +23,50 @@ asterisk_data_dir: /var/lib/asterisk
 bacula_work_dir: /var/spool/bacula
 bacula_run_dir: /var/run
 
+# Commons - Perms check
+fs_legit_suid:
+  - /bin/at
+  - /bin/chage
+  - /bin/chfn
+  - /bin/chsh
+  - /bin/crontab
+  - /bin/gpasswd
+  - /bin/mount
+  - /bin/newgrp
+  - /bin/umount
+  - /bin/passwd
+  - /bin/pkexec
+  - /bin/su
+  - /sbin/pam_timestamp_check
+  - /sbin/unix_chkpwd
+  - /sbin/usernetctl
+  - /sbin/mount.nfs
+  - /usr/bin/at
+  - /usr/bin/chage
+  - /usr/bin/chfn
+  - /usr/bin/chsh
+  - /usr/bin/crontab
+  - /usr/bin/gpasswd
+  - /usr/bin/mount
+  - /usr/bin/newgrp
+  - /usr/bin/passwd
+  - /usr/bin/pkexec
+  - /usr/bin/su
+  - /usr/bin/sudo
+  - /usr/bin/umount
+  - /usr/sbin/mount.nfs
+  - /usr/sbin/pam_timestamp_check
+  - /usr/sbin/unix_chkpwd
+  - /usr/sbin/usernetctl
+  - /usr/lib/polkit-1/polkit-agent-helper-1
+  - /usr/lib64/dbus-1/dbus-daemon-launch-helper
+  - /usr/libexec/qemu-bridge-helper
+  - /usr/lib/squid3/pinger
+  - /var/lib/docker/aufs/diff/.*
+
+# Memcache
+memcache_runtime_user: memcached
+
 # MySQL
 mysql_conf_dir: /etc
 mysql_include_dir: /etc/mysql.d
@@ -30,7 +74,10 @@ mysql_service_name: mysqld
 
 # Nagios
 nagios_hostgroup: rhel-servers
+nagios_iconimage: utgb/rhel.png
+nagios_iconimagealt: rhel
 nagios_run_dir: /var/run/nrpe
+nagios_statusmapimage: utgb/rhel.gd2
 
 # Named
 named_conf_dir: /etc/named
@@ -38,6 +85,31 @@ named_service_name: named
 
 # OpenLDAP
 openldap_conf_dir: /etc/slapd
+
+# OpenVZ
+openvz_modules:
+  - autofs4
+  - ipt_LOG
+  - ipt_REDIRECT
+  - ipt_REJECT
+  - ipt_conntrack
+  - ipt_helper
+  - ipt_length
+  - ipt_limit
+  - ipt_multiport
+  - ipt_state
+  - ipt_tcpmss
+  - ipt_ttl
+  - ipt_tos
+  - iptable_mangle
+  - iptable_nat
+  - nf_conntrack
+  - nf_conntrack_ftp
+  - nf_conntrack_irc
+  - nf_nat
+  - nfsd
+  - xt_comment
+  - xt_state
 
 # PHP - usual suspects
 #php_mod_curl: true

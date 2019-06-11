@@ -5,13 +5,6 @@ define pki::define::get($ca     = "web",
     $download = lookup("download_cmd")
     $master   = lookup("pki_master")
 
-    if ($download == "wget") {
-	$cmd = "$download --no-check-certificate --no-proxy"
-    } elsif ($download == "curl") {
-	$cmd = "$download -k --noproxy"
-    } else {
-	$cmd = $download
-    }
     if ($what == "key") {
 	$ext = "key"
     } elsif ($what == "dh") {
@@ -31,6 +24,16 @@ define pki::define::get($ca     = "web",
 	$url  = "$what/$ca/$fqdn/"
 	$dest = "$prefix.$ext"
 	$fl   = "index.html"
+    }
+    if ($download == "wget") {
+	$cmd = "$download --no-check-certificate --no-proxy"
+
+	Common::Define::Package["wget"]
+	    -> Exec["Get $url $what from $master"]
+    } elsif ($download == "curl") {
+	$cmd = "$download -k --noproxy"
+    } else {
+	$cmd = $download
     }
 
     exec {

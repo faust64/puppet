@@ -59,6 +59,11 @@ class php::vars {
     $with_dev             = lookup("php_with_dev")
     $zend_modules         = lookup("php_zend_extensions")
 
+    if (($operatingsystem == "Debian" and $lsbdistcodename == "stretch") or ($operatingsystem == "Ubuntu" and $lsbdistcodename == "xenial")) {
+	$phpvers = "7.0"
+    } else {
+	$phpvers = "5"
+    }
     if ($mod_mysql or $mod_mysqli or $mod_mysqlnd) {
 	$mod_pdo_mysql = true
     } else {
@@ -81,11 +86,7 @@ class php::vars {
 		$srvname = "php-fpm"
 	    }
 	    "Debian", "Devuan", "Ubuntu": {
-		if ($lsbdistcodename == "xenial") {
-		    $srvname = "php7-fpm"
-		} else {
-		    $srvname = "php5-fpm"
-		}
+		$srvname = "php${phpvers}-fpm"
 	    }
 	}
     } else {

@@ -58,6 +58,7 @@ apache_mod_proxy_balancer: false
 apache_mod_proxy_connect: false
 apache_mod_proxy_ftp: false
 apache_mod_proxy_http: false
+apache_mod_proxy_wstunnel: false
 apache_mod_python: false
 apache_mod_reqtimeout: true
 apache_mod_rewrite: true
@@ -782,6 +783,7 @@ kibana_prefix: logs
 # KVM
 kvm_collectd: false
 kvm_cpu_family: SandyBridge
+kvm_do_models: true
 kvm_munin_monitored: true
 kvm_munin_probes:
   - kvm_io
@@ -1890,6 +1892,10 @@ ui_openbsd_nics:
   - em2
   - em3
 pxe_root_dir: /srv/tftpboot
+satellite_ksroot: false
+satellite_register_activationkey: false
+satellite_register_organization: false
+satellite_repo: false
 tftp_runtime_user: tftp
 wds_ip: false
 
@@ -2488,7 +2494,7 @@ csp_policy_inventory:
   smokeping: "; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
   sonarr: "'unsafe-inline'; style-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
   ssp: "; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
-  subsonic: "'unsafe-inline'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src *; font-src 'self'; frame-src 'self'; object-src 'none';"
+  subsonic: "'unsafe-inline'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com; img-src *; font-src 'self'; frame-src 'self'; object-src 'none';"
   websocket: "; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
   wordpress: "; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: https://secure.gravatar.com https://www.linuxcounter.net; font-src 'self' data:; frame-src 'self'; object-src 'none';"
 csp_report: false
@@ -2594,13 +2600,13 @@ fs_legit_suid:
   - /usr/bin/pkexec
   - /usr/bin/sudo
   - /usr/bin/sudoedit
-  - /usr/lib/pt_chown
   - /usr/lib/dbus-1.0/dbus-daemon-launch-helper
   - /usr/lib/eject/dmcrypt-get-device
   - /usr/lib/landscape/apt-update
   - /usr/lib/nagios/plugins/check_dhcp
   - /usr/lib/openssh/ssh-keysign
   - /usr/lib/policykit-1/polkit-agent-helper-1
+  - /usr/lib/pt_chown
   - /usr/lib/spice-gtk/spice-client-glib-usb-acl-helper
   - /usr/lib/squid3/pinger
   - /var/lib/docker/aufs/diff/.*

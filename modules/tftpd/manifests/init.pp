@@ -23,8 +23,11 @@ class tftpd {
     include tftpd::menu::fedora
     include tftpd::menu::freebsd
     include tftpd::menu::mfsbsd
+    include tftpd::menu::ocp4
     include tftpd::menu::openbsd
     include tftpd::menu::opensuse
+    include tftpd::menu::redhat
+    include tftpd::menu::satellite
     include tftpd::menu::ubuntu
     include tftpd::automate::kickstart
     include tftpd::automate::preseed

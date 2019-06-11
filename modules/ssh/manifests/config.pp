@@ -18,7 +18,7 @@ class ssh::config {
 	}
     }
     if ($ssh::vars::ssh_mac_algos != false) {
-	$mac  = join($ssh::vars::ssh_mac_algos, ',')
+	$mac = join($ssh::vars::ssh_mac_algos, ',')
 
 	common::define::lined {
 	    "Set sshd MAC algorithms":
@@ -27,7 +27,7 @@ class ssh::config {
 		notify => Service[$ssh::vars::ssh_service_name],
 		path   => "/etc/ssh/sshd_config";
 	}
-    }
+    } else { $mac = false }
 
     if ($domain == "ceph.intra.unetresgrossebite.com") {
 	exec {

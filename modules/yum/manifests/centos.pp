@@ -9,8 +9,7 @@ class yum::centos {
 	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => root,
-	    path    => "/etc/yum.repos.d/CentOS-Base.repo",
-	    require => File["Prepare YUM for further configuration"];
+	    path    => "/etc/yum.repos.d/CentOS-Base.repo";
     }
 
     exec {
@@ -23,7 +22,7 @@ class yum::centos {
 
     yum::define::repo {
 	"epel":
-	    descr      => "Extra Packages - \$basearch",
+	    descr      => "EPEL - \$basearch",
 	    failover   => "priority",
 	    gpgkey     => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-$shortvers",
 	    mirrorlist => "https://mirrors.fedoraproject.org/metalink?repo=epel-$shortvers&arch=\$basearch",

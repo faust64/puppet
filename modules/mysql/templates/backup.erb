@@ -11,20 +11,25 @@ mspass="<% if @mspw != "" -%>-p<%=@mspw%><% end -%>"
 dbdir=<%=@dumpdir%>
 fail=0
 
-for database in `echo show databases | mysql -Nu$msuser $mspass | grep -Ev '(_schema|lost\+found)'`
-do
-    if ! mysqldump -u$msuser $mspass $database 2>&1 | gzip - >$dbdir/$database<% if @rolling_backup -%>-`date +%s`<% end -%>; then
-	echo "Failed to either dump or write to disk the dump of $database (/$dbdir/$database)"
-	fail=`expr $fail + 1`
-	continue
-    fi
-<% if @rolling_backup -%>    chmod 0600 $dbdir/$database*
-    echo done $database
-    find $dbdir/$database* -type f -mtime +7 -exec rm -f {} \;
-<% else -%>    chmod 0600 $dbdir/$database
-    echo done $database
-<% end -%>    du -sh $dbdir/$database*
-done >$TMPFILE
+if ! echo show databases | mysql -Nu$msuser $mspass >/dev/null 2>&1; then
+    echo "database unreachable"
+    fail=1
+else
+    for database in `echo show databases | mysql -Nu$msuser $mspass | grep -Ev '(_schema|lost\+found)'`
+    do
+	if ! mysqldump -u$msuser $mspass $database 2>&1 | gzip - >$dbdir/$database<% if @rolling_backup -%>-`date +%s`<% end -%>; then
+	    echo "Failed to either dump or write to disk the dump of $database (/$dbdir/$database)"
+	    fail=`expr $fail + 1`
+	    continue
+	fi
+<% if @rolling_backup -%>	chmod 0600 $dbdir/$database*
+	echo done $database
+	find $dbdir/$database* -type f -mtime +7 -exec rm -f {} \;
+<% else -%>	chmod 0600 $dbdir/$database
+	echo done $database
+<% end -%>	du -sh $dbdir/$database*
+    done
+fi >$TMPFILE
 
 test $fail -gt 0 && SUBJECT=WARNING
 if test "$HOOK_URL" -a -x /usr/local/bin/slack; then

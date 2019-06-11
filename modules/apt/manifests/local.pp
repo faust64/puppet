@@ -2,17 +2,19 @@ class apt::local {
     $repo = $apt::vars::apt_repo
     $rkey = $apt::vars::apt_repo_key
 
-    if (! defined(Apt::Define::Aptkey[$rkey])) {
-	apt::define::aptkey {
-	    $rkey:
-		url => "$repo/public.key";
+    if ($lsbdistcodename != "buster") {
+	if (! defined(Apt::Define::Aptkey[$rkey])) {
+	    apt::define::aptkey {
+		$rkey:
+		    url => "$repo/public.key";
+	    }
 	}
-    }
 
-    apt::define::repo {
-	"UTGB":
-	    baseurl => "$repo/",
-	    require => Apt::Define::Aptkey[$rkey];
+	apt::define::repo {
+	    "UTGB":
+		baseurl => "$repo/",
+		require => Apt::Define::Aptkey[$rkey];
+	}
     }
 
     if ($architecture == "armv6l") {

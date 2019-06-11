@@ -15,6 +15,8 @@ class tftpd::vars {
     $pxe_master   = lookup("pxe_reference_repository")
     $pxe_packages = lookup("pxe_packages_repository")
     $repo         = lookup("puppet_http_repo")
+    $rhrepo       = lookup("satellite_repo")
+    $rhroot       = lookup("satellite_ksroot")
     $root_dir     = lookup("pxe_root_dir")
     $runtime_user = lookup("tftp_runtime_user")
     $squid_ip     = lookup("squid_ip")

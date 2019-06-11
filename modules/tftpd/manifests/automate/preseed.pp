@@ -179,6 +179,32 @@ class tftpd::automate::preseed {
 	    ubvers   => "trusty";
 	"trusty-desktop-man":
 	    ubvers   => "trusty";
+	"xenial-kvm-auto":
+	    autopart => true,
+	    ubvers   => "xenial",
+	    server   => "kvm";
+	"xenial-kvm-man":
+	    ubvers   => "xenial",
+	    server   => "kvm";
+	"xenial-xen-auto":
+	    autopart => true,
+	    ubvers   => "xenial",
+	    server   => "xen";
+	"xenial-xen-man":
+	    ubvers   => "xenial",
+	    server   => "xen";
+	"xenial-server-auto":
+	    autopart => true,
+	    ubvers   => "xenial",
+	    server   => true;
+	"xenial-server-man":
+	    ubvers   => "xenial",
+	    server   => true;
+	"xenial-desktop-auto":
+	    autopart => true,
+	    ubvers   => "xenial";
+	"xenial-desktop-man":
+	    ubvers   => "xenial";
 	"kvm-auto":
 	    autopart => true,
 	    server   => "kvm";

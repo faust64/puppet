@@ -30,7 +30,7 @@ menu title CentOS Systems
     label -
 	menu label <%=dist%> <%=arch%>
 	kernel installers/centos<%=dist%>/<%=arch%>/linux
-	append initrd=installers/centos<%=dist%>/<%=arch%>/initrd.img inst.repo=http://mirror.centos.org/altarch/<%=@rhelvers%>/os/aarch64/
+	append initrd=installers/centos<%=dist%>/<%=arch%>/initrd.img inst.repo=http://mirror.centos.org/centos/<%=dist%>/os/<%=arch%>/
 <% end -%><% end -%><% @distribs.each do |dist| -%><% [ "x86_64", "i386" ].each do |arch| -%>    label -
 	menu label <%=dist%> <%=arch%> (VZ/KVM/Xen host auto part.)
 	kernel installers/centos<%=dist%>/<%=arch%>/linux

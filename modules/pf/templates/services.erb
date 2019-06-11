@@ -18,6 +18,7 @@ pass in quick inet proto $u from $nagios_ip to <private_networks> port snmp
 pass in quick inet proto $i from $nagios_ip to <private_networks>
 pass in quick inet proto $i from $nagios_ip to $ext_net route-to ( $wan_if $wan_gw )
 <% end -%><% if @pxe_ip != false -%>pass in quick inet proto $u from $pxe_ip to <private_networks>
+pass in quick inet proto $u from <private_networks> to $pxe_ip port tftp
 <% end -%><% if @mail_ip != false -%>pass in quick inet proto $t from $smtp_ip to $ext_net port smtp route-to ( $wan_if $wan_gw )
 <% end -%><% if @mail_mx != false -%>pass in quick inet proto $t from $mail_ip to $ext_net port 2703 route-to ( $wan_if $wan_gw )
 pass in quick inet proto $u from $mail_ip to $ext_net port 6277 route-to ( $wan_if $wan_gw )

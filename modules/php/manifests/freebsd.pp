@@ -1,8 +1,9 @@
 class php::freebsd {
     $conf_dir = $php::vars::conf_dir
+    $phpvers  = $php::vars::phpvers
 
     common::define::package {
-	"php5":
+	"php$phpvers":
     }
 
     file {
