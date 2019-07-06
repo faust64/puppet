@@ -44,7 +44,7 @@ if test "$CURRENT_POS" -gt "$LAST_POS"; then
 		fi
 		whois $address \
 		    | awk 'BEGIN{ last = ""; }/^([Rr][Oo][Uu][Tt][Ee]|[Cc][Ii][Dd][Rr]):/{if ($2 != last) { print $2;} last = $2;}' \
-		    | awk -F. '{ if (NF > 3) { print $0; } }'
+		    | sed 's|[^0-9]*$||' | awk -F. '{ if (NF > 3) { print $0; } }'
 	    done \
 	| sort \
 	| awk "BEGIN{
