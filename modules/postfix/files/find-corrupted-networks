@@ -1,0 +1,61 @@
+#!/bin/sh
+
+if test "$LOG_LEVEL" = debug; then
+    set -x
+fi
+
+# how many occurences of a same network do we want to match - would need
+# different IPs in a same network to increment counter, only networks with
+# more than IPS_PER_NETWORK failing login would be returned
+IPS_PER_NETWORK=${IPS_PER_NETWORK:-3}
+
+# postfix logs
+MAILLOG=/var/log/maillog
+
+# output file fail2ban would then use banning "corrupted" networks
+BANLOG=/var/log/ban-networks-maillog
+
+if test -s "$MAILLOG.pos"; then
+    eval `awk -F: '{print "LAST_INO=" $1 " LAST_POS=" $2}' "$MAILLOG.pos"`
+fi
+if ! test "$LAST_POS" -ge 0 2>/dev/null; then
+    LAST_POS=0
+fi
+if test -s "$MAILLOG"; then
+    CURRENT_POS=`awk 'END{print NR}' "$MAILLOG"`
+    CURRENT_INO=`stat -c "%i" $MAILLOG`
+fi
+if test "$LAST_INO" -a "$CURRENT_INO"; then
+    if test "$LAST_INO" -ne "$CURRENT_INO" 2>/dev/null; then
+	LAST_POS=0
+    fi
+fi
+if ! test "$IPS_PER_NETWORK" -gt 0 2>/dev/null; then
+    IPS_PER_NETWORK=3
+fi
+
+if test "$CURRENT_POS" -gt "$LAST_POS"; then
+    tail -`expr $CURRENT_POS - $LAST_POS` "$MAILLOG" | grep 'SASL LOGIN authentication failed' \
+	| sed 's|.* warning: [^\[]*\[\([0-9\.]*\)\].*|\1|' \
+	| sort -u | while read address
+	    do
+		if test "$LOG_LEVEL" = info; then
+		    echo resolving $address whois data >&2
+		fi
+		whois $address \
+		    | awk 'BEGIN{ last = ""; }/^([Rr][Oo][Uu][Tt][Ee]|[Cc][Ii][Dd][Rr]):/{if ($2 != last) { print $2;} last = $2;}' \
+		    | awk -F. '{ if (NF > 3) { print $0; } }'
+	    done \
+	| sort \
+	| awk "BEGIN{
+		has = 0;
+		last = \"\";
+	    } {
+		if (\$1 == last) { has = has + 1; }
+		if (last != \$1 && has > $IPS_PER_NETWORK) { print last; }
+		last = \$1;
+	    } END {
+		if (has > $IPS_PER_NETWORK) { print last; }
+	    }" >>"$BANLOG"
+    echo "$CURRENT_INO:$CURRENT_POS" >"$MAILLOG.pos"
+fi
