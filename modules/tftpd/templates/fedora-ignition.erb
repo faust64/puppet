@@ -1,0 +1,8 @@
+variant: fcos
+version: 1.0.0
+passwd:
+  users:
+<% @keys.values.each do |key| %>  - name: <%=key['pentagram']%>
+    ssh_authorized_keys:
+    - <% if key['type'] =~ /ssh-/ -%><%=key['type']%><% else -%>ssh-dss<% end -%> <%=key['key']%>
+<% end -%>
