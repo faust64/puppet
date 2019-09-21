@@ -12,17 +12,22 @@ class sabnzbd::debian {
 	$codename = $lsbdistcodename
     }
 
-    apt::define::aptkey {
-	"jcfp":
-	    keyid     => "4BB9F05F",
-	    keyserver => "pool.sks-keyservers.net";
-    }
+    if ($codename != "buster") {
+	apt::define::aptkey {
+	    "jcfp":
+		keyid     => "4BB9F05F",
+		keyserver => "pool.sks-keyservers.net";
+	}
 
-    apt::define::repo {
-	"sabnzbd":
-	    baseurl  => "http://ppa.launchpad.net/jcfp/ppa/ubuntu",
-	    codename => $codename,
-	    require  => Apt::Define::Aptkey["jcfp"];
+	apt::define::repo {
+	    "sabnzbd":
+		baseurl  => "http://ppa.launchpad.net/jcfp/ppa/ubuntu",
+		codename => $codename,
+		require  => Apt::Define::Aptkey["jcfp"];
+	}
+
+	Apt::Define::Repo["sabnzbd"]
+	    -> Common::Define::Package["sabnzbdplus"]
     }
 
     if ($lsbdistcodename == "stretch") {
@@ -37,7 +42,6 @@ class sabnzbd::debian {
 
     common::define::package {
 	[ "sabnzbdplus", "p7zip-full", "par2" ]:
-	    require => Apt::Define::Repo["sabnzbd"];
     }
 
     file {

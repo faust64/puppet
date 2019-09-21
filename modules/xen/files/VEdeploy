@@ -359,6 +359,8 @@ EOF
 	    version=jessie
 	elif grep -q 9.[0-9] etc/debian_version; then
 	    version=stretch
+	elif grep -q 10.[0-9] etc/debian_version; then
+	    version=buster
 	fi
 
 	if test "$version"; then

@@ -14,7 +14,7 @@ class nodejs::debian {
 	    Apt::Define::Repo["backports"]
 		-> Common::Define::Package["nodejs"]
 	}
-	if ($lsbdistcodename != "stretch") {
+	if ($lsbdistcodename != "stretch" and $lsbdistcodename != "buster") {
 	    common::define::package {
 		"npm":
 		    require =>

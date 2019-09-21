@@ -81,31 +81,18 @@ else
     apt-get update ; apt-get upgrade ; apt-get dist-upgrade ; apt-get autoremove --purge ; apt-get install ca-certificates lsb-release wget
     if grep -E '(devuan|trusty)' /etc/apt/sources.list >/dev/null; then
 	dist=trusty
-    elif grep buster /etc/debian_version; then
-	cat <<EOF >>/var/lib/dpkg/status
-Package: libreadline6
-Status: install ok installed
-Priority: extra
-Section: libs
-Installed-Size: 1
-Maintainer: Debian QA Group <packages@qa.debian.org>
-Architecture: amd64
-Multi-Arch: same
-Source: readline5 (5.2+dfsg-3)
-Version: 6.2+dfsg-3+b13
-Depends: readline-common, libc6 (>= 2.15), libtinfo6 (>= 6)
-Description: puppet patch
-
-EOF
-	echo ./ >/var/lib/dpkg/info/libreadline6\:amd64.list
-	dist=yakkety
     else
 	dist=`lsb_release -sc`
     fi
-    wget https://apt.puppetlabs.com/puppetlabs-release-pc1-$dist.deb
-    dpkg -i puppetlabs-release-pc1-$dist.deb
-    apt-get update
-    apt-get install puppet-agent
+    if ! grep buster /etc/apt/sources.list >/dev/null; then
+	wget https://apt.puppetlabs.com/puppetlabs-release-pc1-$dist.deb
+	dpkg -i puppetlabs-release-pc1-$dist.deb
+	apt-get update
+	apt-get install puppet-agent
+    else
+	apt-get update
+	apt-get install puppet
+    fi
 fi
 export FQDN=`hostname -f`
 echo "certname: $FQDN (Y/n)?"
@@ -114,13 +101,24 @@ if test "$a" = n; then
     echo abort
     exit 1
 fi
-cat <<EOF >/etc/puppetlabs/puppet/puppet.conf
+if grep buster /etc/apt/sources.list >/dev/null; then
+    cat <<EOF >/etc/puppet/puppet.conf
+[main]
+certname = $FQDN
+server = puppet.unetresgrossebite.com
+ssldir = /var/lib/puppet/ssl
+environment = production
+runinterval = 1h
+EOF
+else
+    cat <<EOF >/etc/puppetlabs/puppet/puppet.conf
 [main]
 certname = $FQDN
 server = puppet.unetresgrossebite.com
 environment = production
 runinterval = 1h
 EOF
-. /etc/profile.d/puppet-agent.sh
+    . /etc/profile.d/puppet-agent.sh
+fi
 puppet agent --onetime --test
 ```
