@@ -1,6 +1,6 @@
-pass in quick on <%=@nicname%> inet proto $t from <adm_ip> to ( <%=@nicname%> ) port ssh reply-to ( <%=@nicname%> <%=@nicgw%> )
+pass in quick on <%=@nicname%> inet proto $t from <adm_ip> to ( <%=@nicname%> ) port <%=@ssh_port%> reply-to ( <%=@nicname%> <%=@nicgw%> )
 pass in quick on <%=@nicname%> inet proto $i from <adm_ip> to ( <%=@nicname%> ) reply-to ( <%=@nicname%> <%=@nicgw%> )
-<% if @alsonic != false -%>pass in quick on <%=@nicname%> inet proto $t from <adm_ip> to ( <%=@alsonic%> ) port ssh reply-to ( <%=@nicname%> <%=@nicgw%> )
+<% if @alsonic != false -%>pass in quick on <%=@nicname%> inet proto $t from <adm_ip> to ( <%=@alsonic%> ) port <%=@ssh_port%> reply-to ( <%=@nicname%> <%=@nicgw%> )
 pass in quick on <%=@nicname%> inet proto $i from <adm_ip> to ( <%=@alsonic%> ) reply-to ( <%=@nicname%> <%=@nicgw%> )
 <% end -%><% if @reverse_ip != false -%>pass in quick on <%=@nicname%> inet proto $t from any to <%=@pubreverse%> port http rdr-to $reverse_ip port http reply-to ( <%=@nicname%> <%=@nicgw%> )
 pass in quick on <%=@nicname%> inet proto $t from any to <%=@pubreverse%> port https rdr-to $reverse_ip port https reply-to ( <%=@nicname%> <%=@nicgw%> )
@@ -10,7 +10,7 @@ pass in quick on <%=@nicname%> inet proto $t from any to <%=@altreverse%> port h
 pass in quick on <%=@nicname%> inet proto $u from $sipsrv_ip to <%=@pubasterisk%> port $sip_udp_port rdr-to <%=host%> port sip reply-to ( <%=@nicname%> <%=@nicgw%> )
 pass in quick on <%=@nicname%> inet proto $i from <office_net> to <%=@pubasterisk%> reply-to ( <%=@nicname%> <%=@nicgw%> )
 pass in quick on <%=@nicname%> inet proto $u from <office_net> to <%=@pubasterisk%> port $iax_port rdr-to <%=host%> port $iax_port reply-to ( <%=@nicname%> <%=@nicgw%> )
-<% end -%><% break -%><% end -%><% end -%><% if @gatessh != false and @ssh_ip != false and @gatessh != @pubreverse -%>pass in quick on <%=@nicname%> inet proto $t from any to <%=@gatessh%> port https rdr-to $ssh_ip port ssh reply-to ( <%=@nicname%> <%=@nicgw%> )
+<% end -%><% break -%><% end -%><% end -%><% if @gatessh != false and @ssh_ip != false and @gatessh != @pubreverse -%>pass in quick on <%=@nicname%> inet proto $t from any to <%=@gatessh%> port https rdr-to $ssh_ip port <%=@ssh_port%> reply-to ( <%=@nicname%> <%=@nicgw%> )
 <% end -%><% if @pubvisio != false and @visio_ip != false and @pubvisio != @pubreverse and @pubvisio != @pubasterisk and @pubvisio != @gatessh and @pubvisio != @pubmx -%>block in quick on <%=@nicname%> inet proto $tu from any to <%=@pubvisio%> port snmp
 block in quick inet proto $t from any to <%=@pubvisio%> port http
 pass in quick inet proto $tui from <% if @visio_clients == false -%>any<% else -%>$visioclt_ip<% end -%> to <%=@pubvisio%> rdr-to <%=@visio_ip%> reply-to ( <%=@nicname%> <%=@nicgw%> )

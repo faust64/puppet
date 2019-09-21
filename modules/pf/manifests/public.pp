@@ -13,6 +13,7 @@ class pf::public {
     $pubreverse_ip   = $pf::vars::pubreverse_ip
     $reverse_ip      = $pf::vars::reverse_ip
     $ssh_ip          = $pf::vars::ssh_ip
+    $ssh_port        = $pf::vars::ssh_port
     $syslog_ip       = $pf::vars::syslog_ip
     $transmission_ip = $pf::vars::transmission_ip
     $visio_clients   = $pf::vars::visio_clients
