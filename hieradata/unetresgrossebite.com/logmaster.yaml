@@ -15,7 +15,7 @@ elasticsearch_number_of_replicas: 0
 
 # Firehol
 firehol_interfaces:
-  - name: eno1
+  - name: any
     description: WAN
     protection: strong
     allow:
