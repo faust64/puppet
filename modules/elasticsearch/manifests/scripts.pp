@@ -28,9 +28,17 @@ class elasticsearch::scripts {
 	    require => Common::Define::Package["elasticsearch-curator"];
     }
 
+    if ($elasticsearch::vars::version == "7.x") {
+	$provider = "apt"
+    } else {
+	$provider = "pip"
+
+	Class[Common::Tools::Pip]
+	    -> Common::Define::Package["elasticsearch-curator"]
+    }
+
     common::define::package {
 	"elasticsearch-curator":
-	    provider => "pip",
-	    require  => Class[Common::Tools::Pip];
+	    provider => $provider;
     }
 }

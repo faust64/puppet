@@ -11,6 +11,9 @@ class logstash {
     case $myoperatingsystem {
 	"Debian", "Devuan", "Ubuntu": {
 	    include logstash::debian
+
+	    Class[java]
+		-> Class[logstash::debian]
 	}
 	default: {
 	    common::define::patchneeded { "logstash": }

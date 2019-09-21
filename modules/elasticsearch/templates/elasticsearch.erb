@@ -3,14 +3,19 @@ bootstrap.system_call_filter: false
 node.name: "<%=@nodename%>"
 node.master: <% if @is_master == true -%>tru<% else -%>fals<% end -%>e
 node.data: <% if @is_data == true -%>tru<% else -%>fals<% end -%>e
-<% if @version == "5.x" -%>node.ingest: false
-<% end -%>network.bind_host: <%=@listen%>
-transport.tcp.port: 9300
+<% if @version == "5.x" or @version == "6.x" or @version == "7.x" -%>node.ingest: false
+<% if @version == "7.x" -%>node.ml: false
+xpack.ml.enabled: false
+path.data: /var/lib/elasticsearch
+path.logs: /var/log/elasticsearch
+<% end -%><% end -%>network.<% if @version != "7.x" -%>bind_<% end -%>host: <%=@listen%>
+<% if @version != "7.x" -%>transport.tcp.port: 9300
 transport.tcp.compress: true
-http.port: 9200
-<% if @version != "5.x" -%>index.number_of_shards: <%=@shards%>
+<% end -%>http.port: 9200
+<% if @version != "5.x" and @version != "6.x" and @version != "7.x" -%>index.number_of_shards: <%=@shards%>
 index.number_of_replicas: <%=@replicas%>
 discovery.zen.ping.multicast.enabled: false
 <% end -%><% if @cors == true -%>http.cors.enabled: true
-<% end -%><% if @cluster_hosts -%>discovery.zen.ping.unicast.hosts: [ <% @cluster_hosts.each do |host| -%><% if host != @nodename and host != @fqdn -%>"<%=host%>", <% end -%><% end -%>]
+<% end -%><% if @cluster_hosts -%>discovery.<% if @version != "7.x" -%>zen.ping.unicast.<% else -%>seed_<% end -%>hosts: [ <% @cluster_hosts.each do |host| -%><% if host != @nodename and host != @fqdn -%>"<%=host%>", <% end -%><% end -%>]
+<% end -%><% if @version == "7.x" -%>cluster.initial_master_nodes: [ <% @cluster_hosts.each do |host| -%><% if host != @nodename and host != @fqdn -%>"<%=host%>", <% end -%><% end -%>]
 <% end -%>

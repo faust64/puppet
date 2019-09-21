@@ -1,8 +1,9 @@
 server.port: 5601
 server.host: "127.0.0.1"
 server.name: "UneTresGrosseBite"
-elasticsearch.url: "http://<%=@listen%>:9200"
-kibana.index: "<%=@index%>"
+<% if @version == "7.x" -%>elasticsearch.hosts: ["http://<%=@listen%>:9200"]
+<% else -%>elasticsearch.url: "http://<%=@listen%>:9200"
+<% end -%>kibana.index: "<%=@index%>"
 kibana.defaultAppId: "discover"
 elasticsearch.pingTimeout: 4500
 elasticsearch.requestTimeout: 30000

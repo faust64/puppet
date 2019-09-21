@@ -85,7 +85,7 @@ class apache::vars {
     $with_collectd        = lookup("apache_collectd")
     $web_root             = lookup("apache_web_root")
 
-    if ($lsbdistcodename == "stretch" or $lsbdistcodename == "jessie" or $lsbdistcodename == "trusty" or $lsbdistcodename == "xenial") {
+    if ($lsbdistcodename == "buster" or $lsbdistcodename == "stretch" or $lsbdistcodename == "jessie" or $lsbdistcodename == "trusty" or $lsbdistcodename == "xenial") {
 	$version = "2.4"
     } else {
 	$version = "2.2"

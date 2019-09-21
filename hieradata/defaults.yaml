@@ -304,9 +304,18 @@ camtrace_keyid: false
 
 # Ceph
 ceph_cluster_name: ceph
+ceph_crush_root: default
+ceph_crush_rack: default
+ceph_do_cephx: true
 ceph_do_dashboard: false
+ceph_do_libvirt: false
+ceph_do_radosgw: false
 ceph_dashboard_client_keyring: ceph.client.dashboard.keyring
 ceph_dashboard_client_name: client.dashboard
+ceph_filestore_mkfs_type: xfs
+ceph_init_from: false
+ceph_mon_key: false
+ceph_mon_list: false
 ceph_munin: false
 ceph_munin_probes:
   - ceph_osd
@@ -315,7 +324,10 @@ ceph_nagios: false
 ceph_nagios_client: nagios
 ceph_nagios_keyring_path: ceph.client.nagios.keyring
 ceph_nagios_map: false
-ceph_version: kraken
+ceph_objectstore: bluestore
+ceph_public_network: false
+ceph_private_network: false
+ceph_version: luminous
 
 # ClamAV
 clamav_contact: false
@@ -417,7 +429,7 @@ elasticsearch_number_of_shards: 10
 elasticsearch_retention_open: 10
 elasticsearch_retention: 30
 elasticsearch_retention_unit: days
-elasticsearch_version: 5.x
+elasticsearch_version: 7.x
 
 # Fail2ban
 fail2ban_conf_dir: /etc/fail2ban
@@ -1705,7 +1717,7 @@ contact_alerts_pf: false
 dell_ups_ip: false
 dell_ups_mgr_ip: false
 dhcp_ip: false
-dns_ip: false
+#dns_ip: false
 dns_masters: false
 dns_push: false
 git_ip: false

@@ -1,6 +1,5 @@
 class elasticsearch::vars {
     $clustername        = lookup("elasticsearch_cluster_name")
-    $cluster_hosts      = lookup("elasticsearch_cluster_hosts")
     $cors               = lookup("elasticsearch_http_cors")
     $is_data            = lookup("elasticsearch_is_data")
     $is_master          = lookup("elasticsearch_is_master")
@@ -27,5 +26,10 @@ class elasticsearch::vars {
 	$nodename = $myname
     } else {
 	$nodename = $hostname
+    }
+    if ($version == "7.x" and lookup("elasticsearch_cluster_hosts") == false) {
+	$cluster_hosts = [ $listen ]
+    } else {
+	$cluster_hosts = lookup("elasticsearch_cluster_hosts")
     }
 }

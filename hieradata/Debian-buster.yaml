@@ -1,7 +1,8 @@
+java_default_version: "11"
 php_conf_dir: /etc/php7
+puppet_conf_dir: /etc/puppet
 rsyslog_version: 8
 snmp_uptodate_new: true
 ssh_mac_algorithms: false
 stunnel_options:
   - CIPHER_SERVER_PREFERENCE
-puppet_conf_dir: /etc/puppet
