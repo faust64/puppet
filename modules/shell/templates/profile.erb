@@ -33,7 +33,7 @@ if test -z "$PWD"; then
     PWD=$HOME
     export PWD
 fi
-if tty >/dev/null; then
+<% if @lsbdistcodename != "buster" %>if tty >/dev/null; then
     if test -f $HOME/<%=@whichconf%> -a -r $HOME/<%=@whichconf%>; then
 	ENV=$HOME
 	export ENV
@@ -43,7 +43,7 @@ if tty >/dev/null; then
 <% else -%>	. $HOME/.kshrc
 <% end %>    fi
 fi
-<% if @http_proxy != false -%><% @http_proxy.each do |host| -%>export http_proxy=http://<%=host%>:3128/
+<% end -%><% if @http_proxy != false -%><% @http_proxy.each do |host| -%>export http_proxy=http://<%=host%>:3128/
 export https_proxy=$http_proxy
 export ftp_proxy=$http_proxy
 <% break -%><% end -%><% if @no_proxy_for != false -%>export no_proxy=<%=@no_proxy_for.join(',')%>
