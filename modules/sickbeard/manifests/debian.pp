@@ -5,6 +5,12 @@ class sickbeard::debian {
     $run_dir      = $sickbeard::vars::run_dir
     $runtime_user = $sickbeard::vars::runtime_user
 
+    if (! defined(Common::Define::Package["net-tools"])) {
+	common::define::package {
+	    "net-tools":
+	}
+    }
+
     file {
 	"Install sickbeard init script":
 	    group   => lookup("gid_zero"),
