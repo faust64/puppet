@@ -47,6 +47,3 @@ nagios_smart_disks:
 
 # OpenSSH
 ssh_tcp_wrappers: false
-
-#temp/move to defaults:
-rsyslog_hub: 151.80.43.230
