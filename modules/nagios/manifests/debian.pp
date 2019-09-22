@@ -21,6 +21,26 @@ class nagios::debian {
 	    -> Package["nagios-nrpe-server"]
     }
 
+    if ($lsbdistcodename == "buster") {
+	common::define::lined {
+	    "Nagios should not use dedicated temporary directory":
+		line    => "PrivateTmp=false",
+		match   => "^PrivateTmp",
+		notify  => Exec["Load nagios systemd configuration"],
+		path    => "/etc/systemd/system/multi-user.target.wants/nagios-nrpe-server.service",
+		require => Package["nagios-nrpe-server"];
+	}
+
+	exec {
+	    "Load nagios systemd configuration":
+		command     => "systemctl daemon-reload",
+		cwd         => "/",
+		notify      => Service[$nagios::vars::nrpe_service_name],
+		path        => "/usr/local/bin:/usr/bin:/bin",
+		refreshonly => true;
+	}
+    }
+
     if ($nagios::vars::watch_hpraid) {
 	apt::define::aptkey {
 	    "Hewlett-Packard":
