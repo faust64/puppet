@@ -457,6 +457,8 @@ EOF
 	    version=jessie
 	elif grep -q 9.[0-9] etc/debian_version; then
 	    version=stretch
+	elif grep -q 10.[0-9] etc/debian_version; then
+	    version=buster
 	fi
 
 	if test "$version"; then
@@ -490,12 +492,21 @@ iface $BRCHILD_IF inet static
     netmask $BRCHILD_NETMASK
 EOF
 	    if test "$BRCHILD_NETMASK" = 255.255.255.255; then
-		cat <<EOF >>etc/network/interfaces
+		if test "$version" = buster; then
+		    cat <<EOF >>etc/network/interfaces
+    post-up /usr/sbin/ip route add $BRCHILD_GATEWAY dev $BRCHILD_IF
+    post-up /usr/sbin/ip route add default via $BRCHILD_GATEWAY
+    pre-down /usr/sbin/ip route del default via $BRCHILD_GATEWAY
+    pre-down /usr/sbin/ip route del $BRCHILD_GATEWAY dev $BRCHILD_IF
+EOF
+		else
+		    cat <<EOF >>etc/network/interfaces
     post-up /sbin/route add $BRCHILD_GATEWAY dev $BRCHILD_IF
     post-up /sbin/route add default gw $BRCHILD_GATEWAY
     pre-down /sbin/route del default gw $BRCHILD_GATEWAY
     pre-down /sbin/route del $BRCHILD_GATEWAY dev $BRCHILD_IF
 EOF
+		fi
 	    else
 		cat <<EOF >>etc/network/interfaces
     gateway $BRCHILD_GATEWAY
