@@ -13,6 +13,8 @@ class php::modules {
     } else {
 	if ($lsbdistcodename == "buster") {
 	    php::define::module {
+		"iconv":
+		    modstatus => $php::vars::mod_iconv;
 		"posix":
 		    modstatus => true;
 		"xml":

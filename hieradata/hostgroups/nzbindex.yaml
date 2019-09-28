@@ -39,6 +39,7 @@ php_max_exectime: 60
 php_mod_curl: true
 php_mod_ctype: true
 php_mod_gd: true
+php_mod_iconv: true
 php_mod_json: true
 php_mod_ldap: true
 php_mod_memcache: true
