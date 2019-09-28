@@ -1,6 +1,7 @@
 java_default_version: "11"
 mysql_provider: mariadb
 php_conf_dir: /etc/php/7.3
+php_mod_mysqlnd: true
 puppet_conf_dir: /etc/puppet
 rsyslog_version: 8
 snmp_uptodate_new: true

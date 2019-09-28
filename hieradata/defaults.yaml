@@ -1820,7 +1820,9 @@ php_mod_snmp: false
 php_mod_sqlite: false
 php_mod_uploadprogress: false
 php_mod_xml: false
+php_mod_xmlreader: false
 php_mod_xmlrpc: false
+php_mod_xsl: false
 php_mod_zip: false
 php_mod_zlib: false
 php_munin: false

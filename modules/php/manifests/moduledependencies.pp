@@ -91,14 +91,15 @@ class php::moduledependencies {
 	    common::define::package {
 		"php-jsonlint":
 	    }
+	} elsif ($operatingsystem == "FreeBSD" or
+	    ($operatingsystem == "Debian" and $lsbdistcodename == "buster")) {
+	    common::define::package {
+		"php${phpvers}-json":
+	    }
 	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"php-services-json":
-	    }
-	} elsif ($operatingsystem == "FreeBSD") {
-	    common::define::package {
-		"php${phpvers}-json":
 	    }
 	}
     }
@@ -146,7 +147,8 @@ class php::moduledependencies {
 	}
     }
     if ($php::vars::mod_memcache == true) {
-	if ($operatingsystem == "CentOS" or $operatingsystem == "RedHat") {
+	if ($operatingsystem == "CentOS" or $operatingsystem == "RedHat"
+	    or ($operatingsystem == "Debian" and $lsbdistcodename == "buster")) {
 	    common::define::package {
 		"php-memcache":
 	    }
@@ -158,7 +160,11 @@ class php::moduledependencies {
 	}
     }
     if ($php::vars::mod_mysqlnd == true) {
-	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	if ($operatingsystem == "Debian" and $lsbdistcodename == "buster") {
+	    common::define::package {
+		"php${phpvers}-mysql":
+	    }
+	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"php${phpvers}-mysqlnd":

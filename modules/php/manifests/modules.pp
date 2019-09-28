@@ -11,6 +11,13 @@ class php::modules {
 		modstatus => "purge";
 	}
     } else {
+	if ($lsbdistcodename == "buster") {
+	    php::define::module {
+		"posix":
+		    modstatus => true;
+	    }
+	}
+
 	php::define::module {
 	    "apc":
 		modstatus => $php::vars::with_apc;
@@ -73,8 +80,12 @@ class php::modules {
 	    modstatus   => $php::vars::mod_snmp;
 	"uploadprogress":
 	    modstatus   => $php::vars::mod_uploadprogress;
+	"xmlreader":
+	    modstatus   => $php::vars::mod_xmlreader;
 	"xmlrpc":
 	    modstatus   => $php::vars::mod_xmlrpc;
+	"xsl":
+	    modstatus   => $php::vars::mod_xsl;
 	"zip":
 	    modstatus   => $php::vars::mod_zip;
 	"zlib":
