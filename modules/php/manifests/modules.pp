@@ -15,6 +15,16 @@ class php::modules {
 	    php::define::module {
 		"posix":
 		    modstatus => true;
+		"xml":
+		    modpriority => 15,
+		    modstatus   => $php::vars::mod_xml;
+	    }
+	} else {
+	    php::define::module {
+		"posix":
+		    modstatus => true;
+		"xml":
+		    modstatus   => $php::vars::mod_xml;
 	    }
 	}
 
@@ -25,7 +35,7 @@ class php::modules {
 		modstatus   => $php::vars::mod_mbstring;
 	    [ "sqlite", "pdo_sqlite" ]:
 		modstatus   => $php::vars::mod_sqlite;
-	    [ "xml", "simplexml" ]:
+	    "simplexml":
 		modstatus   => $php::vars::mod_xml;
 	}
     }
