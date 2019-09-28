@@ -29,6 +29,9 @@ usage()
 
 test -z "$1" && usage
 
+if test "$PASSWD"; then
+    PASSWD="'-p$PASSWD'"
+fi
 while test "$1"
 do
     case "$1" in
@@ -77,7 +80,7 @@ do
 			  '$pass'"		\
 	       | mysql				\
 		    -u $ACCOUNT			\
-		    "-p$PASSWD"			\
+		    $PASSWD			\
 		>/dev/null 2>&1; then
 		echo "unable to create user $user" >&2
 		ret=`expr $ret + 1`
@@ -89,7 +92,7 @@ do
 				     to '$user'@'%'"	\
 		       | mysql				\
 			    -u $ACCOUNT			\
-			    "-p$PASSWD"			\
+			    $PASSWD			\
 			>/dev/null 2>&1; then
 			echo "unable to set privileges for $user on $db" >&2
 			ret=`expr $ret + 1`
@@ -112,7 +115,7 @@ do
 			  $db"			\
 	       | mysql				\
 		    -u $ACCOUNT			\
-		    "-p$PASSWD"			\
+		    $PASSWD			\
 		>/dev/null 2>&1; then
 		echo "unable to create database $db" >&2
 		ret=`expr $ret + 1`
@@ -120,7 +123,7 @@ do
 		if ! cat "$init"		\
 		   | mysql			\
 			-u $ACCOUNT		\
-			"-p$PASSWD"		\
+			$PASSWD			\
 			$db			\
 		    >/dev/null 2>&1; then
 		    echo "unable to initialize database $db" >&2
@@ -147,7 +150,7 @@ do
 	    if ! echo "drop user '$user'@'$BIND_ADDR'"	\
 	       | mysql					\
 		    -u $ACCOUNT				\
-		    "-p$PASSWD"				\
+		    $PASSWD				\
 		>/dev/null 2>&1; then
 		echo "unable to drop user $user" >&2
 		ret=`expr $ret + 1`
@@ -171,7 +174,7 @@ do
 	    if ! echo "drop database $db"	\
 	       | mysql				\
 		    -u $ACCOUNT			\
-		    "-p$PASSWD"			\
+		    $PASSWD			\
 		>/dev/null 2>&1; then
 		echo "unable to drop database $database" >&2
 		ret=`expr $ret + 1`
@@ -190,7 +193,7 @@ do
 	    if ! echo "select User from user"	\
 	       | mysql				\
 		    -u $ACCOUNT			\
-		    "-p$PASSWD"			\
+		    $PASSWD			\
 		    mysql			\
 		    | grep "^$user\$"		\
 		>/dev/null 2>&1; then
@@ -211,7 +214,7 @@ do
 	    if ! echo "show tables"	\
 	       | mysql			\
 		    -u $ACCOUNT		\
-		    "-p$PASSWD"		\
+		    $PASSWD		\
 		    $db			\
 		>/dev/null 2>&1; then
 		echo "database $db does not exist" >&2
@@ -239,7 +242,7 @@ do
 			   MASTER_HOST='$host'"	\
 	       | mysql				\
 		    -u $ACCOUNT			\
-		    "-p$PASSWD"			\
+		    $PASSWD			\
 		    mysql			\
 		>/dev/null 2>&1; then
 		echo "unable set mysql master!" >&2
@@ -267,7 +270,7 @@ do
 		       flush privileges;"	\
 	       | mysql				\
 		    -u $ACCOUNT			\
-		    "-p$PASSWD"			\
+		    $PASSWD			\
 		    mysql			\
 		>/dev/null 2>&1; then
 		echo "unable to update $user's password!" >&2
