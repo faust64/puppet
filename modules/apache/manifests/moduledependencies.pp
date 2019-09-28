@@ -59,18 +59,21 @@ class apache::moduledependencies {
     if ($apache::vars::mod_php == true) {
 	include php
 
+	$phpvers = $apache::vars::phpvers
+	$phpmaj  = $phpvers.split('\.')[0]
+
 	Class[Php]
 	    -> Service[$apache::vars::service_name]
 
 	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
-		"libapache2-mod-php5":
-		    require => Package["php5"];
+		"libapache2-mod-php${phpvers}":
+		    require => Package["php${phpvers}"];
 	    }
 
-	    Package["libapache2-mod-php5"]
-		-> Apache::Define::Module["php5"]
+	    Package["libapache2-mod-php${phpvers}"]
+		-> Apache::Define::Module["php${phpmaj}"]
 	}
     }
     if ($apache::vars::mod_xsendfile == true) {

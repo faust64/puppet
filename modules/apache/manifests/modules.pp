@@ -1,4 +1,6 @@
 class apache::modules {
+    $phpvers = $apache::vars::phpvers
+    $phpmaj  = $phpvers.split('\.')[0]
     if ($apache::vars::listen_ports['ssl'] != false) {
 	$sslstatus    = true
 	$headerstatus = true
@@ -89,9 +91,9 @@ class apache::modules {
 	"negotiation":
 	    customconf    => true,
 	    modstatus     => $apache::vars::mod_negotiation;
-	"php5":
+	"php${phpmaj}":
 	    customconf    => true,
-	    customlibname => "libphp5",
+	    customlibname => "libphp${phpvers}",
 	    modstatus     => $apache::vars::mod_php;
 	"proxy":
 	    modstatus     => $apache::vars::mod_proxy;

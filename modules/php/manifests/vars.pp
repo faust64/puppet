@@ -61,6 +61,8 @@ class php::vars {
 
     if (($operatingsystem == "Debian" and $lsbdistcodename == "stretch") or ($operatingsystem == "Ubuntu" and $lsbdistcodename == "xenial")) {
 	$phpvers = "7.0"
+    } elsif ($operatingsystem == "Debian" and $lsbdistcodename == "buster") {
+	$phpvers = "7.3"
     } else {
 	$phpvers = "5"
     }

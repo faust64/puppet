@@ -90,6 +90,13 @@ class apache::vars {
     } else {
 	$version = "2.2"
     }
+    if (($operatingsystem == "Debian" and $lsbdistcodename == "stretch") or ($operatingsystem == "Ubuntu" and $lsbdistcodename == "xenial")) {
+	$phpvers = "7.0"
+    } elsif ($operatingsystem == "Debian" and $lsbdistcodename == "buster") {
+	$phpvers = "7.3"
+    } else {
+	$phpvers = "5"
+    }
     if ($mod_proxy_ajp or $mod_proxy_balancer or $mod_proxy_connect
 	or $mod_proxy_ftp or $mod_proxy_http) {
 	$mod_proxy = true

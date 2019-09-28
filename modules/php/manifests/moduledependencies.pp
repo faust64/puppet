@@ -165,7 +165,8 @@ class php::moduledependencies {
 	    }
 	}
     } elsif ($php::vars::mod_mysql == true or $php::vars::mod_mysqli) {
-	if ($operatingsystem == "CentOS" or $operatingsystem == "RedHat") {
+	if ($operatingsystem == "CentOS" or $operatingsystem == "RedHat"
+	    or ($operatingsystem == "Debian" and $lsbdistcodename == "buster")) {
 	    common::define::package {
 		"php-mysql":
 	    }
