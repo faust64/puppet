@@ -10,7 +10,7 @@ apache_mpm: prefork
 apache_rsyslog: true
 
 # Memcache
-memcache_max_mem: 256
+memcache_max_mem: 512
 
 # MySQL
 mysql_keep_backup: /media/backups
@@ -42,4 +42,5 @@ php_mod_json: true
 php_mod_ldap: true
 php_mod_memcache: true
 php_mod_mysqli: true
+php_mod_xml: true
 php_pear: true
