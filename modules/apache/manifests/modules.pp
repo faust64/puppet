@@ -33,13 +33,13 @@ class apache::modules {
     }
     if ($operatingsystem == "Debian" and
 	($lsbdistcodename == "buster" or $lsbdistcodename == "stretch")) {
-	$fastcgi = false
 	if ($apache::vars::mod_cgid == true) {
 	    $cgid = true
 	} else { $cgid = $apache::vars::mod_fcgid }
+	$fastcgi = false
     } else {
-	$fastcgi = $apache::vars::mod_cgid
-	$cgid    = $apache::vars::mod_fcgid
+	$cgid    = $apache::vars::mod_cgid
+	$fastcgi = $apache::vars::mod_fcgid
     }
 
     apache::define::module {
