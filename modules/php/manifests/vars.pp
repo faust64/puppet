@@ -1,4 +1,8 @@
 class php::vars {
+    $cmod_mysql           = lookup("php_mod_mysql")
+    $cmod_mysqli          = lookup("php_mod_mysqli")
+    $cmod_mysqlnd         = lookup("php_mod_mysqlnd")
+    $cmod_xml             = lookup("php_mod_xml")
     $conf_dir             = lookup("php_conf_dir")
     $check_cli            = lookup("php_is_cli")
     $check_fpm            = lookup("php_is_fpm")
@@ -27,16 +31,12 @@ class php::vars {
     $mod_mbstring         = lookup("php_mod_mbstring")
     $mod_mcrypt           = lookup("php_mod_mcrypt")
     $mod_memcache         = lookup("php_mod_memcache")
-    $mod_mysql            = lookup("php_mod_mysql")
-    $mod_mysqli           = lookup("php_mod_mysqli")
-    $mod_mysqlnd          = lookup("php_mod_mysqlnd")
     $mod_pdo_check        = lookup("php_mod_pdo")
     $mod_pgsql            = lookup("php_mod_pgsql")
     $mod_phar             = lookup("php_mod_phar")
     $mod_snmp             = lookup("php_mod_snmp")
     $mod_sqlite           = lookup("php_mod_sqlite")
     $mod_uploadprogress   = lookup("php_mod_uploadprogress")
-    $mod_xml              = lookup("php_mod_xml")
     $mod_xmlreader        = lookup("php_mod_xmlreader")
     $mod_xmlrpc           = lookup("php_mod_xmlrpc")
     $mod_xsl              = lookup("php_mod_xsl")
@@ -69,6 +69,32 @@ class php::vars {
     } else {
 	$phpvers = "5"
     }
+
+    if ($phpvers == "5") {
+	$mod_mysql   = $cmod_mysql
+	$mod_mysqli  = $cmod_mysqli
+	$mod_mysqlnd = $cmod_mysqlnd
+	$mod_xml     = $cmod_xml
+    } else {
+	$mod_mysql = false
+	if ($cmod_mysql == true) {
+	    notify { "mod_mysql no longer available as of php7": }
+	    $mod_mysqli  = true
+	} else {
+	    $mod_mysqli  = $cmod_mysqli
+	}
+	if ($mod_mysqli == true) {
+	    $mod_mysqlnd = true
+	} else {
+	    $mod_mysqlnd = $cmod_mysqlnd
+	}
+	if ($mod_mcrypt == true) {
+	    $mod_xml = true
+	} else {
+	    $mod_xml = $cmod_xml
+	}
+    }
+
     if ($mod_mysql or $mod_mysqli or $mod_mysqlnd) {
 	$mod_pdo_mysql = true
     } else {
