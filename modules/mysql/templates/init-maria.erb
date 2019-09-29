@@ -1,0 +1,31 @@
+#!/bin/sh
+
+MYSQLADMIN_CFG=/etc/mysql/mariadb.conf.d/90-mysqladmin.cnf
+if ! test -s $MYSQLADMIN_CFG; then
+    if test "$(awk '/password/{print $3}' /etc/mysql/debian.cnf)"; then
+	echo "Already initialized?"
+	exit 1
+    fi
+    PASS=$(perl -e 'print map{("a".."z","A".."Z",0..9)[int(rand(62))]}(1..16)');
+    sed -i -e "s/^password =.*$/password = $PASS/" \
+	   -e "s/^user     =.*$/user     = debian-sys-maint/" \
+	/etc/mysql/debian.cnf
+    cat >$MYSQLADMIN_CFG <<EOF
+[mysqladmin]
+host     = localhost
+user     = debian-sys-maint
+password = $PASS
+socket   = /var/run/mysqld/mysqld.sock 
+EOF
+    chown 0:0 $MYSQLADMIN_CFG
+    chmod 0600 $MYSQLADMIN_CFG
+    ACCOUNT="<%=scope.lookupvar('::msuser')%>"
+    PASSWD="<%=scope.lookupvar('::mspw')%>"
+    if test "$PASSWD"; then
+	mysql -u "$ACCOUNT" "-p$PASSWD" -e \
+	    "GRANT ALL ON *.* TO 'debian-sys-maint'@'localhost' IDENTIFIED BY '$PASS' WITH GRANT OPTION;"
+    else
+	mysql -u "$ACCOUNT" -e \
+	    "GRANT ALL ON *.* TO 'debian-sys-maint'@'localhost' IDENTIFIED BY '$PASS' WITH GRANT OPTION;"
+    fi
+fi
