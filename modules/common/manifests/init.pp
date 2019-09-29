@@ -84,6 +84,11 @@ class common {
 
     if (lookup("do_pakiti")) {
 	include pakiti
+    } else {
+	nagios::define::probe {
+	    "pakiti":
+		ensure => absent;
+	}
     }
     if (lookup("do_rkhunter")) {
 	include rkhunter
