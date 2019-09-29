@@ -141,8 +141,10 @@ class php::moduledependencies {
 	    }
 	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
-	    common::define::package {
-		"php${phpvers}-mcrypt":
+	    if ($lsbdistcodename != "buster") {
+		common::define::package {
+		    "php${phpvers}-mcrypt":
+		}
 	    }
 	}
     }
