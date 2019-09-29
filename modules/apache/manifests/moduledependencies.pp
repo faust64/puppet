@@ -28,20 +28,32 @@ class apache::moduledependencies {
 		-> Apache::Define::Module["cgid"]
 	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu") {
-	    common::define::package {
-		"libapache2-mod-fastcgi":
+	    if ($lsbdistcodename == "buster" or $lsbdistcodename == "stretch") {
+		notify { "fastcgi no longer available as of stretch": }
+		if (! defined(Common::Define::Package["libapache2-mod-fcgid"])) {
+		    common::define::package {
+			"libapache2-mod-fcgid":
+		    }
+
+		    Package["libapache2-mod-fcgid"]
+			-> Apache::Define::Module["fcgid"]
+		}
+	    } else {
+		common::define::package {
+		    "libapache2-mod-fastcgi":
+		}
+
+		apache::define::module {
+		    "fastcgi":
+			modstatus => $apache::vars::mod_cgid;
+		}
+
+		Package["libapache2-mod-fastcgi"]
+		    -> Apache::Define::Module["cgid"]
+
+		Package["libapache2-mod-fastcgi"]
+		    -> Apache::Define::Module["fastcgi"]
 	    }
-
-	    apache::define::module {
-		"fastcgi":
-		    modstatus => $apache::vars::mod_cgid;
-	    }
-
-	    Package["libapache2-mod-fastcgi"]
-		-> Apache::Define::Module["cgid"]
-
-	    Package["libapache2-mod-fastcgi"]
-		-> Apache::Define::Module["fastcgi"]
 	}
     }
     if ($apache::vars::mod_mime == true) {

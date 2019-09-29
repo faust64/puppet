@@ -31,6 +31,16 @@ class apache::modules {
 		modstatus     => $apache::vars::mod_ldap;
 	}
     }
+    if ($operatingsystem == "Debian" and
+	($lsbdistcodename == "buster" or $lsbdistcodename == "stretch")) {
+	$fastcgi = false
+	if ($apache::vars::mod_cgid == true) {
+	    $cgid = true
+	} else { $cgid = $apache::vars::mod_fcgid }
+    } else {
+	$fastcgi = $apache::vars::mod_cgid
+	$cgid    = $apache::vars::mod_fcgid
+    }
 
     apache::define::module {
 	"actions":
@@ -62,7 +72,7 @@ class apache::modules {
 	    modstatus     => $apache::vars::mod_cgi;
 	"cgid":
 	    customconf    => true,
-	    modstatus     => $apache::vars::mod_cgid;
+	    modstatus     => $cgid;
 	"dav":
 	    modstatus     => $apache::vars::mod_svn;
 	"dav_svn":
@@ -80,7 +90,7 @@ class apache::modules {
 	    modstatus     => $apache::vars::mod_expires;
 	"fcgid":
 	    customconf    => true,
-	    modstatus     => $apache::vars::mod_fcgid;
+	    modstatus     => $fastcgi;
 	"headers":
 	    modstatus     => $headerstatus;
 	"include":
