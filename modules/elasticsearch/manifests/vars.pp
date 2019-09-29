@@ -17,19 +17,11 @@ class elasticsearch::vars {
     $shards             = lookup("elasticsearch_number_of_shards")
     $version            = lookup("elasticsearch_version")
 
-    if ($listen_addr) {
-	$listen = $listen_addr
-    } else {
-	$listen = "127.0.0.1"
-    }
-    if ($myname) {
-	$nodename = $myname
-    } else {
-	$nodename = $hostname
-    }
+    if ($listen_addr) { $listen = $listen_addr }
+    else { $listen = "127.0.0.1" }
+    if ($myname) { $nodename = $myname }
+    else { $nodename = $hostname }
     if ($version == "7.x" and lookup("elasticsearch_cluster_hosts") == false) {
 	$cluster_hosts = [ $listen ]
-    } else {
-	$cluster_hosts = lookup("elasticsearch_cluster_hosts")
-    }
+    } else { $cluster_hosts = lookup("elasticsearch_cluster_hosts") }
 }

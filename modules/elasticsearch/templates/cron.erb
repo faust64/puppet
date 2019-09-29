@@ -1,0 +1,6 @@
+#!/bin/sh
+
+TODAY=$(date +%Y.%m.%d)
+curl -XPUT "http://<%=@listen%>:9200/<%=@clustername%>-$TODAY/_settings" \
+    -H 'Content-Type: application/json' \
+    -d '{ "index": {"number_of_replicas": 0 } }'
