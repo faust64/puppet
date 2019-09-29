@@ -54,6 +54,7 @@ class apache::modules {
 	"authn_file":
 	    modstatus     => true;
 	"authnz_ldap":
+	    customconf    => true,
 	    modstatus     => $apache::vars::mod_ldap;
 	"authz_groupfile":
 	    modstatus     => true;
