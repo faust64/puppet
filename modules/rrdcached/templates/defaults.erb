@@ -1,4 +1,13 @@
-DISABLE=0
-OPTS="<%=@opts%>"
+<% if @lsbdistcodename == "buster" -%>PIDFILE=/var/run/rrdcached.pid
+SOCKFILE=<%=@sockfile%>
+<% if @basepath != false -%>BASE_PATH=<%=@basepath%>
+<% end -%><% if @sockgroup != false -%>SOCKGROUP=<%=@sockgroup%>
+<% end -%><% if @sockmode != false -%>SOCKMODE=<%=@sockmode%>
+<% end -%><% if @journalpath != false -%>JOURNAL_PATH=<%=@journalpath%>/
+<% end -%>BASE_OPTIONS="-B"
+DAEMON=/usr/bin/rrdcached
+<% else -%>DISABLE=0
+OPTS="<% if @sockgroup != false -%>-s <%=@sockgroup%><% end -%><% if @sockfile != false -%> -l unix:<%=@sockfile%><% end -%><% if @basepath != false -%> -b <%=@basepath%><% end -%> -B<% if @journalpath != false -%> -j <%=@journalpath%><% end -%> -F<% if @sockmode != false -%> -m <%=@sockmode%><% end -%> -w 1800 -z 1800 -f 3600"
 MAXWAIT=40
 ENABLE_COREFILES=0
+<% end -%>

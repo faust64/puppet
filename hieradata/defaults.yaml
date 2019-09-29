@@ -2103,7 +2103,12 @@ rkhunter_script_whitelist:
 rkhunter_tmp_dir: /var/lib/rkhunter/tmp
 
 # RRDcached
-rrdcached_opts: ""
+rrdcached_basepath: false
+rrdcached_journal_owner: false
+rrdcached_journal_path: false
+rrdcached_sockfile: /var/run/rrdcached.sock
+rrdcached_sockgroup: false
+rrdcached_sockmode: false
 
 # Rsync
 rsync_clients: false
