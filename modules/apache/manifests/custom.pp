@@ -38,4 +38,9 @@ class apache::custom {
 	    require => File["Install Apache error messages"],
 	    unless  => "test -s webserver-background.jpg";
     }
+
+    if ($download == "wget") {
+	Common::Define::Package["wget"]
+	    -> Exec["Install Apache error background"]
+    }
 }
