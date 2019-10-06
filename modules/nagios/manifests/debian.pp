@@ -44,14 +44,22 @@ class nagios::debian {
     if ($nagios::vars::watch_hpraid) {
 	apt::define::aptkey {
 	    "Hewlett-Packard":
-		url => "http://downloads.linux.hpe.com/SDR/repo/mcp/GPG-KEY-mcp";
+#		url => "http://downloads.linux.hpe.com/SDR/repo/mcp/GPG-KEY-mcp";
+#		url => "http://downloads.linux.hpe.com/SDR/hpPublicKey1024.pub";
+#		url => "http://downloads.linux.hpe.com/SDR/hpPublicKey2048.pub";
+#		url => "http://downloads.linux.hpe.com/SDR/hpPublicKey2048_key1.pub";
+		url => "http://downloads.linux.hpe.com/SDR/hpePublicKey2048_key1.pub";
+
 	}
 
+	if ($lsbdistcodename == "buster" or $lsbdistcodename == "stretch") {
+	    $fetch = "jessie"
+	} else { $fetch = $lsbdistcodename }
 	apt::define::repo {
 	    "hp":
 		baseurl  => "http://downloads.linux.hpe.com/SDR/repo/mcp/",
 		branches => "non-free",
-		codename => "$lsbdistcodename/current",
+		codename => "$fetch/current",
 		require  => Apt::Define::Aptkey["Hewlett-Packard"];
 	}
 

@@ -1,5 +1,5 @@
 with_collectd: false
-physical_parent: eros.adm.intra.unetresgrossebite.com,gaia.adm.intra.unetresgrossebite.com
+physical_parent: eros.adm.intra.unetresgrossebite.com
 
 # LinuxCounter
 lico_update_day: 1

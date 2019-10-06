@@ -1,4 +1,4 @@
-physical_parent: gaia.adm.intra.unetresgrossebite.com,hestia.adm.intra.unetresgrossebite.com
+physical_parent: eros.adm.intra.unetresgrossebite.com,hestia.adm.intra.unetresgrossebite.com
 
 # Collectd
 with_collectd: false

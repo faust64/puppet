@@ -1,4 +1,4 @@
-physical_parent: gaia.adm.intra.unetresgrossebite.com,rhea.adm.intra.unetresgrossebite.com
+physical_parent: eros.adm.intra.unetresgrossebite.com,rhea.adm.intra.unetresgrossebite.com
 
 # Fstab
 tmp_target_device: /dev/mapper/data-tmp
