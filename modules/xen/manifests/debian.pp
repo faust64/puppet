@@ -1,7 +1,11 @@
 class xen::debian {
     $mem_max      = $xen::vars::mem_max
     $mem_reserved = $xen::vars::mem_reserved
-    if ($lsbdistcodename == "xenial") {
+    if ($lsbdistcodename == "buster") {
+	$xenvers = "-4.11"
+    } elsif ($lsbdistcodename == "stretch") {
+	$xenvers = "-4.8"
+    } elsif ($lsbdistcodename == "xenial") {
 	$xenvers = "-4.6"
     } elsif ($lsbdistcodename == "trusty" or $lsbdistcodename == "jessie") {
 	$xenvers = "-4.4"
