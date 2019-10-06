@@ -565,6 +565,30 @@
 			},
 			"Perfs" : ["194","202","246"]
 		},
+		"Crucial BX500" : {
+			"Device" : ["CT240BX500SSD1"],
+			"ID#" : {
+				"1" : "VALUE", # Raw Read Error Rate
+				"5" : "RAW_VALUE", # Re-allocated Sector Count
+				"9" : "RAW_VALUE", # Power-On Hours
+				"12" : "RAW_VALUE", # Power Cycle Count
+				"183" : "RAW_VALUE", # Runtime Bad Block
+				"194" : "RAW_VALUE", # Temperature Celsius
+				"196" : "RAW_VALUE", # Reallocated Event Count
+				"197" : "RAW_VALUE", # Current Pending Sector
+				"198" : "RAW_VALUE", # Offline Uncorrectable
+				"199" : "RAW_VALUE"  # UDMA CRC Error Count
+			},
+			"Threshs" : {
+				"1" : ["62:","52:"],
+				"5" : ["20:","40:"],
+				"196" : ["0","10"],
+				"197" : ["0","10"],
+				"198" : ["0","10"],
+				"199" : ["0","10"]
+			},
+			"Perfs" : ["194"]
+		},
 		"Western Digital RE4" : {
 			"Device" : ["Western Digital RE4","Western Digital RE4 2TB","Western Digital RE4 1TB","Western Digital RE4 500G","WDC WD2003FYYS-02W0B1","WDC WD1003FBYX-01Y7B0","WDC WD5003ABYX-01WERA1","WDC WD1003FBYZ-010FB0","WDC WD10EFRX-68PJCN0"],
 			"ID#" : {
