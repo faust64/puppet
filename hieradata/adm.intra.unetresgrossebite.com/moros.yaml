@@ -11,6 +11,9 @@ munin_node_listenaddr: 10.42.242.104
 
 # Nagios
 nagios_listenaddr: 10.42.242.104
+nagios_smart_disks:
+  - sda
+  - sdb
 
 # SNMP
 snmp_listenaddr: 10.42.242.104
