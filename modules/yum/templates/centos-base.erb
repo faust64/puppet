@@ -1,12 +1,14 @@
 [base]
 name=CentOS-$releasever - Base
-mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os
+<% if @major == "8" -%>baseurl=http://mirror.centos.org/centos/$releasever/BaseOS/$basearch/os/
+<% else -%>mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os
 #baseurl=http://mirror.centos.org/centos/$releasever/os/$basearch/
-gpgcheck=1
+<% end -%>gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-<%=@shortvers%>
 <% if @srvtype != "kvmvz" and @srvtype != "vz" -%>exclude=kernel
 <% end -%>
 
+<% if @major != "8" -%>
 [updates]
 name=CentOS-$releasever - Updates
 mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=updates
@@ -16,26 +18,35 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-<%=@shortvers%>
 <% if @srvtype != "kvmvz" and @srvtype != "vz" -%>exclude=kernel
 <% end -%>
 
-#additional packages that may be useful
+<% end -%>#additional packages that may be useful
 [extras]
 name=CentOS-$releasever - Extras
-mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=extras
+<% if @major == "8" -%>baseurl=http://mirror.centos.org/centos/$releasever/extras/$basearch/os/
+<% else -%>mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=extras
 #baseurl=http://mirror.centos.org/centos/$releasever/extras/$basearch/
-gpgcheck=1
+<% end -%>gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-<%=@shortvers%>
 
 [centosplus]
 name=CentOS-$releasever - Plus
-mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=centosplus
+<% if @major == "8" -%>baseurl=http://mirror.centos.org/centos/$releasever/centosplus/$basearch/os/
+<% else -%>mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=centosplus
 #baseurl=http://mirror.centos.org/centos/$releasever/centosplus/$basearch/
-gpgcheck=1
+<% end -%>gpgcheck=1
 enabled=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-<%=@shortvers%>
 
-[contrib]
+<% if @major != "8" -%>[contrib]
 name=CentOS-$releasever - Contrib
 mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=contrib
 #baseurl=http://mirror.centos.org/centos/$releasever/contrib/$basearch/
 gpgcheck=1
 enabled=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-<%=@shortvers%>
+<% else -%>[AppStream]
+name=CentOS-$releasever - AppStream
+baseurl=http://mirror.centos.org/centos/$releasever/AppStream/$basearch/os/
+gpgcheck=1
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-<%=@shortvers%>
+<% end -%>

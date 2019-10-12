@@ -443,9 +443,7 @@ EOF
 
     if test -f etc/debian_version -o -f etc/devuan_version; then
 	eval archives=false version=
-	if test -f etc/devuan_version; then
-	    version=`cat etc/devuan_version`
-	elif grep -q 5.[0-9] etc/debian_version; then
+	if grep -q 5.[0-9] etc/debian_version; then
 	    version=lenny
 	    archives=true
 	elif grep -q 6.[0-9] etc/debian_version; then
@@ -455,8 +453,14 @@ EOF
 	    version=wheezy
 	elif grep -q 8.[0-9] etc/debian_version; then
 	    version=jessie
+	elif grep -q 8.[0-9] etc/devuan_version; then
+	    version=jessie
+	elif grep -q 9.[0-9] etc/devuan_version; then
+	    version=ascii
 	elif grep -q 9.[0-9] etc/debian_version; then
 	    version=stretch
+	elif grep -q 10.[0-9] etc/devuan_version; then
+	    version=beowulf
 	elif grep -q 10.[0-9] etc/debian_version; then
 	    version=buster
 	fi

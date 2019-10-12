@@ -29,14 +29,26 @@ class common::physical::nagios {
 	}
 
 	each($smart_disks) |Integer $index, String $disk| {
-	    if ($disks[$disk]['model'] == "LOGICAL VOLUME" and $disks[$disk]['vendor'] == "HP") {
-		nagios::define::probe {
-		    "smart_$disk":
-			pluginargs    => [ "/dev/$disk", "-O", "cciss,$index" ],
-			pluginconf    => "smart",
-			description   => "$fqdn SMART $disk",
-			servicegroups => "system",
-			use           => "jobs-service";
+	    if (defined('$disks')) {
+		if ($disks[$disk]['model'] == "LOGICAL VOLUME"
+		and $disks[$disk]['vendor'] == "HP") {
+		    nagios::define::probe {
+			"smart_$disk":
+			    pluginargs    => [ "/dev/$disk", "-O", "cciss,$index" ],
+			    pluginconf    => "smart",
+			    description   => "$fqdn SMART $disk",
+			    servicegroups => "system",
+			    use           => "jobs-service";
+		    }
+		} else {
+		    nagios::define::probe {
+			"smart_$disk":
+			    pluginargs    => [ "/dev/$disk" ],
+			    pluginconf    => "smart",
+			    description   => "$fqdn SMART $disk",
+			    servicegroups => "system",
+			    use           => "jobs-service";
+		    }
 		}
 	    } else {
 		nagios::define::probe {

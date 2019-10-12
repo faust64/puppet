@@ -1,5 +1,5 @@
 class squid::debian {
-    if ($lsbdistcodename == "stretch") {
+    if ($lsbdistcodename == "stretch" or $lsbdistcodename == "ascii" or $lsbdistcodename == "buster" or $lsbdistcodename == "beowulf") {
 	common::define::package {
 	    "squid":
 	}
