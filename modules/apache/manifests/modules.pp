@@ -31,8 +31,10 @@ class apache::modules {
 		modstatus     => $apache::vars::mod_ldap;
 	}
     }
-    if ($operatingsystem == "Debian" and
-	($lsbdistcodename == "buster" or $lsbdistcodename == "stretch")) {
+    if (($operatingsystem == "Debian" and
+	($lsbdistcodename == "buster" or $lsbdistcodename == "stretch"))
+        or ($myoperatingsystem == "Devuan" and
+	($lsbdistcodename == "beowulf" or $lsbdistcodename == "ascii"))) {
 	if ($apache::vars::mod_cgid == true) {
 	    $cgid = true
 	} else { $cgid = $apache::vars::mod_fcgid }
