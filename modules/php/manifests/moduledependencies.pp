@@ -91,14 +91,15 @@ class php::moduledependencies {
 	    common::define::package {
 		"php-jsonlint":
 	    }
+	} elsif ($operatingsystem == "FreeBSD" or
+	    ($operatingsystem == "Debian" and $lsbdistcodename == "buster")) {
+	    common::define::package {
+		"php${phpvers}-json":
+	    }
 	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"php-services-json":
-	    }
-	} elsif ($operatingsystem == "FreeBSD") {
-	    common::define::package {
-		"php${phpvers}-json":
 	    }
 	}
     }
@@ -140,13 +141,46 @@ class php::moduledependencies {
 	    }
 	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
-	    common::define::package {
-		"php${phpvers}-mcrypt":
+	    if ($lsbdistcodename == "buster" or $lsbdistcodename == "stretch") {
+		include common::tools::gcc
+		include common::tools::make
+
+		common::define::package {
+		    [ "autoconf", "libc-dev", "pkg-config", "libmcrypt-dev" ]:
+		}
+
+		#FIXME: noexec needs to be disabled/re-enabled building this
+		#also, would want to cleanup build deps afterwards
+		exec {
+		    "Install php-mcrypt from PECL":
+			command => "echo '' | pecl install mcrypt >pecl-install.out 2>&1",
+			creates => "/root/pecl-install.out",
+			cwd     => "/root",
+			path    => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+			require =>
+			    [
+				Common::Define::Package["autoconf"],
+				Common::Define::Package["libc-dev"],
+				Common::Define::Package["libmcrypt-dev"],
+				Common::Define::Package["pkg-config"],
+				Class[Common::Tools::Gcc],
+				Class[Common::Tools::Make],
+				Php::Define::Module["xml"]
+			    ];
+		}
+
+		Exec["Install php-mcrypt from PECL"]
+		    -> Php::Define::Module["mcrypt"]
+	    } else {
+		common::define::package {
+		    "php${phpvers}-mcrypt":
+		}
 	    }
 	}
     }
     if ($php::vars::mod_memcache == true) {
-	if ($operatingsystem == "CentOS" or $operatingsystem == "RedHat") {
+	if ($operatingsystem == "CentOS" or $operatingsystem == "RedHat"
+	    or ($operatingsystem == "Debian" and $lsbdistcodename == "buster")) {
 	    common::define::package {
 		"php-memcache":
 	    }
@@ -158,14 +192,19 @@ class php::moduledependencies {
 	}
     }
     if ($php::vars::mod_mysqlnd == true) {
-	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	if ($operatingsystem == "Debian" and $lsbdistcodename == "buster") {
+	    common::define::package {
+		"php${phpvers}-mysql":
+	    }
+	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"php${phpvers}-mysqlnd":
 	    }
 	}
     } elsif ($php::vars::mod_mysql == true or $php::vars::mod_mysqli) {
-	if ($operatingsystem == "CentOS" or $operatingsystem == "RedHat") {
+	if ($operatingsystem == "CentOS" or $operatingsystem == "RedHat"
+	    or ($operatingsystem == "Debian" and $lsbdistcodename == "buster")) {
 	    common::define::package {
 		"php-mysql":
 	    }

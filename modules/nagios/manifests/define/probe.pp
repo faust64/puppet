@@ -3,6 +3,7 @@ define nagios::define::probe($args             = false,
 			     $contact_escalate = lookup("nagios_contact_escalate"),
 			     $description      = "$fqdn $name",
 			     $depexecfail      = "u,w,c",
+                             $ensure           = "present",
 			     $escalate_first   = 1,
 			     $escalate_itv     = 20,
 			     $escalate_last    = 2,
@@ -24,26 +25,18 @@ define nagios::define::probe($args             = false,
 	    $cmdhead = "check_nrpe_port!$natport!$command"
 	} elsif ($realport != 5666 and $realport != "5666") {
 	    $cmdhead = "check_nrpe_port!$realport!$command"
-	} else {
-	    $cmdhead = "check_nrpe!$command"
-	}
-    } else {
-	$cmdhead = $command
-    }
+	} else { $cmdhead = "check_nrpe!$command" }
+    } else { $cmdhead = $command }
     if ($args) {
 	$cmdtail = join($args, '!')
 	$cmd     = "$cmdhead!$cmdtail"
-    } else {
-	$cmd     = $cmdhead
-    }
+    } else { $cmd     = $cmdhead }
     $http_listen = lookup("apache_listen_ports")
 
     if ($pluginargs != false) {
 	$preargs   = join($pluginargs, ' ')
 	$pluginarg = " $preargs"
-    } else {
-	$pluginarg = ""
-    }
+    } else { $pluginarg = "" }
 
     $conf_dir  = lookup("nagios_conf_dir")
     $plugindir = lookup("nagios_plugins_dir")
@@ -56,6 +49,7 @@ define nagios::define::probe($args             = false,
 	@@nagios_service {
 	    "check_${name}_$fqdn":
 		check_command       => $cmd,
+		ensure              => $ensure,
 		host_name           => $fqdn,
 		notify              => Exec["Refresh Icinga configuration"],
 		require             => File["Prepare nagios services probes import directory"],
@@ -71,6 +65,7 @@ define nagios::define::probe($args             = false,
 		"check_${name}_$fqdn":
 		    dependent_host_name           => $dephost,
 		    dependent_service_description => $dependency,
+		    ensure                        => $ensure,
 		    execution_failure_criteria    => $depexecfail,
 		    host_name                     => $fqdn,
 		    inherits_parent               => 1,
@@ -87,6 +82,7 @@ define nagios::define::probe($args             = false,
 	    @@nagios_serviceescalation {
 		"check_${name}_$fqdn":
 		    contact_groups        => $contact_escalate,
+		    ensure                => $ensure,
 		    escalation_options    => $escalate_opts,
 		    escalation_period     => $escalate_when,
 		    first_notification    => $escalate_first,
@@ -105,6 +101,7 @@ define nagios::define::probe($args             = false,
 	    file {
 		"Install Nagios $name configuration":
 		    content => template("nagios/plugins/$pluginconf.erb"),
+		    ensure  => $ensure,
 		    group   => lookup("gid_zero"),
 		    mode    => "0644",
 		    notify  => Service[$nagios::vars::nrpe_service_name],

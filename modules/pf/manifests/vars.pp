@@ -86,6 +86,7 @@ class pf::vars {
     $snmp_listenaddr        = lookup("snmp_listenaddr")
     $squid_ip               = lookup("squid_ip")
     $ssh_ip                 = lookup("ssh_ip")
+    $ssh_port               = lookup("ssh_port")
     $sudo_conf_dir          = lookup("sudo_conf_dir")
     $syslog_ip              = lookup("rsyslog_hub")
     $tftpproxy_port         = lookup("tftpproxy_local_port")

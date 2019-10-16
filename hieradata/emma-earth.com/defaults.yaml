@@ -90,5 +90,5 @@ postfix_letsencrypt: true
 # Rsyslog
 rsyslog_do_relp: true
 rsyslog_do_udp: false
-rsyslog_hub: 5.135.176.165
+rsyslog_hub: 151.80.43.230
 rsyslog_via_stunnel: true

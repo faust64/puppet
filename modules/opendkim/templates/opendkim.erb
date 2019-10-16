@@ -4,4 +4,6 @@ OversignHeaders From
 KeyTable <%=@conf_dir%>/dkim.d/KeyTable
 SigningTable <%=@conf_dir%>/dkim.d/SigningTable
 ExternalIgnoreList <%=@conf_dir%>/dkim.d/TrustedHosts
-InternalHosts <%=@conf_dir%>/dkim.d/TrustedHosts
+InternalHosts <%=@conf_dir%>/dkim.d/TrustedHosts<% if @lsbdistcodename == "buster" -%>
+PidFile /run/opendkim/opendkim.pid
+Socket inet:12345@localhost<% end -%>

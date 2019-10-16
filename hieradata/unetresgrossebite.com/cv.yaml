@@ -11,7 +11,7 @@ bacula_file_daemon_fileset:
 
 # Firehol
 firehol_interfaces:
-  - name: eth0
+  - name: ens3
     description: WAN
     protection: strong
     allow:

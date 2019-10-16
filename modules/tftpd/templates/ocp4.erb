@@ -11,10 +11,10 @@ menu title OCP4 RH-CoreOS Systems
 <% @distribs.each do |dist| -%><% [ "x86_64" ].each do |arch| -%>   label -
 	menu label <%=dist%> <%=arch%> - bios
 	kernel installers/ocp4-rhcos-<%=dist%>/<%=arch%>/linux
-	append initrd=installers/ocp4-rhcos-<%=dist%>/<%=arch%>/initrd.gz coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://<%=@ipaddress%>/ocp4/rhcos-<%=dist%>-metal-bios.raw.gz coreos.inst.ignition_url=http://<%=@ipaddress%>/ocp4/config.ign
+	append initrd=installers/ocp4-rhcos-<%=dist%>/<%=arch%>/initrd.gz coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://<%=@ipaddress%>/ocp4/rhcos-<%=dist%>-<%=arch%>-metal-bios.raw.gz coreos.inst.ignition_url=http://<%=@ipaddress%>/ocp4/config.ign
     label -
 	menu label <%=dist%> <%=arch%> - uefi
 	kernel installers/ocp4-rhcos-<%=dist%>/<%=arch%>/linux
-	append initrd=installers/ocp4-rhcos-<%=dist%>/<%=arch%>/initrd.gz coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://<%=@ipaddress%>/ocp4/rhcos-<%=dist%>-metal-uefi.raw.gz coreos.inst.ignition_url=http://<%=@ipaddress%>/ocp4/config.ign
+	append initrd=installers/ocp4-rhcos-<%=dist%>/<%=arch%>/initrd.gz coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://<%=@ipaddress%>/ocp4/rhcos-<%=dist%>-<%=arch%>-metal-uefi.raw.gz coreos.inst.ignition_url=http://<%=@ipaddress%>/ocp4/config.ign
 <% end -%><% end -%>
 menu end

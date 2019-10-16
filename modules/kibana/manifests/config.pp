@@ -1,6 +1,7 @@
 class kibana::config {
-    $index  = $kibana::vars::index_name
-    $listen = $kibana::vars::esearch_listen
+    $index   = $kibana::vars::index_name
+    $listen  = $kibana::vars::esearch_listen
+    $version = $kibana::vars::esearch_version
 
     file {
 	"Prepare kibana for further configuration":

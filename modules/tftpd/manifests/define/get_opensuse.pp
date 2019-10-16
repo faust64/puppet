@@ -2,7 +2,7 @@ define tftpd::define::get_opensuse($arch = [ "i386", "x86_64" ]) {
     $download = $tftpd::vars::download
     $root_dir = $tftpd::vars::root_dir
 
-    if (versioncmp($name, '42.0') <= 0) { $pfx = "" }
+    if (versioncmp($name, '15.0') <= 0) { $pfx = "" }
     else { $pfx = "leap" }
 
     file {

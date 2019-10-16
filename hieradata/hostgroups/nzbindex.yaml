@@ -10,7 +10,7 @@ apache_mpm: prefork
 apache_rsyslog: true
 
 # Memcache
-memcache_max_mem: 256
+memcache_max_mem: 512
 
 # MySQL
 mysql_keep_backup: /media/backups
@@ -37,9 +37,13 @@ ossec_app_directories:
 php_disabled_functions: false
 php_max_exectime: 60
 php_mod_curl: true
+php_mod_ctype: true
 php_mod_gd: true
+php_mod_iconv: true
 php_mod_json: true
 php_mod_ldap: true
 php_mod_memcache: true
 php_mod_mysqli: true
+php_mod_mysqlnd: true
+php_mod_xml: true
 php_pear: true

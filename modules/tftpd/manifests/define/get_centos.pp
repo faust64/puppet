@@ -13,6 +13,12 @@ define tftpd::define::get_centos($arch = [ "i386", "x86_64" ]) {
     }
 
     each($arch) |$archi| {
+	if ($name == "8") {
+	    $dpath = "BaseOS/$archi/os/isolinux"
+	} else {
+	    $dpath = "os/$archi/isolinux"
+	}
+
 	file {
 	    "Prepare CentOS$name $archi directory":
 		ensure  => directory,
@@ -25,13 +31,13 @@ define tftpd::define::get_centos($arch = [ "i386", "x86_64" ]) {
 
 	exec {
 	    "Download CentOS$name $archi vmlinuz":
-		command     => "$download http://mirror.centos.org/centos/$name/os/$archi/isolinux/vmlinuz && mv vmlinuz linux",
+		command     => "$download http://mirror.centos.org/centos/$name/$dpath/vmlinuz && mv vmlinuz linux",
 		creates     => "$root_dir/installers/centos${name}/$archi/linux",
 		cwd         => "$root_dir/installers/centos${name}/$archi",
 		path        => "/usr/local/bin:/usr/bin:/bin",
 		require     => File["Prepare CentOS$name $archi directory"];
 	    "Download CentOS$name $archi initrd.img":
-		command     => "$download http://mirror.centos.org/centos/$name/os/$archi/isolinux/initrd.img",
+		command     => "$download http://mirror.centos.org/centos/$name/$dpath/initrd.img",
 		creates     => "$root_dir/installers/centos${name}/$archi/initrd.img",
 		cwd         => "$root_dir/installers/centos${name}/$archi",
 		path        => "/usr/local/bin:/usr/bin:/bin",

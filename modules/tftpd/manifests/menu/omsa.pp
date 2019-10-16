@@ -1,4 +1,4 @@
-class tftpd::menu::centos {
+class tftpd::menu::omsa {
     $distribs    = [ "om74" ]
     $root_dir    = $tftpd::vars::root_dir
 

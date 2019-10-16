@@ -15,4 +15,8 @@ nagios_load_crit_threshold: "12.0,12.0,12.0"
 nagios_load_warn_threshold: "11.0,11.0,11.0"
 
 # RRDcached
-rrdcached_opts: "-s munin -l unix:/var/run/rrdcached.sock -b /var/lib/munin/ -B -j /var/lib/munin/journal/ -F -m 0660 -w 1800 -z 1800 -f 3600"
+rrdcached_basepath: /var/lib/munin
+rrdcached_journal_owner: munin
+rrdcached_journal_path: /var/lib/munin/journal
+rrdcached_sockgroup: munin
+rrdcached_sockmode: "0660"

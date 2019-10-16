@@ -4,7 +4,9 @@ apache_listen_ports:
   ssl: 443
 apache_mod_authldap: true
 apache_mod_headers: true
+apache_mod_proxy_http: true
 apache_munin: true
+apache_rsyslog: true
 
 # Fail2ban
 fail2ban_do_badbots: true

@@ -50,6 +50,16 @@ DscOverride: override.stretch
 
 Origin: UTGB
 Label: UneTresGrosseBite
+Codename: buster
+Architectures: i386 amd64
+Components: main
+Description: UTGB APT-deb repository
+SignWith: 67F0B406
+DebOverride: override.buster
+DscOverride: override.buster
+
+Origin: UTGB
+Label: UneTresGrosseBite
 Codename: precise
 Architectures: i386 amd64
 Components: main

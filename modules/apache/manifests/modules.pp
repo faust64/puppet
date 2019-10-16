@@ -1,4 +1,6 @@
 class apache::modules {
+    $phpvers = $apache::vars::phpvers
+    $phpmaj  = $phpvers.split('\.')[0]
     if ($apache::vars::listen_ports['ssl'] != false) {
 	$sslstatus    = true
 	$headerstatus = true
@@ -29,6 +31,18 @@ class apache::modules {
 		modstatus     => $apache::vars::mod_ldap;
 	}
     }
+    if (($operatingsystem == "Debian" and
+	($lsbdistcodename == "buster" or $lsbdistcodename == "stretch"))
+        or ($myoperatingsystem == "Devuan" and
+	($lsbdistcodename == "beowulf" or $lsbdistcodename == "ascii"))) {
+	if ($apache::vars::mod_cgid == true) {
+	    $cgid = true
+	} else { $cgid = $apache::vars::mod_fcgid }
+	$fastcgi = false
+    } else {
+	$cgid    = $apache::vars::mod_cgid
+	$fastcgi = $apache::vars::mod_fcgid
+    }
 
     apache::define::module {
 	"actions":
@@ -42,6 +56,7 @@ class apache::modules {
 	"authn_file":
 	    modstatus     => true;
 	"authnz_ldap":
+	    customconf    => true,
 	    modstatus     => $apache::vars::mod_ldap;
 	"authz_groupfile":
 	    modstatus     => true;
@@ -60,7 +75,7 @@ class apache::modules {
 	    modstatus     => $apache::vars::mod_cgi;
 	"cgid":
 	    customconf    => true,
-	    modstatus     => $apache::vars::mod_cgid;
+	    modstatus     => $cgid;
 	"dav":
 	    modstatus     => $apache::vars::mod_svn;
 	"dav_svn":
@@ -78,7 +93,7 @@ class apache::modules {
 	    modstatus     => $apache::vars::mod_expires;
 	"fcgid":
 	    customconf    => true,
-	    modstatus     => $apache::vars::mod_fcgid;
+	    modstatus     => $fastcgi;
 	"headers":
 	    modstatus     => $headerstatus;
 	"include":
@@ -89,9 +104,9 @@ class apache::modules {
 	"negotiation":
 	    customconf    => true,
 	    modstatus     => $apache::vars::mod_negotiation;
-	"php5":
+	"php${phpmaj}":
 	    customconf    => true,
-	    customlibname => "libphp5",
+	    customlibname => "libphp${phpvers}",
 	    modstatus     => $apache::vars::mod_php;
 	"proxy":
 	    modstatus     => $apache::vars::mod_proxy;

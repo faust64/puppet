@@ -1,5 +1,5 @@
 class tftpd::menu::ocp4 {
-    $distribs = [ "410.8.20190516.0" ]
+    $distribs = [ "4.1.0" ]
     $keys     = $tftpd::vars::ssh_keys
     $password = $tftpd::vars::default_pass
     $root_dir = $tftpd::vars::root_dir

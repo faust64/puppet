@@ -209,6 +209,13 @@ direct_unpack_threads = 3
 history_retention = 0
 email_cats = *,
 reject_duplicate_files = 0
+host_whitelist = <%=@fqdn%>,
+require_modern_tls = 0
+win_process_prio = 3
+ignore_empty_files = 0
+debug_log_decoding = 0
+x_frame_options = 1
+max_url_retries = 10
 [logging]
 max_log_size = 5242880
 log_level = 1
@@ -260,6 +267,7 @@ dir = ""
 enable = 1
 displayname = <%=@nntp_host%>:<%=@nntp_port%>
 name = <%=@nntp_host%>:<%=@nntp_port%>
+ssl_ciphers = ""
 notes = ""
 connections = <%=@nntp_max_conn%>
 <% if @nntp_port == 443 -%>ssl = 1

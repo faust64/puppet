@@ -1,6 +1,6 @@
 class tftpd::menu::centos {
     $distribs    = [ "6" ]
-    $distribswtf = [ "7" ]
+    $distribswtf = [ "7", "8" ]
     $root_dir    = $tftpd::vars::root_dir
 
     tftpd::define::get_centos {

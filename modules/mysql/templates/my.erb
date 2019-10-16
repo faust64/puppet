@@ -1,11 +1,13 @@
 [client]
-port			= 3306
+<% if @provider == "mariadb" -%>default-character-set   = utf8mb4
+<% end -%>port			= 3306
 socket			= <%=@sock_dir%>/<%=@sock_file%>
 
 [mysqld_safe]
 nice			= 0
 socket			= <%=@sock_dir%>/<%=@sock_file%>
-
+<% if @provider == "mariadb" -%>syslog
+<% end -%>
 [mysqld]
 basedir			= /usr
 bind-address		= <%=@bind_addr%>
@@ -49,7 +51,8 @@ quick
 quote-names
 
 [mysql]
-
+<% if @provider == "mariadb" -%>default-character-set   = utf8mb4
+<% end -%>
 [isamchk]
 key_buffer		= <%=@key_buffer%>
 

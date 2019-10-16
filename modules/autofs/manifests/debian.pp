@@ -1,5 +1,5 @@
 class autofs::debian {
-    if ($lsbdistcodename == "jessie" or $lsbdistcodename == "wheezy" or $lsbdistcodename == "trusty") {
+    if ($lsbdistcodename == "jessie" or $lsbdistcodename == "wheezy" or $lsbdistcodename == "trusty" or $lsbdistcodename == "stretch" or $lsbdistcodename == "ascii" or $lsbdistcodename == "buster" or $lsbdistcodename == "beowulf") {
 	$pkgname = "autofs5"
     } else { $pkgname = "autofs4" }
 

@@ -11,6 +11,25 @@ class php::modules {
 		modstatus => "purge";
 	}
     } else {
+	if ($lsbdistcodename == "buster") {
+	    php::define::module {
+		"iconv":
+		    modstatus => $php::vars::mod_iconv;
+		"posix":
+		    modstatus => true;
+		"xml":
+		    modpriority => 15,
+		    modstatus   => $php::vars::mod_xml;
+	    }
+	} else {
+	    php::define::module {
+		"posix":
+		    modstatus => true;
+		"xml":
+		    modstatus   => $php::vars::mod_xml;
+	    }
+	}
+
 	php::define::module {
 	    "apc":
 		modstatus => $php::vars::with_apc;
@@ -18,7 +37,7 @@ class php::modules {
 		modstatus   => $php::vars::mod_mbstring;
 	    [ "sqlite", "pdo_sqlite" ]:
 		modstatus   => $php::vars::mod_sqlite;
-	    [ "xml", "simplexml" ]:
+	    "simplexml":
 		modstatus   => $php::vars::mod_xml;
 	}
     }
@@ -73,8 +92,12 @@ class php::modules {
 	    modstatus   => $php::vars::mod_snmp;
 	"uploadprogress":
 	    modstatus   => $php::vars::mod_uploadprogress;
+	"xmlreader":
+	    modstatus   => $php::vars::mod_xmlreader;
 	"xmlrpc":
 	    modstatus   => $php::vars::mod_xmlrpc;
+	"xsl":
+	    modstatus   => $php::vars::mod_xsl;
 	"zip":
 	    modstatus   => $php::vars::mod_zip;
 	"zlib":

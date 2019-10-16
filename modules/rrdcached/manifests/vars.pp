@@ -1,5 +1,8 @@
 class rrdcached::vars {
-    $munin_group = lookup("munin_group")
-    $munin_user  = lookup("munin_user")
-    $opts        = lookup("rrdcached_opts")
+    $basepath     = lookup("rrdcached_basepath")
+    $journalowner = lookup("rrdcached_journal_owner")
+    $journalpath  = lookup("rrdcached_journal_path")
+    $sockfile     = lookup("rrdcached_sockfile")
+    $sockgroup    = lookup("rrdcached_sockgroup")
+    $sockmode     = lookup("rrdcached_sockmode")
 }

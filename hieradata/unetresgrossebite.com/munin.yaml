@@ -6,7 +6,7 @@ physical_parent: geras.unetresgrossebite.com
 
 # Firehol
 firehol_interfaces:
-  - name: eth0
+  - name: any
     description: WAN
     protection: strong
     allow:

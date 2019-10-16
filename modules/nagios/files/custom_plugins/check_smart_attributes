@@ -122,9 +122,13 @@ sub getSmartctl{
 	    }
 	    # Call smartctl with extra option for Adaptec
 	    @output = `$smartctl -a -d $extraOpts $device`;
-	}
-	else{
-	    @output = `$smartctl -a $device`;
+	} else {
+            if($extraOpts =~ /^cciss,[0-9]/){
+                # Call smartctl with extra option for HP
+                @output = `$smartctl -a -d $extraOpts $device`;
+            } else {
+                @output = `$smartctl -a $device`;
+            }
 	}
 	if(($? >> 8) & 2){
 	    print "Error: smartctl returned \"No such device\" for device $device.\n";

@@ -39,7 +39,11 @@
     WSGIDaemonProcess moin user=<%=scope.lookupvar('apache::vars::runtime_user')%> group=<%=scope.lookupvar('apache::vars::runtime_group')%> processes=<%=@wsgi_child%> threads=<%=@wsgi_threads%> maximum-requests=<%=@wsgi_max%> umask=<%=@wsgi_umask%>
     WSGIProcessGroup moin
     WSGIErrorOverride On
+    Alias /moin_static195/ /usr/share/moin/htdocs/
+    Alias /moin_static196/ /usr/share/moin/htdocs/
+    Alias /moin_static197/ /usr/share/moin/htdocs/
     Alias /moin_static198/ /usr/share/moin/htdocs/
+    Alias /moin_static199/ /usr/share/moin/htdocs/
 <% end -%>    Alias /wiki /usr/share/moin/htdocs
     <Directory />
 	Options -FollowSymLinks

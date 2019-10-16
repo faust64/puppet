@@ -1,10 +1,12 @@
 class common::config::mail {
     if (lookup("postfix_routeto") == $fqdn) {
 	include bluemind
+	include postfix::jobs
     } else {
 	case $myoperatingsystem {
 	    "Debian", "Devuan", "CentOS", "RedHat", "Ubuntu": {
 		include postfix
+		include postfix::jobs
 	    }
 	    "FreeBSD": {
 		include sendmail

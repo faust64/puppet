@@ -27,7 +27,7 @@ class elasticsearch::config {
 	    require => File["Prepare elasticsearch for further configuration"];
     }
 
-    if ($version == "5.x") {
+    if ($version == "5.x" or $version == "6.x" or $version == "7.x") {
 	if (! defined(Class[curl])) {
 	    include curl
 	}

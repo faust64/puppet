@@ -73,7 +73,7 @@ if (open my $fh, ">>", $o_in_file) {
     print "CRITICAL - unable to open '$o_in_file' for writing - $!\n";
     exit $exitcode{CRITICAL};
 }
-
+sleep(2);
 if (!-r $o_out_file) {
     print "CRITICAL - log file '$o_out_file' does not exists\n";
     exit 2;

@@ -1,5 +1,9 @@
 class rrdcached::debian {
-    $opts = $rrdcached::vars::opts
+    $basepath    = $rrdcached::vars::basepath
+    $journalpath = $rrdcached::vars::journalpath
+    $sockfile    = $rrdcached::vars::sockfile
+    $sockgroup   = $rrdcached::vars::sockgroup
+    $sockmode    = $rrdcached::vars::sockmode
 
     common::define::package {
 	"rrdcached":

@@ -50,6 +50,18 @@ btsync_shared_folders:
 # ClamAV
 clamav_contact: samuel@unetresgrossebite.com
 
+# Ceph
+ceph_init_from: helios.adm.intra.unetresgrossebite.com
+ceph_mon_list:
+  - name: helios
+    address: 10.42.242.14
+  - name: selene
+    address: 10.42.242.16
+  - name: hemara
+    address: 10.42.242.19
+ceph_public_network: 10.42.242.0/24
+ceph_private_network: 10.42.46.0/24
+
 # Fail2ban
 fail2ban_contact: samuel@unetresgrossebite.com
 fail2ban_ignoreips:
@@ -59,14 +71,16 @@ fail2ban_ignoreips:
   - 10.42.44.20
   - 37.48.71.168
   - 37.59.45.201
-  - 37.187.108.35/32
+  - 37.187.122.201/32
   - 51.254.93.64/29
   - 62.210.188.140
   - 78.193.67.92
   - 87.98.218.22/32
+  - 91.121.2.215/32
   - 95.211.136.210/31
   - 95.211.136.212
   - 95.211.205.36
+  - 151.80.43.230/32
   - 176.31.250.180/32
   - 188.165.212.140
   - 127.0.0.1/8

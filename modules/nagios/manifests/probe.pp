@@ -231,24 +231,19 @@ class nagios::probe {
 
     if (getvar('::swapsize')) {
 	if ($swapsize =~ /[1-9]/) {
-	    $doswap = true
-	} else {
-	    $doswap = false
-	}
-    } else {
-	$doswap = false
-    }
+	    $swapensure = "present"
+	} else { $swapensure = "absent" }
+    } else { $swapensure = "absent" }
 
-    if ($doswap) {
-	nagios::define::probe {
-	    "swap":
-		description   => "$fqdn swap usage",
-		escalate_itv  => 10,
-		escalate_last => 6,
-		pluginconf    => "swap",
-		servicegroups => "system",
-		use           => "critical-service";
-	}
+    nagios::define::probe {
+	"swap":
+	    description   => "$fqdn swap usage",
+	    ensure        => $swapensure,
+	    escalate_itv  => 10,
+	    escalate_last => 6,
+	    pluginconf    => "swap",
+	    servicegroups => "system",
+	    use           => "critical-service";
     }
 
     if ($virtual == "physical" or $virtual == "xen0" or $virtual == "openvzhn") {

@@ -11,6 +11,6 @@ menu title openSUSE Systems
 <% @distribswtf.each do |dist| -%><% [ "x86_64" ].each do |arch| -%>    label -
 	menu label <%=dist%> <%=arch%>
 	kernel installers/opensuse<%=dist%>/<%=arch%>/linux
-	append initrd=installers/opensuse<%=dist%>/<%=arch%>/initrd splash=silent vga=0x314 showopts install=http://download.opensuse.org/distribution/<%=@name%>/repo/oss/
+	append initrd=installers/opensuse<%=dist%>/<%=arch%>/initrd splash=silent vga=0x314 showopts install=http://download.opensuse.org/distribution/<% if scope.function_versioncmp([dist, '15.0']) >= 0 -%>leap/<% end -%><%=dist%>/repo/oss/
 <% end -%><% end -%>
 menu end

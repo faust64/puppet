@@ -15,7 +15,7 @@ elasticsearch_retention_open: 40
 elasticsearch_retention: 60
 
 # Java
-java_default_version: "8"
+java_default_version: "11"
 
 # Kibana
 kibana_prefix: bigbrother

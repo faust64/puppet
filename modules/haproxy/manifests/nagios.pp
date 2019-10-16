@@ -61,7 +61,11 @@ class haproxy::nagios {
 	    } elsif ($command == "check_mysql") {
 		if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 		    or $operatingsystem == "Ubuntu") {
-		    $dep = "mysql-client"
+		    if ($lsbdistcodename == "buster") {
+			$dep = "default-mysql-client"
+		    } else {
+			$dep = "mysql-client"
+		    }
 		} elsif ($operatingsystem == "CentOS" or $operatingsystem == "RedHat") {
 		    $dep = "mysql"
 		} else {

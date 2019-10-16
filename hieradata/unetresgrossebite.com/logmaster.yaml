@@ -10,12 +10,12 @@ physical_parent: false
 racktables_object_id: 4
 
 # Elasticsearch
-elasticsearch_listen_addr: 5.135.176.165
+elasticsearch_listen_addr: 151.80.43.230
 elasticsearch_number_of_replicas: 0
 
 # Firehol
 firehol_interfaces:
-  - name: eth0
+  - name: any
     description: WAN
     protection: strong
     allow:
@@ -45,7 +45,7 @@ lico_update_min: 30
 logstash_output:
   elasticsearch:
     hosts: 
-      - 5.135.176.165
+      - 151.80.43.230
     index: bigbrother
 
 # Nagios
@@ -61,4 +61,4 @@ rsyslog_collect:
   - "*.unetresgrossebite.com"
   - "*.emma-earth.com"
 rsyslog_hub: false
-rsyslog_logstash_target: 5.135.176.165
+rsyslog_logstash_target: 151.80.43.230

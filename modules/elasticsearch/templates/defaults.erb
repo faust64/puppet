@@ -21,8 +21,9 @@
 #MAX_MAP_COUNT=262144
 #ES_JAVA_OPTS=
 #RESTART_ON_UPGRADE=true
-<% end -%><% if @version == "5.x" -%>ES_STARTUP_SLEEP_TIME=5
-<% else -%>ES_USER=elasticsearch
+<% end -%><% if @version == "5.x" or @version == "6.x" or @version == "7.x" -%>ES_STARTUP_SLEEP_TIME=5
+<% if @version == "7.x" -%>ES_PATH_CONF=/etc/elasticsearch
+<% end -%><% else -%>ES_USER=elasticsearch
 ES_GROUP=elasticsearch
 LOG_DIR=/var/log/elasticsearch
 DATA_DIR=/var/lib/elasticsearch

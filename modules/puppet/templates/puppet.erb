@@ -38,4 +38,10 @@ certname = <%=@fqdn%>
 server = <%=@puppet_master%>
 environment = production
 runinterval = 1h
-<% end %><% end %>
+<% if @lsbdistcodename == "buster" -%>ssldir = /var/lib/puppet/ssl
+
+[master]
+vardir = /var/lib/puppet
+cadir  = /var/lib/puppet/ssl/ca
+dns_alt_names = puppet
+<% end %><% end %><% end %>
