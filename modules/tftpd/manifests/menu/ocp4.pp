@@ -1,5 +1,5 @@
 class tftpd::menu::ocp4 {
-    $distribs = [ "4.1.0" ]
+    $distribs = [ "4.2.0", "4.1.0" ]
     $keys     = $tftpd::vars::ssh_keys
     $password = $tftpd::vars::default_pass
     $root_dir = $tftpd::vars::root_dir
@@ -18,7 +18,6 @@ class tftpd::menu::ocp4 {
 	    require =>
 		[
 		    File["Prepare boot-screens directory"],
-#		    File["Install ocp4 default cloud-config"]
 		    File["Prepare OCP4 RH-CoreOS ignition assets directory"]
 		];
 	"Prepare OCP4 RH-CoreOS ignition assets directory":
@@ -28,12 +27,5 @@ class tftpd::menu::ocp4 {
 	    owner   => root,
 	    path    => "$root_dir/ocp4",
 	    require => File["Prepare pxe server root"];
-#	"Install ocp4 default cloud-config":
-#	    content => template("tftpd/ocp4-ignition.erb"),
-#	    group   => lookup("gid_zero"),
-#	    mode    => "0644",
-#	    owner   => root,
-#	    path    => "$root_dir/ocp4/config.ign",
-#	    require => File["Install ocp4 cloud-config directory"];
     }
 }

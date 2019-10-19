@@ -1,7 +1,8 @@
-define tftpd::define::get_ocp4($arch              = [ "x86_64" ],
-			       $ocp_version_short = "4.1") {
-    $download = $tftpd::vars::download
-    $root_dir = $tftpd::vars::root_dir
+define tftpd::define::get_ocp4($arch = [ "x86_64" ]) {
+    $download          = $tftpd::vars::download
+    $root_dir          = $tftpd::vars::root_dir
+    $varray            = split("$name", '\.')
+    $ocp_version_short = "${varray[0]}.${varray[1]}"
 
     file {
 	"Prepare OCP4 RH-CoreOS $name root directory":
@@ -40,8 +41,8 @@ define tftpd::define::get_ocp4($arch              = [ "x86_64" ],
 		require => File["Prepare OCP4 RH-CoreOS ignition assets directory"],
 		timeout => 1200;
 	    "Download rhcos $name $archi initrd.img":
-		command => "$download http://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/$ocp_version_short/$name/rhcos-${name}-${archi}-installer-initramfs.img && mv rhcos-${name}-${archi}-installer-initramfs.img initrd && gzip -9 -f initrd",
-		creates => "$root_dir/installers/ocp4-rhcos-$name/$archi/initrd.gz",
+		command => "$download http://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/$ocp_version_short/$name/rhcos-${name}-${archi}-installer-initramfs.img && mv rhcos-${name}-${archi}-installer-initramfs.img initrd",
+		creates => "$root_dir/installers/ocp4-rhcos-$name/$archi/initrd",
 		cwd     => "$root_dir/installers/ocp4-rhcos-$name/$archi",
 		path    => "/usr/local/bin:/usr/bin:/bin",
 		require => File["Prepare OCP4 RH-CoreOS $name $archi directory"],
