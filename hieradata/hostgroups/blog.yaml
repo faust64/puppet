@@ -46,3 +46,4 @@ ossec_app_directories:
 php_mod_gd: true
 php_mod_ldap: true
 php_mod_mysql: true
+php_mod_json: true
