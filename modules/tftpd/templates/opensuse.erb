@@ -8,9 +8,13 @@ menu title openSUSE Systems
     menu title openSUSE Systems
 	menu label openSUSE Systems
 	menu exit
-<% @distribswtf.each do |dist| -%><% [ "x86_64" ].each do |arch| -%>    label -
+<% @distribsleap.each do |dist| -%><% [ "x86_64" ].each do |arch| -%>    label -
 	menu label <%=dist%> <%=arch%>
 	kernel installers/opensuse<%=dist%>/<%=arch%>/linux
-	append initrd=installers/opensuse<%=dist%>/<%=arch%>/initrd splash=silent vga=0x314 showopts install=http://download.opensuse.org/distribution/<% if scope.function_versioncmp([dist, '15.0']) >= 0 -%>leap/<% end -%><%=dist%>/repo/oss/
-<% end -%><% end -%>
+	append initrd=installers/opensuse<%=dist%>/<%=arch%>/initrd splash=silent vga=0x314 showopts install=http://download.opensuse.org/distribution/leap/<%=dist%>/repo/oss/
+<% end -%><% end -%><% [ "x86_64", "i386" ].each do |arch| -%>    label -
+	menu label TumbleWeed <%=arch%>
+	kernel installers/opensusetumbleweed/<%=arch%>/linux
+	append initrd=installers/opensusetumbleweed/<%=arch%>/initrd splash=silent vga=0x314 showopts install=http://download.opensuse.org/tumbleweed/repo/oss/
+<% end -%>
 menu end

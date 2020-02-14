@@ -1,0 +1,20 @@
+menu background boot-screens/splash.png
+include boot-screens/stdmenu.cfg
+menu hshift 19
+menu width 40
+menu margin 0
+
+menu title FlatCar Systems
+    menu title FlatCar Systems
+	menu label FlatCar Systems
+	menu exit
+<% @distribs.each do |dist| -%><% [ "amd64" ].each do |arch| -%>   label -
+	menu label <%=dist%> <%=arch%> (ssh-only access)
+	kernel installers/flatcar-<%=dist%>/<%=arch%>/linux
+	append initrd=installers/flatcar-<%=dist%>/<%=arch%>/initrd.gz cloud-config-url=http://<%=@ipaddress%>/cloud-config/default.yml
+    label -
+	menu label <%=dist%> <%=arch%> (console autologin)
+	kernel installers/flatcar-<%=dist%>/<%=arch%>/linux
+	append initrd=installers/flatcar-<%=dist%>/<%=arch%>/initrd.gz cloud-config-url=http://<%=@ipaddress%>/cloud-config/default.yml flatcar.autologin
+<% end -%><% end -%>
+menu end

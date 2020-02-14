@@ -17,11 +17,11 @@ class tftpd {
     include tftpd::config
     include tftpd::menu::archlinux
     include tftpd::menu::centos
-    include tftpd::menu::coreos
     include tftpd::menu::debian
     include tftpd::menu::devuan
     include tftpd::menu::fedora
     include tftpd::menu::fedoracoreos
+    include tftpd::menu::flatcar
     include tftpd::menu::freebsd
     include tftpd::menu::mfsbsd
     include tftpd::menu::ocp4

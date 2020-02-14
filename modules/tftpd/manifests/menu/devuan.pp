@@ -1,5 +1,5 @@
 class tftpd::menu::devuan {
-    $distribs    = [ "ascii", "jessie" ]
+    $distribs    = [ "beowulf", "ascii", "jessie" ]
     $locale      = $tftpd::vars::locale
     $locale_long = $tftpd::vars::locale_long
     $root_dir    = $tftpd::vars::root_dir

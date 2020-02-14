@@ -1,12 +1,9 @@
 class tftpd::menu::mfsbsd {
-    $distribs    = [ ]
-    $distribswtf = [ "12.0", "11.2", "11.1" ]
-    $root_dir    = $tftpd::vars::root_dir
+    $distribs = [ "12.1", "12.0", "11.2" ]
+    $root_dir = $tftpd::vars::root_dir
 
     tftpd::define::get_mfsbsd {
-	$distribswtf:
-	    arch => [ "amd64" ];
-#	$distribs:
+	$distribs:
     }
 
     file {

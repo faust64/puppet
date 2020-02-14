@@ -11,14 +11,14 @@ menu title Fedora CoreOS Systems
 <% @distribs.each do |dist| -%><% [ "x86_64" ].each do |arch| -%>   label -
 	menu label <%=dist%> <%=arch%> (install to sda)
 	kernel installers/fedora-coreos-<%=dist%>/<%=arch%>/linux
-	append initrd=installers/fedora-coreos-<%=dist%>/<%=arch%>/initrd.gz coreos.inst.ignition_url=http://<%=@ipaddress%>/fedora-ignition/default.ign coreos.inst.install_dev=sda coreos.inst=yes ip=dhcp rd.neednet=1 coreos.inst.image_url=http://<%=@ipaddress%>/fedora-ignition/<%=dist%>-<%=arch%>-metal-bios.raw.xz
+	append initrd=installers/fedora-coreos-<%=dist%>/<%=arch%>/initrd coreos.inst.ignition_url=http://<%=@ipaddress%>/fedora-ignition/default.ign coreos.inst.install_dev=sda coreos.inst=yes ip=dhcp rd.neednet=1 coreos.inst.image_url=http://<%=@ipaddress%>/fedora-ignition/<%=dist%>-<%=arch%>-metal-bios.raw.xz
     label -
 	menu label <%=dist%> <%=arch%> (install to vda)
 	kernel installers/fedora-coreos-<%=dist%>/<%=arch%>/linux
-	append initrd=installers/fedora-coreos-<%=dist%>/<%=arch%>/initrd.gz coreos.inst.ignition_url=http://<%=@ipaddress%>/fedora-ignition/default.ign coreos.inst.install_dev=vda coreos.inst=yes ip=dhcp rd.neednet=1 coreos.inst.image_url=http://<%=@ipaddress%>/fedora-ignition/<%=dist%>-<%=arch%>-metal-bios.raw.xz
+	append initrd=installers/fedora-coreos-<%=dist%>/<%=arch%>/initrd coreos.inst.ignition_url=http://<%=@ipaddress%>/fedora-ignition/default.ign coreos.inst.install_dev=vda coreos.inst=yes ip=dhcp rd.neednet=1 coreos.inst.image_url=http://<%=@ipaddress%>/fedora-ignition/<%=dist%>-<%=arch%>-metal-bios.raw.xz
     label -
 	menu label <%=dist%> <%=arch%> (no ignitionn)
 	kernel installers/fedora-coreos-<%=dist%>/<%=arch%>/linux
-	append initrd=installers/fedora-coreos-<%=dist%>/<%=arch%>/initrd.gz coreos.inst.ignition_url=skip coreos.autologin ip=dhcp rd.neednet=1
+	append initrd=installers/fedora-coreos-<%=dist%>/<%=arch%>/initrd coreos.inst.ignition_url=skip coreos.autologin ip=dhcp rd.neednet=1
 <% end -%><% end -%>
 menu end

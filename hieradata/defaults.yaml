@@ -89,6 +89,8 @@ apache_searchuser: ou=users,dc=example,dc=com
 apache_serveradmin: false
 apache_service_name: apache2
 apache_ssl_ciphers_backward_compatibility: false
+apache_ssl_protos:
+  - TLSv1.2
 apache_timeout: 120
 apache_web_root: /var/www
 

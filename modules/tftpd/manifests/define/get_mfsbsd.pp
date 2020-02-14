@@ -1,4 +1,4 @@
-define tftpd::define::get_mfsbsd($arch = [ "i386", "amd64" ]) {
+define tftpd::define::get_mfsbsd($arch = [ "amd64" ]) {
     $download  = $tftpd::vars::download
     $root_dir  = $tftpd::vars::root_dir
     $release   = regsubst($name, '^(\w+)\.(\w+)$', '\1')

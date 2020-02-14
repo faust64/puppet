@@ -8,6 +8,7 @@ dhcpd_collect_static_leases:
   - surv.intra.unetresgrossebite.com
   - vms.intra.unetresgrossebite.com
   - intra.unetresgrossebite.com
+dns_search: intra.unetresgrossebite.com
 
 # Nagios
 nagios_no_parent: false

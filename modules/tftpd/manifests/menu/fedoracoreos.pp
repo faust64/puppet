@@ -1,5 +1,5 @@
 class tftpd::menu::fedoracoreos {
-    $distribs = [ "30.20190725.0" ]
+    $distribs = [ "31.20200127.3.0" ]
     $keys     = $tftpd::vars::ssh_keys
     $root_dir = $tftpd::vars::root_dir
 

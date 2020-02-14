@@ -1,9 +1,7 @@
-define tftpd::define::get_fedora($arch     = [ "i386", "x86_64" ],
+define tftpd::define::get_fedora($arch     = [ "x86_64" ],
 				 $families = [ "Server" ]) {
     $download = $tftpd::vars::download
     $root_dir = $tftpd::vars::root_dir
-#   $mirror   = "http://ftp.free.fr/mirrors/fedora.redhat.com/fedora/linux/releases/" no i386?
-#   $mirror   = "http://epel.mirrors.ovh.net/download.fedora.redhat.com/linux/releases/"
     $mirror   = "http://mirrors.ircam.fr/pub/fedora/linux/releases/"
 
     file {

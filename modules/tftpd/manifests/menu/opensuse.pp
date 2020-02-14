@@ -1,12 +1,13 @@
 class tftpd::menu::opensuse {
-#    $distribs    = [ "13.2", "13.1" ]
-    $distribswtf = [ "42.3", "15.1" ]
-    $root_dir    = $tftpd::vars::root_dir
+    $distribsleap = [ "15.2" ]
+    $root_dir     = $tftpd::vars::root_dir
 
-    tftpd::define::get_opensuse {
-	$distribswtf:
-	    arch => [ "x86_64" ];
-#	$distribs:
+    tftpd::define::get_opensuse_leap {
+	$distribsleap:
+    }
+
+    tftpd::define::get_opensuse_tumbleweed {
+	"tumbleweed":
     }
 
     file {
