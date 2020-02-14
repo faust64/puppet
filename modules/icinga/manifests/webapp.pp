@@ -31,6 +31,13 @@ class icinga::webapp {
 
     if ($icinga::vars::pnp == true) {
 	file {
+	    "Install Icinga pnp lib dir":
+		ensure => directory,
+		group   => $icinga::vars::runtime_group,
+		mode    => "0755",
+		owner   => $icinga::vars::runtime_user,
+		path    => "/var/lib/pnp4nagios/perfdata",
+		recurse => true;
 	    "Install Icinga pnp popup SSI":
 		group   => lookup("gid_zero"),
 		mode    => "0644",

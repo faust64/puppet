@@ -6,6 +6,7 @@ define apache::define::module($customconf    = false,
     $icon_dir   = $apache::vars::icons_dir
     $modsec_dir = lookup("apache_mod_security_datadir")
     $modssl_bc  = lookup("apache_ssl_ciphers_backward_compatibility")
+    $tlsprotos  = lookup("apache_ssl_protos")
     $srvname    = $apache::vars::service_name
     $run_dir    = "/var/run/$srvname"
     $version    = $apache::vars::version
