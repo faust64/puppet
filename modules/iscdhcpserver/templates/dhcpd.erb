@@ -85,8 +85,20 @@ zone dhcp.<%=@domain%>.
 <% else -%>    option domain-name-servers	<% @dns_ip.join(', ')%>;
 <% end -%>    pool
     {
-<% if netmsk == 24 -%><% netstop = netid -%><% elsif netmsk == 23 -%><% netstop = netid + 1 -%><% elsif netmsk == 22 -%><% netstop = netid + 3 -%><% elsif netmsk == 21 -%><% netstop = netid + 7 -%><% elsif netmsk == 20 -%><% netstop = netid + 15 -%><% elsif netmsk == 19 -%><% netstop = netid + 31 -%><% elsif netmsk == 18 -%><% netstop = netid + 63 -%><% elsif netmsk == 17 -%><% netstop = netid + 127 -%><% elsif netmsk == 16 -%><% netstop = 32 -%><% end -%>	range				10.<%=@office_netids[@mydomain]%>.<%=netid%>.10 10.<%=@office_netids[@mydomain]%>.<%=netstop%>.150;
-	deny				dynamic bootp clients;
+<% if netmsk == 24 -%><% netstop = netid -%><% elsif netmsk == 23 -%><% netstop = netid + 1 -%><% elsif netmsk == 22 -%><% netstop = netid + 3 -%><% elsif netmsk == 21 -%><% netstop = netid + 7 -%><% elsif netmsk == 20 -%><% netstop = netid + 15 -%><% elsif netmsk == 19 -%><% netstop = netid + 31 -%><% elsif netmsk == 18 -%><% netstop = netid + 63 -%><% elsif netmsk == 17 -%><% netstop = netid + 127 -%><% elsif netmsk == 16 -%><% netstop = 32 -%><% end -%>	range				10.<%=@office_netids[@mydomain]%>.<%=netid%>.9 10.<%=@office_netids[@mydomain]%>.<%=netstop%>.150;
+<% if not @all_networks[vlanname]['dedicatedpxepool'].nil? and @all_networks[vlanname]['dedicatedpxepool'] == false and @pxe_ip != false -%><% if not @all_networks[vlanname]['pxesatellite'].nil? and @all_networks[vlanname]['pxesatellite'] == true -%>	if option arch = 00:06 {
+	    filename "bootia32.efi";
+	} else if option arch = 00:07 {
+	    filename "bootx64.efi";
+	} else {
+	    filename "pxelinux.0";
+	}
+<% else -%>	filename			"pxelinux.0";
+<% end -%><% if not @all_networks[vlanname]['pxeip'].nil? and @all_networks[vlanname]['pxeip'] -%>	next-server			<%=@all_networks[vlanname]['pxeip']%>;
+<% else -%>	next-server			<%=@pxe_ip%>;
+<% end -%><% if @dhcp_ip[1] -%>	failover peer			"dhcp-failover";
+<% end -%>    }
+<% else -%>	deny				dynamic bootp clients;
 	deny				members of "pxeclt1";
 	deny				members of "pxeclt2";
 	deny				members of "pxeclt3";
@@ -115,6 +127,7 @@ zone dhcp.<%=@domain%>.
 	allow				members of "pxeclt3";
 	allow				members of "pxeclt4";
 	max-lease-time			1800;
+<% end -%>
     }
 <% end -%>
 }

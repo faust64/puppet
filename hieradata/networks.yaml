@@ -97,8 +97,8 @@ vlan_database:
     name: Management
     dns: "adm"
     dnsip:
-      - 10.42.242.5
-      - 10.42.242.5
+      - 10.42.242.3
+      - 10.42.242.3
     netid: "242"
     netmsk: 24
     acl:
@@ -125,8 +125,8 @@ vlan_database:
     name: Users
     dns: "users"
     dnsip:
-      - 10.42.45.5
-      - 10.42.45.5
+      - 10.42.45.3
+      - 10.42.45.3
     netid: "45"
     netmsk: 24
     acl:
@@ -147,8 +147,8 @@ vlan_database:
     name: VirtServices
     dns: "vms"
     dnsip:
-      - 10.42.44.5
-      - 10.42.44.5
+      - 10.42.44.3
+      - 10.42.44.3
     netid: "44"
     netmsk: 24
     acl:
@@ -168,8 +168,8 @@ vlan_database:
     name: Friends
     dns: "friends"
     dnsip:
-      - 10.42.253.5
-      - 10.42.253.5
+      - 10.42.253.3
+      - 10.42.253.3
     netid: "253"
     netmsk: 24
     acl:
@@ -177,6 +177,7 @@ vlan_database:
       - vlan4
       - vlan6
       - vlan8
+    dedicatedpxepool: false
     dhcp: true
     ftp: true
     forceproxy: false
@@ -191,8 +192,8 @@ vlan_database:
     name: WiFi
     dns: "wifi"
     dnsip:
-      - 10.42.254.5
-      - 10.42.254.5
+      - 10.42.254.3
+      - 10.42.254.3
     netid: "254"
     netmsk: 24
     acl:
@@ -213,8 +214,8 @@ vlan_database:
     name: Plaristote
     dns: "plaristote"
     dnsip:
-      - 10.42.43.5
-      - 10.42.43.5
+      - 10.42.43.3
+      - 10.42.43.3
     netid: "43"
     netmsk: 24
     acl:
@@ -238,8 +239,8 @@ vlan_database:
     name: VoIP
     dns: "sip"
     dnsip:
-      - 10.42.41.5
-      - 10.42.41.5
+      - 10.42.41.3
+      - 10.42.41.3
     netid: "41"
     netmsk: 24
     acl:
@@ -262,8 +263,8 @@ vlan_database:
     name: Ceph
     dns: "ceph"
     dnsip:
-      - 10.42.46.5
-      - 10.42.46.5
+      - 10.42.46.3
+      - 10.42.46.3
     netid: "46"
     netmsk: 24
     acl:
@@ -282,8 +283,8 @@ vlan_database:
     name: VideoSurveillance
     dns: "surv"
     dnsip:
-      - 10.42.40.5
-      - 10.42.40.5
+      - 10.42.40.3
+      - 10.42.40.3
     netid: "40"
     netmsk: 24
     acl:
@@ -302,8 +303,8 @@ vlan_database:
     name: Faust
     dns: "faust"
     dnsip:
-      - 10.42.42.5
-      - 10.42.42.5
+      - 10.42.42.3
+      - 10.42.42.3
     admin: true
     netid: "42"
     netmsk: 24
@@ -334,8 +335,8 @@ vlan_database:
     name: Guests
     dns: "guests"
     dnsip:
-      - 10.42.252.5
-      - 10.42.252.5
+      - 10.42.252.3
+      - 10.42.252.3
     netid: "252"
     netmsk: 24
     acl: false
