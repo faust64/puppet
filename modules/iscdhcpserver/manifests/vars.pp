@@ -9,7 +9,7 @@ class iscdhcpserver::vars {
     $netmask_correspondance = lookup("netmask_correspondance")
     $office_netids          = lookup("office_netids")
     $pxe_ip                 = lookup("pxe_ip")
-    $rndc_key               = lookup("named_rndc_key")
+    $rndc_keys              = lookup("dhcp_rndc_keys")
     $root_domain            = lookup("root_domain")
     $search                 = lookup("dns_search")
     $service_name           = lookup("dhcp_isc_service_name")

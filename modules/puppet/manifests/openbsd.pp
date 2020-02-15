@@ -1,7 +1,7 @@
 class puppet::openbsd {
     include puppet::patches::openbsd
 
-    if ($kernelversion == "5.2" or $kernelversion == "5.4") {
+    if (versioncmp($kernelversion, '5.4') <= 0) {
 	file {
 	    "Install OpenBSD puppet rc script":
 		ensure  => present,

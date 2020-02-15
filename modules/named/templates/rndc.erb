@@ -1,4 +1,4 @@
-key "rndc-key" {
+<% if @rndc_keys != false -%><% @rndc_keys.each do |k| -%>key "<%=k['name']%>" {
     algorithm hmac-md5;
-    secret "<%=@rndc_key%>";
-};
+    secret <%=k['secret']%>;
+};<% end -%><% end -%>

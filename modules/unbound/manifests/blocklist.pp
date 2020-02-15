@@ -28,7 +28,7 @@ class unbound::blocklist {
 	    notify      => Service["unbound"],
 	    path        => "/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin",
 	    refreshonly => true,
-	    timeout     => 900;
+	    timeout     => 1800;
     }
 
     File["Install blocklist generation script"]

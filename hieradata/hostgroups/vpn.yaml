@@ -1,6 +1,5 @@
 additional_classes:
-#  - Pixelserver
-#  - Unbound
+  - Unbound
   - Openvpn
   - Fail2ban
 

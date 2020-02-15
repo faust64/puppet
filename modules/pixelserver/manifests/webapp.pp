@@ -1,11 +1,21 @@
 class pixelserver::webapp {
-    include nginx
+    if (defined(Class["apache"])) {
+	apache::define::vhost {
+	    "*":
+		app_port     => "9999",
+		require      => Service["pixelserver"],
+		vhostrsyslog => false,
+		vhostsource  => "app_proxy";
+	}
+    } elsif ($operatingsystem != "OpenBSD") {
+	include nginx
 
-    nginx::define::vhost {
-	"_":
-	    app_port     => "9999",
-	    require      => Service["pixelserver"],
-	    vhostrsyslog => false,
-	    vhostsource  => "app_proxy";
+	nginx::define::vhost {
+	    "_":
+		app_port     => "9999",
+		require      => Service["pixelserver"],
+		vhostrsyslog => false,
+		vhostsource  => "app_proxy";
+	}
     }
 }

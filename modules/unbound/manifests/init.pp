@@ -31,6 +31,7 @@ class unbound {
     include unbound::filetraq
     include unbound::munin
     include unbound::nagios
+    include unbound::pixelserver
     include unbound::service
 
     if ($kernel == "Linux") {

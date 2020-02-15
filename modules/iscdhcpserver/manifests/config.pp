@@ -9,8 +9,21 @@ class iscdhcpserver::config {
     $netmask_correspondance = $iscdhcpserver::vars::netmask_correspondance
     $office_netids          = $iscdhcpserver::vars::office_netids
     $pxe_ip                 = $iscdhcpserver::vars::pxe_ip
-    $rndc_key               = $iscdhcpserver::vars::rndc_key
+    $rndc_keys              = $iscdhcpserver::vars::rndc_keys
     $search                 = $iscdhcpserver::vars::search
+
+    if ($rndc_keys != false) {
+	file {
+	    "Install RNDC Keys Configuration":
+		content => template("iscdhcpserver/rndc.erb"),
+		group   => lookup("gid_zero"),
+		mode    => "0640",
+		notify  => Service[$iscdhcpserver::vars::service_name],
+		owner   => root,
+		path    => "$dhcp_conf_dir/rndc.key",
+		require => File["Prepare isc-dhcp-server for further configuration"];
+	}
+    }
 
     file {
 	"Prepare isc-dhcp-server for further configuration":
@@ -26,14 +39,6 @@ class iscdhcpserver::config {
 	    notify  => Service[$iscdhcpserver::vars::service_name],
 	    owner   => root,
 	    path    => "$dhcp_conf_dir/dhcpd.conf",
-	    require => File["Prepare isc-dhcp-server for further configuration"];
-	"Install rndc.key":
-	    content => template("named/rndc.erb"),
-	    group   => lookup("gid_zero"),
-	    mode    => "0640",
-	    notify  => Service[$iscdhcpserver::vars::service_name],
-	    owner   => root,
-	    path    => "$dhcp_conf_dir/rndc.key",
 	    require => File["Prepare isc-dhcp-server for further configuration"];
 	"Ensure dhcpd.local is there":
 	    content => "# Local definitions go there

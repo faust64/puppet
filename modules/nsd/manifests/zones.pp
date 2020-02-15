@@ -1,7 +1,9 @@
 class nsd::zones {
-    $conf_dir  = $nsd::vars::conf_dir
-    $zones     = $nsd::vars::zones
-    $zones_dir = $nsd::vars::zones_dir
+    $conf_dir    = $nsd::vars::conf_dir
+    $listen_port = $nsd::vars::listen_port
+    $rndc_keys   = $nsd::vars::rndc_keys
+    $zones       = $nsd::vars::zones
+    $zones_dir   = $nsd::vars::zones_dir
 
     file {
 	"Prepare NSD zones directory":

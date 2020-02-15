@@ -17,7 +17,7 @@ $sock      = new IO::Socket::INET(LocalHost => '127.0.0.1',
 				  ReuseAddr => 1);
 
 if (!defined($sock)) {
-    print "Error : cannot bind : $!\n";
+    print "Error: cannot bind: $!\n";
     exit(1);
 }
 

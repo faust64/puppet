@@ -26,7 +26,8 @@ config checksum_mode: all
 # config flowbits_size: 64
 # config ignore_ports: tcp 21 6667:6671 1356
 # config ignore_ports: udp 1:17 53
-
+<% if @daq_dir != false -%>config daq_dir: <%=@daq_dir%>
+<% end -%>
 config pcre_match_limit: 1500
 config pcre_match_limit_recursion: 1500
 config detection: search-method ac-bnfa max_queue_events 5

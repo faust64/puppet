@@ -17,7 +17,7 @@ class named::vars {
     $named_notify       = lookup("named_notify")
     $named_master       = lookup("named_master")
     $office_netids      = lookup("office_netids")
-    $rndc_key           = lookup("named_rndc_key")
+    $rndc_keys          = lookup("dhcp_rndc_keys")
     $runtime_conf_dir   = lookup("named_runtime_conf_dir")
     $runtime_group      = lookup("named_runtime_group")
     $runtime_log_dir    = lookup("named_runtime_log_dir")

@@ -127,6 +127,7 @@ tftp_runtime_user: root
 rsync_service_name: rsyncd
 
 # Snort
+snort_daq_dir: /usr/local/lib/daq
 snort_group: _snort
 snort_log_dir: /var/snort/log
 snort_user: _snort

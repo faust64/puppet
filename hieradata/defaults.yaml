@@ -304,33 +304,6 @@ btsync_sync_umask: "0002"
 camtrace_keyhash: false
 camtrace_keyid: false
 
-# Ceph
-ceph_cluster_name: ceph
-ceph_crush_root: default
-ceph_crush_rack: default
-ceph_do_cephx: true
-ceph_do_dashboard: false
-ceph_do_libvirt: false
-ceph_do_radosgw: false
-ceph_dashboard_client_keyring: ceph.client.dashboard.keyring
-ceph_dashboard_client_name: client.dashboard
-ceph_filestore_mkfs_type: xfs
-ceph_init_from: false
-ceph_mon_key: false
-ceph_mon_list: false
-ceph_munin: false
-ceph_munin_probes:
-  - ceph_osd
-  - ceph_usage
-ceph_nagios: false
-ceph_nagios_client: nagios
-ceph_nagios_keyring_path: ceph.client.nagios.keyring
-ceph_nagios_map: false
-ceph_objectstore: bluestore
-ceph_public_network: false
-ceph_private_network: false
-ceph_version: luminous
-
 # ClamAV
 clamav_contact: false
 clamav_conf_dir: /etc/clamav
@@ -405,6 +378,7 @@ dhcpd_collect_static_leases: false
 dhcpd_conf_dir: /etc/dhcp
 dhcp_on_nondhcp_network: false
 dhcp_isc_service_name: isc-dhcp-server
+dhcp_rndc_keys: false
 pxe_ip: false
 rndc_conf_dir: false
 
@@ -1120,7 +1094,6 @@ named_munin: true
 named_munin_probes:
   - bind9
 named_notify: false
-named_rndc_key: rbvsezgcuT+vx4d6LKHDeA==
 named_runtime_conf_dir: /etc/bind
 named_runtime_group: bind
 named_runtime_log_dir: /var/log/named
@@ -1979,9 +1952,9 @@ redis_timeout: 0
 # Relayd
 relayd_conf_dir: /etc
 relayd_http_alt_port: 8081
-relayd_http_port: 8080
+relayd_http_port: 8002
 relayd_https_alt_port: 8444
-relayd_https_port: 8443
+relayd_https_port: 8003
 relayd_interval: 60
 relayd_prefork: 3
 relayd_timeout: 30000
@@ -2255,6 +2228,7 @@ snmp_uptodate_new: false
 
 # Snort
 snort_conf_dir: /etc/snort
+snort_daq_dir: false
 snort_group: snort
 snort_listen_if: false
 snort_log_dir: /var/log/snort

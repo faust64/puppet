@@ -1,5 +1,6 @@
 class snort::config {
     $conf_dir = $snort::vars::conf_dir
+    $daq_dir  = $snort::vars::daq_dir
     $dns_ip   = $snort::vars::dns_ip
     $mail_ip  = $snort::vars::mail_ip
     $netids   = $snort::vars::netids

@@ -1,0 +1,5 @@
+<% if @rndc_keys != false -%><% @rndc_keys.each do |k| -%><% if k['name'] == @hostname or k['name'] == @fqdn -%>key "rndc-key" {
+    algorithm hmac-md5;
+    secret "<%=k['secret']%>";
+};<% end -%><% end -%><% end -%>
+

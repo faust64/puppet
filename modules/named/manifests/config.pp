@@ -8,7 +8,7 @@ class named::config {
     $named_notify     = $named::vars::named_notify
     $named_master     = $named::vars::named_master
     $office_netids    = $named::vars::office_netids
-    $rndc_key         = $named::vars::rndc_key
+    $rndc_keys        = $named::vars::rndc_keys
     $runtime_conf_dir = $named::vars::runtime_conf_dir
     $runtime_zone_dir = $named::vars::runtime_zone_dir
     $runtime_log_dir  = $named::vars::runtime_log_dir

@@ -1,15 +1,15 @@
 #!/bin/sh
-exit 0
 
 ADDRESS=<%=@pixeladdress%>
 CONFDIR=<%=@conf_dir%>
+REFRESH=${REFRESH:-true}
 TMPFILE=/tmp/gen.$$
 
 render_record()
 {
 #discard myftp.org: some friend of mine host his plex behind a myftp.org record,
 #discard piwik.org: can't download their last build if I can't reach their site
-    echo "$1" | grep -E (myftp|piwik).org' >/dev/null && return 0
+    echo "$1" | grep -E '(myftp|piwik).org' >/dev/null && return 0
     grep "\"$1\"" $TMPFILE >/dev/null && return 0
     echo "local-zone: \"$1\" redirect"
     echo "local-data: \"$1 A $ADDRESS\""
@@ -18,13 +18,26 @@ render_record()
 cd /root
 
 if ! test -s winhelp-blocklist.txt; then
-    curl http://winhelp2002.mvps.org/hosts.txt >winhelp-blocklist.txt
+    curl -fsL http://winhelp2002.mvps.org/hosts.txt >winhelp-blocklist.txt
+elif $REFRESH; then
+    curl -fsL http://winhelp2002.mvps.org/hosts.txt >winhelp-blocklist.txt.new
+    if test -s winhelp-blocklist.txt.new; then
+	mv winhelp-blocklist.txt.new winhelp-blocklist.txt
+    fi
 fi
 if ! test -s pglyoyo-blocklist.txt; then
-    curl "http://pgl.yoyo.org/adservers/serverlist.php?hostformat=unbound&showintro=0&mimetype=plaintext" >pglyoyo-blocklist.txt
+    curl -fsL "http://pgl.yoyo.org/adservers/serverlist.php?hostformat=unbound&showintro=0&mimetype=plaintext" >pglyoyo-blocklist.txt
+elif $REFRESH; then
+    if test -s pglyoyo-blocklist.txt.new; then
+	mv pglyoyo-blocklist.txt.new pglyoyo-blocklist.txt
+    fi
 fi
 if ! test -s adaway-blocklist.txt; then
-    curl https://adaway.org/hosts.txt >adaway-blocklist.txt
+    curl -fsL https://adaway.org/hosts.txt >adaway-blocklist.txt
+elif $REFRESH; then
+    if test -s adaway-blocklist.txt.new; then
+	mv adaway-blocklist.txt.new adaway-blocklist.txt
+    fi
 fi
 
 (
@@ -52,6 +65,7 @@ if test -s $TMPFILE -a -d $CONFDIR; then
 	    RET=1
 	elif ! unbound-checkconf; then
 	    echo "reverting configuration as of new snippet looks invalid" >&2
+	    mv $CONFDIR/blocklist.conf $CONFDIR/blocklist.conf.discard
 	    mv $CONFDIR/blocklist.conf.backup $CONFDIR/blocklist.conf
 	    RET=1
 <% if @kernel == "Linux" -%>	elif test -x /bin/systemctl; then
@@ -66,6 +80,7 @@ if test -s $TMPFILE -a -d $CONFDIR; then
 <% end -%>	fi
     else
 	echo "no modification, discarding generated file"
+	rm -f $TMPFILE
 	RET=0
     fi
 elif ! test -d $CONFDIR; then

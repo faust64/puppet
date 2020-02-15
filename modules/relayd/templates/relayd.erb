@@ -6,6 +6,7 @@ prefork <%=@relayd_prefork%>
 <% end -%><% if @mailmx_ip != false -%>table <mailmx> { <%=@mailmx_ip%> }
 <% end -%><% if @webcache_ip != false -%>table <webcache> { <% @webcache_ip.sort.each do |host| -%><%=host%> <% end -%>}
 <% end -%><% if @reverse_ip != false -%>table <webreverse> { <% @reverse_ip.sort.each do |host| -%><%=host%> <% end -%>}
+<% end -%><% if @pixel_ip != false and @has_pixel == true -%>table <pixelserver> { 127.0.0.1 }
 <% end -%><% if @mailmx_ip != false -%>
 
 relay mailrelay {
@@ -35,13 +36,19 @@ relay namecachetcp {
 <% end -%><% end -%><% if @reverse_ip != false -%>
 
 relay clearreverse {
-    listen on 127.0.0.1 port 8002
+    listen on 127.0.0.1 port <%=@relayd_http_port%>
     forward to <webreverse> port 80 check tcp
 }
 
 relay sslreverse {
-    listen on 127.0.0.1 port 8003
+    listen on 127.0.0.1 port <%=@relayd_https_port%>
     forward to <webreverse> port 443 check tcp
+}
+<% end -%><% if @pixel_ip != false and @has_pixel == true -%>
+
+relay pixelserver {
+    listen <%=@pixel_ip%> port 80
+    forward to <pixelserver> port 9999 check http "/" code 200
 }
 <% end -%><% if @mailmx_ip != false -%>
 

@@ -1,3 +1,4 @@
 include: "<%=@conf_dir%>/nsd.conf.d/server.conf"
 include: "<%=@conf_dir%>/nsd.conf.d/remote-control.conf"
-include: "<%=@conf_dir%>/nsd.conf.d/zones.conf"
+<% if @rndc_keys != false -%>include: "<%=@conf_dir%>/nsd.conf.d/dhcp.conf"
+<% end -%>include: "<%=@conf_dir%>/nsd.conf.d/zones.conf"

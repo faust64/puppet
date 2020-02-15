@@ -1,8 +1,5 @@
 physical_parent: eros.adm.intra.unetresgrossebite.com,hera.adm.intra.unetresgrossebite.com
 
-# Ceph
-ceph_do_libvirt: true
-
 # LinuxCounter
 lico_update_day: 1
 lico_update_hour: 14

@@ -129,8 +129,7 @@ define apache::define::vhost($aliases         = false,
 			vhostsource     => "proxy";
 		}
 	    }
-	}
-	else {
+	} else {
 	    file {
 		"Disable Apache $name vhost configuration":
 		    ensure  => absent,

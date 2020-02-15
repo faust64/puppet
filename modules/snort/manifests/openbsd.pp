@@ -6,7 +6,7 @@ class snort::openbsd {
     $snort_group     = $snort::vars::snort_group
 
     common::define::package {
-	"snort":
+	[ "snort", "daq" ]:
     }
 
     file {
@@ -32,5 +32,6 @@ class snort::openbsd {
 	-> Service["snort"]
 
     Common::Define::Package["snort"]
+	-> Common::Define::Package["daq"]
 	-> File["Prepare Snort logs directory"]
 }

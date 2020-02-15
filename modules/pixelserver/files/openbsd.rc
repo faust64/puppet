@@ -1,0 +1,98 @@
+#!/bin/ksh
+
+DAEMON=/usr/local/sbin/pixelserver
+KILL=/bin/kill
+LOCK=/tmp/.lock-pixelserver
+PRG=`basename "$0"`
+
+while echo "$1" | grep '^-' >/dev/null
+do
+    shift
+done
+
+failure()
+{
+    echo "WARNING: $@" >&2
+}
+success()
+{
+    echo "INFO: $@"
+}
+
+usage()
+{
+    echo "Usage: $PRG {start|stop|restart|check|help or usage}"
+}
+
+start()
+{
+    $DAEMON &
+    touch $LOCK
+    success "PixelServer started"; echo
+}
+
+dostop()
+{
+    local process
+
+    for process in `/bin/ps ax | awk '/[^d]\/pixelserver/{print $1}'`
+    do
+	$KILL $process || $KILL -9 $process
+    done
+    rm -f $LOCK
+    success "PixelServer Stopped"; echo
+}
+
+knockknock()
+{
+    if test -e $LOCK; then
+	return 0
+    fi
+
+    return 1
+}
+
+case "$1" in
+    start)
+	if knockknock; then
+	    echo "already running"
+	    exit 3
+	elif ! start; then
+	    exit 3
+	fi
+	;;
+
+    stop)
+	if ! knockknock; then
+	    echo "sure?"
+	    exit 3
+	elif ! dostop; then
+	    exit 3
+	fi
+	;;
+
+    check)
+	if ! knockknock; then
+	    echo "ca sent lsapin"
+	    exit 3
+	fi
+	echo "pong"
+	;;
+
+    restart)
+	"$0" stop
+	sleep 5
+	"$0" start
+	;;
+
+    help|usage)
+	usage
+	;;
+
+    *)
+	usage >&2
+	exit 3
+	;;
+esac
+
+exit 0
