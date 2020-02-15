@@ -1,0 +1,39 @@
+#!/bin/sh
+
+if ! test "$1"; then
+    VERSION=6.6
+else
+    VERSION=$1
+fi
+
+if test "$2"; then
+    ARCH=$2
+else
+    ARCH="i386 amd64"
+fi
+
+if test -z "$SITE_ROOT"; then
+    SITE_ROOT=/var/www
+fi
+
+for version in $VERSION
+do
+    for arch in $ARCH
+    do
+	mkdir -p "$SITE_ROOT/openbsd/$version/$arch"
+	(
+	    cd "$SITE_ROOT/openbsd/$version/$arch"
+	    V=`echo $version | sed 's|\.||g'`
+	    for f in bsd bsd.mp bsd.rd cdboot cdbr comp$V.tgz game$V.tgz \
+		install$V.iso INSTALL.$arch man$V.tgz pxeboot SHA256 \
+		xbase$V.tgz xfont$V.tgz xserv$V.tgz xshare$V.tgz
+	    do
+		if ! test -s $f; then
+		    wget http://ftp.nluug.nl/OpenBSD/$version/$arch/$f
+		fi
+	    done
+	)
+    done
+done
+
+exit 0

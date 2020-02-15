@@ -80,6 +80,7 @@ class pf::vars {
     $short_domain           = $array_dom[0]
     $sip_providers          = lookup("sip_providers")
     $sip_trunks             = lookup("asterisk_sip_trunks")
+    $svc_ip                 = lookup("pf_svc_ip")
     $pubmx_ip               = lookup("pubmx_ip")
     $pubreverse_ip          = lookup("pubreverse_ip")
     $snmp_ip                = lookup("snmp_ip")

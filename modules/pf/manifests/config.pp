@@ -50,14 +50,15 @@ class pf::config {
     $pf_table_entries       = $pf::vars::pf_table_entries
     $pf_tables              = $pf::vars::pf_tables
     $plex_ip                = $pf::vars::plex_ip
+    $pubmx_ip               = $pf::vars::pubmx_ip
     $pxe_ip                 = $pf::vars::pxe_ip
     $rip_map                = $pf::vars::rip_map
     $sasyncd_peer           = $pf::vars::sasyncd_peer
     $skip_gre               = $pf::vars::skip_gre
-    $pubmx_ip               = $pf::vars::pubmx_ip
     $snmp_ip                = $pf::vars::snmp_ip
     $snmp_listenaddr        = $pf::vars::snmp_listenaddr
     $squid_ip               = $pf::vars::squid_ip
+    $svc_ip                 = $pf::vars::svc_ip
     $relayd_http_port       = $pf::vars::relayd_http_port
     $relayd_https_port      = $pf::vars::relayd_https_port
     $reverse_ip             = $pf::vars::reverse_ip

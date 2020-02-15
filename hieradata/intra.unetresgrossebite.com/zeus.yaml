@@ -18,6 +18,7 @@ nagios_listenaddr: 10.42.242.5
 
 # Networks
 dns_ip:
+  - 10.255.255.255
   - 10.42.242.3
 #gre_tunnels:
 #  "0":
@@ -79,6 +80,9 @@ net_ifs:
     netmsk: 255.255.255.0
     rootif: trunk0
     vid: 1003
+  - name: lo1
+    addr: 10.255.255.255
+    netmsk: 255.255.255.255
 
 # OSPF
 ospf_router_id: 10.42.242.5

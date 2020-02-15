@@ -14,7 +14,7 @@ relay mailrelay {
 }
 <% end -%><% if @namecache_ip != false -%>
 
-<% if @kernelversion == "6.6" -%>redirect "dns" {
+<% if @kernelversion == "6.6" -%>redirect dns {
     listen on 127.0.0.1 tcp port 8001
     listen on 127.0.0.1 udp port 8001
     forward to <namecache> port 53 check tcp

@@ -117,8 +117,7 @@ define network::interfaces::main($faddr    = false,
 # FU, dolphins
 #	    }
 
-	    if ($vid > 0)
-	    {
+	    if ($vid > 0) {
 		if ($hostid != 1) {
 		    network::interfaces::vlan {
 			$name:

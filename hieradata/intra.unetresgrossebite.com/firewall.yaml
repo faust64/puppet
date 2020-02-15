@@ -507,49 +507,49 @@ unbound_do_dnssec: true
 unbound_do_public: true
 unbound_forwarders:
   0.43.10.in-addr.arpa:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   1.43.10.in-addr.arpa:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   242.42.10.in-addr.arpa:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   253.42.10.in-addr.arpa:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   254.42.10.in-addr.arpa:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   40.42.10.in-addr.arpa:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   41.42.10.in-addr.arpa:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   42.42.10.in-addr.arpa:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   43.42.10.in-addr.arpa:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   44.42.10.in-addr.arpa:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   45.42.10.in-addr.arpa:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   46.42.10.in-addr.arpa:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   adm.intra.unetresgrossebite.com:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   ceph.intra.unetresgrossebite.com:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   faust.intra.unetresgrossebite.com:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   intra.unetresgrossebite.com:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   leaseweb.unetresgrossebite.com:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   plaristote.intra.unetresgrossebite.com:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   sip.intra.unetresgrossebite.com:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   surv.intra.unetresgrossebite.com:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   users.intra.unetresgrossebite.com:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   vms.intra.unetresgrossebite.com:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
   wifi.intra.unetresgrossebite.com:
-    - 10.42.44.3@8053
+    - 10.255.255.255@8053
 unbound_pixel_address: 10.42.44.1

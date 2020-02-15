@@ -1,11 +1,13 @@
 class named::scripts {
     $contact    = $named::vars::contact
     $do_domains = $named::vars::do_domains
+    $jumeau     = $named::vars::jumeau
     $ldap_slave = $named::vars::openldap_ldap_slave
     $rgroup     = $named::vars::runtime_group
     $ruser      = $named::vars::runtime_user
     $rzone_dir  = $named::vars::runtime_zone_dir
     $srvname    = $named::vars::service_name
+    $ssh_port   = $named::vars::ssh_port
     $zones      = $named::vars::zones_check
     $zone_dir   = $named::vars::zone_dir
 

@@ -6,6 +6,8 @@ class packages {
     }
     include packages::vars
     include packages::tools
+
+    include packages::asterisk
     include packages::bios
     include packages::camtrace
     include packages::debian

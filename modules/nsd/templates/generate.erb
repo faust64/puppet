@@ -115,6 +115,16 @@ if $RELOAD; then
 <% if @kernel == "Linux" -%>	service nsd reload
 <% else -%>	/etc/rc.d/nsd reload
 <% end -%>    fi
-fi
+<% if @jumeau != false -%>    if ! ping -c1 -w3 <%=@jumeau%> >/dev/null 2>&1; then
+	echo "WARNING: <%=@jumeau%> unresponsive, won't sync conf" >&2
+    else
+	for d in /usr/share/dnsgen "$NSD_ZONES_ROOT"
+	do
+	    if ! rsync -avWxP --rsh='ssh -p<%=@ssh_port%>' $d/ <%=@jumeau%>:$d/; then
+		echo "WARNING: failed syncing $d to <%=@jumeau%>" >&2
+	    fi
+	done
+    fi
+<% end -%>fi
 
 exit 0

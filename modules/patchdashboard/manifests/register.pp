@@ -6,6 +6,9 @@ class patchdashboard::register {
     if ($upstream) {
 	if (! defined(Class[curl])) {
 	    include curl
+
+	    Class["curl"]
+		-> Exec["Download PatchDashboard client installer"]
 	}
 
 	if ($myoperatingsystem == "Debian" or $myoperatingsystem == "Devuan" or $myoperatingsystem == "Ubuntu") {
@@ -22,6 +25,40 @@ class patchdashboard::register {
 		-> Exec["Download PatchDashboard client installer"]
 	}
 
+	if ($operatingsystem == "OpenBSD" or $operatingsystem == "FreeBSD") {
+	    if (! defined(Common::Define::Package["bash"])) {
+		common::define::package {
+		    "bash":
+		}
+	    }
+
+	    common::define::lined {
+		"Fix PatchDashboard registration script":
+		    line    => "#!/usr/bin/env bash",
+		    match   => "^#!/",
+		    path    => "/root/patchdashboard-register.sh",
+		    require => Exec["Download PatchDashboard client installer"];
+	    }
+
+	    Common::Define::Package["bash"]
+		-> Exec["Install PatchDashboard client"]
+
+	    Common::Define::Lined["Fix PatchDashboard registration script"]
+		-> Exec["Install PatchDashboard client"]
+	    $mark_installed = "/opt/patch_manager/check-in.sh"
+
+	    cron {
+		"Check-in with PatchDashboard":
+		    command => "/opt/patch_manager/check-in.sh",
+		    hour    => "*",
+		    minute  => "*/2",
+		    require => Exec["Install PatchDashboard client"],
+		    user    => root;
+	    }
+	} else {
+	    $mark_installed = "/etc/cron.d/patch-manager"
+	}
+
 	exec {
 	    "Download PatchDashboard client installer":
 		command => "$download https://$upstream/client/client_installer.php && mv client_installer.php patchdashboard-register.sh && chmod +x patchdashboard-register.sh",
@@ -31,7 +68,7 @@ class patchdashboard::register {
 	    "Install PatchDashboard client":
 		command     => "patchdashboard-register.sh",
 		cwd         => "/",
-		creates     => "/etc/cron.d/patch-manager",
+		creates     => $mark_installed,
 		notify      => Exec["Register to PatchDashboard"],
 		path        => "/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:/root",
 		require     => Exec["Download PatchDashboard client installer"];
