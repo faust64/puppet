@@ -1,6 +1,7 @@
 class network::vars {
     $all_networks           = lookup("vlan_database", {merge => hash})
     $all_openvpns           = lookup("openvpn_database", {merge => hash})
+    $default_mtu            = lookup("mtu_default")
     $bgp_database           = lookup("bgp_database")
     $dns_ip                 = lookup("dns_ip")
     $filtering_switches     = lookup("filtering_switches")

@@ -3,14 +3,14 @@ class python::openbsd {
 	"python":
     }
 
-    if (versioncmp($kernelversion, '5.9') <= 0) {
+    if ($kernelversion == '6.0') {
 	file {
 	    "Link python bin":
 		ensure  => link,
 		path    => "/usr/bin/python",
 		replace => no,
 		require => Common::Define::Package["python"],
-		target  => "/usr/local/bin/python2.7";
+		target  => "/usr/local/bin/python3.5";
 	}
     } else {
 	file {
@@ -19,7 +19,7 @@ class python::openbsd {
 		path    => "/usr/bin/python",
 		replace => no,
 		require => Common::Define::Package["python"],
-		target  => "/usr/local/bin/python3.5";
+		target  => "/usr/local/bin/python2.7";
 	}
     }
 }

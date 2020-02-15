@@ -11,6 +11,10 @@ nagios_ip:
   - 10.42.242.202
   - 10.42.242.203
 
+# OpenSSL
+pki_master: pki.adm.intra.unetresgrossebite.com
+pki_public: pki.adm.intra.unetresgrossebite.com
+
 # PF
 asterisk_ip:
   - 10.42.41.254

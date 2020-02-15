@@ -15,8 +15,8 @@ include "/etc/pf.d/Intranet"
 include "/etc/pf.d/Services"
 <% @local_networks[@domain].each do |nic| -%><% vlanname = nic['name'] -%>include "/etc/pf.d/VLAN-<%=@all_networks[vlanname]['name']%>"
 <% end -%>
-<% @ovpn_networks[@domain].each do |nic| -%><% vpnname = nic['name'] -%><% if @all_openvpns[vpnname]['server'] == true or nic['server'] == true -%>include "/etc/pf.d/OpenVPN-<%=vpnname%>"
-<% end -%><% end -%>
+<% if @ovpn_networks[@domain] -%><% @ovpn_networks[@domain].each do |nic| -%><% vpnname = nic['name'] -%><% if @all_openvpns[vpnname]['server'] == true or nic['server'] == true -%>include "/etc/pf.d/OpenVPN-<%=vpnname%>"
+<% end -%><% end -%><% end -%>
 include "/etc/pf.d/GLPI"
 <% @main_networks.each do |nic| -%><% if nic['gw'] =~ /[0-9]\.[0-9]/ -%>include "/etc/pf.d/WAN-<%=nic['name']%>"
 <% end -%><% end -%>

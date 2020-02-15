@@ -14,7 +14,12 @@ relay mailrelay {
 }
 <% end -%><% if @namecache_ip != false -%>
 
-dns protocol dnsudp
+<% if @kernelversion == "6.6" -%>redirect "dns" {
+    listen on 127.0.0.1 tcp port 8001
+    listen on 127.0.0.1 udp port 8001
+    forward to <namecache> port 53 check tcp
+}
+<% else -%>dns protocol dnsudp
 relay namecache {
     protocol dnsudp
     listen on 127.0.0.1 port 8001
@@ -27,7 +32,7 @@ relay namecachetcp {
     listen on 127.0.0.1 port 8001
     forward to <namecache> port 53 check tcp
 }
-<% end -%><% if @reverse_ip != false -%>
+<% end -%><% end -%><% if @reverse_ip != false -%>
 
 relay clearreverse {
     listen on 127.0.0.1 port 8002

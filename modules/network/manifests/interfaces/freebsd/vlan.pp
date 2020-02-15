@@ -1,5 +1,6 @@
 define network::interfaces::freebsd::vlan($addr     = "127.0.0.1",
 					  $ifstate  = false,
+					  $mtu      = false,
 					  $nmask    = "255.0.0.0",
 					  $root_if  = false,
 					  $vid      = 1) {
@@ -10,11 +11,16 @@ define network::interfaces::freebsd::vlan($addr     = "127.0.0.1",
     } else {
 	$args = false
     }
+    if ($mtu != false) {
+	$argsmtu = " mtu $mtu"
+    } else {
+	$argsmtu = ""
+    }
 
     if ($args) {
 	file_line {
 	    "Configure $name interface":
-		line => "ifconfig_$name='$args'",
+		line => "ifconfig_$name='$args$argsmtu'",
 		path => "/etc/rc.conf";
 	}
     } else {

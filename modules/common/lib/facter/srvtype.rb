@@ -58,7 +58,7 @@ Facter.add("srvtype") do
 	    "vz"
 	when /oneiroi|oizis|hypnos/
 	    "xen"
-	when /dysnomia|io|phonoi|makhai|limos|hysminai|zeus/
+	when /poseidon|io|limos|hysminai|zeus/
 	    "firewall"
 	else
 	    "wat"

@@ -32,14 +32,14 @@ class unbound::config {
 
     exec {
 	"Download root.hint from internic.net":
-	    command     => "$download ftp://FTP.INTERNIC.NET/domain/named.cache",
+	    command     => "$download https://www.internic.net/domain/named.root",
 	    creates     => "$var_dir/root.hint",
 	    cwd         => "/root",
 	    notify      => Exec["Install root.hint"],
 	    path        => "/usr/bin:/bin",
 	    require     => File["Prepare unbound for further configuration"];
 	"Install root.hint":
-	    command     => "mv /root/named.cache root.hint ; chown $runtime_group:$runtime_user root.hint",
+	    command     => "mv /root/named.root root.hint ; chown $runtime_group:$runtime_user root.hint",
 	    creates     => "$var_dir/root.hint",
 	    cwd         => $var_dir,
 	    notify      => Service["unbound"],

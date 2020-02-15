@@ -23,7 +23,7 @@ done
 
 ExpectedCiphers="aes128-ctr aes128-gcm@openssh.com aes192-ctr aes256-ctr aes256-gcm@openssh.com chacha20-poly1305@openssh.com"
 ExpectedHostKeys="ssh-ed25519-cert-v01@openssh.com ssh-ed25519 ssh-rsa-cert-v01@openssh.com ssh-rsa"
-ExpectedMACs="hmac-sha2-256-etm@openssh.com hmac-sha2-512-etm@openssh.com hmac-ripemd160-etm@openssh.com hmac-sha2-256 hmac-sha2-512 hmac-ripemd160 umac-128@openssh.com umac-128-etm@openssh.com"
+ExpectedMACs="hmac-sha2-256-etm@openssh.com hmac-sha2-512-etm@openssh.com hmac-sha2-256 hmac-sha2-512 umac-128@openssh.com umac-128-etm@openssh.com"
 WeakCiphers="3des-cbc aes128-cbc aes192-cbc aes256-cbc arcfour arcfour128 arcfour256 blowfish-cbc cast128-cbc"
 WeakHostKeys="ssh-dsa ssh-dss ssh-ecdsa"
 WeakMACs="hmac-md5 hmac-md5-96 hmac-sha1 hmac-sha1-96 hmac-md5-etm@openssh.com hmac-md5-96-etm@openssh.com hmac-sha1-etm@openssh.com hmac-sha1-96-etm@openssh.com umac-64 umac-64-etm@openssh.com"

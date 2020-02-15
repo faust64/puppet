@@ -1,20 +1,20 @@
-hostid: 5
-jumeau: poseidon
+hostid: 2
+jumeau: zeus
 nagios_no_parent: true
 
 # BGPD
-bgp_router_id: 10.42.242.5
+bgp_router_id: 10.42.242.2
 
 # Ifstated
 ifstated_alt_gateway: false
-ifstated_peer: 10.42.44.2
+ifstated_peer: 10.42.44.5
 
 # Munin / Munin-Node
-munin_node_listenaddr: 10.42.242.5
+munin_node_listenaddr: 10.42.242.2
 
 # Nagios
 nagios_icmp_proof: 8.8.8.8
-nagios_listenaddr: 10.42.242.5
+nagios_listenaddr: 10.42.242.2
 
 # Networks
 dns_ip:
@@ -22,15 +22,15 @@ dns_ip:
 #gre_tunnels:
 #  "0":
 #    description: "LeaseWeb via Freebox"
-#    innerlocal: 192.168.255.4
+#    innerlocal: 192.168.255.1
 #    innerremote: 192.168.255.255
-#    local: 172.16.42.4
+#    local: 172.16.42.1
 #    remote: 172.16.42.43
 #  "1":
 #    description: "LeaseWeb via Orange"
-#    innerlocal: 192.168.255.8
+#    innerlocal: 192.168.255.5
 #    innerremote: 192.168.255.254
-#    local: 10.42.242.5
+#    local: 10.42.242.2
 #    remote: 10.43.1.1
 mtu_default: 9000
 net_ifs:
@@ -43,12 +43,12 @@ net_ifs:
   - name: em3
     mtu: 9012
   - name: trunk0
-    addr: 172.16.42.4
+    addr: 172.16.42.1
     bcast: 172.16.42.7
     mtu: 9008
     netmsk: 255.255.255.248
     pfsync: true
-    proof: 10.42.242.9
+    proof: 10.42.242.10
     trunkopts: trunkport em0 trunkport em1 trunkport em2 trunkport em3
     trunkproto: lacp
   - name: vlan1000
@@ -70,8 +70,7 @@ net_ifs:
     vid: 1000
     vpn: 78.193.67.92
   - name: vlan1003
-    addr: 192.168.10.100
-    bcast: 192.168.10.255
+    bcast: 192.168.10.150
     carpaddr: 192.168.10.254
     carpvhid: 12
     default: true
@@ -81,10 +80,10 @@ net_ifs:
     vid: 1003
 
 # OSPF
-ospf_router_id: 10.42.242.5
+ospf_router_id: 10.42.242.2
 
-# Sasyncd
-sasyncd_peer: 172.16.42.1
+# SAsyncd
+sasyncd_peer: 172.16.42.4
 
 # SNMP
-snmp_listenaddr: 10.42.242.5
+snmp_listenaddr: 10.42.242.2

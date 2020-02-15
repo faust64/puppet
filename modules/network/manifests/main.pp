@@ -9,7 +9,7 @@ class network::main {
 	if ($nic['mtu']) {
 	    $mtu = $nic['mtu']
 	} else {
-	    $mtu = false
+	    $mtu = $network::vars::default_mtu
 	}
 	if ($nic['hwaddr']) {
 	    $hwaddr = $nic['hwaddr']
@@ -137,6 +137,7 @@ class network::main {
 		network::interfaces::vlan {
 		    $nic['name']:
 			addr    => $nic['addr'],
+			mtu     => $mtu,
 			nmask   => $nic['netmsk'],
 			root_if => $rootif,
 			vid     => $vid,
@@ -171,6 +172,7 @@ class network::main {
 		$nic['name']:
 		    addr    => false,
 		    ifstate => $ifstate,
+		    mtu     => $mtu,
 		    root_if => $rootif,
 		    vid     => $vid,
 		    vvid    => $vid;
@@ -193,6 +195,7 @@ class network::main {
 		    addr       => $nic['carpaddr'],
 		    addr_alias => $addr_alias,
 		    bcast      => $nic['bcast'],
+		    mtu        => $mtu,
 		    nmask      => $nic['netmsk'],
 		    root_if    => $nic['name'],
 		    routes     => $routes,

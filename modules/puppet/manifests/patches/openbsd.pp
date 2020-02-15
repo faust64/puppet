@@ -6,6 +6,10 @@ class puppet::patches::openbsd {
 	$withruby = "1.9.1"
     } elsif ($rubyversion =~ /2\.2/) {
 	$withruby = "2.2"
+    } elsif ($rubyversion =~ /2\.4/) {
+	$withruby = "2.4"
+    } elsif ($rubyversion =~ /2\.6/) {
+	$withruby = "2.6"
     } else {
 	$withruby = false
     }
@@ -30,29 +34,36 @@ class puppet::patches::openbsd {
 	}
     }
 
-    file {
-	"OpenBSD Service Abstraction":
-	    group  => lookup("gid_zero"),
-	    mode   => "0644",
-	    owner  => root,
-	    path   => "/usr/local/lib/ruby/site_ruby/$withruby/puppet/provider/service/init.rb",
-	    source => "puppet:///modules/puppet/$withruby/patched-init.rb";
-	"OpenBSD Group Management":
-	    group  => lookup("gid_zero"),
-	    mode   => "0644",
-	    owner  => root,
-	    path   => "/usr/local/lib/ruby/site_ruby/$withruby/puppet/type/group.rb",
-	    source => "puppet:///modules/puppet/$withruby/patched-group.rb";
-    }
-
-    if (versioncmp($kernelversion, '5.9') <= 0) {
+    if ($withruby != false) {
 	file {
-	    "OpenBSD fact Interfaces not to include l2 filters":
+	    "OpenBSD Service Abstraction":
 		group  => lookup("gid_zero"),
 		mode   => "0644",
 		owner  => root,
-		path   => "/usr/local/lib/ruby/site_ruby/$withruby/facter/util/ip.rb",
-		source => "puppet:///modules/puppet/$withruby/patched-ip.rb";
+		path   => "/usr/local/lib/ruby/site_ruby/$withruby/puppet/provider/service/init.rb",
+		source => "puppet:///modules/puppet/$withruby/patched-init.rb";
+	}
+
+	if (versioncmp($withruby, '2.6') < 0) {
+	    file {
+		"OpenBSD Group Management":
+		    group  => lookup("gid_zero"),
+		    mode   => "0644",
+		    owner  => root,
+		    path   => "/usr/local/lib/ruby/site_ruby/$withruby/puppet/type/group.rb",
+		    source => "puppet:///modules/puppet/$withruby/patched-group.rb";
+	    }
+	}
+
+	if (versioncmp($kernelversion, '5.9') <= 0) {
+	    file {
+		"OpenBSD fact Interfaces not to include l2 filters":
+		    group  => lookup("gid_zero"),
+		    mode   => "0644",
+		    owner  => root,
+		    path   => "/usr/local/lib/ruby/site_ruby/$withruby/facter/util/ip.rb",
+		    source => "puppet:///modules/puppet/$withruby/patched-ip.rb";
+	    }
 	}
     }
 }

@@ -14,8 +14,11 @@ class opensmtpd::alias {
 	"Postmap alias database":
 	    command     => "newaliases",
 	    cwd         => $opensmtpd::vars::alias_dir,
-	    refreshonly => true,
 	    path        => "/usr/local/sbin:/usr/sbin:/usr/bin:/sbin:/bin",
-	    require     => File["Install mailer configuration"];
+	    refreshonly => true,
+	    require     => [
+		    File["Install mailer configuration"],
+		    File["Install OpenSMTPD main configuration"]
+		];
     }
 }

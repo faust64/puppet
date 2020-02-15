@@ -16,5 +16,6 @@ class packages {
     include packages::openbsd
     include packages::rhel
     include packages::sles
+    include packages::wpad
     include packages::default
 }

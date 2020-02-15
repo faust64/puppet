@@ -30,4 +30,7 @@ class snort::openbsd {
 
     File["Install Snort rc script"]
 	-> Service["snort"]
+
+    Common::Define::Package["snort"]
+	-> File["Prepare Snort logs directory"]
 }

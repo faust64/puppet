@@ -23,11 +23,11 @@ class fail2ban {
     include fail2ban::filetraq
     include fail2ban::filters
     include fail2ban::munin
-    include fail2ban::rsyslog
     include fail2ban::scripts
     include fail2ban::service
 
     if ($kernel == "Linux") {
+	include fail2ban::rsyslog
 	include fail2ban::logrotate
     }
 }

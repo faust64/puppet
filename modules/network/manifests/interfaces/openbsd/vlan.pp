@@ -1,6 +1,7 @@
 define network::interfaces::openbsd::vlan($addr     = "127.0.0.1",
 					  $ifstate  = false,
 				 	  $l2filter = false,
+					  $mtu      = false,
 				 	  $nmask    = "255.0.0.0",
 				 	  $root_if  = false,
 					  $routes   = false,

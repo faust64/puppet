@@ -52,10 +52,6 @@ net_ifs:
         wat: to free
       - net: 212.27.52.0/24
         wat: to free
-      - net: 159.203.22.84/32
-        wat: pki.digitalocean
-      - net: 54.170.0.0/13
-        wat: amazon-us-east-1
     sipout: true
     vid: 1000
     vpn: 78.193.67.92

@@ -1147,6 +1147,7 @@ name_to_number:
   "7": ziehben
   "8": arrrcht
   "9": NEIN
+mtu_default: false
 net_ifs: false
 # again
 netmask_correspondance:
@@ -1529,10 +1530,8 @@ ssh_keys_database: false
 ssh_mac_algorithms:
   - hmac-sha2-256-etm@openssh.com
   - hmac-sha2-512-etm@openssh.com
-  - hmac-ripemd160-etm@openssh.com
   - hmac-sha2-256                                      
   - hmac-sha2-512
-  - hmac-ripemd160
   - umac-128@openssh.com
   - umac-128-etm@openssh.com
 ssh_moduli_dir: /etc/ssh
