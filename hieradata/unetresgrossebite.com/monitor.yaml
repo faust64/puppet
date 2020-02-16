@@ -27,8 +27,8 @@ icinga_check_domains:
 icinga_check_ssl:
   - bacula.unetresgrossebite.com
   - blog.unetresgrossebite.com
+  - cloud.unetresgrossebite.com
   - gitlab.unetresgrossebite.com
-  - owncloud.unetresgrossebite.com
   - play.unetresgrossebite.com
   - racktables.unetresgrossebite.com
   - repository.unetresgrossebite.com
