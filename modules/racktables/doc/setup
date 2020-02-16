@@ -1,0 +1,16 @@
+FYI: deploying a new server, note that class would not initialize Racktables.
+Having first applied this module, remove the /var/www/racktables/inc/secret.php
+file and disable LDAP authentication on your webserver.
+
+Connect to Racktables UI, initialize installation.
+In Racktables settings, Permissions tab, keep the first line unchanged and allow
+your LDAP user connecting in (eg, with username = faust)
+
+```
+allow {$userid_1}
+allow {$username_faust}
+```
+
+Now, we may apply puppet again, which would reinitialize Racktables secret.php
+and Apache configuration. You may then operate Racktables authenticating with
+your LDAP account.

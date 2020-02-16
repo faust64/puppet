@@ -13,4 +13,6 @@ class racktables {
     Class[Mysql]
 	-> Class[Apache]
 	-> Class[Racktables::Sourceforge]
+	-> Class[Racktables::Webapp]
+	-> Class[Racktables::Collect]
 }
