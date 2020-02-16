@@ -37,7 +37,7 @@ class nextcloud::install {
 	"Install NextCloud data directory":
 	    ensure  => directory,
 	    group   => $nextcloud::vars::runtime_group,
-	    mode    => "0755",
+	    mode    => "0770",
 	    owner   => $nextcloud::vars::runtime_user,
 	    path    => "$webroot/data",
 	    require => Exec["Extract NextCloud"];

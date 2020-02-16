@@ -49,6 +49,7 @@ apache_mod_dir: true
 apache_mod_expires: false
 apache_mod_fcgid: false
 apache_mod_headers: false
+apache_mod_http2: false
 apache_mod_include: true
 apache_mod_mime: true
 apache_mod_negotiation: true

@@ -1,7 +1,7 @@
 define racktables::define::register_nic() {
     $nicid       = 1
     $mymac       = "macaddress_$name"
-    $l2address   = inline_template("<%=scope.lookupvar(@mymac)%>")
+    $l2address   = regsubst(upcase(inline_template("<%=scope.lookupvar(@mymac)%>")), ':', '', 'G')
 
     if ($name =~ /veth[0-9][0-9]/) {
 	$hwtype = 31

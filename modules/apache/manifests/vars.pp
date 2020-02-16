@@ -37,6 +37,7 @@ class apache::vars {
     $mod_expires          = lookup("apache_mod_expires")
     $mod_fcgid            = lookup("apache_mod_fcgid")
     $mod_headers          = lookup("apache_mod_headers")
+    $mod_http2            = lookup("apache_mod_http2")
     $mod_include          = lookup("apache_mod_include")
     $mod_ldap             = lookup("apache_mod_authldap")
     $mod_mime             = lookup("apache_mod_mime")

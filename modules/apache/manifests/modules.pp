@@ -44,6 +44,17 @@ class apache::modules {
 	$fastcgi = $apache::vars::mod_fcgid
     }
 
+    if (($operatingsystem == "Debian" and
+	($lsbdistcodename == "buster" or $lsbdistcodename == "stretch"))
+        or ($myoperatingsystem == "Devuan" and
+	($lsbdistcodename == "beowulf" or $lsbdistcodename == "ascii"))) {
+	apache::define::module {
+	    "http2":
+		customconf    => true,
+		modstatus     => $apache::vars::mod_http2;
+	}
+    }
+
     apache::define::module {
 	"actions":
 	    customconf    => true,

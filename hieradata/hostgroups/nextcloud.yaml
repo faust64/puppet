@@ -9,6 +9,7 @@ apache_listen_ports:
   plain: 80
   ssl: 443
 apache_max_keepalive_req: 10
+apache_mod_http2: true
 apache_mod_php: true
 apache_mod_xsendfile: true
 apache_mod_xsendfile_paths:

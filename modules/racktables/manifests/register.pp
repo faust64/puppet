@@ -104,7 +104,7 @@ class racktables::register {
 	    or $nic =~ /bge/ or $nic =~ /vlan/ or $nic =~ /fxp/ or $nic =~ /xe/
 	    or $nic =~ /carp/ or $nic =~ /rl/ or $nic =~ /re/ or $nic =~ /lagg/
 	    or $nic =~ /bond/ or $nic =~ /br/ or $nic =~ /p[0-9]p/
-	    or $nic =~ /trunk/) {
+	    or $nic =~ /trunk/ or $nic =~ /ens/) {
 	    racktables::define::register_nic { $nic: }
 	}
     }
