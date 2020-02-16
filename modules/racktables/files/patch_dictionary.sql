@@ -21,8 +21,12 @@ INSERT INTO Dictionary VALUES (11, 50200, 'yes', 'Soekris%GPASS%net5501');
 INSERT INTO Dictionary VALUES (17, 50201, 'yes', 'Soekris%GPASS%net5501');
 INSERT INTO Dictionary VALUES (11, 50202, 'yes', 'Soekris%GPASS%net6501');
 INSERT INTO Dictionary VALUES (17, 50203, 'yes', 'Soekris%GPASS%net6501');
-INSERT INTO Dictionary VALUES (11, 50204, 'yes', 'apu4');
-INSERT INTO Dictionary VALUES (17, 50205, 'yes', 'apu4');
+INSERT INTO Dictionary VALUES (11, 50204, 'yes', 'PC Engines%GPASS%apu4');
+INSERT INTO Dictionary VALUES (17, 50205, 'yes', 'PC Engines%GPASS%apu4');
+INSERT INTO Dictionary VALUES (11, 50206, 'yes', 'PC Engines%GPASS%apu3');
+INSERT INTO Dictionary VALUES (17, 50207, 'yes', 'PC Engines%GPASS%apu3');
+INSERT INTO Dictionary VALUES (11, 50208, 'yes', 'PC Engines%GPASS%apu2');
+INSERT INTO Dictionary VALUES (17, 50209, 'yes', 'PC Engines%GPASS%apu2');
 
 INSERT INTO Dictionary VALUES (27, 50300, 'yes', '[[APC%GPASS%AP9606 | http://www.apc.com/products/resource/include/techspec_index.cfm?base_sku=AP9606]]');
 INSERT INTO Dictionary VALUES (27, 50301, 'yes', 'ATEN%GPASS%PE8208G');
