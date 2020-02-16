@@ -42,6 +42,14 @@ case "$1" in
 	oid=1070
 	ports=48
 	;;
+    5524)
+	oid=1069
+	ports=24
+	;;
+    5548)
+	oid=1070
+	ports=48
+	;;
     6224)
 	oid=350
 	ports=24

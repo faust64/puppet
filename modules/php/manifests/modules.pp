@@ -43,6 +43,8 @@ class php::modules {
     }
 
     php::define::module {
+	"bcmath":
+	    modstatus   => $php::vars::mod_bcmath;
 	"ctype":
 	    modstatus   => $php::vars::mod_ctype;
 	"curl":

@@ -15,6 +15,7 @@ class php::vars {
     $mail_mx              = lookup("mail_mx")
     $max_exectime         = lookup("php_max_exectime")
     $mem_limit            = lookup("php_memory_limit")
+    $mod_bcmath           = lookup("php_mod_bcmath")
     $mod_ctype            = lookup("php_mod_ctype")
     $mod_curl             = lookup("php_mod_curl")
     $mod_dom              = lookup("php_mod_dom")

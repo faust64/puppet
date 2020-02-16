@@ -4,7 +4,7 @@ export PATH=/sbin:/usr/sbin:/usr/local/sbin:/bin:/usr/bin:/usr/local/bin
 
 <% if @snort_listen_if != false -%>itf=<%=@snort_listen_if%>
 <% else -%>exit 0
-<% end -%>RUNDIR=/var/run
+<% end -%>RUNDIR=/var/snort/log
 
 if ! test -d <%=@log_dir%>; then
     mkdir -p <%=@log_dir%>

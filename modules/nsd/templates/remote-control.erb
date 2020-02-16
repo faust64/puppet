@@ -1,8 +1,6 @@
 remote-control:
-<% if @control_enabled == false -%>
-    control-enable: no
-<% else -%>
-    control-enable: yes
+<% if @control_enabled == false -%>    control-enable: no
+<% else -%>    control-enable: yes
     control-interface: <%=@control_listenaddr%>
     control-port: <%=@control_listenport%>
     control-key-file: "<%=@conf_dir%>/nsd_control.key"

@@ -11,6 +11,14 @@ class php::moduledependencies {
 	    "php${phpvers}-ctype":
 	}
     }
+    if ($php::vars::mod_bcmath == true) {
+	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
+	    common::define::package {
+		"php${phpvers}-bcmath":
+	    }
+	}
+    }
     if ($php::vars::mod_curl == true) {
 	include curl
 
@@ -128,7 +136,8 @@ class php::moduledependencies {
 	    common::define::package {
 		"php-mbstring":
 	    }
-	} elsif ($operatingsystem == "FreeBSD") {
+	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    common::define::package {
 		"php${phpvers}-mbstring":
 	    }

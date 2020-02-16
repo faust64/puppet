@@ -1769,6 +1769,7 @@ php_is_cli: false
 php_is_fpm: false
 php_max_exectime: 30
 php_memory_limit: 128M
+php_mod_bcmath: false
 php_mod_ctype: false
 php_mod_curl: false
 php_mod_dom: false
@@ -1900,7 +1901,7 @@ racktables_database_password: false
 racktables_database_user: false
 racktables_ldap_suffix: false
 racktables_object_id: 1504
-racktables_version: 0.20.11
+racktables_version: 0.21.4
 
 # Reboot
 reboot_week_day: false

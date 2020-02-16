@@ -18,11 +18,13 @@ mysql_munin: true
 nginx_rsyslog: true
 
 # PHP
+php_mod_bcmath: true
 php_mod_curl: true
 php_mod_json: true
 php_mod_gd: true
 php_mod_ldap: true
-php_mod_mysql: true
+php_mod_mbstring: true
+php_mod_mysqli: true
 php_mod_snmp: true
 
 # Racktables

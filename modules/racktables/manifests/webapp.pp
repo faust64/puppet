@@ -47,9 +47,7 @@ class racktables::webapp {
 	    source  => "puppet:///modules/racktables/patch_dictionary.sql";
     }
 
-    racktables::define::set_enterprise {
-	"UTGB":
-    }
+    racktables::define::set_enterprise { "UTGB": }
 
     each($racktables::vars::munin_host) |$host| {
 	racktables::define::set_munin {

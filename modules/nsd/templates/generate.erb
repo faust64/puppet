@@ -120,7 +120,9 @@ if $RELOAD; then
     else
 	for d in /usr/share/dnsgen "$NSD_ZONES_ROOT"
 	do
-	    if ! rsync -avWxP --rsh='ssh -p<%=@ssh_port%>' $d/ <%=@jumeau%>:$d/; then
+	    if ! rsync -avWxP --rsh='ssh -p<%=@ssh_port%>' \
+		--exclude=zones.conf --exclude=server.conf \
+		--exclude=remote-control.conf $d/ <%=@jumeau%>:$d/; then
 		echo "WARNING: failed syncing $d to <%=@jumeau%>" >&2
 	    fi
 	done
