@@ -1,21 +1,21 @@
-class owncloud::webapp {
+class nextcloud::webapp {
     include apache
 
-    if ($owncloud::vars::db_backend == "mysql") {
+    if ($nextcloud::vars::db_backend == "mysql") {
 	include mysql
 
 	mysql::define::create_database {
-	    $owncloud::vars::db_name:
-		dbpass => $owncloud::vars::db_pass,
-		dbuser => $owncloud::vars::db_user;
+	    $nextcloud::vars::db_name:
+		dbpass => $nextcloud::vars::db_pass,
+		dbuser => $nextcloud::vars::db_user;
 	}
     }
 
-    $domains  = $owncloud::vars::domains
-    $rdomain  = $owncloud::vars::rdomain
+    $domains  = $nextcloud::vars::domains
+    $rdomain  = $nextcloud::vars::rdomain
 
     if ($domain != $rdomain) {
-	$reverse = "owncloud.$rdomain"
+	$reverse = "nextcloud.$rdomain"
 	$arraydom = inline_template("<% @domains.values.each do |dom| -%><%=dom%>,<% end -%><%=@reverse%>,cloud.<%=@rdomain%>")
 	$aliases  = split($arraydom, ',')
     } else {
@@ -32,14 +32,14 @@ class owncloud::webapp {
     }
 
     apache::define::vhost {
-	"owncloud.$domain":
+	"nextcloud.$domain":
 	    aliases        => $aliases,
 	    allow_override => $override,
-	    app_root       => $owncloud::vars::web_root,
-	    csp_name       => "owncloud",
+	    app_root       => $nextcloud::vars::web_root,
+	    csp_name       => "nextcloud",
 	    deny_frames    => "remote",
 	    options        => $options,
-	    require        => File["Prepare owncloud for further configuration"],
+	    require        => File["Prepare nextcloud for further configuration"],
 	    vhostldapauth  => "applicative",
 	    with_reverse   => $reverse;
     }

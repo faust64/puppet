@@ -1,8 +1,12 @@
 class owncloud::debian {
     if ($lsbdistcodename == "wheezy" or $lsbdistcodename == "jessie") {
 	$repopath = "http://download.opensuse.org/repositories/isv:ownCloud:community/Debian_$lsbmajdistrelease.0/"
-    } elsif ($lsbdistcodename == "trusty") {
-	$repopath = "http://download.opensuse.org/repositories/isv:ownCloud:community/xUbuntu_$operatingsystemrelease/"
+    } elsif ($lsbdistcodename == "stretch") {
+	$repopath = "http://download.owncloud.org/download/repositories/stable/Debian_$lsbmajdistrelease.0/"
+    } elsif ($lsbdistcodename == "buster") {
+	$repopath = "http://download.owncloud.org/download/repositories/stable/Debian_$lsbmajdistrelease/"
+    } elsif ($lsbdistcodename == "xenial" or $lsbdistcodename == "trusty") {
+	$repopath = "http://download.owncloud.org/download/repositories/stable/Ubuntu_$operatingsystemrelease/"
     }
     if ($repopath) {
 	apt::define::aptkey {

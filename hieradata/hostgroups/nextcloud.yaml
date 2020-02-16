@@ -1,6 +1,6 @@
 additional_classes:
   - Memcache
-  - Owncloud
+  - Nextcloud
 
 # Apache
 apache_keepalive: "On"
@@ -30,13 +30,13 @@ nginx_rsyslog: true
 
 # OSSEC
 ossec_app_directories:
-  /var/www/owncloud: false
+  /var/www/nextcloud: false
 ossec_ignore:
   - /etc/mtab
   - /etc/hosts.deny
   - /etc/random-seed
   - /etc/adjtime
-  - /var/www/owncloud/data/owncloud.log
+  - /var/www/nextcloud/data/nextcloud.log
 
 # PHP
 php_apc: true

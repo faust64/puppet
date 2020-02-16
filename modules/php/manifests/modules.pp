@@ -13,6 +13,10 @@ class php::modules {
     } else {
 	if ($lsbdistcodename == "buster") {
 	    php::define::module {
+		"apcu":
+		    modstatus => $php::vars::with_apc;
+		"apc":
+		    modstatus => "purge";
 		"iconv":
 		    modstatus => $php::vars::mod_iconv;
 		"posix":
@@ -23,6 +27,8 @@ class php::modules {
 	    }
 	} else {
 	    php::define::module {
+		"apc":
+		    modstatus => $php::vars::with_apc;
 		"posix":
 		    modstatus => true;
 		"xml":
@@ -31,8 +37,6 @@ class php::modules {
 	}
 
 	php::define::module {
-	    "apc":
-		modstatus => $php::vars::with_apc;
 	    "mbstring":
 		modstatus   => $php::vars::mod_mbstring;
 	    [ "sqlite", "pdo_sqlite" ]:
@@ -96,6 +100,8 @@ class php::modules {
 	    modstatus   => $php::vars::mod_uploadprogress;
 	"xmlreader":
 	    modstatus   => $php::vars::mod_xmlreader;
+	"xmlwriter":
+	    modstatus   => $php::vars::mod_xmlwriter;
 	"xmlrpc":
 	    modstatus   => $php::vars::mod_xmlrpc;
 	"xsl":

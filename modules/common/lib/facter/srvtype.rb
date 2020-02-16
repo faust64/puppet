@@ -40,7 +40,7 @@ Facter.add("srvtype") do
 	    "opennebula"
 	when /momos|moros|thanatos|phoebe|crios|eurybie|hemara|ouranos|eos|erebe|helios|nyx|selene|aether/
 	    "openshift"
-	when /drive|owncloud|media|packages|pxe|pydio|repository/
+	when /drive|owncloud|nextcloud|media|packages|pxe|pydio|repository/
 	    "repo"
 	when /samba/
 	    "samba"

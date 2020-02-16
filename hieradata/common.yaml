@@ -165,6 +165,13 @@ named_zones_check:
   - vms.intra.unetresgrossebite.com
   - wifi.intra.unetresgrossebite.com
 
+# NextCloud
+nextcloud_domains:
+  0: nextcloud.unetresgrossebite.com
+  1: owncloud.unetresgrossebite.com
+  2: cloud.unetresgrossebite.com
+nextcloud_mail_domain: unetresgrossebite.com
+
 # Nginx
 nginx_rsyslog: true
 
@@ -257,6 +264,8 @@ ossec_whitelist:
 # OwnCloud
 owncloud_domains:
   0: owncloud.unetresgrossebite.com
+  1: nextcloud.unetresgrossebite.com
+  2: cloud.unetresgrossebite.com
 owncloud_mail_domain: unetresgrossebite.com
 
 # Pakiti

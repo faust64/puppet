@@ -40,6 +40,7 @@ class php::vars {
     $mod_uploadprogress   = lookup("php_mod_uploadprogress")
     $mod_xmlreader        = lookup("php_mod_xmlreader")
     $mod_xmlrpc           = lookup("php_mod_xmlrpc")
+    $mod_xmlwriter        = lookup("php_mod_xmlwriter")
     $mod_xsl              = lookup("php_mod_xsl")
     $mod_zip              = lookup("php_mod_zip")
     $mod_zlib             = lookup("php_mod_zlib")
