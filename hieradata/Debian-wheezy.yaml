@@ -11,3 +11,6 @@ ssh_mac_algorithms:
   - hmac-sha2-256                                      
   - hmac-sha2-512
   - hmac-ripemd160
+stunnel_options:
+  - NO_SSLv2
+  - CIPHER_SERVER_PREFERENCE

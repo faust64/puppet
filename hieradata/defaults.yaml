@@ -2340,8 +2340,6 @@ stunnel_ciphers:
   - '!MD5'
   - '!PS'
 stunnel_options:
-  - NO_SSLv2
-# - NO_SSLv3
   - CIPHER_SERVER_PREFERENCE
 stunnel_service_name: stunnel
 

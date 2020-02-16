@@ -22,6 +22,25 @@ class opendkim::debian {
 	    source => "puppet:///modules/opendkim/defaults";
     }
 
+    if ($lsbdistcodename == "buster") {
+	if (! defined(Class[Common::Systemd])) {
+	    include common::systemd
+	}
+
+	exec {
+	    "Generate Systemd configuration from defaults":
+		command => "opendkim.service.generate",
+		notify      => Exec["Reload systemd configuration"],
+		path        => "/usr/sbin:/usr/bin:/sbin:/bin:/lib/opendkim",
+		refreshonly => true,
+		subscribe   => File["Install opendkim service defaults"];
+	}
+
+	File["Install opendkim service defaults"]
+	    -> Exec["Generate Systemd configuration from defaults"]
+	    -> Service["opendkim"]
+    }
+
     Package["opendkim"]
 	-> File["Install opendkim service defaults"]
 	-> File["Prepare opendkim for further configuration"]

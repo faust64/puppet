@@ -7,3 +7,6 @@ squid_error_dir: /usr/share/squid3/errors
 squid_log_dir: /var/log/squid3
 squid_service_name: squid3
 squid_spool_dir: /var/spool/squid3
+stunnel_options:
+  - NO_SSLv2
+  - CIPHER_SERVER_PREFERENCE
