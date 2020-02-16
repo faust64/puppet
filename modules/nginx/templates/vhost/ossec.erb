@@ -62,7 +62,7 @@ server {
 <% end -%><% if @xss_protection == true -%>    add_header X-XSS-Protection "1; mode=block";
 <% end -%>    ssl on;
     ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
-    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_protocols <%=@tlsprotos.join(" ") %>;
     ssl_prefer_server_ciphers on;
     ssl_session_cache shared:SSL:10m;
 <% if @lsbdistcodename != "trusty" and @lsbdistcodename != "wheezy" -%>    ssl_session_tickets off;

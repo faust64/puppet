@@ -36,6 +36,7 @@ define nginx::define::vhost($aliases         = false,
     $listen_ports     = $nginx::vars::listen_ports
     $log_dir          = $nginx::vars::log_dir
     $public_key_pins  = $nginx::vars::public_key_pins
+    $tlsprotos        = lookup("apache_ssl_protos")
     $rsyslog_conf_dir = $nginx::vars::rsyslog_conf_dir
     $rsyslog_version  = $nginx::vars::rsyslog_version
     $run_dir          = $nginx::vars::nginx_run_dir
