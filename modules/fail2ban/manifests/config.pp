@@ -16,6 +16,7 @@ class fail2ban::config {
     $do_webnoscript = $fail2ban::vars::do_web_noscript
     $do_weboverflow = $fail2ban::vars::do_web_overflow
     $do_wordpress   = $fail2ban::vars::do_wordpress
+    $has_ssh_ddos   = $fail2ban::vars::has_ssh_ddos
     $ignore         = $fail2ban::vars::ignoreips
     $maxretry       = $fail2ban::vars::maxretry
     $named_log      = $fail2ban::vars::named_log

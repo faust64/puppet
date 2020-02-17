@@ -18,6 +18,7 @@ class fail2ban::vars {
     $do_wordpress         = lookup("fail2ban_do_wordpress")
     $download             = lookup("download_cmd")
     $gid_adm              = lookup("gid_adm")
+    $has_ssh_ddos         = lookup("fail2ban_ssh_ddos_filter")
     $ignoreips            = lookup("fail2ban_ignoreips")
     $maxretry             = lookup("fail2ban_maxretry")
     $munin_conf_dir       = lookup("munin_conf_dir")

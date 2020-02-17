@@ -1,0 +1,18 @@
+[Unit]
+Description=Airsonic Media Server
+After=remote-fs.target network.target
+AssertPathExists=/opt/airsonic
+
+[Service]
+Type=simple
+EnvironmentFile=-<%=@defdir%>/airsonic
+ExecStart=/usr/bin/java $JAVA_OPTS \
+          -Dairsonic.home=${AIRSONIC_HOME} \
+          -Dserver.context-path=${CONTEXT_PATH} \
+          -Dserver.port=${PORT} \
+          -jar ${JAVA_JAR} $JAVA_ARGS
+User=<%=@runtime_user%>
+Group=<%=@runtime_group%>
+
+[Install]
+WantedBy=multi-user.target

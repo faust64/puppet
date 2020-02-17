@@ -1,3 +1,4 @@
+fail2ban_ssh_ddos_filter: false
 java_default_version: "11"
 mysql_provider: mariadb
 php_conf_dir: /etc/php/7.3

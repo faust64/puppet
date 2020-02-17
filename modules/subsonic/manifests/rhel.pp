@@ -6,7 +6,7 @@ class subsonic::rhel {
 #WARNING:
 # subsonic package is distributed by our local repository
     common::define::package {
-	[ "subsonic" ]:
+	"subsonic":
     }
 
     if ($subsonic::vars::do_flac == true) {

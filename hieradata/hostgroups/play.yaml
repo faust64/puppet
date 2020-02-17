@@ -1,5 +1,11 @@
 additional_classes:
-  - Subsonic
+  - Airsonic
+
+# Airsonic
+airsonic_allocate: 512
+airsonic_message: "__Welcome to Mephitheque\\!__\\r\\n\\r\\n\\\\ \\\\\\r\\n\\r\\nHere is a bunch of poor download choices"
+airsonic_subtitle: ""
+airsonic_title: "Welcome to Mephitheque\\!"
 
 # Apache
 apache_keepalive: "On"
@@ -23,9 +29,3 @@ nagios_partitions_watchlist:
 #nginx_collectd: true
 nginx_munin: true
 nginx_rsyslog: true
-
-# Subsonic
-subsonic_allocate: 512
-subsonic_message: "__Welcome to Mephitheque\\!__\\r\\n\\r\\n\\\\ \\\\\\r\\n\\r\\nHere is a bunch of poor download choices"
-subsonic_subtitle: ""
-subsonic_title: "Welcome to Mephitheque\\!"

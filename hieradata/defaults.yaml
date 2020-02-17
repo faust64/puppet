@@ -18,6 +18,26 @@ aide_contact: false
 aide_database_dir: /var/lib/aide
 with_aide: false
 
+# Airsonic
+airsonic_alerts: root@example.com
+#airsonic_allocate: 150
+airsonic_do_flac: false
+airsonic_getting_started: false
+airsonic_message: "Airsonic"
+airsonic_music_root: /var/music
+airsonic_port: 8080
+airsonic_runtime_group: airsonic
+airsonic_runtime_user: airsonic
+airsonic_version: 10.5.0
+airsonic_xms: 700m
+airsonic_xmx: 700m
+airsonic_searchuser: ou=users,dc=example,dc=com
+airsonic_slack_hook_uri: false
+airsonic_subtitle: "Airsonic"
+airsonic_sync_bwlimit: false
+airsonic_sync_directories: false
+airsonic_title: "Welcome to Airsonic"
+
 # Apache
 apache_allow_privates:
   - 10.0.0.0/8
@@ -433,6 +453,7 @@ fail2ban_munin_probes:
   - fail2ban
   - fail2ban_reject
 fail2ban_slack_hook_uri: false
+fail2ban_ssh_ddos_filter: true
 fail2ban_version: false
 
 # Filetraq
@@ -2488,6 +2509,7 @@ vmwares_esx_username: root
 
 #WebServers
 csp_policy_inventory:
+  airsonic: "; script-src 'self' 'unsafe-inline' 'unsafe-eval' www.gstatic.com; img-src 'self' *.akamaized.net; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; frame-src 'self'; object-src 'none';"
   cv: "; style-src 'self'; script-src 'self'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'self';"
   baculaweb: "; style-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
   gitlab: "; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; img-src 'self' http://www.gravatar.com; font-src 'self'; frame-src 'none'; object-src 'none';"

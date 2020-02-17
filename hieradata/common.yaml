@@ -6,6 +6,11 @@ generic_contact: samuel@unetresgrossebite.com
 # AIDE
 aide_contact: root@unetresgrossebite.com
 
+# Airsonic
+airsonic_alerts: root@unetresgrossebite.com
+airsonic_searchuser: ou=users,dc=unetresgrossebite,dc=com
+airsonic_sync_bwlimit: 100
+
 # Apache
 apache_allow_privates:
   - 10.42.0.0/15

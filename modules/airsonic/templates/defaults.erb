@@ -1,0 +1,6 @@
+AIRSONIC_HOME=/opt/airsonic
+CONTEXT_PATH=
+JAVA_ARGS=--server.address=127.0.0.1
+JAVA_JAR=/opt/airsonic/airsonic.war
+JAVA_OPTS="<% if @xmx != false -%> -Xmx<%=@xmx%><% end -%><% if @xms != false -%> -Xms<%=@xms%><% end -%>"
+PORT=<%=@port%>

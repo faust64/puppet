@@ -1,7 +1,7 @@
-class subsonic::webapp {
-    $port    = 4040
+class airsonic::webapp {
+    $port    = $airsonic::vars::port
     $proto   = "http"
-    $rdomain = $subsonic::vars::rdomain
+    $rdomain = $airsonic::vars::rdomain
     if ($domain != $rdomain) {
 	$reverse = "play.$rdomain"
 	$aliases = [ $reverse ]
@@ -16,10 +16,10 @@ class subsonic::webapp {
 		aliases         => $aliases,
 		app_port        => $port,
 		app_proto       => $proto,
-		csp_name        => "subsonic",
-		konami_location => $subsonic::vars::music_root,
+		csp_name        => "airsonic",
+		konami_location => $airsonic::vars::music_root,
 		noerrors        => true,
-		require         => Service["subsonic"],
+		require         => Service["airsonic"],
 		sslredirecthttp => true,
 		vhostldapauth   => "applicative",
 		vhostsource     => "app_proxy",
@@ -33,11 +33,12 @@ class subsonic::webapp {
 		aliases         => $aliases,
 		app_port        => $port,
 		app_proto       => $proto,
-		csp_name        => "subsonic",
+		csp_name        => "airsonic",
 		deny_frames     => false,
-		konami_location => $subsonic::vars::music_root,
+		konami_location => $airsonic::vars::music_root,
+		maxtempfilesize => 0,
 		noerrors        => true,
-		require         => Service["subsonic"],
+		require         => Service["airsonic"],
 		sslredirecthttp => true,
 		vhostldapauth   => "applicative",
 		vhostsource     => "app_proxy",

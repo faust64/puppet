@@ -1,0 +1,6 @@
+input(type="imfile"
+      File="/var/airsonic/airsonic.log"
+      statefile="/var/airsonic/.airsonic.log"
+      Tag="airsonic"
+      Severity="info"
+      Facility="local7")

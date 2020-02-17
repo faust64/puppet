@@ -32,7 +32,7 @@ maxretry = <%=@maxretry%>
 [ssh-ddos]
 enabled  = true
 port     = <%=@ssh_port%>
-filter   = sshd-ddos
+filter   = <% if @has_ssh_ddos != false -%>sshd-ddos<% else -%>sshd[mode=aggressive]<% end %>
 logpath  = /var/log/authlog
 maxretry = <%=@maxretry%>
 <% end -%><% if @do_pam == true -%>

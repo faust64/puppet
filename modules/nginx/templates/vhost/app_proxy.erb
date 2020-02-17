@@ -13,9 +13,11 @@ server {
 <% end -%><% if @listen_ports['ssl'] != false -%><% if @app_rewrite == true %>    rewrite ^/(.*) https://<%=@name%>/$1;
 <% else -%>    location / {
 	proxy_redirect off;
-	proxy_set_header Host $host;
 	proxy_set_header X-Real-IP $remote_addr;
 	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	proxy_set_header X-Forwarded-Proto http;
+	proxy_set_header X-Forwarded-Host $http_host;
+	proxy_set_header Host $http_host;
 	proxy_pass <%=@app_proto%>://127.0.0.1:<%=@app_port%>;
 <% if @noerrors == false -%>	proxy_intercept_errors on;
 <% end -%>    }
@@ -51,13 +53,16 @@ server {
 	alias <%=@konami_location%>/;
     }
 <% end -%><% if @sslredirecthttp -%>    proxy_redirect http:// https://;
-   location / {
+    location / {
 <% else -%>    location / {
 	proxy_redirect off;
-<% end -%>	proxy_set_header Host $host;
-	proxy_set_header X-Real-IP $remote_addr;
+<% end -%>	proxy_set_header X-Real-IP $remote_addr;
 	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-	proxy_pass <%=@app_proto%>://127.0.0.1:<%=@app_port%>;
+	proxy_set_header X-Forwarded-Proto https;
+	proxy_set_header X-Forwarded-Host $http_host;
+	proxy_set_header Host $http_host;
+<% if @maxtempfilesize != false -%>	proxy_max_temp_file_size <%=@maxtempfilesize%>;
+<% end -%>	proxy_pass <%=@app_proto%>://127.0.0.1:<%=@app_port%>;
 <% if @noerrors == false -%>	proxy_intercept_errors on;
 <% end -%>    }
 <% if @noerrors == false -%>    include <%=@conf_dir%>/errors.conf;

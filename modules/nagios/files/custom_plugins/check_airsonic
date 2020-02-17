@@ -1,0 +1,31 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+if test -e /etc/default/airsonic; then
+    airport=`awk -F= '/^PORT=/{print $2}' /etc/default/airsonic`
+elif test -e /etc/sysconfig/airsonic; then
+    airport=`awk -F= '/^PORT=/{print $2}' /etc/sysconfig/airsonic`
+fi
+test -z "$airport" && airport=8080
+
+if ! ps ax | grep 'java .*-Dairsonic' >/dev/null; then
+    ret=CRITICAL
+    msg=" - airsonic not running"
+    perfdata=" | 0"
+elif ! netstat -plant | grep ":$airport[ 	].*LISTEN" >/dev/null; then
+    ret=CRITICAL
+    msg=" - airsonic not listening on $airport"
+    prefdata=" | 0"
+else
+    ret=OK
+    perfdata=" | 1"
+fi
+
+echo "$PRG $ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

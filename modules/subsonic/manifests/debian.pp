@@ -6,7 +6,7 @@ class subsonic::debian {
 #WARNING:
 # subsonic package is distributed by our local repository
     common::define::package {
-	[ "subsonic" ]:
+	"subsonic":
     }
 
     if ($lsbdistcodename == "jessie") {
@@ -28,6 +28,10 @@ class subsonic::debian {
 	Apt::Define::Repo["debian-multimedia"]
 	    -> Exec["FIXME: install deb-multimedia-keyring"]
 	    -> Package["ffmpeg"]
+    } elsif ($lsbdistcodename == "beowulf" or $lsbdistcodename == "buster") {
+	notice {
+	    "WARNING: Subsonic will not work with Java 11. Consider switching to Airsonic.":
+	}
     }
 
     if ($subsonic::vars::do_flac == true) {
