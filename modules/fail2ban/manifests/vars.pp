@@ -35,7 +35,9 @@ class fail2ban::vars {
     $version              = lookup("fail2ban_version")
 
     if ($do_web_abuses or $do_badbots) {
-	if (defined(Class[Nginx]) or defined(Class[Bluemind]) or $hostname == "deepthroat") {
+	if (defined(Class["nginx"]) or defined(Class["bluemind"])
+	    or defined(Class["airsonic"]) or defined(Class["subsonic"])
+	    or $hostname == "deepthroat") {
 	    $web_path     = lookup("nginx_log_dir")
 	} else {
 	    $web_path     = lookup("apache_log_dir")

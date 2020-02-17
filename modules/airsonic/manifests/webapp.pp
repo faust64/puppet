@@ -21,6 +21,7 @@ class airsonic::webapp {
 		noerrors        => true,
 		require         => Service["airsonic"],
 		sslredirecthttp => true,
+		stricttransport => false,
 		vhostldapauth   => "applicative",
 		vhostsource     => "app_proxy",
 		with_reverse    => $reverse;
@@ -40,6 +41,7 @@ class airsonic::webapp {
 		noerrors        => true,
 		require         => Service["airsonic"],
 		sslredirecthttp => true,
+		stricttransport => false,
 		vhostldapauth   => "applicative",
 		vhostsource     => "app_proxy",
 		with_reverse    => $reverse;
