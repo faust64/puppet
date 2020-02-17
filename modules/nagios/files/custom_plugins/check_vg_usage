@@ -1,0 +1,118 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+EXCLUDE=
+MATCH=
+UNKNOWN=3
+CRIT_THRESHOLD=10
+WARN_THRESHOLD=18
+TMPFILE=/tmp/$PRG.$$
+msg=
+perfdata=0
+freeTotal=0
+sizeTotal=0
+ret=UNKNOWN
+
+while test "$1"
+do
+    case "$1" in
+	-c|--critical)
+	    if test "$2" -ge 0 >/dev/null 2>&1; then
+		CRIT_THRESHOLD=$2
+	    else
+		echo Invalid critical threshold >&2
+	    fi
+	    shift
+	    ;;
+	-m|--match)
+	    if test "$2"; then
+		MATCH="$2"
+		shift
+	    else
+		echo Missing match pattern argument >&2
+	    fi
+	    ;;
+	-v|--volumegroup)
+	    if test "$2"; then
+		VGS="$2"
+		shift
+	    else
+		echo Missing volume group argument >&2
+	    fi
+	    ;;
+	-w|--warning)
+	    if test "$2" -ge 0 >/dev/null 2>&1; then
+		WARN_THRESHOLD=$2
+	    else
+		echo Invalid warning threshold >&2
+	    fi
+	    shift
+	    ;;
+	-x|--exclude)
+	    if test "$2"; then
+		EXCLUDE="$2"
+		shift
+	    else
+		echo Missing exclude pattern argument >&2
+	    fi
+	    ;;
+	*)
+	    echo "Invalid argument $1" >&2
+	    ;;
+    esac
+    shift
+done
+if test "$CRIT_THRESHOLD" -ge "$WARN_THRESHOLD"; then
+    echo notice: threshold looks incoherent >&2
+fi
+
+if test "$VGS"; then
+    if ! vgs 2>/dev/null | grep "$1" >/dev/null; then
+	VGS=
+	msg=": could not find VG $1"
+    else
+	VGS="$1"
+    fi
+else
+    VGS=`vgs | awk 'NR>1{print $1}'`
+fi
+if test "$MATCH"; then
+    VGS=`echo "$VGS" | grep -E "$MATCH"`
+fi
+if test "$EXCLUDE"; then
+    VGS=`echo "$VGS" | grep -vE "$EXCLUDE"`
+fi
+
+for disk in $VGS
+do
+    vgdisplay "$disk" --units B >$TMPFILE
+    freePE=`awk '/Free[ ]*PE/{print $5}' $TMPFILE`
+    peSize=`awk '/PE Size/{print $3}' $TMPFILE`
+    totalPE=`awk '/Total[ ]*PE/{print $3}' $TMPFILE`
+    rm -f $TMPFILE
+    freeTotal=`expr $freeTotal + \( $freePE "*" $peSize \)`
+    sizeTotal=`expr $sizeTotal + \( $totalPE "*" $peSize \)`
+    test "$perfdata" = 0 && perfdata= || perfdata="$perfdata;"
+    perfdata="$perfdata$freePE/$totalPE"
+    freePCT=`expr "$freePE" '*' 100 / "$totalPE"`
+    test -z "$msg" && msg=": " || msg="$msg, "
+    msg="$msg$disk has $freePCT% free"
+done
+
+if test "$sizeTotal" -ne 0; then
+    freePCT=`expr "$freeTotal" '*' 100 / "$sizeTotal"`
+    if test "$freePCT" -le "$CRIT_THRESHOLD"; then
+	ret=CRITICAL
+    elif test "$freePCT" -le "$WARN_THRESHOLD"; then
+	ret=WARNING
+    else
+	ret=OK
+    fi
+fi
+
+echo "VGS-Usage $ret$msg | $perfdata"
+eval ret=\$$ret
+exit $ret

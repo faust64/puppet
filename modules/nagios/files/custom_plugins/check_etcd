@@ -1,0 +1,31 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+msg=": Nothing to report"
+ret=OK
+TMPFILE=/tmp/.$PRG.$$
+
+test -f /etc/etcd/etcd.conf && source /etc/etcd/etcd.conf
+if test -z "$ETCD_ADVERTISE_CLIENT_URLS"; then
+    ret=UNKNOWN
+    msg=": failed identifying advertise URL"
+elif ! etcdctl -C "$ETCD_ADVERTISE_CLIENT_URLS" \
+    --ca-file=/etc/origin/master/master.etcd-ca.crt \
+    --cert-file=/etc/origin/master/master.etcd-client.crt \
+    --key-file=/etc/origin/master/master.etcd-client.key cluster-health >$TMPFILE 2>&1; then
+    ret=UNKNOWN
+    msg=": failed querying etcd"
+elif ! grep -i '^cluster is healthy' $TMPFILE >/dev/null 2>&1; then
+    ret=CRITICAL
+    msg=": cluster is not healthy"
+fi
+rm -f $TMPFILE
+
+echo "ETCD-status $ret$msg"
+eval ret=\$$ret
+exit $ret

@@ -1,0 +1,52 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+CRIT_THRESHOLD=3
+ret=OK
+msg="Nothing to report"
+TMPFILE=/tmp/.$PRG.$$
+
+if test -s /etc/nagios/openshift.cfg; then
+    CHECK_VOLUMES_TOKEN=$(awk '/^token[ ]*= /{print $3;exit;}' /etc/nagios/openshift.cfg)
+    OPENSHIFT_MASTER_ADDRESS=$(awk '/^endpoint[ ]*= /{print $3;exit;}' /etc/nagios/openshift.cfg)
+fi
+
+if test -z "$CHECK_VOLUMES_TOKEN"; then
+    echo CRITICAL: missing OpenShift token querying API >&2
+    exit 1
+elif test -z "$OPENSHIFT_MASTER_ADDRESS"; then
+    echo CRITICAL: missing OpenShift API endpoint address >&2
+    exit 1
+fi
+
+OC_COMMAND="oc --token=$CHECK_VOLUMES_TOKEN --insecure-skip-tls-verify=true -s $OPENSHIFT_MASTER_ADDRESS"
+
+df 2>&1 | grep kubernetes.io | grep /pvc- \
+    | while read dev total used free pct path;
+	do
+	    if echo "$pct" | grep -E '[89][0-9]%' >/dev/null; then
+		dev=`echo "$path" | sed 's|^.*pvc-|pvc-|'`
+		claim=$($OC_COMMAND describe pv "$dev" | awk '/Claim/{print $2}')
+		echo $claim is $pct full
+	    fi
+	done >$TMPFILE
+
+if test -s $TMPFILE; then
+    count=$(awk 'END{print NR}' $TMPFILE)
+    if test "$count" -ge $CRIT_THRESHOLD; then
+	ret=CRITICAL
+    else
+	ret=WARNING
+    fi
+    msg="$(cat $TMPFILE | tr -d '\n' ',' | sed 's|,$||')"
+fi
+rm -f $TMPFILE
+
+echo "GFS-usage $ret: $msg"
+eval ret=\$$ret
+exit $ret

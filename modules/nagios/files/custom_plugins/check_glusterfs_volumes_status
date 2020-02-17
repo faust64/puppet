@@ -1,0 +1,35 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+CRIT_THRESHOLD=2
+ret=OK
+msg=": Nothing to report"
+
+TMPFILE=/tmp/.$PRG.$$
+perfdata=0
+
+mount 2>/dev/null | grep fuse.glusterfs | awk '{print $1" "$3}' | while read volume mountpoint
+    do
+	ls "$mountpoint" >/dev/null 2>&1 && continue
+	echo "failed accessing $volume @ $mountpoint"
+    done >$TMPFILE 2>/dev/null
+
+if test -s $TMPFILE; then
+    perfdata=`awk 'END{print NR}' $TMPFILE`
+    msg=": `cat $TMPFILE | tr '\n' ',' | sed 's|,$||'`"
+    if test "0$perfdata" -ge "0$CRIT_THRESHOLD"; then
+	ret=CRITICAL
+    else
+	ret=WARNING
+    fi
+fi
+rm -f $TMPFILE
+
+echo "GFS-status $ret$msg | $perfdata"
+eval ret=\$$ret
+exit $ret

@@ -1,0 +1,71 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+test "$NETDEV" || NETDEV=eth0
+if test "$1"; then
+    MASTER_ENDPOINT="$1"
+else
+    MASTER_ENDPOINT=openshift.example.com:8443
+fi
+if echo "$MASTER_ENDPOINT" | grep : >/dev/null; then
+    MASTER_PORT=`echo $MASTER_ENDPOINT | cut -d: -f2`
+else
+    MASTER_PORT=443
+fi
+ME=`ip a show $NETDEV | awk '/ inet /{print $2}' | cut -d/ -f1`
+HNAME=`hostname -f`
+VERSION=`rpm -qa | grep -E '(origin-node-|openshift-node-)' | sed 's|.*-node-\([^-]*\).*|\1|'`
+if echo "$VERSION" | grep -E '3\.[012345678]\.' >/dev/null; then
+    IS_SYSTEMD=true
+else
+    IS_SYSTEMD=false
+fi
+
+if $IS_SYSTEMD; then
+    if ! systemctl is-active etcd; then
+	ret=CRITICAL
+	msg=": etcd not running"
+    elif ! systemctl is-active atomic-openshift-master-api; then
+	ret=CRITICAL
+	msg=": master-api not running"
+    elif ! systemctl is-active atomic-openshift-master-controllers; then
+	ret=CRITICAL
+	msg=": master-controllers not running"
+    fi
+else
+    for what in etcd api controllers
+    do
+	if test -x /usr/bin/crictl; then
+	    if ! crictl pods 2>&1 | grep master-${what}-$HNAME | grep kube-system >/dev/null; then
+		ret=CRITICAL
+		msg=": $what not running"
+		break
+	    fi
+	elif ! docker ps 2>&1 | grep k8s_${what}_master-${what}-$HNAME >/dev/null; then
+	    ret=CRITICAL
+	    msg=": $what not running"
+	    break
+	fi
+    done
+fi >/dev/null 2>&1
+if test -z "$ret"; then
+    if test -z "$ME"; then
+	ret=UNKNOWN
+	msg=": could not lookup address for dev:$NETDEV"
+    elif ! /usr/lib64/nagios/plugins/check_http $ME -p $MASTER_PORT -u https://$MASTER_ENDPOINT/healthz -S -s ok; then
+	ret=WARNING
+	msg=": master-api is unhealthy"
+    else
+	ret=OK
+	msg=": Nothing to report"
+    fi
+fi >/dev/null 2>&1
+
+echo "OC-master $ret$msg"
+eval ret=\$$ret
+exit $ret

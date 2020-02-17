@@ -1,0 +1,38 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+if ls /var/lib/origin/logs/fluentdv4* >/dev/null 2>&1; then
+    FLUENTD_BUFFERS=/var/lib/origin/logs
+else
+    FLUENTD_BUFFERS=/var/lib/origin
+fi
+FLUENTD_LOGS=${FLUENTD_LOGS:-/var/log/fluentd}
+
+FILES_CRIT_THRESHOLDS=5
+FILES_WARN_THRESHOLDS=1
+FILES_MINUTES_THRESHOLDS=10
+
+ret=OK
+msg="all fine"
+perfdata=$(find $FLUENTD_BUFFERS -mmin +$FILES_MINUTES_THRESHOLDS -type f -name '*buffer' | wc -l)
+
+if grep "Splunk response" $FLUENTD_LOGS/fluentd.log 2>/dev/null \
+	| grep -i '"text":"Incorrect index' >/dev/null; then
+    ret=CRITICAL
+    msg="invalid index forwarding to Splunk"
+elif test "$perfdata" -ge $FILES_CRIT_THRESHOLDS; then
+    ret=CRITICAL
+    msg="buffers piling up"
+elif test "$perfdata" -ge $FILES_WARN_THRESHOLDS; then
+    ret=WARNING
+    msg="buffers accumulating"
+fi
+
+echo "Fluentd $ret: $msg | $perfdata"
+eval ret=\$$ret
+exit $ret

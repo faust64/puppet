@@ -1,0 +1,34 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+CRIT_THRESHOLD=2
+ret=OK
+msg=": Nothing to report"
+
+TMPFILE=/tmp/.$PRG.$$
+
+df 2>&1 | grep kubernetes.io | grep -viE '(configmap|emptydir|secret)/' \
+    | while read dev total used free pct path;
+	do
+	    if echo "$pct" | grep -E '[89][0-9]%' >/dev/null; then
+		echo $path is $pct >>$TMPFILE
+	    fi
+	done
+
+if test -s $TMPFILE; then
+    if grep -E ' 9[0-9]%' $TMPFILE >/dev/null; then
+	ret=CRITCAL
+    else
+	ret=WARNING
+    fi
+fi
+rm -f $TMPFILE
+
+echo "PV-usage $ret$msg"
+eval ret=\$$ret
+exit $ret

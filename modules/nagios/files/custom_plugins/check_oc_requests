@@ -1,0 +1,247 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+KUBE_ENDPOINT=
+KUBE_TOKEN=
+KUBE_CONFIG=$HOME/.kube/config
+OPENSHIFT_CLUSTER=OpenShift
+CRIT_THRESHOLD=5
+NONPROJ_CRIT_THRESHOLD=3
+NONPROJ_WARN_THRESHOLD=8
+WARN_THRESHOLD=15
+ENV=all
+ZONE_SELECTOR=
+ret=OK
+perfdata=0
+TMPFILE=/tmp/$PRG.$$
+
+bytesconv()
+{
+    if test "$1" = 0; then
+	echo 0
+	return
+    fi
+    idx=1
+    res=
+    for u in M G T P
+    do
+	if echo "$1" | grep -E "${u}i*" >/dev/null; then
+	    res=$(echo $1 | sed "s|$u.*||g")
+	    break
+	fi
+	idx=$(expr $idx + 1)
+    done
+    if test "$res"; then
+	if echo "$1" | grep i >/dev/null; then
+	    factor=1024
+	else
+	    factor=1000
+	fi
+	while test "$idx" -gt 1
+	do
+	    res=$(expr $res '*' $factor)
+	    idx=$(expr $idx - 1)
+	done
+	echo "$res"
+    else
+	echo "$1"
+    fi
+}
+
+while test "$1"
+do
+    case "$1" in
+	-e|--endpoint)
+	    if test "$2"; then
+		KUBE_ENDPOINT="$2"
+	    else
+		echo Missing endpoint argument >&2
+	    fi
+	    shift
+	    ;;
+	-C|--critical-infra)
+	    if test "$2" -ge 0 >/dev/null 2>&1; then
+		NONPROJ_CRIT_THRESHOLD=$2
+	    else
+		echo Invalid critical threshold >&2
+	    fi
+	    shift
+	    ;;
+	-W|--warning-infra)
+	    if test "$2" -ge 0 >/dev/null 2>&1; then
+		WARN_THRESHOLD=$2
+	    else
+		echo Invalid warning threshold >&2
+	    fi
+	    shift
+	    ;;
+	-c|--critical)
+	    if test "$2" -ge 0 >/dev/null 2>&1; then
+		CRIT_THRESHOLD=$2
+	    else
+		echo Invalid critical threshold >&2
+	    fi
+	    shift
+	    ;;
+	-k|--kubeconfig)
+	    if test -r "$2"; then
+		KUBE_CONFIG="$2"
+	    else
+		echo "Could not read kubeconfig $2" >&2
+	    fi
+	    shift
+	    ;;
+	-o|--cluster)
+	    if test "$2"; then
+		OPENSHIFT_CLUSTER="$2"
+		shift
+	    else
+		echo Missing cluster argument >&2
+	    fi
+	    ;;
+	-s|--selector)
+	    if echo "$2" | grep -E "^(dev|stage|mgmt|prod)$" >/dev/null; then
+		ZONE_SELECTOR="--selector=environment=$2"
+	    elif test "$2"; then
+		ZONE_SELECTOR="--selector=$2"
+	    fi
+	    if test "$ZONE_SELECTOR"; then
+		ENV=$2
+	    else
+		echo Missing project selector >&2
+	    fi
+	    shift
+	    ;;
+	-t|--token)
+	    if test "$2"; then
+		KUBE_TOKEN="$2"
+		shift
+	    else
+		echo Missing token argument >&2
+	    fi
+	    ;;
+	-w|--warning)
+	    if test "$2" -ge 0 >/dev/null 2>&1; then
+		WARN_THRESHOLD=$2
+	    else
+		echo Invalid warning threshold >&2
+	    fi
+	    shift
+	    ;;
+	*)
+	    echo "Invalid argument $1" >&2
+	    ;;
+    esac
+    shift
+done
+
+getClusterConfig()
+{
+    awk "BEG{ pick = 0; }{
+        if (\$0 == \"[$OPENSHIFT_CLUSTER]\") {
+	    pick = 1;
+	} else {
+	    if (\$0 ~ /^\[.*\]/) {
+		pick = 0;
+	    } else {
+		if (pick == 1) { print \$0; }
+	    }
+	}
+    }" /etc/nagios/openshift.cfg
+}
+
+if test -s /etc/nagios/openshift.cfg -a -z "$KUBE_TOKEN"; then
+    KUBE_TOKEN=$(getClusterConfig | awk '/^token/{print $3;exit;}')
+    KUBE_ENDPOINT=$(getClusterConfig | awk '/^endpoint/{print $3;exit;}')
+fi
+if ! which oc >/dev/null 2>&1; then
+    echo UNKNOWN: missing oc binary
+    exit $UNKNOWN
+elif test "$KUBE_TOKEN" -a "$KUBE_ENDPOINT"; then
+    if ! oc --insecure-skip-tls-verify "--token=$KUBE_TOKEN" "--server=$KUBE_ENDPOINT" whoami >/dev/null 2>&1; then
+	echo UNKNOWN: invalid token querying OpenShift API
+	exit $UNKNOWN
+    fi
+    AUTH_STR="--insecure-skip-tls-verify --token=$KUBE_TOKEN --server=$KUBE_ENDPOINT"
+elif ! test -s $HOME/.kube/config; then
+    echo UNKNOWN: missing oc configuration
+    exit $UNKNOWN
+elif ! oc "--config=$KUBE_CONFIG" whoami >/dev/null 2>&1; then
+    echo UNKNOWN: oc client not logged in
+    exit $UNKNOWN
+else
+    AUTH_STR="--config=$KUBE_CONFIG"
+fi
+if test "$CRIT_THRESHOLD" -ge "$WARN_THRESHOLD"; then
+    echo notice: threshold looks incoherent >&2
+fi
+
+for node in `oc $AUTH_STR get nodes $ZONE_SELECTOR 2>/dev/null | awk 'NR>1{print $1}'`
+do
+    oc $AUTH_STR describe node $node >$TMPFILE 2>/dev/null
+    eval `grep -B3 ^Events: $TMPFILE | awk '/cpu.*%/{print "cpualloc=" $2 " cpupct=" $3}' | sed -e 's|[)(%]||g'`
+    eval `grep -B3 ^Events: $TMPFILE | awk '/memory.*%/{print "memalloc=" $2 " mempct=" $3}' | sed -e 's|[)(%]||g'`
+    test "$perfdata" && perfdata="$perfdata,"
+    perfdata="$perfdata$cpupct/$mempct"
+    if echo "$cpualloc" | grep m; then
+	cpualloc=$(echo $cpualloc | sed 's|m||')
+    else
+	cpualloc=${cpualloc}000
+    fi >/dev/null
+    memalloc=$(ytesconv $memalloc)
+    ISCOMPUTE=false
+    if grep node-role.kubernetes.io/compute=true $TMPFILE >/dev/null; then
+	ISCOMPUTE=true
+    fi
+    if test $ISCOMPUTE = false; then
+	if test "$cpupct" -ge `expr 100 - $NONPROJ_WARN_THRESHOLD`; then
+	    if test "$cpupct" -ge `expr 100 - $NONPROJ_CRIT_THRESHOLD`; then
+		ret=CRITICAL
+	    elif test "$ret" = OK; then
+		ret=WARNING
+	    fi
+	    test -z "$msg" || msg="$msg, "
+	    msg="$msg$node CPU is $cpupct% allocated"
+	fi
+	if test "$mempct" -ge `expr 100 - $NONPROJ_WARN_THRESHOLD`; then
+	    if test "$mempct" -ge `expr 100 - $NONPROJ_CRIT_THRESHOLD`; then
+		ret=CRITICAL
+	    elif test "$ret" = OK; then
+		ret=WARNING
+	    fi
+	    test -z "$msg" || msg="$msg, "
+	    msg="$msg$node Memory is $mempct% allocated"
+	fi
+    else
+	if test "$cpupct" -ge `expr 100 - $WARN_THRESHOLD`; then
+	    if test "$cpupct" -ge `expr 100 - $CRIT_THRESHOLD`; then
+		ret=CRITICAL
+	    elif test "$ret" = OK; then
+		ret=WARNING
+	    fi
+	    test -z "$msg" || msg="$msg, "
+	    msg="$msg$node CPU is $cpupct% allocated"
+	fi
+	if test "$mempct" -ge `expr 100 - $WARN_THRESHOLD`; then
+	    if test "$mempct" -ge `expr 100 - $CRIT_THRESHOLD`; then
+		ret=CRITICAL
+	    elif test "$ret" = OK; then
+		ret=WARNING
+	    fi
+	    test -z "$msg" || msg="$msg, "
+	    msg="$msg$node Memory is $mempct% allocated"
+	fi
+    fi
+done
+if test -z "$msg"; then
+    msg="Nothing to report"
+fi
+rm -f $TMPFILE
+
+echo "OC-requests-$ENV $ret: $msg | $perfdata"
+eval ret=\$$ret
+exit $ret

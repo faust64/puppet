@@ -1,0 +1,31 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+TMPFILE=/tmp/$PRG.$$
+
+count=0
+if ! docker ps -a 2>/dev/null | grep -vE "(k8s_|^CONTAINER)" | awk '{print $1}' >$TMPFILE; then
+    ret=UNKNOWN
+    msg="failed listing running containers "
+elif ! test -s $TMPFILE; then
+    ret=OK
+    msg="all fine "
+else
+    count="$(awk 'END{print NR}' $TMPFILE)"
+    msg="found: $(cat $TMPFILE | tr '\n' ' ')"
+    if test "$count" -ge 3; then
+	ret=CRITICAL
+    else
+	ret=WARNING
+    fi
+fi
+perfdata=" $count/$(docker ps -a | grep -v ^CONTAINER | wc -l)"
+
+rm -f $TMPFILE
+echo "Docker-Containers $ret - $msg|$perfdata"
+eval ret=\$$ret
+exit $ret
