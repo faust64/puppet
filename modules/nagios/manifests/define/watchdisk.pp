@@ -1,7 +1,12 @@
 define nagios::define::watchdisk() {
+    if ($operatingsystem == "OpenBSD" and $kernelversion == "6.6") {
+	$cmdhead = "check_nrpe_plain"
+    } else {
+	$cmdhead = "check_nrpe"
+    }
     @@nagios_service {
 	"check_disk_${name}_$fqdn":
-	    check_command       => "check_nrpe!check_disk_$name",
+	    check_command       => "${cmdhead}!check_disk_$name",
 	    host_name           => "$fqdn",
 	    notify              => Exec["Refresh Icinga configuration"],
 	    require             => File["Prepare nagios services probes import directory"],

@@ -53,10 +53,10 @@ icinga_static_devices:
     host_ipaddress: 10.42.40.101
     host_parents: ponos.adm.intra.unetresgrossebite.com
     srvclass: cam
-  gamma.sip.intra.unetresgrossebite.com:
-    host_ipaddress: 10.42.41.42
-    host_parents: nikea.adm.intra.unetresgrossebite.com
-    srvclass: phone
+#  gamma.sip.intra.unetresgrossebite.com:
+#    host_ipaddress: 10.42.41.42
+#    host_parents: nikea.adm.intra.unetresgrossebite.com
+#    srvclass: phone
   asteros.adm.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.242.11
     host_parents: eros.adm.intra.unetresgrossebite.com
