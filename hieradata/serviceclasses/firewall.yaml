@@ -73,6 +73,7 @@ allowed_tcp_ports:
 allowed_udp_ports:
   - time
   - ntp
+  - https
   - "33434:33534"
 blacklist:
   - 37.61.242.57
