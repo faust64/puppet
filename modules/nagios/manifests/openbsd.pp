@@ -2,12 +2,19 @@ class nagios::openbsd {
     $conf_dir = $nagios::vars::nagios_conf_dir
 
     if (versioncmp($kernelversion, '5.7') <= 0) {
+	$pname = "nrpe"
 	common::define::package {
-	    [ "nagios-plugins", "nrpe" ]:
+	    [ "nagios-plugins", $pname ]:
 	}
     } else {
+	if ($kernelversion == "5.8") {
+	    $pname = "nrpe-2.15p10-no_ssl"
+	} else {
+	    $pname = "nrpe"
+	}
+
 	common::define::package {
-	    [ "nagios-plugins-resmon", "nrpe" ]:
+	    [ "nagios-plugins-resmon", $pname ]:
 	}
     }
 
@@ -41,7 +48,7 @@ class nagios::openbsd {
 	    unless  => "grep '^pkg_scripts=.*nrpe' rc.conf.local";
     }
 
-    Package["nrpe"]
+    Package[$pname]
 	-> File_line["Enable Nagios on boot"]
 	-> File["Install Nagios custom plugins"]
 	-> File["Prepare nagios nrpe for further configuration"]

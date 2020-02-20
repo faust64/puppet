@@ -64,6 +64,8 @@ class apache::vars {
     $munin_monitored      = lookup("apache_munin")
     $munin_probes         = lookup("apache_munin_probes")
     $munin_service_name   = lookup("munin_node_service_name")
+    $nagios_plugins_dir   = lookup("nagios_plugins_dir")
+    $nagios_runtime_user  = lookup("nagios_runtime_user")
     $office_netids        = lookup("office_netids")
     $office_networks      = lookup("office_networks")
     $owsap_security       = lookup("apache_mod_security_owsap")

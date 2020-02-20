@@ -21,6 +21,8 @@ class nginx::vars {
     $munin_monitored      = lookup("nginx_munin")
     $munin_probes         = lookup("nginx_munin_probes")
     $munin_service_name   = lookup("munin_node_service_name")
+    $nagios_plugins_dir   = lookup("nagios_plugins_dir")
+    $nagios_runtime_user  = lookup("nagios_runtime_user")
     $name_hash_bsize      = lookup("nginx_names_hash_bucket_size")
     $nginx_rsyslog        = lookup("nginx_rsyslog")
     $nginx_run_dir        = lookup("nginx_run_dir")

@@ -1,0 +1,8 @@
+[nsd_*]
+user <%=@username%>
+env.logdir <%=@log_dir%>
+env.logfile nsd.log
+env.pidfile <%=@run_dir%>/nsd.pid
+
+[nsd_by_type]
+env.stats = A=A AAAA=AAAA MX=MX PTR=PTR TYPE252=AXFR SOA=SOA

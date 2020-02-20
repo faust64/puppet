@@ -4,6 +4,16 @@ define command {
 }
 
 define command {
+    command_name	check_nrpe_plain
+    command_line	<%=@plugindir%>/check_nrpe -H '$HOSTADDRESS$' -c '$ARG1$' -n -t 45
+}
+
+define command {
     command_name	check_nrpe_port
     command_line	<%=@plugindir%>/check_nrpe -H '$HOSTADDRESS$' -p '$ARG1$' -c '$ARG2$' -t 45
+}
+
+define command {
+    command_name	check_nrpe_port_plain
+    command_line	<%=@plugindir%>/check_nrpe -H '$HOSTADDRESS$' -p '$ARG1$' -c '$ARG2$' -n -t 45
 }

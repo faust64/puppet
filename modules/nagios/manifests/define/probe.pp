@@ -22,10 +22,24 @@ define nagios::define::probe($args             = false,
 	$natport  = lookup("nagios_nrpe_nat_port")
 	$realport = lookup("nagios_nrpe_port")
 	if ($natport) {
-	    $cmdhead = "check_nrpe_port!$natport!$command"
+	    if ($operatingsystem == "OpenBSD" and $kernelversion == "6.6") {
+		$cmdhead = "check_nrpe_port_plain!$natport!$command"
+	    } else {
+		$cmdhead = "check_nrpe_port!$natport!$command"
+	    }
 	} elsif ($realport != 5666 and $realport != "5666") {
-	    $cmdhead = "check_nrpe_port!$realport!$command"
-	} else { $cmdhead = "check_nrpe!$command" }
+	    if ($operatingsystem == "OpenBSD" and $kernelversion == "6.6") {
+		$cmdhead = "check_nrpe_port_plain!$realport!$command"
+	    } else {
+		$cmdhead = "check_nrpe_port!$realport!$command"
+	    }
+	} else {
+	    if ($operatingsystem == "OpenBSD" and $kernelversion == "6.6") {
+		$cmdhead = "check_nrpe_plain!$command"
+	    } else {
+		$cmdhead = "check_nrpe!$command"
+	    }
+	}
     } else { $cmdhead = $command }
     if ($args) {
 	$cmdtail = join($args, '!')

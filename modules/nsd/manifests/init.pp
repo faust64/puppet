@@ -15,7 +15,10 @@ class nsd {
 
     include nsd::config
     include nsd::control
+    include nsd::filetraq
+    include nsd::munin
     include nsd::scripts
+    include nsd::nagios
     include nsd::service
     include nsd::zones
 }
