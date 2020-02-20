@@ -1,8 +1,16 @@
 additional_classes:
+  - Airsonic
   - Iscsiinitiator
   - Media
-  - Subsonic
   - Packages
+# - Subsonic
+
+# Airsonic
+airsonic_allocate: 512
+airsonic_message: "__Welcome to Mephitheque\\!__\\r\\n\\r\\n\\\\ \\\\\\r\\n\\r\\nHere is a bunch of poor download choices"
+airsonic_music_root: /goinfre/media/Music
+airsonic_subtitle: ""
+airsonic_title: "Welcome to Mephitheque\\!"
 
 # Apache
 apache_keepalive: "On"
