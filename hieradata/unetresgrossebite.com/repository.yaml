@@ -14,7 +14,7 @@ physical_parent: gaia.unetresgrossebite.com
 
 # Firehol
 firehol_interfaces:
-  - name: eth0
+  - name: ens3
     description: WAN
     protection: strong
     allow:
