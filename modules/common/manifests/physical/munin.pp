@@ -11,13 +11,13 @@ class common::physical::munin {
 
 	file {
 	    "Install Smart munin-node configuration":
+		content => template("common/munin_smart.erb"),
 		group   => lookup("gid_zero"),
 		mode    => "0644",
 		notify  => Service[lookup("munin_node_service_name")],
 		owner   => root,
 		path    => "$munin_conf_dir/plugin-conf.d/smart.conf",
-		require => File["Prepare Munin-node plugin-conf directory"],
-		source  => "puppet:///modules/common/munin_smart.conf";
+		require => File["Prepare Munin-node plugin-conf directory"];
 	}
 
 	each($smart_disks) |$disk| {

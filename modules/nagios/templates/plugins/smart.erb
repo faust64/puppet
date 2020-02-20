@@ -1,1 +1,1 @@
-command[<%=@command%>]=sudo <%=@plugindir%>/check_smart_attributes -d <%=@pluginarg%> -dbj <%=@plugindir%>/check_smartdb.json
+command[<%=@command%>]=sudo <%=@plugindir%>/check_smart_attributes <% if @operatingsystem == "OpenBSD" -%>-p /usr/local/sbin/smartctl <% end -%>-d <%=@pluginarg%> -dbj <%=@plugindir%>/check_smartdb.json

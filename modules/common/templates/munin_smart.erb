@@ -1,0 +1,7 @@
+[smart*]
+user root
+<% if @operatingsystem == "OpenBSD" -%>env.smartpath /usr/local/sbin/smartctl
+env.ignoreexit 100
+env.ignorestandby True
+<% end -%>[hddtemp_smartctl]
+user root

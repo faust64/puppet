@@ -95,7 +95,7 @@ sub readDbJSON{
 sub getSmartctl{
     my $smartctl = shift;
     my @devicesToCheck_a = @{(shift)};
-    my $extraOpts = shift;
+    my $extraOpts = shift || '';
     #a hash of all devices with their corresponding output
     my %output_h;
 

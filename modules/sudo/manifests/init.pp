@@ -11,6 +11,9 @@ class sudo {
 	"FreeBSD": {
 	    include sudo::freebsd
 	}
+	"OpenBSD": {
+	    include sudo::openbsd
+	}
     }
 
     include sudo::config

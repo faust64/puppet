@@ -6,6 +6,9 @@ class common::libs::perljson {
 	"CentOS", "RedHat": {
 	    $what = "perl-JSON"
 	}
+	"OpenBSD": {
+	    $what = "p5-JSON"
+	}
     }
 
     if ($what) {

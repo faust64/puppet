@@ -15,6 +15,8 @@ munin_node_listenaddr: 10.42.242.2
 # Nagios
 nagios_icmp_proof: 8.8.8.8
 nagios_listenaddr: 10.42.242.2
+nagios_smart_disks:
+  - sd0c
 
 # Networks
 dns_ip:

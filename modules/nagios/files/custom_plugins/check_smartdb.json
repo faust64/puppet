@@ -324,6 +324,22 @@
 			},
 			"Perfs" : ["190","177","180","241"]
 		},
+		"Terrabit" : {
+			"Device" : ["SATA SSD", "Terrabit Industrial mSATAIII MLC"],
+			"ID#" : {
+				"1" : "RAW_VALUE", # Raw Read Error Rate
+				"9" : "RAW_VALUE", # Power-On Hours Count
+				"12" : "RAW_VALUE", # Power Cycle Count
+				"192" : "RAW_VALUE", # Power-Off Retract Count (Unsafe Shutdown Count)
+				"194" : "RAW_VALUE", # Temperature Celcius
+				"231" : "RAW_VALUE", # Temperature Celcius
+				"241" : "RAW_VALUE", # Total LBAs Written (32MiB)
+			},
+			"Threshs" : {
+				"194" : ["0:","70"]
+			},
+			"Perfs" : ["241"]
+		},
 		"Toshiba 3.5 HDD DT01ACA": {
 			"Device" : ["TOSHIBA DT01ACA300"],
 			"ID#" : {

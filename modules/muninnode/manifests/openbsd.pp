@@ -5,8 +5,13 @@ class muninnode::openbsd {
 
     file_line {
 	"Enable Munin-Node on boot":
-	    line => "munin_node_flags=",
-	    path => "/etc/rc.conf.local";
+	    line    => "munin_node_flags=",
+	    path    => "/etc/rc.conf.local";
+	"Patch smart_ probe python version":
+	    line    => "#!/usr/bin/env python",
+	    match   => "^#!/usr/bin/env python.*",
+	    path    => "/usr/local/libexec/munin/plugins/smart_",
+	    require => Common::Define::Package["munin-node"];
     }
 
     exec {
