@@ -7,7 +7,7 @@ class airsonic::register {
 	    group   => lookup("gid_zero"),
 	    mode    => "0640",
 	    owner   => root,
-	    path    => "/var/airsonic/remotes/$fqdn",
+	    path    => "/opt/airsonic/remotes/$fqdn",
 	    require => File["Prepare airsonic remotes directory"],
 	    tag     => "airsonic-sync-libraries";
     }

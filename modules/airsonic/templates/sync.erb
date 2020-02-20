@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DEST=<%=@alerts%>
-REMOTES=`test -d /var/airsonic/remotes && cd /var/airsonic/remotes && cat * 2>/dev/null`
+REMOTES=`test -d /opt/airsonic/remotes && cd /opt/airsonic/remotes && cat * 2>/dev/null`
 <% if @slack_hook -%>HOOK_URI=<%=@slack_hook%>
 <% end -%>ROOT=<%=@music_root%>
 TMPFILE=/tmp/airsonic_sync.$$

@@ -1,6 +1,14 @@
 nagios_no_parent: false
 physical_parent: oizis.adm.intra.unetresgrossebite.com
 
+# Airsonic
+airsonic_do_flac: true
+airsonic_sync_bwlimit: 5000
+airsonic_sync_directories:
+  - Lossless
+  - Main
+  - Videos
+
 # Fstab
 tmp_fs: ext4
 tmp_target_device: /dev/xvdb1

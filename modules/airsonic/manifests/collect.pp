@@ -5,7 +5,7 @@ class airsonic::collect {
 	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
-	    path    => "/var/airsonic/remotes",
+	    path    => "/opt/airsonic/remotes",
 	    require => File["Install airsonic.properties"];
     }
 
