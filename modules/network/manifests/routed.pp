@@ -32,12 +32,12 @@ class network::routed {
 		     include igmpproxy
 		}
 	    }
-	    if ($network::vars::all_networks[$nicname]['ftpproxy'] == true) {
+	    if ($network::vars::all_networks[$nicname]['ftp'] == true) {
 		if (! defined(Class[Ftpproxy])) {
 		     include ftpproxy
 		}
 	    }
-	    if ($network::vars::all_networks[$nicname]['tftpproxy'] == true) {
+	    if ($network::vars::all_networks[$nicname]['tftp'] == true) {
 		if (! defined(Class[Tftpproxy])) {
 		     include tftpproxy
 		}

@@ -1,10 +1,11 @@
 class tftpproxy::openbsd {
     case $kernelrelease {
-	/5\.[3-9]/: {
+	/5\.[3-9]/, /6\.[0-9]/: {
 	    file_line {
 		"Enable tftpproxy on boot":
-		    line => "tftpproxy_flags=",
-		    path => "/etc/rc.conf.local";
+		    line  => "tftpproxy_flags=",
+		    match => '^tftpproxy_flags=',
+		    path  => "/etc/rc.conf";
 	    }
 
 	    common::define::service {

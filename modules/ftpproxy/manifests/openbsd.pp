@@ -8,22 +8,20 @@ class ftpproxy::openbsd {
 
 		if ($nic['carpaddr']) {
 		    $nat_addr = $nic['carpaddr']
-		}
-		else {
+		} else {
 		    $nat_addr = $nic['addr']
 		}
 
 		file_line {
 		    "Enable ftpproxy on boot":
 			line  => "ftpproxy_flags='-r -a $nat_addr'",
-#			match => 'ftpproxy_flags=',
-			path  => '/etc/rc.conf.local';
+			match => '^ftpproxy_flags=',
+			path  => '/etc/rc.conf';
 		}
 
-#		File_line["Enable ftpproxy on boot"]
-#		    -> Service["ftpproxy"]
-	    }
-	    else {
+		File_line["Enable ftpproxy on boot"]
+		    -> Service["ftpproxy"]
+	    } else {
 		err{ "Looks like you have several default gateways configured": }
 	    }
 	}
