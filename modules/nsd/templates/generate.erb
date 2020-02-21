@@ -112,20 +112,28 @@ done
 
 if $RELOAD; then
     if nsd-checkconf <%=@conf_dir%>/nsd.conf; then
-<% if @kernel == "Linux" -%>	service nsd reload
+<% if @kernel == "Linux" and @myoperatingsystem == "Devuan" -%>	service nsd reload
+<% elsif @kernel == "Linux" -%>	systemctl reload nsd
 <% else -%>	/etc/rc.d/nsd reload
 <% end -%>    fi
 <% if @jumeau != false -%>    if ! ping -c1 -w3 <%=@jumeau%> >/dev/null 2>&1; then
 	echo "WARNING: <%=@jumeau%> unresponsive, won't sync conf" >&2
     else
+	allfine=true
 	for d in /usr/share/dnsgen "$NSD_ZONES_ROOT"
 	do
 	    if ! rsync -avWxP --rsh='ssh -p<%=@ssh_port%>' \
 		--exclude=zones.conf --exclude=server.conf \
 		--exclude=remote-control.conf $d/ <%=@jumeau%>:$d/; then
 		echo "WARNING: failed syncing $d to <%=@jumeau%>" >&2
+		allfine=false
 	    fi
 	done
+	if $allfine; then
+<% if @kernel == "Linux" and @myoperatingsystem == "Devuan" -%>	    ssh -p<%=@ssh_port%> <%=@jumeau%> service nsd reload
+<% elsif @kernel == "Linux" -%>	    ssh -p<%=@ssh_port%> <%=@jumeau%> systemctl reload nsd
+<% else -%>	    ssh -p<%=@ssh_port%> <%=@jumeau%> /etc/rc.d/nsd reload
+<% end -%>	fi
     fi
 <% end -%>fi
 

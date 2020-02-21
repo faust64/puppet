@@ -168,18 +168,25 @@ done
 
 if $RELOAD; then
     if named-checkconf; then
-<% if @kernel == "Linux" -%>	service $NAMED_SERVICE reload
+<% if @kernel == "Linux" and @myoperatingsystem == "Devuan" -%>	service $NAMED_SERVICE reload
 <% else -%>	/etc/rc.d/$NAMED_SERVICE reload
+<% elsif @kernel == "Linux" -%>	systemctl reload $NAMED_SERVICE
 <% end -%>    fi
 <% if @jumeau != false -%>    if ! ping -c1 -w3 <%=@jumeau%> >/dev/null 2>&1; then
 	echo "WARNING: <%=@jumeau%> unresponsive, won't sync conf" >&2
     else
+	allfine=true
 	for d in /usr/share/dnsgen "$NAMED_ROOT"
 	do
 	    if ! rsync -avWxP --rsh='ssh -p<%=@ssh_port%>' $d/ <%=@jumeau%>:$d/; then
 		echo "WARNING: failed syncing $d to <%=@jumeau%>" >&2
+		allfine=false
 	    fi
 	done
+	if $allfine; then
+<% if @kernel == "Linux" and @myoperatingsystem == "Devuan" -%>	    ssh -p<%=@ssh_port%> <%=@jumeau%> service $NAMED_SERVICE reload
+<% else -%>	    ssh -p<%=@ssh_port%> <%=@jumeau%> /etc/rc.d/$NAMED_SERVICE reload
+<% end -%>	fi
     fi
 <% end -%>fi
 
