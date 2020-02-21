@@ -10,6 +10,7 @@ lico_update_min: 20
 munin_node_listenaddr: 10.42.242.105
 
 # Nagios
+has_lm_sensors: false
 nagios_listenaddr: 10.42.242.105
 nagios_md_raid:
   - md1
