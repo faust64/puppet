@@ -1,4 +1,5 @@
 class network::routed {
+    $mtu = $network::vars::default_mtu
     if ($network::vars::local_networks) {
 	each($network::vars::local_networks) |$nic| {
 	    $nicname = $nic['name']
@@ -50,6 +51,7 @@ class network::routed {
 			fnetid   => $fnetid,
 			fvid     => $fvid,
 			l2filter => $network::vars::all_networks[$nicname]['l2filter'],
+			mtu      => $mtu,
 			rootif   => $nic['rootif'],
 			routes   => $routes;
 		}
@@ -61,6 +63,7 @@ class network::routed {
 			fnetid   => $fnetid,
 			fvid     => $fvid,
 			l2filter => $network::vars::all_networks[$nicname]['l2filter'],
+			mtu      => $mtu,
 			ospfif   => $nic['ospfif'],
 			routes   => $routes;
 		}

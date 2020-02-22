@@ -47,7 +47,7 @@ relay sslreverse {
 <% end -%><% if @pixel_ip != false and @has_pixel == true -%>
 
 relay pixelserver {
-    listen <%=@pixel_ip%> port 80
+    listen on <%=@pixel_ip%> port 80
     forward to <pixelserver> port 9999 check http "/" code 200
 }
 <% end -%><% if @mailmx_ip != false -%>

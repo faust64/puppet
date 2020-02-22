@@ -1,9 +1,9 @@
 define network::interfaces::main($faddr    = false,
 				 $fmask    = false,
-				 $fmtu     = false,
 				 $fnetid   = false,
 				 $fvid     = false,
 				 $l2filter = false,
+				 $mtu      = false,
 				 $ospfif   = false,
 				 $rootif   = false,
 				 $routes   = false) {
@@ -123,6 +123,7 @@ define network::interfaces::main($faddr    = false,
 			$name:
 			    addr     => $myaddr,
 			    l2filter => $l2filter,
+			    mtu      => $mtu,
 			    nmask    => $nmask,
 			    root_if  => $rootif,
 			    vid      => $vid,
@@ -133,6 +134,7 @@ define network::interfaces::main($faddr    = false,
 			$name:
 			    addr    => $carp_addr,
 			    bcast   => $lolcast,
+			    mtu     => $mtu,
 			    nmask   => $nmask,
 			    root_if => "vlan$vvid",
 			    routes  => $myroutes,
@@ -143,6 +145,7 @@ define network::interfaces::main($faddr    = false,
 			$name:
 			    addr     => $myaddr,
 			    l2filter => $l2filter,
+			    mtu      => $mtu,
 			    nmask    => $nmask,
 			    root_if  => $rootif,
 			    routes   => $myroutes,
@@ -154,7 +157,7 @@ define network::interfaces::main($faddr    = false,
 		network::interfaces::generic {
 		    $name:
 			addr    => $myaddr,
-			mtu     => $fmtu,
+			mtu     => $mtu,
 			nmask   => $nmask,
 			root_if => $rootif,
 			routes  => $myroutes;
