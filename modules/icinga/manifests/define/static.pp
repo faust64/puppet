@@ -1,7 +1,9 @@
 define icinga::define::static($host_contact   = "root",
 			      $host_ipaddress = "127.0.0.1",
 			      $host_parents   = false,
-			      $srvclass       = "generic") {
+			      $model          = false,
+			      $srvclass       = "generic",
+			      $stackmembers   = false) {
     $host_namearray = $name.split('\.')
     $host_named     = $host_namearray[1]
     $host_nameh     = $host_namearray[0]
@@ -76,11 +78,8 @@ define icinga::define::static($host_contact   = "root",
 	    $iconimagealt   = "switch"
 	    $iconimage      = "utgb/switch.png"
 	    $statusmapimage = "utgb/switch.gd2"
-	    case $name {
-		/nikea/, /ponos/, /amphilogiai/: {
-		    $src = "switches/powerconnect"
-		}
-		/2816/, /2824/, /2848/, /5324/, /5348/, /5424/, /5448/, /6224/, /6248/: {
+	    case $model {
+		/2816/, /2824/, /2848/, /5324/, /5348/, /5424/, /5448/, /5524/, /5548/, /6224/, /6248/: {
 		    $src = "switches/powerconnect"
 		}
 	        /pfsense/: {
@@ -90,17 +89,17 @@ define icinga::define::static($host_contact   = "root",
 		    $src = "switches/generic"
 		}
 	    }
-	    case $name {
+	    case $model {
 		/2816/: {
 		    $ports = [ '1', '2', '3', '4', '5', '6', '7', '8', '9',
 				'10', '11', '12', '13', '14', '15', '16' ]
 		}
-		/nikea/, /ponos/, /amphilogiai/, /2824/, /5324/, /5424/, /6224/: {
+		/2824/, /5324/, /5424/, /5524/, /6224/: {
 		    $ports = [ '1', '2', '3', '4', '5', '6', '7', '8', '9',
 				'10', '11', '12', '13', '14', '15', '16', '17',
 				'18', '19', '20', '21', '22', '23', '24' ]
 		}
-		/2848/, /5348/, /5448/, /6248/, /eros/, /gaia/: {
+		/2848/, /5348/, /5448/, /5548/, /6248/: {
 		    $ports = [ '1', '2', '3', '4', '5', '6', '7', '8', '9',
 				'10', '11', '12', '13', '14', '15', '16', '17',
 				'18', '19', '20', '21', '22', '23', '24', '25',
@@ -110,6 +109,37 @@ define icinga::define::static($host_contact   = "root",
 		}
 		default: {
 		    $ports = false
+		}
+	    }
+	    case $model {
+		/5524/, /5548/, /6224/, /6248/: {
+		    $anarray = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ]
+		    if ($stackmembers != false) {
+			$mbrs = $anarray[0,$stackmembers]
+		    } else {
+			$mbrs = [ 1 ]
+		    }
+		    case $model {
+			/5524/: {
+			    $portcount = 28
+			}
+			/5548/: {
+			    $portcount = 52
+			}
+			/6224/: {
+			    $portcount = 30
+			}
+			/6248/: {
+			    $portcount = 54
+			}
+			default: {
+			    $portcount = 50
+			}
+		    }
+		}
+		default: {
+		    $mbrs = [ 1 ]
+		    $portcount = size($ports)
 		}
 	    }
     	}

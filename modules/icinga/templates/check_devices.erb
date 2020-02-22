@@ -19,8 +19,18 @@ define command {
 }
 
 define command {
+    command_name        check-swstack-portadm
+    command_line        <%=@plugindir%>/check_sw -H '$HOSTADDRESS$' -C icinga -t adm -p '$ARG1$' -i '$ARG2$' -c '$ARG3$'
+}
+
+define command {
     command_name        check-sw-portchange
     command_line        <%=@plugindir%>/check_sw -H '$HOSTADDRESS$' -C icinga -t lastchange -p '$ARG1$'
+}
+
+define command {
+    command_name        check-swstack-portchange
+    command_line        <%=@plugindir%>/check_sw -H '$HOSTADDRESS$' -C icinga -t lastchange -p '$ARG1$' -i '$ARG2$' -c '$ARG3$'
 }
 
 define command {
@@ -29,8 +39,18 @@ define command {
 }
 
 define command {
+    command_name        check-swstack-portcheck
+    command_line        <%=@plugindir%>/check_sw -H '$HOSTADDRESS$' -C icinga -t portcheck -p '$ARG1$' -i '$ARG2$' -c '$ARG3$'
+}
+
+define command {
     command_name        check-sw-portstats
     command_line        <%=@plugindir%>/check_sw -H '$HOSTADDRESS$' -C icinga -t portstats -p '$ARG1$'
+}
+
+define command {
+    command_name        check-swstack-portstats
+    command_line        <%=@plugindir%>/check_sw -H '$HOSTADDRESS$' -C icinga -t portstats -p '$ARG1$' -i '$ARG2$' -c '$ARG3$'
 }
 
 define command {
