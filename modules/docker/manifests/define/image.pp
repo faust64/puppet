@@ -1,5 +1,6 @@
-define docker::define::image($ensure = "present",
-			     $image = $name) {
+define docker::define::image($ensure  = "present",
+			     $image   = $name,
+			     $timeout = 360) {
     if ($ensure == "present") {
 	exec {
 	    "Install docker image $name":
@@ -8,8 +9,7 @@ define docker::define::image($ensure = "present",
 		unless  => "docker images | grep '^$image[ \t]'",
 		path    => "/usr/bin:/bin",
 		require => Package["docker.io"],
-    #pulling images can take time, especially with my ADSL throughput, ...
-		timeout => 1800;
+		timeout => $timeout;
 	}
     } else {
 	exec {

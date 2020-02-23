@@ -214,7 +214,8 @@ class ssh::config {
 	    path   => "/etc/ssh/sshd_config";
     }
 
-    if ($os['release']['major'] != "7" and $lsbdistcodename != "buster") {
+    if ($os['release']['major'] != "7" and $lsbdistcodename != "buster"
+	and $operatingsystetem != "OpenBSD" and $kernelrelease != "6.6") {
 	common::define::lined {
 	    "Disable rhosts authentication (2/2)":
 		line   => "RhostsRSAAuthentication no",

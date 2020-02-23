@@ -1,6 +1,18 @@
 class ftpproxy::openbsd {
     $main_networks = $ftpproxy::vars::main_networks
 
+    file {
+	"Install Ftp-Proxy custom rc script":
+	    group  => hiera("gid_zero"),
+	    mode   => "0555",
+	    owner  => root,
+	    path   => "/etc/rc.d/ftpproxy",
+	    source => "puppet:///modules/ftpproxy/ftpproxy";
+    }
+
+    File["Install Ftp-Proxy custom rc script"]
+	-> Service["ftpproxy"]
+
     each($main_networks) |$nic| {
 	if ($nic['default'] == true) {
 	    if ! defined(Exec["Enable ftpproxy on boot"]) {
@@ -16,7 +28,7 @@ class ftpproxy::openbsd {
 		    "Enable ftpproxy on boot":
 			line  => "ftpproxy_flags='-r -a $nat_addr'",
 			match => '^ftpproxy_flags=',
-			path  => '/etc/rc.conf';
+			path  => '/etc/rc.conf.local';
 		}
 
 		File_line["Enable ftpproxy on boot"]

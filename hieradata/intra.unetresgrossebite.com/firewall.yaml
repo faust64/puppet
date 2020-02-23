@@ -501,7 +501,7 @@ transmission_ip: 10.42.42.42
 #vpnserver_ip: 10.42.44.38
 
 # Snort
-snort_listen_if: em0
+snort_listen_if: trunk0
 
 # Unbound
 unbound_do_dnssec: true

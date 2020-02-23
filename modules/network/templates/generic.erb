@@ -1,5 +1,4 @@
-<% if @trunk != "" %>trunkproto <%=@trunk%><% elsif @addr != false %>inet<% end -%><% if @addr != false and @nmask != false %> <%=@addr%><% if @trunk != "" %> netmask<% end -%> <%=@nmask%><% if @trunk == "" %> NONE<% end -%><% else %><%=@ifstate%><% end -%><% if @mtu != false and @addr != false %> mtu <%=@mtu%><% end %>
-<% if @addr == false && mtu != false -%>mtu <%=@mtu%><% end %>
+<% if @trunk != "" %>trunkproto <%=@trunk%><% elsif @addr != false %>inet<% end -%><% if @addr != false and @nmask != false %> <%=@addr%><% if @trunk != "" %> netmask<% end -%> <%=@nmask%><% if @trunk == "" %> NONE<% end -%><% else %><%=@ifstate%><% end -%><% if @mtu != false %> mtu <%=@mtu%><% end %>
 <% if @addr_alias != false %><% @addr_alias.sort.each do |host| -%><% if host =~ /[0-9]/ -%>inet alias <%=host%> <%=@nmask%> <%=@bcast%>
 <% end -%><% end -%><% end -%><% if @ualias != false -%><% @ualias.sort.each do |host| -%><% if host =~ /[0-9]\.[0-9]/ -%>inet alias <%=host%> 255.255.255.255 NONE
 <% end -%><% end -%><% end -%><% if @hwaddr -%>lladdr <%=@hwaddr%>

@@ -29,7 +29,26 @@ class nginx::debian {
 	    -> Service["nginx"]
     }
 
-    Common::Define::Package["nginx"]
-	-> File["Drop nginx default enabled configuration"]
-	-> Common::Define::Service["nginx"]
+    if ($lsbdistcodename == "buster") {
+	if (! defined(Exec["Reload systemd configuration"])) {
+	    include common::systemd
+	}
+
+	file_line {
+	    "Fix nginx systemd configuration":
+		line   => "After=network.target",
+		match  => "^After=.*",
+		notify => Exec["Reload systemd configuration"],
+		path   => "/lib/systemd/system/nginx.service";
+	}
+
+	Common::Define::Package["nginx"]
+	    -> File_line["Fix nginx systemd configuration"]
+	    -> File["Drop nginx default enabled configuration"]
+	    -> Common::Define::Service["nginx"]
+    } else {
+	Common::Define::Package["nginx"]
+	    -> File["Drop nginx default enabled configuration"]
+	    -> Common::Define::Service["nginx"]
+    }
 }

@@ -1,0 +1,31 @@
+#!/bin/sh
+#
+# $OpenBSD: ftpproxy,v 1.1 2011/07/06 18:55:36 robert Exp $
+
+for f in rc.conf rc.conf.local
+do
+    if test -s /etc/$f; then
+	c=$(awk -F= '/^[ \t]*ftpproxy_flags=/{print $2}' /etc/$f 2>/dev/null)
+	if test "$c"; then
+	    flags="$c"
+	fi
+    fi
+done
+if echo "$flags" | grep -- '-a[ \t]' >/dev/null; then
+    addr=`echo $flags | sed "s|^.*-a[ \t]*\([^ \t\"']*\).*|\1|"`
+    ifs=`grep $addr /etc/hostname.* 2>/dev/null | awk -F: '{print $1;exit;}' | sed 's|/etc/hostname.||'`
+    if echo "$ifs" | grep carp >/dev/null; then
+	if ! ifconfig $ifs 2>/dev/null | grep MASTER >/dev/null; then
+	    echo NOTICE: ftp-proxy service in standby
+	    exit 0
+	fi
+    fi
+fi
+
+daemon="/usr/sbin/ftp-proxy"
+
+. /etc/rc.d/rc.subr
+
+rc_reload=NO
+
+rc_cmd $1
