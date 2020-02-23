@@ -9,13 +9,13 @@ class sendmail::config {
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/etc/mail";
-	"Install sendmail accepted domains configuration":
-	    content => template("sendmail/local-host-names.erb"),
-	    group   => lookup("gid_zero"),
-	    mode    => "0644",
-	    owner   => root,
-	    path    => "/etc/mail/local-host-names",
-	    require => File["Prepare sendmail for further configuration"];
+#	"Install sendmail accepted domains configuration":
+#	    content => template("sendmail/local-host-names.erb"),
+#	    group   => lookup("gid_zero"),
+#	    mode    => "0644",
+#	    owner   => root,
+#	    path    => "/etc/mail/local-host-names",
+#	    require => File["Prepare sendmail for further configuration"];
 	"Install sendmail submit configuration":
 	    content => template("sendmail/submit.erb"),
 	    group   => lookup("gid_zero"),
