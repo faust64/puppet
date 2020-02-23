@@ -308,8 +308,8 @@ vlan_database:
     admin: true
     netid: "42"
     netmsk: 24
-    pxeip: 10.42.44.50
-    pxesatellite: true
+#   pxeip: 10.42.44.50
+#   pxesatellite: true
     acl:
       - vlan2
       - vlan3
