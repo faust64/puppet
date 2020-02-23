@@ -30,6 +30,7 @@ icinga_static_devices:
 #   model: powerconnect-5448
     model: powerconnect-5548
     srvclass: network
+    stackmbridx: 2
     stackmembers: 1
   nikea.adm.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.242.10
