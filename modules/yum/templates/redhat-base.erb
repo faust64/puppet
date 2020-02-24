@@ -1,0 +1,13 @@
+<% if @major != "8" -%>[Base]
+name=RHEL-$releasever - Base
+baseurl=https://<%=@http_repo%>/rhel/<%=@operatingsystemrelease%>
+gpgcheck=0<% else -%>[BaseOS]
+name=RHEL-$releasever - BaseOS
+baseurl=https://<%=@http_repo%>/rhel/<%=@operatingsystemrelease%>/BaseOS
+gpgcheck=0
+
+[AppStream]
+name=RHEL-$releasever - AppStream
+baseurl=https://<%=@http_repo%>/rhel/<%=@operatingsystemrelease%>/AppStream
+gpgcheck=0<% end -%>
+

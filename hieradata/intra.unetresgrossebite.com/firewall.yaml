@@ -57,6 +57,7 @@ nsd_serve_domains:
   - 0.43.10.in-addr.arpa
   - 1.43.10.in-addr.arpa
   - 242.42.10.in-addr.arpa
+  - 252.42.10.in-addr.arpa
   - 253.42.10.in-addr.arpa
   - 254.42.10.in-addr.arpa
   - 255.255.10.in-addr.arpa
@@ -71,6 +72,8 @@ nsd_serve_domains:
   - adm.intra.unetresgrossebite.com
   - ceph.intra.unetresgrossebite.com
   - faust.intra.unetresgrossebite.com
+  - friends.intra.unetresgrossebite.com
+  - guests.intra.unetresgrossebite.com
   - intra.unetresgrossebite.com
   - leaseweb.unetresgrossebite.com
   - plaristote.intra.unetresgrossebite.com

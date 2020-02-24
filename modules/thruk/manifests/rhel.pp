@@ -4,7 +4,6 @@ class thruk::rhel {
 
     common::define::package {
 	"thruk":
-	    require => Yum::Define::Repo["Packages"];
     }
 
     file {

@@ -22,7 +22,6 @@ class xorg::rhel {
     }
 
     Package["xorg-x11-server-Xorg"]
-	-> Yum::Define::Repo["Packages"]
 	-> Package["msttcore-fonts"]
 	-> Package["xorg-x11-server-utils"]
 }
