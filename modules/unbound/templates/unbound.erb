@@ -40,7 +40,8 @@ server:
     infra-host-ttl:			900
     infra-lame-ttl:			900
     interface:				0.0.0.0
-    interface-automatic:		no
+<% if @pf_svc_ip != false -%>    interface:				<%=@pf_svc_ip%>
+<% end -%>    interface-automatic:		no
     jostle-timeout:			200
     keep-missing:			31622400
     key-cache-size:			4m

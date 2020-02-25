@@ -10,6 +10,7 @@ class ifstated::vars {
     $main_networks  = lookup("net_ifs")
     $munin_ip       = lookup("munin_ip")
     $pf_alerts      = lookup("contact_alerts_pf")
+    $puppet_master  = lookup("puppetmaster")
     $sasyncd_peer   = lookup("sasyncd_peer")
     $ifstated_peer  = lookup("ifstated_peer")
     $vlan_database  = lookup("vlan_database")

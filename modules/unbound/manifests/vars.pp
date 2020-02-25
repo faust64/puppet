@@ -25,4 +25,9 @@ class unbound::vars {
     } else {
 	$pixeladdress   = $ipaddress
     }
+    if (defined(Class["pf"])) {
+	$pf_svc_ip      = hiera("pf_svc_ip")
+    } else {
+	$pf_svc_ip      = false
+    }
 }

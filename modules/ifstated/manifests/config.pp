@@ -17,6 +17,7 @@ class ifstated::config {
     $local_networks = $ifstated::vars::local_networks[$domain]
     $main_networks  = $ifstated::vars::main_networks
     $munin_ip       = $ifstated::vars::munin_ip
+    $puppet_master  = $ifstated::vars::puppet_master
     $sasyncd_fml    = $ifstated::vars::sasyncd_fml
     $sync_peer      = $ifstated::vars::sync_peer
     $vlan_database  = $ifstated::vars::vlan_database

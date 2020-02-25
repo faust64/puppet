@@ -14,13 +14,9 @@ icinga_collect_domains:
   - intra.unetresgrossebite.com
 icinga_static_devices:
   eros.adm.intra.unetresgrossebite.com:
-    host_ipaddress: 10.42.242.13
-    host_parents: zeus.intra.unetresgrossebite.com
-    model: powerconnect-5448
-    srvclass: network
-  newsw.adm.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.242.4
     host_parents: zeus.intra.unetresgrossebite.com
+#   model: powerconnect-5448
     model: powerconnect-5548
     srvclass: network
     stackmembers: 1

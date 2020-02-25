@@ -6,7 +6,7 @@ nagios_no_parent: true
 bgp_router_id: 10.42.242.5
 
 # Ifstated
-ifstated_alt_gateway: 10.42.242.3
+ifstated_alt_gateway: 10.42.242.2
 #ifstated_alt_gateway: 10.42.242.2
 ifstated_peer: 10.42.44.2
 
@@ -22,7 +22,7 @@ nagios_smart_disks:
 # Networks
 dns_ip:
   - 10.255.255.255
-  - 10.42.242.3
+  - 10.42.242.2
 #gre_tunnels:
 #  "0":
 #    description: "LeaseWeb via Freebox"

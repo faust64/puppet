@@ -6,7 +6,7 @@ nagios_no_parent: true
 bgp_router_id: 10.42.242.2
 
 # Ifstated
-ifstated_alt_gateway: 10.42.242.3
+ifstated_alt_gateway: 10.42.242.5
 #ifstated_alt_gateway: 10.42.242.5
 ifstated_peer: 10.42.44.5
 

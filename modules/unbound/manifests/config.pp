@@ -6,6 +6,7 @@ class unbound::config {
     $download         = $unbound::vars::download
     $fail2ban_unbound = $unbound::vars::fail2ban_unbound
     $forwards         = $unbound::vars::forwards
+    $pf_svc_ip        = $unbound::vars::pf_svc_ip
     $recurse_networks = $unbound::vars::recurse_networks
     $rdomain          = $unbound::vars::rdomain
     $run_dir          = $unbound::vars::run_dir

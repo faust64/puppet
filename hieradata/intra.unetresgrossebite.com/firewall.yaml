@@ -542,6 +542,8 @@ unbound_forwarders:
     - 10.255.255.255@8053
   faust.intra.unetresgrossebite.com:
     - 10.255.255.255@8053
+  friends.intra.unetresgrossebite.com:
+    - 10.255.255.255@8053
   intra.unetresgrossebite.com:
     - 10.255.255.255@8053
   leaseweb.unetresgrossebite.com:
