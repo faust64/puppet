@@ -44,7 +44,7 @@ icinga_static_devices:
 #   srvclass: network
   ponos.adm.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.242.6
-    host_parents: eros.adm.intra.unetresgrossebite.com
+    host_parents: gaia.adm.intra.unetresgrossebite.com
     model: powerconnect-5424
     srvclass: network
 # ate.adm.intra.unetresgrossebite.com:
@@ -77,7 +77,7 @@ icinga_static_devices:
 #   srvclass: phone
   asteros.adm.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.242.11
-    host_parents: eros.adm.intra.unetresgrossebite.com
+    host_parents: gaia.adm.intra.unetresgrossebite.com
     srvclass: ap
   cerberus.adm.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.242.26
@@ -85,15 +85,15 @@ icinga_static_devices:
     srvclass: ap
   rhea.adm.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.242.253
-    host_parents: eros.adm.intra.unetresgrossebite.com
+    host_parents: gaia.adm.intra.unetresgrossebite.com
     srvclass: pdu
   hera.adm.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.242.247
-    host_parents: eros.adm.intra.unetresgrossebite.com
+    host_parents: gaia.adm.intra.unetresgrossebite.com
     srvclass: pdu
   hestia.adm.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.242.246
-    host_parents: eros.adm.intra.unetresgrossebite.com
+    host_parents: gaia.adm.intra.unetresgrossebite.com
     srvclass: pdu
   printer.vms.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.44.150

@@ -56,6 +56,7 @@ net_ifs:
     trunkopts: trunkport em0 trunkport em1 trunkport em2 trunkport em3
     trunkproto: lacp
   - name: vlan1000
+    addr: 192.168.9.100
     asterisk: 78.193.67.92
     bcast: 78.193.67.255
     carpaddr: 78.193.67.92
