@@ -22,6 +22,7 @@ state primary
 <% end -%><% if @has_tftpproxy -%>		 /etc/rc.d/tftpproxy restart; \
 <% end -%><% if @has_relayd -%>		 relayctl reload; \
 <% end -%><% if @gw -%>		 route change default `cat /etc/mygate`; \
+<% end -%><% if @forcepuppetgw -%>		 route add $(host <%=@puppet_master%> | awk '{print $NF}')/32 $(awk '/wan_gw/{print $3}' /etc/pf.d/IFS)
 <% end -%><% if @has_openvpn -%>		 /usr/local/sbin/openvpn_resync; \
 <% end -%><% if @has_pf -%>		 /usr/local/sbin/pf_resync; \
 <% end -%><% if @has_ipsecctl -%>		 /usr/local/sbin/ipsec_resync -r; \
@@ -44,6 +45,7 @@ state backup
 <% break -%><% end -%><% end -%><% end -%><% if @has_ftpproxy -%>		 /etc/rc.d/ftpproxy stop; \
 <% end -%><% if @has_tftpproxy -%>		 /etc/rc.d/tftpproxy stop; \
 <% end -%><% if @gw -%>		 route change default `cat /etc/myigate`; \
+<% end -%><% if @forcepuppetgw -%>		 route delete $(host <%=@puppet_master%> | awk '{print $NF}')/32
 <% end -%><% if @has_ospfd -%>		 /usr/local/sbin/ospf_resync; \
 <% end -%>		 "
     }

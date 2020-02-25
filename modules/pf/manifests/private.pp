@@ -18,18 +18,21 @@ class pf::private {
 	    }
 
 	    if ($pf::vars::vpnserver_ip != '127.0.0.1') {
-		$routeto = ''
+		$routeto     = ''
+		$routetopriv = ''
 	    }
 	    else {
-		$routeto = ' route-to ( $def_if $def_gw )'
+		$routeto     = ' route-to ( $def_if $def_gw )'
+		$routetopriv = ' route-to ( $wan_if $wan_gw )'
 	    }
 
 	    pf::define::vlan {
 		$nicname:
-		    l2filter => $l2filter,
-		    root_if  => $root_if,
-		    routeto  => $routeto,
-		    vlanname => $vlanname;
+		    l2filter    => $l2filter,
+		    root_if     => $root_if,
+		    routeto     => $routeto,
+		    routetopriv => $routetopriv,
+		    vlanname    => $vlanname;
 	    }
 	}
     }

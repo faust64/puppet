@@ -5,6 +5,7 @@ additional_classes:
 
 # Ifstated
 ifstated_alt_gateway: 10.42.242.1
+ifstated_force_puppet_gateway: true
 
 # Ipsecctl
 ipsec_tunnels:

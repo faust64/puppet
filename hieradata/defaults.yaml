@@ -740,6 +740,7 @@ ifplugd_iface: eth0
 ifstated_bypass: false
 ifstated_conf_dir: /etc
 ifstated_dhcrelay: true
+ifstated_force_puppet_gateway: false
 
 # Ipfw
 myvlan: false

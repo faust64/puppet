@@ -3,6 +3,7 @@ class ifstated::config {
     $carp_advbase   = $ifstated::vars::carp_advbase
     $conf_dir       = $ifstated::vars::conf_dir
     $contact_alerts = $ifstated::vars::contact_alerts
+    $forcepuppetgw  = $ifstated::vars::forcepuppetgw
     $dhcp_ip        = $ifstated::vars::dhcp_ip
     $do_relay_dhcp  = $ifstated::vars::do_relay_dhcp
     $gw             = $ifstated::vars::alt_gateway

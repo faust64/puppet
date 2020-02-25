@@ -23,13 +23,15 @@ pass in quick on <%=@root_if%> inet proto $u from <<%=@name%>_net> to <%=rt['net
 <% end -%><% if @squid_ip != false and @all_networks[@name]['forceproxy'] == true -%>pass in quick on <%=@root_if%> inet proto $t from <<%=@name%>_net> to $ext_net port http rdr-to $squid_ip port $squid_port<%=@l2filter%>
 <% end -%><% if @bbb_ip != false -%>pass in quick on <%=@root_if%> inet proto $tu from <<%=@name%>_net> to $bbb_ip port $bbb_port<%=@l2filter%><%=@routeto%>
 <% end -%><% if @git_ip != false -%>pass in quick on <%=@root_if%> inet proto $t from <<%=@name%>_net> to $git_ip port 9418<%=@l2filter%><%=@routeto%>
-<% end -%>pass in on <%=@root_if%> inet proto $t from <<%=@name%>_net> to $ext_net port $default_tcp_port<%=@l2filter%><%=@routeto%>
+<% end -%>pass in quick on <%=@root_if%> inet proto $t from <<%=@name%>_net> to <office_net> port $default_tcp_port<%=@l2filter%><%=@routetopriv%>
+pass in on <%=@root_if%> inet proto $t from <<%=@name%>_net> to $ext_net port $default_tcp_port<%=@l2filter%><%=@routeto%>
 <% if @all_networks[@name]['quic'] == true -%>pass in on <%=@root_if%> inet proto $u from <<%=@name%>_net> to $ext_net port https<%=@l2filter%><%=@routeto%>
 <% end -%><% if @all_networks[@name]['admin'] == true -%>pass in on <%=@root_if%> inet proto $t from <<%=@name%>_net> to $ext_net port 444<%=@l2filter%><%=@routeto%>
 <% end -%><% if @pubmx_ip != false -%>pass in on <%=@root_if%> inet proto $t from <<%=@name%>_net> to $pubmx_ip port $pub_mail_port<%=@l2filter%><%=@routeto%>
 <% end -%><% if @xmpp_ip != false and @all_networks[@name]['xmppvisio'] == true -%>pass in on <%=@root_if%> inet proto $u from <<%=@name%>_net> to $xmpp_ip port $xmpp_udp_port<%=@l2filter%><%=@routeto%>
 pass in on <%=@root_if%> inet proto $t from <<%=@name%>_net> to $xmpp_ip port $xmpp_tcp_port<%=@l2filter%><%=@routeto%>
-<% end -%>pass in on <%=@root_if%> inet proto $u from <<%=@name%>_net> to $ext_net port $default_udp_port<%=@l2filter%><%=@routeto%>
+<% end -%>pass in quick on <%=@root_if%> inet proto $u from <<%=@name%>_net> to <office_net> port $default_udp_port<%=@l2filter%><%=@routetopriv%>
+pass in on <%=@root_if%> inet proto $u from <<%=@name%>_net> to $ext_net port $default_udp_port<%=@l2filter%><%=@routeto%>
 <% elsif @all_networks[@name]['internet'] == "guest" -%>pass in on <%=@root_if%> inet proto $i from <<%=@name%>_net> to $ext_net<%=@l2filter%><%=@routeto%>
 <% if @squid_ip != false -%>pass in quick on <%=@root_if%> inet proto $t from <<%=@name%>_net> to $ext_net port http rdr-to $squid_ip port $squid_port<%=@l2filter%>
 <% else -%>pass in on <%=@root_if%> inet proto $t from <<%=@name%>_net> to $ext_net port $web_port<%=@l2filter%><%=@routeto%>

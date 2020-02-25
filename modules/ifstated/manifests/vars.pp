@@ -6,6 +6,7 @@ class ifstated::vars {
     $default_alerts = lookup("contact_alerts")
     $dhcp_ip        = lookup("dhcp_ip")
     $do_relay_dhcp  = lookup("ifstated_dhcrelay")
+    $forcepuppetgw  = lookup("ifstated_force_puppet_gateway")
     $local_networks = lookup("active_vlans")
     $main_networks  = lookup("net_ifs")
     $munin_ip       = lookup("munin_ip")

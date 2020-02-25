@@ -1,8 +1,9 @@
-define pf::define::vlan($as_if    = false,
-			$l2filter = "",
-			$root_if  = $name,
-			$routeto  = "",
-			$vlanname = $name) {
+define pf::define::vlan($as_if       = false,
+			$l2filter    = "",
+			$root_if     = $name,
+			$routeto     = "",
+			$routetopriv = "",
+			$vlanname    = $name) {
     $all_networks      = $pf::vars::all_networks
     $bbb_ip            = $pf::vars::bbb_ip
     $ftpproxy_port     = $pf::vars::ftpproxy_port

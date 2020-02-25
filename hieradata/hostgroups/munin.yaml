@@ -2,7 +2,7 @@ additional_classes:
   - Munin
 
 # Apache
-apache_mod_cgid: true
+apache_mod_fcgid: true
 apache_mod_expires: true
 
 # Cron
