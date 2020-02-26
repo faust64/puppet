@@ -1,6 +1,6 @@
 #!/bin/ksh
 
-DAEMON=/usr/local/sbin/pixelserver
+DAEMON=/usr/local/sbin/pixelserver-wrapper
 KILL=/bin/kill
 LOCK=/tmp/.lock-pixelserver
 PRG=`basename "$0"`

@@ -112,21 +112,31 @@ ospf_map: false
 
 # PF
 pf_custom_rules:
+  "rhvpn":
+    closedate: 2021/01/01
+    glpi: 9996
+    host:
+      ovpn-ams2.redhat.com: 209.132.186.220/32
+    port:
+      ssh: 443
+    proto: "$u"
+    vlans:
+      - vlan42
   "txbot":
-    closedate: 2099/31/12
+    closedate: 2020/20/02
     glpi: 9997
     host:
-      "digitalocean": "104.236.252.106/32"
+      digitalocean: 104.236.252.106/32
     port:
       ssh: 10666
     proto: "$t"
     vlans:
       - vlan42
   "website":
-    closedate: 2099/31/12
+    closedate: 2020/20/02
     glpi: 9998
     host:
-      "digitalocean": "45.55.174.182/32"
+      digitalocean: 45.55.174.182/32
     port:
       ssh: 17777
     proto: "$t"
