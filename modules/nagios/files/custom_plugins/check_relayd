@@ -42,7 +42,7 @@ else
 	  awk '/[ 	]host[ 	]/{print $3" "$5}' | \
 	  while read host status
 	  do
-	      if "x$status" = xup; then
+	      if test "x$status" = xup; then
 		  continue
 	      fi
 	      echo -n " - $host status:$status"
