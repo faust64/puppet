@@ -2,7 +2,8 @@ antispoof for { <% @local_networks[@domain].each do |nic| -%><%=nic['name']%> <%
 <% if @named_ip != false -%>pass in quick inet proto $tu from $named_ip to <office_net> port domain route-to ( $wan_if $wan_gw )
 <% end -%>pass in quick inet proto $tu from $dns_ip to $ext_net port domain route-to ( $def_if $def_gw )
 pass in quick inet proto $tu from any to $dns_ip port domain
-<% if @masterns != false -%>pass in quick inet proto $tu from $ns_ip to $dns_ip
+<% if @svc_ip != false %>pass in quick inet proto $t from <private_networks> to <%=@svc_ip%> port { http https }
+<% end -%><% if @masterns != false -%>pass in quick inet proto $tu from $ns_ip to $dns_ip
 <% end -%><% if @ldap_ip != false and @masterldap != false -%>pass in quick inet proto $t from $ldap_host to $ldap_ip
 pass in quick inet proto $t from $ldap_ip to $ldap_host
 <% end -%><% if @squid_ip != false -%>pass in quick inet proto $t from $squid_ip to $ext_net port $web_port route-to ( $def_if $def_gw )
