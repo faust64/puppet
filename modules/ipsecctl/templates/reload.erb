@@ -65,7 +65,7 @@ fi
 ipsec_resync >/dev/null 2>&1
 >/tmp/$Prg.report
 
-for vid in 70 90 30 20
+for vid in 2 4
 do
     hereiam=`ifconfig carp$vid 2>/dev/null | awk '/[ 	]inet[ 	]/{print $2}'`
     test "$hereiam" && break
@@ -73,7 +73,7 @@ done
 
 if test -z "$hereiam"; then
     echo "Can't find about some local IP to pass our tunnels" >/tmp/$Prg.report
-else
+elif test -s /etc/ipsec.conf; then
     cd /etc/ipsec.d
     ls -1 | while read file
     do
@@ -90,20 +90,20 @@ else
 	    fi
 	fi
     done
+    sleep 60
+    if grep 'unable to recover' /tmp/$Prg.report; then
+	SUBJECT='[WARNING] Unable to recover some tunnels'
+    elif grep 'unreachable' /tmp/$Prg.report; then
+	SUBJECT='[ERROR] Unable to reach some gateways'
+    elif test -s /tmp/$Prg.report; then
+	SUBJECT='[REPORT] Succesfully reloaded tunnels'
+    else
+	rm -f /tmp/$Prg.report
+	exit 0
+    fi >/dev/null 2>&1
+    cat /tmp/$Prg.report | mail -s "$SUBJECT" $DEST
 fi
 
-sleep 60
-if grep 'unable to recover' /tmp/$Prg.report; then
-    SUBJECT='[WARNING] Unable to recover some tunnels'
-elif grep 'unreachable' /tmp/$Prg.report; then
-    SUBJECT='[ERROR] Unable to reach some gateways'
-elif test -s /tmp/$Prg.report; then
-    SUBJECT='[REPORT] Succesfully reloaded tunnels'
-else
-    rm -f /tmp/$Prg.report
-    exit 0
-fi >/dev/null 2>&1
-cat /tmp/$Prg.report | mail -s "$SUBJECT" $DEST
 rm -f /tmp/$Prg.report
 
 exit 0

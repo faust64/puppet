@@ -266,4 +266,21 @@ class nagios::probe {
 	    }
 	}
     }
+
+    if ($nagios::vars::jumbo_check) {
+	if ($nagios::vars::jumbo_check != true) {
+	    $netif = $nagios::vars::jumbo_check
+	} else {
+	    $netif = $interfaces.split(',')[0]
+	}
+	nagios::define::probe {
+	    "mtu":
+		pluginargs    => [ "-i", $netif ],
+		description   => "$fqdn mtu on $netif",
+		escalate_itv  => 1440,
+		escalate_last => 3,
+		servicegroups => "system",
+		use           => "jobs-service";
+	}
+    }
 }

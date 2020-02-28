@@ -15,6 +15,7 @@ lico_update_min: 12
 munin_node_listenaddr: 10.42.242.22
 
 # Nagios
+nagios_check_jumbo: false
 nagios_listenaddr: 10.42.242.22
 nagios_smart_disks:
   - sda

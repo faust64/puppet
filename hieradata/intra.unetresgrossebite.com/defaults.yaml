@@ -7,6 +7,7 @@ modeles_path: /var/www/modeles
 with_collectd: false
 
 # Nagios
+nagios_check_jumbo: true
 nagios_ip:
   - 10.42.242.202
   - 10.42.242.203

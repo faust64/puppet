@@ -6,6 +6,7 @@ class nagios::vars {
     $iconimage           = lookup("nagios_iconimage")
     $iconimagealt        = lookup("nagios_iconimagealt")
     $ipmitool_bin        = lookup("ipmitool_bin")
+    $jumbo_check         = lookup("nagios_check_jumbo")
     $nagios_class        = lookup("nagios_host_class")
     $nagios_conf_dir     = lookup("nagios_conf_dir")
     $nagios_hostgroup    = lookup("nagios_hostgroup")

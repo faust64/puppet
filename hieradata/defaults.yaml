@@ -754,6 +754,7 @@ ipsecctl_default_backend: isakmpd
 # ISAKMPD
 isakmpd_conf_dir: /etc/isakmpd
 isakmpd_dpd_interval: 20
+isakmpd_listen: false
 isakmpd_lifetimep1: "86400,60:86400"
 isakmpd_lifetimep2: "28800,60:86400"
 
@@ -1060,6 +1061,7 @@ has_ipmi: false
 has_lm_sensors: true
 has_serial_io: false
 ipmitool_bin: /usr/bin/ipmitool
+nagios_check_jumbo: false
 nagios_conf_dir: /etc/nagios
 nagios_contact_escalate: false
 nagios_dns_proof: perdu.com

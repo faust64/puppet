@@ -1,0 +1,57 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+CRIT=1500
+IFACE=eth0
+WARN=9000
+ret=OK
+str=
+
+while test "$1"
+do
+    case "$1" in
+	-c|--critical)	CRIT=$2; shift ;;
+	-i|--iface)	IFACE=$2; shift ;;
+	-w|--warning)	WARN=$2; shift ;;
+	*)		echo "unknown option $1" >&2 ;;
+    esac
+    shift
+done
+
+if ! test $WARN -gt $CRIT >/dev/null; then
+    echo invalid alert thresholds, resetting defaults >&2
+    CRIT=1500
+    WARN=9000
+fi
+
+if ! ip link show >/dev/null 2>&1; then
+    hasmtu=`ifconfig $IFACE | awk '/[mM][tT][uU]/' | sed 's|^.*[mM][tT][uU][: ]*\([0-9\]*\).*$|\1|'`
+else
+    hasmtu=`ip link show $IFACE 2>/dev/null | awk '/mtu/' | sed 's|^.* mtu \([0-9]*\).*$|\1|'`
+fi
+
+if test -z "$hasmtu"; then
+    ret=UNKNOWN
+    str="could not retrieve MTU for $IFACE"
+elif test "$hasmtu" -ge "$WARN"; then
+    ret=OK
+    str="$IFACE has mtu $hasmtu"
+elif test "$hasmtu" -ge "$CRIT"; then
+    ret=WARNING
+    str="$IFACE has mtu $hasmtu"
+elif test "$hasmtu" -lt "$CRIT"; then
+    ret=CRITICAL
+    str="$IFACE has mtu $hasmtu"
+else
+    ret=UNKNOWN
+    str="$IFACE has invalid mtu $hasmtu"
+fi 2>/dev/null
+
+echo "$ret $str"
+eval ret=\$$ret
+exit $ret

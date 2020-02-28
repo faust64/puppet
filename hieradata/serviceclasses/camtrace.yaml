@@ -27,7 +27,6 @@ nagios_partitions_watchlist:
   root: /
   backups: /disk
   recordings: /disk1
-nagios_no_parent: false
 
 # Openbox
 openbox_autostart_cmd: 'firefox "http://localhost/" &'

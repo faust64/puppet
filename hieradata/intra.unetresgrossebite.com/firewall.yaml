@@ -8,12 +8,12 @@ ifstated_alt_gateway: 10.42.242.1
 ifstated_force_puppet_gateway: true
 
 # Ipsecctl
-ipsec_tunnels:
-  Hypnos:
-    localgw: 78.193.67.92
-    localnet: 10.42.0.0/16
-    remotegw: 37.48.71.168
-    remotenet: 10.43.1.0/24
+ipsec_tunnels: []
+#  Hypnos:
+#    localgw: 78.193.67.92
+#    localnet: 10.42.0.0/16
+#    remotegw: 37.48.71.168
+#    remotenet: 10.43.1.0/24
 # Hypnos-fallback:
 #   localgw: 78.193.67.92
 #   localnet: 172.16.42.0/29
@@ -41,6 +41,10 @@ ipsec_tunnels:
 #    hashp2: sha1
 #    groupp2: modp768
 #    passphrase: nondefaultpassphrase
+
+# Isakmpd
+isakmpd_listen:
+  - 78.193.67.92
 
 # Network
 #gre_tunnels:

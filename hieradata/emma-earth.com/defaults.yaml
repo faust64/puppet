@@ -33,7 +33,6 @@ munin_ip:
 # Nagios
 nagios_ip:
   - 5.135.4.213
-nagios_no_parent: false
 
 # OpenLDAP
 openldap_ldap_slave: sso.unetresgrossebite.com

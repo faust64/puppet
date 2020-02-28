@@ -44,7 +44,6 @@ munin_ip:
 # Nagios
 nagios_ip:
   - 5.135.4.213
-nagios_no_parent: false
 
 # Named
 named_master: 78.193.67.92

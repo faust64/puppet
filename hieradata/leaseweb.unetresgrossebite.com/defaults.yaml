@@ -7,7 +7,6 @@ modeles_path: /media/backups
 modeles_nfs_opts: fstype=nfs4,ro,soft,intr
 
 # Nagios
-nagios_no_parent: false
 nagios_hostgroups:
   - cpanel
   - customer

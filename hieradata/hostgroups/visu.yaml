@@ -37,7 +37,6 @@ locale_LOCALE: C
 # Nagios
 nagios_load_crit_threshold: "2.2,2.2,2.2"
 nagios_load_warn_threshold: "2.0,2.0,2.0"
-nagios_no_parent: false
 
 # Puppet
 #a week

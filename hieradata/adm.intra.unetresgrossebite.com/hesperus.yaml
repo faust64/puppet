@@ -1,4 +1,3 @@
-nagios_no_parent: false
 no_linprocfs: true
 physical_parent: nikea.adm.intra.unetresgrossebite.com
 with_collectd: false

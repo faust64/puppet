@@ -12,7 +12,6 @@ nagios_procs_crit: 600
 nagios_procs_warn: 300
 nagios_runprocs_crit: 100
 nagios_runprocs_warn: 50
-nagios_no_parent: false
 
 # OpenSSH
 ssh_tcp_wrappers:

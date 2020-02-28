@@ -12,7 +12,6 @@ contact_alerts_ipsecctl: faust@unetresgrossebite.com
 nagios_class: network
 nagios_load_crit_threshold: "3.0,3.0,3.0"
 nagios_load_warn_threshold: "2.9,2.9,2.9"
-nagios_no_parent: false
 nagios_partitions_watchlist:
   root: /
 nagios_runprocs_crit: 15

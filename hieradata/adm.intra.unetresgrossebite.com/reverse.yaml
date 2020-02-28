@@ -1,4 +1,3 @@
-nagios_no_parent: false
 physical_parent: nemesis.adm.intra.unetresgrossebite.com
 with_collectd: false
 
@@ -9,12 +8,16 @@ apache_mod_proxy_balancer: true
 # Pki
 pki_public: pki.adm.intra.unetresgrossebite.com
 
+# Nagios
+nagios_check_jumbo: false
+
 # Reverses
 reverse_domains:
   - intra.unetresgrossebite.com
   - adm.intra.unetresgrossebite.com
   - ceph.intra.unetresgrossebite.com
   - faust.intra.unetresgrossebite.com
+  - friends.intra.unetresgrossebite.com
   - plaristote.intra.unetresgrossebite.com
   - sip.intra.unetresgrossebite.com
   - surv.intra.unetresgrossebite.com

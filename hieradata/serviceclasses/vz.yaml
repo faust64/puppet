@@ -18,7 +18,6 @@ bacula_file_daemon_fileset:
 # Nagios
 nagios_load_crit_threshold: "8.0,8.0,8.0"
 nagios_load_warn_threshold: "7.7,7.7,7.7"
-nagios_no_parent: false
 nagios_partitions_watchlist:
   backups: /media/backups
   boot: /boot

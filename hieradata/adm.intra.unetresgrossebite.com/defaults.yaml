@@ -4,6 +4,7 @@ modeles_nfs_opts: fstype=nfs4,ro,soft,intr
 modeles_path: /goinfre/packages/modeles
 
 # Nagios
+nagios_check_jumbo: true
 nagios_hostgroups:
   - ap
   - cam

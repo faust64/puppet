@@ -11,7 +11,7 @@ dhcpd_collect_static_leases:
 dns_search: intra.unetresgrossebite.com
 
 # Nagios
-nagios_no_parent: false
+nagios_check_jumbo: false
 
 # OpenLDAP
 ldap_id: 41
