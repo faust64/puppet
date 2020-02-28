@@ -51,7 +51,7 @@ NODE fw1
 
 NODE fw2
     POSITION 300 200
-    LABEL Io
+    LABEL Poseidon
     LABELFONT 42
     LABELOFFSET E
     LABELOUTLINECOLOR 255 255 255
@@ -61,7 +61,7 @@ NODE sw1
     POSITION 550 300
     LABEL Eros
     LABELFONT 42
-    LABELOFFSET N
+    LABELOFFSET NE
     LABELOUTLINECOLOR 255 255 255
     ICON 60 60 /var/www/wmap/images/sw.png
 
@@ -69,23 +69,15 @@ NODE sw2
     POSITION 250 300
     LABEL Gaia
     LABELFONT 42
-    LABELOFFSET N
+    LABELOFFSET NW
     LABELOUTLINECOLOR 255 255 255
     ICON 60 60 /var/www/wmap/images/sw.png
-
-#NODE sw3
-#    POSITION 400 250
-#    LABEL Amphilogiai
-#    LABELFONT 42
-#    LABELOFFSET N
-#    LABELOUTLINECOLOR 255 255 255
-#    ICON 60 60 /var/www/wmap/images/sw.png
 
 NODE sw3
     POSITION 700 300
     LABEL Nikea
     LABELFONT 42
-    LABELOFFSET N
+    LABELOFFSET NW
     LABELOUTLINECOLOR 255 255 255
     ICON 60 60 /var/www/wmap/images/sw.png
 
@@ -93,12 +85,12 @@ NODE sw4
     POSITION 100 300
     LABEL Ponos
     LABELFONT 42
-    LABELOFFSET N
+    LABELOFFSET NE
     LABELOUTLINECOLOR 255 255 255
     ICON 60 60 /var/www/wmap/images/sw.png
 
 NODE cam1
-    POSITION 70 410
+    POSITION 70 110
     LABEL cam1
     LABELFONT 42
     LABELOFFSET S
@@ -106,7 +98,7 @@ NODE cam1
     ICON 60 60 /var/www/wmap/images/camera.png
 
 NODE cam2
-    POSITION 130 410
+    POSITION 130 110
     LABEL cam2
     LABELFONT 42
     LABELOFFSET S
@@ -114,7 +106,7 @@ NODE cam2
     ICON 60 60 /var/www/wmap/images/camera.png
 
 NODE vs1
-    POSITION 290 410
+    POSITION 280 490
     LABEL Nemesis
     LABELFONT 42
     LABELOFFSET S
@@ -122,7 +114,7 @@ NODE vs1
     ICON 60 60 /var/www/wmap/images/server.png
 
 NODE vs2
-    POSITION 530 410
+    POSITION 520 490
     LABEL Thanatos
     LABELFONT 42
     LABELOFFSET S
@@ -131,31 +123,55 @@ NODE vs2
 
 NODE vs3
     LABEL Momos
-    POSITION 370 410
+    POSITION 360 490
     LABELFONT 42
     LABELOFFSET S
     LABELOUTLINECOLOR 255 255 255
     ICON 60 60 /var/www/wmap/images/server.png
 
 NODE vs4
-    POSITION 450 410
+    POSITION 440 490
     LABEL Moros
     LABELFONT 42
     LABELOFFSET S
     LABELOUTLINECOLOR 255 255 255
     ICON 60 60 /var/www/wmap/images/server.png
 
-NODE vs5
-    POSITION 200 410
-    LABEL Oneiroi
+NODE vs6
+    POSITION 400 345
+    LABEL Oizis
     LABELFONT 42
     LABELOFFSET S
     LABELOUTLINECOLOR 255 255 255
     ICON 60 60 /var/www/wmap/images/server.png
 
-NODE vs6
-    POSITION 610 410
-    LABEL Oizis
+NODE vs7
+    POSITION 320 595
+    LABEL Crios
+    LABELFONT 42
+    LABELOFFSET S
+    LABELOUTLINECOLOR 255 255 255
+    ICON 60 60 /var/www/wmap/images/server.png
+
+NODE vs8
+    POSITION 440 595
+    LABEL Phoebe
+    LABELFONT 42
+    LABELOFFSET S
+    LABELOUTLINECOLOR 255 255 255
+    ICON 60 60 /var/www/wmap/images/server.png
+
+NODE vs9
+    POSITION 240 595
+    LABEL Aether
+    LABELFONT 42
+    LABELOFFSET S
+    LABELOUTLINECOLOR 255 255 255
+    ICON 60 60 /var/www/wmap/images/server.png
+
+NODE vs10
+    POSITION 560 595
+    LABEL Erebe
     LABELFONT 42
     LABELOFFSET S
     LABELOUTLINECOLOR 255 255 255
@@ -169,243 +185,97 @@ NODE store1
     LABELOUTLINECOLOR 255 255 255
     ICON 60 60 /var/www/wmap/images/disk.png
 
+NODE vs5
+    POSITION 200 450
+    LABEL Oneiroi
+    LABELFONT 42
+    LABELOFFSET S
+    LABELOUTLINECOLOR 255 255 255
+    ICON 60 60 /var/www/wmap/images/server.png
+
 NODE ceph1
-    POSITION 740 520
+    POSITION 52 450
     LABEL Helios
     LABELFONT 42
     LABELOFFSET S
     LABELOUTLINECOLOR 255 255 255
     ICON 60 60 /var/www/wmap/images/disk.png
 
-NODE ceph1disk1
-    LABEL ceph-00
-    POSITION ceph1 0 60
-    TARGET gauge:/var/www/mrtg/helios/10.42.242.14.disk.58.rrd:ds0:ds1
-    MAXVALUE 1.9T
+#NODE ceph1disk1
+#    LABEL ceph-00
+#    POSITION ceph1 0 60
+#    TARGET gauge:/var/www/mrtg/helios/10.42.242.14.disk.58.rrd:ds0:ds1
+#    MAXVALUE 1.9T
 
-NODE ceph1disk2
-    LABEL ceph-12
-    POSITION ceph1 0 80
-    TARGET gauge:/var/www/mrtg/helios/10.42.242.14.disk.57.rrd:ds0:ds1
-    MAXVALUE 927G
+#NODE ceph1disk2
+#    LABEL ceph-12
+#    POSITION ceph1 0 80
+#    TARGET gauge:/var/www/mrtg/helios/10.42.242.14.disk.57.rrd:ds0:ds1
+#    MAXVALUE 927G
 
-NODE ceph1disk3
-    LABEL ceph-20
-    POSITION ceph1 0 100
-    TARGET gauge:/var/www/mrtg/helios/10.42.242.14.disk.56.rrd:ds0:ds1
-    MAXVALUE 927G
+#NODE ceph1disk3
+#    LABEL ceph-20
+#    POSITION ceph1 0 100
+#    TARGET gauge:/var/www/mrtg/helios/10.42.242.14.disk.56.rrd:ds0:ds1
+#    MAXVALUE 927G
 
 NODE ceph2
-    POSITION 643 520
+    POSITION 102 450
     LABEL Selene
     LABELFONT 42
     LABELOFFSET S
     LABELOUTLINECOLOR 255 255 255
     ICON 60 60 /var/www/wmap/images/disk.png
 
-NODE ceph2disk1
-    LABEL ceph-01
-    POSITION ceph2 0 60
-    TARGET gauge:/var/www/mrtg/selene/10.42.242.16.disk.56.rrd:ds0:ds1
-    MAXVALUE 1.9T
+#NODE ceph2disk1
+#    LABEL ceph-01
+#    POSITION ceph2 0 60
+#    TARGET gauge:/var/www/mrtg/selene/10.42.242.16.disk.56.rrd:ds0:ds1
+#    MAXVALUE 1.9T
 
-NODE ceph2disk2
-    LABEL ceph-11
-    POSITION ceph2 0 80
-    TARGET gauge:/var/www/mrtg/selene/10.42.242.16.disk.58.rrd:ds0:ds1
-    MAXVALUE 927G
+#NODE ceph2disk2
+#    LABEL ceph-11
+#    POSITION ceph2 0 80
+#    TARGET gauge:/var/www/mrtg/selene/10.42.242.16.disk.58.rrd:ds0:ds1
+#    MAXVALUE 927G
 
-NODE ceph2disk3
-    LABEL ceph-22
-    POSITION ceph2 0 100
-    TARGET gauge:/var/www/mrtg/selene/10.42.242.16.disk.57.rrd:ds0:ds1
-    MAXVALUE 2.8T
+#NODE ceph2disk3
+#    LABEL ceph-22
+#    POSITION ceph2 0 100
+#    TARGET gauge:/var/www/mrtg/selene/10.42.242.16.disk.57.rrd:ds0:ds1
+#    MAXVALUE 2.8T
 
 NODE ceph3
-    POSITION 254 520
-    LABEL Eos
-    LABELFONT 42
-    LABELOFFSET S
-    LABELOUTLINECOLOR 255 255 255
-    ICON 60 60 /var/www/wmap/images/disk.png
-
-NODE ceph3disk1
-    LABEL ceph-26
-    POSITION ceph3 0 60
-    TARGET gauge:/var/www/mrtg/eos/10.42.242.18.disk.56.rrd:ds0:ds1
-    MAXVALUE 470G
-
-NODE ceph3disk2
-    LABEL ceph-27
-    POSITION ceph3 0 80
-    TARGET gauge:/var/www/mrtg/eos/10.42.242.18.disk.57.rrd:ds0:ds1
-    MAXVALUE 3.7T
-
-NODE ceph3disk3
-    LABEL ceph-28
-    POSITION ceph3 0 100
-    TARGET gauge:/var/www/mrtg/eos/10.42.242.18.disk.58.rrd:ds0:ds1
-    MAXVALUE 3.7T
-
-NODE ceph3disk4
-    LABEL ceph-29
-    POSITION ceph3 0 120
-    TARGET gauge:/var/www/mrtg/eos/10.42.242.18.disk.59.rrd:ds0:ds1
-    MAXVALUE 3.7T
-
-NODE ceph4
-    POSITION 351 520
-    LABEL Hemara
-    LABELFONT 42
-    LABELOFFSET S
-    LABELOUTLINECOLOR 255 255 255
-    ICON 60 60 /var/www/wmap/images/disk.png
-
-NODE ceph4disk1
-    LABEL ceph-02
-    POSITION ceph4 0 60
-    TARGET gauge:/var/www/mrtg/hemara/10.42.242.19.disk.58.rrd:ds0:ds1
-    MAXVALUE 461G
-
-NODE ceph4disk2
-    LABEL ceph-07
-    POSITION ceph4 0 80
-    TARGET gauge:/var/www/mrtg/hemara/10.42.242.19.disk.56.rrd:ds0:ds1
-    MAXVALUE 3.7T
-
-NODE ceph4disk3
-    LABEL ceph-14
-    POSITION ceph4 0 100
-    TARGET gauge:/var/www/mrtg/hemara/10.42.242.19.disk.57.rrd:ds0:ds1
-    MAXVALUE 3.7T
-
-NODE ceph4disk4
-    LABEL ceph-18
-    POSITION ceph4 0 120
-    TARGET gauge:/var/www/mrtg/hemara/10.42.242.19.disk.59.rrd:ds0:ds1
-    MAXVALUE 2.8T
-
-NODE ceph5
-    POSITION 448 520
+    POSITION 152 450
     LABEL Nyx
     LABELFONT 42
     LABELOFFSET S
     LABELOUTLINECOLOR 255 255 255
     ICON 60 60 /var/www/wmap/images/disk.png
 
-NODE ceph5disk1
-    LABEL ceph-04
-    POSITION ceph5 0 60
-    TARGET gauge:/var/www/mrtg/nyx/10.42.242.20.disk.59.rrd:ds0:ds1
-    MAXVALUE 472G
+#NODE ceph3disk1
+#    LABEL ceph-26
+#    POSITION ceph3 0 60
+#    TARGET gauge:/var/www/mrtg/nyx/10.42.242.18.disk.56.rrd:ds0:ds1
+#    MAXVALUE 470G
 
-NODE ceph5disk2
-    LABEL ceph-08
-    POSITION ceph5 0 80
-    TARGET gauge:/var/www/mrtg/nyx/10.42.242.20.disk.56.rrd:ds0:ds1
-    MAXVALUE 3.7T
+#NODE ceph3disk2
+#    LABEL ceph-27
+#    POSITION ceph3 0 80
+#    TARGET gauge:/var/www/mrtg/nyx/10.42.242.18.disk.57.rrd:ds0:ds1
+#    MAXVALUE 3.7T
 
-NODE ceph5disk3
-    LABEL ceph-17
-    POSITION ceph5 0 100
-    TARGET gauge:/var/www/mrtg/nyx/10.42.242.20.disk.57.rrd:ds0:ds1
-    MAXVALUE 3.7T
+#NODE ceph3disk3
+#    LABEL ceph-28
+#    POSITION ceph3 0 100
+#    TARGET gauge:/var/www/mrtg/nyx/10.42.242.18.disk.58.rrd:ds0:ds1
+#    MAXVALUE 3.7T
 
-NODE ceph5disk4
-    LABEL ceph-24
-    POSITION ceph5 0 120
-    TARGET gauge:/var/www/mrtg/nyx/10.42.242.20.disk.58.rrd:ds0:ds1
-    MAXVALUE 3.7T
-
-NODE ceph6
-    POSITION 545 520
-    LABEL Erebe
-    LABELFONT 42
-    LABELOFFSET S
-    LABELOUTLINECOLOR 255 255 255
-    ICON 60 60 /var/www/wmap/images/disk.png
-
-NODE ceph6disk1
-    LABEL ceph-06
-    POSITION ceph6 0 60
-    TARGET gauge:/var/www/mrtg/erebe/10.42.242.22.disk.59.rrd:ds0:ds1
-    MAXVALUE 442G
-
-NODE ceph6disk2
-    LABEL ceph-10
-    POSITION ceph6 0 80
-    TARGET gauge:/var/www/mrtg/erebe/10.42.242.22.disk.57.rrd:ds0:ds1
-    MAXVALUE 2.8T
-
-NODE ceph6disk3
-    LABEL ceph-16
-    POSITION ceph6 0 100
-    TARGET gauge:/var/www/mrtg/erebe/10.42.242.22.disk.56.rrd:ds0:ds1
-    MAXVALUE 1.9T
-
-NODE ceph6disk4
-    LABEL ceph-21
-    POSITION ceph6 0 120
-    TARGET gauge:/var/www/mrtg/erebe/10.42.242.22.disk.58.rrd:ds0:ds1
-    MAXVALUE 2.8T
-
-NODE ceph7
-    POSITION 157 520
-    LABEL Aether
-    LABELFONT 42
-    LABELOFFSET S
-    LABELOUTLINECOLOR 255 255 255
-    ICON 60 60 /var/www/wmap/images/disk.png
-
-NODE ceph7disk1
-    LABEL ceph-03
-    POSITION ceph7 0 60
-    TARGET gauge:/var/www/mrtg/aether/10.42.242.23.disk.58.rrd:ds0:ds1
-    MAXVALUE 3.7T
-
-NODE ceph7disk2
-    LABEL ceph-13
-    POSITION ceph7 0 80
-    TARGET gauge:/var/www/mrtg/aether/10.42.242.23.disk.57.rrd:ds0:ds1
-    MAXVALUE 1.9T
-
-NODE ceph7disk3
-    LABEL ceph-19
-    POSITION ceph7 0 100
-    TARGET gauge:/var/www/mrtg/aether/10.42.242.23.disk.56.rrd:ds0:ds1
-    MAXVALUE 442G
-
-NODE ceph8
-    POSITION 60 520
-    LABEL Ouranos
-    LABELFONT 42
-    LABELOFFSET S
-    LABELOUTLINECOLOR 255 255 255
-    ICON 60 60 /var/www/wmap/images/disk.png
-
-NODE ceph8disk1
-    LABEL ceph-05
-    POSITION ceph8 0 60
-    TARGET gauge:/var/www/mrtg/ouranos/10.42.242.24.disk.57.rrd:ds0:ds1
-    MAXVALUE 461G
-
-NODE ceph8disk2
-    LABEL ceph-09
-    POSITION ceph8 0 80
-    TARGET gauge:/var/www/mrtg/ouranos/10.42.242.24.disk.56.rrd:ds0:ds1
-    MAXVALUE 2.8T
-
-NODE ceph8disk3
-    LABEL ceph-15
-    POSITION ceph8 0 100
-    TARGET gauge:/var/www/mrtg/ouranos/10.42.242.24.disk.58.rrd:ds0:ds1
-    MAXVALUE 2.8T
-
-NODE ceph8disk4
-    LABEL ceph-23
-    POSITION ceph8 0 120
-    TARGET gauge:/var/www/mrtg/ouranos/10.42.242.24.disk.59.rrd:ds0:ds1
-    MAXVALUE 3.7T
+#NODE ceph3disk4
+#    LABEL ceph-29
+#    POSITION ceph3 0 120
+#    TARGET gauge:/var/www/mrtg/nyx/10.42.242.18.disk.59.rrd:ds0:ds1
+#    MAXVALUE 3.7T
 
 NODE ap1
     POSITION 700 710
@@ -449,20 +319,20 @@ NODE faustwifi
 
 LINK fw1orange
     ARROWSTYLE 1 1
-    BANDWIDTH 103M 106M
+    BANDWIDTH 185M 106M
     BWFONT 43
     BWLABELPOS 35 20
     NODES fw1:N fibreorange
-    TARGET /var/www/mrtg/zeus/10.42.242.5_12.rrd:ds0:ds1
+    TARGET /var/www/mrtg/zeus/10.42.242.5_26.rrd:ds0:ds1
     WIDTH 3
 
 LINK fw2orange
     ARROWSTYLE 1 1
-    BANDWIDTH 103M 106M
+    BANDWIDTH 185M 106M
     BWFONT 43
     BWLABELPOS 35 20
     NODES fw2:N fibreorange
-    TARGET /var/www/mrtg/io/10.42.242.3_12.rrd:ds0:ds1
+    TARGET /var/www/mrtg/poseidon/10.42.242.2_26.rrd:ds0:ds1
     WIDTH 3
 
 LINK fw1free
@@ -471,7 +341,7 @@ LINK fw1free
     BWFONT 43
     BWLABELPOS 35 20
     NODES fw1:N fibrefree
-    TARGET /var/www/mrtg/zeus/10.42.242.5_10.rrd:ds0:ds1
+    TARGET /var/www/mrtg/zeus/10.42.242.5_25.rrd:ds0:ds1
     WIDTH 3
 
 LINK fw2free
@@ -480,33 +350,15 @@ LINK fw2free
     BWFONT 43
     BWLABELPOS 35 20
     NODES fw2:N fibrefree
-    TARGET /var/www/mrtg/io/10.42.242.3_10.rrd:ds0:ds1
+    TARGET /var/www/mrtg/poseidon/10.42.242.2_25.rrd:ds0:ds1
     WIDTH 3
-
-LINK fw1lan
-    ARROWSTYLE 1 1
-    BANDWIDTH 3000M
-    BWFONT 43
-    BWLABELPOS 40 20
-    NODES fw1:S90 sw1:N
-    TARGET /var/www/mrtg/zeus/10.42.242.5_7.rrd:ds0:ds1
-    WIDTH 2
-
-LINK fw2lan
-    ARROWSTYLE 1 1
-    BANDWIDTH 3000M
-    BWFONT 43
-    BWLABELPOS 40 20
-    NODES fw2:SW sw2:NE85
-    TARGET /var/www/mrtg/io/10.42.242.3_7.rrd:ds0:ds1
-    WIDTH 2
 
 LINK tosw3
     ARROWSTYLE 1 1
     BANDWIDTH 1000M
     BWFONT 43
     NODES sw1:E sw3:W
-    TARGET /var/www/mrtg/sw1/10.42.242.13_40.rrd:ds0:ds1
+    TARGET /var/www/mrtg/sw1/10.42.242.4_39.rrd:ds0:ds1
     WIDTH 2
 
 LINK tosw4
@@ -514,155 +366,205 @@ LINK tosw4
     BANDWIDTH 1000M
     BWFONT 43
     NODES sw2:W sw4:E
-    TARGET /var/www/mrtg/sw2/10.42.242.15_40.rrd:ds0:ds1
+    TARGET /var/www/mrtg/sw2/10.42.242.15_92.rrd:ds0:ds1
     WIDTH 2
 
 LINK sw1lagg1
     ARROWSTYLE 1 1
-    BANDWIDTH 8000M
-    BWFONT 43
-    NODES sw1:W sw2:E
-    TARGET /var/www/mrtg/sw1/10.42.242.13_49.rrd:ds0:ds1
+    BANDWIDTH 4000M
+    BWLABEL none
+    NODES sw1:S vs3:N
+    TARGET /var/www/mrtg/sw1/10.42.242.4_1000.rrd:ds0:ds1
     WIDTH 2
 
 LINK sw1lagg2
     ARROWSTYLE 1 1
-    BANDWIDTH 2000M
+    BANDWIDTH 4000M
     BWLABEL none
-#   BWFONT 43
-    NODES sw1:S ceph1:N
-    TARGET /var/www/mrtg/sw1/10.42.242.13_50.rrd:ds0:ds1
+    NODES sw1:S vs4:N
+    TARGET /var/www/mrtg/sw1/10.42.242.4_1001.rrd:ds0:ds1
     WIDTH 2
 
 LINK sw1lagg3
     ARROWSTYLE 1 1
     BANDWIDTH 2000M
     BWLABEL none
-#   BWFONT 43
-    NODES sw1:S ceph2:N
-    TARGET /var/www/mrtg/sw1/10.42.242.13_51.rrd:ds0:ds1
+    NODES sw1:S vs8:N
+    TARGET /var/www/mrtg/sw1/10.42.242.4_1002.rrd:ds0:ds1
     WIDTH 2
 
 LINK sw1lagg4
     ARROWSTYLE 1 1
-    BANDWIDTH 4000M
+    BANDWIDTH 2000M
     BWLABEL none
-#   BWFONT 43
-    NODES sw1:S vs4:N
-    TARGET /var/www/mrtg/sw1/10.42.242.13_52.rrd:ds0:ds1
+    NODES sw1:S vs7:N
+    TARGET /var/www/mrtg/sw1/10.42.242.4_1003.rrd:ds0:ds1
     WIDTH 2
 
 LINK sw1lagg5
     ARROWSTYLE 1 1
-    BANDWIDTH 4000M
+    BANDWIDTH 2000M
     BWLABEL none
-#   BWFONT 43
-    NODES sw1:S vs2:N
-    TARGET /var/www/mrtg/sw1/10.42.242.13_53.rrd:ds0:ds1
+    NODES sw1:W vs6:E
+    TARGET /var/www/mrtg/sw1/10.42.242.4_1004.rrd:ds0:ds1
     WIDTH 2
 
-#LINK sw1lagg6
-#    ARROWSTYLE 1 1
-#    BANDWIDTH 4000M
-##   BWFONT 43
-#    BWLABEL none
-#    NODES sw1:S vs5:N
-#    TARGET /var/www/mrtg/sw1/10.42.242.13_54.rrd:ds0:ds1
-#    WIDTH 2
+LINK sw1lagg6
+    ARROWSTYLE 1 1
+    BANDWIDTH 4000M
+    BWLABEL none
+    NODES sw1:S vs2:N
+    TARGET /var/www/mrtg/sw1/10.42.242.4_1005.rrd:ds0:ds1
+    WIDTH 2
 
-LINK sw2lagg2
+LINK sw1lagg7
+    ARROWSTYLE 1 1
+    BANDWIDTH 4000M
+    BWLABEL none
+    NODES sw1:S vs1:N
+    TARGET /var/www/mrtg/sw1/10.42.242.4_1006.rrd:ds0:ds1
+    WIDTH 2
+
+LINK sw1lagg8
     ARROWSTYLE 1 1
     BANDWIDTH 2000M
     BWLABEL none
-#   BWFONT 43
-    NODES sw2:S ceph4:N
-    TARGET /var/www/mrtg/sw2/10.42.242.15_50.rrd:ds0:ds1
+    NODES sw1:S vs9:N
+    TARGET /var/www/mrtg/sw1/10.42.242.4_1007.rrd:ds0:ds1
+    WIDTH 2
+
+LINK sw1lagg9
+    ARROWSTYLE 1 1
+    BANDWIDTH 2000M
+    BWLABEL none
+    NODES sw1:S vs10:N
+    TARGET /var/www/mrtg/sw1/10.42.242.4_1008.rrd:ds0:ds1
+    WIDTH 2
+
+LINK sw1lagg29
+    ARROWSTYLE 1 1
+    BANDWIDTH 8000M
+    BWFONT 43
+    NODES sw1:W sw2:E
+    TARGET /var/www/mrtg/sw1/10.42.242.4_1028.rrd:ds0:ds1
+    WIDTH 2
+
+LINK sw1lagg30
+    ARROWSTYLE 1 1
+    BANDWIDTH 20000M
+    BWFONT 43
+    NODES sw1:N sw2:N
+    TARGET /var/www/mrtg/sw1/10.42.242.4_1029.rrd:ds0:ds1
+    WIDTH 2
+
+LINK sw1lagg31
+    ARROWSTYLE 1 1
+    BANDWIDTH 2000M
+    BWFONT 43
+    NODES sw1:N fw2:S
+    TARGET /var/www/mrtg/sw1/10.42.242.4_1030.rrd:ds0:ds1
+    WIDTH 2
+
+LINK sw1lagg32
+    ARROWSTYLE 1 1
+    BANDWIDTH 4000M
+    BWFONT 43
+    NODES sw1:N fw1:S
+    TARGET /var/www/mrtg/sw1/10.42.242.4_1031.rrd:ds0:ds1
+    WIDTH 2
+
+LINK sw2lagg1
+    ARROWSTYLE 1 1
+    BANDWIDTH 4000M
+    BWLABEL none
+    NODES sw2:S vs3:N
+    TARGET /var/www/mrtg/sw2/10.42.242.15_1000.rrd:ds0:ds1
+    WIDTH 2
+
+LINK sw2lagg2
+    ARROWSTYLE 1 1
+    BANDWIDTH 4000M
+    BWLABEL none
+    NODES sw2:S vs4:N
+    TARGET /var/www/mrtg/sw2/10.42.242.15_1001.rrd:ds0:ds1
     WIDTH 2
 
 LINK sw2lagg3
     ARROWSTYLE 1 1
-    BANDWIDTH 4000M
+    BANDWIDTH 2000M
     BWLABEL none
-#   BWFONT 43
-    NODES sw2:S ceph3:N
-    TARGET /var/www/mrtg/sw2/10.42.242.15_51.rrd:ds0:ds1
+    NODES sw2:S vs8:N
+    TARGET /var/www/mrtg/sw2/10.42.242.15_1002.rrd:ds0:ds1
     WIDTH 2
 
 LINK sw2lagg4
     ARROWSTYLE 1 1
-    BANDWIDTH 4000M
+    BANDWIDTH 2000M
     BWLABEL none
-#   BWFONT 43
-    NODES sw2:S vs3:N
-    TARGET /var/www/mrtg/sw2/10.42.242.15_52.rrd:ds0:ds1
+    NODES sw2:S vs7:N
+    TARGET /var/www/mrtg/sw2/10.42.242.15_1003.rrd:ds0:ds1
     WIDTH 2
-
-LINK sw4lagg1
-    ARROWSTYLE 1 1
-    BANDWIDTH 1000M
-    BWLABEL none
-    NODES sw4:S vs5:NW
-    TARGET /var/www/mrtg/sw4/10.42.242.6_49.rrd:ds0:ds1
-    WIDTH 1
 
 LINK sw2lagg5
     ARROWSTYLE 1 1
+    BANDWIDTH 2000M
+    BWLABEL none
+    NODES sw2:E vs6:W
+    TARGET /var/www/mrtg/sw2/10.42.242.15_1004.rrd:ds0:ds1
+    WIDTH 2
+
+LINK sw2lagg6
+    ARROWSTYLE 1 1
     BANDWIDTH 4000M
     BWLABEL none
-#   BWFONT 43
+    NODES sw2:S vs2:N
+    TARGET /var/www/mrtg/sw2/10.42.242.15_1005.rrd:ds0:ds1
+    WIDTH 2
+
+LINK sw2lagg7
+    ARROWSTYLE 1 1
+    BANDWIDTH 4000M
+    BWLABEL none
     NODES sw2:S vs1:N
-    TARGET /var/www/mrtg/sw2/10.42.242.15_53.rrd:ds0:ds1
+    TARGET /var/www/mrtg/sw2/10.42.242.15_1006.rrd:ds0:ds1
     WIDTH 2
 
-#LINK sw2lagg6
-#    ARROWSTYLE 1 1
-#    BANDWIDTH 4000M
-#    BWFONT 43
-#    NODES sw2:E sw3:SW
-#    TARGET /var/www/mrtg/sw2/10.42.242.15_54.rrd:ds0:ds1
-#    WIDTH 2
-
-LINK ceph5nolagg
+LINK sw2lagg8
     ARROWSTYLE 1 1
-    BANDWIDTH 1000M
+    BANDWIDTH 2000M
     BWLABEL none
-#   BWFONT 43
-    NODES sw1:S ceph5:N
-    TARGET /var/www/mrtg/sw1/10.42.242.13_11.rrd:ds0:ds1
+    NODES sw2:S vs9:N
+    TARGET /var/www/mrtg/sw2/10.42.242.15_1007.rrd:ds0:ds1
     WIDTH 2
 
-LINK ceph6nolagg
+LINK sw2lagg9
     ARROWSTYLE 1 1
-    BANDWIDTH 1000M
+    BANDWIDTH 2000M
     BWLABEL none
-#   BWFONT 43
-    NODES sw1:S ceph6:N
-    TARGET /var/www/mrtg/sw1/10.42.242.13_12.rrd:ds0:ds1
-    WIDTH 1
+    NODES sw2:S vs10:N
+    TARGET /var/www/mrtg/sw2/10.42.242.15_1008.rrd:ds0:ds1
+    WIDTH 2
 
-LINK ceph7nolagg
+LINK sw2lagg31
     ARROWSTYLE 1 1
-    BANDWIDTH 1000M
-    BWLABEL none
-#   BWFONT 43
-    NODES sw2:S ceph7:N
-    TARGET /var/www/mrtg/sw2/10.42.242.15_9.rrd:ds0:ds1
-    WIDTH 1
+    BANDWIDTH 4000M
+    BWFONT 43
+    NODES sw2:N fw2:S
+    TARGET /var/www/mrtg/sw2/10.42.242.15_1030.rrd:ds0:ds1
+    WIDTH 2
 
-LINK ceph8nolagg
+LINK sw2lagg32
     ARROWSTYLE 1 1
-    BANDWIDTH 1000M
-    BWLABEL none
-#   BWFONT 43
-    NODES sw2:S ceph8:N
-    TARGET /var/www/mrtg/sw2/10.42.242.15_10.rrd:ds0:ds1
-    WIDTH 1
+    BANDWIDTH 2000M
+    BWFONT 43
+    NODES sw2:N fw1:S
+    TARGET /var/www/mrtg/sw2/10.42.242.15_1031.rrd:ds0:ds1
+    WIDTH 2
 
 LINK store1lagg
     ARROWSTYLE 1 1
     BANDWIDTH 1000M
     BWLABEL none
-#   BWFONT 43
     NODES sw3:S store1:N
     TARGET /var/www/mrtg/sw3/10.42.242.10_49.rrd:ds0:ds1
     WIDTH 1
@@ -671,123 +573,32 @@ LINK ceph1lan
     ARROWSTYLE 1 1
     BANDWIDTH 1000M
     BWLABEL none
-    NODES sw1:S ceph1:N
-    TARGET /var/www/mrtg/sw1/10.42.242.13_31.rrd:ds0:ds1
+    NODES sw4:S ceph1:N
+    TARGET /var/www/mrtg/sw4/10.42.242.6_13.rrd:ds0:ds1
     WIDTH 1
 
 LINK ceph2lan
     ARROWSTYLE 1 1
     BANDWIDTH 1000M
     BWLABEL none
-    NODES sw1:S ceph2:N
-    TARGET /var/www/mrtg/sw1/10.42.242.13_32.rrd:ds0:ds1
+    NODES sw4:S ceph2:N
+    TARGET /var/www/mrtg/sw4/10.42.242.6_12.rrd:ds0:ds1
     WIDTH 1
 
 LINK ceph3lan
     ARROWSTYLE 1 1
     BANDWIDTH 1000M
     BWLABEL none
-    NODES sw2:S ceph3:N
-    TARGET /var/www/mrtg/sw2/10.42.242.15_32.rrd:ds0:ds1
+    NODES sw4:S ceph3:N
+    TARGET /var/www/mrtg/sw4/10.42.242.6_14.rrd:ds0:ds1
     WIDTH 1
 
-LINK ceph4lan
+LINK vs5lan
     ARROWSTYLE 1 1
     BANDWIDTH 1000M
     BWLABEL none
-    NODES sw2:S ceph4:N
-    TARGET /var/www/mrtg/sw2/10.42.242.15_31.rrd:ds0:ds1
-    WIDTH 1
-
-LINK ceph5lan
-    ARROWSTYLE 1 1
-    BANDWIDTH 1000M
-    BWLABEL none
-    NODES sw1:S ceph5:N
-    TARGET /var/www/mrtg/sw1/10.42.242.13_29.rrd:ds0:ds1
-    WIDTH 1
-
-LINK ceph6lan
-    ARROWSTYLE 1 1
-    BANDWIDTH 1000M
-    BWLABEL none
-#   BWFONT 43
-    NODES sw1:S ceph6:N
-    TARGET /var/www/mrtg/sw1/10.42.242.13_30.rrd:ds0:ds1
-    WIDTH 1
-
-LINK ceph7lan
-    ARROWSTYLE 1 1
-    BANDWIDTH 1000M
-    BWLABEL none
-#   BWFONT 43
-    NODES sw2:S ceph7:N
-    TARGET /var/www/mrtg/sw2/10.42.242.15_29.rrd:ds0:ds1
-    WIDTH 1
-
-LINK ceph8lan
-    ARROWSTYLE 1 1
-    BANDWIDTH 1000M
-    BWLABEL none
-#   BWFONT 43
-    NODES sw2:S ceph8:N
-    TARGET /var/www/mrtg/sw2/10.42.242.15_30.rrd:ds0:ds1
-    WIDTH 1
-
-LINK vs1lan
-    ARROWSTYLE 1 1
-    BANDWIDTH 1000M
-    BWLABEL none
-    NODES sw2:S vs1:N
-    TARGET /var/www/mrtg/sw2/10.42.242.15_35.rrd:ds0:ds1
-    WIDTH 1
-
-LINK vs2lan
-    ARROWSTYLE 1 1
-    BANDWIDTH 1000M
-    BWLABEL none
-    NODES sw1:S vs2:N
-    TARGET /var/www/mrtg/sw1/10.42.242.13_36.rrd:ds0:ds1
-    WIDTH 1
-
-LINK vs3lan1
-    ARROWSTYLE 1 1
-    BANDWIDTH 1000M
-    BWLABEL none
-    NODES sw1:S vs3:N
-    TARGET /var/www/mrtg/sw1/10.42.242.13_37.rrd:ds0:ds1
-    WIDTH 1
-
-LINK vs3lan2
-    ARROWSTYLE 1 1
-    BANDWIDTH 1000M
-    BWLABEL none
-    NODES sw2:S vs3:N
-    TARGET /var/www/mrtg/sw2/10.42.242.15_37.rrd:ds0:ds1
-    WIDTH 1
-
-LINK vs4lan1
-    ARROWSTYLE 1 1
-    BANDWIDTH 1000M
-    BWLABEL none
-    NODES sw1:S vs4:N
-    TARGET /var/www/mrtg/sw1/10.42.242.13_38.rrd:ds0:ds1
-    WIDTH 1
-
-LINK vs4lan2
-    ARROWSTYLE 1 1
-    BANDWIDTH 1000M
-    BWLABEL none
-    NODES sw2:S vs4:N
-    TARGET /var/www/mrtg/sw2/10.42.242.15_38.rrd:ds0:ds1
-    WIDTH 1
-
-LINK vs6lan
-    ARROWSTYLE 1 1
-    BANDWIDTH 1000M
-    BWLABEL none
-    NODES sw1:S vs6:N
-    TARGET /var/www/mrtg/sw1/10.42.242.13_9.rrd:ds0:ds1
+    NODES sw4:S vs5:N
+    TARGET /var/www/mrtg/sw4/10.42.242.6_3.rrd:ds0:ds1
     WIDTH 1
 
 LINK wifi1
@@ -796,7 +607,7 @@ LINK wifi1
     BWFONT 43
     BWLABELPOS 15 8
     NODES ap1:N sw1:S
-    TARGET /var/www/mrtg/sw1/10.42.242.13_33.rrd:ds0:ds1
+    TARGET /var/www/mrtg/sw1/10.42.242.4_33.rrd:ds0:ds1
     WIDTH 2
 
 LINK ssidguest1
@@ -835,31 +646,13 @@ LINK wifi2
     TARGET /var/www/mrtg/sw4/10.42.242.6_5.rrd:ds0:ds1
     WIDTH 2
 
-LINK ssidguest2
-    ARROWSTYLE 1 1
-    BANDWIDTH 56M
-    BWFONT 43
-    BWLABELPOS 78 35
-    NODES ap2:E90 guestwifi
-    TARGET /var/www/mrtg/cerberus/10.42.242.26_18.rrd:ds0:ds1
-    WIDTH 2
-
-LINK ssidusers2
-    ARROWSTYLE 1 1
-    BANDWIDTH 56M
-    BWFONT 43
-    BWLABELPOS 78 52
-    NODES ap2:E90 userswifi
-    TARGET /var/www/mrtg/cerberus/10.42.242.26_17.rrd:ds0:ds1
-    WIDTH 2
-
 LINK ssidfaust2
     ARROWSTYLE 1 1
     BANDWIDTH 56M
     BWFONT 43
     BWLABELPOS 78 35
     NODES ap2:E90 faustwifi
-    TARGET /var/www/mrtg/cerberus/10.42.242.26_16.rrd:ds0:ds1
+    TARGET /var/www/mrtg/cerberus/10.42.242.26_8.rrd:ds0:ds1
     WIDTH 2
 
 LINK tocam1
@@ -867,7 +660,7 @@ LINK tocam1
     BANDWIDTH 100M
     BWFONT 43
     BWLABELPOS 70 25
-    NODES cam1:N sw4:S
+    NODES cam1:S sw4:N
     TARGET /var/www/mrtg/cam1/10.42.40.100_2.rrd:ds0:ds1
     WIDTH 2
 
@@ -876,6 +669,6 @@ LINK tocam2
     BANDWIDTH 100M
     BWFONT 43
     BWLABELPOS 70 25
-    NODES cam2:N sw4:S
+    NODES cam2:S sw4:N
     TARGET /var/www/mrtg/cam2/10.42.40.101_2.rrd:ds0:ds1
     WIDTH 2
