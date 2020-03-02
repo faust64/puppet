@@ -46,6 +46,9 @@ ipsec_tunnels: []
 isakmpd_listen:
   - 78.193.67.92
 
+# Nagios
+nagios_check_jumbo: trunk0
+
 # Network
 #gre_tunnels:
 #  "9001":
