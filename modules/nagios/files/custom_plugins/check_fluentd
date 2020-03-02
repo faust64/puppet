@@ -8,6 +8,8 @@ UNKNOWN=3
 
 if ls /var/lib/origin/logs/fluentdv4* >/dev/null 2>&1; then
     FLUENTD_BUFFERS=/var/lib/origin/logs
+elif test -d /var/lib/kubernetes/logs; then
+    FLUENTD_BUFFERS=/var/lib/kubernetes/logs
 else
     FLUENTD_BUFFERS=/var/lib/origin
 fi

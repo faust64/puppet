@@ -10,19 +10,42 @@ msg=": Nothing to report"
 ret=OK
 TMPFILE=/tmp/.$PRG.$$
 
-test -f /etc/etcd/etcd.conf && source /etc/etcd/etcd.conf
-if test -z "$ETCD_ADVERTISE_CLIENT_URLS"; then
+if test -f /etc/etcd/etcd.conf; then
+    source /etc/etcd/etcd.conf
+    if test -z "$ETCD_ADVERTISE_CLIENT_URLS"; then
+	ret=UNKNOWN
+	msg=": failed identifying advertise URL"
+    elif ! etcdctl -C "$ETCD_ADVERTISE_CLIENT_URLS" \
+	    --ca-file=/etc/origin/master/master.etcd-ca.crt \
+	    --cert-file=/etc/origin/master/master.etcd-client.crt \
+	    --key-file=/etc/origin/master/master.etcd-client.key \
+	    cluster-health >$TMPFILE 2>&1; then
+	ret=UNKNOWN
+	msg=": failed querying etcd"
+    elif ! grep -i '^cluster is healthy' $TMPFILE >/dev/null 2>&1; then
+	ret=CRITICAL
+	msg=": cluster is not healthy"
+    fi
+elif test -f /etc/kubernetes/manifests/etcd.yaml; then
+    ETCD_ADVERTISE_CLIENT_URLS=$(awk '/initial-cluster=/' \
+	    /etc/kubernetes/manifests/etcd.yaml \
+	    | sed -e 's|.*initial-cluster=||' -e 's|^[a-z]*=http|http|' \
+	          -e 's|:2380|:2379|g' -e 's|,[a-z]*=http|,http|g')
+    if ! kubectl -n kube-system exec -it etcd-$(hostname) -- \
+	    etcdctl --endpoints "$ETCD_ADVERTISE_CLIENT_URLS" \
+	    --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+	    --cert=/etc/kubernetes/pki/etcd/peer.crt \
+	    --key=/etc/kubernetes/pki/etcd/peer.key \
+	    endpoint health >$TMPFILE 2>&1; then
+	ret=UNKNOWN
+	msg=": failed querying etcd"
+    elif grep -v ':2379 is healthy' $TMPFILE >/dev/null 2>&1; then
+	ret=CRITICAL
+	msg=": cluster is not healthy"
+    fi
+else
     ret=UNKNOWN
-    msg=": failed identifying advertise URL"
-elif ! etcdctl -C "$ETCD_ADVERTISE_CLIENT_URLS" \
-    --ca-file=/etc/origin/master/master.etcd-ca.crt \
-    --cert-file=/etc/origin/master/master.etcd-client.crt \
-    --key-file=/etc/origin/master/master.etcd-client.key cluster-health >$TMPFILE 2>&1; then
-    ret=UNKNOWN
-    msg=": failed querying etcd"
-elif ! grep -i '^cluster is healthy' $TMPFILE >/dev/null 2>&1; then
-    ret=CRITICAL
-    msg=": cluster is not healthy"
+    msg=": not an etcd node?"
 fi
 rm -f $TMPFILE
 

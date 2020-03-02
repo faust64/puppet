@@ -7,7 +7,7 @@ CRITICAL=2
 UNKNOWN=3
 MINSIZE=20000000
 
-for disk in `mount | awk '/type ext/{print $1}'`
+for disk in `mount | awk '/type ext/{print $1}' | sort -u`
 do
     if test "`df -P $disk | awk 'END{print $2}'`" -gt "$MINSIZE"; then
 	NBMOUNT=`sudo /sbin/tune2fs -l $disk | awk -F: '/Mount count:/{printf("%d",$2);}'`
