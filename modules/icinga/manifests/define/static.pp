@@ -15,6 +15,18 @@ define icinga::define::static($host_contact   = "root",
     $host_group     = "${srvclass}-servers"
 
     case $srvclass {
+	"ap": {
+	    $iconimagealt   = $srvclass
+	    $iconimage      = "utgb/$srvclass.png"
+	    $src            = "accesspoints/generic"
+	    $statusmapimage = "utgb/$srvclass.gd2"
+	}
+	"cam": {
+	    $iconimagealt   = $srvclass
+	    $iconimage      = "utgb/$srvclass.png"
+	    $src            = "cameras/generic"
+	    $statusmapimage = "utgb/$srvclass.gd2"
+	}
 	"cloudwatch", "codedeploy", "ec2", "elasticache", "elasticsearch", "elb", "emr", "glacier", "redshift", "route53", "vpc": {
 	    if (! defined(Common::Define::Package["aws-status"])) {
 		include common::tools::pip
@@ -43,36 +55,6 @@ define icinga::define::static($host_contact   = "root",
 	    $iconimagealt   = $srvclass
 	    $iconimage      = "utgb/$srvclass.png"
 	    $src            = "servers/$srvclass"
-	    $statusmapimage = "utgb/$srvclass.gd2"
-	}
-	"peerio", "peerioblob", "peerioghost", "peerioicebear", "peerioiceblobprod", "peerioiceblobdr", "peeriomail", "peerioshark", "peeriosite", "expandoo", "expandooblob", "expandooghost", "expandooicebear", "expandooiceblobprod", "expandooiceblobdr", "expandoomail", "expandooshark", "expandoosite": {
-	    $iconimagealt   = "peerio"
-	    $iconimage      = "utgb/peerio.png"
-	    $src            = "servers/peerio"
-	    $statusmapimage = "utgb/peerio.gd2"
-	}
-	"ap": {
-	    $iconimagealt   = $srvclass
-	    $iconimage      = "utgb/$srvclass.png"
-	    $src            = "accesspoints/generic"
-	    $statusmapimage = "utgb/$srvclass.gd2"
-	}
-	"printer": {
-	    $iconimagealt   = $srvclass
-	    $iconimage      = "utgb/$srvclass.png"
-	    $src            = "printers/generic"
-	    $statusmapimage = "utgb/$srvclass.gd2"
-	}
-	"phone": {
-	    $iconimagealt   = $srvclass
-	    $iconimage      = "utgb/$srvclass.png"
-	    $src            = "phones/generic"
-	    $statusmapimage = "utgb/$srvclass.gd2"
-	}
-	"cam": {
-	    $iconimagealt   = $srvclass
-	    $iconimage      = "utgb/$srvclass.png"
-	    $src            = "cameras/generic"
 	    $statusmapimage = "utgb/$srvclass.gd2"
 	}
 	"network": {
@@ -161,12 +143,39 @@ define icinga::define::static($host_contact   = "root",
 		}
 	    }
     	}
+	"ocp4": {
+	    $iconimagealt   = $srvclass
+	    $iconimage      = "utgb/centos.png"
+	    $src            = "servers/ocp4"
+	    $statusmapimage = "utgb/centos.gd2"
+	}
 	"pdu": {
-	    include common::libs::perlsnmp
 	    $iconimagealt   = $srvclass
 	    $iconimage      = "utgb/$srvclass.png"
-	    $src            = "pdu/generic"
+	    $src            = "$srvclass/generic"
 	    $statusmapimage = "utgb/$srvclass.gd2"
+	}
+	"phone", "printer": {
+	    $iconimagealt   = $srvclass
+	    $iconimage      = "utgb/$srvclass.png"
+	    $src            = "${srvclass}s/generic"
+	    $statusmapimage = "utgb/$srvclass.gd2"
+	}
+	"rpi-k8s": {
+	    $iconimagealt   = $srvclass
+	    $iconimage      = "utgb/kubernetes.png"
+	    $src            = "servers/rpi-k8s"
+	    $statusmapimage = "utgb/debian.gd2"
+	    if ($name == "hellenes.friends.intra.unetresgrossebite.com") {
+		$checks = [ "certificates", "fdesc", "fsck", "load", "mem",
+			    "haproxy_k8s_api", "haproxy_k8s_routers_http",
+			    "haproxy_k8s_routers_https", "ntpq", "rprocs",
+			    "uptime" ]
+	    } else {
+		$checks = [ "certificates", "fdesc", "fsck", "load", "mem",
+			    "ntpq", "oom", "persistent_volumes_usage",
+			    "rogue_containers", "rprocs", "uptime" ]
+	    }
 	}
     }
 

@@ -43,26 +43,9 @@ icinga_static_devices:
 # nebula.surfscriptpro.com:
 #   host_ipaddress: 192.99.160.94
 #   srvclass: customer
-# backups.peerio.com:
-#   host_ipaddress: 192.99.33.18
-#   srvclass: linux
-# pki.digitalocean.peerio.com:
-#   host_ipaddress: 159.203.22.84
-#   srvclass: linux
-# repository.digitalocean.peerio.com:
-#   host_ipaddress: 159.203.4.138
-#   srvclass: linux
 #  route53-prod.amazonaws.com:
 #    host_ipaddress: us-east-1
 #    srvclass: route53
-#  sharklb1.prod.peerio.com:
-#    host_ipaddress: 52.91.96.93
-#    host_parents: route53-prod.amazonaws.com
-#    srvclass: peerioshark
-#  site.awsprod.peerio.com:
-#    host_ipaddress: 34.235.117.144
-#    host_parents: route53-prod.amazonaws.com
-#    srvclass: peeriosite
 # vps1.nebula.surfscriptpro.com:
 #   host_ipaddress: 158.69.153.16
 #   host_parents: nebula.surfscriptpro.com

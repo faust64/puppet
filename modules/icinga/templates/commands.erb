@@ -29,66 +29,6 @@ define command {
 }
 
 define command {
-    command_name	check-peerio
-    command_line	<%=@plugindir%>/check_http -H 'app.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -s 'Peerio server'
-}
-
-define command {
-    command_name	check-peerioblob
-    command_line	<%=@plugindir%>/check_http -H 'blob.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -s 'Peerio objects gateway'
-}
-
-define command {
-    command_name	check-peerioghost
-    command_line	<%=@plugindir%>/check_http -H 'ghost.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -u https://ghost.peerio.com/v1/ping
-}
-
-define command {
-    command_name	check-expandooicebear
-    command_line	<%=@plugindir%>/check_http -H 'login.expandoo.eu' -I "$HOSTADDRESS$" -p 443 --ssl -s 'Peerio server'
-}
-
-define command {
-    command_name	check-expandooiceblobprod
-    command_line	<%=@plugindir%>/check_http -H 'docs.expandoo.eu' -I "$HOSTADDRESS$" -p 443 --ssl -s 'Peerio objects gateway'
-}
-
-define command {
-    command_name	check-expandoomail
-    command_line	<%=@plugindir%>/check_http -H 'public.expandoo.eu' -I "$HOSTADDRESS$" -p 443 --ssl -u https://public.expandoo.eu/v2/ping
-}
-
-define command {
-    command_name	check-peerioicebear
-    command_line	<%=@plugindir%>/check_http -H 'icebear.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -s 'Peerio server'
-}
-
-define command {
-    command_name	check-peerioiceblobprod
-    command_line	<%=@plugindir%>/check_http -H 'iceblobvirginia.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -s 'Peerio objects gateway'
-}
-
-define command {
-    command_name	check-peerioiceblobdr
-    command_line	<%=@plugindir%>/check_http -H 'icebloboregon.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -s 'Peerio objects gateway'
-}
-
-define command {
-    command_name	check-peeriomail
-    command_line	<%=@plugindir%>/check_http -H 'mail.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -u https://mail.peerio.com/v2/ping
-}
-
-define command {
-    command_name	check-peerioshark
-    command_line	<%=@plugindir%>/check_http -H 'account.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -s 'Peerio Customer Login' -f follow
-}
-
-define command {
-    command_name	check-peeriosite
-    command_line	<%=@plugindir%>/check_http -H 'www.peerio.com' -I "$HOSTADDRESS$" -p 443 --ssl -s '<title>Peerio</title>' -f follow
-}
-
-define command {
     command_name	check-aws-alive
     command_line	/usr/local/bin/aws-status-check 'http://status.aws.amazon.com/rss/$ARG1$-$HOSTADDRESS$.rss'
 }

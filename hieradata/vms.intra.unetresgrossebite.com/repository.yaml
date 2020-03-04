@@ -1,0 +1,18 @@
+physical_parent: oizis.adm.intra.unetresgrossebite.com
+
+# Munin-Node
+vps_with_munin: true
+
+# Nagios
+nagios_load_crit_threshold: "2.3,2.4,2.4"
+nagios_load_warn_threshold: "2.0,2.0,2.0"
+
+# Packages
+apache_web_root: /var/www
+packages_do_nfs: true
+packages_nfs_allow:
+- 10.42.242.0/24
+- 10.42.253.0/24
+- 10.42.42.0/24
+- 10.42.46.0/24
+packages_sync_remote_host: repository.unetresgrossebite.com

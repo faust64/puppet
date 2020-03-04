@@ -3,12 +3,10 @@ class packages::default {
     $web_root = $packages::vars::web_root
     if ($domain != $rdomain) {
 	$reverse = "repository.$rdomain"
-	$aliases = [ "_", "packages.$domain", "packages.$rdomain", "packages.faust.intra.unetresgrossebite.com", "packages.vms.intra.unetresgrossebite.com", "packages",
-		     $reverse, "repository.faust.intra.unetresgrossebite.com", "repository.vms.intra.unetresgrossebite.com", "repository" ]
+	$aliases = [ "_", $reverse, "repository" ]
     } else {
 	$reverse = false
-	$aliases = [ "_", "packages.$domain", "packages.$rdomain", "packages.faust.intra.unetresgrossebite.com", "packages.vms.intra.unetresgrossebite.com", "packages",
-		     "repository.faust.intra.unetresgrossebite.com", "repository.vms.intra.unetresgrossebite.com", "repository" ]
+	$aliases = [ "_", "repository" ]
     }
 
     file {
@@ -46,11 +44,11 @@ class packages::default {
 	}
     }
 
-    if ($packages::vars::do_nfs) {
+    if ($packages::vars::do_nfs and $packages::vars::nfs_allow) {
 	nfs::define::share {
 	    "VE models":
 		path => "$web_root/modeles",
-		to   => [ "10.42.42.0/24", "10.42.46.0/24", "10.42.242.0/24" ];
+		to   => $packages::vars::nfs_allow;
 	}
     }
 }

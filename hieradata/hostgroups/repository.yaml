@@ -11,6 +11,11 @@ git_with_gitlist: false
 git_with_gitlab: false
 github_backups_dir: /var/www/github
 
+# Nagios
+nagios_partitions_watchlist:
+  root: /
+  repository: /var/www
+
 # Nginx
 nginx_names_hash_bucket_size: 128
 nginx_rsyslog: true

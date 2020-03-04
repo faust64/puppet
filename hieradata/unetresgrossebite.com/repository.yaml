@@ -33,11 +33,6 @@ letsencrypt_renew_day: 22
 letsencrypt_renew_hour: 22
 letsencrypt_renew_min: 14
 
-# Nagios
-nagios_partitions_watchlist:
-  root: /
-  repository: /var/www
-
 # Packages
 packages_do_nfs: false
 

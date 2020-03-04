@@ -56,93 +56,15 @@ icinga_static_devices:
     host_ipaddress: us-west-2
     host_parents: route53-dr.amazonaws.com
     srvclass: codedeploy
-  bloblb1.prod.peerio.com:
-    host_ipaddress: 52.91.96.93
-    host_parents: route53-prod.amazonaws.com
-    srvclass: peerioblob
-  bloblb2.prod.peerio.com:
-    host_ipaddress: 54.204.82.86
-    host_parents: route53-prod.amazonaws.com
-    srvclass: peerioblob
-  bloblb1.dr.peerio.com:
-    host_ipaddress: 54.149.57.234
-    host_parents: route53-dr.amazonaws.com
-    srvclass: peerioblob
-  bloblb2.dr.peerio.com:
-    host_ipaddress: 54.191.37.231
-    host_parents: route53-dr.amazonaws.com
-    srvclass: peerioblob
-  ghostlb1.prod.peerio.com:
-    host_ipaddress: 52.91.96.93
-    host_parents: route53-prod.amazonaws.com
-    srvclass: peerioghost
-  ghostlb2.prod.peerio.com:
-    host_ipaddress: 54.204.82.86
-    host_parents: route53-prod.amazonaws.com
-    srvclass: peerioghost
-  ghostlb1.dr.peerio.com:
-    host_ipaddress: 54.149.57.234
-    host_parents: route53-dr.amazonaws.com
-    srvclass: peerioghost
-  ghostlb2.dr.peerio.com:
-    host_ipaddress: 54.191.37.231
-    host_parents: route53-dr.amazonaws.com
-    srvclass: peerioghost
-  lb1.prod.peerio.com:
-    host_ipaddress: 52.91.96.93
-    host_parents: route53-prod.amazonaws.com
-    srvclass: peerio
-  lb2.prod.peerio.com:
-    host_ipaddress: 54.204.82.86
-    host_parents: route53-prod.amazonaws.com
-    srvclass: peerio
-  lb1.dr.peerio.com:
-    host_ipaddress: 54.149.57.234
-    host_parents: route53-dr.amazonaws.com
-    srvclass: peerio
-  lb2.dr.peerio.com:
-    host_ipaddress: 54.191.37.231
-    host_parents: route53-dr.amazonaws.com
-    srvclass: peerio
-# pki.digitalocean.peerio.com:
-#   host_ipaddress: 159.203.22.84
-#   srvclass: linux
-  repository.digitalocean.peerio.com:
-    host_ipaddress: 159.203.4.138
-    srvclass: linux
   nebula.surfscriptpro.com:
     host_ipaddress: 192.99.160.94
     srvclass: customer
-  site.awsprod.peerio.com:
-    host_ipaddress: 52.90.54.101
-    host_parents: route53-prod.amazonaws.com
-    srvclass: peeriosite
-  site.productiondr.peerio.com:
-    host_ipaddress: 54.218.249.170
-    host_parents: route53-dr.amazonaws.com
-    srvclass: peeriosite
   route53-prod.amazonaws.com:
     host_ipaddress: us-east-1
     srvclass: route53
   route53-dr.amazonaws.com:
     host_ipaddress: us-west-2
     srvclass: route53
-  sharklb1.prod.peerio.com:
-    host_ipaddress: 52.91.96.93
-    host_parents: route53-prod.amazonaws.com
-    srvclass: peerioshark
-  sharklb2.prod.peerio.com:
-    host_ipaddress: 54.204.82.86
-    host_parents: route53-prod.amazonaws.com
-    srvclass: peerioshark
-  sharklb1.dr.peerio.com:
-    host_ipaddress: 54.149.57.234
-    host_parents: route53-dr.amazonaws.com
-    srvclass: peerioshark
-  sharklb2.dr.peerio.com:
-    host_ipaddress: 54.191.37.231
-    host_parents: route53-dr.amazonaws.com
-    srvclass: peerioshark
   vps1.nebula.surfscriptpro.com:
     host_ipaddress: 158.69.153.16
     host_parents: nebula.surfscriptpro.com

@@ -15,6 +15,8 @@ class common::physical::netpackages {
 	    }
 	}
     } elsif ($kernel == "Linux") {
+	inclue common::tools::netstat
+
 	common::define::package {
 	    [ "ethtool", "iftop" ]:
 	}
@@ -22,11 +24,6 @@ class common::physical::netpackages {
 	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan" or $operatingsystem == "Ubuntu") {
 	    common::define::package {
 		"arping":
-	    }
-	}
-	if ($operatingsystem == "CentOS" or $operatingsystem == "RedHat") {
-	    common::define::package {
-		"net-tools":
 	    }
 	}
     }

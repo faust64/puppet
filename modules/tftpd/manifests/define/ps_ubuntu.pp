@@ -1,5 +1,5 @@
 define tftpd::define::ps_ubuntu($autopart = false,
-				$ubvers   = "bionic",
+				$ubvers   = "focal",
 				$server   = false) {
     $apt_proxy    = $tftpd::vars::apt_proxy
     $charset      = $tftpd::vars::charset

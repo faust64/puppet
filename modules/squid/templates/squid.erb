@@ -18,8 +18,8 @@ logformat combined %>a %ui %un [%tl] "%rm %ru HTTP/%rv" %Hs %<st "%{Referer}>h" 
 access_log <%=@log_dir%>/access.log combined
 coredump_dir <%=@cache_dir%>
 <% if @error_dir != false -%>error_directory <%=@error_dir%>/<%=@locale%>
-<% end -%><% if @wat_do == "cache" or @wat_do == "filter" -%>hierarchy_stoplist cgi-bin ?
-refresh_pattern ^ftp: 1440 20% 10080
+<% end -%><% if @wat_do == "cache" or @wat_do == "filter" -%><% if @lsbdistcodename == "jessie" -%>hierarchy_stoplist cgi-bin ?
+<% end -%>refresh_pattern ^ftp: 1440 20% 10080
 refresh_pattern ^gopher: 1440 0% 1440
 refresh_pattern (Release|Package(.gz)*)$ 0 20% 2880
 refresh_pattern . 0 20% 4320

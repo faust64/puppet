@@ -12,7 +12,6 @@ nagios_hostgroups:
   - customer
   - debian
   - linux
-  - peerio
   - ubuntu
 nagios_ip:
   - 10.42.242.202

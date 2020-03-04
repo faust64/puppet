@@ -1,16 +1,5 @@
 additional_classes:
-  - Airsonic
-  - Iscsiinitiator
   - Media
-  - Packages
-# - Subsonic
-
-# Airsonic
-airsonic_allocate: 512
-airsonic_message: "__Welcome to Mephitheque\\!__\\r\\n\\r\\n\\\\ \\\\\\r\\n\\r\\nHere is a bunch of poor download choices"
-airsonic_music_root: /goinfre/media/Music
-airsonic_subtitle: ""
-airsonic_title: "Welcome to Mephitheque\\!"
 
 # Apache
 apache_keepalive: "On"
@@ -28,10 +17,3 @@ nagios_procs_crit: 300
 nagios_procs_warn: 250
 nagios_runprocs_crit: 20
 nagios_runprocs_warn: 15
-
-# Subsonic
-subsonic_allocate: 300
-subsonic_message: "__Welcome to Mephitheque\\!__\\r\\n\\r\\n\\\\ \\\\\\r\\n\\r\\nHere is a bunch of poor download choices"
-subsonic_music_root: /goinfre/media/Music
-subsonic_subtitle: ""
-subsonic_title: "Welcome to Mephitheque\\!"

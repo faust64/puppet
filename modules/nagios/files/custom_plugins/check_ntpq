@@ -7,7 +7,7 @@ CRITICAL=2
 UNKNOWN=3
 TMPFILE=/tmp/$PRG.$$
 
-if ! ntpq -v >/dev/null; then
+if ! ntpq --help >/dev/null; then
     perfdata=" | 0"
     res=UNKNOWN
 else
@@ -17,7 +17,7 @@ else
 	perfdata=" | 0"
 	res=WARNING
     else
-	dispersion=`grep rootdispersion= $TMPFILE | sed 's|.*rootdispersion=\([0-9]*\).*|\1|'`
+	dispersion=`grep -E 'rootdisp(|ersion)'= $TMPFILE | sed 's|.*rootdisp[^=]*=\([0-9]*\).*|\1|'`
 	if test "$dispersion" -gt 600; then
 	    msg=" - rootdispersion: $dispersion"
 	    perfdata=" | 0"

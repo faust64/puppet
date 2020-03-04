@@ -1,0 +1,31 @@
+physical_parent: oizis.adm.intra.unetresgrossebite.com
+
+# Airsonic
+airsonic_do_flac: true
+airsonic_music_root: /goinfre/media/Music
+airsonic_sync_bwlimit: 5000
+airsonic_sync_directories:
+  - Lossless
+  - Main
+  - Videos
+
+# Munin-Node
+vps_with_munin: true
+
+# Nagios
+nagios_partitions_watchlist:
+  root: /
+  subsonic: /goinfre/media/Music
+
+# Nagios
+nagios_load_crit_threshold: "4.0,4.0,4.0"
+nagios_load_warn_threshold: "2.0,2.0,2.0"
+
+# Subsonic
+subsonic_do_flac: true
+subsonic_music_root: /goinfre/media/Music
+subsonic_sync_bwlimit: 5000
+subsonic_sync_directories:
+  - Lossless
+  - Main
+  - Videos

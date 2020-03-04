@@ -1,5 +1,6 @@
 class packages::vars {
     $do_nfs    = lookup("packages_do_nfs")
+    $nfs_allow = lookup("packages_nfs_allow")
     $rdomain   = lookup("root_domain")
     $sync_hook = lookup("packages_sync_hook_uri")
     $sync_host = lookup("packages_sync_remote_host")

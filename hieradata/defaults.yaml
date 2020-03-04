@@ -1585,6 +1585,8 @@ owncloud_web_root: /var/www/owncloud
 # Packages
 packages_is_apache: true
 packages_do_nfs: true
+packages_nfs_allow:
+- 127.0.0.1/32
 packages_sync_hook_uri: false
 packages_sync_remote_host: false
 packages_sync_remote_path: /var/www

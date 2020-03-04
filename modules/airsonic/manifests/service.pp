@@ -1,6 +1,7 @@
 class airsonic::service {
     common::define::service {
 	"airsonic":
-	    ensure => running;
+	    ensure  => running,
+	    require => Class["java"];
     }
 }

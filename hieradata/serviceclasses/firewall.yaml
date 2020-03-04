@@ -50,10 +50,12 @@ allowed_tcp_ports:
   - ntp
   - imap
   - 222
+  - ldap
   - https
   - 444
   - smtps
   - 563
+  - ldaps
   - imaps
   - pop3s
   - 1022

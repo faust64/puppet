@@ -1,4 +1,5 @@
 class airsonic {
+    include java
     include airsonic::vars
 
     if ($airsonic::vars::do_flac == true) {

@@ -26,7 +26,6 @@ letsencrypt_renew_min: 54
 # Munin
 munin_collect_domains:
   - emma-earth.com
-  - peerio.biz
   - unetresgrossebite.com
 
 # PF

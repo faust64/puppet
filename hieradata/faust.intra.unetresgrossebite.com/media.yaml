@@ -1,0 +1,14 @@
+physical_parent: oizis.adm.intra.unetresgrossebite.com
+
+# Fstab
+tmp_fs: ext4
+tmp_target_device: /dev/xvdb1
+
+# Munin-Node
+vps_with_munin: true
+
+# Nagios
+nagios_partitions_watchlist:
+  root: /
+  goinfre: /goinfre
+  tmp: /tmp

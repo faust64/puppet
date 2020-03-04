@@ -205,6 +205,32 @@ class tftpd::automate::preseed {
 	    ubvers   => "xenial";
 	"xenial-desktop-man":
 	    ubvers   => "xenial";
+	"bionic-kvm-auto":
+	    autopart => true,
+	    ubvers   => "bionic",
+	    server   => "kvm";
+	"bionic-kvm-man":
+	    ubvers   => "bionic",
+	    server   => "kvm";
+	"bionic-xen-auto":
+	    autopart => true,
+	    ubvers   => "bionic",
+	    server   => "xen";
+	"bionic-xen-man":
+	    ubvers   => "bionic",
+	    server   => "xen";
+	"bionic-server-auto":
+	    autopart => true,
+	    ubvers   => "bionic",
+	    server   => true;
+	"bionic-server-man":
+	    ubvers   => "bionic",
+	    server   => true;
+	"bionic-desktop-auto":
+	    autopart => true,
+	    ubvers   => "bionic";
+	"bionic-desktop-man":
+	    ubvers   => "bionic";
 	"kvm-auto":
 	    autopart => true,
 	    server   => "kvm";
