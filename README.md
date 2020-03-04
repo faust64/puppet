@@ -18,8 +18,9 @@ Should you need any help understanding what's in there, getting started, ... ple
 
 # Bootstrap Puppetmaster
 
-Setting up a new Puppetmaster, don't forget to install and enable puppetdb & hiera terminus.
-Replace your `/etc/puppetlabs/puppet/hiera.yaml` with the following:
+Setting up a new Puppetmaster, don't forget to install and enable puppetdb &
+hiera terminus.  Replace your `/etc/puppetlabs/puppet/hiera.yaml` with the
+following:
 
 ```
 ---
@@ -56,14 +57,16 @@ Replace your `/etc/puppetlabs/puppet/hiera.yaml` with the following:
 :logger: console
 ```
 
-Change your working directory to `/etc/puppetlabs/code/environments/`, clone this repository:
+Change your working directory to `/etc/puppetlabs/code/environments/`, clone
+this repository:
 
 ```
 test -d production && mv production production.orig
 git clone https://github.com/faust64/puppet production
 ```
 
-To avoid filling your Puppetmaster filesystem with reports, add some daily job running the following:
+To avoid filling your Puppetmaster filesystem with reports, add some daily job
+running the following:
 
 ```
 find /var/lib/puppet/reports/ -type f -ctime +7 2>/dev/null | xargs -P 4 -n 20 rm -f
@@ -71,28 +74,17 @@ find /var/lib/puppet/reports/ -type f -ctime +7 2>/dev/null | xargs -P 4 -n 20 r
 
 # Bootstrap Puppet Agent
 
-To deploy an agent, having trusted its public IP (update required in `hieradata/unetresgrossebite.com/puppet.yaml`), run the following:
+To deploy an agent, having trusted its public IP (update `office_netwprks`
+firewall configuration in `hieradata/unetresgrossebite.com/puppet.yaml`), run
+the following:
 
 ```
 if test -s /etc/centos-release -o -s /etc/redhat-release; then
     rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
     yum install puppet-agent -y
 else
-    apt-get update ; apt-get upgrade ; apt-get dist-upgrade ; apt-get autoremove --purge ; apt-get install ca-certificates lsb-release wget
-    if grep -E '(devuan|trusty)' /etc/apt/sources.list >/dev/null; then
-	dist=trusty
-    else
-	dist=`lsb_release -sc`
-    fi
-    if ! grep buster /etc/apt/sources.list >/dev/null; then
-	wget https://apt.puppetlabs.com/puppetlabs-release-pc1-$dist.deb
-	dpkg -i puppetlabs-release-pc1-$dist.deb
-	apt-get update
-	apt-get install puppet-agent
-    else
-	apt-get update
-	apt-get install puppet
-    fi
+    apt-get update ; apt-get upgrade ; apt-get dist-upgrade
+    apt-get install ca-certificates lsb-release wget puppet
 fi
 export FQDN=`hostname -f`
 echo "certname: $FQDN (Y/n)?"
@@ -101,8 +93,7 @@ if test "$a" = n; then
     echo abort
     exit 1
 fi
-if grep buster /etc/apt/sources.list >/dev/null; then
-    cat <<EOF >/etc/puppet/puppet.conf
+cat <<EOF >/etc/puppet/puppet.conf
 [main]
 certname = $FQDN
 server = puppet.unetresgrossebite.com
@@ -110,15 +101,5 @@ ssldir = /var/lib/puppet/ssl
 environment = production
 runinterval = 1h
 EOF
-else
-    cat <<EOF >/etc/puppetlabs/puppet/puppet.conf
-[main]
-certname = $FQDN
-server = puppet.unetresgrossebite.com
-environment = production
-runinterval = 1h
-EOF
-    . /etc/profile.d/puppet-agent.sh
-fi
 puppet agent --onetime --test
 ```

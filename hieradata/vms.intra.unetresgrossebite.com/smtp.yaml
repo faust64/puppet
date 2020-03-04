@@ -9,3 +9,5 @@ postfix_local_domains:
   - emma-earth.fr
   - undomaine.42
   - unetresgrossebite.com
+postfix_networks:
+  - 10.42.0.0/15

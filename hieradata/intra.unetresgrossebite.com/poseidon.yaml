@@ -52,7 +52,7 @@ net_ifs:
     mtu: 9008
     netmsk: 255.255.255.248
     pfsync: true
-    proof: 10.42.242.10
+    proof: 10.42.242.15
     trunkopts: trunkport em0 trunkport em1 trunkport em2 trunkport em3
     trunkproto: lacp
   - name: vlan1000

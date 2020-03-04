@@ -15,7 +15,7 @@ class common::physical::netpackages {
 	    }
 	}
     } elsif ($kernel == "Linux") {
-	inclue common::tools::netstat
+	include common::tools::netstat
 
 	common::define::package {
 	    [ "ethtool", "iftop" ]:
