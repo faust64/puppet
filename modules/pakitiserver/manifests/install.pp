@@ -2,15 +2,16 @@ class pakitiserver::install {
     include php
     include mysql
 
-    $download = $pakitiserver::vars::download
+    common::define::geturl {
+	"Pakiti from sourceforge":
+	    nomv   => true,
+	    notify => Exec["Extract Pakiti web app"],
+	    target => "/root/pakiti-2.1.5.tar.gz",
+	    url    => "http://downloads.sourceforge.net/project/pakiti/pakiti/2.1.5-1/pakiti-2.1.5.tar.gz",
+	    wd     => "/root";
+    }
 
     exec {
-	"Download Pakiti from sourceforge":
-	    command     => "$download http://downloads.sourceforge.net/project/pakiti/pakiti/2.1.5-1/pakiti-2.1.5.tar.gz",
-	    cwd         => "/root",
-	    notify      => Exec["Extract Pakiti web app"],
-	    path        => "/usr/bin:/bin",
-	    unless      => "test -s /root/pakiti-2.1.5.tar.gz";
 	"Extract Pakiti web app":
 	    command     => "tar -xf /root/pakiti-2.1.5.tar.gz && mv pakiti-2.1.5 pakiti && chown -R root:root pakiti",
 	    cwd         => "/usr/share",
@@ -54,6 +55,7 @@ class pakitiserver::install {
     }
 
     pakitiserver::define::cleanup {
-	[ "CHANGELOG", "HISTORY", "LICENCE", "README", "client", "docs", "install", "pakiti2.spec", "scripts/process_oval_rh_php4.php" ]:
+	[ "CHANGELOG", "HISTORY", "LICENCE", "README", "client", "docs",
+	  "install", "pakiti2.spec", "scripts/process_oval_rh_php4.php" ]:
     }
 }

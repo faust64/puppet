@@ -1,14 +1,13 @@
 class yum::epel {
     $arrayvers = split($operatingsystemrelease, '\.')
-    $download  = lookup("download_cmd")
     $shortvers = $arrayvers[0]
 
-    exec {
-	"Download EPEL repository key":
-	    command => "$download https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-$shortvers",
-	    cwd     => "/etc/pki/rpm-gpg",
-	    path    => "/usr/bin:/bin",
-	    unless  => "test -s RPM-GPG-KEY-EPEL-$shortvers";
+    common::define::geturl {
+	"EPEL repository key":
+	    nomv   => true,
+	    target => "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-$shortvers",
+	    url    => "https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-$shortvers",
+	    wd     => "/etc/pki/rpm-gpg";
     }
 
     yum::define::repo {
@@ -17,6 +16,6 @@ class yum::epel {
 	    failover   => "priority",
 	    gpgkey     => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-$shortvers",
 	    mirrorlist => "https://mirrors.fedoraproject.org/metalink?repo=epel-$shortvers&arch=\$basearch",
-	    require    => Exec["Download EPEL repository key"];
+	    require    => Common::Define::Geturl["EPEL repository key"];
     }
 }

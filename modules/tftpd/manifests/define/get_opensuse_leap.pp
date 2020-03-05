@@ -1,5 +1,4 @@
 define tftpd::define::get_opensuse_leap($arch = [ "x86_64" ]) {
-    $download = $tftpd::vars::download
     $root_dir = $tftpd::vars::root_dir
 
     file {
@@ -23,24 +22,24 @@ define tftpd::define::get_opensuse_leap($arch = [ "x86_64" ]) {
 		require => File["Prepare OpenSuSE Leap $name root directory"];
 	}
 
-	exec {
-	    "Download openSUSE Leap $name $archi linux":
-		command     => "$download http://download.opensuse.org/distribution/leap/$name/repo/oss/boot/$archi/loader/linux",
-		creates     => "$root_dir/installers/opensuse${name}/$archi/linux",
-		cwd         => "$root_dir/installers/opensuse${name}/$archi",
-		path        => "/usr/local/bin:/usr/bin:/bin",
-		require     => File["Prepare OpenSuSE Leap $name $archi directory"];
-	    "Download openSUSE Leap $name $archi initrd":
-		command     => "$download http://download.opensuse.org/distribution/leap/$name/repo/oss/boot/$archi/loader/initrd",
-		creates     => "$root_dir/installers/opensuse${name}/$archi/initrd",
-		cwd         => "$root_dir/installers/opensuse${name}/$archi",
-		path        => "/usr/local/bin:/usr/bin:/bin",
-		require     => File["Prepare OpenSuSE Leap $name $archi directory"],
-		timeout     => 600;
+	common::define::geturl {
+	    "openSUSE Leap $name $archi linux":
+		nomv    => true,
+		require => File["Prepare OpenSuSE Leap $name $archi directory"],
+		target  => "$root_dir/installers/opensuse${name}/$archi/linux",
+		url     => "http://download.opensuse.org/distribution/leap/$name/repo/oss/boot/$archi/loader/linux",
+		wd      => "$root_dir/installers/opensuse${name}/$archi";
+	    "openSUSE Leap $name $archi initrd":
+		nomv    => true,
+		require => File["Prepare OpenSuSE Leap $name $archi directory"],
+		target  => "$root_dir/installers/opensuse${name}/$archi/initrd",
+		tmout   => 600,
+		url     => "http://download.opensuse.org/distribution/leap/$name/repo/oss/boot/$archi/loader/initrd",
+		wd      => "$root_dir/installers/opensuse${name}/$archi";
 	}
 
-	Exec["Download openSUSE Leap $name $archi linux"]
-	    -> Exec["Download openSUSE Leap $name $archi initrd"]
+	Common::Define::Geturl["openSUSE Leap $name $archi linux"]
+	    -> Common::Define::Geturl["openSUSE Leap $name $archi initrd"]
 	    -> File["Install pxe opensuse boot-screen"]
     }
 }

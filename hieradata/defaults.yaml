@@ -862,8 +862,13 @@ matchbox_feed_url: false
 matchbox_runtime_user: pi
 
 # Media
-media_subsonic: false
+media_airsonic_nfs: false
+media_do_emby: false
+media_do_plex: true
+media_music_nfs_root: /var/music
+media_share_nfs: false
 media_sickbeard: false
+media_subsonic_nfs: false
 media_web_root: /goinfre
 
 # Memcache
@@ -2520,8 +2525,8 @@ vmwares_esx_username: root
 #WebServers
 csp_policy_inventory:
   airsonic: "; script-src 'self' 'unsafe-inline' 'unsafe-eval' www.gstatic.com; img-src 'self' *.akamaized.net; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; frame-src 'self'; object-src 'none';"
-  cv: "; style-src 'self'; script-src 'self'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'self';"
   baculaweb: "; style-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
+  cv: "; style-src 'self'; script-src 'self'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'self';"
   gitlab: "; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; img-src 'self' http://www.gravatar.com; font-src 'self'; frame-src 'none'; object-src 'none';"
   icinga: "; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; img-src 'self'; font-src 'self'; frame-src 'self'; object-src 'none';"
   icingaweb2: "; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self' data:; frame-src 'none'; object-src 'none';"

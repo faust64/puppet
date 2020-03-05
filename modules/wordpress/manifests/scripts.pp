@@ -1,30 +1,17 @@
 class wordpress::scripts {
-    $download   = $wordpress::vars::download
     $log_dir    = $wordpress::vars::apache_log_dir
     $slack_hook = $wordpress::vars::slack_hook
 
-    exec {
-	"Download wp-cli":
-	    command     => "$download https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar",
-	    creates     => "/usr/local/bin/wp-cli",
-	    cwd         => "/root",
-	    notify      => Exec["Install wp-cli"],
-	    path        => "/usr/bin:/bin",
-	    require     => Class["php"];
-	"Install wp-cli":
-	    command     => "mv /root/wp-cli.phar wp-cli",
-	    cwd         => "/usr/local/bin",
-	    refreshonly => true,
-	    path        => "/usr/bin:/bin";
+    common::define::geturl {
+	"wp-cli":
+	    prm     => "0755",
+	    require => Class["php"],
+	    target  => "/usr/local/bin/wp-cli",
+	    url     => "https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar",
+	    wd      => "/root";
     }
 
     file {
-	"Set permissions to wp-cli":
-	    group   => lookup("gid_zero"),
-	    mode    => "0755",
-	    owner   => root,
-	    path    => "/usr/local/bin/wp-cli",
-	    require => Exec["Install wp-cli"];
 	"Install Wordpress backup script":
 	    content => template("wordpress/backup.erb"),
 	    group   => lookup("gid_zero"),

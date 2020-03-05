@@ -1,15 +1,17 @@
 class vmwaremgr::vspherecli {
-    $download = $vmwaremgr::vars::download
-    $repo     = $vmwaremgr::vars::repo
-    $version  = $vmwaremgr::vars::esx_version
+    $repo    = $vmwaremgr::vars::repo
+    $version = $vmwaremgr::vars::esx_version
+
+    common::define::geturl {
+	"vSphere CLI $version":
+	    nomv   => true,
+	    notify => Exec["Extract vSphere CLI"],
+	    target => "/root/vmware-vsphere-cli-$version.tar.gz",
+	    url    => "$repo/puppet/vmware-vsphere-cli-$version.tar.gz",
+	    wd     => "/root";
+    }
 
     exec {
-	"Download VMware vSphere CLI $version":
-	    command     => "$download $repo/puppet/vmware-vsphere-cli-$version.tar.gz",
-	    cwd         => "/root",
-	    notify      => Exec["Extract vSphere CLI"],
-	    path        => "/usr/bin:/bin",
-	    unless      => "test -e vmware-vsphere-cli-$version.tar.gz";
 	"Extract vSphere CLI":
 	    command     => "rm -fr vmware-vsphere-cli && tar -xf vmware-vsphere-cli-$version.tar.gz",
 	    cwd         => "/root",

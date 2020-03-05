@@ -7,7 +7,6 @@ class nginx::vars {
     $csp_sources          = lookup("csp_sources")
     $conf_dir             = lookup("nginx_conf_dir")
     $do_letsencrypt       = lookup("apache_letsencrypt")
-    $download             = lookup("download_cmd")
     $error_dir            = "$conf_dir/error"
     $hpkp_max_age         = lookup("hpkp_max_age")
     $hpkp_report          = lookup("hpkp_report")

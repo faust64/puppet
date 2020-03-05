@@ -1,6 +1,5 @@
 class trezor::github {
-    $download = $trezor::vars::download
-    $srvdir   = $trezor::vars::srvdir
+    $srvdir = $trezor::vars::srvdir
 
     nodejs::define::module {
 	[ "grunt-cli", "bower" ]:

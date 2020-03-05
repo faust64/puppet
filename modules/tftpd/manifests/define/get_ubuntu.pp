@@ -1,5 +1,4 @@
 define tftpd::define::get_ubuntu($arch = [ "i386", "amd64" ]) {
-    $download = $tftpd::vars::download
     $root_dir = $tftpd::vars::root_dir
 
     file {
@@ -23,24 +22,24 @@ define tftpd::define::get_ubuntu($arch = [ "i386", "amd64" ]) {
 		require => File["Prepare Ubuntu $name root directory"];
 	}
 
-	exec {
-	    "Download Ubuntu $name $archi linux":
-		command => "$download http://archive.ubuntu.com/ubuntu/dists/$name/main/installer-$archi/current/images/netboot/ubuntu-installer/$archi/linux",
-		creates => "$root_dir/installers/$name/$archi/linux",
-		cwd     => "$root_dir/installers/$name/$archi",
-		path    => "/usr/local/bin:/usr/bin:/bin",
-		require => File["Prepare Ubuntu $name $archi directory"];
-	    "Download Ubuntu $name $archi initrd.img":
-		command => "$download http://archive.ubuntu.com/ubuntu/dists/$name/main/installer-$archi/current/images/netboot/ubuntu-installer/$archi/initrd.gz",
-		creates => "$root_dir/installers/$name/$archi/initrd.gz",
-		cwd     => "$root_dir/installers/$name/$archi",
-		path    => "/usr/local/bin:/usr/bin:/bin",
+	common::define::geturl {
+	    "Ubuntu $name $archi linux":
+		nomv    => true,
 		require => File["Prepare Ubuntu $name $archi directory"],
-		timeout => 600;
+		target  => "$root_dir/installers/$name/$archi/linux",
+		url     => "http://archive.ubuntu.com/ubuntu/dists/$name/main/installer-$archi/current/images/netboot/ubuntu-installer/$archi/linux",
+		wd      => "$root_dir/installers/$name/$archi";
+	    "Ubuntu $name $archi initrd.img":
+		nomv    => true,
+		require => File["Prepare Ubuntu $name $archi directory"],
+		target  => "$root_dir/installers/$name/$archi/initrd.gz",
+		tmout   => 600,
+		url     => "http://archive.ubuntu.com/ubuntu/dists/$name/main/installer-$archi/current/images/netboot/ubuntu-installer/$archi/initrd.gz",
+		wd      => "$root_dir/installers/$name/$archi";
 	}
 
-	Exec["Download Ubuntu $name $archi linux"]
-	    -> Exec["Download Ubuntu $name $archi initrd.img"]
+	Common::Define::Geturl["Ubuntu $name $archi linux"]
+	    -> Common::Define::Geturl["Ubuntu $name $archi initrd.img"]
 	    -> File["Install pxe ubuntu boot-screen"]
     }
 }

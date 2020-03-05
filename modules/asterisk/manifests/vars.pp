@@ -21,7 +21,6 @@ class asterisk::vars {
     $data_dir             = lookup("asterisk_data_dir")
     $default_sip_pass     = lookup("asterisk_default_sip_passphrase")
     $default_vm_pass      = lookup("asterisk_default_voicemail_passphrase")
-    $download             = lookup("download_cmd")
     $extensions_all       = lookup("asterisk_extensions")
     $externalip           = lookup("asterisk_external_ip")
     $fax_from             = lookup("asterisk_fax_from")

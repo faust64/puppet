@@ -11,7 +11,6 @@ class bacula::vars {
     $director_pass_check    = lookup("bacula_director_passphrase")
     $director_port          = lookup("bacula_director_port")
     $do_webapp              = lookup("bacula_do_webapp")
-    $download               = lookup("download_cmd")
     $file_daemon_bind       = lookup("bacula_file_daemon_bind_addr")
     $file_daemon_fileset    = lookup("bacula_file_daemon_fileset")
     $file_daemon_ignore     = lookup("bacula_file_daemon_fileset_ignore")

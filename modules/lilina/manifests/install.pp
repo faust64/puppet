@@ -1,20 +1,21 @@
 class lilina::install {
-    $download     = $lilina::vars::download
     $runtime_user = $lilina::vars::runtime_user
     $web_root     = $lilina::vars::web_root
 
-    exec {
-	"Install lilina server root":
-	    command     => "$download https://github.com/Lilina/Lilina/zipball/master && mv master lilina-latest.zip",
-	    creates     => "/root/lilina-latest.zip",
-	    cwd         => "/root",
-	    notify      => Exec["Extract lilina server root"],
-	    path        => "/usr/bin:/bin",
-	    require     =>
+    common::define::geturl {
+	"Lilina":
+	    notify  => Exec["Extract lilina server root"],
+	    require =>
 		[
 		    Class[Common::Tools::Unzip],
 		    File["Prepare www directory"]
-		];
+		],
+	    target  => "/root/master lilina-latest.zip",
+	    url     => "https://github.com/Lilina/Lilina/zipball/master",
+	    wd      => "/root";
+    }
+
+    exec {
 	"Extract lilina server root":
 	    command     => "tar -xzf /root/lilina-latest.zip && mv Lilina* lilina",
 	    cwd         => $web_root,

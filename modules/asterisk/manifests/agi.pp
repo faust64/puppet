@@ -1,16 +1,18 @@
 class asterisk::agi {
     $data_dir = $asterisk::vars::data_dir
-    $download = $asterisk::vars::download
     $repo     = $asterisk::vars::repo
     $version  = $asterisk::vars::version_maj
 
+    common::define::geturl {
+	"asterisk agi scripts":
+	    nomv   => true,
+	    notify => Exec["Extract asterisk agi scripts"],
+	    target => "/root/asterisk-agi-bin.tar.gz",
+	    url    => "$repo/puppet/asterisk-agi-bin.tar.gz",
+	    wd     => "/root";
+    }
+
     exec {
-	"Download asterisk agi scripts":
-	    command     => "$download $repo/puppet/asterisk-agi-bin.tar.gz",
-	    cwd         => "/root",
-	    unless      => "tar -tf asterisk-agi-bin.tar.gz",
-	    notify      => Exec["Extract asterisk agi scripts"],
-	    path        => "/usr/bin:/bin";
 	"Extract asterisk agi scripts":
 	    command     => "tar -xf /root/asterisk-agi-bin.tar.gz",
 	    cwd         => $data_dir,

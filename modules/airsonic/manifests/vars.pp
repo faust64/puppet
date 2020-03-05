@@ -1,6 +1,5 @@
 class airsonic::vars {
     $alerts               = lookup("airsonic_alerts")
-    $download             = hiera("download_cmd")
     $do_flac              = lookup("airsonic_do_flac")
     $getting_started      = lookup("airsonic_getting_started")
     $ldap_base            = lookup("airsonic_searchuser")

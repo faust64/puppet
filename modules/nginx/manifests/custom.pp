@@ -1,6 +1,5 @@
 class nginx::custom {
     $conf_dir        = $nginx::vars::conf_dir
-    $download        = $nginx::vars::download
     $error_dir       = $nginx::vars::error_dir
     $robots_allow    = $nginx::vars::robots_allow
     $robots_disallow = $nginx::vars::robots_disallow
@@ -32,12 +31,12 @@ class nginx::custom {
 	    require => File["Prepare Nginx for further configuration"];
     }
 
-    exec {
-	"Install Nginx error background":
-	    command => "$download $repo/puppet/webserver-background.jpg",
-	    cwd     => $error_dir,
-	    path    => "/usr/bin:/bin",
+    common::define::geturl {
+	"Nginx error background":
+	    nomv    => true,
 	    require => File["Install Nginx error messages"],
-	    unless  => "test -s webserver-background.jpg";
+	    target  => "$error_dir/webserver-background.jpg",
+	    url     => "$repo/puppet/webserver-background.jpg",
+	    wd      => $error_dir;
     }
 }

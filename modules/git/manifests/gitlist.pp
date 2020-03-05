@@ -3,7 +3,6 @@ class git::gitlist {
 	include apache
     }
 
-    $download  = $git::vars::download
     $repo_root = $git::vars::repo_root
     $rdomain   = $git::vars::rdomain
     $version   = $git::vars::gitlist_vers
@@ -48,14 +47,17 @@ class git::gitlist {
 	    require => File["Install GitList main configuration"];
     }
 
+    common::define::geturl {
+	"gitlist":
+	    nomv    => true,
+	    notify  => Exec["Extract gitlist server root"],
+	    require => File["Prepare www directory"],
+	    target  => "/root/gitlist-$version.tar.gz",
+	    url     => "https://s3.amazonaws.com/gitlist/gitlist-$version.tar.gz",
+	    wd      => "/root";
+    }
+
     exec {
-	"Install gitlist server root":
-	    command     => "$download https://s3.amazonaws.com/gitlist/gitlist-$version.tar.gz",
-	    creates     => "/root/gitlist-$version.tar.gz",
-	    cwd         => "/root",
-	    notify      => Exec["Extract gitlist server root"],
-	    path        => "/usr/bin:/bin",
-	    require     => File["Prepare www directory"];
 	"Extract gitlist server root":
 	    command     => "tar -xzf /root/gitlist-$version.tar.gz",
 	    cwd         => $web_root,

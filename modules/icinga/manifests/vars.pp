@@ -11,7 +11,6 @@ class icinga::vars {
     $contact_domain        = lookup("contact_domain")
     $devices               = lookup("icinga_static_devices")
     $dns_ip                = lookup("dns_ip")
-    $download              = lookup("download_cmd")
     $lib_dir               = lookup("icinga_lib_dir")
     $livestatus_clients    = lookup("icinga_livestatus_clients")
     $log_dir               = lookup("icinga_log_dir")

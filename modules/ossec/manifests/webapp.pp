@@ -1,5 +1,4 @@
 class ossec::webapp {
-    $download = $ossec::vars::download
     $rdomain  = $ossec::vars::rdomain
 
     if ($domain != $rdomain) {
@@ -71,14 +70,17 @@ class ossec::webapp {
 	}
     }
 
+    common::define::geturl {
+	"OSSEC web UI":
+	    nomv    => true,
+	    notify  => Exec["Extract OSSEC web UI"],
+	    require => File["Install ossec main configuration"],
+	    target  => "/root/master.zip",
+	    url     => "https://github.com/ossec/ossec-wui/archive/master.zip",
+	    wd      => "/root";
+    }
+
     exec {
-	"Download OSSEC web UI":
-	    command     => "$download https://github.com/ossec/ossec-wui/archive/master.zip",
-	    creates     => "/root/master.zip",
-	    cwd         => "/root",
-	    notify      => Exec["Extract OSSEC web UI"],
-	    path        => "/usr/bin:/bin",
-	    require     => File["Install ossec main configuration"];
 	"Extract OSSEC web UI":
 	    command     => "unzip /root/master.zip",
 	    cwd         => "/usr/share",

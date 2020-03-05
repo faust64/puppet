@@ -4,7 +4,6 @@ class git::vars {
     $contact              = lookup("backup_contact")
     $author_name          = lookup("git_gitmaster_name")
     $author_email         = lookup("git_gitmaster_mail")
-    $download             = lookup("download_cmd")
     $gh_backup_org        = lookup("github_backups_organization")
     $gh_backup_slack_hook = lookup("github_backups_slack_hook")
     $gh_backup_token      = lookup("github_backups_token")

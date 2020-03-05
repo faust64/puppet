@@ -1,5 +1,4 @@
 define tftpd::define::get_devuan($arch = [ "i386", "amd64" ]) {
-    $download = $tftpd::vars::download
     $root_dir = $tftpd::vars::root_dir
 
     file {
@@ -23,24 +22,24 @@ define tftpd::define::get_devuan($arch = [ "i386", "amd64" ]) {
 		require => File["Prepare Devuan $name root directory"];
 	}
 
-	exec {
-	    "Download Devuan $name $archi linux":
-		command => "$download http://auto.mirror.devuan.org/devuan/dists/$name/main/installer-$archi/current/images/netboot/debian-installer/$archi/linux",
-		creates => "$root_dir/installers/devuan-$name/$archi/linux",
-		cwd     => "$root_dir/installers/devuan-$name/$archi",
-		path    => "/usr/local/bin:/usr/bin:/bin",
-		require => File["Prepare Devuan $name $archi directory"];
-	    "Download Devuan $name $archi initrd.img":
-		command => "$download http://auto.mirror.devuan.org/devuan/dists/$name/main/installer-$archi/current/images/netboot/debian-installer/$archi/initrd.gz",
-		creates => "$root_dir/installers/devuan-$name/$archi/initrd.gz",
-		cwd     => "$root_dir/installers/devuan-$name/$archi",
-		path    => "/usr/local/bin:/usr/bin:/bin",
+	common::define::geturl {
+	    "Devuan $name $archi linux":
+		nomv    => true,
 		require => File["Prepare Devuan $name $archi directory"],
-		timeout => 600;
+		target  => "$root_dir/installers/devuan-$name/$archi/linux",
+		url     => "http://auto.mirror.devuan.org/devuan/dists/$name/main/installer-$archi/current/images/netboot/debian-installer/$archi/linux",
+		wd      => "$root_dir/installers/devuan-$name/$archi";
+	    "Devuan $name $archi initrd.img":
+		nomv    => true,
+		require => File["Prepare Devuan $name $archi directory"],
+		target  => "$root_dir/installers/devuan-$name/$archi/initrd.gz",
+		tmout   => 600,
+		url     => "http://auto.mirror.devuan.org/devuan/dists/$name/main/installer-$archi/current/images/netboot/debian-installer/$archi/initrd.gz",
+		wd      => "$root_dir/installers/devuan-$name/$archi";
 	}
 
-	Exec["Download Devuan $name $archi linux"]
-	    -> Exec["Download Devuan $name $archi initrd.img"]
+	Common::Define::Geturl["Devuan $name $archi linux"]
+	    -> Common::Define::Geturl["Devuan $name $archi initrd.img"]
 	    -> File["Install pxe devuan boot-screen"]
     }
 }

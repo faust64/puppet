@@ -1,5 +1,6 @@
 class common::openbsd {
     $arrayvers          = split($kernelversion, '\.')
+    $contact            = lookup("generic_contact")
     $major              = $arrayvers[0]
     $minor              = $arrayvers[1]
     $openbsd_pkg_source = lookup("openbsd_pkg_source")
@@ -15,6 +16,14 @@ class common::openbsd {
 		recurse => true,
 		source  => "puppet:///modules/common/obsd/rc.d";
 	}
+    }
+
+    common::define::lined {
+	"Sets cron mail recipient":
+	    line   => "MAILTO=$contact",
+	    match  => "^MAILTO",
+	    notify => Common::Define::Service[$common::config::cron_srvname],
+	    path   => "/var/cron/tabs/root";
     }
 
     common::define::package {

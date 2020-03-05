@@ -1,16 +1,18 @@
 class racktables::sourceforge {
-    $download = $racktables::vars::download
     $version  = $racktables::vars::version
     $web_root = $racktables::vars::web_root
 
+    common::define::geturl {
+	"racktables from sourceforge":
+	    nomv     => true,
+	    notify   => Exec["Unpack racktables"],
+	    require  => File["Prepare www directory"],
+	    target   => "/root/RackTables-$version.tar.gz",
+	    url      => "http://downloads.sourceforge.net/project/racktables/RackTables-$version.tar.gz",
+	    wd       => "/root";
+    }
+
     exec {
-	"Download racktables from sourceforge":
-	    command     => "$download http://downloads.sourceforge.net/project/racktables/RackTables-$version.tar.gz",
-	    cwd         => "/root",
-	    notify      => Exec["Unpack racktables"],
-	    path        => "/usr/bin:/bin",
-	    require     => File["Prepare www directory"],
-	    unless      => "test -s RackTables-$version.tar.gz";
 	"Unpack racktables":
 	    command     => "tar -xf RackTables-$version.tar.gz",
 	    cwd         => "/root",

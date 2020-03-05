@@ -1,6 +1,5 @@
 class trezorbridge::github {
-    $download = $trezorbridge::vars::download
-    $srvdir   = $trezorbridge::vars::srvdir
+    $srvdir = $trezorbridge::vars::srvdir
 
     git::define::clone {
 	"trezord":
@@ -11,14 +10,17 @@ class trezorbridge::github {
 	    update          => false;
     }
 
+    common::define::geturl {
+	"config.proto":
+	    nomv    => true,
+	    notify  => Exec["Build config.proto"],
+	    require => Git::Define::Clone["trezord"],
+	    target  => "/usr/share/trezord/src/config/config.proto",
+	    url     => "https://raw.githubusercontent.com/trezor/trezor-common/master/protob/config.proto",
+	    wd      => "/usr/share/trezord/src/config";
+    }
+
     exec {
-	"Fetch patched config.proto":
-	    command     => "$download https://raw.githubusercontent.com/trezor/trezor-common/master/protob/config.proto",
-	    creates     => "/usr/share/trezord/src/config/config.proto",
-	    cwd         => "/usr/share/trezord/src/config",
-	    notify      => Exec["Build config.proto"],
-	    path        => "/usr/local/bin:/usr/bin:/bin",
-	    require     => Git::Define::Clone["trezord"];
 	"Build config.proto":
 	    command     => "protoc -I/usr/include -I. --cpp_out=. config.proto",
 	    cwd         => "/usr/share/trezord/src/config",

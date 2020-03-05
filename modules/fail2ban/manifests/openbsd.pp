@@ -1,23 +1,25 @@
 class fail2ban::openbsd {
     $conf_dir = $fail2ban::vars::conf_dir
-    $download = $fail2ban::vars::download
     $repo     = $fail2ban::vars::repo
     $version  = $fail2ban::vars::version
 
     include python
 
+    common::define::geturl {
+	"fail2ban":
+	    nomv   => true,
+	    target => "/root/fail2ban-$version.tar.gz",
+	    url    => "$repo/puppet/fail2ban-$version.tar.gz",
+	    wd     => "/root";
+    }
+
     exec {
-	"Download fail2ban sources":
-	    command => "$download $repo/puppet/fail2ban-$version.tar.gz",
-	    cwd     => "/root",
-	    path    => "/usr/bin:/bin",
-	    unless  => "test -s fail2ban-$version.tar.gz";
 	"Extract fail2ban sources":
 	    command => "tar -xzf /root/fail2ban-$version.tar.gz",
 	    creates => "/usr/src/fail2ban-$version/setup.py",
 	    cwd     => "/usr/src",
 	    path    => "/usr/bin:/bin",
-	    require => Exec["Download fail2ban sources"];
+	    require => Common::Define::Geturl["fail2ban"];
 	"Install fail2ban from sources":
 	    command => "python setup.py install",
 	    creates => "/usr/local/bin/fail2ban-server",

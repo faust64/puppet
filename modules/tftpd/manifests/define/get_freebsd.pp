@@ -1,5 +1,4 @@
 define tftpd::define::get_freebsd($arch = [ "i386", "amd64" ]) {
-    $download = $tftpd::vars::download
     $root_dir = $tftpd::vars::root_dir
 
     file {
@@ -23,17 +22,17 @@ define tftpd::define::get_freebsd($arch = [ "i386", "amd64" ]) {
 		require => File["Prepare freebsd $name root directory"];
 	}
 
-	exec {
-	    "Download freebsd $name $archi image":
-		command => "$download http://ftp.freebsd.org/pub/FreeBSD/releases/ISO-IMAGES/$name/FreeBSD-${name}-RELEASE-${archi}-bootonly.iso",
-		creates => "$root_dir/installers/freebsd-$name/$archi/FreeBSD-${name}-RELEASE-${archi}-bootonly.iso",
-		cwd     => "$root_dir/installers/freebsd-$name/$archi",
-		path    => "/usr/local/bin:/usr/bin:/bin",
+	common::define::geturl {
+	    "FreeBSD $name $archi image":
+		nomv    => true,
 		require => File["Prepare freebsd $name $archi directory"],
-		timeout => 3600;
+		target  => "$root_dir/installers/freebsd-$name/$archi/FreeBSD-${name}-RELEASE-${archi}-bootonly.iso",
+		tmout   => 3600,
+		url     => "http://ftp.freebsd.org/pub/FreeBSD/releases/ISO-IMAGES/$name/FreeBSD-${name}-RELEASE-${archi}-bootonly.iso",
+		wd      => "$root_dir/installers/freebsd-$name/$archi";
 	}
 
-	Exec["Download freebsd $name $archi image"]
+	Common::Define::Geturl["FreeBSD $name $archi image"]
 	    -> File["Install pxe freebsd boot-screen"]
     }
 }

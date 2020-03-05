@@ -1,7 +1,6 @@
 class asterisk::webapp {
     include nginx
 
-    $download = $asterisk::vars::download
     $repo     = $asterisk::vars::repo
     $srv_root = $asterisk::vars::webserver_root
 
@@ -29,14 +28,17 @@ class asterisk::webapp {
 	    require => Class[Nginx];
     }
 
+    common::define::geturl {
+	"cisco home screen":
+	    nomv    => true,
+	    notify  => Exec["Install cisco home screen"],
+	    require => File["Prepare Linksys configuration directory"],
+	    target  => "/root/cisco-logo.bmp",
+	    url     => "$repo/puppet/cisco-logo.bmp",
+	    wd      => "/root";
+    }
+
     exec {
-	"Download cisco home screen":
-	    command     => "$download $repo/puppet/cisco-logo.bmp",
-	    cwd         => "/root",
-	    notify      => Exec["Install cisco home screen"],
-	    path        => "/usr/bin:/bin",
-	    require     => File["Prepare Linksys configuration directory"],
-	    unless      => "test -s cisco-logo.bmp";
 	"Install cisco home screen":
 	    command     => "cp -p /root/cisco-logo.bmp logo.bmp",
 	    cwd         => "/var/www/cisco",

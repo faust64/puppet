@@ -16,7 +16,6 @@ class fail2ban::vars {
     $do_web_noscript      = lookup("fail2ban_do_web_noscript")
     $do_web_overflow      = lookup("fail2ban_do_web_overflow")
     $do_wordpress         = lookup("fail2ban_do_wordpress")
-    $download             = lookup("download_cmd")
     $gid_adm              = lookup("gid_adm")
     $has_ssh_ddos         = lookup("fail2ban_ssh_ddos_filter")
     $ignoreips            = lookup("fail2ban_ignoreips")

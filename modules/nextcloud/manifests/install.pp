@@ -1,7 +1,6 @@
 class nextcloud::install {
     include common::tools::unzip
 
-    $download = $nextcloud::vars::download
     $version  = $nextcloud::vars::version
     $webroot  = $nextcloud::vars::web_root
     if ($version != "latest") {
@@ -11,13 +10,16 @@ class nextcloud::install {
 	$cv   = $version
     }
 
+    common::define::geturl {
+	"NextCloud":
+	    nomv    => true,
+	    notify  => Exec["Extract NextCloud"],
+	    target  => "/root/nextcloud-$cv.zip",
+	    url     => "https://download.nextcloud.com/server/releases/nextcloud-$cv.zip",
+	    wd      => "/root";
+    }
+
     exec {
-	"Download NextCloud":
-	    command     => "$download https://download.nextcloud.com/server/releases/nextcloud-$cv.zip",
-	    creates     => "/root/nextcloud-$cv.zip",
-	    cwd         => "/root",
-	    notify      => Exec["Extract NextCloud"],
-	    path        => "/usr/bin:/bin";
 	"Extract NextCloud":
 	    command     => "unzip /root/nextcloud-$cv.zip",
 	    cwd         => "/var/www",

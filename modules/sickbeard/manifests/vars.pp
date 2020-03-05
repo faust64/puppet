@@ -4,7 +4,6 @@ class sickbeard::vars {
     $conf_dir       = lookup("sickbeard_conf_dir")
     $contact        = lookup("sickbeard_contact")
     $data_dir_check = lookup("sickbeard_data_dir")
-    $download       = lookup("download_cmd")
     $home_dir       = lookup("sickbeard_home_dir")
     $providers      = lookup("sickbeard_custom_providers")
     $rdomain        = lookup("root_domain")

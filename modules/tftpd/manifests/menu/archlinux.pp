@@ -1,5 +1,4 @@
 class tftpd::menu::archlinux {
-    $download = $tftpd::vars::download
     $root_dir = $tftpd::vars::root_dir
 
     file {
@@ -12,13 +11,13 @@ class tftpd::menu::archlinux {
 	    require => File["Prepare installers directory"];
     }
 
-    exec {
-	"Download ArchLinux ipxe.lkrn":
-	    command => "$download https://releng.archlinux.org/pxeboot/ipxe.lkrn",
-	    creates => "$root_dir/installers/archlinux/ipxe.lkrn",
-	    cwd     => "$root_dir/installers/archlinux",
-	    path    => "/usr/local/bin:/usr/bin:/bin",
-	    require => File["Prepare ArchLinux root directory"];
+    common::define::geturl {
+	"ArchLinux ipxe.lkrn":
+	    nomv    => true,
+	    require => File["Prepare ArchLinux root directory"],
+	    target  => "$root_dir/installers/archlinux/ipxe.lkrn",
+	    url     => "https://releng.archlinux.org/pxeboot/ipxe.lkrn",
+	    wd      => "$root_dir/installers/archlinux";
     }
 # ArchLinux uses some outdated version of ipxe.lkrn. Build your own:
 # git clone git://git.ipxe.org/ipxe.git

@@ -3,7 +3,6 @@ class pakitiserver::vars {
     $apache_group        = lookup("apache_runtime_group")
     $db_passphrase       = lookup("pakiti_db_passphrase")
     $db_user             = lookup("pakiti_db_user")
-    $download            = lookup("download_cmd")
     $http_passphrase     = lookup("pakiti_http_passphrase")
     $http_user           = lookup("pakiti_http_user")
     $rdomain             = lookup("root_domain")

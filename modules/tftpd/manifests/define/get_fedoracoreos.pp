@@ -1,6 +1,5 @@
 define tftpd::define::get_fedoracoreos($arch   = [ "x86_64" ],
                                        $stream = "stable") {
-    $download = $tftpd::vars::download
     $root_dir = $tftpd::vars::root_dir
 
     file {
@@ -24,32 +23,29 @@ define tftpd::define::get_fedoracoreos($arch   = [ "x86_64" ],
 		require => File["Prepare Fedora CoreOS $name root directory"];
 	}
 
-	exec {
-	    "Download Fedora CoreOS $name $archi linux":
-		command => "$download https://builds.coreos.fedoraproject.org/prod/streams/${stream}/builds/${name}/${archi}/fedora-coreos-${name}-live-kernel-${archi} && mv fedora-coreos-${name}-live-kernel-${archi} linux",
-		creates => "$root_dir/installers/fedora-coreos-$name/$archi/linux",
-		cwd     => "$root_dir/installers/fedora-coreos-$name/$archi",
-		path    => "/usr/local/bin:/usr/bin:/bin",
-		require => File["Prepare Fedora CoreOS $name $archi directory"];
-	    "Download Fedora CoreOS $name $archi initrd.img":
-		command => "$download https://builds.coreos.fedoraproject.org/prod/streams/${stream}/builds/${name}/${archi}/fedora-coreos-${name}-live-initramfs.${archi}.img && mv fedora-coreos-${name}-live-initramfs.${archi}.img initrd",
-		creates => "$root_dir/installers/fedora-coreos-$name/$archi/initrd",
-		cwd     => "$root_dir/installers/fedora-coreos-$name/$archi",
-		path    => "/usr/local/bin:/usr/bin:/bin",
+	common::define::geturl {
+	    "Fedora CoreOS $name $archi linux":
 		require => File["Prepare Fedora CoreOS $name $archi directory"],
-		timeout => 900;
-	    "Download Fedora CoreOS $name $archi metal-bios":
-		command => "$download https://builds.coreos.fedoraproject.org/prod/streams/${stream}/builds/${name}/${archi}/fedora-coreos-${name}-metal.${archi}.raw.xz && mv fedora-coreos-${name}-metal.${archi}.raw.xz ${name}-${archi}-metal-bios.raw.xz",
-		creates => "$root_dir/fedora-ignition/${name}-${archi}-metal-bios.raw.xz",
-		cwd     => "$root_dir/fedora-ignition",
-		path    => "/usr/local/bin:/usr/bin:/bin",
+		target  => "$root_dir/installers/fedora-coreos-$name/$archi/linux",
+		url     => "https://builds.coreos.fedoraproject.org/prod/streams/${stream}/builds/${name}/${archi}/fedora-coreos-${name}-live-kernel-${archi}",
+		wd      => "$root_dir/installers/fedora-coreos-$name/$archi";
+	    "Fedora CoreOS $name $archi initrd.img":
+		require => File["Prepare Fedora CoreOS $name $archi directory"],
+		target  => "$root_dir/installers/fedora-coreos-$name/$archi/initrd",
+		tmout   => 900,
+		url     => "https://builds.coreos.fedoraproject.org/prod/streams/${stream}/builds/${name}/${archi}/fedora-coreos-${name}-live-initramfs.${archi}.img",
+		wd      => "$root_dir/installers/fedora-coreos-$name/$archi";
+	    "Fedora CoreOS $name $archi metal-bios":
 		require => File["Install fedora-coreos ignition directory"],
-		timeout => 1200;
+		target  => "$root_dir/fedora-ignition/${name}-${archi}-metal-bios.raw.xz",
+		tmout   => 1200,
+		url     => "https://builds.coreos.fedoraproject.org/prod/streams/${stream}/builds/${name}/${archi}/fedora-coreos-${name}-metal.${archi}.raw.xz",
+		wd      => "$root_dir/fedora-ignition";
 	}
 
-	Exec["Download Fedora CoreOS $name $archi linux"]
-	    -> Exec["Download Fedora CoreOS $name $archi initrd.img"]
-	    -> Exec["Download Fedora CoreOS $name $archi metal-bios"]
+	Common::Define::Geturl["Fedora CoreOS $name $archi linux"]
+	    -> Common::Define::Geturl["Fedora CoreOS $name $archi initrd.img"]
+	    -> Common::Define::Geturl["Fedora CoreOS $name $archi metal-bios"]
 	    -> File["Install pxe fedora-coreos boot-screen"]
     }
 }

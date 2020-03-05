@@ -1,21 +1,22 @@
 class selfoss::install {
-    $download     = $selfoss::vars::download
     $runtime_user = $selfoss::vars::runtime_user
     $web_root     = $selfoss::vars::web_root
 
-    exec {
-	"Install selfoss server root":
-	    command     => "$download https://github.com/SSilence/selfoss/archive/master.zip && mv master.zip selfoss-latest.zip",
-	    creates     => "/root/selfoss-latest.zip",
-	    cwd         => "/root",
-	    notify      => Exec["Extract selfoss server root"],
-	    path        => "/usr/bin:/bin",
-	    require     =>
+    common::define::geturl {
+	"selfoss":
+	    notify  => Exec["Extract selfoss server root"],
+	    require =>
 		[
 		    Class[Apache],
 		    Class[Common::Tools::Unzip],
 		    File["Prepare www directory"]
-		];
+		],
+	    target  => "/root/selfoss-latest.zip",
+	    url     => "https://github.com/SSilence/selfoss/archive/master.zip",
+	    wd      => "/root";
+    }
+
+    exec {
 	"Extract selfoss server root":
 	    command     => "tar -xzf /root/selfoss-latest.zip && mv selfoss-master selfoss",
 	    cwd         => $web_root,

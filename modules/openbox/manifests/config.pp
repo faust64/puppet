@@ -2,7 +2,6 @@ class openbox::config {
     $autostart      = $openbox::vars::autostart
     $autostart_file = $openbox::vars::autostart_file
     $dm             = $openbox::dm
-    $download       = $openbox::vars::download
     $home_dir       = $openbox::vars::home_dir
     $repo           = $openbox::vars::repo
     $username       = $openbox::vars::runtime_user
@@ -27,13 +26,13 @@ class openbox::config {
     }
 
     if ($with_feh) {
-	exec {
-	    "Download default wallpaper":
-		command => "$download $repo/puppet/webserver-background.png",
-		cwd     => "$home_dir/$username/.config/openbox",
-		path    => "/usr/bin:/bin",
+	common::define::geturl {
+	    "default wallpaper":
+		nomv    => true,
 		require => File["Prepare openbox user directory"],
-		unless  => "test -s webserver-background.png";
+		target  => "/root/webserver-background.png",
+		url     => "$repo/puppet/webserver-background.png",
+		wd      => "$home_dir/$username/.config/openbox";
 	}
     }
 }

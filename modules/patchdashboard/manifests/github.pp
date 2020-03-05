@@ -1,14 +1,14 @@
 class patchdashboard::github {
-    $download = $patchdashboard::vars::download
+    common::define::geturl {
+	"patchdashboard":
+	    notify  => Exec["Extract patchdashboard"],
+	    require => Common::Define::Package["unzip"],
+	    target  => "/root/patchdashboard.zip",
+	    url     => "https://github.com/faust64/patchdashboard/archive/peerio.zip",
+	    wd      => "/root";
+    }
 
     exec {
-	"Download patchdashboard":
-	    command     => "$download https://github.com/faust64/patchdashboard/archive/peerio.zip && mv peerio.zip patchdashboard.zip",
-	    creates     => "/usr/share/patchdashboard",
-	    cwd         => "/root",
-	    notify      => Exec["Extract patchdashboard"],
-	    path        => "/usr/bin:/bin",
-	    require     => Common::Define::Package["unzip"];
 	"Extract patchdashboard":
 	    command     => "unzip patchdashboard.zip && mv patchdashboard-peerio /usr/share/patchdashboard",
 	    cwd         => "/root",

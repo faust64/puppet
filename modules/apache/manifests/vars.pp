@@ -9,7 +9,6 @@ class apache::vars {
     $csp_policies         = lookup("csp_policy_inventory")
     $csp_report           = lookup("csp_report")
     $csp_sources          = lookup("csp_sources")
-    $download             = lookup("download_cmd")
     $do_letsencrypt       = lookup("apache_letsencrypt")
     $keepalive            = lookup("apache_keepalive")
     $keepalive_timeout    = lookup("apache_keepalive_timeout")

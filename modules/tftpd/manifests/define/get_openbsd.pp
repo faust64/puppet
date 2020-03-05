@@ -1,5 +1,4 @@
 define tftpd::define::get_openbsd($arch = [ "i386", "amd64" ]) {
-    $download = $tftpd::vars::download
     $root_dir = $tftpd::vars::root_dir
 
     file {
@@ -23,23 +22,23 @@ define tftpd::define::get_openbsd($arch = [ "i386", "amd64" ]) {
 		require => File["Prepare OpenBSD $name root directory"];
 	}
 
-	exec {
-	    "Download OpenBSD $name $archi kernel":
-		command => "$download http://ftp.nluug.nl/os/OpenBSD/$name/$archi/bsd.rd",
-		creates => "$root_dir/installers/openbsd-$name/$archi/bsd.rd",
-		cwd     => "$root_dir/installers/openbsd-$name/$archi",
-		path    => "/usr/local/bin:/usr/bin:/bin",
-		require => File["Prepare OpenBSD $name $archi directory"];
-	    "Download OpenBSD $name $archi pxeboot":
-		command => "$download http://ftp.nluug.nl/os/OpenBSD/$name/$archi/pxeboot",
-		creates => "$root_dir/installers/openbsd-$name/$archi/pxeboot",
-		cwd     => "$root_dir/installers/openbsd-$name/$archi",
-		path    => "/usr/local/bin:/usr/bin:/bin",
-		require => File["Prepare OpenBSD $name $archi directory"];
+	common::define::geturl {
+	    "OpenBSD $name $archi kernel":
+		nomv    => true,
+		require => File["Prepare OpenBSD $name $archi directory"],
+		url     => "http://ftp.nluug.nl/os/OpenBSD/$name/$archi/bsd.rd",
+		target  => "$root_dir/installers/openbsd-$name/$archi/bsd.rd",
+		wd      => "$root_dir/installers/openbsd-$name/$archi";
+	    "OpenBSD $name $archi pxeboot":
+		nomv    => true,
+		require => File["Prepare OpenBSD $name $archi directory"],
+		url     => "http://ftp.nluug.nl/os/OpenBSD/$name/$archi/pxeboot",
+		target  => "$root_dir/installers/openbsd-$name/$archi/pxeboot",
+		wd      => "$root_dir/installers/openbsd-$name/$archi";
 	}
 
-	Exec["Download OpenBSD $name $archi kernel"]
-	    -> Exec["Download OpenBSD $name $archi pxeboot"]
+	Common::Define::Geturl["OpenBSD $name $archi kernel"]
+	    -> Common::Define::Geturl["OpenBSD $name $archi pxeboot"]
 	    -> File["Install pxe openbsd boot-screen"]
     }
 }

@@ -1,14 +1,10 @@
 class patchdashboard::register {
     $db_name  = "patchdashboard"
-    $download = lookup("download_cmd")
     $upstream = lookup("patchdashboard_upstream")
 
     if ($upstream) {
 	if (! defined(Class[curl])) {
 	    include curl
-
-	    Class["curl"]
-		-> Exec["Download PatchDashboard client installer"]
 	}
 
 	if ($myoperatingsystem == "Debian" or $myoperatingsystem == "Devuan" or $myoperatingsystem == "Ubuntu") {
@@ -22,7 +18,7 @@ class patchdashboard::register {
 	    }
 
 	    File["Schedule daily apt updates"]
-		-> Exec["Download PatchDashboard client installer"]
+		-> Common::Define::Geturl["PatchDashboard client installer"]
 	}
 
 	if ($operatingsystem == "OpenBSD" or $operatingsystem == "FreeBSD") {
@@ -37,7 +33,7 @@ class patchdashboard::register {
 		    line    => "#!/usr/bin/env bash",
 		    match   => "^#!/",
 		    path    => "/root/patchdashboard-register.sh",
-		    require => Exec["Download PatchDashboard client installer"];
+		    require => Common::Define::Geturl["PatchDashboard client installer"];
 	    }
 
 	    Common::Define::Package["bash"]
@@ -45,6 +41,7 @@ class patchdashboard::register {
 
 	    Common::Define::Lined["Fix PatchDashboard registration script"]
 		-> Exec["Install PatchDashboard client"]
+
 	    $mark_installed = "/opt/patch_manager/check-in.sh"
 
 	    cron {
@@ -59,19 +56,22 @@ class patchdashboard::register {
 	    $mark_installed = "/etc/cron.d/patch-manager"
 	}
 
+	common::define::geturl {
+	    "PatchDashboard client installer":
+		prm     => "0750",
+		target  => "/root/patchdashboard-register.sh",
+		url     => "https://$upstream/client/client_installer.php",
+		wd      => "/root";
+	}
+
 	exec {
-	    "Download PatchDashboard client installer":
-		command => "$download https://$upstream/client/client_installer.php && mv client_installer.php patchdashboard-register.sh && chmod +x patchdashboard-register.sh",
-		cwd     => "/root",
-		creates => "/root/patchdashboard-register.sh",
-		path    => "/usr/bin:/bin";
 	    "Install PatchDashboard client":
 		command     => "patchdashboard-register.sh",
 		cwd         => "/",
 		creates     => $mark_installed,
 		notify      => Exec["Register to PatchDashboard"],
 		path        => "/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin:/root",
-		require     => Exec["Download PatchDashboard client installer"];
+		require     => Common::Define::Geturl["PatchDashboard client installer"];
 	    "Register to PatchDashboard":
 		command     => "check-in.sh",
 		cwd         => "/",
@@ -82,8 +82,6 @@ class patchdashboard::register {
 	if (defined(Common::Define::Package["curl"])) {
 	    Common::Define::Package["curl"]
 		-> Exec["Register to PatchDashboard"]
-	    Common::Define::Package["curl"]
-		-> Exec["Install PatchDashboard client"]
 	}
 
 	@@exec {

@@ -1,6 +1,5 @@
 class mrtg::vars {
     $collect_check = lookup("mrtg_collect")
-    $download      = lookup("download_cmd")
     $rdomain       = lookup("root_domain")
     $repo          = lookup("puppet_http_repo")
     $weekday_start = lookup("mrtg_week_start_day")

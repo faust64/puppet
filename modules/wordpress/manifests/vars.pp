@@ -5,7 +5,6 @@ class wordpress::vars {
     $db_name           = lookup("wordpress_db_name")
     $db_pass           = lookup("wordpress_db_pass")
     $db_user           = lookup("wordpress_db_user")
-    $download          = lookup("download_cmd")
     $key_auth          = lookup("wordpress_key_auth")
     $key_secure_auth   = lookup("wordpress_key_secure_auth")
     $key_logged_in     = lookup("wordpress_key_logged_in")

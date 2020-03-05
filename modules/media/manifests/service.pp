@@ -1,6 +1,8 @@
 class media::service {
-    common::define::service {
-	"plexmediaserver":
-	    ensure => running;
+    if ($media::vars::plex != false) {
+	common::define::service {
+	    "plexmediaserver":
+		ensure => running;
+	}
     }
 }

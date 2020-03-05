@@ -1,6 +1,5 @@
 class unbound::blocklist {
     $conf_dir = $unbound::vars::conf_dir
-    $download = $unbound::vars::download
 
     file {
 	"Install custom dns blacklist":

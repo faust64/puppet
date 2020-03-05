@@ -5,7 +5,6 @@ class thruk::vars {
     $backends        = lookup("thruk_backends")
     $base_dir        = lookup("thruk_base_dir")
     $conf_dir        = lookup("thruk_conf_dir")
-    $download        = lookup("download_cmd")
     $home_link       = lookup("thruk_home_link")
     $listen_ports    = lookup("apache_listen_ports")
     $plugins         = lookup("thruk_plugins")

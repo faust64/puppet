@@ -12,7 +12,7 @@ class media {
 	}
     }
 
-#   include media::default
+    include media::default
     include media::scripts
     include media::service
     include media::webapp

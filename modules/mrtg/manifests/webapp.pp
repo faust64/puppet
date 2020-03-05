@@ -2,7 +2,6 @@ class mrtg::webapp {
     include apache
     include mrtg::weathermap
 
-    $download      = $mrtg::vars::download
     $rdomain       = $mrtg::vars::rdomain
     $repo          = $mrtg::vars::repo
     $weekday_start = $mrtg::vars::weekday_start
@@ -117,13 +116,16 @@ class mrtg::webapp {
 	    source  => "puppet:///modules/mrtg/index.html";
     }
 
+    common::define::geturl {
+	"mrtg webapp icons":
+	    notify => Exec["Unpack mrtg webapp icons"],
+	    nomv   => true,
+	    target => "/root/mrtg-icons.tar.gz",
+	    url    => "$repo/puppet/mrtg-icons.tar.gz",
+	    wd     => "/root";
+    }
+
     exec {
-	"Download mrtg webapp icons":
-	    command     => "$download $repo/puppet/mrtg-icons.tar.gz",
-	    cwd         => "/root",
-	    notify      => Exec["Unpack mrtg webapp icons"],
-	    path        => "/usr/bin:/bin",
-	    unless      => "test -s mrtg-icons.tar.gz";
 	"Unpack mrtg webapp icons":
 	    command     => "tar -xzf /root/mrtg-icons.tar.gz",
 	    cwd         => "/var/www/mrtg",

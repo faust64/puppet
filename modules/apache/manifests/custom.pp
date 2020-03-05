@@ -1,5 +1,4 @@
 class apache::custom {
-    $download        = $apache::vars::download
     $error_dir       = $apache::vars::error_dir
     $repo            = $apache::vars::repo
     $robots_allow    = $apache::vars::robots_allow
@@ -30,17 +29,11 @@ class apache::custom {
 	    require => File["Prepare www directory"];
     }
 
-    exec {
-	"Install Apache error background":
-	    command => "$download $repo/puppet/webserver-background.jpg",
-	    cwd     => "$error_dir/include",
-	    path    => "/usr/bin:/bin",
+    common::define::geturl {
+	"Apache error background":
 	    require => File["Install Apache error messages"],
-	    unless  => "test -s webserver-background.jpg";
-    }
-
-    if ($download == "wget") {
-	Common::Define::Package["wget"]
-	    -> Exec["Install Apache error background"]
+	    target  => "$error_dir/include/webserver-background.jpg",
+	    url     => "$repo/puppet/webserver-background.jpg",
+	    wd      => "$error_dir/include";
     }
 }

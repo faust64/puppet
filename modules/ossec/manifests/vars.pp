@@ -6,7 +6,6 @@ class ossec::vars {
     $conf_dir             = lookup("ossec_conf_dir")
     $contact              = lookup("ossec_contact")
     $do_rsyslog           = lookup("rsyslog_to_ossec")
-    $download             = lookup("download_cmd")
     $frequency            = lookup("ossec_check_frequency")
     $ignore               = lookup("ossec_ignore")
     $mail_from            = lookup("ossec_mail_from")

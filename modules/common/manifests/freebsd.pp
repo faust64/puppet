@@ -1,6 +1,5 @@
 class common::freebsd {
     $ports     = lookup("deported_ports")
-    $download  = lookup("download_cmd")
     $with_dbus = lookup("freebsd_with_dbus")
 
     case $kernelversion {
@@ -54,13 +53,17 @@ class common::freebsd {
 # having no ports tree, package calls may result in "!  error - port broken"
 # error messages. depending on ressources relationships, could prevent some
 # part of your catalog from being processed.
+	common::define::geturl {
+	    "FreeBSD ports tree":
+		create  => "/usr/ports/net",
+		nomv    => true,
+		notify  => Exec["Extract FreeBSD ports tree"],
+		target  => "/tmp/ports.tgz",
+		url     => "$portsource",
+		wd      => "/tmp";
+	}
+
 	exec {
-	    "Download FreeBSD ports tree":
-		command     => "$download $portsource",
-		cwd         => "/tmp",
-		notify      => Exec["Extract FreeBSD ports tree"],
-		path        => "/usr/bin:/bin",
-		unless      => "test -d /usr/ports/net";
 	    "Extract FreeBSD ports tree":
 		command     => "if test -s /tmp/ports.tgz; then tar -xzf /tmp/ports.tgz; elif test -s /tmp/ports.txz; then tar -xJf /tmp/ports.txz; else exit 42; fi",
 		cwd         => "/usr",

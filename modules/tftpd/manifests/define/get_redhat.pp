@@ -1,5 +1,4 @@
 define tftpd::define::get_redhat($arch = [ "x86_64" ]) {
-    $download = $tftpd::vars::download
     $rhrepo   = $tftpd::vars::rhrepo
     $rhroot   = $tftpd::vars::rhroot
     $root_dir = $tftpd::vars::root_dir
@@ -26,24 +25,23 @@ define tftpd::define::get_redhat($arch = [ "x86_64" ]) {
 		require => File["Prepare RedHat$name root directory"];
 	}
 
-	exec {
-	    "Download RedHat$name $archi vmlinuz":
-	        command     => "$download $rhrepo/server/$sdist/$name/$archi/kickstart/images/pxeboot/vmlinuz && mv vmlinuz linux",
-		creates     => "$root_dir/installers/redhat${name}/$archi/linux",
-		cwd         => "$root_dir/installers/redhat${name}/$archi",
-		path        => "/usr/local/bin:/usr/bin:/bin",
-		require     => File["Prepare RedHat$name $archi directory"];
-	    "Download RedHat$name $archi initrd.img":
-	        command     => "$download $rhrepo/server/$sdist/$name/$archi/kickstart/images/pxeboot/initrd.img",
-		creates     => "$root_dir/installers/redhat${name}/$archi/initrd.img",
-		cwd         => "$root_dir/installers/redhat${name}/$archi",
-		path        => "/usr/local/bin:/usr/bin:/bin",
-		require     => File["Prepare RedHat$name $archi directory"],
-		timeout     => 600;
+	common::define::geturl {
+	    "RedHat$name $archi vmlinuz":
+		require => File["Prepare RedHat$name $archi directory"],
+		target  => "$root_dir/installers/redhat${name}/$archi/linux",
+	        url     => "$rhrepo/server/$sdist/$name/$archi/kickstart/images/pxeboot/vmlinuz",
+		wd      => "$root_dir/installers/redhat${name}/$archi";
+	    "RedHat$name $archi initrd.img":
+		nomv    => true,
+		require => File["Prepare RedHat$name $archi directory"],
+		target  => "$root_dir/installers/redhat${name}/$archi/initrd.img",
+		tmout   => 600,
+	        url     => "$rhrepo/server/$sdist/$name/$archi/kickstart/images/pxeboot/initrd.img",
+		wd      => "$root_dir/installers/redhat${name}/$archi";
 	}
 
-	Exec["Download RedHat$name $archi vmlinuz"]
-	    -> Exec["Download RedHat$name $archi initrd.img"]
+	Common::Define::Geturl["RedHat$name $archi vmlinuz"]
+	    -> Common::Define::Geturl["RedHat$name $archi initrd.img"]
 	    -> File["Install pxe redhat boot-screen"]
     }
 }

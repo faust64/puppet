@@ -3,10 +3,13 @@ class subsonic::debian {
     $listen       = $subsonic::vars::listen_ports
     $runtime_user = "root"
 
-#WARNING:
-# subsonic package is distributed by our local repository
     common::define::package {
 	"subsonic":
+	    require =>
+		[
+		    Apt::Define::Repo["UTGB"],
+		    Exec["Update APT local cache"]
+		];
     }
 
     if ($lsbdistcodename == "jessie") {

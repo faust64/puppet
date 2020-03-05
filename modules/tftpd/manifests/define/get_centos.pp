@@ -1,5 +1,4 @@
 define tftpd::define::get_centos($arch = [ "i386", "x86_64" ]) {
-    $download = $tftpd::vars::download
     $root_dir = $tftpd::vars::root_dir
 
     file {
@@ -29,24 +28,23 @@ define tftpd::define::get_centos($arch = [ "i386", "x86_64" ]) {
 		require => File["Prepare CentOS$name root directory"];
 	}
 
-	exec {
-	    "Download CentOS$name $archi vmlinuz":
-		command     => "$download http://mirror.centos.org/centos/$name/$dpath/vmlinuz && mv vmlinuz linux",
-		creates     => "$root_dir/installers/centos${name}/$archi/linux",
-		cwd         => "$root_dir/installers/centos${name}/$archi",
-		path        => "/usr/local/bin:/usr/bin:/bin",
-		require     => File["Prepare CentOS$name $archi directory"];
-	    "Download CentOS$name $archi initrd.img":
-		command     => "$download http://mirror.centos.org/centos/$name/$dpath/initrd.img",
-		creates     => "$root_dir/installers/centos${name}/$archi/initrd.img",
-		cwd         => "$root_dir/installers/centos${name}/$archi",
-		path        => "/usr/local/bin:/usr/bin:/bin",
-		require     => File["Prepare CentOS$name $archi directory"],
-		timeout     => 600;
+	common::define::geturl {
+	    "CentOS$name $archi vmlinuz":
+		require => File["Prepare CentOS$name $archi directory"],
+		target  => "$root_dir/installers/centos${name}/$archi/linux",
+		url     => "http://mirror.centos.org/centos/$name/$dpath/vmlinuz",
+		wd      => "$root_dir/installers/centos${name}/$archi";
+	    "CentOS$name $archi initrd.img":
+		nomv     => true,
+		require  => File["Prepare CentOS$name $archi directory"],
+		target   => "$root_dir/installers/centos${name}/$archi/initrd.img",
+		tmout    => 600,
+		url      => "http://mirror.centos.org/centos/$name/$dpath/initrd.img",
+		wd       => "$root_dir/installers/centos${name}/$archi";
 	}
 
-	Exec["Download CentOS$name $archi vmlinuz"]
-	    -> Exec["Download CentOS$name $archi initrd.img"]
+	Common::Define::Geturl["CentOS$name $archi vmlinuz"]
+	    -> Common::Define::Geturl["CentOS$name $archi initrd.img"]
 	    -> File["Install pxe centos boot-screen"]
     }
 }

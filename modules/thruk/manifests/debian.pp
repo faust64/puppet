@@ -1,5 +1,4 @@
 class thruk::debian {
-    $download      = $thruk::vars::download
     $listen_ports  = $thruk::vars::listen_ports
     $repo          = $thruk::vars::repo
     $start_timeout = $thruk::vars::start_timeout
@@ -18,7 +17,11 @@ class thruk::debian {
 
     common::define::package {
 	"thruk":
-	    require => Apt::Define::Repo["thruk"];
+	    require =>
+		[
+		    Apt::Define::Repo["thruk"],
+		    Exec["Update APT local cache"]
+		];
     }
 
     file {

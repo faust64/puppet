@@ -1,5 +1,4 @@
 define tftpd::define::get_mfsbsd($arch = [ "amd64" ]) {
-    $download  = $tftpd::vars::download
     $root_dir  = $tftpd::vars::root_dir
     $release   = regsubst($name, '^(\w+)\.(\w+)$', '\1')
 
@@ -28,17 +27,17 @@ define tftpd::define::get_mfsbsd($arch = [ "amd64" ]) {
 	    if ($special == true) { $fname = "se-${name}-RELEASE-$archi" }
 	    else { $fname = "${name}-RELEASE-$archi" }
 
-	    exec {
-		"Download mfsBSD $fname image":
-		    command => "$download http://mfsbsd.vx.sk/files/images/$release/$archi/mfsbsd-$fname.img || $download http://mfsbsd.vx.sk/files/images/$release/mfsbsd-$fname.img",
-		    creates => "$root_dir/installers/mfsbsd-$name/$archi/mfsbsd-$fname.img",
-		    cwd     => "$root_dir/installers/mfsbsd-$name/$archi",
-		    path    => "/usr/local/bin:/usr/bin:/bin",
+	    common::define::geturl {
+		"mfsBSD $fname image":
+		    nomv    => true,
 		    require => File["Prepare mfsBSD $name $archi directory"],
-		    timeout => 1800;
+		    target  => "$root_dir/installers/mfsbsd-$name/$archi/mfsbsd-$fname.img",
+		    tmout   => 1800,
+		    url     => "http://mfsbsd.vx.sk/files/images/$release/$archi/mfsbsd-$fname.img",
+		    wd      => "$root_dir/installers/mfsbsd-$name/$archi";
 	    }
 
-	    Exec["Download mfsBSD $fname image"]
+	    Common::Define::Geturl["mfsBSD $fname image"]
 		-> File["Install pxe mfsbsd boot-screen"]
 	}
     }

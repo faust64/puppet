@@ -1,5 +1,4 @@
 class tftpd::bootscreens {
-    $download    = $tftpd::vars::download
     $locale      = $tftpd::vars::locale
     $locale_long = $tftpd::vars::locale_long
     $repo        = $tftpd::vars::repo
@@ -31,12 +30,12 @@ class tftpd::bootscreens {
 	    source  => "puppet:///modules/tftpd/stdmenu.cfg";
     }
 
-    exec {
+    common::define::geturl {
 	"Install splash.png":
-	    command => "$download $repo/puppet/splash.png",
-	    cwd     => "$root_dir/boot-screens",
-	    path    => "/usr/bin:/bin",
+	    nomv    => true,
 	    require => File["Prepare boot-screens directory"],
-	    unless  => "test -e splash.png";
+	    target  => "$root_dir/boot-screens/splash.png",
+	    url     => "$$repo/puppet/splash.png",
+	    wd      => "$root_dir/boot-screens";
     }
 }

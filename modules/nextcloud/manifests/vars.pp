@@ -1,6 +1,5 @@
 class nextcloud::vars {
     $domains        = lookup("nextcloud_domains")
-    $download       = lookup("download_cmd")
     $db_backend     = lookup("nextcloud_db_backend")
     $db_host        = lookup("nextcloud_db_host")
     $db_name        = lookup("nextcloud_db_name")

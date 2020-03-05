@@ -4,7 +4,6 @@ class tftpd::vars {
     $clear_pass   = lookup("ui_host_clear_password")
     $contact      = lookup("contact_alerts")
     $default_pass = lookup("ks_host_hashed_password")
-    $download     = lookup("download_cmd")
     $dns_ip       = lookup("dns_ip")
     $locale       = lookup("locale")
     $locale_long  = lookup("locale_LOCALE")

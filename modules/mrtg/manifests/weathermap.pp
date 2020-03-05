@@ -1,19 +1,21 @@
 class mrtg::weathermap {
-    $download = $mrtg::vars::download
-    $rdomain  = $mrtg::vars::rdomain
-    $repo     = $mrtg::vars::repo
+    $rdomain = $mrtg::vars::rdomain
+    $repo    = $mrtg::vars::repo
 
     $aliases = [ "weathermap.$rdomain", "wmap.$domain", "wmap.$rdomain" ]
 
     include ::php
 
+    common::define::geturl {
+	"weathermap server root":
+	    nomv   => true,
+	    notify => Exec["Extract weathermap server root"],
+	    url    => "$repo/puppet/weathermap-vhost.tar.gz",
+	    target => "/root/weathermap-vhost.tar.gz",
+	    wd     => "/root";
+    }
+
     exec {
-	"Install weathermap server root":
-	    command     => "$download $repo/puppet/weathermap-vhost.tar.gz",
-	    creates     => "/root/weathermap-vhost.tar.gz",
-	    cwd         => "/root",
-	    notify      => Exec["Extract weathermap server root"],
-	    path        => "/usr/bin:/bin";
 	"Extract weathermap server root":
 	    command     => "tar -xzf /root/weathermap-vhost.tar.gz",
 	    cwd         => "/var/www",

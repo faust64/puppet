@@ -1,20 +1,22 @@
 class miniflux::install {
-    $download     = $miniflux::vars::download
     $runtime_user = $miniflux::vars::runtime_user
     $web_root     = $miniflux::vars::web_root
 
-    exec {
-	"Install miniflux server root":
-	    command     => "$download https://miniflux.net/miniflux-latest.zip",
-	    creates     => "/root/miniflux-latest.zip",
-	    cwd         => "/root",
-	    notify      => Exec["Extract miniflux server root"],
-	    path        => "/usr/bin:/bin",
-	    require     =>
+    common::define::geturl {
+	"miniflux":
+	    notify  => Exec["Extract miniflux server root"],
+	    nomv    => true,
+	    require =>
 		[
 		    Class[Common::Tools::Unzip],
 		    File["Prepare www directory"]
-		];
+		],
+	    target  => "/root/miniflux-latest.zip",
+	    url     => "https://miniflux.net/miniflux-latest.zip",
+	    wd      => "/root";
+    }
+
+    exec {
 	"Extract miniflux server root":
 	    command     => "tar -xzf /root/miniflux-latest.zip",
 	    cwd         => $web_root,

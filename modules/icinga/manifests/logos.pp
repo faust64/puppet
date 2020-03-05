@@ -6,7 +6,6 @@ class icinga::logos {
 	    -> File["Prepare Icinga share directory"]
     }
 
-    $download  = $icinga::vars::download
     $repo      = $icinga::vars::repo
     $share_dir = $icinga::vars::share_dir
 
@@ -40,14 +39,17 @@ class icinga::logos {
 	    require => File["Prepare Icinga images directory"];
     }
 
+    common::define::geturl {
+	"icinga icons":
+	    nomv    => true,
+	    notify  => Exec["Unpack icinga webapp icons"],
+	    require => File["Prepare Icinga logos directory"],
+	    target  => "/root/icinga-icons.tar.gz",
+	    url     => "$repo/puppet/icinga-icons.tar.gz",
+	    wd      => "/root";
+    }
+
     exec {
-	"Download icinga webapp icons":
-	    command     => "$download $repo/puppet/icinga-icons.tar.gz",
-	    cwd         => "/root",
-	    notify      => Exec["Unpack icinga webapp icons"],
-	    path        => "/usr/bin:/bin",
-	    require     => File["Prepare Icinga logos directory"],
-	    unless      => "test -s icinga-icons.tar.gz";
 	"Unpack icinga webapp icons":
 	    command     => "tar -xzf /root/icinga-icons.tar.gz",
 	    cwd         => "$share_dir/htdocs/images/logos",

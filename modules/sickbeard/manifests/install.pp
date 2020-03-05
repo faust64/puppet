@@ -1,5 +1,4 @@
 class sickbeard::install {
-    $download     = $sickbeard::vars::download
     $home_dir     = $sickbeard::vars::home_dir
     $runtime_user = $sickbeard::vars::runtime_user
 
@@ -14,14 +13,16 @@ class sickbeard::install {
 	    require => Group[$sickbeard::vars::runtime_group];
     }
 
+    common::define::geturl {
+	"sickbeard":
+	    notify  => Exec["Extract sickbeard"],
+	    require => User[$runtime_user],
+	    target  => "/root/sickbeard.tar.gz",
+	    url     => "https://github.com/midgetspy/Sick-Beard/tarball/development",
+	    wd      => "/root";
+    }
+
     exec {
-	"Download sickbeard from github":
-	    command     => "$download https://github.com/midgetspy/Sick-Beard/tarball/development && mv development sickbeard.tar.gz",
-	    creates     => "/root/sickbeard.tar.gz",
-	    cwd         => "/root",
-	    notify      => Exec["Extract sickbeard"],
-	    path        => "/usr/bin:/bin",
-	    require     => User[$runtime_user];
 	"Extract sickbeard":
 	    command     => "tar -xf /root/sickbeard.tar.gz && ln -s midgetspy-Sick-Beard-* $home_dir && chown -R $runtime_user midgetspy-Sick-Beard-*",
 	    creates     => $home_dir,

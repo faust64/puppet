@@ -1,5 +1,4 @@
 class vmwaremgr::vars {
-    $download           = lookup("download_cmd")
     $esx_pass           = lookup("vmwares_esx_passphrase")
     $esx_user           = lookup("vmwares_esx_username")
     $esx_version        = lookup("esx_version")

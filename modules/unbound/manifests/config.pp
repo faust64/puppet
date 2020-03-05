@@ -3,14 +3,12 @@ class unbound::config {
     $do_cache         = $unbound::vars::do_cache
     $do_dnssec        = $unbound::vars::do_dnssec
     $do_public        = $unbound::vars::do_public
-    $download         = $unbound::vars::download
     $fail2ban_unbound = $unbound::vars::fail2ban_unbound
     $forwards         = $unbound::vars::forwards
     $pf_svc_ip        = $unbound::vars::pf_svc_ip
-    $recurse_networks = $unbound::vars::recurse_networks
     $rdomain          = $unbound::vars::rdomain
+    $recurse_networks = $unbound::vars::recurse_networks
     $run_dir          = $unbound::vars::run_dir
-    $runtime_group    = $unbound::vars::runtime_group
     $runtime_user     = $unbound::vars::runtime_user
     $var_dir          = $unbound::vars::var_dir
 
@@ -31,28 +29,22 @@ class unbound::config {
 	    require => File["Prepare unbound for further configuration"];
     }
 
-    exec {
-	"Download root.hint from internic.net":
-	    command     => "$download https://www.internic.net/domain/named.root",
-	    creates     => "$var_dir/root.hint",
-	    cwd         => "/root",
-	    notify      => Exec["Install root.hint"],
-	    path        => "/usr/bin:/bin",
-	    require     => File["Prepare unbound for further configuration"];
-	"Install root.hint":
-	    command     => "mv /root/named.root root.hint ; chown $runtime_group:$runtime_user root.hint",
-	    creates     => "$var_dir/root.hint",
-	    cwd         => $var_dir,
-	    notify      => Service["unbound"],
-	    path        => "/sbin:/usr/bin:/bin",
-	    refreshonly => true;
+    common::define::geturl {
+	"root.hint":
+	    grp     => $unbound::vars::runtime_group,
+	    notify  => Service["unbound"],
+	    require => File["Prepare unbound for further configuration"],
+	    target  => "$var_dir/root.hint",
+	    url     => "https://www.internic.net/domain/named.root",
+	    usr     => $runtime_user,
+	    wd      => "/root";
     }
 
     if ($fail2ban_unbound == true) {
 	file {
 	    "Prepare unbound log file":
 		ensure  => present,
-		group   => $runtime_group,
+		group   => $unbound::vars::runtime_group,
 		mode    => "0644",
 		notify  => Service["unbound"],
 		owner   => $runtime_user,

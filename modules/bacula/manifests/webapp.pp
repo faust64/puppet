@@ -1,7 +1,6 @@
 class bacula::webapp {
     include apache
 
-    $download    = $bacula::vars::download
     $mysql_pass  = $bacula::vars::mysql_pass
     $rdomain     = $bacula::vars::rdomain
     $web_dir     = $bacula::vars::web_dir
@@ -40,14 +39,17 @@ class bacula::webapp {
 	    require => File["Set proper permissions on Smarty cache"];
     }
 
+    common::define::geturl {
+	"bacula-web":
+	    nomv    => true,
+	    notify  => Exec["Install bacula-web"],
+	    require => Class["php"],
+	    target  => "/usr/src/bacula-web-latest.tgz",
+	    url     => "http://www.bacula-web.org/files/bacula-web.org/downloads/bacula-web-latest.tgz",
+	    wd      => "/usr/src";
+    }
+
     exec {
-	"Download bacula-web":
-	    command     => "$download http://www.bacula-web.org/files/bacula-web.org/downloads/bacula-web-latest.tgz",
-	    creates     => "/usr/src/bacula-web-latest.tgz",
-	    cwd         => "/usr/src",
-	    notify      => Exec["Install bacula-web"],
-	    path        => "/usr/bin:/bin",
-	    require     => Class["php"];
 	"Install bacula-web":
 	    command     => "tar -xzf /usr/src/bacula-web-latest.tgz",
 	    cwd         => $web_dir,

@@ -1,5 +1,4 @@
 class apache::modsecurity {
-    $download        = $apache::vars::download
     $office_networks = $apache::vars::office_networks
     $srvname         = $apache::vars::service_name
     $version         = $apache::vars::version
@@ -15,19 +14,15 @@ class apache::modsecurity {
     }
 
     if ($apache::vars::owsap_security == true) {
+	common::define::geturl {
+	    "OWSAP modsecurity ruleset":
+		notify => Exec["Extract OWSAP modsecurity ruleset"],
+		target => "/root/security_rset.tar.gz",
+		url    => "https://github.com/SpiderLabs/owasp-modsecurity-crs/tarball/master",
+		wd     => "/root";
+	}
+
 	exec {
-	    "Download OWSAP modsecurity ruleset":
-		command     => "$download https://github.com/SpiderLabs/owasp-modsecurity-crs/tarball/master",
-		creates     => "/root/master",
-		cwd         => "/root",
-		notify      => Exec["Rename downloaded OSAP modsecurity ruleset"],
-		path        => "/usr/bin:/bin",
-		unless      => "test -s security_rset.tar.gz";
-	    "Rename downloaded OSAP modsecurity ruleset":
-		command     => "mv master security_rset.tar.gz",
-		cwd         => "/root",
-		path        => "/usr/bin:/bin",
-		refreshonly => true;
 	    "Extract OWSAP modsecurity ruleset":
 		command     => "tar -xzf /root/security_rset.tar.gz",
 		cwd         => "/usr/share",
@@ -41,8 +36,7 @@ class apache::modsecurity {
 		path        => "/usr/bin:/bin";
 	}
 
-	Exec["Download OWSAP modsecurity ruleset"]
-	    -> Exec["Rename downloaded OSAP modsecurity ruleset"]
+	Common::Define::Geturl["OWSAP modsecurity ruleset"]
 	    -> Exec["Extract OWSAP modsecurity ruleset"]
 	    -> Exec["Link owsap-modsecurity-crs to extracted directory"]
 	    -> File["Install mod_security main configuration"]

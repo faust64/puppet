@@ -3,7 +3,6 @@ class airsonic::install {
 	include common::systemd
     }
 
-    $download      = $airsonic::vars::download
     $port          = $airsonic::vars::port
     $runtime_group = $airsonic::vars::runtime_group
     $runtime_user  = $airsonic::vars::runtime_user
@@ -11,13 +10,13 @@ class airsonic::install {
     $xms           = $airsonic::vars::xms
     $xmx           = $airsonic::vars::xmx
 
-    exec {
-	"Download Airsonic":
-	    command => "$download https://github.com/airsonic/airsonic/releases/download/v$version/airsonic.war",
-	    creates => "/opt/airsonic/airsonic.war",
-	    cwd     => "/opt/airsonic",
+    common::define::geturl {
+	"Airsonic":
+	    nomv    => true,
 	    require => File["Prepare Airsonic directory"],
-	    path    => "/usr/bin:/bin";
+	    target  => "/opt/airsonic/airsonic.war",
+	    url     => "https://github.com/airsonic/airsonic/releases/download/v$version/airsonic.war",
+	    wd      => "/opt/airsonic";
     }
 
     if ($operatingsystem == "CentOS" or $operatingsystem == "Fedora"
@@ -51,7 +50,7 @@ class airsonic::install {
 	    path    => "/etc/systemd/system/airsonic.service";
     }
 
-    Exec["Download Airsonic"]
+    Common::Define::Geturl["Airsonic"]
 	-> File["Install Airsonic Systemd Unit"]
 	-> File["Install Airsonic Service Defaults"]
 	-> File["Install airsonic.properties"]

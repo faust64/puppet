@@ -3,7 +3,6 @@ class unbound::vars {
     $do_cache           = lookup("unbound_do_cache")
     $do_dnssec          = lookup("unbound_do_dnssec")
     $do_public          = lookup("unbound_do_public")
-    $download           = lookup("download_cmd")
     $fail2ban_unbound   = lookup("fail2ban_do_unbound")
     $forwards           = lookup("unbound_forwarders")
     $munin_conf_dir     = lookup("munin_conf_dir")
