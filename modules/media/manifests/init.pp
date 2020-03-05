@@ -12,6 +12,7 @@ class media {
 	}
     }
 
+    include media::config
     include media::default
     include media::scripts
     include media::service

@@ -40,6 +40,9 @@ snmp_ip:
   - 10.42.242.205
   - 10.42.242.206
 
+# Puppet
+puppet_apt_repo: http://repository.vms.intra.unetresgrossebite.com/debian
+
 # PXE
 satellite_repo: katello.vms.intra.unetresgrossebite.com
 

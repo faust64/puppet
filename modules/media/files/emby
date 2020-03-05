@@ -1,0 +1,2 @@
+EMBY_DATA=/var/lib/emby
+LIBVA_DRIVERS_DIR=

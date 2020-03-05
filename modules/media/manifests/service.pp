@@ -5,4 +5,10 @@ class media::service {
 		ensure => running;
 	}
     }
+    if ($media::vars::emby != false) {
+	common::define::service {
+	    "emby-server":
+		ensure => running;
+	}
+    }
 }

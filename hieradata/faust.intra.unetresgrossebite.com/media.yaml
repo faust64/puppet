@@ -4,6 +4,9 @@ physical_parent: oizis.adm.intra.unetresgrossebite.com
 tmp_fs: ext4
 tmp_target_device: /dev/xvdb1
 
+# Media
+media_do_emby: true
+
 # Munin-Node
 vps_with_munin: true
 

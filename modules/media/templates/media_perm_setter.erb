@@ -1,16 +1,16 @@
 #!/bin/sh
 
 cd <%=@media_root%>/media
-for mediadir in Series EPTV Documentaries Theater
+for mediadir in Docu EPTV Movies Series Training
 do
     test -d "$mediadir" || continue
     echo processing $mediadir
-    find $mediadir -type d -exec chmod 0755 {} \;
-    find $mediadir -type f -exec chmod 0644 {} \;
-    chown -R root:root $mediadir
+    find $mediadir -type d -exec chmod 0775 {} \;
+    find $mediadir -type f -exec chmod 0664 {} \;
+    chown -R root:video $mediadir
 done
 
-for mediadir in Movies .plex_series
+<% if @plex != false -%>for mediadir in plexSeries
 do
     test -d "$mediadir" || continue
     echo processing $mediadir
@@ -19,13 +19,4 @@ do
     find -P $mediadir -exec chown plex:root {} \;
 done
 
-for mediadir in Music
-do
-    test -d "$mediadir" || continue
-    echo processing $mediadir
-    find -P $mediadir -type d -exec chmod 0755 {} \;
-    find -P $mediadir -type f -exec chmod 0644 {} \;
-    chown -R root:root $mediadir
-done
-
-exit 0
+<% end -%>exit 0

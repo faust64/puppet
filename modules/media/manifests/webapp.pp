@@ -13,8 +13,8 @@ class media::webapp {
     if ($media::vars::plex != false) {
 	nginx::define::vhost {
 	    "plex.$domain":
-		aliases       => [ "plex", "plex.faust.$rdomain", "plex.$rdomain" ],
-		require       => Service["plexmediaserver"],
+		aliases       => [ "plex", "plex.$rdomain" ],
+		require       => Common::Define::Service["plexmediaserver"],
 		vhostldapauth => "none",
 		vhostsource   => "plex",
 		with_reverse  => "plex.$rdomain";
@@ -34,8 +34,8 @@ class media::webapp {
     if ($media::vars::emby != false) {
 	nginx::define::vhost {
 	    "emby.$domain":
-		aliases       => [ "emby", "emby.faust.$rdomain", "emby.$rdomain" ],
-		require       => Service["embymediaserver"],
+		aliases       => [ "emby", "emby.$rdomain" ],
+		require       => Common::Define::Service["emby-server"],
 		vhostldapauth => "none",
 		vhostsource   => "emby",
 		with_reverse  => "emby.$rdomain";

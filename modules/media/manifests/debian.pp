@@ -2,6 +2,7 @@ class media::debian {
     common::define::package {
 	"mkvtoolnix":
     }
+
     if ($media::vars::plex != false) {
 	common::define::package {
 	    "plexmediaserver":
@@ -14,14 +15,17 @@ class media::debian {
 
 	$youtubeversion = "4.4"
 
+	common::define::geturl {
+	    "Plex-YouTube.TV plugin":
+		nomv    => true,
+		notify  => Exec["Extract Plex-YouTube.TV plugin"],
+		require => Package["plexmediaserver"],
+		target  => "/usr/src/v$youtubeversion.tar.gz",
+		url     => "https://github.com/kolsys/YouTubeTV.bundle/archive/v$youtubeversion.tar.gz",
+		wd      => "/usr/src";
+	}
+
 	exec {
-	    "Download Plex-YouTube.TV plugin":
-		command     => "wget https://github.com/kolsys/YouTubeTV.bundle/archive/v$youtubeversion.tar.gz",
-		cwd         => "/usr/src",
-		unless      => "tar -tzf v$youtubeversion.tar.gz >/dev/null",
-		notify      => Exec["Extract Plex-YouTube.TV plugin"],
-		path        => "/usr/bin:/bin",
-		require     => Package["plexmediaserver"];
 	    "Extract Plex-YouTube.TV plugin":
 		command     => "rm -fr YouTubeTV.bundle ; tar -xzf /usr/src/v$youtubeversion.tar.gz && mv YouTubeTV.bundle-$youtubeversion YouTubeTV.bundle",
 		cwd         => "/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Plug-ins",
@@ -40,7 +44,7 @@ class media::debian {
 	}
     }
 
-    if ($media::vars::plex != false) {
+    if ($media::vars::emby != false) {
 	common::define::package {
 	    "emby-server":
 		require =>

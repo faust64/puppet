@@ -1,6 +1,7 @@
 class media::scripts {
     $sickbeard  = $media::vars::sickbeard
     $media_root = $media::vars::web_root
+    $plex       = $media::vars::plex
 
     file {
 	"Install mediainfo script":
@@ -10,6 +11,12 @@ class media::scripts {
 	    path    => "/usr/local/bin/mediainfo",
 	    require => Class[Common::Libs::Exif],
 	    source  => "puppet:///modules/media/mediainfo";
+	"Install media permissions setter":
+	    content => template("media/media_perm_setter.erb"),
+	    group   => lookup("gid_zero"),
+	    mode    => "0750",
+	    owner   => root,
+	    path    => "/usr/local/sbin/media_perm_setter";
     }
 
     if ($sickbeard != false) {
@@ -23,7 +30,7 @@ class media::scripts {
 	}
     }
 
-    if ($media::vars::plex != false) {
+    if ($plex != false) {
 	file {
 	    "Install Plex Series indexer":
 		content => template("media/plex_index_series.erb"),
@@ -37,12 +44,6 @@ class media::scripts {
 		mode    => "0750",
 		owner   => root,
 		path    => "/usr/local/sbin/plex_index_music";
-	    "Install media permissions setter":
-		content => template("media/media_perm_setter.erb"),
-		group   => lookup("gid_zero"),
-		mode    => "0750",
-		owner   => root,
-		path    => "/usr/local/sbin/media_perm_setter";
 	}
     }
 }
