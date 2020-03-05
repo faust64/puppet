@@ -1,3 +1,4 @@
+auditd_conf_dir: /etc/audit
 rsyslog_version: 8
 snmp_uptodate_new: true
 squid_cache_dir: /var/spool/squid3

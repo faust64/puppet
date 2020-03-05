@@ -22,6 +22,7 @@ class pf::vars {
     $dhcp_ip                = lookup("dhcp_ip")
     $do_relay_dhcp          = lookup("ifstated_dhcrelay")
     $dns_ip                 = lookup("dns_ip")
+    $emby_ip                = lookup("emby_ip")
     $ftpproxy_port          = lookup("ftpproxy_local_port")
     $git_ip                 = lookup("pubgit_ip")
     $gre_tunnels            = lookup("gre_tunnels")

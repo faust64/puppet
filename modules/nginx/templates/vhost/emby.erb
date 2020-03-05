@@ -25,3 +25,41 @@ server {
     }
 <% if @noerrors == false -%>    include /etc/nginx/errors.conf;
 <% end -%>}
+<% if @listen_ports['ssl'] != false -%>
+
+server {
+    listen <%=@listen_ports['ssl']%>;
+    server_name <% if @aliases != false -%><% @aliases.each do |dname| -%><%=dname%> <% end -%><% end -%><%=@name%>;
+    server_tokens off;
+    add_header X-Xss-Protection "1; mode=block" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Strict-Transport-Security "max-age=2592000; includeSubdomains" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header 'Referrer-Policy' 'no-referrer';
+    add_header Content-Security-Policy "frame-ancestors<% @aliases.each do |dname| -%><% if dname != "_" -%> <%=dname%><% end -%><% end -%>;";
+    proxy_hide_header X-Powered-By;
+    error_log <%=@log_dir%>/ssl-error-<%=@name%>.log;
+    access_log <%=@log_dir%>/ssl-access-<%=@name%>.log main;
+    ssl on;
+    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
+    ssl_protocols <%=@tlsprotos.join(" ") %>;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+<% if @lsbdistcodename != "trusty" and @lsbdistcodename != "wheezy" -%>    ssl_session_tickets off;
+<% end -%>    ssl_certificate <%=@conf_dir%>/ssl/server-full.crt;
+    ssl_certificate_key <%=@conf_dir%>/ssl/server.key;
+    ssl_dhparam /etc/nginx/ssl/dh.pem;
+    root /var/www;
+    location / {
+	proxy_pass http://127.0.0.1:8096; 
+	proxy_set_header Host $host;
+	proxy_set_header If-Range $http_if_range;
+	proxy_set_header Range $http_range;
+	proxy_set_header X-Real-IP $remote_addr;
+	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	proxy_http_version 1.1;
+	proxy_set_header Upgrade $http_upgrade;
+	proxy_set_header Connection "upgrade";
+    }
+<% if @noerrors == false -%>    include /etc/nginx/errors.conf;
+<% end -%>}<% end %>

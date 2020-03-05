@@ -34,11 +34,14 @@ class media::webapp {
     if ($media::vars::emby != false) {
 	nginx::define::vhost {
 	    "emby.$domain":
-		aliases       => [ "emby", "emby.$rdomain" ],
-		require       => Common::Define::Service["emby-server"],
-		vhostldapauth => "none",
-		vhostsource   => "emby",
-		with_reverse  => "emby.$rdomain";
+		aliases        => [ "emby", "emby.$rdomain" ],
+		deny_frames    => false,
+		nosniff        => true,
+		referrerpolicy => "never",
+		require        => Common::Define::Service["emby-server"],
+		vhostldapauth  => "none",
+		vhostsource    => "emby",
+		with_reverse   => "emby.$rdomain";
 	}
     }
 }

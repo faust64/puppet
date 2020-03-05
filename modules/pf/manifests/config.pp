@@ -19,6 +19,7 @@ class pf::config {
     $dell_ups_mgr_ip        = $pf::vars::dell_ups_mgr_ip
     $dhcp_ip                = $pf::vars::dhcp_ip
     $dns_ip                 = $pf::vars::dns_ip
+    $emby_ip                = $pf::vars::emby_ip
     $git_ip                 = $pf::vars::git_ip
     $gre_tunnels            = $pf::vars::gre_tunnels
     $icecast_ip             = $pf::vars::icecast_ip

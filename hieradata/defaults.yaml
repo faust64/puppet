@@ -222,7 +222,7 @@ at_deny: /etc/at.deny
 
 # Auditd
 auditd_buffer_size: 320
-auditd_conf_dir: /etc/audit
+auditd_conf_dir: /etc/audit/rules.d
 auditd_contact: false
 auditd_keep_logs: false
 auditd_max_logfile_size: 5
@@ -1750,6 +1750,7 @@ dhcp_ip: false
 #dns_ip: false
 dns_masters: false
 dns_push: false
+emby_ip: false
 git_ip: false
 icecast_ip: false
 icecast_upstream_ip: 91.216.209.231

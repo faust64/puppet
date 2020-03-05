@@ -142,6 +142,14 @@ define nginx::define::vhost($aliases         = false,
 		    $hasssl    = false
 		}
 
+		if ($referrerpolicy == false) {
+		    $rpol = false
+		} elsif ($referrerpolicy == "origin-when-cross-origin") {
+		    $rpol = "origin-when-cross-origin"
+		} else {
+		    $rpol = $referrerpolicy
+		}
+
 		@@apache::define::vhost {
 		    $with_reverse:
 			aliases         => $aliases,
@@ -150,6 +158,7 @@ define nginx::define::vhost($aliases         = false,
 			preserve_host   => $preserve_host,
 			proxyto         => $proxyaddr,
 			pubclear        => $pubclear,
+			referrerpolicy  => $rpol,
 			sslproxy        => $hasssl,
 			stricttransport => $stricttransport,
 			tag             => "reverse-$domain",
