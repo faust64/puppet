@@ -37,7 +37,7 @@ define ssh::define::declare_fingerprints($hash    = "sha1",
     }
 
     if ($typenum and $hashnum and $blob) {
-	@@file_line {
+	@@common::define::lined {
 	    "Declare $hname SSHFP $keytype":
 		line    => "$hname	SSHFP	$typenum	$hashnum	$blob",
 		match   => "$hname	SSHFP	$typenum	$hashnum",

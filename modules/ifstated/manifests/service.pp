@@ -8,7 +8,7 @@ class ifstated::service {
 	    require     =>
 		[
 		    File["Ifstated application script"],
-		    File_line["Enable Ifstated on boot"]
+		    Common::Define::Lined["Enable Ifstated on boot"]
 		];
     }
 }

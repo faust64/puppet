@@ -16,7 +16,7 @@ class subsonic::config {
 	    replace => no;
     }
 
-    file_line {
+    common::define::lined {
 	"Define subsonic locale":
 	    line    => "LocaleLanguage=$locale",
 	    match   => "LocaleLanguage=",
@@ -52,7 +52,7 @@ class subsonic::config {
 	    match   => "LicenseEmail=",
 	    notify  => Service["subsonic"],
 	    path    => "/var/subsonic/subsonic.properties",
-	    require => File_line["Fuck with verification process"];
+	    require => Common::Define::Lined["Fuck with verification process"];
 	"Set subsonic registering code":
 	    line    => "LicenseCode=f3ada405ce890b6f8204094deb12d8a8",
 	    match   => "LicenseCode=",
@@ -68,7 +68,7 @@ class subsonic::config {
     }
 
     if ($subsonic::vars::getting_started == false) {
-	file_line {
+	common::define::lined {
 	    "Disable subsonic getting started page":
 		line    => "GettingStartedEnabled=false",
 		match   => "GettingStartedEnabled=",
@@ -81,7 +81,7 @@ class subsonic::config {
     if ($ldap_base != false and $ldap_host != false) {
 	include openldap::client
 
-	file_line {
+	common::define::lined {
 	    "Set subsonic authentication source":
 		line    => "LdapUrl=ldaps\\://${ldap_host}\\:636/${ldap_base}",
 		match   => "LdapUrl=",

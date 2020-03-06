@@ -1,5 +1,5 @@
 class nginx::openbsd {
-    file_line {
+    common::define::lined {
 	"Enable nginx":
 	    line => "nginx_flags=",
 	    path => "/etc/rc.conf.local";
@@ -10,7 +10,7 @@ class nginx::openbsd {
 	    command => 'echo "pkg_scripts=\"\$pkg_scripts nginx\"" >>rc.conf.local',
 	    cwd     => "/etc",
 	    path    => "/usr/bin:/bin",
-	    require => File_line["Enable nginx"],
+	    require => Common::Define::Lined["Enable nginx"],
 	    unless  => "grep '^pkg_scripts=.*nginx' rc.conf.local";
     }
 }

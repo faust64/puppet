@@ -5,14 +5,14 @@ class dhcrelay::openbsd {
     if ($ifs != false) {
 	$flags = "$ifs$targets"
 
-	file_line {
+	common::define::lined {
 	    "Enable dhcrelay on boot":
 		line  => "dhcrelay_flags='$flags'",
 #		match => 'dhcrelay_flags=',
 		path  => '/etc/rc.conf.local';
 	}
 
-	File_line["Enable dhcrelay on boot"]
+	Common::Define::Lined["Enable dhcrelay on boot"]
 	    -> Common::Define::Service["dhcrelay"]
     }
 }

@@ -14,7 +14,7 @@ class puppet::openbsd {
 		source  => "puppet:///modules/puppet/obsd.rc";
 	}
 
-	file_line {
+	common::define::lined {
 	    "Enable Puppet on boot":
 		line    => "puppetd_flags=",
 		path    => "/etc/rc.conf.local",
@@ -26,11 +26,11 @@ class puppet::openbsd {
 		command => 'echo "pkg_scripts=\"\$pkg_scripts puppetd\"" >>rc.conf.local',
 		cwd     => "/etc",
 		path    => "/usr/bin:/bin",
-		require => File_line["Enable Puppet on boot"],
+		require => Common::Define::Lined["Enable Puppet on boot"],
 		unless  => "grep '^pkg_scripts=.*puppetd' rc.conf.local";
 	}
     } else {
-	file_line {
+	common::define::lined {
 	    "Enable Puppet on boot":
 		line    => "pupped_flags=",
 		path    => "/etc/rc.conf.local";
@@ -41,7 +41,7 @@ class puppet::openbsd {
 		command => 'echo "pkg_scripts=\"\$pkg_scripts puppet\"" >>rc.conf.local',
 		cwd     => "/etc",
 		path    => "/usr/bin:/bin",
-		require => File_line["Enable Puppet on boot"],
+		require => Common::Define::Lined["Enable Puppet on boot"],
 		unless  => "grep '^pkg_scripts=.*puppet' rc.conf.local";
 	}
     }

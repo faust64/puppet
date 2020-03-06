@@ -5,5 +5,5 @@ class muninnode::rhel {
 
     Package["munin-node"]
 	-> File["Install Munin custom plugins"]
-	-> File_line["Ensure munin knows where to listen"]
+	-> Common::Define::Lined["Ensure munin knows where to listen"]
 }

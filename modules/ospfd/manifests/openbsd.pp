@@ -1,5 +1,5 @@
 class ospfd::openbsd {
-    file_line {
+    common::define::lined {
 	"Enable ospfd on boot":
 	    line  => "ospfd_flags=",
 #	    match => 'ospfd_flags=',

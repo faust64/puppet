@@ -3,7 +3,7 @@ class ifstated::freebsd {
 	"ifstated":
     }
 
-    file_line {
+    common::define::lined {
 	"Enable Ifstated on boot":
 	    line => "ifstated_enable=",
 	    path => "/etc/rc.conf";

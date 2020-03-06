@@ -30,7 +30,7 @@ class airsonic::config {
 	    replace => no;
     }
 
-    file_line {
+    common::define::lined {
 	"Define airsonic proxy configuration":
 	    line    => "server.use-forward-headers=true",
 	    match   => "server.use-forward-headers",
@@ -64,7 +64,7 @@ class airsonic::config {
     }
 
     if ($airsonic::vars::getting_started == false) {
-	file_line {
+	common::define::lined {
 	    "Disable airsonic getting started page":
 		line    => "GettingStartedEnabled=false",
 		match   => "GettingStartedEnabled=",
@@ -77,7 +77,7 @@ class airsonic::config {
     if ($ldap_base != false and $ldap_host != false) {
 	include openldap::client
 
-	file_line {
+	common::define::lined {
 	    "Set airsonic authentication source":
 		line    => "LdapUrl=ldaps\\://${ldap_host}\\:636/${ldap_base}",
 		match   => "LdapUrl=",

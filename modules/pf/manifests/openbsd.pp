@@ -1,5 +1,5 @@
 class pf::openbsd {
-    file_line {
+    common::define::lined {
 	"Enable PF on boot":
 	    line  => 'pf=YES',
 #	    match => 'pf=',

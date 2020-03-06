@@ -34,7 +34,7 @@ class nginx::debian {
 	    include common::systemd
 	}
 
-	file_line {
+	common::define::lined {
 	    "Fix nginx systemd configuration":
 		line   => "After=network.target",
 		match  => "^After=.*",
@@ -43,7 +43,7 @@ class nginx::debian {
 	}
 
 	Common::Define::Package["nginx"]
-	    -> File_line["Fix nginx systemd configuration"]
+	    -> Common::Define::Lined["Fix nginx systemd configuration"]
 	    -> File["Drop nginx default enabled configuration"]
 	    -> Common::Define::Service["nginx"]
     } else {

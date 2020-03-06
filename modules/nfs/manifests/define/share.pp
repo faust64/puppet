@@ -11,7 +11,7 @@ define nfs::define::share($options = [ "ro" , "no_subtree_check",
     $allstr = regsubst($tostr, ',', "($optstr) ", 'G')
     $final  = "$allstr($optstr)"
 
-    file_line {
+    common::define::lined {
 	"Set $name NFS share":
 	    line    => "$path $final",
 	    match   => $path,

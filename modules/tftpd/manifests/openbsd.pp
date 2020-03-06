@@ -10,7 +10,7 @@ class tftpd::openbsd {
 	    path   => "/srv";
     }
 
-    file_line {
+    common::define::lined {
 	"Enable tftpd on boot":
 	    line => "tftpd_flags=",
 	    path => "/etc/rc.conf.local";

@@ -1,5 +1,5 @@
 class ripd::openbsd {
-    file_line {
+    common::define::lined {
 	"Enable ripd on boot":
 	    line  => "ripd_flags=",
 #	    match => "ripd_flags=",

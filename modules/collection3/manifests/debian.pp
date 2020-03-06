@@ -2,7 +2,7 @@ class collection3::debian {
     $web_root = $collection3::vars::web_root
 
     if ($lsbdistcodename == "jessie") {
-	file_line {
+	common::define::lined {
 	    "Disable collection warnings from CGI::param":
 		after   => "use HTML::Entities ('fatalsToBowser');",
 		line    => '$CGI::LIST_CONTEXT_WARN = 0;',

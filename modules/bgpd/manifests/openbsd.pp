@@ -1,5 +1,5 @@
 class bgpd::openbsd {
-    file_line {
+    common::define::lined {
 	"Enable bgpd on boot":
 	    line  => "bgpd_flags=",
 #	    match => 'bgpd_flags=',

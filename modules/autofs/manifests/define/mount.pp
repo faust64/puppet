@@ -39,7 +39,7 @@ define autofs::define::mount($fsopts      = "ro",
 	}
 
 	if ($no_dir == true) {
-	    file_line {
+	    common::define::lined {
 		"Declare autofs $name mount invokation":
 		    line    => "$mountpoint/ $conf_dir/$name --ghost --timeout 43200",
 		    match   => "$mountpoint/ ",
@@ -61,7 +61,7 @@ define autofs::define::mount($fsopts      = "ro",
     } elsif ($mountstatus != "enabled") {
 	if ($no_dir == true) {
 	    if (defined(Service["autofs"])) {
-		file_line {
+		common::define::lined {
 		    "Drop autofs $name mount invokation":
 			ensure  => absent,
 			line    => "$mountpoint/ $conf_dir/$name --ghost --timeout 43200",
@@ -75,10 +75,10 @@ define autofs::define::mount($fsopts      = "ro",
 			force   => true,
 			notify  => Service["autofs"],
 			path    => "$conf_dir/$name",
-			require => File_line["Drop autofs $name mount invokation"];
+			require => Common::Define::Lined["Drop autofs $name mount invokation"];
 		}
 	    } else {
-		file_line {
+		common::define::lined {
 		    "Drop autofs $name mount invokation":
 			ensure  => absent,
 			line    => "$mountpoint/ $conf_dir/$name --ghost --timeout 43200",
@@ -90,7 +90,7 @@ define autofs::define::mount($fsopts      = "ro",
 			ensure  => absent,
 			force   => true,
 			path    => "$conf_dir/$name",
-			require => File_line["Drop autofs $name mount invokation"];
+			require => Common::Define::Lined["Drop autofs $name mount invokation"];
 		}
 	    }
 	} elsif (defined(Service["autofs"])) {

@@ -19,7 +19,7 @@ define network::interfaces::freebsd::generic($addr       = false,
 	}
     }
 
-    file_line {
+    common::define::lined {
 	"Configure $name interface":
 	    line => "ifconfig_$name='$args'",
 	    path => "/etc/rc.conf",

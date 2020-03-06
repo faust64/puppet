@@ -1,7 +1,8 @@
 class media::scripts {
-    $sickbeard  = $media::vars::sickbeard
+    $emby       = $media::vars::emby
     $media_root = $media::vars::web_root
     $plex       = $media::vars::plex
+    $sickbeard  = $media::vars::sickbeard
 
     file {
 	"Install mediainfo script":

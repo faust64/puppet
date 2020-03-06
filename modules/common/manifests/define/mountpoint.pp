@@ -28,7 +28,7 @@ define common::define::mountpoint($dev        = false,
 		    command   => "mount $dir -o remount,$opts",
 		    cwd       => "/",
 		    path      => "/usr/bin:/bin",
-		    subscribe => File_line["Define $name mountpoint"];
+		    subscribe => Common::Define::Lined["Define $name mountpoint"];
 	    }
 	}
     } else {

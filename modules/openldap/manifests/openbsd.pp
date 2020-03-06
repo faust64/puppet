@@ -34,7 +34,7 @@ class openldap::openbsd($server = false) {
 		command => 'echo "pkg_scripts=\"\$pkg_scripts slapd\"" >>rc.conf.local',
 		cwd     => "/etc",
 		path    => "/usr/bin:/bin",
-		require => File_line["Enable OpenLDAP on boot"],
+		require => Common::Define::Lined["Enable OpenLDAP on boot"],
 		unless  => "grep '^pkg_scripts=.*slapd' rc.conf.local";
 	}
 
@@ -47,7 +47,7 @@ class openldap::openbsd($server = false) {
 	}
 
 	Package["openldap-server"]
-	    -> File_line["Enable OpenLDAP on boot"]
+	    -> Common::Define::Lined["Enable OpenLDAP on boot"]
 	    -> Exec["Add OpenLDAP to pkg_scripts"]
 	    -> File["Prepare OpenLDAP for further configuration"]
 	    -> Common::Define::Service[$openldap::vars::service_name]

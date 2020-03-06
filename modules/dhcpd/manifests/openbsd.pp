@@ -1,5 +1,5 @@
 class dhcpd::openbsd {
-    file_line {
+    common::define::lined {
 	"Enable Dhcpd on boot":
 	    line => "dhcpd_flags=",
 	    path => "/etc/rc.conf.local";

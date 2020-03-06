@@ -18,7 +18,7 @@ define network::interfaces::freebsd::vlan($addr     = "127.0.0.1",
     }
 
     if ($args) {
-	file_line {
+	common::define::lined {
 	    "Configure $name interface":
 		line => "ifconfig_$name='$args$argsmtu'",
 		path => "/etc/rc.conf";

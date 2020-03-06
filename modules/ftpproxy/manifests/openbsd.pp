@@ -24,14 +24,14 @@ class ftpproxy::openbsd {
 		    $nat_addr = $nic['addr']
 		}
 
-		file_line {
+		common::define::lined {
 		    "Enable ftpproxy on boot":
 			line  => "ftpproxy_flags='-r -a $nat_addr'",
 			match => '^ftpproxy_flags=',
 			path  => '/etc/rc.conf.local';
 		}
 
-		File_line["Enable ftpproxy on boot"]
+		Common::Define::Lined["Enable ftpproxy on boot"]
 		    -> Service["ftpproxy"]
 	    } else {
 		err{ "Looks like you have several default gateways configured": }

@@ -5,12 +5,17 @@ for mediadir in Docu EPTV Movies Series Training
 do
     test -d "$mediadir" || continue
     echo processing $mediadir
-    find $mediadir -type d -exec chmod 0775 {} \;
+<% if @emby != false and @plex != false %>    find $mediadir -type d -exec chmod 0775 {} \;
     find $mediadir -type f -exec chmod 0664 {} \;
     chown -R root:video $mediadir
-done
+<% else %>    find $mediadir -type d -exec chmod 0755 {} \;
+    find $mediadir -type f -exec chmod 0644 {} \;
+<% if @emby != false %>    chown -R emby:root $mediadir
+<% elsif @plex != false %>    chown -R plex:root $mediadir
+<% else -%>    chown -R root:root $mediadir
+<% end -%><% end %>done
 
-<% if @plex != false -%>for mediadir in plexSeries
+<% if @plex != false %>for mediadir in plexSeries
 do
     test -d "$mediadir" || continue
     echo processing $mediadir
@@ -19,4 +24,4 @@ do
     find -P $mediadir -exec chown plex:root {} \;
 done
 
-<% end -%>exit 0
+<% end %>exit 0

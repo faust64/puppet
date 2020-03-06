@@ -25,7 +25,7 @@ class named::scripts {
     if ($named::vars::named_master == false) {
 	if ($named::vars::sshfp_domains != false) {
 	    each($named::vars::sshfp_domains) |$zone| {
-		File_line <<| tag == "sshfp-records-$zone" |>>
+		Common::Define::Lined <<| tag == "sshfp-records-$zone" |>>
 	    }
 	}
 	each($do_domains) |$zone| {

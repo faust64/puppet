@@ -3,7 +3,7 @@ class isakmpd::freebsd {
 	"isakmpd":
     }
 
-    file_line {
+    common::define::lined {
 	"Enable Isakmpd on boot":
 	    line => "isakmpd_enable=",
 	    path => "/etc/rc.conf";

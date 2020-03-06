@@ -24,7 +24,7 @@ class nagios::openbsd {
 	}
     }
 
-    file_line {
+    common::define::lined {
 	"Enable Nagios on boot":
 	    line => "nrpe_flags=",
 	    path => "/etc/rc.conf.local";
@@ -44,12 +44,12 @@ class nagios::openbsd {
 	    command => 'echo "pkg_scripts=\"\$pkg_scripts nrpe\"" >>rc.conf.local',
 	    cwd     => "/etc",
 	    path    => "/usr/bin:/bin",
-	    require => File_line["Enable Nagios on boot"],
+	    require => Common::Define::Lined["Enable Nagios on boot"],
 	    unless  => "grep '^pkg_scripts=.*nrpe' rc.conf.local";
     }
 
     Package[$pname]
-	-> File_line["Enable Nagios on boot"]
+	-> Common::Define::Lined["Enable Nagios on boot"]
 	-> File["Install Nagios custom plugins"]
 	-> File["Prepare nagios nrpe for further configuration"]
 	-> Exec["Add Nagios to pkg_scripts"]
