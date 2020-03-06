@@ -7,7 +7,11 @@ REMOTE_USER=<%=@sync_user%>
 <% end -%>hostname=`hostname -f || hostname`
 ret=1
 
-cd <%=@web_root%>
+if ! test -d "<%=@web_root%>"; then
+    echo "Missing repository root" >&2
+    exit 1
+fi
+cd "<%=@web_root%>"
 
 if rsync -avWxP --exclude='*lost+found*' --exclude='*modeles/virtualbox-peerio*' --rsh="ssh -p$REMOTE_PORT" --delete $REMOTE_USER@$REMOTE_HOST:$REMOTE_PATH/ .; then
     ret=0

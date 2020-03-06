@@ -13,7 +13,11 @@ elif ls /tmp/subsonic_sync.* 2>/dev/null | grep [0-9] >/dev/null; then
     exit 1
 fi
 
-cd $ROOT
+if ! test -d "$ROOT"; then
+    echo "Missing subsonic root" >&2
+    exit 1
+fi
+cd "$ROOT"
 for remoteitem in $REMOTES
 do
     if echo $remoteitem | grep : >/dev/null; then

@@ -1,6 +1,10 @@
 #!/bin/sh
 
-cd <%=@media_root%>/media
+if ! test -d "<%=@media_root%>/media; then
+    echo "Missing media root" >&2
+    exit 1
+fi
+cd "<%=@media_root%>/media"
 for mediadir in Docu EPTV Movies Series Training
 do
     test -d "$mediadir" || continue
