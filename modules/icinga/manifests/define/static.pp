@@ -170,11 +170,11 @@ define icinga::define::static($host_contact   = "root",
 		$checks = [ "certificates", "fdesc", "fsck", "load", "mem",
 			    "haproxy_k8s_api", "haproxy_k8s_routers_http",
 			    "haproxy_k8s_routers_https", "ntpq", "rprocs",
-			    "uptime" ]
+			    "temp", "uptime" ]
 	    } else {
 		$checks = [ "certificates", "fdesc", "fsck", "load", "mem",
 			    "ntpq", "oom", "persistent_volumes_usage",
-			    "rogue_containers", "rprocs", "uptime" ]
+			    "rogue_containers", "rprocs", "temp", "uptime" ]
 	    }
 	}
     }

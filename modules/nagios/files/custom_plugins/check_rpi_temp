@@ -1,0 +1,31 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+WARN=50
+CRIT=60
+
+temp=`vcgencmd measure_temp 2>/dev/null | sed 's|^temp=\([0-9\.]*\).*|\1|'`
+if test -z "$temp"; then
+    ret=UNKNOWN
+    msg="could not retrieve temp"
+else
+    int=`echo $temp | cut -d. -f1`
+    msg="$temp'"
+    perfdata=" | $int;$WARN;$CRIT"
+    if test "$int" -ge "$CRIT"; then
+	ret=CRITICAL
+    elif test "$int" -ge "$WARN"; then
+	ret=WARNING
+    else
+	ret=OK
+    fi
+fi
+
+echo "RPI-temp $ret: $msg$perfdata"
+eval ret=\$$ret
+exit $ret
