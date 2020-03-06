@@ -6,12 +6,12 @@ var SMTP_SERVERS <% if @mail_ip != false %><% @mail_ip.each do |host| -%><%=host
 var HTTP_SERVERS $LAN_NET
 var TELNET_SERVERS $LAN_NET
 portvar SSH_PORTS [22,222]
-portvar HTTP_PORTS  [80,2301,3128,7777,7779,8000,8008,8028,8080,8180,8888,9999]
+portvar HTTP_PORTS [80,2301,3128,7777,7779,8000,8008,8028,8080,8180,8888,9999]
 portvar SHELLCODE_PORTS !80
 portvar ORACLE_PORTS 1521
 var AIM_SERVERS [64.12.24.0/23,64.12.28.0/23,64.12.161.0/24,64.12.163.0/24,64.12.200.0/24,205.188.3.0/24,205.188.5.0/24,205.188.7.0/24,205.188.9.0/24,205.188.153.0/24,205.188.179.0/24,205.188.248.0/24]
 var RULE_PATH rules
-var SO_RULE_PATH  so_rules
+var SO_RULE_PATH so_rules
 var PREPROC_RULE_PATH preproc_rules
 
 config disable_decode_alerts
@@ -23,11 +23,10 @@ config disable_ipopt_alerts
 # config enable_decode_oversized_alerts
 # config enable_decode_oversized_drops
 config checksum_mode: all
-# config flowbits_size: 64
-# config ignore_ports: tcp 21 6667:6671 1356
-# config ignore_ports: udp 1:17 53
-<% if @daq_dir != false -%>config daq_dir: <%=@daq_dir%>
-<% end -%>
+# config flowbits_size: 64<% if @ignore_tcp != false %>
+config ignore_ports: tcp <%=@ignore_tcp.join(' ')-%><% end %><% if @ignore_udp != false %>
+config ignore_ports: udp <%=@ignore_udp.join(' ')-%><% end %><% if @daq_dir != false %>
+config daq_dir: <%=@daq_dir%><% end %>
 config pcre_match_limit: 1500
 config pcre_match_limit_recursion: 1500
 config detection: search-method ac-bnfa max_queue_events 5
@@ -46,22 +45,21 @@ preprocessor http_inspect: global iis_unicode_map unicode.map 1252
 preprocessor http_inspect_server: server default \
     apache_whitespace no \
     ascii no \
-	bare_byte no \
-	chunk_length 500000 \
-	flow_depth 1460 \
-	directory no \
-	double_decode no \
-	iis_backslash no \
-	iis_delimiter no \
-	iis_unicode no \
-	multi_slash no \
-	non_strict \
-	oversize_dir_length 500 \
-	ports { 80 2301 3128 7777 7779 8000 8008 8028 8080 8180 8888 9999 } \
-	u_encode yes \
-	non_rfc_char { 0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07 } \
-	webroot no
-
+    bare_byte no \
+    chunk_length 500000 \
+    flow_depth 1460 \
+    directory no \
+    double_decode no \
+    iis_backslash no \
+    iis_delimiter no \
+    iis_unicode no \
+    multi_slash no \
+    non_strict \
+    oversize_dir_length 500 \
+    ports { 80 2301 3128 7777 7779 8000 8008 8028 8080 8180 8888 9999 } \
+    u_encode yes \
+    non_rfc_char { 0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07 } \
+    webroot no
 preprocessor rpc_decode: 111 32770 32771 32772 32773 32774 32775 32776 32777 32778 32779 no_alert_multiple_requests no_alert_large_fragments no_alert_incomplete
 preprocessor bo
 preprocessor ftp_telnet: global encrypted_traffic yes check_encrypted inspection_type stateful
@@ -103,21 +101,21 @@ preprocessor ftp_telnet_protocol: ftp client default \
     bounce yes \
     telnet_cmds no
 preprocessor smtp: ports { 25 587 691 } \
-  inspection_type stateful \
-  normalize cmds \
-  normalize_cmds { EXPN VRFY RCPT } \
-  alt_max_command_line_len 260 { MAIL } \
-  alt_max_command_line_len 300 { RCPT } \
-  alt_max_command_line_len 500 { HELP HELO ETRN } \
-  alt_max_command_line_len 255 { EXPN VRFY }
-# preprocessor sfportscan: proto  { all } memcap { 10000000 } sense_level { low }
+    inspection_type stateful \
+    normalize cmds \
+    normalize_cmds { EXPN VRFY RCPT } \
+    alt_max_command_line_len 260 { MAIL } \
+    alt_max_command_line_len 300 { RCPT } \
+    alt_max_command_line_len 500 { HELP HELO ETRN } \
+    alt_max_command_line_len 255 { EXPN VRFY }
+# preprocessor sfportscan: proto { all } memcap { 10000000 } sense_level { low }
 # preprocessor arpspoof
 # preprocessor arpspoof_detect_host: 192.168.40.1 f0:0f:00:f0:0f:00
 preprocessor ssh: server_ports { 22 } \
-		  max_client_bytes 19600 \
-		  max_encrypted_packets 20 \
-		  enable_respoverflow enable_ssh1crc32 \
-		  enable_srvoverflow enable_protomismatch
+    max_client_bytes 19600 \
+    max_encrypted_packets 20 \
+    enable_respoverflow enable_ssh1crc32 \
+    enable_srvoverflow enable_protomismatch
 preprocessor dcerpc2: memcap 102400, events [co ]
 preprocessor dcerpc2_server: default, policy WinXP, \
     detect [smb [139,445], tcp 135, udp 135, rpc-over-http-server 593], \
@@ -135,6 +133,5 @@ preprocessor ssl: ports { 443 465 563 636 989 992 993 994 995 7801 7702 7900 790
 # output alert_prelude
 include classification.config
 include reference.config
-
 include $RULE_PATH/local.rules
 include threshold.conf

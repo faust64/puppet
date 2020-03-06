@@ -2290,6 +2290,9 @@ snmp_uptodate_new: false
 snort_conf_dir: /etc/snort
 snort_daq_dir: false
 snort_group: snort
+snort_ignore_hosts: false
+snort_ignore_tcp_ports: false
+snort_ignore_udp_ports: false
 snort_listen_if: false
 snort_log_dir: /var/log/snort
 snort_user: snort
