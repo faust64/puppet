@@ -1,6 +1,5 @@
 class sickbeard::install {
-    $home_dir     = $sickbeard::vars::home_dir
-    $runtime_user = $sickbeard::vars::runtime_user
+    $home_dir = $sickbeard::vars::home_dir
 
     group {
 	$sickbeard::vars::runtime_group:
@@ -8,27 +7,20 @@ class sickbeard::install {
     }
 
     user {
-	$runtime_user:
+	$sickbeard::vars::runtime_user:
 	    gid     => $sickbeard::vars::runtime_group,
 	    require => Group[$sickbeard::vars::runtime_group];
     }
 
-    common::define::geturl {
+    git::define::clone {
 	"sickbeard":
-	    notify  => Exec["Extract sickbeard"],
-	    require => User[$runtime_user],
-	    target  => "/root/sickbeard.tar.gz",
-	    url     => "https://github.com/midgetspy/Sick-Beard/tarball/development",
-	    wd      => "/root";
-    }
-
-    exec {
-	"Extract sickbeard":
-	    command     => "tar -xf /root/sickbeard.tar.gz && ln -s midgetspy-Sick-Beard-* $home_dir && chown -R $runtime_user midgetspy-Sick-Beard-*",
-	    creates     => $home_dir,
-	    cwd         => "/usr/share",
-	    path        => "/usr/bin:/bin",
-	    refreshonly => true;
+	    branch          => "development",
+	    grp             => $sickbeard::vars::runtime_group,
+	    usr             => $sickbeard::vars::runtime_user,
+	    local_container => "/usr/share",
+	    repository      => "https://github.com/midgetspy/Sick-Beard",
+	    require         => User[$runtime_user],
+	    update          => false;
     }
 
     common::define::package {

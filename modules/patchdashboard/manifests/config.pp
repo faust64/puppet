@@ -12,14 +12,14 @@ class patchdashboard::config {
 	    mode    => "0640",
 	    owner   => root,
 	    path    => "/usr/share/patchdashboard/html/lib/db_config.php",
-	    require => Exec["Extract patchdashboard"];
+	    require => Git::Define::Clone["patchdashboard"];
 	"Install PatchDashboard shell database configuration":
 	    content => template("patchdashboard/db-tiny.erb"),
 	    group   => $patchdashboard::vars::runtime_group,
 	    mode    => "0640",
 	    owner   => root,
 	    path    => "/usr/share/patchdashboard/db.conf",
-	    require => Exec["Extract patchdashboard"];
+	    require => Git::Define::Clone["patchdashboard"];
     }
 
     each([ "patch_checker", "check-in", "package_checker", "run_commands" ]) |$script| {
@@ -32,7 +32,7 @@ class patchdashboard::config {
 		require =>
 		    [
 			Exec["Create Company"],
-			Exec["Extract patchdashboard"]
+			Git::Define::Clone["patchdashboard"]
 		    ];
 	    "Set server uri into $script":
 		command => "sed -i 's|__SERVER_URI_SET_ME__|https://$fqdn/|' $script.sh",
@@ -42,7 +42,7 @@ class patchdashboard::config {
 		require =>
 		    [
 			Exec["Create Company"],
-			Exec["Extract patchdashboard"]
+			Git::Define::Clone["patchdashboard"]
 		    ];
 	}
     }

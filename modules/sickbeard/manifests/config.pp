@@ -32,7 +32,7 @@ class sickbeard::config {
 	    ensure  => link,
 	    force   => true,
 	    path    => "/var/log/sickbeard",
-	    require => Exec["Extract sickbeard"],
+	    require => Git::Define::Clone["sickbeard"],
 	    target  => "$home_dir/Logs";
     }
 }

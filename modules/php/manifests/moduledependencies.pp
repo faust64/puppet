@@ -158,8 +158,14 @@ class php::moduledependencies {
 		include common::tools::gcc
 		include common::tools::make
 
+		if ($lsbdistcodename == "buster" or $lsbdistcodename == "beowulf") {
+		    $lcd = "libc-dev-bin"
+		} else {
+		    $lcd = "libc-dev"
+		}
+
 		common::define::package {
-		    [ "autoconf", "libc-dev", "pkg-config", "libmcrypt-dev" ]:
+		    [ "autoconf", $lcd, "pkg-config", "libmcrypt-dev" ]:
 		}
 
 		#FIXME: noexec needs to be disabled/re-enabled building this
@@ -173,7 +179,7 @@ class php::moduledependencies {
 			require =>
 			    [
 				Common::Define::Package["autoconf"],
-				Common::Define::Package["libc-dev"],
+				Common::Define::Package[$lcd],
 				Common::Define::Package["libmcrypt-dev"],
 				Common::Define::Package["pkg-config"],
 				Class[Common::Tools::Gcc],

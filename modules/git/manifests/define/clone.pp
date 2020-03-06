@@ -1,11 +1,13 @@
 define git::define::clone($branch          = "master",
 			  $git_password    = false,
 			  $git_username    = false,
+			  $grp             = false,
 			  $local_container = false,
 			  $local_name      = $name,
 			  $repository      = false,
 			  $submoduleinit   = false,
-			  $update          = false) {
+			  $update          = false,
+			  $usr             = false) {
     if ($repository and $local_container) {
 	if (! defined(Class[git])) {
 	    include git
@@ -58,6 +60,11 @@ define git::define::clone($branch          = "master",
 			require => Exec["GIT clone $name"];
 		}
 	    }
+
+	    if ($usr != false or $grp != false) {
+		Exec["GIT update $name"]
+		    -> Exec["Sets permissions on $name"]
+	    }
 	}
 	if ($submoduleinit) {
 	    exec {
@@ -65,6 +72,30 @@ define git::define::clone($branch          = "master",
 		    command     => "git submodule update --recursive --init",
 		    cwd         => "$local_container/$local_name",
 		    path        => "/usr/local/bin:/usr/bin:/bin",
+		    refreshonly => true,
+		    require     => Exec["GIT clone $name"];
+	    }
+
+	    if ($usr != false or $grp != false) {
+		Exec["GIT init submodule $name"]
+		    -> Exec["Sets permissions on $name"]
+	    }
+	}
+
+	if ($usr != false or $grp != false) {
+	    if ($usr != false and $grp != false) {
+		$pstr = "$usr:$grp"
+	    } elsif ($usr != false) {
+		$pstr = "$usr"
+	    } else {
+		$pstr = ":$grp"
+	    }
+
+	    exec {
+		"Sets permissions on $name":
+		    command     => "chown -R $pstr $local_name",
+		    cwd         => "$local_container",
+		    path        => "/usr/bin:/bin",
 		    refreshonly => true,
 		    require     => Exec["GIT clone $name"];
 	    }

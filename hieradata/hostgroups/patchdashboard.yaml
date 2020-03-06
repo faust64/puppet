@@ -30,6 +30,6 @@ nginx_rsyslog: true
 # PHP
 php_mod_gd: true
 php_mod_mcrypt: true
-php_mod_mysql: true
+php_mod_mysqli: true
 php_mod_xmlrpc: true
 php_with_dev: true

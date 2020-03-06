@@ -1,5 +1,5 @@
 class airsonic::nagios {
-    if (! defined(Class[Common::Tools::Netstat])) {
+    if (! defined(Class["common::tools::netstat"])) {
 	include common::tools::netstat
     }
 

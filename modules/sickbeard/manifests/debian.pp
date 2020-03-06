@@ -5,10 +5,8 @@ class sickbeard::debian {
     $run_dir      = $sickbeard::vars::run_dir
     $runtime_user = $sickbeard::vars::runtime_user
 
-    if (! defined(Common::Define::Package["net-tools"])) {
-	common::define::package {
-	    "net-tools":
-	}
+    if (! defined(Class["common::tools::netstat"])) {
+	include common::tools::netstat
     }
 
     file {
@@ -19,7 +17,7 @@ class sickbeard::debian {
 	    owner   => root,
 	    path    => "/etc/init.d/sickbeard",
 	    source  => "puppet:///modules/sickbeard/debian.rc",
-	    require => Exec["Extract sickbeard"];
+	    require => Git::Define::Clone["sickbeard"];
 	"Install sickbeard service defaults":
 	    content => template("sickbeard/defaults.erb"),
 	    group   => lookup("gid_zero"),
