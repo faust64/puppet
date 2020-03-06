@@ -1138,6 +1138,7 @@ named_zones_check:
 
 # Network
 can_set_tos: true
+carp_do_preempt: false
 gre_tunnels: false
 # anything elegant would be welcome
 name_to_number:
@@ -2290,7 +2291,6 @@ snmp_uptodate_new: false
 snort_conf_dir: /etc/snort
 snort_daq_dir: false
 snort_group: snort
-snort_ignore_hosts: false
 snort_ignore_tcp_ports: false
 snort_ignore_udp_ports: false
 snort_listen_if: false
