@@ -57,8 +57,8 @@ class saslauthd::postfix {
 	    path        => "/usr/sbin:/sbin:/usr/bin:/bin",
 	    require     =>
 		[
-		    Service["postfix"],
-		    Service["saslauthd"]
+		    Common::Define::Service["postfix"],
+		    Common::Define::Service["saslauthd"]
 		],
 	    unless      => "grep '^sasl:.*postfix' /etc/group",
     }

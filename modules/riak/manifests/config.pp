@@ -55,5 +55,5 @@ class riak::config {
     }
 
     Mysysctl::Define::Setfile["riak"]
-	-> Service["riak"]
+	-> Common::Define::Service["riak"]
 }

@@ -16,7 +16,7 @@ class sonarr::webapp {
 		app_port      => 8989,
 		csp_name      => "sonarr",
 		deny_frames   => true,
-		require       => Service["sonarr"],
+		require       => Common::Define::Service["sonarr"],
 		vhostldapauth => false,
 		vhostsource   => "app_proxy",
 		with_reverse  => $reverse;
@@ -30,7 +30,7 @@ class sonarr::webapp {
 		app_port      => 8989,
 		csp_name      => "sonarr",
 		deny_frames   => true,
-		require       => Service["sonarr"],
+		require       => Common::Define::Service["sonarr"],
 		vhostldapauth => false,
 		vhostsource   => "app_proxy",
 		with_reverse  => $reverse;

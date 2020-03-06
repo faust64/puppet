@@ -3,6 +3,6 @@ class autofs::rhel {
 	"autofs":
     }
 
-    Package["autofs"]
-	-> Service["autofs"]
+    Common::Define::Package["autofs"]
+	-> Common::Define::Service["autofs"]
 }

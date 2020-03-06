@@ -11,6 +11,6 @@ class opensmtpd::openbsd {
     }
 
     Common::Define::Lined["Enable Opensmtpd on boot"]
-	-> Service["sendmail"]
-	-> Service["smtpd"]
+	-> Common::Define::Service["sendmail"]
+	-> Common::Define::Service["smtpd"]
 }

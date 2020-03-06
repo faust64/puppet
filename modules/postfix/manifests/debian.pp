@@ -5,10 +5,10 @@ class postfix::debian {
 	[ "postfix" ]:
     }
 
-    Package["postfix"]
-	-> Package["bsd-mailx"]
-	-> Package["exim4"]
-	-> Service["postfix"]
+    Common::Define::Package["postfix"]
+	-> Common::Define::Package["bsd-mailx"]
+	-> Common::Define::Package["exim4"]
+	-> Common::Define::Service["postfix"]
 
     if ($srvtype == "mail") {
 	common::define::package {

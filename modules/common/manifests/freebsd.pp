@@ -95,8 +95,8 @@ class common::freebsd {
 	    "dbus":
 	}
 
-	Package["dbus"]
+	Common::Define::Package["dbus"]
 	    -> Common::Define::Lined["Enable dbus service"]
-	    -> Service["dbus"]
+	    -> Common::Define::Service["dbus"]
     }
 }

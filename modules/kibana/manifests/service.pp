@@ -5,7 +5,7 @@ class kibana::service {
     }
 
     if ($kibana::vars::esearch_listen == $ipaddress or $kibana::vars::esearch_listen == "127.0.0.1") {
-	Service["elasticsearch"]
-	    ~> Service["kibana"]
+	Common::Define::Service["elasticsearch"]
+	    ~> Common::Define::Service["kibana"]
     }
 }

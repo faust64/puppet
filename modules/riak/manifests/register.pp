@@ -11,7 +11,7 @@ class riak::register {
 	    path    => "/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin",
 	    require =>
 		[
-		    Service["riak"],
+		    Common::Define::Service["riak"],
 		    File["Install Riak join script"],
 		    File["Install Riak commit script"]
 		];

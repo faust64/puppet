@@ -56,8 +56,8 @@ class nagios::rhel {
 	}
     }
 
-    Package["nrpe"]
+    Common::Define::Package["nrpe"]
 	-> File["Install Nagios custom plugins"]
 	-> File["Prepare nagios nrpe for further configuration"]
-	-> Service[$nagios::vars::nrpe_service_name]
+	-> Common::Define::Service[$nagios::vars::nrpe_service_name]
 }

@@ -30,5 +30,5 @@ class sickbeard::debian {
     File["Install sickbeard init script"]
 	-> File["Install sickbeard service defaults"]
 	-> File["Prepare sickbeard for further configuration"]
-	-> Service["sickbeard"]
+	-> Common::Define::Service["sickbeard"]
 }

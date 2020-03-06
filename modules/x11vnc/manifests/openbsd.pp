@@ -3,7 +3,7 @@ class openvpn::openbsd {
 	"x11vnc":
     }
 
-    Package["x11vnc"]
+    Common::Define::Package["x11vnc"]
 	-> File["Install x11-VNC wrapper script"]
-	-> Service["x11vnc"]
+	-> Common::Define::Service["x11vnc"]
 }

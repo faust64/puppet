@@ -5,4 +5,4 @@ tmp_fs: ext4
 tmp_target_device: /dev/xvdb1
 
 # Media
-media_do_emby: true
+media_do_plex: true

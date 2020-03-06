@@ -1,0 +1,15 @@
+#!/bin/sh
+
+cd <%=@media_root%>/media
+for mediadir in Docu EPTV Movies Series Training
+do
+    test -d "$mediadir" || continue
+    echo processing $mediadir
+<% if @emby != false %>    rsync -avWx $mediadir --usermap=:emby --groupmap=:video <%=@plex_host%>:<%=@media_root%>/media/
+<% else %>    rsync -avWx $mediadir --usermap=:plex --groupmap=:video <%=@emby_host%>:<%=@media_root%>/media/
+<% end %>     if test $? -eq 0; then
+	echo OK
+    fi
+done
+
+exit 0

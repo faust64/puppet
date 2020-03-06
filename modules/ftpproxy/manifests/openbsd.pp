@@ -11,7 +11,7 @@ class ftpproxy::openbsd {
     }
 
     File["Install Ftp-Proxy custom rc script"]
-	-> Service["ftpproxy"]
+	-> Common::Define::Service["ftpproxy"]
 
     each($main_networks) |$nic| {
 	if ($nic['default'] == true) {
@@ -32,7 +32,7 @@ class ftpproxy::openbsd {
 		}
 
 		Common::Define::Lined["Enable ftpproxy on boot"]
-		    -> Service["ftpproxy"]
+		    -> Common::Define::Service["ftpproxy"]
 	    } else {
 		err{ "Looks like you have several default gateways configured": }
 	    }

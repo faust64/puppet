@@ -33,7 +33,7 @@ class sonarr::debian {
 	    notify  =>
 		[
 		    Exec["Reload systemd configuration"],
-		    Service["sonarr"]
+		    Common::Define::Service["sonarr"]
 		],
 	    owner   => "root",
 	    path    => "/lib/systemd/system/sonarr.service";

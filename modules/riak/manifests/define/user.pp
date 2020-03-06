@@ -15,7 +15,7 @@ define riak::define::user($ensure      = "present",
 		command => "riak-admin security add-user $name$passwordstr",
 		cwd     => "/",
 		path    => "/usr/sbin:/usr/bin:/sbin:/bin",
-		require => Service["riak"],
+		require => Common::Define::Service["riak"],
 		unless  => "riak-admin security print-users | grep '^|[ ]*$name '";
 	}
 
@@ -93,7 +93,7 @@ define riak::define::user($ensure      = "present",
 		cwd     => "/",
 		onlyif  => "riak-admin security print-users | grep '^|[ ]*$name '",
 		path    => "/usr/sbin:/usr/bin:/sbin:/bin",
-		require => Service["riak"];
+		require => Common::Define::Service["riak"];
 	}
     }
 }

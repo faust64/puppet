@@ -33,7 +33,7 @@ class elasticsearch::debian {
     }
 
     Class[Java]
-	-> Package["elasticsearch"]
+	-> Common::Define::Package["elasticsearch"]
 	-> File["Install elasticsearch service defaults"]
-	-> Service["elasticsearch"]
+	-> Common::Define::Service["elasticsearch"]
 }

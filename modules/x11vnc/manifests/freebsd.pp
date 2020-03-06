@@ -18,8 +18,8 @@ class x11vnc::freebsd {
 	    source  => "puppet:///modules/x11vnc/freebsd.rc";
     }
 
-    Package["x11vnc"]
+    Common::Define::Package["x11vnc"]
 	-> File["Enable x11-VNC service"]
 	-> File["Install x11-VNC wrapper script"]
-	-> Service["x11vnc"]
+	-> Common::Define::Service["x11vnc"]
 }

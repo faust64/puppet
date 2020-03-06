@@ -49,7 +49,7 @@ define riak::define::set_permissions($bucketname = false,
 		command => "riak-admin security grant $grantcmd on $onoption to $trustee",
 		cwd     => "/",
 		path    => "/usr/sbin:/usr/bin:/sbin:/bin",
-		require => Service["riak"],
+		require => Common::Define::Service["riak"],
 		unless  => "riak-admin security print-grants $trustee | grep $grantcmd";
 	}
 

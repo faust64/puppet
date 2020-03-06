@@ -26,6 +26,8 @@ Facter.add("srvtype") do
 	    "logs"
 	when /smtp|deepthroat|cumshot|bukkake/
 	    "mail"
+	when /emby|media|plex/
+	    "vidz"
 	when /icecast/
 	    "mediarelay"
 	when /centreon|icinga|monitor|nagios|shinken|thruk|zabbix/
@@ -38,7 +40,7 @@ Facter.add("srvtype") do
 	    "opennebula"
 	when /momos|moros|thanatos|phoebe|crios|eurybie|hemara|ouranos|eos|erebe|helios|nyx|selene|aether/
 	    "openshift"
-	when /drive|owncloud|nextcloud|media|packages|pxe|pydio|repository/
+	when /drive|nextcloud|owncloud|packages|pxe|pydio|repository/
 	    "repo"
 	when /samba/
 	    "samba"

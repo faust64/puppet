@@ -9,6 +9,6 @@ define asterisk::define::astdb($base = "AMPUSER",
 	    cwd     => "/",
 	    path    => "/usr/sbin:/sbin:/usr/bin:/bin",
 	    unless  => "asterisk -rx 'database show $base/$key' | grep '$val'",
-	    require => Service[$asterisk::vars::service_name];
+	    require => Common::Define::Service[$asterisk::vars::service_name];
     }
 }

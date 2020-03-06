@@ -15,9 +15,9 @@ class icecast::debian {
 	    owner   => root,
 	    notify  => Service[$icecast::vars::service_name],
 	    path    => "/etc/default/icecast2",
-	    require => Package["icecast2"];
+	    require => Common::Define::Package["icecast2"];
     }
 
-    Package["icecast2"]
-	-> Service[$icecast::vars::service_name]
+    Common::Define::Package["icecast2"]
+	-> Common::Define::Service[$icecast::vars::service_name]
 }

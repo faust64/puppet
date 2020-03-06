@@ -41,7 +41,7 @@ class unbound::debian {
 	    -> File["Install unbound service defaults"]
     }
 
-    Package["unbound"]
+    Common::Define::Package["unbound"]
 	-> File["Prepare unbound for further configuration"]
-	-> Service["unbound"]
+	-> Common::Define::Service["unbound"]
 }

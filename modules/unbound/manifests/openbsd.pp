@@ -6,5 +6,5 @@ class unbound::openbsd {
     }
 
     Common::Define::Lined["Enable unbound on boot"]
-	-> Service["unbound"]
+	-> Common::Define::Service["unbound"]
 }

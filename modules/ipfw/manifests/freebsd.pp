@@ -6,5 +6,5 @@ class ipfw::freebsd {
     }
 
     Common::Define::Lined["Enable ipfw on boot"]
-	-> Service["ipfw"]
+	-> Common::Define::Service["ipfw"]
 }

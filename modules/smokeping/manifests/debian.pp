@@ -39,6 +39,6 @@ class smokeping::debian {
 	    -> File["Link smokeping share directory to apache server root"]
     }
 
-    Package["smokeping"]
-	-> Service["smokeping"]
+    Common::Define::Package["smokeping"]
+	-> Common::Define::Service["smokeping"]
 }

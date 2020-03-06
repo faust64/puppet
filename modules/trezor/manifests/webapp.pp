@@ -30,7 +30,7 @@ class trezor::webapp {
 		aliases       => $aliases,
 		app_port      => 8000,
 #		csp_name      => "trezorwallet",
-#		require       => Service[##nodejsservice##],
+#		require       => Common::Define::Service[##nodejsservice##],
 		vhostldapauth => false,
 		vhostsource   => "trezor",
 		with_reverse  => $reverse;
@@ -43,7 +43,7 @@ class trezor::webapp {
 		aliases       => $aliases,
 		app_port      => 8000,
 #		csp_name      => "trezorwallet",
-#		require       => Service[##nodejsservice##],
+#		require       => Common::Define::Service[##nodejsservice##],
 		vhostldapauth => false,
 		vhostsource   => "trezor",
 		with_reverse  => $reverse;

@@ -21,7 +21,7 @@ class sickbeard::webapp {
 		app_port      => 8082,
 		csp_name      => "sickbeard",
 		deny_frames   => true,
-		require       => Service["sickbeard"],
+		require       => Common::Define::Service["sickbeard"],
 		vhostldapauth => $ldapauth,
 		vhostsource   => "app_proxy",
 		with_reverse  => $reverse;
@@ -38,7 +38,7 @@ class sickbeard::webapp {
 		app_port      => 8082,
 		csp_name      => "sickbeard",
 		deny_frames   => true,
-		require       => Service["sickbeard"],
+		require       => Common::Define::Service["sickbeard"],
 		vhostldapauth => false,
 		vhostsource   => "app_proxy",
 		with_reverse  => $reverse;

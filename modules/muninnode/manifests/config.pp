@@ -31,7 +31,7 @@ class muninnode::config {
 	}
 
 	File["Install munin-node run directory"]
-	    -> Service[$muninnode::vars::munin_node_service_name]
+	    -> Common::Define::Service[$muninnode::vars::munin_node_service_name]
     }
     if ($munin_pooler) {
 	file {

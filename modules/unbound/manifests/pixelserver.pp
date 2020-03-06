@@ -11,7 +11,7 @@ class unbound::pixelserver {
 	    }
 
 	    Class["pixelserver"]
-		-> Service["unbound"]
+		-> Common::Define::Service["unbound"]
 	}
     }
 }

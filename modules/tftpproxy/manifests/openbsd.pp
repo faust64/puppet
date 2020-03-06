@@ -14,7 +14,7 @@ class tftpproxy::openbsd {
 	    }
 
 	    Common::Define::Lined["Enable tftpproxy on boot"]
-		-> Service["tftpproxy"]
+		-> Common::Define::Service["tftpproxy"]
 	}
 	default: {
 	    notify { "tftpproxy not implemented in current release": }

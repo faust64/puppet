@@ -47,5 +47,5 @@ class transmission::config {
     }
 
     Mysysctl::Define::Setfile["transmission"]
-	-> Service[$transmission::vars::srvname]
+	-> Common::Define::Service[$transmission::vars::srvname]
 }

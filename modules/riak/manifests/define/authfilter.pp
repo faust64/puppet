@@ -8,7 +8,7 @@ define riak::define::authfilter($sources = [ "127.0.0.1/32" ],
 		    command => "riak-admin security add-source $user $filter $type",
 		    cwd     => "/",
 		    path    => "/usr/sbin:/usr/bin:/sbin:/bin",
-		    require => Service["riak"],
+		    require => Common::Define::Service["riak"],
 		    unless  => "riak-admin security print-sources | grep -B3 '^|[^|]* $user[, ]' | grep '[| ]$type[| ]' | grep $filter";
 	    }
 

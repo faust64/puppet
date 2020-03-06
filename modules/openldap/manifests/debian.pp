@@ -39,9 +39,9 @@ class openldap::debian($server = false) {
 		path    => "/etc/default/slapd";
 	}
 
-	Package["slapd"]
+	Common::Define::Package["slapd"]
 	    -> File["Install OpenLDAP service defaults"]
 	    -> File["Prepare OpenLDAP for further configuration"]
-	    -> Service[$openldap::vars::service_name]
+	    -> Common::Define::Service[$openldap::vars::service_name]
     }
 }

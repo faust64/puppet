@@ -6,6 +6,9 @@ apache_keepalive: "On"
 apache_listen_ports:
   plain: 80
   ssl: 443
+apache_mod_authldap: true
+apache_mod_headers: true
+apache_munin: true
 
 # Media
 media_sickbeard: https://tvschedule.unetresgrossebite.com

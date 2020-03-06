@@ -11,5 +11,5 @@ class ossec::register {
     }
 
     Exec["OSSEC register to $manager"]
-	-> Service[$ossec::vars::service_name]
+	-> Common::Define::Service[$ossec::vars::service_name]
 }

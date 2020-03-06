@@ -7,5 +7,5 @@ class relayd::openbsd {
 
     File["Relayd main configuration"]
 	-> Common::Define::Lined["Enable relayd on boot"]
-	-> Service["relayd"]
+	-> Common::Define::Service["relayd"]
 }

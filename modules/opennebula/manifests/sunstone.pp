@@ -121,7 +121,7 @@ class opennebula::sunstone {
 	$fqdn:
 	    app_root        => "/usr/lib/one/sunstone/public",
 	    app_port        => 9869,
-	    require         => Service["opennebula-sunstone"],
+	    require         => Common::Define::Service["opennebula-sunstone"],
 	    stricttransport => $strict,
 	    vhostsource     => "sunstone";
     }

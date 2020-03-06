@@ -73,7 +73,7 @@ class riak::debian {
 	}
 
 	Exec["Reload systemd configuration"]
-	    -> Service["riak"]
+	    -> Common::Define::Service["riak"]
     } elsif ($operatingsystem == "Ubuntu" and $lsbdistcodename == "trusty") {
 	file {
 	    "Drop riak upstart dummy configuration":
@@ -103,7 +103,7 @@ class riak::debian {
 	    }
 
 	    Common::Define::Lined["Set Riak $username $limit limits"]
-		-> Service["riak"]
+		-> Common::Define::Service["riak"]
 	}
     }
 }

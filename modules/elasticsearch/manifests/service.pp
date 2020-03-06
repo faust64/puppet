@@ -15,7 +15,7 @@ class elasticsearch::service {
 		mode    => "0755",
 		owner   => root,
 		path    => "/etc/cron.daily/elasticsearch",
-		require => Service["elasticsearch"];
+		require => Common::Define::Service["elasticsearch"];
 	}
     }
 }

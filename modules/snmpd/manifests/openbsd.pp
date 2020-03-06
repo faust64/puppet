@@ -6,5 +6,5 @@ class snmpd::openbsd {
     }
 
     Common::Define::Lined["Enable snmpd on boot"]
-	-> Service["snmpd"]
+	-> Common::Define::Service["snmpd"]
 }

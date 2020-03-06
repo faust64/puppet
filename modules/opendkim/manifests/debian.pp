@@ -38,7 +38,7 @@ class opendkim::debian {
 
 	File["Install opendkim service defaults"]
 	    -> Exec["Generate Systemd configuration from defaults"]
-	    -> Service["opendkim"]
+	    -> Common::Define::Service["opendkim"]
     }
 
     Package["opendkim"]

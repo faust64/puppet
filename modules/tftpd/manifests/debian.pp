@@ -11,7 +11,7 @@ class tftpd::debian {
 	    content => template("tftpd/tftpd-hpa.erb"),
 	    group   => lookup("gid_zero"),
 	    mode    => "0644",
-	    notify  => Common::Define::Service["tftpd-hpa"],
+	    notify  => Service["tftpd-hpa"],
 	    owner   => root,
 	    path    => "/etc/default/tftpd-hpa";
     }
@@ -21,7 +21,7 @@ class tftpd::debian {
 	    ensure => running;
     }
 
-    Package["tftpd-hpa"]
+    Common::Define::Package["tftpd-hpa"]
 	-> File["Install tftpd service defaults"]
-	-> Service["tftpd-hpa"]
+	-> Common::Define::Service["tftpd-hpa"]
 }

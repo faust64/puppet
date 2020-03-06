@@ -1,9 +1,11 @@
 class media::vars {
     $airsonic  = lookup("media_airsonic_nfs")
     $emby      = lookup("media_do_emby")
+    $emby_host = lookup("emby_ip")
     $musicroot = lookup("media_music_nfs_root")
     $nfsshare  = lookup("media_share_nfs")
     $plex      = lookup("media_do_plex")
+    $plex_host = lookup("plex_ip")
     $rdomain   = lookup("root_domain")
     $sickbeard = lookup("media_sickbeard")
     $subsonic  = lookup("media_subsonic_nfs")

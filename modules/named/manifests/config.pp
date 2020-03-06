@@ -77,5 +77,5 @@ class named::config {
 	-> File["Install named rndc configuration"]
 	-> File["Install named options configuration"]
 	-> File["Install named main configuration"]
-	-> Service[$named::vars::service_name]
+	-> Common::Define::Service[$named::vars::service_name]
 }

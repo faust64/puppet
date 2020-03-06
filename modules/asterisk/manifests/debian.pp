@@ -16,11 +16,11 @@ class asterisk::debian {
 	    ]:
 	}
 
-	Package["dahdi"]
+	Common::Define::Package["dahdi"]
 	    -> File["Prepare Dahdi for further configuration"]
     }
 
-    Package["asterisk"]
-	-> Package["asterisk-voicemail"]
+    Common::Define::Package["asterisk"]
+	-> Common::Define::Package["asterisk-voicemail"]
 	-> File["Prepare Asterisk for further configuration"]
 }

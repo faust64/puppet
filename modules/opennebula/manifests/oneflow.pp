@@ -40,7 +40,7 @@ class opennebula::oneflow {
 	    aliases         => $aliases,
 	    app_port        => 2474,
 	    noerrors        => true,
-	    require         => Service["opennebula-flow"],
+	    require         => Common::Define::Service["opennebula-flow"],
 	    stricttransport => $strict,
 	    vhostsource     => "app_proxy",
 	    with_reverse    => $reverse;

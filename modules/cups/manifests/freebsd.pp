@@ -18,8 +18,8 @@ class cups::freebsd {
 	    path   => "/etc/rc.conf";
     }
 
-    Package["cups-base"]
+    Common::Define::Package["cups-base"]
 	-> File["Prepare cups for further configuration"]
 	-> Common::Define::Lined["Enable cups service"]
-	-> Service[$cups::vars::service_name]
+	-> Common::Define::Service[$cups::vars::service_name]
 }

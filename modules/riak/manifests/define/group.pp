@@ -5,7 +5,7 @@ define riak::define::group($ensure = "present") {
 		command => "riak-admin security add-group $name",
 		cwd     => "/",
 		path    => "/usr/sbin:/usr/bin:/sbin:/bin",
-		require => Service["riak"],
+		require => Common::Define::Service["riak"],
 		unless  => "riak-admin security print-groups | grep '^|[ ]*$name '";
 	}
 
@@ -18,7 +18,7 @@ define riak::define::group($ensure = "present") {
 		cwd     => "/",
 		onlyif  => "riak-admin security print-groups | grep '^|[ ]*$name '",
 		path    => "/usr/sbin:/usr/bin:/sbin:/bin",
-		require => Service["riak"];
+		require => Common::Define::Service["riak"];
 	}
     }
 }

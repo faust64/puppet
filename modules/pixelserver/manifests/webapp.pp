@@ -3,7 +3,7 @@ class pixelserver::webapp {
 	apache::define::vhost {
 	    "*":
 		app_port     => "9999",
-		require      => Service["pixelserver"],
+		require      => Common::Define::Service["pixelserver"],
 		vhostrsyslog => false,
 		vhostsource  => "app_proxy";
 	}
@@ -13,7 +13,7 @@ class pixelserver::webapp {
 	nginx::define::vhost {
 	    "_":
 		app_port     => "9999",
-		require      => Service["pixelserver"],
+		require      => Common::Define::Service["pixelserver"],
 		vhostrsyslog => false,
 		vhostsource  => "app_proxy";
 	}

@@ -42,5 +42,5 @@ class pixelserver::debian {
 
     File["Install pixelserver rc script"]
 	-> File["Install pixelserver"]
-	-> Service["pixelserver"]
+	-> Common::Define::Service["pixelserver"]
 }

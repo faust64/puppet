@@ -3,7 +3,7 @@ class samba::rhel {
 	"samba":
     }
 
-    Package["nss-pam-ldapd"]
-	-> Package["samba"]
-	-> Service["samba"]
+    Common::Define::Package["nss-pam-ldapd"]
+	-> Common::Define::Package["samba"]
+	-> Common::Define::Service["samba"]
 }

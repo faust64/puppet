@@ -22,7 +22,7 @@ class transmission::webapp {
 		aliases       => $aliases,
 		app_port      => 9091,
 		noerrors      => true,
-		require       => Service[$transmission::vars::srvname],
+		require       => Common::Define::Service[$transmission::vars::srvname],
 		vhostsource   => "app_proxy",
 		with_reverse  => $reverse;
 	    "what.$domain":
@@ -39,7 +39,7 @@ class transmission::webapp {
 		aliases       => $aliases,
 		app_port      => 9091,
 		noerrors      => true,
-		require       => Service[$transmission::vars::srvname],
+		require       => Common::Define::Service[$transmission::vars::srvname],
 		vhostldapauth => false,
 		vhostsource   => "app_proxy",
 		with_reverse  => $reverse;

@@ -10,5 +10,5 @@ class isakmpd::openbsd {
 
     Common::Define::Lined["Enable isakmpd on boot"]
 	-> File["Install Isakmpd main configuration"]
-#	-> Service["isakmpd"]
+#	-> Common::Define::Service["isakmpd"]
 }

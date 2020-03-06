@@ -55,7 +55,7 @@ class opennebula::onegate {
 	    aliases         => $aliases,
 	    app_port        => 5030,
 	    noerrors        => true,
-	    require         => Service["opennebula-gate"],
+	    require         => Common::Define::Service["opennebula-gate"],
 	    stricttransport => $strict,
 	    vhostsource     => "app_proxy",
 	    with_reverse    => $reverse;

@@ -8,6 +8,6 @@ class sasyncd::openbsd {
 	}
 
 #	Common::Define::Lined["Enable sasyncd on boot"]
-#	    -> Service["sasyncd"]
+#	    -> Common::Define::Service["sasyncd"]
     }
 }

@@ -22,11 +22,11 @@ class nginx::debian {
 	    "fcgiwrap":
 	}
 
-	Package["fcgiwrap"]
-	    -> Package["nginx"]
+	Common::Define::Package["fcgiwrap"]
+	    -> Common::Define::Package["nginx"]
 
-	Service["fcgiwrap"]
-	    -> Service["nginx"]
+	Common::Define::Service["fcgiwrap"]
+	    -> Common::Define::Service["nginx"]
     }
 
     if ($lsbdistcodename == "buster") {

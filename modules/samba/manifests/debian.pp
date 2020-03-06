@@ -3,8 +3,8 @@ class samba::debian {
 	"samba":
     }
 
-    Package["libpam-ldap"]
-	-> Package["libnss-ldap"]
-	-> Package["samba"]
-	-> Service["samba"]
+    Common::Define::Package["libpam-ldap"]
+	-> Common::Define::Package["libnss-ldap"]
+	-> Common::Define::Package["samba"]
+	-> Common::Define::Service["samba"]
 }

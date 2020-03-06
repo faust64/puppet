@@ -13,8 +13,8 @@ class stunnel::debian {
 	    source => "puppet:///modules/stunnel/defaults";
     }
 
-    Package["stunnel4"]
+    Common::Define::Package["stunnel4"]
 	-> File["Prepare stunnel for further configuration"]
 	-> File["Install stunnel service defaults"]
-	-> Service[$stunnel::vars::srvname]
+	-> Common::Define::Service[$stunnel::vars::srvname]
 }

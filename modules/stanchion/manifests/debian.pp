@@ -31,7 +31,7 @@ class stanchion::debian {
 	-> File["Install Riak limits configuration"]
 	-> File["Install Stanchion defaults configuration"]
 	-> File["Prepare Stanchion for further configuration"]
-	-> Service["stanchion"]
+	-> Common::Define::Service["stanchion"]
 
     if (($operatingsystem == "Ubuntu" and $lsbdistcodename == "xenial") or ($operatingsystem == "Debian" and $lsbdistcodename == "jessie")) {
 	file {
@@ -52,7 +52,7 @@ class stanchion::debian {
 	}
 
 	Exec["Reload systemd configuration"]
-	    -> Service["stanchion"]
+	    -> Common::Define::Service["stanchion"]
     }
 
     file {

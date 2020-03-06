@@ -25,8 +25,8 @@ class openldap::rhel($server = false) {
 	    }
 	}
 
-	Package["openldap-servers"]
+	Common::Define::Package["openldap-servers"]
 	    -> File["Prepare OpenLDAP for further configuration"]
-	    -> Service[$openldap::vars::service_name]
+	    -> Common::Define::Service[$openldap::vars::service_name]
     }
 }

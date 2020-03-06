@@ -39,5 +39,5 @@ class redis::config {
     }
 
     Mysysctl::Define::Setfile["redis"]
-	-> Service[$redis::vars::service_name]
+	-> Common::Define::Service[$redis::vars::service_name]
 }

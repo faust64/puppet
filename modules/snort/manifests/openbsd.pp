@@ -29,7 +29,7 @@ class snort::openbsd {
     }
 
     File["Install Snort rc script"]
-	-> Service["snort"]
+	-> Common::Define::Service["snort"]
 
     Common::Define::Package["snort"]
 	-> Common::Define::Package["daq"]

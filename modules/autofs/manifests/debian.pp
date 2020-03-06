@@ -9,6 +9,6 @@ class autofs::debian {
 	$pkgname:
     }
 
-    Package[$pkgname]
-	-> Service["autofs"]
+    Common::Define::Package[$pkgname]
+	-> Common::Define::Service["autofs"]
 }

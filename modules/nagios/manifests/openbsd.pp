@@ -48,10 +48,10 @@ class nagios::openbsd {
 	    unless  => "grep '^pkg_scripts=.*nrpe' rc.conf.local";
     }
 
-    Package[$pname]
+    Common::Define::Package[$pname]
 	-> Common::Define::Lined["Enable Nagios on boot"]
 	-> File["Install Nagios custom plugins"]
 	-> File["Prepare nagios nrpe for further configuration"]
 	-> Exec["Add Nagios to pkg_scripts"]
-	-> Service[$nagios::vars::nrpe_service_name]
+	-> Common::Define::Service[$nagios::vars::nrpe_service_name]
 }

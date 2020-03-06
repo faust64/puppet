@@ -12,8 +12,8 @@ class memcache::debian {
 	    path   => "/etc/default/memcached";
     }
 
-    Package["memcached"]
+    Common::Define::Package["memcached"]
 	-> File["Install memcached service defaults"]
 	-> File["Install memcache main configuration"]
-	-> Service[$memcache::vars::service_name]
+	-> Common::Define::Service[$memcache::vars::service_name]
 }

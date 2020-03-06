@@ -6,7 +6,7 @@ define riak::define::ciphers($ciphers = lookup("riak_ciphers")) {
 	    command => "riak-admin security ciphers $ciphersstr",
 	    cwd     => "/",
 	    path    => "/usr/sbin:/usr/bin:/sbin:/bin",
-	    require => Service["riak"],
+	    require => Common::Define::Service["riak"],
 	    unless  => "riak-admin security ciphers | grep '^$ciphersstr'";
     }
 }

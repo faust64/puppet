@@ -41,8 +41,8 @@ class rsyslog::stunnel {
 
 # this seems to force pki::define::get to re-download certificates,
 #   regardless of the unless clause to be true (?!)
-#    Service[$rsyslog::vars::stunnel_srvname]
-#	~> Service[$rsyslog::vars::service_name]
-    Service[$rsyslog::vars::stunnel_srvname]
-	-> Service[$rsyslog::vars::service_name]
+#    Common::Define::Service[$rsyslog::vars::stunnel_srvname]
+#	~> Common::Define::Service[$rsyslog::vars::service_name]
+    Common::Define::Service[$rsyslog::vars::stunnel_srvname]
+	-> Common::Define::Service[$rsyslog::vars::service_name]
 }

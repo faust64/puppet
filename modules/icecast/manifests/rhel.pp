@@ -3,6 +3,6 @@ class icecast::rhel {
 	"icecast":
     }
 
-    Package["icecast"]
-	-> Service[$icecast::vars::service_name]
+    Common::Define::Package["icecast"]
+	-> Common::Define::Service[$icecast::vars::service_name]
 }

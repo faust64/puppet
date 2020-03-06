@@ -1,0 +1,16 @@
+# Media
+media_do_emby: false
+media_do_plex: false
+
+# Munin-Node
+vps_with_munin: true
+
+# Nagios
+nagios_partitions_watchlist:
+  root: /
+  goinfre: /goinfre
+  tmp: /tmp
+
+# Pf
+emby_ip: 10.42.42.210
+plex_ip: 10.42.42.211

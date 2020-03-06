@@ -12,7 +12,7 @@ class collectd::freebsd {
 	$pkgname:
     }
 
-    Package[$pkgname]
+    Common::Define::Package[$pkgname]
 	-> File["Prepare collectd for further configuration"]
-	-> Service["collectd"]
+	-> Common::Define::Service["collectd"]
 }

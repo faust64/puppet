@@ -103,8 +103,8 @@ class nagios::debian {
 	}
     }
 
-    Package["nagios-nrpe-server"]
+    Common::Define::Package["nagios-nrpe-server"]
 	-> File["Install Nagios custom plugins"]
 	-> File["Prepare nagios nrpe for further configuration"]
-	-> Service[$nagios::vars::nrpe_service_name]
+	-> Common::Define::Service[$nagios::vars::nrpe_service_name]
 }

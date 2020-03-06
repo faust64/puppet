@@ -13,8 +13,8 @@ class collectd::debian {
 	    source => "puppet:///modules/collectd/defaults";
     }
 
-    Package["collectd"]
+    Common::Define::Package["collectd"]
 	-> File["Prepare collectd for further configuration"]
 	-> File["Install collectd service defaults"]
-	-> Service["collectd"]
+	-> Common::Define::Service["collectd"]
 }

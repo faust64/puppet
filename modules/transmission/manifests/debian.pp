@@ -16,7 +16,7 @@ class transmission::debian {
 	    require => Package["transmission-daemon"];
     }
 
-    Package["transmission-daemon"]
+    Common::Define::Package["transmission-daemon"]
 	-> File["Prepare transmission for further configuration"]
-	-> Service[$transmission::vars::srvname]
+	-> Common::Define::Service[$transmission::vars::srvname]
 }

@@ -35,8 +35,8 @@ class nagios::freebsd {
 	    source  => "puppet:///modules/nagios/freebsd.rc";
     }
 
-    Package["nrpe-ssl"]
+    Common::Define::Package["nrpe-ssl"]
 	-> File["Install Nagios custom plugins"]
 	-> File["Prepare nagios nrpe for further configuration"]
-	-> Service[$nagios::vars::nrpe_service_name]
+	-> Common::Define::Service[$nagios::vars::nrpe_service_name]
 }

@@ -3,7 +3,7 @@ class aptcacherng::debian {
 	"apt-cacher-ng":
     }
 
-    Package["apt-cacher-ng"]
-	-> Service["apt-cacher-ng"]
+    Common::Define::Package["apt-cacher-ng"]
+	-> Common::Define::Service["apt-cacher-ng"]
 #	-> File["Install APT main configuration"]
 }

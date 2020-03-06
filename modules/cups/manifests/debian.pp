@@ -10,7 +10,7 @@ class cups::debian {
 	"cups":
     }
 
-    Package["cups"]
+    Common::Define::Package["cups"]
 	-> File["Prepare cups for further configuration"]
-	-> Service[$cups::vars::service_name]
+	-> Common::Define::Service[$cups::vars::service_name]
 }

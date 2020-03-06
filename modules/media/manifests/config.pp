@@ -6,7 +6,7 @@ class media::config {
 	    "Install emby main configuration":
 		group   => lookup("gid_zero"),
 		mode    => "0644",
-		notify  => Common::Define::Service["emby-server"],
+		notify  => Service["emby-server"],
 		owner   => "root",
 		path    => "/etc/emby-server.conf",
 		require => Common::Define::Package["emby-server"],
@@ -25,7 +25,7 @@ class media::config {
 		}
 
 		File["Installs emby ignore for dir:$dir"]
-		    -> Service["emby-server"]
+		    -> Common::Define::Service["emby-server"]
 	    }
 	}
     }

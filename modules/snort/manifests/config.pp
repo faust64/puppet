@@ -56,6 +56,6 @@ class snort::config {
 	}
 
 	File["Link Snort logs to /var/log"]
-	    -> Service["snort"]
+	    -> Common::Define::Service["snort"]
     }
 }

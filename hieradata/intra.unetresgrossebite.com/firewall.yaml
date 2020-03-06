@@ -512,7 +512,7 @@ pf_custom_rules:
       - vlan42
 # listing AWS IPs, pro-tip:
 # curl https://ip-ranges.amazonaws.com/ip-ranges.json | grep -E '(ip_prefix|service)' | grep -EB1 '(EC2|AMAZON)' | awk '/ip_prefix/{print $2}' | cut -d'"' -f2 | sort -u | awk '{print "      aws" NR ": " $0}'
-plex_ip: 10.42.42.210
+plex_ip: 10.42.42.211
 qos_bw_bulk: 420M
 qos_bw_data: 2500M
 qos_bw_interactive: 1000M

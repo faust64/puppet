@@ -17,20 +17,20 @@ class mysql::scripts {
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/mysql_toolbox",
-	    require => Service[$mysql::vars::service_name];
+	    require => Common::Define::Service[$mysql::vars::service_name];
 	"Install mysql_backup":
 	    content => template("mysql/backup.erb"),
 	    group   => lookup("gid_zero"),
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/mysql_backup",
-	    require => Service[$mysql::vars::service_name];
+	    require => Common::Define::Service[$mysql::vars::service_name];
 	"Install sqlite2mysql":
 	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/usr/local/bin/sqlite2mysql",
-	    require => Service[$mysql::vars::service_name],
+	    require => Common::Define::Service[$mysql::vars::service_name],
 	    source  => "puppet:///modules/mysql/sqlite2mysql";
     }
 }

@@ -7,5 +7,5 @@ class nsd::openbsd {
 
     Common::Define::Lined["Enable nsd on boot"]
 	-> File["Prepare NSD for further configuration"]
-	-> Service["nsd"]
+	-> Common::Define::Service["nsd"]
 }

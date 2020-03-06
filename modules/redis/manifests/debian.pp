@@ -40,7 +40,7 @@ class redis::debian {
 		    notify  =>
 			[
 			    Exec["Reload systemd configuration"],
-			    Service["redis-sentinel"]
+			    Common::Define::Service["redis-sentinel"]
 			],
 		    owner   => root,
 		    path    => "/lib/systemd/system/redis-sentinel.service",
@@ -50,7 +50,7 @@ class redis::debian {
 	}
     }
 
-    Package["redis-server"]
+    Common::Define::Package["redis-server"]
 	-> File["Install Redis defaults configuration"]
 	-> File["Prepare redis for further configuration"]
 }

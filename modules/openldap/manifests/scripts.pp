@@ -8,6 +8,6 @@ class openldap::scripts {
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/OpenLDAPbackup",
-	    require => Service[$openldap::vars::service_name];
+	    require => Common::Define::Service[$openldap::vars::service_name];
     }
 }

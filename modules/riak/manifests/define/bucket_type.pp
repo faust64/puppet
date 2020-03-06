@@ -24,7 +24,7 @@ define riak::define::bucket_type($action = "create",
 		    cwd         => "/",
 		    notify      => Exec["Activate riak $what"],
 		    path        => "/usr/sbin:/usr/bin:/sbin:/bin",
-		    require     => Service["riak"],
+		    require     => Common::Define::Service["riak"],
 		    unless      => $checkcmd;
 		"Activate riak $what":
 		    cwd         => "/",
@@ -39,7 +39,7 @@ define riak::define::bucket_type($action = "create",
 		    cwd     => "/",
 		    onlyif  => $checkcmd,
 		    path    => "/usr/sbin:/usr/bin:/sbin:/bin",
-		    require => Service["riak"];
+		    require => Common::Define::Service["riak"];
 	    }
 	}
     }

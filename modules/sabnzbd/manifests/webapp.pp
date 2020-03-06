@@ -37,7 +37,7 @@ class sabnzbd::webapp {
 		aliases       => $aliases,
 		app_port      => 8081,
 		csp_name      => "sabnzbd",
-		require       => Service[$sabnzbd::vars::service_name],
+		require       => Common::Define::Service[$sabnzbd::vars::service_name],
 		vhostsource   => "sabnzbd",
 		with_reverse  => $reverse;
 # FIXME: certificate path
@@ -55,7 +55,7 @@ class sabnzbd::webapp {
 		aliases       => $aliases,
 		app_port      => 8081,
 		csp_name      => "sabnzbd",
-		require       => Service[$sabnzbd::vars::service_name],
+		require       => Common::Define::Service[$sabnzbd::vars::service_name],
 		vhostldapauth => false,
 		vhostsource   => "sabnzbd",
 		with_reverse  => $reverse;

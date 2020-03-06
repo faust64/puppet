@@ -16,7 +16,7 @@ class kibana::webapp {
 		aliases      => $aliases,
 		app_port     => 5601,
 		csp_name     => "kibana",
-		require      => Service["kibana"],
+		require      => Common::Define::Service["kibana"],
 		vhostsource  => "app_proxy",
 		with_reverse => $reverse;
 	}
@@ -28,7 +28,7 @@ class kibana::webapp {
 		aliases      => $aliases,
 		app_port     => 5601,
 		csp_name     => "kibana",
-		require      => Service["kibana"],
+		require      => Common::Define::Service["kibana"],
 		vhostsource  => "app_proxy",
 		with_reverse => $reverse;
 	}

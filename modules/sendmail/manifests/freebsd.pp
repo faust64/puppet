@@ -17,5 +17,5 @@ class sendmail::freebsd {
     Common::Define::Lined["Enable sendmail msp queue"]
 	-> Common::Define::Lined["Enable sendmail outbound"]
 	-> Common::Define::Lined["Enable sendmail"]
-	-> Service["sendmail"]
+	-> Common::Define::Service["sendmail"]
 }

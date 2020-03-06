@@ -41,7 +41,7 @@ class riakcs::debian {
 	-> File["Install Riak limits configuration"]
 	-> File["Install RiakCS defaults configuration"]
 	-> File["Prepare RiakCS for further configuration"]
-	-> Service["riak-cs"]
+	-> Common::Define::Service["riak-cs"]
 
     if (($operatingsystem == "Ubuntu" and $lsbdistcodename == "xenial") or ($operatingsystem == "Debian" and $lsbdistcodename == "jessie")) {
 	file {
@@ -62,6 +62,6 @@ class riakcs::debian {
 	}
 
 	Exec["Reload systemd configuration"]
-	    -> Service["riak-cs"]
+	    -> Common::Define::Service["riak-cs"]
     }
 }
