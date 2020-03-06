@@ -91,7 +91,7 @@ class icinga::debian {
 	-> Icinga::Define::Config["icinga.cfg"]
 
     Package["nagios-images"]
-	-> Exec["Download icinga webapp icons"]
+	-> Common::Define::Geturl["icinga icons"]
 
     Package["icinga"]
 	-> File["Prepare Icinga main configuration directory"]
