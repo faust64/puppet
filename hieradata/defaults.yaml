@@ -796,6 +796,7 @@ kibana_prefix: logs
 kvm_collectd: false
 kvm_cpu_family: SandyBridge
 kvm_do_models: true
+kvm_nested: false
 kvm_munin_monitored: true
 kvm_munin_probes:
   - kvm_io

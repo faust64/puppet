@@ -2,7 +2,9 @@ class qemu {
     include qemu::vars
 
     case $myoperatingsystem {
-	"CentOS", "RedHat": { }
+	"CentOS", "RedHat": {
+	    include qemu::rhel
+	}
 	"Debian", "Devuan", "Ubuntu": {
 	    include qemu::debian
 	}
@@ -13,4 +15,6 @@ class qemu {
 	    common::define::patchneeded { "qemu": }
 	}
     }
+
+    include qemu::config
 }

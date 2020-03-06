@@ -1,6 +1,9 @@
 physical_parent: gaia.adm.intra.unetresgrossebite.com,hera.adm.intra.unetresgrossebite.com,hestia.adm.intra.unetresgrossebite.com
 has_serial_io: true
 
+# KVM
+kvm_nested: true
+
 # LinuxCounter
 lico_update_day: 1
 lico_update_hour: 14

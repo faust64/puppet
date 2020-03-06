@@ -19,7 +19,7 @@ class media::debian {
 	    "Plex-YouTube.TV plugin":
 		nomv    => true,
 		notify  => Exec["Extract Plex-YouTube.TV plugin"],
-		require => Package["plexmediaserver"],
+		require => Common::Define::Package["plexmediaserver"],
 		target  => "/usr/src/v$youtubeversion.tar.gz",
 		url     => "https://github.com/kolsys/YouTubeTV.bundle/archive/v$youtubeversion.tar.gz",
 		wd      => "/usr/src";
@@ -29,7 +29,7 @@ class media::debian {
 	    "Extract Plex-YouTube.TV plugin":
 		command     => "rm -fr YouTubeTV.bundle ; tar -xzf /usr/src/v$youtubeversion.tar.gz && mv YouTubeTV.bundle-$youtubeversion YouTubeTV.bundle",
 		cwd         => "/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Plug-ins",
-		notify      => Service["plexmediaserver"],
+		notify      => Common::Define::Service["plexmediaserver"],
 		path        => "/usr/bin:/bin",
 		refreshonly => true;
 	}
@@ -39,7 +39,7 @@ class media::debian {
 		ensure  => link,
 		force   => true,
 		path    => "/var/log/plex",
-		require => Package["plexmediaserver"],
+		require => Common::Define::Package["plexmediaserver"],
 		target  => "/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/Logs";
 	}
     }
@@ -52,6 +52,15 @@ class media::debian {
 			Apt::Define::Repo["UTGB"],
 			Exec["Update APT local cache"]
 		    ];
+	}
+
+	file {
+	    "Link emby logs to /var/log":
+		ensure  => link,
+		force   => true,
+		path    => "/var/log/emby",
+		require => Common::Define::Package["emby-server"],
+		target  => "/var/lib/emby/logs";
 	}
     }
 }

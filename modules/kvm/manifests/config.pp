@@ -20,4 +20,40 @@ class kvm::config {
 		path    => "/etc/virtual.conf";
 	}
     }
+
+    if ($kernel == "Linux") {
+	case $processor0 {
+	    /Intel/: { $ptype = "intel" }
+	    /AMD/: { $ptype = "amd" }
+	    default: { $ptype = "fixme" }
+	}
+
+#FIXME: should apply everywhere
+#before: make sure there's nothing manually applied we would lose
+if ($kvm::vars::kvm_nested != false) {
+	if ($ptype != "fixme") {
+	    if ($kvm::vars::kvm_nested) {
+		$kvmopts = "present"
+	    } else {
+		$kvmopts = "absent"
+	    }
+
+	    file {
+		"Toggles KVM module options":
+		    content => template("kvm/module.erb"),
+		    ensure  => $kvmopts,
+		    group   => lookup("gid_zero"),
+		    mode    => "0644",
+		    owner   => root,
+		    path    => "/etc/modprobe.d/kvm.conf";
+	    }
+	} else {
+	    notify {
+		"FIXME: could not detect CPU kind from facts":
+		    message => "ignoring KVM nested configuration ($processor0)";
+	    }
+	}
+#//FIXME: should apply everywhere
+}
+    }
 }

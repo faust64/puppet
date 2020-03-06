@@ -6,6 +6,7 @@ class kvm::vars {
     $do_models          = lookup("kvm_do_models")
     $has_openvz         = lookup("openvz_and_xen")
     $jumeau             = lookup("jumeau")
+    $kvm_nested         = lookup("kvm_nested")
     $mail_hub           = lookup("mail_mx")
     $modeles_nas        = lookup("modeles_nas")
     $modeles_fsopts     = lookup("modeles_nfs_opts")

@@ -3,7 +3,7 @@ class libvirt::rhel {
 	[ "libvirt", "virt-install", "virt-top" ]:
     }
 
-    if ($os['release']['major'] != "7") {
+    if ($os['release']['major'] == "6") {
 	file {
 	    "Install libvirt halt script":
 		ensure  => link,
