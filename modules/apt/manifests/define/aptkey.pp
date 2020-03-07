@@ -4,10 +4,15 @@ define apt::define::aptkey($keyid     = false,
     if ($url) {
 	exec {
 	    "Import $url APT key":
-		command => "wget -O - '$url' | apt-key add -",
+		command => "wget --no-check-certificate -O - '$url' | apt-key add -",
 		cwd     => "/",
 		unless  => "apt-key list | grep '$name'",
 		path    => "/usr/bin:/bin";
+	}
+
+	if (defined(Common::Define::Package["wget"])) {
+	    Common::Define::Package["wget"]
+		-> Exec["Import $url APT key"]
 	}
     } elsif ($keyid) {
 	exec {
