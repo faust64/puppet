@@ -162,6 +162,8 @@ var switches = {
 	    'thanatos LAG6#4 (g20)': '72',
 	    'aether LAG8#1 (g21)': '73',
 	    'aether LAG8#2 (g22)': '74',
+	    'nyx LAG10#1 (g30)': '81',
+	    'nyx LAG10#2 (g31)': '82',
 	    'rhea (g36)': '88',
 	    'asteros (g38)': '90',
 	    'to-ponos (g40)': '92',
@@ -174,6 +176,7 @@ var switches = {
 	    'crios total (ch4)': '1003',
 	    'thanatos total (ch6)': '1005',
 	    'aether total (ch8)': '1007',
+	    'nyx total (ch10)': '1009',
 	    'poseidon total (ch32)': '1031',
 	    'to-eros ethernet total (29)': '10028',
 	    'to-eros fiber total (30)': '10029'

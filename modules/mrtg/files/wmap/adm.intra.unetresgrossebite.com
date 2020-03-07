@@ -154,7 +154,7 @@ NODE vs7
     ICON 60 60 /var/www/wmap/images/server.png
 
 NODE vs8
-    POSITION 440 595
+    POSITION 480 595
     LABEL Phoebe
     LABELFONT 42
     LABELOFFSET S
@@ -170,8 +170,16 @@ NODE vs9
     ICON 60 60 /var/www/wmap/images/server.png
 
 NODE vs10
-    POSITION 560 595
+    POSITION 520 595
     LABEL Erebe
+    LABELFONT 42
+    LABELOFFSET S
+    LABELOUTLINECOLOR 255 255 255
+    ICON 60 60 /var/www/wmap/images/server.png
+
+NODE vs11
+    POSITION 400 595
+    LABEL Nyx
     LABELFONT 42
     LABELOFFSET S
     LABELOUTLINECOLOR 255 255 255
@@ -441,6 +449,14 @@ LINK sw1lagg9
     TARGET /var/www/mrtg/sw1/10.42.242.4_1008.rrd:ds0:ds1
     WIDTH 2
 
+LINK sw1lagg10
+    ARROWSTYLE 1 1
+    BANDWIDTH 2000M
+    BWLABEL none
+    NODES sw1:S vs11:N
+    TARGET /var/www/mrtg/sw1/10.42.242.4_1009.rrd:ds0:ds1
+    WIDTH 2
+
 LINK sw1lagg29
     ARROWSTYLE 1 1
     BANDWIDTH 8000M
@@ -543,6 +559,14 @@ LINK sw2lagg9
     BWLABEL none
     NODES sw2:S vs10:N
     TARGET /var/www/mrtg/sw2/10.42.242.15_1008.rrd:ds0:ds1
+    WIDTH 2
+
+LINK sw2lagg10
+    ARROWSTYLE 1 1
+    BANDWIDTH 2000M
+    BWLABEL none
+    NODES sw2:S vs11:N
+    TARGET /var/www/mrtg/sw2/10.42.242.15_1009.rrd:ds0:ds1
     WIDTH 2
 
 LINK sw2lagg31

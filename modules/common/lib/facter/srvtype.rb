@@ -18,7 +18,7 @@ Facter.add("srvtype") do
 	    "exploit"
 	when /blog|cv|miner|myartgallery|myisp|play|reader|wallet|wiki|www/
 	    "hosting"
-	when /eris|gaia|geras|ker|nemesis/
+	when /eris|gaia|geras|nemesis/
 	    "kvm"
 	when /hermes|aphrodite/
 	    "kvmvz"
@@ -38,7 +38,7 @@ Facter.add("srvtype") do
 	    "nzb"
 	when /cerbero|echidna/
 	    "opennebula"
-	when /momos|moros|thanatos|phoebe|crios|eurybie|hemara|ouranos|eos|erebe|helios|nyx|selene|aether/
+	when /momos|moros|thanatos|phoebe|crios|eurybie|hemara|ouranos|eos|erebe|helios|selene|aether/
 	    "openshift"
 	when /drive|nextcloud|owncloud|packages|pxe|pydio|repository/
 	    "repo"
@@ -56,7 +56,7 @@ Facter.add("srvtype") do
 	    "torrent"
 	when /cronos|rhea/
 	    "vz"
-	when /oneiroi|oizis|hypnos/
+	when /oneiroi|nyx|oizis/
 	    "xen"
 	when /poseidon|io|limos|hysminai|zeus/
 	    "firewall"
