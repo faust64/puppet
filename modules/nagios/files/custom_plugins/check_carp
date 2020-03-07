@@ -10,10 +10,10 @@ eval master=0 init=0 backup=0 bkplist= initlist=
 
 for i in /etc/hostname.carp*
 do
-    itf=${i#/etc/hostname.carp.};
-    if ifconfig $itf | grep MASTER; then
+    itf=`echo $i | sed 's|.*hostname\.carp|carp|'`
+    if ifconfig $itf 2>/dev/null | grep MASTER >/dev/null; then
 	master=`expr $master + 1`
-    elif ifconfig $itf | grep INIT; then
+    elif ifconfig $itf 2>/dev/null | grep INIT >/dev/null; then
 	init=`expr $init + 1`
 	initlist="$initlist $itf"
     else

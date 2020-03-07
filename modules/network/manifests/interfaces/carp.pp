@@ -31,6 +31,15 @@ define network::interfaces::carp($vhid       = 1,
 		    routes     => $routes,
 		    ualias     => $ualias;
 	    }
+
+	    if (! defined(Nagios::Define::Probe["carp"])) {
+		nagios::define::probe {
+		    "carp":
+			description   => "$fqdn CARP status consistency",
+			servicegroups => "network",
+			use           => "critical-service";
+		}
+	    }
 	}
     }
 }
