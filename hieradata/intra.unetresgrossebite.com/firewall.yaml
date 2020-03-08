@@ -48,6 +48,18 @@ isakmpd_listen:
 
 # Nagios
 nagios_check_jumbo: trunk0
+nagios_load_crit_threshold: "4.2,4.2,4.2"
+nagios_load_warn_threshold: "3.8,3.8,3.8"
+nagios_partitions_watchlist:
+  home: /home
+  root: /
+  tmp: /tmp
+  usr: /usr
+  usrx11r6: /usr/X11R6
+  usrlocal: /usr/local
+  usrobj: /usr/obj
+  usrsrc: /usr/src
+  var: /var
 
 # Network
 #gre_tunnels:

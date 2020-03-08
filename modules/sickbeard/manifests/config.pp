@@ -28,6 +28,20 @@ class sickbeard::config {
 		    File["Prepare sickbeard for further configuration"],
 		    File["Prepare sickbeard store directory"]
 		];
+	"Install sickbeard patched config template":
+	    group   => $sickbeard::vars::runtime_group,
+	    mode    => "0644",
+	    owner   => $sickbeard::vars::runtime_user,
+	    path    => "/usr/share/sickbeard/data/interfaces/default/config.tmpl",
+	    require => Git::Define::Clone["sickbeard"],
+	    source  => "puppet:///modules/sickbeard/config.tmpl";
+	"Install sickbeard patched top include template":
+	    group   => $sickbeard::vars::runtime_group,
+	    mode    => "0644",
+	    owner   => $sickbeard::vars::runtime_user,
+	    path    => "/usr/share/sickbeard/data/interfaces/default/inc_top.tmpl",
+	    require => Git::Define::Clone["sickbeard"],
+	    source  => "puppet:///modules/sickbeard/inc_top.tmpl";
 	"Link applicative logs to /var/log":
 	    ensure  => link,
 	    force   => true,

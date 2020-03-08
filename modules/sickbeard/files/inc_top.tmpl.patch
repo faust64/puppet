@@ -1,0 +1,15 @@
+--- inc_top.tmpl.orig	2014-11-16 22:49:02.000000000 +0100
++++ inc_top.tmpl	2020-03-08 02:48:19.879873463 +0100
+@@ -204,11 +204,7 @@
+                         </li>
+                         <li class="divider-vertical"></li>
+                     </ul>
+-                    <ul class="nav pull-right">
+-                        <li>
+-                            <a id="navDonate" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=JA8M7VDY89SQ4" rel="noreferrer" onclick="window.open('${sickbeard.ANON_REDIRECT}' + this.href); return false;"><img src="$sbRoot/images/paypal/btn_donate_LG.gif" alt="[donate]" height="26" width="92" /></a>
+-                        </li>
+-                    </ul>
++                    <ul class="nav pull-right">&nbsp;</ul>
+                 </div><!-- /nav-collapse -->
+ 
+             </div><!-- /container -->
