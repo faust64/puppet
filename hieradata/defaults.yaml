@@ -869,6 +869,7 @@ media_do_plex: true
 media_music_nfs_root: /var/music
 media_share_nfs: false
 media_sickbeard: false
+media_tmdb_apikey: false
 media_subsonic_nfs: false
 media_web_root: /goinfre
 

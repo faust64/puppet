@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if ! test -d "<%=@media_root%>/media; then
+if ! test -d "<%=@media_root%>/media"; then
     echo "Missing media root" >&2
     exit 1
 fi
@@ -9,9 +9,9 @@ for mediadir in Docu EPTV Movies Series Training
 do
     test -d "$mediadir" || continue
     echo processing $mediadir
-<% if @emby != false %>    rsync -avWx $mediadir --usermap=:emby --groupmap=:video <%=@plex_host%>:<%=@media_root%>/media/
-<% else %>    rsync -avWx $mediadir --usermap=:plex --groupmap=:video <%=@emby_host%>:<%=@media_root%>/media/
-<% end %>     if test $? -eq 0; then
+<% if @emby != false %>    rsync -avWx $mediadir --usermap=:plex --groupmap=:video <%=@plex_host%>:<%=@media_root%>/media/
+<% else %>    rsync -avWx $mediadir --usermap=:emby --groupmap=:video <%=@emby_host%>:<%=@media_root%>/media/
+<% end %>    if test $? -eq 0; then
 	echo OK
     fi
 done

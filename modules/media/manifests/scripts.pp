@@ -5,6 +5,7 @@ class media::scripts {
     $plex       = $media::vars::plex
     $plex_host  = $media::vars::plex_host
     $sickbeard  = $media::vars::sickbeard
+    $tmdbapikey = $media::vars::tmdbapikey
 
     file {
 	"Install mediainfo script":
@@ -30,6 +31,21 @@ class media::scripts {
 		mode    => "0750",
 		owner   => root,
 		path    => "/usr/local/sbin/series_date_setter";
+	}
+    }
+
+    if ($tmdbapikey != false) {
+	if (! defined(Class["curl"])) {
+	    include curl
+	}
+
+	file {
+	    "Install Movies date setter":
+		content => template("media/movies_date_setter.erb"),
+		group   => lookup("gid_zero"),
+		mode    => "0750",
+		owner   => root,
+		path    => "/usr/local/sbin/movies_date_setter";
 	}
     }
 

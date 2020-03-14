@@ -1,0 +1,119 @@
+#!/bin/sh
+
+apikey="api_key=<%=@tmdbapikey%>"
+baseurl=https://api.themoviedb.org/3/search/movie
+MOVIES_ROOT=<%=@media_root%>/media/Movies
+TMPFILE=/tmp/list.$$
+
+if test -z "$DEBUG"; then
+    DEBUG=false
+else
+    DEBUG=true
+fi
+if ! curl -sL "$baseurl?$apikey" -o $TMPFILE >/dev/null 2>&1; then
+    echo "Failed to retrieve series index" >&2
+    rm -f $TMPFILE
+    exit 2
+elif ! grep '{"errors":\["query must be provided"\]}' $TMPFILE >/dev/null 2>&1; then
+    echo "Failed authenticating against API" >&2
+    rm -f $TMPFILE
+    exit 2
+fi
+
+while test "$1"
+do
+    cleaned=`echo "$1" | sed -e 's|(|\\(|g' -e 's|)|\\)|g'`
+    if test -z "$match"; then
+	match="($cleaned"
+    else
+	match="$match|$cleaned"
+    fi
+    shift
+done
+if test "$match"; then
+    match="$match)"
+fi
+
+getMatch()
+{
+    local _found _c _m _r _s
+
+    _s=`python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])" "$1" | sed 's|+|%20|g'`
+    if ! curl -sL "$baseurl?$apikey&query=$_s" -o $TMPFILE \
+	    >/dev/null 2>&1; then
+	if $DEBUG; then
+	    echo "WARNING: failed querying API for $1" >&2
+	fi
+	echo ""
+    elif grep '{"page":1,"total_results":0,"total_pages":0,"results":\[\]}' \
+	    $TMPFILE >/dev/null 2>&1; then
+	if $DEBUG; then
+	    echo "WARNING: no match found for $1" >&2
+	fi
+	echo ""
+    else
+	rlen=`cat $TMPFILE | jq -r '.results | length'`
+	if ! test "$rlen" -ge 1 >/dev/null 2>&1; then
+	    rlen=1
+	fi
+	if test -z "$2"; then
+	    r="$1"
+	fi
+	for _c in `seq 0 $(expr $rlen - 1)`
+	do
+	    _m=`cat $TMPFILE | jq -r ".results[$_c].original_title"`
+	    if echo "$_m" | grep -i "$_r" >/dev/null; then
+		_found=`cat $TMPFILE | jq -r ".results[$_c].release_date"`
+		break
+	    fi
+	done
+	if test -z "$_found"; then
+	    if $DEBUG; then
+		echo "WARNING: could not extract release date for $1" >&2
+	    fi
+	    echo ""
+	else
+	    echo $_found | sed 's|-||g'
+	fi
+    fi
+    rm -f $TMPFILE
+}
+
+
+ls "$MOVIES_ROOT" | while read movie
+    do
+	if test "$match"; then
+	    echo "$movie" | grep -E "$match" || continue
+	fi >/dev/null
+	found=`getMatch "$movie"`
+	if test -z "$found"; then
+	    sname=`echo "$movie" | sed 's| (.*||'`
+	    found=`getMatch "$sname" "$movie"`
+	fi
+	if test -z "$found" -o "$found" = null; then
+	    sname=`echo "$sname" | sed 's|[ \t]|-|g'`
+	    found=`getMatch "$sname" "$movie"`
+	fi
+	if test -z "$found" -o "$found" = null; then
+	    sname=`echo "$sname" | sed 's|[^a-ZA-Z ]||g'`
+	    found=`getMatch "$sname" "$movie"`
+	fi
+	if test -z "$found"; then
+	    echo "WARNING: could not resolve $movie"
+	elif test "$found" = null; then
+	    echo "WARNING: no release date for $movie"
+	elif ! echo "$found" | grep \
+		'[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' \
+		>/dev/null; then
+	    echo "WARNING: invalid release date for $movie ($found)"
+	else
+	    cur=`date -d @$(stat --format %Y "$MOVIES_ROOT/$movie") +%Y%m%d`
+	    if test "$found" != "$cur"; then
+		echo "NOTICE: $movie was released on $found"
+		touch -md $found "$MOVIES_ROOT/$movie/"*
+		touch -md $found "$MOVIES_ROOT/$movie/"
+	    fi
+	fi
+    done
+
+exit 0

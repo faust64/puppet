@@ -9,6 +9,7 @@ WGET="wget --no-check-certificate --no-proxy"
 
 if ! $WGET $baseurl/home/ -O $IDXFILE >/dev/null 2>&1; then
     echo "Failed to retrieve series index" >&2
+    rm -f $IDXFILE
     exit 2
 fi
 
