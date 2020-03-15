@@ -30,6 +30,13 @@ class xen::config {
 	    owner   => root,
 	    path    => "/etc/xen/auto",
 	    require => File["Prepare Xen for further configuration"];
+	"Prepare Xen save directory":
+	    ensure  => directory,
+	    group   => lookup("gid_zero"),
+	    mode    => "0755",
+	    owner   => root,
+	    path    => "/var/lib/xen/save",
+	    require => File["Prepare Xen for further configuration"];
 	"Install xl configuration":
 	    group  => lookup("gid_zero"),
 	    mode   => "0600",
@@ -46,6 +53,13 @@ class xen::config {
 		mode    => "0644",
 		owner   => root,
 		path    => "/etc/virtual.conf";
+	}
+    }
+
+    if ($mountpoints['/var/lib/xen/save'] == undef) {
+	notify {
+	    "WARNING: /var/lib/xen/save located on rootfs":
+		message => "Consider creating a dedicated filesystem, large enough to dump DomU's memory";
 	}
     }
 
