@@ -57,8 +57,8 @@ fi
 			echo "Failed to parse $episode name" >&2
 			continue
 		    fi
-<% if @sickbeard != false -%>		    datestr=`grep -A11 "class=\"epCheck\" id=\"${s}x$e\" " $TMPFILE | grep 'class="col-airdate"' | sed -e 's|.*airdate">\([^<]*\)<.*|\1|' -e 's|-||g'`
-<% else -%>		    datestr=`cat $TMPFILE | jq -r ".[] | select(.[\"identifier\"] | test(\"s0*${s}e0*$e\"))" | jq -r ".[\"airDate\"]" | sed 's|\([0-9]*\)-\([0-9]*\)-\([0-9]*\)[^0-9].*|\1\2\3|'`
+<% if @sickbeard != false -%>		    datestr=`grep -A11 "class=\"epCheck\" id=\"${s}x$e\" " $TMPFILE | grep 'class="col-airdate"' | sed -e 's|.*airdate">\([^<]*\)<.*|\1|' -e 's|-||g' | head -1`
+<% else -%>		    datestr=`cat $TMPFILE | jq -r ".[] | select(.[\"identifier\"] | test(\"s0*${s}e0*$e\"))" | jq -r ".[\"airDate\"]" | sed 's|\([0-9]*\)-\([0-9]*\)-\([0-9]*\)[^0-9].*|\1\2\3|' | head -1`
 <% end -%>		    if test "$DEBUG" = verbose; then
 			echo "[$showtitle/${s}x$e] $datestr $episode"
 		    fi
