@@ -213,7 +213,7 @@ slack_channel = ""
 slack_bot_name = ""
 <% end -%>slack_icon_url = ""
 [Newznab]
-newznab_data = "Sick Beard Index|http://lolo.sickbeard.com/|0|5030,5040|1!!!NZBs.org|http://nzbs.org/||5030,5040,5070,5090|0!!!Usenet-Crawler|https://www.usenet-crawler.com/||5030,5040|0<% if @providers != false -%><% @providers.keys.each do |provider| -%><% if @providers[provider]['url'] =~ /http/ -%>!!!<%=provider%>|<%=@providers[provider]['url']%>|<% if @providers[provider]['key'] =~ /[a-z0-9]/ -%><%=@providers[provider]['key']%><% end -%>|5030,5040|1<% end -%><% end -%><% end -%>"
+newznab_data = "Sick Beard Index|http://lolo.sickbeard.com/|0|5030,5040|1!!!NZBs.org|http://nzbs.org/||5030,5040,5070,5090|0!!!Usenet-Crawler|https://www.usenet-crawler.com/||5030,5040|0<% if @providers != false -%><% @providers.keys.each do |provider| -%><% if @providers[provider]['url'] =~ /http/ -%>!!!<%=provider%>|<%=@providers[provider]['url']%>|<% if @providers[provider]['key'] =~ /[a-z0-9]/ -%><%=@providers[provider]['key']%><% end -%>|<%=@providers[provider]['categories'].join(',')%>|1<% end -%><% end -%><% end -%>"
 [GUI]
 coming_eps_layout = list
 coming_eps_display_paused = 1

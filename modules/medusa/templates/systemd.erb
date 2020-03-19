@@ -1,0 +1,16 @@
+[Unit]
+Description=Medusa Daemon
+After=network.target
+
+[Service]
+User=<%=@runtime_user%>
+Group=<%=@runtime_group%>
+
+Type=simple
+ExecStart=/usr/bin/python3 <%=@home_dir%>/start.py -q --nolaunch --datadir=<%=@home_dir%>
+TimeoutStopSec=25
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

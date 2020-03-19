@@ -1,4 +1,5 @@
-define nginx::define::vhost($aliases         = false,
+define nginx::define::vhost($add_xff_headers = false,
+			    $aliases         = false,
 			    $app_port        = 8080,
 			    $app_proto       = "http",
 			    $app_root        = $nginx::vars::web_root,

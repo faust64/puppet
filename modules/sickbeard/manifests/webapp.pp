@@ -5,18 +5,18 @@ class sickbeard::webapp {
     if ($domain != $rdomain) {
 	$ldapauth = false
 	$reverse  = "$fqdn.$rdomain"
-	$aliases  = [ "sickbeard.$rdomain", "sickbeard.$domain", "tvcalendar.$rdomain", "tvcalendar.$domain", $reverse ]
+	$aliases  = [ "sickbeard.$rdomain", "tvcalendar.$rdomain", "tvcalendar.$domain", $reverse ]
     } else {
 	include apache
 
 	$ldapauth = "pubonly"
 	$reverse  = false
-	$aliases  = false
+	$aliases  = [ "tvcalendar.$domain" ]
     }
 
     if (defined(Class["apache"])) {
 	apache::define::vhost {
-	    "tvschedule.$domain":
+	    "sickbeard.$domain":
 		aliases       => $aliases,
 		app_port      => 8082,
 		csp_name      => "sickbeard",
@@ -33,7 +33,7 @@ class sickbeard::webapp {
 	include nginx
 
 	nginx::define::vhost {
-	    "tvschedule.$domain":
+	    "sickbeard.$domain":
 		aliases       => $aliases,
 		app_port      => 8082,
 		csp_name      => "sickbeard",

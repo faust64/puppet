@@ -15,6 +15,7 @@ class sickbeard::vars {
     $search_freq    = lookup("sickbeard_search_frequency")
     $slack_hook     = lookup("sickbeard_slack_hook_uri")
     $slack_notify   = lookup("sickbeard_slack_notify")
+    $version        = lookup("sickbeard_version")
     $web_dir        = lookup("sickbeard_web_dir")
     if ($data_dir_check == false) {
 	$data_dir = $home_dir

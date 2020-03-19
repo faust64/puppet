@@ -13,9 +13,12 @@
 <% end -%><% if @xss_protection == true -%>    Header always set X-Xss-Protection "1; mode=block"
 <% end -%><% if @listen_ports['ssl'] != false -%><% if @app_rewrite == true -%>    RewriteEngine On
     RewriteRule ^/(.*) https://<%=@name%>/$1 [L,R]
-<% else -%><% if @add_xff_headers -%>    RequestHeader set X-Forwarded-Proto "http"
+<% else -%><% if @add_xff_headers -%>    RequestHeader set X-Forwarded-Proto "http" env=HTTP
     RequestHeader set X-Forwarded-Port "<%=@listen_ports['plain']%>"
 <% end -%>    ProxyPreserveHost <%=@preserve_host%>
+    ProxyPass /ws ws://127.0.0.1:8086/ws keepalive=On timeout=600 retry=1 acquire=3000
+    ProxyPassReverse /ws ws://127.0.0.1:8086/ws
+    ProxyPassReverseCookieDomain 127.0.0.1 %{HTTP:Host}
     ProxyPass / <%=@app_proto%>://127.0.0.1:<%=@app_port%>/
     ProxyPassReverse / <%=@app_proto%>://127.0.0.1:<%=@app_port%>/
 <% if @noerrors == false -%>    ProxyErrorOverride On
@@ -34,7 +37,7 @@
 <% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
 <% end -%><% if @xss_protection == true -%>    Header always set X-Xss-Protection "1; mode=block"
 <% end -%><% if @sslredirecthttp -%>    Header edit Location "(^http://)" "https://"
-<% end -%><% if @add_xff_headers -%>    RequestHeader set X-Forwarded-Proto "https"
+<% end -%><% if @add_xff_headers -%>    RequestHeader set X-Forwarded-Proto "https" env=HTTPS
     RequestHeader set X-Forwarded-Port "<%=@listen_ports['ssl']%>"
 <% end -%>    CustomLog <%=@log_dir%>/ssl-access-<%=@name%>.log combined
     Include ssl.conf
@@ -43,6 +46,9 @@
 	DocumentRoot <%=@konami_location%>
     </Location>
 <% end -%>    ProxyPreserveHost <%=@preserve_host%>
+    ProxyPass /ws ws://127.0.0.1:8086/ws keepalive=On timeout=600 retry=1 acquire=3000
+    ProxyPassReverse /ws ws://127.0.0.1:8086/ws
+    ProxyPassReverseCookieDomain 127.0.0.1 %{HTTP:Host}
     ProxyPass / <%=@app_proto%>://127.0.0.1:<%=@app_port%>/
     ProxyPassReverse / <%=@app_proto%>://127.0.0.1:<%=@app_port%>/
 <% if @noerrors == false -%>    ProxyErrorOverride On

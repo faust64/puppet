@@ -11,7 +11,8 @@ apache_mod_headers: true
 apache_munin: true
 
 # Media
-media_sickbeard: https://tvschedule.unetresgrossebite.com
+media_medusa: https://medusa.unetresgrossebite.com
+media_sickbeard: https://sickbeard.unetresgrossebite.com
 
 # Nagios
 nagios_load_crit_threshold: "4.0,4.0,4.0"

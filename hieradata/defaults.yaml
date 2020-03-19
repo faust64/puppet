@@ -866,12 +866,31 @@ matchbox_runtime_user: pi
 media_airsonic_nfs: false
 media_do_emby: false
 media_do_plex: true
+media_medusa: false
 media_music_nfs_root: /var/music
 media_share_nfs: false
 media_sickbeard: false
 media_tmdb_apikey: false
 media_subsonic_nfs: false
 media_web_root: /goinfre
+
+# Medusa
+medusa_api_key: false
+medusa_backup_dir: /media/backups
+medusa_contact: false
+medusa_cookie_secret_key: false
+medusa_custom_providers: false
+medusa_data_dir: false
+medusa_encryption_key: false
+medusa_home_dir: /usr/share/medusa
+medusa_runtime_group: medusa
+medusa_runtime_user: medusa
+medusa_sab_target: false
+medusa_search_frequency: 10
+medusa_slack_notify: false
+medusa_slack_hook_uri: false
+medusa_version: v0.3.12
+medusa_web_dir: /var/www/medusa
 
 # Memcache
 memcache_conf_dir: /etc
@@ -2259,7 +2278,9 @@ sickbeard_runtime_group: sickbeard
 sickbeard_runtime_user: sickbeard
 sickbeard_sab_target: false
 sickbeard_search_frequency: 10
+sickbeard_slack_notify: false
 sickbeard_slack_hook_uri: false
+sickbeard_version: development
 sickbeard_web_dir: /var/www/sickbeard
 
 # Slim
@@ -2424,6 +2445,9 @@ tftpproxy_local_port: 6969
 pxe_packages_repository: false
 pxe_reference_repository: false
 
+# Python
+python_version: 2
+
 # Thruk
 thruk_admin_contact: false
 thruk_backends:
@@ -2538,8 +2562,9 @@ csp_policy_inventory:
   icingaweb2: "; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self' data:; frame-src 'none'; object-src 'none';"
   inferno: "; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:; font-src 'self' data:; frame-src 'none'; object-src 'none';"
   kibana: "https://tiles.elastic.co/; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' https://tiles.elastic.co data:; font-src 'self'; frame-src 'none'; object-src 'none';"
-  munin: "'unsafe-inline'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
+  medusa: "'unsafe-inline'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data:; font-src 'self'; frame-src 'none'; object-src 'none';"
   moinmoin: "; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
+  munin: "'unsafe-inline'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
   nextcloud: "; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; frame-src 'self'; object-src 'none';"
   nuts: "; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self'; font-src 'self'; frame-src 'none'; object-src 'none';"
   owncloud: "; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval'; img-src 'self' data:; font-src 'self' data:; frame-src 'self'; object-src 'none';"

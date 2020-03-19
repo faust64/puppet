@@ -1,4 +1,6 @@
 class python {
+    include python::vars
+
     case $myoperatingsystem {
 	"CentOS", "RedHat": {
 	    include python::rhel

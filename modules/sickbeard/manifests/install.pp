@@ -14,13 +14,13 @@ class sickbeard::install {
 
     git::define::clone {
 	"sickbeard":
-	    branch          => "development",
+	    branch          => $sickbeard::vars::version,
 	    grp             => $sickbeard::vars::runtime_group,
-	    usr             => $sickbeard::vars::runtime_user,
 	    local_container => "/usr/share",
 	    repository      => "https://github.com/midgetspy/Sick-Beard",
 	    require         => User[$runtime_user],
-	    update          => false;
+	    update          => false,
+	    usr             => $sickbeard::vars::runtime_user;
     }
 
     common::define::package {

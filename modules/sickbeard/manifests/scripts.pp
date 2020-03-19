@@ -1,6 +1,7 @@
 class sickbeard::scripts {
     $backup_dir = $sickbeard::vars::backup_dir
     $contact    = $sickbeard::vars::contact
+    $home_dir   = $sickbeard::vars::home_dir
     $slack_hook = $sickbeard::vars::slack_hook
 
     file {

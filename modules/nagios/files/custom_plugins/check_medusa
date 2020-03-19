@@ -1,0 +1,35 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+
+if test "$1" = "-c" -a -r "$2"; then
+    config=$2
+else
+    config=/usr/share/medusa/config.ini
+fi
+
+if test -r $config; then
+    medusaport=`awk -F= '/^[ 	]*web_port[ 	]*=/{print $2}' $config | sed 's|[ \t]*||g'`
+fi
+test -z "$medusaport" && medusaport=8086
+
+if ! ps ax | grep -i ' start.py .*--daemon' >/dev/null; then
+    ret=CRITICAL
+    msg=" - medusa not running"
+    perfdata=" | 0"
+elif ! netstat -plant | grep ":$medusaport[ 	].*LISTEN" >/dev/null; then
+    ret=CRITICAL
+    msg=" - medusa not listening on $medusaport"
+    prefdata=" | 0"
+else
+    ret=OK
+    perfdata=" | 1"
+fi
+
+echo "$PRG $ret$msg$perfdata"
+eval ret=\$$ret
+exit $ret

@@ -1,4 +1,5 @@
-define apache::define::vhost($aliases         = false,
+define apache::define::vhost($add_xff_headers = false,
+			     $aliases         = false,
 			     $allow_override  = false,
 			     $app_port        = 8080,
 			     $app_proto       = "http",

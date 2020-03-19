@@ -209,3 +209,8 @@ host thanatos-br10 {
     hardware ethernet a0:36:9f:04:44:d5;
     fixed-address 10.42.46.101;
 }
+
+host scr-eth0 {
+    hardware ethernet 34:93:42:04:36:5b;
+    fixed-address 10.42.254.42;
+}

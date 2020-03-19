@@ -1,11 +1,13 @@
 class media::scripts {
-    $emby       = $media::vars::emby
-    $emby_host  = $media::vars::emby_host
-    $media_root = $media::vars::web_root
-    $plex       = $media::vars::plex
-    $plex_host  = $media::vars::plex_host
-    $sickbeard  = $media::vars::sickbeard
-    $tmdbapikey = $media::vars::tmdbapikey
+    $emby          = $media::vars::emby
+    $emby_host     = $media::vars::emby_host
+    $media_root    = $media::vars::web_root
+    $medusa        = $media::vars::medusa
+    $medusa_apikey = $media::vars::medusa_apikey
+    $plex          = $media::vars::plex
+    $plex_host     = $media::vars::plex_host
+    $sickbeard     = $media::vars::sickbeard
+    $tmdbapikey    = $media::vars::tmdbapikey
 
     file {
 	"Install mediainfo script":
@@ -23,7 +25,14 @@ class media::scripts {
 	    path    => "/usr/local/sbin/media_perm_setter";
     }
 
-    if ($sickbeard != false) {
+    if ($sickbeard != false or ($medusa != false and $medusa_apikey != false)) {
+	if ($sickbeard == false) {
+	    include common::tools::jq
+
+	    Class["common::tools::jq"]
+		-> File["Install Series date setter"]
+	}
+
 	file {
 	    "Install Series date setter":
 		content => template("media/series_date_setter.erb"),

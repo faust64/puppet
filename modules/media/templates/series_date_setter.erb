@@ -1,8 +1,9 @@
 #!/bin/sh
 
 DEBUG=verbose
-baseurl=<%=@sickbeard%>
-IDXFILE=/tmp/idx.$$
+<% if @sickbeard != false -%>baseurl=<%=@sickbeard%>
+<% else -%>baseurl=<%=@medusa%>
+<% end -%>IDXFILE=/tmp/idx.$$
 TMPFILE=/tmp/list.$$
 SERIES_ROOT=<%=@media_root%>/media/Series
 WGET="wget --no-check-certificate --no-proxy"
@@ -27,8 +28,9 @@ if test "$match"; then
     match="$match)"
 fi
 
-grep '<td class="tvShow">' $IDXFILE | sed 's|.*displayShow?show=\([0-9]*\)">\([^<]*\)<.*|showid=\1 showtitle="\2"|' | while read line
-    do
+<% if @sickbeard != false -%>grep '<td class="tvShow">' $IDXFILE | sed 's|.*displayShow?show=\([0-9]*\)">\([^<]*\)<.*|showid=\1 showtitle="\2"|' | while read line
+<% else -%>grep 'show-container' $IDXFILE | sed 's|.*id="show\([^"]*\)" data-name="\([^"]*\)" .*|showid=\1 showtitle="\2"|' | while read line
+<% end -%>    do
 	eval $line
 	test "$showid" -a "$showtitle" || continue
 	if test "$match"; then
@@ -36,8 +38,10 @@ grep '<td class="tvShow">' $IDXFILE | sed 's|.*displayShow?show=\([0-9]*\)">\([^
 	fi >/dev/null
 
 	if test -d "$SERIES_ROOT/$showtitle"; then
-	    if ! $WGET $baseurl/home/displayShow?show=$showid -O $TMPFILE >/dev/null 2>&1; then
-		echo "Failed getting $showtitle index" >&2
+<% if @sickbeard != false -%>	    if ! $WGET "$baseurl/home/displayShow?show=$showid" -O $TMPFILE >/dev/null 2>&1; then
+<% else -%>	    idxname=$(grep -E "indexername=.*&seriesid=$showid" $IDXFILE | sed 's|.*indexername=\([^&]*\)&.*|\1|')
+	    if ! $WGET --header "X-Api-Key: <%=@medusa_apikey%>" "$baseurl/api/v2/series/$idxname$showid/episodes?limit=1000" -O $TMPFILE >/dev/null 2>&1; then
+<% end -%>		echo "Failed getting $showtitle index" >&2
 		continue
 	    fi
 	    cd "$SERIES_ROOT/$showtitle"
@@ -53,8 +57,9 @@ grep '<td class="tvShow">' $IDXFILE | sed 's|.*displayShow?show=\([0-9]*\)">\([^
 			echo "Failed to parse $episode name" >&2
 			continue
 		    fi
-		    datestr=`grep -A11 "class=\"epCheck\" id=\"${s}x$e\" " $TMPFILE | grep 'class="col-airdate"' | sed -e 's|.*airdate">\([^<]*\)<.*|\1|' -e 's|-||g'`
-		    if test "$DEBUG" = verbose; then
+<% if @sickbeard != false -%>		    datestr=`grep -A11 "class=\"epCheck\" id=\"${s}x$e\" " $TMPFILE | grep 'class="col-airdate"' | sed -e 's|.*airdate">\([^<]*\)<.*|\1|' -e 's|-||g'`
+<% else -%>		    datestr=`cat $TMPFILE | jq -r ".[] | select(.[\"identifier\"] | test(\"s0*${s}e0*$e\"))" | jq -r ".[\"airDate\"]" | sed 's|\([0-9]*\)-\([0-9]*\)-\([0-9]*\)[^0-9].*|\1\2\3|'`
+<% end -%>		    if test "$DEBUG" = verbose; then
 			echo "[$showtitle/${s}x$e] $datestr $episode"
 		    fi
 		elif echo "$episode" | grep -E '^\[[1-2][0-9][0-9][0-9].[0-9][0-9].[0-9][0-9]\] ' >/dev/null; then

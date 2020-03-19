@@ -1,9 +1,11 @@
 additional_classes:
+  - Medusa
   - Sickbeard
 # - Sonarr
 
 # Apache
 apache_mod_proxy_http: true
+apache_mod_proxy_wstunnel: true
 apache_rsyslog: true
 
 # Nginx

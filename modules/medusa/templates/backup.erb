@@ -8,8 +8,8 @@ BACKUP_DIR=<%=@backup_dir%>
 <% end -%><% if @slack_hook != false -%>HOOK_URL=<%=@slack_hook%>
 <% end -%>FAIL=
 
-if ! test -s <%=@home_dir%>/sickbeard.db; then
-    FAIL="sickbeard database missing"
+if ! test -s <%=@home_dir%>/main.db; then
+    FAIL="medusa database missing"
 else
     if ! test -d $BACKUP_DIR; then
 	if ! mkdir -p $BACKUP_DIR; then
@@ -19,10 +19,10 @@ else
     if test -d $BACKUP_DIR; then
 	chown root:root $BACKUP_DIR
 	chmod 0700 $BACKUP_DIR
-	if ! tar -cf $BACKUP_DIR/sickbeard.tar \
+	if ! tar -cf $BACKUP_DIR/medusa.tar \
 	    <%=@home_dir%>/cache.db \
-	    <%=@home_dir%>/sickbeard.db \
-	    /etc/sickbeard/config.ini; then
+	    <%=@home_dir%>/failed.db \
+	    <%=@home_dir%>/main.db; then
 	    FAIL="creating backup"
 	fi
     fi
@@ -31,13 +31,13 @@ fi
 test "$FAIL" && SUBJECT=WARNING
 if test "$HOOK_URL" -a -x /usr/local/bin/slack; then
     if test "$FAIL"; then
-	/usr/local/bin/slack $HOOK_URL "$SUBJECT: backup sickbeard on $HOSTNAME - $FAIL"
+	/usr/local/bin/slack $HOOK_URL "$SUBJECT: backup medusa on $HOSTNAME - $FAIL"
     else
-	/usr/local/bin/slack $HOOK_URL "$SUBJECT: backup sickbeard done on $HOSTNAME"
+	/usr/local/bin/slack $HOOK_URL "$SUBJECT: backup medusa done on $HOSTNAME"
     fi
 elif test "$DEST"; then
     test "$FAIL" && msg="$FAIL" || msg=done
-    echo $msg | mail -s"[$SUBJECT] backing up sickbeard on $HOSTNAME" $DEST
+    echo $msg | mail -s"[$SUBJECT] backing up medusa on $HOSTNAME" $DEST
 elif test "$FAIL"; then
     echo $FAIL >&2
 else
