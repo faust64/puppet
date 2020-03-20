@@ -4,11 +4,6 @@ with_collectd: false
 # Collectd
 with_collectd: false
 
-# LinuxCounter
-lico_update_day: 1
-lico_update_hour: 15
-lico_update_min: 18
-
 # Munin-Node
 munin_node_listenaddr: 10.42.242.24
 

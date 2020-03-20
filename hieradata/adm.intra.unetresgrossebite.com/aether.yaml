@@ -42,12 +42,6 @@ fs_legit_suid:
   - /usr/lib/x86_64-linux-gnu/sssd/proxy_child
   - /var/lib/docker/aufs/diff/.*
 
-# LinuxCounter
-lico_update_day: 1
-lico_update_hour: 16
-
-lico_update_min: 8
-
 # Munin-Node
 munin_node_listenaddr: 10.42.242.23
 

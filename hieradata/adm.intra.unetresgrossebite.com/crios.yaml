@@ -4,11 +4,6 @@ has_serial_io: true
 # KVM
 kvm_nested: true
 
-# LinuxCounter
-lico_update_day: 1
-lico_update_hour: 14
-lico_update_min: 53
-
 # Munin-Node
 munin_node_listenaddr: 10.42.242.107
 

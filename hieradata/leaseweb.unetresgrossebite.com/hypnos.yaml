@@ -1,8 +1,3 @@
-# LinuxCounter
-lico_update_day: 1
-lico_update_hour: 15
-lico_update_min: 2
-
 # Fstab
 tmp_target_device: "UUID=690a9753-cebc-4e76-a0ad-62516480b40d"
 

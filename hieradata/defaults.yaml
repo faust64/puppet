@@ -817,12 +817,6 @@ libvirt_runtime_user: root
 lightdm_conf_dir: /etc/lightdm
 lightdm_auto_login: false
 
-# LinuxCounter
-lico_api_key: false
-lico_update_day: false
-lico_update_hour: false
-lico_update_min: false
-
 # Locales
 locale: en
 locale_LOCALE: en_US

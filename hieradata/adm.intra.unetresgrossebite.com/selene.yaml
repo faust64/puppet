@@ -6,11 +6,6 @@ with_collectd: false
 # KVM
 kvm_cpu_family: Opteron_G3
 
-# LinuxCounter
-lico_update_day: 1
-lico_update_hour: 14
-lico_update_min: 58
-
 # Munin-Node
 munin_node_listenaddr: 10.42.242.16
 

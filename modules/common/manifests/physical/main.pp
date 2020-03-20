@@ -1,7 +1,9 @@
 class common::physical::main {
     include common::physical::fs
     include common::physical::fingerprints
+##FIXME / DROPME##
     include common::physical::linuxcounter
+##//##
     include common::physical::netpackages
     include common::physical::perf
     include common::physical::reboot

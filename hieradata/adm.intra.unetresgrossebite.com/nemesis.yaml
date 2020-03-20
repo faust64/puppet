@@ -6,11 +6,6 @@ tmp_target_device: /dev/mapper/data-tmp
 # KVM
 kvm_nested: true
 
-# LinuxCounter
-lico_update_day: 1
-lico_update_hour: 14
-lico_update_min: 38
-
 # Munin-Node
 munin_node_listenaddr: 10.42.242.100
 

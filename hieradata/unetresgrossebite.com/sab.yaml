@@ -33,11 +33,6 @@ letsencrypt_renew_day: 22
 letsencrypt_renew_hour: 22
 letsencrypt_renew_min: 44
 
-# LinuxCounter
-lico_update_day: 1
-lico_update_hour: 15
-lico_update_min: 28
-
 # Nagios
 nagios_partitions_watchlist:
   root: /
