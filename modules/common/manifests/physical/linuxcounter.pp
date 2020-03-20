@@ -8,7 +8,8 @@ class common::physical::linuxcounter {
     file {
 	"Prepare LinuxConter for further configuration":
 	    ensure  => absent,
-		path    => "/root/.linuxcounter";
+	    force   => yes,
+	    path    => "/root/.linuxcounter";
 	"Install linux-counter update script":
 	    ensure  => absent,
 	    path   => "/usr/local/bin/lico-update";
