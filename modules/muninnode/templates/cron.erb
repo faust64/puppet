@@ -1,3 +1,3 @@
-MAILTO=root
-*/20 * * * * root if test -x <%=@conf_dir%>/plugins/apt_all; then <%=@conf_dir%>/plugins/apt_all update 7200 12; elif test -x /etc/munin/plugins/apt; then /etc/munin/plugins/apt update 7200 12; fi >/dev/null
-*/5 * * * * root if test -d <%=@conf_dir%>/plugins-pool -a -x /usr/local/sbin/munin-pool; then /usr/local/sbin/munin-pool; fi >/dev/null
+<% if @operatingsystem == "Debian" or @operatingsystem == "Ubuntu" or @myoperatingsystem == "Devuan" -%>*/20 * * * * root if test -x <%=@conf_dir%>/plugins/apt_all; then <%=@conf_dir%>/plugins/apt_all update 7200 12; elif test -x /etc/munin/plugins/apt; then /etc/munin/plugins/apt update 7200 12; fi >/dev/null 2>&1
+<% end -%><% if @pooler -%>*/5 * * * * root if test -d <%=@conf_dir%>/plugins-pool -a -x /usr/local/sbin/munin-pool; then /usr/local/sbin/munin-pool; fi >/dev/null 2>&1
+<% end -%>

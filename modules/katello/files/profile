@@ -1,0 +1,56 @@
+#!/bin/sh
+
+taskcleanup()
+{
+    local srch stts
+
+    if test -z "$TASK_SEARCH"; then
+	if test "$SEACH"; then
+	    srch="$SEARCH"
+	elif test -z "$1"; then
+	    srch="result = error"
+	elif echo "$1" | grep = >/dev/null; then
+	    srch="$1"
+	elif test "$2" = 3 -a "$3"; then
+	    srch="$1 = $3"
+	    shift 2
+	else
+	    srch="result = error"
+        fi
+    else
+	srch="$TASK_SEARCH"
+    fi
+    if test -z "$STATES"; then
+	if test -z "$2"; then
+	    stts=paused
+	else
+	    stts="$2"
+	fi
+    else
+	stts=paused
+    fi
+    if foreman-rake foreman_tasks:cleanup TASK_SEARCH="$srch" STATES="$stts" \
+	    VERBOSE=true NOOP=true | grep '[1-9] [a-z].* would be deleted'; then
+	echo "Are you sure? [Y/n]"
+	while read i
+	do
+	    if echo "$i" | grep -i n >/dev/null; then
+		echo Abort
+		exit 0
+	    elif echo "$i" | grep -i y >/dev/null; then
+		echo Proceeding
+		break
+	    elif test -z "$i"; then
+		echo Proceeding
+		break
+	    fi
+	    echo "invalid: $i. Proceed? [Y/n]"
+	done
+	if ! foreman-rake foreman_tasks:cleanup TASK_SEARCH="$srch" STATES="$stts" \
+		VERBOSE=true; then
+	    echo "Failed ($?)"
+	fi
+    else
+	echo "did not match anything"
+    fi
+}

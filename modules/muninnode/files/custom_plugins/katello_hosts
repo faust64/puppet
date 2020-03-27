@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if test "$1" = config; then
+    echo 'graph_title Katello hosts count'
+    echo 'graph_category katello'
+    echo 'graph_vlabel Hosts'
+    echo 'graph_info Katello Hosts Count'
+    echo 'graph_args --base 1000 -l 0'
+    echo "used.label Hosts Count"
+    echo "used.draw AREA"
+else
+    echo used.value $(hammer host list | awk 'NR>3{print $3}' | awk 'END{print NR}')
+fi
+
+exit 0

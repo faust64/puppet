@@ -9,4 +9,11 @@ class nagios::plugins {
 	    recurse => true,
 	    source  => "puppet:///modules/nagios/custom_plugins";
     }
+
+    if ($operatingsystem == "CentOS" or $operatingsystem == "RedHat") {
+	if ($os['selinux']['enabled']) {
+	    File["Install Nagios custom plugins"]
+		~> Exec["Restores Nagios Plugins SELinux attributes"]
+	}
+    }
 }

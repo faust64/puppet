@@ -123,6 +123,13 @@ define nagios::define::probe($args             = false,
 		    path    => "$conf_dir/nrpe.d/$name.cfg",
 		    require => File["Prepare nagios nrpe probes configuration directory"];
 	    }
+
+	    if ($operatingsystem == "CentOS" or $operatingsystem == "RedHat") {
+		if ($os['selinux']['enabled']) {
+		    File["Install Nagios $name configuration"]
+			~> Exec["Restores Nagios Configuration SELinux attributes"]
+		}
+	    }
 	} else {
 	    file {
 		"Drop Nagios $name configuration":

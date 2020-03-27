@@ -1,0 +1,69 @@
+# Format:
+# <classname>: false - don't include this class
+# <classname>: true - include and use the defaults
+# <classname>:
+#   <param>: <value> - include and override the default(s)
+#
+# See params.pp in each class for what options are available
+
+---
+foreman:
+  configure_epel_repo: false
+foreman_proxy: {}
+puppet:
+  server: true
+foreman::cli: true
+foreman::cli::ansible: false
+foreman::cli::azure: false
+foreman::cli::discovery: false
+foreman::cli::openscap: false
+foreman::cli::remote_execution: false
+foreman::cli::tasks: false
+foreman::cli::templates: false
+foreman::cli::kubevirt: false
+foreman::plugin::ansible: false
+foreman::plugin::azure: false
+foreman::plugin::bootdisk: false
+foreman::plugin::chef: false
+foreman::plugin::default_hostgroup: false
+foreman::plugin::dhcp_browser: false
+foreman::plugin::digitalocean: false
+foreman::plugin::discovery: false
+foreman::plugin::expire_hosts: false
+foreman::plugin::kubevirt: false
+foreman::plugin::host_extra_validator: false
+foreman::plugin::memcache: false
+foreman::plugin::monitoring: false
+foreman::plugin::omaha: false
+foreman::plugin::openscap: false
+foreman::plugin::ovirt_provision: false
+foreman::plugin::tasks: false
+foreman::plugin::hooks: false
+foreman::plugin::puppetdb: false
+foreman::plugin::remote_execution: false
+foreman::plugin::remote_execution::cockpit: false
+foreman::plugin::salt: false
+foreman::plugin::setup: false
+foreman::plugin::snapshot_management: false
+foreman::plugin::templates: false
+foreman::compute::ec2: false
+foreman::compute::gce: false
+foreman::compute::libvirt: false
+foreman::compute::openstack: false
+foreman::compute::ovirt: false
+foreman::compute::rackspace: false
+foreman::compute::vmware: false
+foreman_proxy::plugin::ansible: false
+foreman_proxy::plugin::chef: false
+foreman_proxy::plugin::dhcp::infoblox: false
+foreman_proxy::plugin::dhcp::remote_isc: false
+foreman_proxy::plugin::discovery: false
+foreman_proxy::plugin::dns::infoblox: false
+foreman_proxy::plugin::dns::powerdns: false
+foreman_proxy::plugin::dynflow: false
+foreman_proxy::plugin::monitoring: false
+foreman_proxy::plugin::omaha: false
+foreman_proxy::plugin::openscap: false
+foreman_proxy::plugin::pulp: false
+foreman_proxy::plugin::remote_execution::ssh: false
+foreman_proxy::plugin::salt: false

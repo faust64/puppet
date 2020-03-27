@@ -1,0 +1,5 @@
+# Apache
+apache_modules_dir: /usr/lib64/httpd/modules
+
+# Nagios
+nagios_plugins_dir: /usr/lib64/nagios/plugins

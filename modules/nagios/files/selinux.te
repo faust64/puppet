@@ -1,0 +1,9 @@
+module my_nrpe_conf 1.0;
+
+require {
+        type nrpe_t;
+        type nrpe_etc_t;
+        class dir { read search open getattr };
+}
+
+allow nrpe_t nrpe_etc_t:dir { read open search getattr };

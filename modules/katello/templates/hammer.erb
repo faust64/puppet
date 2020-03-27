@@ -1,0 +1,6 @@
+:foreman:
+<% if @admusr != false -%>  :username: '<%=@admusr%>'
+<% end -%><% if @admpw != false -%>  :password: '<%=@admpw%>'
+<% end -%>  :url: '<%=@foreman_url%>'
+  :refresh_cache: false
+  :request_timeout: 120

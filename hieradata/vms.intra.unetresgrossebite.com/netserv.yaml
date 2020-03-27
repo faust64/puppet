@@ -12,6 +12,10 @@ dns_search: intra.unetresgrossebite.com
 
 # Nagios
 nagios_check_jumbo: false
+# ^ needs everyone to have jumbo frames
+#   LDAP authentication against netserv would fail, for
+#   clients whose mtu is lower than 9000
+#   keeping netserv mtu to 1500 for now
 
 # OpenLDAP
 ldap_id: 41

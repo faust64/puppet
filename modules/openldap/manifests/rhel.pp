@@ -12,6 +12,13 @@ class openldap::rhel($server = false) {
     }
 
     if ($server) {
+	firewalld::define::addrule {
+	    "ldap":
+		port => 389;
+	    "ldaps":
+		port => 636;
+	}
+
 	if ($openldap::vars::ldap_slave == false) {
 	    if ($openldap::vars::web_front) {
 		$ldapadmin = "present"

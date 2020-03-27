@@ -10,6 +10,10 @@ service_dir: /etc/init.d
 apache_error_dir: /usr/share/apache2/error
 apache_icons_dir: /usr/share/apache2/icons
 
+# Cups
+cups_runtime_group: lp
+cups_runtime_user: lp
+
 # Nagios
 nagios_hostgroup: devuan-servers
 nagios_iconimage: utgb/devuan.png

@@ -6,6 +6,7 @@ class nsd::vars {
     $jumeau             = lookup("jumeau")
     $listen_addr        = lookup("nsd_listen_address")
     $listen_port        = lookup("nsd_listen_port")
+    $log_dir            = lookup("nsd_log_dir")
     $munin_conf_dir     = lookup("munin_conf_dir")
     $munin_monitored    = lookup("nsd_munin")
     $munin_probes       = lookup("nsd_munin_probes")

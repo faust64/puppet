@@ -37,7 +37,7 @@ reports = store,puppetdb
 certname = <%=@fqdn%>
 server = <%=@puppet_master%>
 environment = production
-runinterval = 1h
+runinterval = <%=@puppet_run_itv%>
 <% if @lsbdistcodename == "buster" -%>ssldir = /var/lib/puppet/ssl
 
 [master]

@@ -15,7 +15,8 @@ class apt::local {
 	    require => Apt::Define::Aptkey[$rkey];
     }
 
-    if ($architecture == "armv6l") {
+    if ($architecture == "armv6l" or $architecture == "armv7l"
+	or $architecture == "armv8l") {
 # assuming all hosts announcing such architecture are RPI
 # would have to check guru/sheeva plugs at least
 	apt::define::repo {

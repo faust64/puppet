@@ -1,6 +1,7 @@
 download_cmd: wget
 gid_adm: adm
 gid_zero: root
+rsyslog_version: 8
 service_dir: /etc/init.d
 
 # Apache
@@ -64,6 +65,9 @@ fs_legit_suid:
   - /usr/lib/squid3/pinger
   - /var/lib/docker/aufs/diff/.*
 
+# Cron
+cron_service_name: crond
+
 # Memcache
 memcache_runtime_user: memcached
 
@@ -77,6 +81,8 @@ nagios_hostgroup: rhel-servers
 nagios_iconimage: utgb/rhel.png
 nagios_iconimagealt: rhel
 nagios_run_dir: /var/run/nrpe
+nagios_runtime_group: nrpe
+nagios_runtime_user: nrpe
 nagios_statusmapimage: utgb/rhel.gd2
 
 # Named

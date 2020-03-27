@@ -1,4 +1,4 @@
-<% if @architecture == "armv6l" -%><%=@nagios_user%>	ALL=NOPASSWD:/usr/local/bin/sysinfo
+<% if @architecture == "armv6l" or @architecture == "armv7l" or @architecture == "armv8l" -%><%=@nagios_user%>	ALL=NOPASSWD:/usr/local/bin/sysinfo
 <% else -%><%=@nagios_user%>	ALL=NOPASSWD:<%=@dmidecode%>
 <%=@nagios_user%>	ALL=NOPASSWD:<%=@ipmitool%>
 <% end -%><% if @hpraid != false -%><%=@nagios_user%>	ALL=NOPASSWD:/usr/bin/cciss_vol_status

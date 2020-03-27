@@ -1,5 +1,9 @@
 #WARNING: this is a copy of Devuan-jessie.yaml
 #         as of right now, operatingsystem returns with Linux
 #         see https://tickets.puppetlabs.com/browse/FACT-1579
+auditd_conf_dir: /etc/audit
 snmp_uptodate_new: true
 rsyslog_version: 8
+stunnel_options:
+  - NO_SSLv2
+  - CIPHER_SERVER_PREFERENCE

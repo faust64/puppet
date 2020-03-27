@@ -1,0 +1,22 @@
+<%#
+kind: snippet
+name: Custom puppet.conf
+model: ProvisioningTemplate
+snippet: true
+%>
+
+[main]
+<%- unless host_param('dns_alt_names').to_s.empty? -%>
+dns_alt_names = <%= host_param('dns_alt_names') %>
+<% end -%>
+<% if @host.operatingsystem.family == "Windows" -%>vardir = C:\ProgramData\PuppetLabs\puppet\cache
+logdir = C:\ProgramData\PuppetLabs\puppet\var\log
+rundir = C:\ProgramData\PuppetLabs\puppet\var\run
+ssldir = C:\ProgramData\PuppetLabs\puppet\etc\ssl
+<% end -%><% if host_param_true?('fips_enabled') -%>digest_algorithm = sha256
+<% end -%><%- if host_param('external_puppet_ca').strip -%>ca_server = <%= host_param('external_puppet_ca') %>  
+<% end -%>certname = <%= @host.certname %>  
+runinterval = 1h
+server = <%= host_param('external_puppet_server') %>
+environment = <%= @host.environment %>
+

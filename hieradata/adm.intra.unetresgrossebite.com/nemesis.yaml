@@ -10,7 +10,6 @@ kvm_nested: true
 munin_node_listenaddr: 10.42.242.100
 
 # Nagios
-nagios_check_jumbo: false
 nagios_listenaddr: 10.42.242.100
 
 # SNMP

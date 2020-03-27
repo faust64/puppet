@@ -1,0 +1,19 @@
+--- kickstart.erb.orig	2020-03-21 14:16:23.169466811 +0100
++++ kickstart.erb	2020-03-21 14:45:08.091234662 +0100
+@@ -1,6 +1,6 @@
+ <%#
+ kind: provision
+-name: Kickstart default
++name: Custom Kickstart
+ model: ProvisioningTemplate
+ oses:
+ - CentOS
+@@ -255,7 +255,7 @@
+ <% if host_param_true?('enable-puppetlabs-repo') || host_param_true?('enable-puppetlabs-puppet6-repo')|| host_param_true?('enable-puppetlabs-puppet5-repo') -%>
+ <%= snippet 'puppetlabs_repo' %>
+ <% end -%>
+-<%= snippet 'puppet_setup' %>
++<%= snippet 'custom_puppet_setup' %>
+ <% end -%>
+ 
+ <% if salt_enabled %>

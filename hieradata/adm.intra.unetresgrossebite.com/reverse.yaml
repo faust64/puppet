@@ -8,9 +8,6 @@ apache_mod_proxy_balancer: true
 # Pki
 pki_public: pki.adm.intra.unetresgrossebite.com
 
-# Nagios
-nagios_check_jumbo: false
-
 # Reverses
 reverse_domains:
   - intra.unetresgrossebite.com

@@ -97,5 +97,19 @@ class muninnode::config {
 	    owner   => root,
 	    path    => "$conf_dir/plugin-conf.d/munin-node",
 	    require => File["Prepare Munin-node plugin-conf directory"];
+	"Install Munin lib directory":
+	    ensure  => directory,
+	    group   => lookup("gid_zero"),
+	    mode    => "0755",
+	    owner   => $muninnode::vars::munin_runtime_user,
+	    require => File["Prepare Munin-node plugin-conf directory"],
+	    path    => "/var/lib/munin";
+	"Install Munin plugin-state directory":
+	    ensure  => directory,
+	    group   => lookup("gid_zero"),
+	    mode    => "0755",
+	    owner   => $muninnode::vars::munin_runtime_user,
+	    require => File["Install Munin lib directory"],
+	    path    => "/var/lib/munin/plugin-state";
     }
 }

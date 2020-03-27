@@ -1,0 +1,15 @@
+additional_classes:
+  - Katello
+
+# Apache
+apache_rsyslog: true
+
+# Nagios
+nagios_partitions_watchlist:
+  root: /
+  mongo: /var/lib/mongodb
+  postgres: /var/lib/pgsql
+  pulp: /var/lib/pulp
+
+# Puppet
+puppet_run_interval: 43200

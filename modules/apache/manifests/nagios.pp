@@ -12,6 +12,7 @@ class apache::nagios {
 	    owner   => root,
 	    path    => "/etc/sudoers.d/nagios-certs";
     }
+
     nagios::define::probe {
 	"apache":
 	    description   => "$fqdn apache",

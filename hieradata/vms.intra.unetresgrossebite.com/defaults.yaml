@@ -2,6 +2,7 @@
 modeles_nfs_opts: fstype=nfs4,ro,soft,intr
 
 # Nagios
+nagios_check_jumbo: true
 nagios_ip:
   - 10.42.242.200
   - 10.42.242.202

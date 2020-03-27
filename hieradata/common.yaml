@@ -107,6 +107,9 @@ jesred_regexpr:
 jesred_rewrite_for:
   - 10.42.0.0/15
 
+# Katello
+foreman_fqdn: katello.vms.intra.unetresgrossebite.com
+
 # Letsencrypt
 letsencrypt_contact: samuel@unetresgrossebite.com
 

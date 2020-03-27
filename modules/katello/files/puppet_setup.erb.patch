@@ -1,0 +1,38 @@
+--- puppet_setup.erb.orig	2020-03-21 14:19:03.329650320 +0100
++++ puppet_setup.erb	2020-03-21 14:55:37.435784581 +0100
+@@ -1,6 +1,6 @@
+ <%#
+ kind: snippet
+-name: puppet_setup
++name: Custom puppet_setup
+ model: ProvisioningTemplate
+ description: this snippet will configure the Puppet agent
+ snippet: true
+@@ -57,10 +57,10 @@
+   '/norestart',
+   '/i',
+   "${puppet_agent_msi}",
+-  <%- if @host.puppet_ca_server.strip -%>
+-  "PUPPET_CA_SERVER=<%= @host.puppet_ca_server %>",
++  <%- if host_param('external_puppet_ca').strip -%>
++  "PUPPET_CA_SERVER=<%= host_param('external_puppet_ca') %>",
+   <%- end -%>
+-  "PUPPET_MASTER_SERVER=<%= @host.puppetmaster %>"
++  "PUPPET_MASTER_SERVER=<%= host_param('external_puppet_server') %>"
+ )
+ 
+ Write-Host "Installing ${puppet_agent_msi} with args ${puppet_install_args}"
+@@ -68,11 +68,11 @@
+ <% end -%>
+ 
+ <% if os_family == 'Windows' -%>
+-$puppet_conf = @("<%= snippet 'puppet.conf' %>".Replace("`n","`r`n"))
++$puppet_conf = @("<%= snippet 'custom-puppet.conf' %>".Replace("`n","`r`n"))
+ Out-File -FilePath <%= etc_path %>\puppet.conf -InputObject $puppet_conf
+ <% else -%>
+ cat > <%= etc_path %>/puppet.conf << EOF
+-<%= snippet 'puppet.conf' %>
++<%= snippet 'custom-puppet.conf' %>
+ EOF
+ <% end -%>
+ 

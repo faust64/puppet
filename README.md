@@ -80,8 +80,8 @@ the following:
 
 ```
 if test -s /etc/centos-release -o -s /etc/redhat-release; then
-    rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
-    yum install puppet-agent -y
+    yum -y install https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
+    yum -y install puppet-agent
 else
     apt-get update ; apt-get upgrade ; apt-get dist-upgrade
     apt-get install ca-certificates lsb-release wget puppet
