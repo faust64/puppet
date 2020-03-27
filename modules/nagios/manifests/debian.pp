@@ -80,7 +80,7 @@ class nagios::debian {
 		    [ "dmidecode", "ipmitool" ]:
 		}
 	    }
-	    "armv6l", "armv7l", "armv8l': {
+	    "armv6l", "armv7l", "armv8l": {
 		file {
 		    "Install minimalistic sysinfo script":
 			group   => lookup("gid_zero"),
