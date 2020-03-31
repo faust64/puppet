@@ -23,4 +23,4 @@ nginx_rsyslog: true
 
 # PHP
 php_mod_gd: true
-php_mod_mysql: true
+php_mod_mysqli: true
