@@ -12,33 +12,44 @@ class opendkim::debian {
 	    -> Class[Opendkim::Genkeys]
     }
 
-    file {
-	"Install opendkim service defaults":
-	    group  => lookup("gid_zero"),
-	    mode   => "0644",
-	    notify => Service["opendkim"],
-	    owner  => root,
-	    path   => "/etc/default/opendkim",
-	    source => "puppet:///modules/opendkim/defaults";
-    }
-
     if ($lsbdistcodename == "buster") {
 	if (! defined(Class[Common::Systemd])) {
 	    include common::systemd
 	}
 
-	exec {
-	    "Generate Systemd configuration from defaults":
-		command => "opendkim.service.generate",
-		notify      => Exec["Reload systemd configuration"],
-		path        => "/usr/sbin:/usr/bin:/sbin:/bin:/lib/opendkim",
-		refreshonly => true,
-		subscribe   => File["Install opendkim service defaults"];
+	file {
+	    "Install opendkim systemd defaults root directory":
+		ensure => "directory",
+		group  => lookup("gid_zero"),
+		mode   => "0755",
+		owner  => root,
+		path   => "/etc/systemd/system/opendkim.service.d";
+	    "Install opendkim service defaults":
+		group  => lookup("gid_zero"),
+		mode   => "0644",
+		notify => Exec["Reload systemd configuration"],
+		owner  => root,
+		path   => "/etc/systemd/system/opendkim.service.d/override.conf",
+		require => File["Install opendkim systemd defaults root directory"],
+		source => "puppet:///modules/opendkim/systemd.conf";
 	}
 
 	File["Install opendkim service defaults"]
-	    -> Exec["Generate Systemd configuration from defaults"]
+	    -> Exec["Reload systemd configuration"]
 	    -> Common::Define::Service["opendkim"]
+
+	File["Install opendkim service defaults"]
+	    ~> Common::Define::Service["opendkim"]
+    } else {
+	file {
+	    "Install opendkim service defaults":
+		group  => lookup("gid_zero"),
+		mode   => "0644",
+		notify => Common::Define::Service["opendkim"],
+		owner  => root,
+		path   => "/etc/default/opendkim",
+		source => "puppet:///modules/opendkim/defaults";
+	}
     }
 
     Package["opendkim"]

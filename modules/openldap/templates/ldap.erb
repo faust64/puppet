@@ -1,7 +1,4 @@
 URI		ldaps://<% if @ldap_slave != false -%><%=@ldap_slave%><% else -%><%=@fqdn%><% end %>
 BASE		<%=@ldap_base%>
 TLS_CACERT	<%=@cert_dir%>/ca-auth.crt
-<% if @lsbdistcodename == 'buster' -%>TLS_REQCERT never
-#FIXME: Migrate LDAP to new PKI!
-<% else -%>TLS_REQCERT	demand
-<% end -%>
+TLS_REQCERT	demand

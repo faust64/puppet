@@ -86,9 +86,6 @@ unbound_recurse_networks:
   - 176.31.250.180/32
   - 188.165.212.140/32
 
-# OpenLDAP
-openldap_ldap_slave: sso.unetresgrossebite.com
-
 # OpenSSH
 ssh_port: 1022
 ssh_tcp_wrappers:
