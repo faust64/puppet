@@ -26,16 +26,11 @@ class common::config::mail {
 	$target = "127.0.0.1"
     }
 
-    if ($operatingsystem != "OpenBSD") {
-	nagios::define::probe {
-	    "mailq":
-		description   => "$fqdn mailq",
-		pluginargs    => [ "-w 20 -c 50" ],
-		use           => "critical-service";
-	}
-    }
-
     nagios::define::probe {
+	"mailq":
+	    description   => "$fqdn mailq",
+	    pluginargs    => [ "-w 20 -c 50" ],
+	    use           => "critical-service";
 	"smtp":
 	    description   => "$fqdn smtp",
 	    pluginargs    =>
