@@ -57,14 +57,23 @@ getMatch()
 	    rlen=1
 	fi
 	if test -z "$2"; then
-	    r="$1"
+	    _r="$1"
+	else
+	    _r="$2"
 	fi
 	for _c in `seq 0 $(expr $rlen - 1)`
 	do
-	    _m=`cat $TMPFILE | jq -r ".results[$_c].original_title"`
-	    if echo "$_m" | grep -i "$_r" >/dev/null; then
+	    _m1=`cat $TMPFILE | jq -r ".results[$_c].original_title"`
+	    _m2=`cat $TMPFILE | jq -r ".results[$_c].title"`
+	    if echo "$_m1" | grep -i "$_r" >/dev/null; then
 		_found=`cat $TMPFILE | jq -r ".results[$_c].release_date"`
-		break
+	    elif echo "$_m2" | grep -i "$_r" >/dev/null; then
+		_found=`cat $TMPFILE | jq -r ".results[$_c].release_date"`
+	    fi
+	    if test "$_found"; then
+		if ! test "$_found" = null; then
+		    break
+		fi
 	    fi
 	done
 	if test -z "$_found"; then
@@ -97,6 +106,10 @@ ls "$MOVIES_ROOT" | while read movie
 	if test -z "$found" -o "$found" = null; then
 	    sname=`echo "$sname" | sed 's|[^a-ZA-Z ]||g'`
 	    found=`getMatch "$sname" "$movie"`
+	fi
+	if test -z "$found"; then
+	    sname=`echo "$movie" | sed 's| (.*||'`
+	    found=`getMatch "$sname"`
 	fi
 	if test -z "$found"; then
 	    echo "WARNING: could not resolve $movie"
