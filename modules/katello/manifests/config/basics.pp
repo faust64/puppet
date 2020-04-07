@@ -12,6 +12,13 @@ class katello::config::basics {
 	    unless      => "hammer scap-content list | grep -i firefox",
     }
 
+    katello::define::globalparam {
+	"Subscription Manager":
+	    type  => "boolean",
+	    value => "true",
+	    var   => "subscription_manager";
+    }
+
     if ($katello::vars::manifest) {
 	common::define::geturl {
 	    "Katello Manifest":

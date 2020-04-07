@@ -28,6 +28,8 @@ class katello::config::rhrepos {
 	    "Red Hat Software Collections RPMs for Red Hat Enterprise Linux 7 Server"
 	]:
 	    releasever => "7Server";
+	"Red Hat Enterprise Linux 7 Server (Kickstart)":
+	    releasever => "7.8";
 	[
 	    "Red Hat Enterprise Linux 7 Server - Fastrack (RPMs)",
 	    "Red Hat Satellite Tools 6.6 for RHEL 8 x86_64 (RPMs)"
@@ -73,6 +75,7 @@ class katello::config::rhrepos {
 		    Katello::Define::Repositoryset["Red Hat Enterprise Linux 7 Server - Optional (RPMs)"],
 		    Katello::Define::Repositoryset["Red Hat Enterprise Linux 7 Server - Supplementary (RPMs)"],
 		    Katello::Define::Repositoryset["Red Hat Enterprise Linux 7 Server - Fastrack (RPMs)"],
+		    Katello::Define::Repositoryset["Red Hat Enterprise Linux 7 Server (Kickstart)"],
 		    Katello::Define::Repositoryset["Red Hat Enterprise Linux 7 Server (RPMs)"]
 		],
 	    syncplan => "RedHat";
@@ -116,6 +119,10 @@ class katello::config::rhrepos {
 	"Red Hat Enterprise Linux 7 Server - Fastrack (RPMs)":
 	    product   => "Red Hat Enterprise Linux Server",
 	    shortname => "Red Hat Enterprise Linux 7 Server - Fastrack RPMs x86_64",
+	    url       => "rhsm";
+	"Red Hat Enterprise Linux 7 Server (Kickstart)":
+	    product   => "Red Hat Enterprise Linux Server",
+	    shortname => "Red Hat Enterprise Linux 7 Server Kickstart x86_64 7.8",
 	    url       => "rhsm";
 	"Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)":
 	    product   => "Red Hat Enterprise Linux for x86_64",

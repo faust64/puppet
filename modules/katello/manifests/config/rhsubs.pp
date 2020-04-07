@@ -1,11 +1,13 @@
 class katello::config::rhsubs {
     katello::define::hostgroup {
 	"Capsule":
+	    ak           => "AK-Capsule-Prod",
 	    cv           => "CCV-capsule6",
 	    domain       => "vms.intra.unetresgrossebite.com",
 	    lifecycleenv => "Prod",
 	    subnet       => "VMs";
 	"OCP":
+	    ak           => "AK-OCP-Prod",
 	    cv           => "CCV-OCP-el7",
 	    domain       => "friends.intra.unetresgrossebite.com",
 	    lifecycleenv => "Prod",

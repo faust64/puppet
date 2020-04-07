@@ -1,4 +1,5 @@
-define katello::define::hostgroup($arch         = false,
+define katello::define::hostgroup($ak           = false,
+				  $arch         = false,
 				  $cv           = false,
 				  $description  = "$name hosts",
 				  $env          = false,
@@ -93,6 +94,24 @@ define katello::define::hostgroup($arch         = false,
 		path        => "/usr/bin:/bin",
 		require     => Exec["Install Host-Group $name"],
 		unless      => "hammer hostgroup info --name '$name' --organization '$org' | grep 'external_puppet_ca .*=> .*$external_puppet_ca'";
+	}
+
+	if ($ak != false) {
+	    $akattrs = [ "hammer hostgroup set-parameter --hostgroup '$name'",
+			 "--name=kt_activation_keys --value=$ak",
+			 "--parameter-type=string" ]
+	    exec {
+		"Sets Host-Group $name ActivationKey Attribute":
+		    command     => $akattrs.join(' '),
+		    environment => [ 'HOME=/root' ],
+		    path        => "/usr/bin:/bin",
+		    require     =>
+			[
+			    Exec["Install Host-Group $name"],
+			    Katello::Define::Activationkey[$ak]
+			],
+		    unless      => "hammer hostgroup info --name '$name' --organization '$org' | grep 'kt_activation_keys .*=> .*$ak'";
+	    }
 	}
     } else {
 	exec {

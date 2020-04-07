@@ -3,11 +3,13 @@ class katello::config::subs {
 
     katello::define::hostgroup {
 	"Ceph":
+	    ak           => "AK-Ceph-Prod",
 	    cv           => "CCV-Ceph-el7",
 	    domain       => "friends.intra.unetresgrossebite.com",
 	    lifecycleenv => "Prod",
 	    subnet       => "Friends";
 	"OKD":
+	    ak           => "AK-OKD-Prod",
 	    cv           => "CCV-OKD-el7",
 	    domain       => "friends.intra.unetresgrossebite.com",
 	    lifecycleenv => "Prod",
