@@ -132,6 +132,16 @@ ospf_map: false
 # PF
 emby_ip: 10.42.42.210
 pf_custom_rules:
+  "avivavdi":
+    closedate: 2021/01/01
+    glpi: 9995
+    host:
+      vdi.aviva.fr: 146.162.243.106/32
+    port:
+      ssh: 8443
+    proto: "$t"
+    vlans:
+      - vlan42
   "rhvpn":
     closedate: 2021/01/01
     glpi: 9996
