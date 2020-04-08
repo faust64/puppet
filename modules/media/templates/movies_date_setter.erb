@@ -36,8 +36,10 @@ fi
 
 getMatch()
 {
-    local _found _c _m _r _s
+    local _found _c _d _m _r _s _y
 
+    _y="$1"
+    shift
     _s=`python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])" "$1" | sed 's|+|%20|g'`
     if ! curl -sL "$baseurl?$apikey&query=$_s" -o $TMPFILE \
 	    >/dev/null 2>&1; then
@@ -72,7 +74,16 @@ getMatch()
 	    fi
 	    if test "$_found"; then
 		if ! test "$_found" = null; then
-		    break
+		    if test "$_y" -a "$_y" -gt 0 >/dev/null 2>&1; then
+			_d=`echo $_found | sed 's|\(....\).*|\1|'`
+			if test $(expr $_d - $_y 2>/dev/null) -lt 2 \
+			    -a $(expr $_d - $_y 2>/dev/null) -gt -2; then
+			    break
+			#else: mismatching dates, probably some homonym
+			fi
+		    else
+			break
+		    fi
 		fi
 	    fi
 	done
@@ -88,28 +99,28 @@ getMatch()
     rm -f $TMPFILE
 }
 
-
 ls "$MOVIES_ROOT" | while read movie
     do
 	if test "$match"; then
 	    echo "$movie" | grep -E "$match" || continue
 	fi >/dev/null
-	found=`getMatch "$movie"`
+	yrhint=`echo "$movie" | sed 's|^[^(]*(\([0-9]*\).*|\1|'`
+	found=`getMatch "$yrhint" "$movie"`
 	if test -z "$found"; then
 	    sname=`echo "$movie" | sed 's| (.*||'`
-	    found=`getMatch "$sname" "$movie"`
+	    found=`getMatch "$yrhint" "$sname" "$movie"`
 	fi
 	if test -z "$found" -o "$found" = null; then
 	    sname=`echo "$sname" | sed 's|[ \t]|-|g'`
-	    found=`getMatch "$sname" "$movie"`
+	    found=`getMatch "$yrhint" "$sname" "$movie"`
 	fi
 	if test -z "$found" -o "$found" = null; then
 	    sname=`echo "$sname" | sed 's|[^a-ZA-Z ]||g'`
-	    found=`getMatch "$sname" "$movie"`
+	    found=`getMatch "$yrhint" "$sname" "$movie"`
 	fi
 	if test -z "$found"; then
 	    sname=`echo "$movie" | sed 's| (.*||'`
-	    found=`getMatch "$sname"`
+	    found=`getMatch "$yrhint" "$sname"`
 	fi
 	if test -z "$found"; then
 	    echo "WARNING: could not resolve $movie"
