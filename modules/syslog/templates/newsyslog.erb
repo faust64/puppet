@@ -31,8 +31,8 @@
 <% end -%><% if @has_nginx -%><%=@nginx_log_dir%>/*.log	<%=@nginx_runtime_user%>:<%=@nginx_runtime_group%>	644  5     1024	*     GZ  /var/run/nginx.pid
 <% end -%><% if @has_munin -%><%=@munin_log_dir%>/munin-node.log			644  7     *	@T00  Z <%=@munin_run_dir%>/munin-node.pid
 <% end -%><% elsif @kernel == "OpenBSD" -%>/var/cron/log		root:wheel	600  3	   10	*     Z
-/var/log/aculog		uucp:dialer	660  7	   *	24    Z
-/var/log/authlog	root:wheel	640  7	   *	168   Z
+<% if @kernelmajversion == 5 -%>/var/log/aculog		uucp:dialer	660  7	   *	24    Z
+<% end -%>/var/log/authlog	root:wheel	640  7	   *	168   Z
 /var/log/daemon				640  5	   30	*     Z
 /var/log/lpd-errs			640  7	   10	*     Z
 /var/log/maillog			600  7	   *	24    Z
