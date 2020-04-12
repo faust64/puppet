@@ -1,4 +1,5 @@
 define katello::define::subnet($base      = false,
+			       $bootmode  = "DHCP",
 			       $ensure    = 'present',
 			       $domain    = false,
 			       $dhcp_from = 150,
@@ -26,6 +27,9 @@ define katello::define::subnet($base      = false,
 	if ($network != false) {
 	    $nw = $network
 	} else { $nw = "$base.0" }
+	if ($bootmode != "DHCP") {
+	    $bm = " --boot-mode Static"
+	} else { $bm = " --boot-mode DHCP" }
 	if ($base != false) {
 	    $dfrom = "$base.$dhcp_from"
 	    $dto   = "$base.$dhcp_to"
@@ -49,8 +53,7 @@ define katello::define::subnet($base      = false,
 	$cmdargs = [ "hammer subnet create --name '$name' --organizations",
 		     "'$org' --locations '$loc'$dm --network $nw --mask $nm",
 		     "--ipam 'Internal DB' --from $dfrom --to $dto",
-		     "--dns-primary $dnsone --dns-secondary $dnstoo ",
-		     "--boot-mode DHCP" ]
+		     "--dns-primary $dnsone --dns-secondary $dnstoo$bm" ]
 	exec {
 	    "Install Subnet $name":
 		command     => $cmdargs.join(' '),
