@@ -36,65 +36,79 @@ fi
 
 getMatch()
 {
-    local _found _c _d _m _r _s _y
+    local _found _c _d _m _p _r _s _y
 
-    _y="$1"
+    _y="$1" _p=1 _found=
     shift
     _s=`python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1])" "$1" | sed 's|+|%20|g'`
-    if ! curl -sL "$baseurl?$apikey&query=$_s" -o $TMPFILE \
-	    >/dev/null 2>&1; then
-	if $DEBUG; then
-	    echo "WARNING: failed querying API for $1" >&2
+    while :
+    do
+	if ! curl -sL "$baseurl?$apikey&query=$_s&page=$_p" -o $TMPFILE \
+		>/dev/null 2>&1; then
+	    if $DEBUG; then
+		echo "WARNING: failed querying API for $1" >&2
+	    fi
+	    echo ""
+	    break
+	elif grep "{\"page\":$_p,\"total_results\":0,.*" $TMPFILE \
+		>/dev/null 2>&1; then
+	    if $DEBUG; then
+		echo "WARNING: no match found for $1" >&2
+	    fi
+	    echo ""
+	    break
+	else
+	    rlen=`cat $TMPFILE | jq -r '.results | length'`
+	    if ! test "$rlen" -ge 1 >/dev/null 2>&1; then
+		rlen=1
+	    fi
+	    if test -z "$2"; then
+		_r="$1"
+	    else
+		_r="$2"
+	    fi
+	    _r=`echo "$_r" | sed -e 's|\[|\\\[|g' -e 's|\]|\\\]|g'`
+	    for _c in `seq 0 $(expr $rlen - 1)`
+	    do
+		_m1=`cat $TMPFILE | jq -r ".results[$_c].original_title"`
+		_m2=`cat $TMPFILE | jq -r ".results[$_c].title"`
+		if echo "$_m1" | grep -i "$_r" >/dev/null; then
+		    _found=`cat $TMPFILE | jq -r ".results[$_c].release_date"`
+		elif echo "$_m2" | grep -i "$_r" >/dev/null; then
+		    _found=`cat $TMPFILE | jq -r ".results[$_c].release_date"`
+		fi
+		if test "$_found"; then
+		    if ! test "$_found" = null; then
+			if test "$_y" -a "$_y" -gt 0 >/dev/null 2>&1; then
+			    _d=`echo $_found | sed 's|\(....\).*|\1|'`
+			    if test $(expr $_d - $_y 2>/dev/null) -lt 2 \
+				-a $(expr $_d - $_y 2>/dev/null) -gt -2; then
+				_p=0
+				break
+			    else
+				_found=
+			    fi
+			else
+			    break
+			fi
+		    fi
+		fi
+	    done
+	    if ! test "$rlen" -ge 20; then
+		break
+	    elif test "$_p" -eq 0; then
+		break
+	    fi
+	    _p=`expr $_p + 1`
 	fi
-	echo ""
-    elif grep '{"page":1,"total_results":0,"total_pages":0,"results":\[\]}' \
-	    $TMPFILE >/dev/null 2>&1; then
+    done
+    if test -z "$_found"; then
 	if $DEBUG; then
-	    echo "WARNING: no match found for $1" >&2
+	    echo "WARNING: could not extract release date for $1" >&2
 	fi
 	echo ""
     else
-	rlen=`cat $TMPFILE | jq -r '.results | length'`
-	if ! test "$rlen" -ge 1 >/dev/null 2>&1; then
-	    rlen=1
-	fi
-	if test -z "$2"; then
-	    _r="$1"
-	else
-	    _r="$2"
-	fi
-	for _c in `seq 0 $(expr $rlen - 1)`
-	do
-	    _m1=`cat $TMPFILE | jq -r ".results[$_c].original_title"`
-	    _m2=`cat $TMPFILE | jq -r ".results[$_c].title"`
-	    if echo "$_m1" | grep -i "$_r" >/dev/null; then
-		_found=`cat $TMPFILE | jq -r ".results[$_c].release_date"`
-	    elif echo "$_m2" | grep -i "$_r" >/dev/null; then
-		_found=`cat $TMPFILE | jq -r ".results[$_c].release_date"`
-	    fi
-	    if test "$_found"; then
-		if ! test "$_found" = null; then
-		    if test "$_y" -a "$_y" -gt 0 >/dev/null 2>&1; then
-			_d=`echo $_found | sed 's|\(....\).*|\1|'`
-			if test $(expr $_d - $_y 2>/dev/null) -lt 2 \
-			    -a $(expr $_d - $_y 2>/dev/null) -gt -2; then
-			    break
-			#else: mismatching dates, probably some homonym
-			fi
-		    else
-			break
-		    fi
-		fi
-	    fi
-	done
-	if test -z "$_found"; then
-	    if $DEBUG; then
-		echo "WARNING: could not extract release date for $1" >&2
-	    fi
-	    echo ""
-	else
-	    echo $_found | sed 's|-||g'
-	fi
+	echo $_found | sed 's|-||g'
     fi
     rm -f $TMPFILE
 }
@@ -108,6 +122,10 @@ ls "$MOVIES_ROOT" | while read movie
 	found=`getMatch "$yrhint" "$movie"`
 	if test -z "$found"; then
 	    sname=`echo "$movie" | sed 's| (.*||'`
+	    found=`getMatch "$yrhint" "$sname" "$movie"`
+	fi
+	if test -z "$found"; then
+	    sname=`echo "$movie" | sed -e 's| (.*||' -e 's|\.||g' -e 's|…||g'`
 	    found=`getMatch "$yrhint" "$sname" "$movie"`
 	fi
 	if test -z "$found" -o "$found" = null; then
