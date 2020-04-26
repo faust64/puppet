@@ -13,5 +13,6 @@ apache_mpm: prefork
 apache_munin: false
 
 # PHP
+php_mod_mbstring: true
 php_mod_mcrypt: true
 php_mod_ldap: true
