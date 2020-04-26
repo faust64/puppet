@@ -168,11 +168,10 @@ class php::moduledependencies {
 		    [ "autoconf", $lcd, "pkg-config", "libmcrypt-dev" ]:
 		}
 
-		#FIXME: noexec needs to be disabled/re-enabled building this
-		#also, would want to cleanup build deps afterwards
+		#FIXME: would want to cleanup build deps afterwards
 		exec {
 		    "Install php-mcrypt from PECL":
-			command => "echo '' | pecl install mcrypt >pecl-install.out 2>&1",
+			command => "mount -o remount,exec /tmp && echo '' | pecl install mcrypt >pecl-install.out 2>&1 && mount -o remount,noexec /tmp",
 			creates => "/root/pecl-install.out",
 			cwd     => "/root",
 			path    => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
@@ -182,6 +181,7 @@ class php::moduledependencies {
 				Common::Define::Package[$lcd],
 				Common::Define::Package["libmcrypt-dev"],
 				Common::Define::Package["pkg-config"],
+				Common::Define::Package["php-pear"],
 				Class[Common::Tools::Gcc],
 				Class[Common::Tools::Make],
 				Php::Define::Module["xml"]

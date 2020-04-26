@@ -1,11 +1,13 @@
 class php::vars {
+    $check_cli            = lookup("php_is_cli")
+    $check_fpm            = lookup("php_is_fpm")
     $cmod_mysql           = lookup("php_mod_mysql")
     $cmod_mysqli          = lookup("php_mod_mysqli")
     $cmod_mysqlnd         = lookup("php_mod_mysqlnd")
+    $cphp_pear            = lookup("php_pear")
     $cmod_xml             = lookup("php_mod_xml")
     $conf_dir             = lookup("php_conf_dir")
-    $check_cli            = lookup("php_is_cli")
-    $check_fpm            = lookup("php_is_fpm")
+    $cwith_dev            = lookup("php_with_dev")
     $disabled_functions   = lookup("php_disabled_functions")
     $errfilter            = lookup("php_error_report")
     $gc_probability       = lookup("php_gc_probability")
@@ -50,7 +52,6 @@ class php::vars {
     $munin_nginx          = lookup("nginx_munin")
     $munin_probes         = lookup("php_munin_probes")
     $munin_service_name   = lookup("munin_node_service_name")
-    $php_pear             = lookup("php_pear")
     $php_sessions         = lookup("php_explicit_sessions")
     $post_max             = lookup("php_post_max_size")
     $rsyslog_conf_dir     = lookup("rsyslog_conf_dir")
@@ -61,7 +62,6 @@ class php::vars {
     $upload_max           = lookup("php_upload_max_filesize")
     $web_root             = lookup("apache_web_root")
     $with_apc             = lookup("php_apc")
-    $with_dev             = lookup("php_with_dev")
     $zend_modules         = lookup("php_zend_extensions")
 
     if (($operatingsystem == "Debian" and $lsbdistcodename == "stretch") or ($operatingsystem == "Ubuntu" and $lsbdistcodename == "xenial")) {
@@ -126,5 +126,24 @@ class php::vars {
 	$is_cli  = false
 	$is_fpm  = false
 	$srvname = false
+    }
+    if ($php::vars::mod_mcrypt == true) {
+	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
+	    if ($lsbdistcodename == "buster" or $lsbdistcodename == "stretch"
+		or $lsbdistcodename == "ascii" or $lsbdistcodename == "beowulf") {
+		$php_pear = true
+		$with_dev = true
+	    } else {
+		$php_pear = $cphp_pear
+		$with_dev = $cwith_dev
+	    }
+	} else {
+	    $php_pear = $cphp_pear
+	    $with_dev = $cwith_dev
+	}
+    } else {
+	$php_pear = $cphp_pear
+	$with_dev = $cwith_dev
     }
 }
