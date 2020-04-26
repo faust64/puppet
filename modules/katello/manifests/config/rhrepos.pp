@@ -1,7 +1,26 @@
 class katello::config::rhrepos {
+    $orgname = $katello::vars::katello_org
+
     katello::define::syncplan {
 	[ "OSP", "RedHat" ]:
 	    interval => "weekly";
+    }
+
+    katello::define::medium {
+	"RedHat Enterprise Linux Server 7.8":
+	    path => "http://$fqdn/pulp/repos/$orgname/Library/content/dist/rhel/server/7/7.8/x86_64/kickstart/";
+    }
+
+    katello::define::os {
+	"RedHat 7.8":
+	    major   => 7,
+	    mediums => "RedHat Enterprise Linux Server 7.8",
+	    minor   => 8,
+	    provs   =>
+		[
+		    "Custom kickstart",
+		    "Kickstart default",
+		];
     }
 
     katello::define::repositoryset {

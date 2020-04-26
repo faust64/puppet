@@ -38,7 +38,7 @@ define katello::define::product($description = $name,
     } else {
 	exec {
 	    "Drop Product $name":
-		command     => $addcmd,
+		command     => "hammer product delete --name '$name' --organization '$org'",
 		environment => [ 'HOME=/root' ],
 		onlyif      => "hammer product info --name '$name' --organization '$org'",
 		path        => "/usr/bin:/bin",
