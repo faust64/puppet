@@ -1,8 +1,5 @@
 physical_parent: eros.adm.intra.unetresgrossebite.com,rhea.adm.intra.unetresgrossebite.com
 
-# Collectd
-with_collectd: false
-
 # KVM
 kvm_cpu_family: Opteron_G3
 

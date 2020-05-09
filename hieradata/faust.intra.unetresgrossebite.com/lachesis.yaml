@@ -1,6 +1,5 @@
 has_serial_io: true
 physical_parent: nikea.adm.intra.unetresgrossebite.com
-with_collectd: false
 with_munin: false
 with_nagios: false
 

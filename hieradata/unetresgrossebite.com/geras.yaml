@@ -1,9 +1,6 @@
 additional_classes:
   - Fail2ban
 
-# Collectd
-with_collectd: false
-
 # Munin-Node
 munin_node_listenaddr: 37.59.45.201
 

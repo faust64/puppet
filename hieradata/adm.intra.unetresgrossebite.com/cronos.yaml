@@ -1,6 +1,5 @@
 no_linprocfs: true
 physical_parent: nikea.adm.intra.unetresgrossebite.com
-with_collectd: false
 
 # FreeBSD
 freebsd_with_dbus: true

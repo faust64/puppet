@@ -1,5 +1,4 @@
 physical_parent: nemesis.adm.intra.unetresgrossebite.com
-with_collectd: false
 
 # Apache
 apache_collectd: false

@@ -3,9 +3,6 @@ modeles_nas: repository.unetresgrossebite.com
 modeles_nfs_opts: fstype=nfs,ro,soft,intr
 modeles_path: /var/www/modeles
 
-# Collectd
-with_collectd: false
-
 # Nagios
 nagios_check_jumbo: true
 nagios_ip:

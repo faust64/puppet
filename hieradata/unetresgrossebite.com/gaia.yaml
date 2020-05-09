@@ -1,9 +1,6 @@
 additional_classes:
   - Fail2ban
 
-# Collectd
-with_collectd: false
-
 # KVM
 kvm_cpu_family: Nehalem
 

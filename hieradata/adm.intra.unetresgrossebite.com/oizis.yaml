@@ -1,4 +1,3 @@
-with_collectd: false
 physical_parent: eros.adm.intra.unetresgrossebite.com
 
 # Munin-Node

@@ -1,8 +1,4 @@
 physical_parent: eros.adm.intra.unetresgrossebite.com,rhea.adm.intra.unetresgrossebite.com
-with_collectd: false
-
-# Collectd
-with_collectd: false
 
 # Munin-Node
 munin_node_listenaddr: 10.42.242.24
