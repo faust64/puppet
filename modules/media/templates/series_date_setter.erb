@@ -32,9 +32,13 @@ fi
 <% else -%>grep 'show-container' $IDXFILE | sed 's|.*id="show\([^"]*\)" data-name="\([^"]*\)" .*|showid=\1 showtitle="\2"|' | while read line
 <% end -%>    do
 	eval $line
-	test "$showid" -a "$showtitle" || continue
-	if test "$match"; then
-	    echo "$showtitle" | grep -E "$match" || continue
+	showtitle=`echo "$showtitle" | sed "s|&#39;|'|g"`
+	if test -z "$showid" -o -z "$showtitle"; then
+	    continue
+	elif test "$match"; then
+	    if ! echo "$showtitle" | grep -E "$match"; then
+		continue
+	    fi
 	fi >/dev/null
 
 	if test -d "$SERIES_ROOT/$showtitle"; then
@@ -48,12 +52,12 @@ fi
 	    ls | while read episode
 	    do
 		if echo "$episode" | grep -E '^\[[0-9][0-9]x[0-9]*\] ' >/dev/null; then
-		    eval `echo "$episode" | sed 's|.*\[0*\([0-9]*\)x0*\([0-9]*\).*|s=\1 e=\2|'`
+		    eval `echo "$episode" | sed 's|.*\[0*\([0-9][0-9]*\)x0*\([0-9]*\).*|s=\1 e=\2|'`
 		    test -z "$e" && echo "$episode" | grep "x00\]" >/dev/null && e=0
 		    if test -z "$s" -o -z "$e"; then
 			echo "Failed to parse $episode name" >&2
 			continue
-		    elif ! test "$s" -gt 0 -a "$e" -gt 0; then
+		    elif ! test "$s" -ge 0 -a "$e" -gt 0; then
 			echo "Failed to parse $episode name" >&2
 			continue
 		    fi
@@ -68,13 +72,15 @@ fi
 			echo "[$showtitle/$datestr] $episode"
 		    fi
 		fi
-		if echo "$datestr" | grep [0-9] >/dev/null; then
+		if echo "$datestr" | grep -E '^[0-9]*$' >/dev/null; then
 		    if test -d "$episode"; then
 			find "$episode" -exec touch -md $datestr {} \;
 		    else
 			touch -md $datestr "$episode"
 		    fi
 		    touch -md $datestr .
+		elif test "$DEBUG" = verbose; then
+		    echo "INFO: ignoring invalid date $datestr for $episode"
 		fi
 	    done
 	    rm -f $TMPFILE
