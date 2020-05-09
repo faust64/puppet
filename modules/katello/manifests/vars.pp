@@ -31,4 +31,5 @@ class katello::vars {
 	    kind => "snippet" },
 	  { file => "puppet_setup",
 	    kind => "snippet" } ]
+    $sat_vers  = "6.7"
 }

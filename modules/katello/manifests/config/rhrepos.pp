@@ -1,5 +1,6 @@
 class katello::config::rhrepos {
-    $orgname = $katello::vars::katello_org
+    $sat_vers = $katello::vars::sat_vers
+    $orgname  = $katello::vars::katello_org
 
     katello::define::syncplan {
 	[ "OSP", "RedHat" ]:
@@ -34,16 +35,17 @@ class katello::config::rhrepos {
 	    "Red Hat Ansible Engine 2.4 RPMs for Red Hat Enterprise Linux 7 Server",
 	    "Red Hat Ansible Engine 2.6 RPMs for Red Hat Enterprise Linux 7 Server",
 	    "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server",
+	    "Red Hat Ansible Engine 2.9 RPMs for Red Hat Enterprise Linux 7 Server",
 	    "Red Hat Enterprise Linux 7 Server - Extras (RPMs)",
 	    "Red Hat Enterprise Linux 7 Server - Optional (RPMs)",
 	    "Red Hat Enterprise Linux 7 Server - Supplementary (RPMs)",
 	    "Red Hat Enterprise Linux 7 Server (RPMs)",
 	    "Red Hat OpenShift Container Platform 3.11 (RPMs)",
 	    "Red Hat OpenStack Platform 13 for RHEL 7 (RPMs)",
-	    "Red Hat Satellite 6.6 (for RHEL 7 Server) (RPMs)",
-	    "Red Hat Satellite Capsule 6.6 (for RHEL 7 Server) (RPMs)",
+	    "Red Hat Satellite $sat_vers (for RHEL 7 Server) (RPMs)",
+	    "Red Hat Satellite Capsule $sat_vers (for RHEL 7 Server) (RPMs)",
 	    "Red Hat Satellite Maintenance 6 (for RHEL 7 Server) (RPMs)",
-	    "Red Hat Satellite Tools 6.6 (for RHEL 7 Server) (RPMs)",
+	    "Red Hat Satellite Tools $sat_vers (for RHEL 7 Server) (RPMs)",
 	    "Red Hat Software Collections RPMs for Red Hat Enterprise Linux 7 Server"
 	]:
 	    releasever => "7Server";
@@ -51,7 +53,7 @@ class katello::config::rhrepos {
 	    releasever => "7.8";
 	[
 	    "Red Hat Enterprise Linux 7 Server - Fastrack (RPMs)",
-	    "Red Hat Satellite Tools 6.6 for RHEL 8 x86_64 (RPMs)"
+	    "Red Hat Satellite Tools $sat_vers for RHEL 8 x86_64 (RPMs)"
 	]:
     }
 
@@ -61,7 +63,8 @@ class katello::config::rhrepos {
 		[
 		    Katello::Define::Repositoryset["Red Hat Ansible Engine 2.4 RPMs for Red Hat Enterprise Linux 7 Server"],
 		    Katello::Define::Repositoryset["Red Hat Ansible Engine 2.6 RPMs for Red Hat Enterprise Linux 7 Server"],
-		    Katello::Define::Repositoryset["Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server"]
+		    Katello::Define::Repositoryset["Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server"],
+		    Katello::Define::Repositoryset["Red Hat Ansible Engine 2.9 RPMs for Red Hat Enterprise Linux 7 Server"]
 		],
 	    syncplan => "Ansible";
 	"Red Hat OpenShift Container Platform":
@@ -73,10 +76,10 @@ class katello::config::rhrepos {
 	[ "Red Hat Satellite", "Red Hat Satellite Capsule" ]:
 	    require  =>
 		[
-		    Katello::Define::Repositoryset["Red Hat Satellite 6.6 (for RHEL 7 Server) (RPMs)"],
-		    Katello::Define::Repositoryset["Red Hat Satellite Capsule 6.6 (for RHEL 7 Server) (RPMs)"],
+		    Katello::Define::Repositoryset["Red Hat Satellite $sat_vers (for RHEL 7 Server) (RPMs)"],
+		    Katello::Define::Repositoryset["Red Hat Satellite Capsule $sat_vers (for RHEL 7 Server) (RPMs)"],
 		    Katello::Define::Repositoryset["Red Hat Satellite Maintenance 6 (for RHEL 7 Server) (RPMs)"],
-		    Katello::Define::Repositoryset["Red Hat Satellite Tools 6.6 (for RHEL 7 Server) (RPMs)"]
+		    Katello::Define::Repositoryset["Red Hat Satellite Tools $sat_vers (for RHEL 7 Server) (RPMs)"]
 		],
 	    syncplan => "Products";
 	"Red Hat Enterprise Linux for x86_64":
@@ -116,6 +119,10 @@ class katello::config::rhrepos {
 	"Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server":
 	    product   => "Red Hat Ansible Engine",
 	    shortname => "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server x86_64",
+	    url       => "rhsm";
+	"Red Hat Ansible Engine 2.9 RPMs for Red Hat Enterprise Linux 7 Server":
+	    product   => "Red Hat Ansible Engine",
+	    shortname => "Red Hat Ansible Engine 2.9 RPMs for Red Hat Enterprise Linux 7 Server x86_64",
 	    url       => "rhsm";
 
 ## RedHat ##
@@ -161,25 +168,25 @@ class katello::config::rhrepos {
 	    url       => "rhsm";
 
 ## Satellite ##
-	"Red Hat Satellite 6.6 (for RHEL 7 Server) (RPMs)":
+	"Red Hat Satellite $sat_vers (for RHEL 7 Server) (RPMs)":
 	    product   => "Red Hat Satellite",
-	    shortname => "Red Hat Satellite 6.6 for RHEL 7 Server RPMs x86_64 7Server",
+	    shortname => "Red Hat Satellite $sat_vers for RHEL 7 Server RPMs x86_64",
 	    url       => "rhsm";
-	"Red Hat Satellite Capsule 6.6 (for RHEL 7 Server) (RPMs)":
+	"Red Hat Satellite Capsule $sat_vers (for RHEL 7 Server) (RPMs)":
 	    product   => "Red Hat Satellite Capsule",
-	    shortname => "Red Hat Satellite Capsule 6.6 for RHEL 7 Server RPMs x86_64 7Server",
+	    shortname => "Red Hat Satellite Capsule $sat_vers for RHEL 7 Server RPMs x86_64",
 	    url       => "rhsm";
 	"Red Hat Satellite Maintenance 6 (for RHEL 7 Server) (RPMs)":
 	    product   => "Red Hat Enterprise Linux Server",
 	    shortname => "Red Hat Satellite Maintenance 6 for RHEL 7 Server RPMs x86_64 7Server",
 	    url       => "rhsm";
-	"Red Hat Satellite Tools 6.6 (for RHEL 7 Server) (RPMs)":
+	"Red Hat Satellite Tools $sat_vers (for RHEL 7 Server) (RPMs)":
 	    product   => "Red Hat Enterprise Linux Server",
-	    shortname => "Red Hat Satellite Tools 6.6 for RHEL 7 Server RPMs x86_64 7Server",
+	    shortname => "Red Hat Satellite Tools $sat_vers for RHEL 7 Server RPMs x86_64",
 	    url       => "rhsm";
-	"Red Hat Satellite Tools 6.6 for RHEL 8 x86_64 (RPMs)":
+	"Red Hat Satellite Tools $sat_vers for RHEL 8 x86_64 (RPMs)":
 	    product   => "Red Hat Enterprise Linux for x86_64",
-	    shortname => "Red Hat Satellite Tools 6.6 for RHEL 8 x86_64 RPMs x86_64",
+	    shortname => "Red Hat Satellite Tools $sat_vers for RHEL 8 x86_64 RPMs x86_64",
 	    url       => "rhsm";
 
 ## OCP ##

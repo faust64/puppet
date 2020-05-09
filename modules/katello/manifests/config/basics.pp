@@ -19,6 +19,15 @@ class katello::config::basics {
 	    var   => "subscription_manager";
     }
 
+    katello::define::settings {
+	"Entries per Page":
+	    setting => "entries_per_page",
+	    value   => "50";
+	"Login Footer":
+	    setting => "login_text",
+	    value   => "Welcome to Katello.<br/>You may use your LDAP credentials logging in.";
+    }
+
     if ($katello::vars::manifest) {
 	common::define::geturl {
 	    "Katello Manifest":

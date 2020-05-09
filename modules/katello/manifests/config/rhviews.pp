@@ -1,4 +1,6 @@
 class katello::config::rhviews {
+    $sat_vers = $katello::vars::sat_vers
+
     katello::define::contentview {
 	"CV-base-redhat7":
 	    content   =>
@@ -36,14 +38,11 @@ class katello::config::rhviews {
 	    content   =>
 		[
 		    { product    => "Red Hat Satellite Capsule",
-		      rname      => "Red Hat Satellite Capsule 6.6 (for RHEL 7 Server) (RPMs)",
-		      repository => "Red Hat Satellite Capsule 6.6 for RHEL 7 Server RPMs x86_64 7Server" },
+		      rname      => "Red Hat Satellite Capsule $sat_vers (for RHEL 7 Server) (RPMs)",
+		      repository => "Red Hat Satellite Capsule $sat_vers for RHEL 7 Server RPMs x86_64" },
 		    { product    => "Red Hat Enterprise Linux Server",
 		      rname      => "Red Hat Satellite Maintenance 6 (for RHEL 7 Server) (RPMs)",
 		      repository => "Red Hat Satellite Maintenance 6 for RHEL 7 Server RPMs x86_64 7Server" },
-		    { product    => "Red Hat Software Collections (for RHEL Server)",
-		      rname      => "Red Hat Software Collections RPMs for Red Hat Enterprise Linux 7 Server",
-		      repository => "Red Hat Software Collections RPMs for Red Hat Enterprise Linux 7 Server x86_64 7Server" },
 		    { product    => "Red Hat Ansible Engine",
 		      rname      => "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server",
 		      repository => "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server x86_64" }
@@ -55,33 +54,30 @@ class katello::config::rhviews {
 		      rname      => "Red Hat OpenShift Container Platform 3.11 (RPMs)",
 		      repository => "Red Hat OpenShift Container Platform 3.11 RPMs x86_64 7Server" },
 		    { product    => "Red Hat Ansible Engine",
-		      rname      => "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server",
-		      repository => "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server x86_64" }
+		      rname      => "Red Hat Ansible Engine 2.9 RPMs for Red Hat Enterprise Linux 7 Server",
+		      repository => "Red Hat Ansible Engine 2.9 RPMs for Red Hat Enterprise Linux 7 Server x86_64" }
 		];
 	"CV-satellite6-el7":
 	    content   =>
 		[
 		    { product    => "Red Hat Satellite",
-		      rname      => "Red Hat Satellite 6.6 (for RHEL 7 Server) (RPMs)",
-		      repository => "Red Hat Satellite 6.6 for RHEL 7 Server RPMs x86_64 7Server" },
+		      rname      => "Red Hat Satellite $sat_vers (for RHEL 7 Server) (RPMs)",
+		      repository => "Red Hat Satellite $sat_vers for RHEL 7 Server RPMs x86_64" },
 		    { product    => "Red Hat Enterprise Linux Server",
 		      rname      => "Red Hat Satellite Maintenance 6 (for RHEL 7 Server) (RPMs)",
 		      repository => "Red Hat Satellite Maintenance 6 for RHEL 7 Server RPMs x86_64 7Server" },
-		    { product    => "Red Hat Software Collections (for RHEL Server)",
-		      rname      => "Red Hat Software Collections RPMs for Red Hat Enterprise Linux 7 Server",
-		      repository => "Red Hat Software Collections RPMs for Red Hat Enterprise Linux 7 Server x86_64 7Server" },
 		    { product    => "Red Hat Ansible Engine",
 		      rname      => "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server",
 		      repository => "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server x86_64" }
 		];
 	"CV-satellite-tools-el7":
 	    content   => [ { product    => "Red Hat Enterprise Linux Server",
-			     rname      => "Red Hat Satellite Tools 6.6 (for RHEL 7 Server) (RPMs)",
-			     repository => "Red Hat Satellite Tools 6.6 for RHEL 7 Server RPMs x86_64 7Server" } ];
+			     rname      => "Red Hat Satellite Tools $sat_vers (for RHEL 7 Server) (RPMs)",
+			     repository => "Red Hat Satellite Tools $sat_vers for RHEL 7 Server RPMs x86_64" } ];
 	"CV-satellite-tools-el8":
 	    content   => [ { product    => "Red Hat Enterprise Linux for x86_64",
-			     rname      => "Red Hat Satellite Tools 6.6 for RHEL 8 x86_64 (RPMs)",
-			     repository => "Red Hat Satellite Tools 6.6 for RHEL 8 x86_64 RPMs x86_64" } ];
+			     rname      => "Red Hat Satellite Tools $sat_vers for RHEL 8 x86_64 (RPMs)",
+			     repository => "Red Hat Satellite Tools $sat_vers for RHEL 8 x86_64 RPMs x86_64" } ];
 
 	"CCV-capsule6":
 	    composite => true,
