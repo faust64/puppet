@@ -77,7 +77,7 @@ fi
 				do
 				    if test -s "./$f.$x" >/dev/null; then
 					echo "[$showtitle/$f.$x] $datestr series assets"
-					touch -md "$datestr" "./$f.$x"
+					touch -mhd "$datestr" "./$f.$x"
 				    fi
 				done
 			    done
@@ -93,9 +93,9 @@ fi
 		if echo "$datestr" | grep -E '^[0-9][0-9]*$' >/dev/null; then
 <% if @emby != false -%>		    if test "$lasts" -ne "$s" -o \( "$s" -eq 0 -a "$laste" -eq 0 \); then
 			if test $s -eq 0; then
-			    if ls "./season-specials"* >/dev/null 2>&1; then
+			    if ls ./season-specials* >/dev/null 2>&1; then
 				echo "[$showtitle/specials] $datestr specials assets"
-				touch -md "$datestr" "./season-specials"*
+				touch -mhd $datestr ./season-specials*
 			    fi
 			else
 			    if test "$s" -le 10; then
@@ -103,23 +103,23 @@ fi
 			    else
 				ds=$s
 			    fi
-			    if ls "./season$ds"* >/dev/null 2>&1; then
+			    if ls ./season$ds* >/dev/null 2>&1; then
 				echo "[$showtitle/season$s] $datestr season assets"
-				touch -md "$datestr" "./season$ds"*
+				touch -mhd $datestr ./season$ds*
 			    fi
 			fi
 		    fi
 		    if test -s ./tvshow.nfo; then
-			touch -md "$datestr" ./tvshow.nfo
+			touch -md $datestr ./tvshow.nfo
 		    fi
 <% end -%>		    if test "$DEBUG" = verbose; then
 			echo "[$showtitle/$epstr] $datestr $episode"
 		    fi
 		    if test -d "$episode"; then
-			find "$episode" -exec touch -md $datestr {} \;
+			find "$episode" -exec touch -mhd $datestr {} \;
 		    else
 			matchep=`echo "$episode" | sed 's|^\(.*\[[0-9exs]*\]\).*|\1|'`
-			touch -md $datestr "${matchep}"*
+			touch -mhd $datestr "$matchep"*
 		    fi
 		    touch -md $datestr .
 		    laste=$e lasts=$s
