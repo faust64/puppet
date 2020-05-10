@@ -49,10 +49,14 @@ fi
 		continue
 	    fi
 	    cd "$SERIES_ROOT/$showtitle"
-	    ls | while read episode
+<% if @emby != false -%>	    laste=0 lasts=0
+<% end -%>	    ls | while read episode
 	    do
-		if echo "$episode" | grep -E '^\[[0-9][0-9]x[0-9]*\] ' >/dev/null; then
-		    eval `echo "$episode" | sed 's|.*\[0*\([0-9][0-9]*\)x0*\([0-9]*\).*|s=\1 e=\2|'`
+<% if @emby != false -%>		if echo "$episode" | grep -E '\.bif$' >/dev/null; then
+		    continue
+		elif echo "$episode" | grep -E '^\[[0-9][0-9]x[0-9]*\] ' >/dev/null; then
+<% else -%>		if echo "$episode" | grep -E '^\[[0-9][0-9]x[0-9]*\] ' >/dev/null; then
+<% end -%>		    eval `echo "$episode" | sed 's|.*\[0*\([0-9][0-9]*\)x0*\([0-9]*\).*|s=\1 e=\2|'`
 		    test -z "$e" && echo "$episode" | grep "x00\]" >/dev/null && e=0
 		    if test -z "$s" -o -z "$e"; then
 			echo "Failed to parse $episode name" >&2
@@ -60,27 +64,67 @@ fi
 		    elif ! test "$s" -ge 0 -a "$e" -gt 0; then
 			echo "Failed to parse $episode name" >&2
 			continue
-		    fi
+<% if @emby != false -%>		    elif test "$e" -eq "$laste" -a "$s" -eq "$lasts"; then
+			continue
+<% end -%>		    fi
 <% if @sickbeard != false -%>		    datestr=`grep -A11 "class=\"epCheck\" id=\"${s}x$e\" " $TMPFILE | grep 'class="col-airdate"' | sed -e 's|.*airdate">\([^<]*\)<.*|\1|' -e 's|-||g' | head -1`
 <% else -%>		    datestr=`cat $TMPFILE | jq -r ".[] | select(.[\"identifier\"] | test(\"s0*${s}e0*$e\"))" | jq -r ".[\"airDate\"]" | sed 's|\([0-9]*\)-\([0-9]*\)-\([0-9]*\)[^0-9].*|\1\2\3|' | head -1`
-<% end -%>		    if test "$DEBUG" = verbose; then
-			echo "[$showtitle/${s}x$e] $datestr $episode"
+<% end -%><% if @emby != false -%> 		    if echo "$datestr" | grep -E '^[0-9][0-9]*$' >/dev/null; then
+			if test "$laste" -eq 0 -a "$lasts" -eq 0; then
+			    for f in banner clearart clearlogo farnart landscape logo poster
+			    do
+				for x in png jpg
+				do
+				    if test -s "./$f.$x" >/dev/null; then
+					echo "[$showtitle/$f.$x] $datestr series assets"
+					touch -md "$datestr" "./$f.$x"
+				    fi
+				done
+			    done
+			fi
 		    fi
+<% end -%>		    epstr=${s}x$e
 		elif echo "$episode" | grep -E '^\[[1-2][0-9][0-9][0-9].[0-9][0-9].[0-9][0-9]\] ' >/dev/null; then
 		    datestr=`echo "$episode" | sed 's|^\[\([1-2][0-9][0-9][0-9]\).\([0-9][0-9]\).\([0-9][0-9]\)\].*|\1\2\3|'`
-		    if test "$DEBUG" = verbose; then
-			echo "[$showtitle/$datestr] $episode"
-		    fi
+		    epstr=$datestr
+		else
+		    continue
 		fi
-		if echo "$datestr" | grep -E '^[0-9]*$' >/dev/null; then
+		if echo "$datestr" | grep -E '^[0-9][0-9]*$' >/dev/null; then
+		    if test "$DEBUG" = verbose; then
+			echo "[$showtitle/$epstr] $datestr $episode"
+		    fi
 		    if test -d "$episode"; then
 			find "$episode" -exec touch -md $datestr {} \;
 		    else
-			touch -md $datestr "$episode"
+			matchep=`echo "$episode" | sed 's|^\(.*\[[0-9exs]*\]\).*|\1|'`
+			touch -md $datestr "${matchep}"*
 		    fi
-		    touch -md $datestr .
+<% if @emby != false -%>		    if test "$lasts" -ne "$s" -o \( "$s" -eq 0 -a "$laste" -eq 0 \); then
+			if test $s -eq 0; then
+			    if ls "./season-specials"* >/dev/null 2>&1; then
+				echo "[$showtitle/specials] $datestr specials assets"
+				touch -md "$datestr" "./season-specials"*
+			    fi
+			else
+			    if test "$lasts" -le 10; then
+				slasts=0$lasts
+			    else
+				slasts=$lasts
+			    fi
+			    if ls "./season$slasts"* >/dev/null 2>&1; then
+				echo "[$showtitle/season$lasts] $datestr season assets"
+				touch -md "$datestr" "./season$slasts"*
+			    fi
+			fi
+		    fi
+		    if test -s ./tvshow.nfo; then
+			touch -md "$datestr" ./tvshow.nfo
+		    fi
+<% end -%>		    touch -md $datestr .
+		    laste=$e lasts=$s
 		elif test "$DEBUG" = verbose; then
-		    echo "INFO: ignoring invalid date $datestr for $episode"
+		    echo "[$showtitle/$epstr] ignoring invalid date $datestr for $episode"
 		fi
 	    done
 	    rm -f $TMPFILE
