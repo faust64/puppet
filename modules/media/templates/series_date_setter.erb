@@ -32,7 +32,7 @@ fi
 <% else -%>grep 'show-container' $IDXFILE | sed 's|.*id="show\([^"]*\)" data-name="\([^"]*\)" .*|showid=\1 showtitle="\2"|' | while read line
 <% end -%>    do
 	eval $line
-	showtitle=`echo "$showtitle" | sed "s|&#39;|'|g"`
+	showtitle=`echo "$showtitle" | sed -e "s|&#39;|'|g" -e "s|&amp;|\&|g"`
 	if test -z "$showid" -o -z "$showtitle"; then
 	    continue
 	elif test "$match"; then
@@ -91,7 +91,28 @@ fi
 		    continue
 		fi
 		if echo "$datestr" | grep -E '^[0-9][0-9]*$' >/dev/null; then
-		    if test "$DEBUG" = verbose; then
+<% if @emby != false -%>		    if test "$lasts" -ne "$s" -o \( "$s" -eq 0 -a "$laste" -eq 0 \); then
+			if test $s -eq 0; then
+			    if ls "./season-specials"* >/dev/null 2>&1; then
+				echo "[$showtitle/specials] $datestr specials assets"
+				touch -md "$datestr" "./season-specials"*
+			    fi
+			else
+			    if test "$s" -le 10; then
+				ds=0$s
+			    else
+				ds=$s
+			    fi
+			    if ls "./season$ds"* >/dev/null 2>&1; then
+				echo "[$showtitle/season$s] $datestr season assets"
+				touch -md "$datestr" "./season$ds"*
+			    fi
+			fi
+		    fi
+		    if test -s ./tvshow.nfo; then
+			touch -md "$datestr" ./tvshow.nfo
+		    fi
+<% end -%>		    if test "$DEBUG" = verbose; then
 			echo "[$showtitle/$epstr] $datestr $episode"
 		    fi
 		    if test -d "$episode"; then
@@ -100,28 +121,7 @@ fi
 			matchep=`echo "$episode" | sed 's|^\(.*\[[0-9exs]*\]\).*|\1|'`
 			touch -md $datestr "${matchep}"*
 		    fi
-<% if @emby != false -%>		    if test "$lasts" -ne "$s" -o \( "$s" -eq 0 -a "$laste" -eq 0 \); then
-			if test $s -eq 0; then
-			    if ls "./season-specials"* >/dev/null 2>&1; then
-				echo "[$showtitle/specials] $datestr specials assets"
-				touch -md "$datestr" "./season-specials"*
-			    fi
-			else
-			    if test "$lasts" -le 10; then
-				slasts=0$lasts
-			    else
-				slasts=$lasts
-			    fi
-			    if ls "./season$slasts"* >/dev/null 2>&1; then
-				echo "[$showtitle/season$lasts] $datestr season assets"
-				touch -md "$datestr" "./season$slasts"*
-			    fi
-			fi
-		    fi
-		    if test -s ./tvshow.nfo; then
-			touch -md "$datestr" ./tvshow.nfo
-		    fi
-<% end -%>		    touch -md $datestr .
+		    touch -md $datestr .
 		    laste=$e lasts=$s
 		elif test "$DEBUG" = verbose; then
 		    echo "[$showtitle/$epstr] ignoring invalid date $datestr for $episode"
