@@ -940,6 +940,10 @@ katello_versions:
     pulp: 2.21
     services:
       - rh-mongodb34-mongod
+      - rh-redis5-redis
+      - pulpcore-api
+      - pulpcore-content
+      - pulpcore-resource-manager
       - postgresql
       - qdrouterd
       - qpidd
@@ -947,9 +951,12 @@ katello_versions:
       - pulp_celerybeat
       - pulp_resource_manager
       - pulp_streamer
+      - smart_proxy_dynflow_core
       - tomcat
-      - dynflowd
+      - dynflow-sidekiq@orchestrator
       - httpd
+      - dynflow-sidekiq@worker
+      - dynflow-sidekiq@worker-hosts-queue
       - foreman-proxy
 pulp_workers_count: 2
 rhregistry_authpass: false
