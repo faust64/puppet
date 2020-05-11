@@ -15,7 +15,7 @@ class katello::config::rhrepos {
     katello::define::os {
 	"RedHat 7.8":
 	    major   => 7,
-	    mediums => "RedHat Enterprise Linux Server 7.8",
+	    mediums => [ "RedHat Enterprise Linux Server 7.8" ],
 	    minor   => 8,
 	    provs   =>
 		[

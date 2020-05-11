@@ -5,7 +5,7 @@ class katello::hammer {
 
     common::define::package {
 	"tfm-rubygem-hammer_cli":
-	    require => Yum::Define::Repo["theforeman"];
+	    require => Yum::Define::Repo["foreman"];
     }
 
     file {

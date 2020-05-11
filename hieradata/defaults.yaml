@@ -935,6 +935,22 @@ katello_versions:
       - dynflowd
       - httpd
       - foreman-proxy
+  3.15:
+    foreman: 2.0
+    pulp: 2.21
+    services:
+      - rh-mongodb34-mongod
+      - postgresql
+      - qdrouterd
+      - qpidd
+      - squid
+      - pulp_celerybeat
+      - pulp_resource_manager
+      - pulp_streamer
+      - tomcat
+      - dynflowd
+      - httpd
+      - foreman-proxy
 pulp_workers_count: 2
 rhregistry_authpass: false
 rhregistry_authuser: false

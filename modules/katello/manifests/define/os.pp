@@ -5,7 +5,6 @@ define katello::define::os($archs       = [ "x86_64" ],
 			   $mediums     = false,
 			   $minor       = 8,
 			   $relname     = false,
-			   $org         = $katello::vars::katello_org,
 			   $parts       = [ "Kickstart default" ],
 			   $provs       = [ "Kickstart default" ]) {
     if ($ensure == 'present' and $path != false) {
@@ -14,27 +13,27 @@ define katello::define::os($archs       = [ "x86_64" ],
 	$joinedprovs = $provs.join(',')
 
 	if ($relname == false) {
-	    $addcmd = [ "hammer os create --name '$name' --organization '$org'",
+	    $addcmd = [ "hammer os create --name '$name'",
 			"--family $family --architectures $archstr",
 			"--major $major --minor $minor" ]
 	} else {
-	    $addcmd = [ "hammer os create --name '$name' --organization '$org'",
+	    $addcmd = [ "hammer os create --name '$name'",
 			"--family $family --architectures $archstr",
 			"--release-name '$relname'" ]
 	}
-	$apartcmd = [ "hammer os update --title '$name' --organization '$org'",
+	$apartcmd = [ "hammer os update --title '$name'",
 		      "--partition-tables '$joinedparts'" ]
-	$aprovcmd = [ "hammer os update --title '$name' --organization '$org'",
+	$aprovcmd = [ "hammer os update --title '$name'",
 		      "--provisioning-templates '$joinedprovs'" ]
 
 	exec {
 	    "Install OS $name":
 		command     => $addcmd.join(' '),
 		environment => [ 'HOME=/root' ],
-		onlyif      => "hammer os list --organization '$org'",
+		onlyif      => "hammer os list'",
 		path        => "/usr/bin:/bin",
 		require     => File["Install hammer cli configuration"],
-		unless      => "hammer os info --title '$name' --organization '$org'";
+		unless      => "hammer os info --title '$name'";
 	}
 
 	each($parts) |$ptable| {
@@ -44,11 +43,15 @@ define katello::define::os($archs       = [ "x86_64" ],
 			  "else { take = 0; } } } }' | grep '$ptable'" ]
 	    exec {
 		"Refreshes $name partition tables ($ptable)":
-		    command     => $aprovcmd.join(' '),
+		    command     => $apartcmd.join(' '),
 		    environment => [ 'HOME=/root' ],
 		    path        => "/usr/bin:/bin",
-		    require     => Exec["Install OS $name"],
-		    unless      => $cprovcmd.join(' ');
+		    require     =>
+			[
+			    Class["katello::config::patches"],
+			    Exec["Install OS $name"]
+			],
+		    unless      => $cpartcmd.join(' ');
 	    }
 	}
 
@@ -62,16 +65,17 @@ define katello::define::os($archs       = [ "x86_64" ],
 		    command     => $aprovcmd.join(' '),
 		    environment => [ 'HOME=/root' ],
 		    path        => "/usr/bin:/bin",
-		    require     => Exec["Install OS $name"],
+		    require     =>
+			[
+			    Class["katello::config::patches"],
+			    Exec["Install OS $name"]
+			],
 		    unless      => $cprovcmd.join(' ');
 	    }
 	}
 
 	if ($mediums != false) {
 	    $joinedmeds = $mediums.join(',')
-	    $amedcmd    = [ "hammer os update --title '$name' --organization '$org'",
-			    "--media '$joinmeds'" ]
-
 	    each($mediums) |$media| {
 		$cmedcmd = [ "hammer os info --title '$name' | awk ",
 			     "'BEG{take=0;}{if (\$0 ~ /Installation media/){take = 1;}",
@@ -80,25 +84,25 @@ define katello::define::os($archs       = [ "x86_64" ],
 
 		exec {
 		    "Refreshes $name installation mediums ($media)":
-			command     => $amedcmd.join(' '),
+			command     => "hammer os update --title '$name' --media '$joinmeds'",
 			environment => [ 'HOME=/root' ],
 			path        => "/usr/bin:/bin",
-			require     => Exec["Install OS $name"],
+			require     =>
+			    [
+				Class["katello::config::patches"],
+				Exec["Install Medium $media"],
+				Exec["Install OS $name"]
+			    ],
 			unless      => $cmedcmd.join(' ');
-		}
-
-		if (defined(Katello::define::medium[$name])) {
-		    Katello::define::medium[$name]
-			-> Exec["Refreshes $name installation mediums ($media)"]
 		}
 	    }
 	}
     } else {
 	exec {
 	    "Drop OS $name":
-		command     => "hammer os delete --title '$name' --organization '$org'",
+		command     => "hammer os delete --title '$name'",
 		environment => [ 'HOME=/root' ],
-		onlyif      => "hammer os info --title '$name' --organization '$org'",
+		onlyif      => "hammer os info --title '$name'",
 		path        => "/usr/bin:/bin",
 		require     => File["Install hammer cli configuration"];
 	}

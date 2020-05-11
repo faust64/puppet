@@ -11,20 +11,15 @@ class katello::rhel {
 	    descr   => "Ansible runner",
 	    gpgkey  => "https://releases.ansible.com/keys/RPM-GPG-KEY-ansible-release.pub",
 	    notify  => Exec["Update System prior Katello deployment"];
-	"theforeman-client":
+	"foreman-client":
 	    baseurl => "https://yum.theforeman.org/client/$tfmvers/el7/x86_64/",
 	    descr   => "TheForeman Client $tfmvers - el7",
 	    notify  => Exec["Update System prior Katello deployment"];
-	"theforeman-plugins":
+	"foreman-plugins":
 	    baseurl => "https://yum.theforeman.org/plugins/$tfmvers/el7/x86_64/",
 	    descr   => "TheForeman Plugins $tfmvers - el7",
 	    notify  => Exec["Update System prior Katello deployment"];
-	"theforeman-rails":
-	    baseurl => "https://yum.theforeman.org/rails/foreman-$tfmvers/el7/x86_64/",
-	    descr   => "TheForeman Rails $tfmvers - el7",
-	    gpgkey  => "https://yum.theforeman.org/rails/foreman-$tfmvers/RPM-GPG-KEY-foreman",
-	    notify  => Exec["Update System prior Katello deployment"];
-	"theforeman":
+	"foreman":
 	    baseurl => "https://yum.theforeman.org/releases/$tfmvers/el7/x86_64/",
 	    descr   => "TheForeman Main $tfmvers - el7",
 	    gpgkey  => "https://yum.theforeman.org/releases/$tfmvers/RPM-GPG-KEY-foreman",
@@ -39,15 +34,39 @@ class katello::rhel {
 	    descr   => "Katello Candlepin $ktlvers - el7",
 	    gpgkey  => "https://yum.theforeman.org/rails/foreman-$tfmvers/RPM-GPG-KEY-foreman",
 	    notify  => Exec["Update System prior Katello deployment"];
-	"katello-pulp":
-	    baseurl => "https://repos.fedorapeople.org/repos/pulp/pulp/stable/$plpvers/7/x86_64/",
-	    descr   => "Katello Pulp $ktlvers - el7",
-	    notify  => Exec["Update System prior Katello deployment"];
 	"puppet5":
 	    baseurl => "http://yum.puppetlabs.com/puppet5/el/7/SRPMS",
 	    descr   => "Puppet5 - el7",
 	    gpgkey  => "https://yum.puppet.com/RPM-GPG-KEY-puppet",
 	    notify  => Exec["Update System prior Katello deployment"];
+    }
+
+    if ($tfmvers == "1.24") {
+	yum::define::repo {
+	    "foreman-rails":
+		baseurl => "https://yum.theforeman.org/rails/foreman-$tfmvers/el7/x86_64/",
+		descr   => "TheForeman Rails $tfmvers - el7",
+		gpgkey  => "https://yum.theforeman.org/rails/foreman-$tfmvers/RPM-GPG-KEY-foreman",
+		notify  => Exec["Update System prior Katello deployment"];
+	    "katello-pulp":
+		baseurl => "https://repos.fedorapeople.org/repos/pulp/pulp/stable/$plpvers/7/x86_64/",
+		descr   => "Katello Pulp $ktlvers - el7",
+		notify  => Exec["Update System prior Katello deployment"];
+	}
+
+	Yum::Define::Repo["foreman-rails"]
+	    -> Yum::Define::Repo["katello-pulp"]
+	    -> Common::Define::Package["foreman-release-scl"]
+    } else {
+	yum::define::repo {
+	    "katello-pulpcore":
+		baseurl => "https://fedorapeople.org/groups/katello/releases/yum/$ktlvers/pulpcore/el7/x86_64/",
+		descr   => "Katello Pulpcore $ktlvers - el7",
+		notify  => Exec["Update System prior Katello deployment"];
+	}
+
+	Yum::Define::Repo["katello-pulpcore"]
+	    -> Common::Define::Package["foreman-release-scl"]
     }
 
     common::define::package {
@@ -58,14 +77,12 @@ class katello::rhel {
 		[
 		    Yum::Define::Repo["ansible-runner"],
 		    Yum::Define::Repo["epel"],
+		    Yum::Define::Repo["foreman"],
+		    Yum::Define::Repo["foreman-client"],
+		    Yum::Define::Repo["foreman-plugins"],
 		    Yum::Define::Repo["katello"],
 		    Yum::Define::Repo["katello-candlepin"],
-		    Yum::Define::Repo["katello-pulp"],
-		    Yum::Define::Repo["puppet5"],
-		    Yum::Define::Repo["theforeman"],
-		    Yum::Define::Repo["theforeman-client"],
-		    Yum::Define::Repo["theforeman-plugins"],
-		    Yum::Define::Repo["theforeman-rails"]
+		    Yum::Define::Repo["puppet5"]
 		];
     }
 }
