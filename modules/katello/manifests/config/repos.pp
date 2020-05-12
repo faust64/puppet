@@ -4,8 +4,13 @@ class katello::config::repos {
     $tfmvers = $katello::vars::theforeman_version
 
     katello::define::syncplan {
-	[ "Ansible", "CentOS", "Ceph", "Debian", "Devuan", "OCP", "Products" ]:
+	[ "Ansible", "CentOS", "Ceph", "Devuan", "OCP", "Products" ]:
 	    interval => "weekly";
+# debian sync likely to crash my Qnap
+# would proceed manually ...
+	[ "Debian" ]:
+	    interval => "weekly",
+	    status   => "disabled";
     }
 
     katello::define::gpgkey {
@@ -45,7 +50,19 @@ class katello::config::repos {
 	    source => "https://yum.theforeman.org/rails/foreman-$tfmvers/RPM-GPG-KEY-foreman";
     }
 
-    each([ "Ansible", "CentOS", "Ceph", "Debian", "Devuan", "OCP" ]) |$mainproduct| {
+# although I did define an OCP sync plan, the OCP product only includes
+# OKD3 packages - which haven't changed since 3.11 initial release - and
+# OCP3 docker images - quite heavy, usually takes 2-3 days for incremental
+# sync, over a week for initial clones, ... let's keep the OCP sync plan
+# for OCP3 rpms, which as still subject to updates
+    each([ "OCP" ]) |$unsyncedproduct| {
+	katello::define::product {
+	    $unsyncedproduct:
+		description => "$unsyncedproduct Repositories";
+	}
+    }
+
+    each([ "Ansible", "CentOS", "Ceph", "Debian", "Devuan" ]) |$mainproduct| {
 	katello::define::product {
 	    $mainproduct:
 		description => "$mainproduct Repositories",
@@ -207,11 +224,6 @@ class katello::config::repos {
 	    product   => "Foreman",
 	    shortname => "el7 x86_64 TheForeman $tfmvers Plugins",
 	    url       => "https://yum.theforeman.org/plugins/$tfmvers/el7/x86_64/";
-	"EL7 TheForeman $tfmvers Rails":
-	    gpgkey    => "TheForeman",
-	    product   => "Foreman",
-	    shortname => "el7 x86_64 TheForeman $tfmvers Rails",
-	    url       => "https://yum.theforeman.org/rails/foreman-$tfmvers/el7/x86_64/";
 
 ## Katello ##
 	"EL7 Katello $ktlvers":
@@ -224,10 +236,6 @@ class katello::config::repos {
 	    product   => "Katello",
 	    shortname => "el7 x86_64 Katello $ktlvers Candlepin",
 	    url       => "https://fedorapeople.org/groups/katello/releases/yum/$ktlvers/candlepin/el7/x86_64/";
-	"EL7 Katello $ktlvers Pulp":
-	    product   => "Katello",
-	    shortname => "el7 x86_64 Katello $ktlvers Pulp",
-	    url       => "https://repos.fedorapeople.org/repos/pulp/pulp/stable/$plpvers/7/x86_64/";
 
 ## OKD3 ##
 	"EL7 OKD 3.11":
@@ -242,5 +250,26 @@ class katello::config::repos {
 	    product   => "Puppet",
 	    shortname => "el7 x86_64 Puppet5",
 	    url       => "http://yum.puppetlabs.com/puppet5/el/7/SRPMS";
+    }
+
+    if ($tfmvers == "1.24" or $tfmvers == 1.24) {
+	katello::define::repository {
+	    "EL7 TheForeman $tfmvers Rails":
+		gpgkey    => "TheForeman",
+		product   => "Foreman",
+		shortname => "el7 x86_64 TheForeman $tfmvers Rails",
+		url       => "https://yum.theforeman.org/rails/foreman-$tfmvers/el7/x86_64/";
+	    "EL7 Katello $ktlvers Pulp":
+		product   => "Katello",
+		shortname => "el7 x86_64 Katello $ktlvers Pulp",
+		url       => "https://repos.fedorapeople.org/repos/pulp/pulp/stable/$plpvers/7/x86_64/";
+	}
+    } else {
+	katello::define::repository {
+	    "EL7 Katello $ktlvers Pulpcore":
+		product   => "Katello",
+		shortname => "el7 x86_64 Katello $ktlvers Pulpcore",
+		url       => "https://fedorapeople.org/groups/katello/releases/yum/$ktlvers/pulpcore/el7/x86_64/";
+	}
     }
 }

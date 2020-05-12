@@ -8,6 +8,10 @@ class katello::config::views {
 	"Dev":
     }
 
+    if ($tfmvers == "1.24" or $tfmvers == 1.24) {
+	$pulprepo = "Pulp"
+    } else { $pulprepo = "Pulpcore" }
+
     katello::define::contentview {
 	"CV-Ansible-el7":
 	    content   => [ { product    => "Ansible",
@@ -93,8 +97,8 @@ class katello::config::views {
 		      rname      => "EL7 TheForeman $tfmvers Plugins",
 		      repository => "el7 x86_64 TheForeman $tfmvers Plugins" },
 		    { product    => "Katello",
-		      rname      => "EL7 Katello $ktlvers Pulp",
-		      repository => "el7 x86_64 Katello $ktlvers Pulp" },
+		      rname      => "EL7 Katello $ktlvers $pulprepo",
+		      repository => "el7 x86_64 Katello $ktlvers $pulprepo" },
 		    { product    => "Puppet",
 		      rname      => "EL7 Puppet5",
 		      repository => "el7 x86_64 Puppet5" }

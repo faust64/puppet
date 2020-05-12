@@ -1,6 +1,8 @@
 class katello::config::rhrepos {
-    $sat_vers = $katello::vars::sat_vers
+    $last7    = 8
+    $last8    = 2
     $orgname  = $katello::vars::katello_org
+    $sat_vers = $katello::vars::sat_vers
 
     katello::define::syncplan {
 	[ "OSP", "RedHat" ]:
@@ -8,15 +10,26 @@ class katello::config::rhrepos {
     }
 
     katello::define::medium {
-	"RedHat Enterprise Linux Server 7.8":
-	    path => "http://$fqdn/pulp/repos/$orgname/Library/content/dist/rhel/server/7/7.8/x86_64/kickstart/";
+	"RedHat Enterprise Linux Server 7.$last7":
+	    path => "http://$fqdn/pulp/repos/$orgname/Library/content/dist/rhel/server/7/7.$last7/x86_64/kickstart/";
+	"RedHat Enterprise Linux Server 8.$last8":
+	    path => "http://$fqdn/pulp/repos/$orgname/Library/content/dist/rhel8/8.$last8/x86_64/baseos/kickstart/";
     }
 
     katello::define::os {
-	"RedHat 7.8":
+	"RedHat 7.$last7":
 	    major   => 7,
-	    mediums => [ "RedHat Enterprise Linux Server 7.8" ],
-	    minor   => 8,
+	    mediums => [ "RedHat Enterprise Linux Server 7.$last7" ],
+	    minor   => $last7,
+	    provs   =>
+		[
+		    "Custom kickstart",
+		    "Kickstart default",
+		];
+	"RedHat 8.$last8":
+	    major   => 8,
+	    mediums => [ "RedHat Enterprise Linux Server 8.$last8" ],
+	    minor   => $last8,
 	    provs   =>
 		[
 		    "Custom kickstart",
@@ -27,10 +40,11 @@ class katello::config::rhrepos {
     katello::define::repositoryset {
 	[
 	    "Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)",
-	    "Red Hat Enterprise Linux 8 for x86_64 - BaseOS (Kickstart)",
 	    "Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)"
 	]:
 	    releasever => 8;
+	"Red Hat Enterprise Linux 8 for x86_64 - BaseOS (Kickstart)":
+	    releasever => "8.$last8";
 	[
 	    "Red Hat Ansible Engine 2.4 RPMs for Red Hat Enterprise Linux 7 Server",
 	    "Red Hat Ansible Engine 2.6 RPMs for Red Hat Enterprise Linux 7 Server",
@@ -50,7 +64,7 @@ class katello::config::rhrepos {
 	]:
 	    releasever => "7Server";
 	"Red Hat Enterprise Linux 7 Server (Kickstart)":
-	    releasever => "7.8";
+	    releasever => "7.$last7";
 	[
 	    "Red Hat Enterprise Linux 7 Server - Fastrack (RPMs)",
 	    "Red Hat Satellite Tools $sat_vers for RHEL 8 x86_64 (RPMs)"

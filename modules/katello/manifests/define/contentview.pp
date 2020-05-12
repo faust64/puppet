@@ -38,9 +38,6 @@ define katello::define::contentview($composite = false,
 		    Exec["Include $includes into Content-View $name"]
 			-> Exec["Publish Content-View $name updated version"]
 			-> Exec["Publish Content-View $name"]
-
-		    Exec["Include $includes into Content-View $name"]
-			~> Exec["Publish Content-View $name updated version"]
 		}
 	    } else {
 		$pd      = $includes['product']
@@ -48,6 +45,15 @@ define katello::define::contentview($composite = false,
 		$rn      = $includes['rname']
 		$include = "$pd/$rp"
 
+		if ($pd == "Debian") {
+			# content-view info does not return with debian contents
+			# whereas content-view list does include a list of included repo IDs
+		    $ck = "hammer content-view list | grep ' $name ' | grep -E ' '$(hammer repository info --name '$rp' --organization '$org' --product '$pd' | awk '/^ID:/{print \$2}')'[,\$ ]'"
+		} else {
+			# on the other hand, content-view list may not return a full list of repo IDs
+			# that column prints at most 80 chars (including trailing '...')
+		    $ck = "hammer content-view info --name '$name' --organization '$org' | grep '$rp'"
+		}
 		exec {
 		    "Include $include into Content-View $name":
 			command     => "hammer content-view add-repository --product '$pd' --repository '$rp' --name '$name' --organization '$org'",
@@ -55,7 +61,7 @@ define katello::define::contentview($composite = false,
 			onlyif      => "hammer content-view info --name '$name' --organization '$org'",
 			path        => "/usr/bin:/bin",
 			require     => Exec["Install Content-View $name"],
-			unless      => "hammer content-view info --name '$name' --organization '$org' | grep '$rp'";
+			unless      => $ck;
 		}
 
 		Katello::Define::Repository[$rn]
@@ -65,9 +71,6 @@ define katello::define::contentview($composite = false,
 		    Exec["Include $include into Content-View $name"]
 			-> Exec["Publish Content-View $name updated version"]
 			-> Exec["Publish Content-View $name"]
-
-		    Exec["Include $include into Content-View $name"]
-			~> Exec["Publish Content-View $name updated version"]
 		}
 	    }
 	}

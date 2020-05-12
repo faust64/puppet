@@ -1,5 +1,7 @@
 class katello::config::subs {
-    $org = $katello::vars::katello_org
+    $ktlvers = $katello::vars::katello_version
+    $org     = $katello::vars::katello_org
+    $tfmvers = $katello::vars::theforeman_version
 
     katello::define::hostgroup {
 	"Ceph":
@@ -15,6 +17,10 @@ class katello::config::subs {
 	    lifecycleenv => "Prod",
 	    subnet       => "Friends";
     }
+
+    if ($tfmvers == "1.24" or $tfmvers == 1.24) {
+	$pulprepo = "Pulp"
+    } else { $pulprepo = "Pulpcore" }
 
     katello::define::activationkey {
 	"AK-Ceph-Prod":
@@ -33,9 +39,9 @@ class katello::config::subs {
 		    "${org}_CentOS_el7_x86_64_Updates",
 		    "${org}_Ceph_el7_x86_64_Ceph_Nautilus",
 		    "${org}_EPEL_EPEL7_x86_64",
-		    "${org}_Foreman_el7_x86_64_TheForeman_1.24_Client",
-		    "${org}_Foreman_el7_x86_64_TheForeman_1.24_Plugins",
-		    "${org}_Katello_el7_x86_64_Katello_3.14_Pulp",
+		    "${org}_Foreman_el7_x86_64_TheForeman_${tfmvers}_Client",
+		    "${org}_Foreman_el7_x86_64_TheForeman_${tfmvers}_Plugins",
+		    "${org}_Katello_el7_x86_64_Katello_${ktlvers}_$pulprepo",
 		    "${org}_Puppet_el7_x86_64_Puppet5"
 		],
 	    lce         => "Prod";
@@ -56,9 +62,9 @@ class katello::config::subs {
 		    "${org}_CentOS_el7_x86_64_Updates",
 		    "${org}_Ceph_el7_x86_64_Ceph_Nautilus",
 		    "${org}_EPEL_EPEL7_x86_64",
-		    "${org}_Foreman_el7_x86_64_TheForeman_1.24_Client",
-		    "${org}_Foreman_el7_x86_64_TheForeman_1.24_Plugins",
-		    "${org}_Katello_el7_x86_64_Katello_3.14_Pulp",
+		    "${org}_Foreman_el7_x86_64_TheForeman_${tfmvers}_Client",
+		    "${org}_Foreman_el7_x86_64_TheForeman_${tfmvers}_Plugins",
+		    "${org}_Katello_el7_x86_64_Katello_${ktlvers}_$pulprepo",
 		    "${org}_Puppet_el7_x86_64_Puppet5"
 		],
 	    lce         => "Prod";

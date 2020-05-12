@@ -41,7 +41,7 @@ class katello::rhel {
 	    notify  => Exec["Update System prior Katello deployment"];
     }
 
-    if ($tfmvers == "1.24") {
+    if ($tfmvers == "1.24" or $tfmvers == 1.24) {
 	yum::define::repo {
 	    "foreman-rails":
 		baseurl => "https://yum.theforeman.org/rails/foreman-$tfmvers/el7/x86_64/",

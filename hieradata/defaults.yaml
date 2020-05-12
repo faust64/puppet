@@ -917,7 +917,7 @@ katello_munin_probes:
   - katello_hosts
 katello_organization: Default Organization
 katello_register_with_ak: false
-katello_version: 3.14
+katello_version: 3.15
 katello_versions:
   3.14:
     foreman: 1.24
