@@ -71,7 +71,7 @@ fi
 <% else -%>		    datestr=`cat $TMPFILE | jq -r ".[] | select(.[\"identifier\"] | test(\"s0*${s}e0*$e\"))" | jq -r ".[\"airDate\"]" | sed 's|\([0-9]*\)-\([0-9]*\)-\([0-9]*\)[^0-9].*|\1\2\3|' | head -1`
 <% end -%><% if @emby != false -%> 		    if echo "$datestr" | grep -E '^[0-9][0-9]*$' >/dev/null; then
 			if test "$laste" -eq 0 -a "$lasts" -eq 0; then
-			    for f in banner clearart clearlogo farnart landscape logo poster
+			    for f in banner clearart clearlogo fanart landscape logo poster
 			    do
 				for x in png jpg
 				do
