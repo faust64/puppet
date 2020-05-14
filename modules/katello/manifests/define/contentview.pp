@@ -45,7 +45,7 @@ define katello::define::contentview($composite = false,
 		$rn      = $includes['rname']
 		$include = "$pd/$rp"
 
-		if ($pd == "Debian") {
+		if ($pd == "Debian" or $rp == "Buster Octopus") {
 			# content-view info does not return with debian contents
 			# whereas content-view list does include a list of included repo IDs
 		    $ck = "hammer content-view list | grep ' $name ' | grep -E ' '$(hammer repository info --name '$rp' --organization '$org' --product '$pd' | awk '/^ID:/{print \$2}')'[,\$ ]'"

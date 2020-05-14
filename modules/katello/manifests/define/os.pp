@@ -84,7 +84,7 @@ define katello::define::os($archs       = [ "x86_64" ],
 
 		exec {
 		    "Refreshes $name installation mediums ($media)":
-			command     => "hammer os update --title '$name' --media '$joinmeds'",
+			command     => "hammer os update --title '$name' --media '$joinedmeds'",
 			environment => [ 'HOME=/root' ],
 			path        => "/usr/bin:/bin",
 			require     =>
@@ -95,6 +95,22 @@ define katello::define::os($archs       = [ "x86_64" ],
 			    ],
 			unless      => $cmedcmd.join(' ');
 		}
+	    }
+	} else {
+	    $cmedcmd = [ "hammer os info --title '$name' | grep -A1 ",
+			 "'Installation media' | grep ^Templates:'" ]
+
+	    exec {
+		"Purges $name installation mediums":
+		    command     => "hammer os update --title '$name' --media ''",
+		    environment => [ 'HOME=/root' ],
+		    path        => "/usr/bin:/bin",
+		    require     =>
+			[
+			    Class["katello::config::patches"],
+			    Exec["Install OS $name"]
+			],
+		    unless      => $cmedcmd.join(' ');
 	    }
 	}
     } else {

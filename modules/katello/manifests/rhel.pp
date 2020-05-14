@@ -53,12 +53,12 @@ class katello::rhel {
 		descr   => "Katello Pulp $ktlvers - el7",
 		notify  => Exec["Update System prior Katello deployment"];
 	}
-
-	Yum::Define::Repo["foreman-rails"]
-	    -> Yum::Define::Repo["katello-pulp"]
-	    -> Common::Define::Package["foreman-release-scl"]
     } else {
 	yum::define::repo {
+	    "foreman-rails":
+		ensure  => "absent";
+	    "katello-pulp":
+		ensure  => "absent";
 	    "katello-pulpcore":
 		baseurl => "https://fedorapeople.org/groups/katello/releases/yum/$ktlvers/pulpcore/el7/x86_64/",
 		descr   => "Katello Pulpcore $ktlvers - el7",
@@ -80,8 +80,10 @@ class katello::rhel {
 		    Yum::Define::Repo["foreman"],
 		    Yum::Define::Repo["foreman-client"],
 		    Yum::Define::Repo["foreman-plugins"],
+		    Yum::Define::Repo["foreman-rails"],
 		    Yum::Define::Repo["katello"],
 		    Yum::Define::Repo["katello-candlepin"],
+		    Yum::Define::Repo["katello-pulp"],
 		    Yum::Define::Repo["puppet5"]
 		];
     }

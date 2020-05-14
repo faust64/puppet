@@ -95,6 +95,14 @@ class katello::config::rhviews {
 	    composite => true,
 	    content   => [ "CV-base-redhat7", "CV-satellite-tools-el7", "CV-satellite6-el7" ],
 	    tolce     => [ "Dev", "Prod" ];
+	"CCV-OCP-el7":
+	    composite => true,
+	    content   =>
+		[
+		    "CV-base-redhat7", "CV-satellite-tools-el7",
+		    "CV-ocp3-el7", "CV-Ceph-el8"
+		],
+	    tolce     => [ "Dev", "Prod" ];
     }
 
     if ($katello::vars::rhregistry_pass and $katello::vars::rhregistry_user) {
@@ -104,25 +112,6 @@ class katello::config::rhviews {
 	katello::define::contentview {
 	    "CV-ocp3-docker":
 		content   => $dkr;
-	    "CCV-OCP-el7":
-		composite => true,
-		content   =>
-		    [
-			"CV-base-redhat7", "CV-satellite-tools-el7",
-			"CV-ocp3-el7", "CV-ocp3-docker", "CV-Ceph-el7"
-		    ],
-		tolce     => [ "Dev", "Prod" ];
-	}
-    } else {
-	katello::define::contentview {
-	    "CCV-OCP-el7":
-		composite => true,
-		content   =>
-		    [
-			"CV-base-redhat7", "CV-satellite-tools-el7",
-			"CV-ocp3-el7", "CV-Ceph-el7"
-		    ],
-		tolce     => [ "Dev", "Prod" ];
 	}
     }
 }

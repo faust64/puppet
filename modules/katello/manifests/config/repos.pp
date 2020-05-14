@@ -127,11 +127,39 @@ class katello::config::repos {
 	    shortname => "Bionic amd64 Ceph Nautilus",
 	    type      => "deb",
 	    url       => "http://download.ceph.com/debian-nautilus/";
+	"Buster Octopus":
+	    debcomps  => [ "main" ],
+	    debrels   => [ "buster" ],
+	    gpgkey    => "CephRelease",
+	    product   => "Ceph",
+	    shortname => "Buster amd64 Ceph Octopus",
+	    type      => "deb",
+	    url       => "http://download.ceph.com/debian-octopus/";
 	"EL7 Nautilus":
 	    gpgkey    => "CephRelease",
 	    product   => "Ceph",
 	    shortname => "el7 x86_64 Ceph Nautilus",
 	    url       => "http://download.ceph.com/rpm-nautilus/el7/x86_64/";
+	"EL7 Octopus noarch":
+	    gpgkey    => "CephRelease",
+	    product   => "Ceph",
+	    shortname => "el7 noarch Ceph Octopus",
+	    url       => "http://download.ceph.com/rpm-octopus/el7/noarch/";
+	"EL7 Octopus x86_64":
+	    gpgkey    => "CephRelease",
+	    product   => "Ceph",
+	    shortname => "el7 x86_64 Ceph Octopus",
+	    url       => "http://download.ceph.com/rpm-octopus/el7/x86_64/";
+	"EL8 Octopus noarch":
+	    gpgkey    => "CephRelease",
+	    product   => "Ceph",
+	    shortname => "el8 noarch Ceph Octopus",
+	    url       => "http://download.ceph.com/rpm-octopus/el8/noarch/";
+	"EL8 Octopus x86_64":
+	    gpgkey    => "CephRelease",
+	    product   => "Ceph",
+	    shortname => "el8 x86_64 Ceph Octopus",
+	    url       => "http://download.ceph.com/rpm-octopus/el8/x86_64/";
 	"Xenial Nautilus":
 	    debcomps  => [ "main" ],
 	    debrels   => [ "xenial" ],
@@ -224,6 +252,15 @@ class katello::config::repos {
 	    product   => "Foreman",
 	    shortname => "el7 x86_64 TheForeman $tfmvers Plugins",
 	    url       => "https://yum.theforeman.org/plugins/$tfmvers/el7/x86_64/";
+	"EL8 TheForeman $tfmvers Client":
+	    gpgkey    => "TheForeman",
+	    product   => "Foreman",
+	    shortname => "el8 x86_64 TheForeman $tfmvers Client",
+	    url       => "https://yum.theforeman.org/client/$tfmvers/el8/x86_64/";
+#	"EL8 TheForeman $tfmvers Plugins":
+#	    product   => "Foreman",
+#	    shortname => "el8 x86_64 TheForeman $tfmvers Plugins",
+#	    url       => "https://yum.theforeman.org/plugins/$tfmvers/el8/x86_64/";
 
 ## Katello ##
 	"EL7 Katello $ktlvers":
@@ -249,7 +286,12 @@ class katello::config::repos {
 	    gpgkey    => "Puppet",
 	    product   => "Puppet",
 	    shortname => "el7 x86_64 Puppet5",
-	    url       => "http://yum.puppetlabs.com/puppet5/el/7/SRPMS";
+	    url       => "https://yum.puppetlabs.com/puppet5/el/7/x86_64/";
+	"EL8 Puppet5":
+	    gpgkey    => "Puppet",
+	    product   => "Puppet",
+	    shortname => "el8 x86_64 Puppet5",
+	    url       => "https://yum.puppetlabs.com/puppet5/el/8/x86_64/";
     }
 
     if ($tfmvers == "1.24" or $tfmvers == 1.24) {
@@ -270,6 +312,10 @@ class katello::config::repos {
 		product   => "Katello",
 		shortname => "el7 x86_64 Katello $ktlvers Pulpcore",
 		url       => "https://fedorapeople.org/groups/katello/releases/yum/$ktlvers/pulpcore/el7/x86_64/";
+#	    "EL8 Katello $ktlvers Pulpcore":
+#		product   => "Katello",
+#		shortname => "el8 x86_64 Katello $ktlvers Pulpcore",
+#		url       => "https://fedorapeople.org/groups/katello/releases/yum/$ktlvers/pulpcore/el8/x86_64/";
 	}
     }
 }

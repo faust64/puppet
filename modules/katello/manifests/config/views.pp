@@ -19,8 +19,22 @@ class katello::config::views {
 			     repository => "el7 x86_64 Ansible" } ];
 	"CV-Ceph-el7":
 	    content   => [ { product    => "Ceph",
-			     rname      => "EL7 Nautilus",
-			     repository => "el7 x86_64 Ceph Nautilus" } ];
+			     rname      => "EL7 Octopus x86_64",
+			     repository => "el7 x86_64 Ceph Octopus" },
+			   { product    => "Ceph",
+			     rname      => "EL7 Octopus noarch",
+			     repository => "el7 noarch Ceph Octopus" } ];
+	"CV-Ceph-el8":
+	    content   => [ { product    => "Ceph",
+			     rname      => "EL8 Octopus x86_64",
+			     repository => "el8 x86_64 Ceph Octopus" },
+			   { product    => "Ceph",
+			     rname      => "EL8 Octopus noarch",
+			     repository => "el8 noarch Ceph Octopus" } ];
+	"CV-Ceph-deb10":
+	    content   => [ { product    => "Ceph",
+			     rname      => "Buster Octopus",
+			     repository => "Buster amd64 Ceph Octopus" } ];
 	"CV-EPEL-el7":
 	    content   => [ { product    => "EPEL",
 			     rname      => "EPEL7 x86_64",
@@ -103,6 +117,22 @@ class katello::config::views {
 		      rname      => "EL7 Puppet5",
 		      repository => "el7 x86_64 Puppet5" }
 		];
+	"CV-katello-client-el8":
+	    content   =>
+		[
+		    { product    => "Foreman",
+		      rname      => "EL8 TheForeman $tfmvers Client",
+		      repository => "el8 x86_64 TheForeman $tfmvers Client" },
+		    { product    => "Foreman",
+		      rname      => "EL7 TheForeman $tfmvers Plugins",
+		      repository => "el7 x86_64 TheForeman $tfmvers Plugins" },
+		    { product    => "Katello",
+		      rname      => "EL7 Katello $ktlvers $pulprepo",
+		      repository => "el7 x86_64 Katello $ktlvers $pulprepo" },
+		    { product    => "Puppet",
+		      rname      => "EL8 Puppet5",
+		      repository => "el8 x86_64 Puppet5" }
+		];
 
 	"CCV-Ceph-el7":
 	    composite => true,
@@ -111,6 +141,18 @@ class katello::config::views {
 		    "CV-Ceph-el7", "CV-EPEL-el7",
 		    "CV-base-centos7", "CV-katello-client-el7"
 		],
+	    tolce     => [ "Dev", "Prod" ];
+	"CCV-Ceph-el8":
+	    composite => true,
+	    content   =>
+		[
+		    "CV-Ceph-el8", "CV-EPEL-el8",
+		    "CV-base-centos8", "CV-katello-client-el8"
+		],
+	    tolce     => [ "Dev", "Prod" ];
+	"CCV-Ceph-deb10":
+	    composite => true,
+	    content   => [ "CV-Ceph-deb10", "CV-base-debian10" ],
 	    tolce     => [ "Dev", "Prod" ];
 	"CCV-OKD-el7":
 	    composite => true,
@@ -127,7 +169,7 @@ class katello::config::views {
 	    tolce     => [ "Dev", "Prod" ];
 	"CCV-centos8":
 	    composite => true,
-	    content   => [ "CV-base-centos8", "CV-EPEL-el8", "CV-katello-client-el7" ],
+	    content   => [ "CV-base-centos8", "CV-EPEL-el8", "CV-katello-client-el8" ],
 	    tolce     => [ "Dev", "Prod" ];
     }
 }
