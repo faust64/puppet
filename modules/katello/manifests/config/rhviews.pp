@@ -100,7 +100,7 @@ class katello::config::rhviews {
 	    content   =>
 		[
 		    "CV-base-redhat7", "CV-satellite-tools-el7",
-		    "CV-ocp3-el7", "CV-Ceph-el8"
+		    "CV-ocp3-el7", "CV-Ceph-el7"
 		],
 	    tolce     => [ "Dev", "Prod" ];
     }
