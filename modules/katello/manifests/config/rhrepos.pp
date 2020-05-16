@@ -39,6 +39,10 @@ class katello::config::rhrepos {
 
     katello::define::repositoryset {
 	[
+	    "Red Hat Ceph Storage 4 Text-Only Advisories for RHEL 8 x86_64 (RPMs)",
+	    "Red Hat Ceph Storage MON 4 for RHEL 8 x86_64 (RPMs)",
+	    "Red Hat Ceph Storage OSD 4 for RHEL 8 x86_64 (RPMs)",
+	    "Red Hat Ceph Storage Tools 4 for RHEL 8 x86_64 (RPMs)",
 	    "Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)",
 	    "Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)"
 	]:
@@ -81,6 +85,19 @@ class katello::config::rhrepos {
 		    Katello::Define::Repositoryset["Red Hat Ansible Engine 2.9 RPMs for Red Hat Enterprise Linux 7 Server"]
 		],
 	    syncplan => "Ansible";
+	"Red Hat Ceph Storage":
+	    require  => Katello::Define::Repositoryset["Red Hat Ceph Storage Tools 4 for RHEL 8 x86_64 (RPMs)"],
+	    syncplan => "Ceph";
+	"Red Hat Ceph Storage MON":
+	    require  =>
+		[
+		    Katello::Define::Repositoryset["Red Hat Ceph Storage 4 Text-Only Advisories for RHEL 8 x86_64 (RPMs)"],
+		    Katello::Define::Repositoryset["Red Hat Ceph Storage MON 4 for RHEL 8 x86_64 (RPMs)"],
+		],
+	    syncplan => "Ceph";
+	"Red Hat Ceph Storage OSD":
+	    require  => Katello::Define::Repositoryset["Red Hat Ceph Storage OSD 4 for RHEL 8 x86_64 (RPMs)"],
+	    syncplan => "Ceph";
 	"Red Hat OpenShift Container Platform":
 	    require  => Katello::Define::Repositoryset["Red Hat OpenShift Container Platform 3.11 (RPMs)"],
 	    syncplan => "OCP";
@@ -201,6 +218,25 @@ class katello::config::rhrepos {
 	"Red Hat Satellite Tools $sat_vers for RHEL 8 x86_64 (RPMs)":
 	    product   => "Red Hat Enterprise Linux for x86_64",
 	    shortname => "Red Hat Satellite Tools $sat_vers for RHEL 8 x86_64 RPMs x86_64",
+	    url       => "rhsm";
+
+## Ceph ##
+	"Red Hat Ceph Storage Tools 4 for RHEL 8 x86_64 (RPMs)":
+	    product   => "Red Hat Ceph Storage",
+	    shortname => "Red Hat Ceph Storage Tools 4 for RHEL 8 x86_64 RPMs",
+	    url       => "rhsm";
+
+	"Red Hat Ceph Storage 4 Text-Only Advisories for RHEL 8 x86_64 (RPMs)":
+	    product   => "Red Hat Ceph Storage MON",
+	    shortname => "Red Hat Ceph Storage 4 Text-Only Advisories for RHEL 8 x86_64 RPMs",
+	    url       => "rhsm";
+	"Red Hat Ceph Storage MON 4 for RHEL 8 x86_64 (RPMs)":
+	    product   => "Red Hat Ceph Storage MON",
+	    shortname => "Red Hat Ceph Storage MON 4 for RHEL 8 x86_64 RPMs",
+	    url       => "rhsm";
+	"Red Hat Ceph Storage OSD 4 for RHEL 8 x86_64 (RPMs)":
+	    product   => "Red Hat Ceph Storage OSD",
+	    shortname => "Red Hat Ceph Storage OSD 4 for RHEL 8 x86_64 RPMs",
 	    url       => "rhsm";
 
 ## OCP ##

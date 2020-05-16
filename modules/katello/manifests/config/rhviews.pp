@@ -47,6 +47,22 @@ class katello::config::rhviews {
 		      rname      => "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server",
 		      repository => "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server x86_64" }
 		];
+	"CV-rhcs4-el8":
+	    content   =>
+		[
+		    { product    => "Red Hat Ceph Storage",
+		      rname      => "Red Hat Ceph Storage Tools 4 for RHEL 8 x86_64 (RPMs)",
+		      repository => "Red Hat Ceph Storage Tools 4 for RHEL 8 x86_64 RPMs" },
+		    { product    => "Red Hat Ceph Storage MON",
+		      rname      => "Red Hat Ceph Storage 4 Text-Only Advisories for RHEL 8 x86_64 (RPMs)",
+		      repository => "Red Hat Ceph Storage 4 Text-Only Advisories for RHEL 8 x86_64 RPMs" },
+		    { product    => "Red Hat Ceph Storage MON",
+		      rname      => "Red Hat Ceph Storage MON 4 for RHEL 8 x86_64 (RPMs)",
+		      repository => "Red Hat Ceph Storage MON 4 for RHEL 8 x86_64 RPMs" },
+		    { product    => "Red Hat Ceph Storage OSD",
+		      rname      => "Red Hat Ceph Storage OSD 4 for RHEL 8 x86_64 (RPMs)",
+		      repository => "Red Hat Ceph Storage OSD 4 for RHEL 8 x86_64 RPMs" }
+		];
 	"CV-ocp3-el7":
 	    content   =>
 		[
@@ -82,6 +98,10 @@ class katello::config::rhviews {
 	"CCV-capsule6":
 	    composite => true,
 	    content   => [ "CV-base-redhat7", "CV-satellite-tools-el7", "CV-capsule6-el7" ],
+	    tolce     => [ "Dev", "Prod" ];
+	"CCV-rhcs-el8":
+	    composite => true,
+	    content   => [ "CV-base-redhat8", "CV-satellite-tools-el8", "CV-rhcs4-el8" ],
 	    tolce     => [ "Dev", "Prod" ];
 	"CCV-rhel7":
 	    composite => true,
