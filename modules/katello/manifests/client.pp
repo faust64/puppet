@@ -10,10 +10,20 @@ class katello::client {
 
     if ($foreman_fqdn and
 	($operatingsystem == "CentOS" or $operatingsystem == "RedHat")) {
+	#WARNING:
+	# Katello-agent is deprecated and will be removed in Katello 4.0
+	# Remote Execution should be used instead
+	# Arguably converting what was a poor take on some provisioning solution,
+	#   into a security risk
 	if ($register_with and $ak) {
 	    common::define::package {
 		[ "katello-agent", "katello-host-tools", "katello-host-tools-tracer" ]:
 		    require => Exec["Register against katello"];
+	    }
+
+	    common::define::service {
+		"goferd":
+		    require => Common::Define::Package["katello-agent"];
 	    }
 	}
 
@@ -42,6 +52,8 @@ class katello::client {
 	$register_with = false
 	$proof         = false
     }
+
+    Ssh_authorized_key <<| tag == "katello-remote-execution-$foreman_fqdn" |>>
 
     if ($register_with and $ak) {
 	if ($org) {
