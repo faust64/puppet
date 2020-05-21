@@ -1,3 +1,8 @@
+geo $not_admin {
+    default 1;
+    10.42.42.0/24 0;
+}
+
 server {
     listen <%=@listen_ports['plain']%>;
     server_name <% if @aliases != false -%><% @aliases.each do |dname| -%><%=dname%> <% end -%><% end -%><%=@name%>;
@@ -13,6 +18,11 @@ server {
     error_log <%=@log_dir%>/error-<%=@name%>.log;
     access_log <%=@log_dir%>/access-<%=@name%>.log main;
     root /var/www;
+    location ~ /dashboard {
+	if ($not_admin) {
+	    return 401;
+	}
+    }
     location / {
 	proxy_http_version 1.1;
 	proxy_pass http://127.0.0.1:8096; 
@@ -55,6 +65,11 @@ server {
     ssl_certificate_key <%=@conf_dir%>/ssl/server.key;
     ssl_dhparam /etc/nginx/ssl/dh.pem;
     root /var/www;
+    location ~ /dashboard {
+	if ($not_admin) {
+	    return 401;
+	}
+    }
     location / {
 	proxy_http_version 1.1;
 	proxy_pass http://127.0.0.1:8096; 
