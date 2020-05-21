@@ -145,7 +145,7 @@ define nginx::define::vhost($add_xff_headers = false,
 
 		if ($referrerpolicy == false) {
 		    $rpol = false
-		} elsif ($referrerpolicy == "origin-when-cross-origin") {
+		} elsif ($referrerpolicy == "origin-when-cross-origin") { ##?? did I mean strict-origin maybe?
 		    $rpol = "origin-when-cross-origin"
 		} else {
 		    $rpol = $referrerpolicy

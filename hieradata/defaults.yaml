@@ -1036,6 +1036,7 @@ media_do_emby: false
 media_do_plex: true
 media_medusa: false
 media_music_nfs_root: /var/music
+media_raw_access: false
 media_share_nfs: false
 media_sickbeard: false
 media_tmdb_apikey: false

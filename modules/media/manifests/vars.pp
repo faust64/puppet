@@ -8,6 +8,7 @@ class media::vars {
     $nfsshare      = lookup("media_share_nfs")
     $plex          = lookup("media_do_plex")
     $plex_host     = lookup("plex_ip")
+    $raw_access    = lookup("media_raw_access")
     $rdomain       = lookup("root_domain")
     $sickbeard     = lookup("media_sickbeard")
     $subsonic      = lookup("media_subsonic_nfs")
