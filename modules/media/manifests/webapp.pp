@@ -45,7 +45,8 @@ class media::webapp {
 		stricttransport => "max-age=2592000; includeSubdomains",
 		vhostldapauth   => "none",
 		vhostsource     => "emby",
-		with_reverse    => "emby.$rdomain";
+		with_reverse    => "emby.$rdomain",
+		wspath          => "/socket";
 	}
     }
 }

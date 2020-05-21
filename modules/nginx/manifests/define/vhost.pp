@@ -27,6 +27,7 @@ define nginx::define::vhost($add_xff_headers = false,
 			    $vhoststatus     = "enabled",
 			    $with_php_fpm    = false,
 			    $with_reverse    = false,
+			    $wspath          = false,
 			    $xss_protection  = true) {
     $cgi_socket       = $nginx::vars::cgi_socket
     $conf_dir         = $nginx::vars::conf_dir
@@ -165,7 +166,8 @@ define nginx::define::vhost($add_xff_headers = false,
 			tag             => "reverse-$domain",
 			vhostldapauth   => $revauth,
 			vhostrsyslog    => false,
-			vhostsource     => "proxy";
+			vhostsource     => "proxy",
+			wspath          => $wspath;
 		}
 	    }
 	} else {

@@ -26,6 +26,7 @@ define apache::define::vhost($add_xff_headers = false,
 			     $vhostsource     = "default",
 			     $vhoststatus     = "enabled",
 			     $with_reverse    = false,
+			     $wspath          = false,
 			     $wsgi_child      = 5,
 			     $wsgi_max        = 1000,
 			     $wsgi_threads    = 10,
@@ -45,6 +46,10 @@ define apache::define::vhost($add_xff_headers = false,
     $rsyslog_version  = $apache::vars::rsyslog_version
     $sendfilepath     = $apache::vars::sendfilepath
     $version          = $apache::vars::version
+
+    if ($wspath != false) {
+	$wsproxyto = regsubst($proxyto, '^http(.*)', 'ws\1')
+    }
 
     if ($listen_ports['ssl'] != false and $version == "2.4") {
 	apache::define::certificate_chain {

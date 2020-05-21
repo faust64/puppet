@@ -7,6 +7,13 @@
 <% end -%><% if @referrerpolicy != false -%>    Header always set Referrer-Policy "<%=@referrerpolicy%>"
 <% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
 <% end -%><% if @sslproxy == true -%>    Include sslproxy.conf
+<% end -%><% if @wspath != false -%>    Header set Connection "Upgrade"
+    RequestHeader setifempty Connection "Upgrade"
+    Header set Upgrade "websocket"
+    RequestHeader setifempty Upgrade "websocket"
+
+    ProxyPass <%=@wspath%> <%=@wsproxyto%><%=@wspath%>
+    ProxyPassReverse <%=@wspath%> <%=@wsproxyto%><%=@wspath%>
 <% end -%>    ProxyPass / <%=@proxyto%>/
     ProxyPassReverse / <%=@proxyto%>/
     ProxyPreserveHost <%=@preserve_host%>
@@ -32,7 +39,14 @@
 <% elsif @deny_frames == true -%>    Header always set X-Frame-Options DENY
 <% end -%><% if @nosniff == true -%>    Header always set X-Content-Type-Options nosniff
 <% end -%>    Include ssl.conf
-    ProxyPass / <%=@proxyto%>/
+<% if @wspath != false -%>    Header set Connection "Upgrade"
+    RequestHeader setifempty Connection "Upgrade"
+    Header set Upgrade "websocket"
+    RequestHeader setifempty Upgrade "websocket"
+
+    ProxyPass <%=@wspath%> <%=@wsproxyto%><%=@wspath%>
+    ProxyPassReverse <%=@wspath%> <%=@wsproxyto%><%=@wspath%>
+<% end -%>    ProxyPass / <%=@proxyto%>/
     ProxyPassReverse / <%=@proxyto%>/
     ProxyPreserveHost <%=@preserve_host%>
 
