@@ -12,6 +12,16 @@ class katello::config::basics {
 	    unless      => "hammer scap-content list | grep -i firefox",
     }
 
+    file {
+	"Fix OpenSCAP Cron":
+	    group   => hier("gid_zero"),
+	    mode    => "0644",
+	    owner   => "root",
+	    path    => "/etc/cron.d/tfm-rubygem-smart_proxy_openscap",
+	    require => File["Install hammer cli configuration"],
+	    source  => "puppet:///modules/katello/smart_proxy_opencap_cron";
+    }
+
     katello::define::globalparam {
 	"Subscription Manager":
 	    type  => "boolean",

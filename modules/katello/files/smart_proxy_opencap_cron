@@ -1,0 +1,2 @@
+# Send all collected OpenSCAP reports once every 30 minutes
+*/30 * * * * foreman-proxy smart-proxy-openscap-send >> /var/log/foreman-proxy/cron.log 2>&1
