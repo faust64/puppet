@@ -15,7 +15,7 @@ class katello::client {
 	# Remote Execution should be used instead
 	# Arguably converting what was a poor take on some provisioning solution,
 	#   into a security risk
-	if ($register_with and $ak) {
+	if ($register_with and $ak and $operatingsystem == "RedHat") {
 	    common::define::package {
 		[ "katello-agent", "katello-host-tools", "katello-host-tools-tracer" ]:
 		    require => Exec["Register against katello"];
