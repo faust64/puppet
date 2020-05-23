@@ -15,15 +15,22 @@ class katello::client {
 	# Remote Execution should be used instead
 	# Arguably converting what was a poor take on some provisioning solution,
 	#   into a security risk
-	if ($register_with and $ak and $operatingsystem == "RedHat") {
-	    common::define::package {
-		[ "katello-agent", "katello-host-tools", "katello-host-tools-tracer" ]:
-		    require => Exec["Register against katello"];
+	if ($register_with and $ak) {
+	    if ($operatingsystem != "CentOS" or $lsbmajdistrelease < 8) {
+		common::define::package {
+		    "katello-agent":
+			require => Exec["Register against katello"];
+		}
+
+		common::define::service {
+		    "goferd":
+			require => Common::Define::Package["katello-agent"];
+		}
 	    }
 
-	    common::define::service {
-		"goferd":
-		    require => Common::Define::Package["katello-agent"];
+	    common::define::package {
+		[ "katello-host-tools", "katello-host-tools-tracer" ]:
+		    require => Exec["Register against katello"];
 	    }
 	}
 
