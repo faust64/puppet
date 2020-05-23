@@ -14,7 +14,7 @@ class katello::config::basics {
 
     file {
 	"Fix OpenSCAP Cron":
-	    group   => hier("gid_zero"),
+	    group   => lookup("gid_zero"),
 	    mode    => "0644",
 	    owner   => "root",
 	    path    => "/etc/cron.d/tfm-rubygem-smart_proxy_openscap",

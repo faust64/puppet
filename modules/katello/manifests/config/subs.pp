@@ -6,7 +6,7 @@ class katello::config::subs {
     katello::define::hostgroup {
 	"Ceph":
 	    ak           => "AK-Ceph-Prod",
-	    cv           => "CCV-Ceph-el7",
+	    cv           => "CCV-Ceph-el8",
 	    domain       => "friends.intra.unetresgrossebite.com",
 	    lifecycleenv => "Prod",
 	    subnet       => "Friends";
@@ -30,19 +30,17 @@ class katello::config::subs {
 		    "CentOS", "Ceph", "EPEL", "Foreman",
 		    "Katello", "Puppet"
 		],
-	    contentview => "CCV-Ceph-el7",
+	    contentview => "CCV-Ceph-el8",
 	    hasrepos    =>
 		[
-		    "${org}_CentOS_el7_x86_64_Base",
-		    "${org}_CentOS_el7_x86_64_Extras",
-		    "${org}_CentOS_el7_x86_64_SCL",
-		    "${org}_CentOS_el7_x86_64_Updates",
-		    "${org}_Ceph_el7_x86_64_Ceph_Nautilus",
-		    "${org}_EPEL_EPEL7_x86_64",
-		    "${org}_Foreman_el7_x86_64_TheForeman_${tfmvers}_Client",
+		    "${org}_CentOS_el8_x86_64_BaseOS",
+		    "${org}_CentOS_el8_x86_64_AppStream",
+		    "${org}_Ceph_el8_x86_64_Ceph_Octopus",
+		    "${org}_EPEL_EPEL8_x86_64",
+		    "${org}_Foreman_el8_x86_64_TheForeman_${tfmvers}_Client",
 		    "${org}_Foreman_el7_x86_64_TheForeman_${tfmvers}_Plugins",
 		    "${org}_Katello_el7_x86_64_Katello_${ktlvers}_$pulprepo",
-		    "${org}_Puppet_el7_x86_64_Puppet5"
+		    "${org}_Puppet_el8_x86_64_Puppet5"
 		],
 	    lce         => "Prod";
 	"AK-OKD-Prod":
@@ -60,7 +58,7 @@ class katello::config::subs {
 		    "${org}_CentOS_el7_x86_64_Extras",
 		    "${org}_CentOS_el7_x86_64_SCL",
 		    "${org}_CentOS_el7_x86_64_Updates",
-		    "${org}_Ceph_el7_x86_64_Ceph_Nautilus",
+		    "${org}_Ceph_el7_x86_64_Ceph_Octopus",
 		    "${org}_EPEL_EPEL7_x86_64",
 		    "${org}_Foreman_el7_x86_64_TheForeman_${tfmvers}_Client",
 		    "${org}_Foreman_el7_x86_64_TheForeman_${tfmvers}_Plugins",

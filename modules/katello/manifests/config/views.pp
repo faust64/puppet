@@ -70,6 +70,9 @@ class katello::config::views {
 		      rname      => "CentOS8 BaseOS x86_64",
 		      repository => "el8 x86_64 BaseOS" },
 		    { product    => "CentOS",
+		      rname      => "CentOS8 Extras x86_64",
+		      repository => "el8 x86_64 Extras" },
+		    { product    => "CentOS",
 		      rname      => "CentOS8 AppStream x86_64",
 		      repository => "el8 x86_64 AppStream" }
 		];

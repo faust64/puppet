@@ -117,6 +117,11 @@ class katello::config::repos {
 	    product   => "CentOS",
 	    shortname => "el8 x86_64 BaseOS",
 	    url       => "http://mirrors.ircam.fr/pub/CentOS/8/BaseOS/x86_64/os/";
+	"CentOS8 Extras x86_64":
+	    gpgkey    => "CentOS8",
+	    product   => "CentOS",
+	    shortname => "el8 x86_64 Extras",
+	    url       => "http://mirrors.ircam.fr/pub/CentOS/8/extras/x86_64/os/";
 
 ## Ceph ##
 	"Bionic Nautilus":

@@ -97,13 +97,6 @@ class katello::config {
 		    File["Install Foreman Answers"]
 		],
 	    timeout     => 3600;
-	"Generate Remote Execution RSA key pair":
-	    command     => "/usr/bin/ssh-keygen -t rsa -b 4096 -N '' -f id_rsa_foreman_proxy && chown -R foreman-proxy:foreman-proxy ./ && restorecon -vR ./",
-	    cwd         => "/usr/share/foreman-proxy/.ssh",
-	    notify      => Exec["Reload Katello Services"],
-	    path        => "/usr/bin:/usr/sbin:/bin",
-	    require     => Exec["Initializes Katello"],
-	    unless      => "test -s id_rsa_foreman_proxy";
 	"Reload Katello Services":
 	    command     => "katello-service restart",
 	    environment => [ "HOME=/root" ],
