@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 #  Copyright (c) 2013 Catalyst IT http://www.catalyst.net.nz
 #
@@ -42,27 +42,27 @@ def main():
   args = parser.parse_args()
   ceph_exec = args.exe if args.exe else CEPH_COMMAND
   if not os.path.exists(ceph_exec):
-    print "MON ERROR: ceph executable '%s' doesn't exist" % ceph_exec
+    print("MON ERROR: ceph executable '%s' doesn't exist" % ceph_exec)
     return STATUS_UNKNOWN
   if args.version:
-    print 'version %s' % __version__
+    print('version %s' % __version__)
     return STATUS_OK
   if args.conf and not os.path.exists(args.conf):
-    print "MON ERROR: ceph conf file '%s' doesn't exist" % args.conf
+    print("MON ERROR: ceph conf file '%s' doesn't exist" % args.conf)
     return STATUS_UNKNOWN
   if args.keyring and not os.path.exists(args.keyring):
-    print "MON ERROR: keyring file '%s' doesn't exist" % args.keyring
+    print("MON ERROR: keyring file '%s' doesn't exist" % args.keyring)
     return STATUS_UNKNOWN
   if not args.monid:
-    print "MON ERROR: no MON ID given"
+    print("MON ERROR: no MON ID given")
     return STATUS_UNKNOWN
   if not args.host:
-    print "MON ERROR: no MON hostname given"
+    print("MON ERROR: no MON hostname given")
     return STATUS_UNKNOWN
   try:
     args.host = socket.gethostbyname(args.host)
   except socket.gaierror:
-    print 'MON ERROR: could not resolve %s' % args.host
+    print('MON ERROR: could not resolve %s' % args.host)
     return STATUS_UNKNOWN
   ceph_cmd = [ceph_exec]
   if args.monaddress:
@@ -82,16 +82,16 @@ def main():
   p = subprocess.Popen(ceph_cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
   output, err = p.communicate()
   if p.returncode != 0 or not output:
-    print "MON ERROR: %s" % err
+    print("MON ERROR: %s" % err)
     return STATUS_ERROR
   mon_host = args.host.replace('.', '\.')
   mon_host = mon_host.replace('[', '\[')
   mon_host = mon_host.replace(']', '\]')
-  up = re.match(".*%s.*mon\.%s.*" % (mon_host, args.monid), output, re.DOTALL)
+  up = re.match(".*%s.*mon\.%s.*" % (mon_host, args.monid), output.decode('UTF8'), re.DOTALL)
   if up:
-    print "MON OK"
+    print("MON OK")
     return STATUS_OK
-  print "MON WARN: no MON.%s found at host %s" % (args.monid, args.host)
+  print("MON WARN: no MON.%s found at host %s" % (args.monid, args.host))
   return STATUS_WARNING
 
 if __name__ == "__main__":
