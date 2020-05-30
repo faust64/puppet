@@ -100,59 +100,59 @@ icinga_static_devices:
     host_parents: nikea.adm.intra.unetresgrossebite.com
     srvclass: printer
 
-  master1.friends.intra.unetresgrossebite.com:
-    host_ipaddress: 10.42.253.10
-    host_parents: momos.adm.intra.unetresgrossebite.com
-    srvclass: ocp4
-  master2.friends.intra.unetresgrossebite.com:
-    host_ipaddress: 10.42.253.11
-    host_parents: moros.adm.intra.unetresgrossebite.com
-    srvclass: ocp4
-  master3.friends.intra.unetresgrossebite.com:
-    host_ipaddress: 10.42.253.12
-    host_parents: phoebe.adm.intra.unetresgrossebite.com
-    srvclass: ocp4
-  infra1.friends.intra.unetresgrossebite.com:
-    host_ipaddress: 10.42.253.13
-    host_parents: moros.adm.intra.unetresgrossebite.com
-    srvclass: ocp4
-  infra2.friends.intra.unetresgrossebite.com:
-    host_ipaddress: 10.42.253.14
-    host_parents: momos.adm.intra.unetresgrossebite.com
-    srvclass: ocp4
-  infra3.friends.intra.unetresgrossebite.com:
-    host_ipaddress: 10.42.253.15
-    host_parents: thanatos.adm.intra.unetresgrossebite.com
-    srvclass: ocp4
-  compute1.friends.intra.unetresgrossebite.com:
-    host_ipaddress: 10.42.253.20
-    host_parents: crios.adm.intra.unetresgrossebite.com
-    srvclass: ocp4
-  compute2.friends.intra.unetresgrossebite.com:
-    host_ipaddress: 10.42.253.21
-    host_parents: moros.adm.intra.unetresgrossebite.com
-    srvclass: ocp4
-  compute3.friends.intra.unetresgrossebite.com:
-    host_ipaddress: 10.42.253.22
-    host_parents: momos.adm.intra.unetresgrossebite.com
-    srvclass: ocp4
-  compute4.friends.intra.unetresgrossebite.com:
-    host_ipaddress: 10.42.253.23
-    host_parents: moros.adm.intra.unetresgrossebite.com
-    srvclass: ocp4
-  compute5.friends.intra.unetresgrossebite.com:
-    host_ipaddress: 10.42.253.24
-    host_parents: momos.adm.intra.unetresgrossebite.com
-    srvclass: ocp4
+#  master1.friends.intra.unetresgrossebite.com:
+#    host_ipaddress: 10.42.253.10
+#    host_parents: momos.adm.intra.unetresgrossebite.com
+#    srvclass: ocp4
+#  master2.friends.intra.unetresgrossebite.com:
+#    host_ipaddress: 10.42.253.11
+#    host_parents: moros.adm.intra.unetresgrossebite.com
+#    srvclass: ocp4
+#  master3.friends.intra.unetresgrossebite.com:
+#    host_ipaddress: 10.42.253.12
+#    host_parents: phoebe.adm.intra.unetresgrossebite.com
+#    srvclass: ocp4
+#  infra1.friends.intra.unetresgrossebite.com:
+#    host_ipaddress: 10.42.253.13
+#    host_parents: moros.adm.intra.unetresgrossebite.com
+#    srvclass: ocp4
+#  infra2.friends.intra.unetresgrossebite.com:
+#    host_ipaddress: 10.42.253.14
+#    host_parents: momos.adm.intra.unetresgrossebite.com
+#    srvclass: ocp4
+#  infra3.friends.intra.unetresgrossebite.com:
+#    host_ipaddress: 10.42.253.15
+#    host_parents: thanatos.adm.intra.unetresgrossebite.com
+#    srvclass: ocp4
+#  compute1.friends.intra.unetresgrossebite.com:
+#    host_ipaddress: 10.42.253.20
+#    host_parents: crios.adm.intra.unetresgrossebite.com
+#    srvclass: ocp4
+#  compute2.friends.intra.unetresgrossebite.com:
+#    host_ipaddress: 10.42.253.21
+#    host_parents: moros.adm.intra.unetresgrossebite.com
+#    srvclass: ocp4
+#  compute3.friends.intra.unetresgrossebite.com:
+#    host_ipaddress: 10.42.253.22
+#    host_parents: momos.adm.intra.unetresgrossebite.com
+#    srvclass: ocp4
+#  compute4.friends.intra.unetresgrossebite.com:
+#    host_ipaddress: 10.42.253.23
+#    host_parents: moros.adm.intra.unetresgrossebite.com
+#    srvclass: ocp4
+#  compute5.friends.intra.unetresgrossebite.com:
+#    host_ipaddress: 10.42.253.24
+#    host_parents: momos.adm.intra.unetresgrossebite.com
+#    srvclass: ocp4
 
   pandore.friends.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.253.40
     host_parents: ponos.adm.intra.unetresgrossebite.com
     srvclass: rpi-k8s
-  hellenes.friends.intra.unetresgrossebite.com:
-    host_ipaddress: 10.42.253.41
-    host_parents: ponos.adm.intra.unetresgrossebite.com
-    srvclass: rpi-k8s
+#  hellenes.friends.intra.unetresgrossebite.com:
+#    host_ipaddress: 10.42.253.41
+#    host_parents: ponos.adm.intra.unetresgrossebite.com
+#    srvclass: rpi-k8s
   epimethee.friends.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.253.42
     host_parents: ponos.adm.intra.unetresgrossebite.com
