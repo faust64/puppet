@@ -1,0 +1,23 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+CRITICAL=2
+UNKNOWN=3
+
+ret=UNKNOWN
+msg="processes not found"
+PCOUNT=`ps ax | awk 'BEG{c=0}/\/[k]eepalived /{c=c+1}END{print c}'`
+if test $PCOUNT -gt 0; then
+    STATE=$(journalctl -u keepalived | awk '/Entering .* STATE/' | sed -e 's|.* Entering ||g' -e 's| STATE[ ]*||g' | tail -1)
+    if echo "$STATE" | grep init; then
+	ret=CRITICAL
+    else
+	ret=OK
+    fi    
+    msg="acting as $STATE"
+fi
+
+echo "Keepalived $ret: $msg"
+eval ret=\$$ret
+exit $ret

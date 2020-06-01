@@ -1,4 +1,6 @@
 #!/bin/sh
+# check_etcd - watch etcd cluster health
+# 20180626 - smoro@redhat.com
 
 PRG=`basename $0`
 OK=0
@@ -11,41 +13,36 @@ ret=OK
 TMPFILE=/tmp/.$PRG.$$
 
 if test -f /etc/etcd/etcd.conf; then
-    source /etc/etcd/etcd.conf
-    if test -z "$ETCD_ADVERTISE_CLIENT_URLS"; then
-	ret=UNKNOWN
-	msg=": failed identifying advertise URL"
-    elif ! etcdctl -C "$ETCD_ADVERTISE_CLIENT_URLS" \
-	    --ca-file=/etc/origin/master/master.etcd-ca.crt \
-	    --cert-file=/etc/origin/master/master.etcd-client.crt \
-	    --key-file=/etc/origin/master/master.etcd-client.key \
-	    cluster-health >$TMPFILE 2>&1; then
-	ret=UNKNOWN
-	msg=": failed querying etcd"
-    elif ! grep -i '^cluster is healthy' $TMPFILE >/dev/null 2>&1; then
-	ret=CRITICAL
-	msg=": cluster is not healthy"
-    fi
-elif test -f /etc/kubernetes/manifests/etcd.yaml; then
-    ETCD_ADVERTISE_CLIENT_URLS=$(awk '/initial-cluster=/' \
-	    /etc/kubernetes/manifests/etcd.yaml \
-	    | sed -e 's|.*initial-cluster=||' -e 's|^[a-z]*=http|http|' \
-	          -e 's|:2380|:2379|g' -e 's|,[a-z]*=http|,http|g')
-    if ! kubectl -n kube-system exec -it etcd-$(hostname) -- \
-	    etcdctl --endpoints "$ETCD_ADVERTISE_CLIENT_URLS" \
-	    --cacert=/etc/kubernetes/pki/etcd/ca.crt \
-	    --cert=/etc/kubernetes/pki/etcd/peer.crt \
-	    --key=/etc/kubernetes/pki/etcd/peer.key \
-	    endpoint health >$TMPFILE 2>&1; then
-	ret=UNKNOWN
-	msg=": failed querying etcd"
-    elif grep -v ':2379 is healthy' $TMPFILE >/dev/null 2>&1; then
-	ret=CRITICAL
-	msg=": cluster is not healthy"
-    fi
-else
+    . /etc/etcd/etcd.conf
+    CLIENT_CA="$ETCD_PEER_TRUSTED_CA_FILE"
+    CLIENT_CERT="$ETCD_PEER_CERT_FILE"
+    CLIENT_KEY="$ETCD_PEER_KEY_FILE"
+elif test -f /etc/etcd.env; then
+    . /etc/etcd.env
+    CLIENT_CA="$ETCDCTL_CA_FILE"
+    CLIENT_CERT="$ETCDCTL_CERT_FILE"
+    CLIENT_KEY="$ETCDCTL_KEY_FILE"
+fi
+
+if test -z "$ETCD_ADVERTISE_CLIENT_URLS"; then
     ret=UNKNOWN
-    msg=": not an etcd node?"
+    msg=": failed identifying advertise URL"
+elif ! etcdctl -C "$ETCD_ADVERTISE_CLIENT_URLS" \
+    "--ca-file=$CLIENT_CA" \
+    "--cert-file=$CLIENT_CERT" \
+    "--key-file=$CLIENT_KEY" cluster-health >$TMPFILE 2>&1; then
+    ret=UNKNOWN
+    msg=": failed querying etcd"
+elif ! grep -i '^cluster is healthy' $TMPFILE >/dev/null 2>&1; then
+    ret=CRITICAL
+    msg=": cluster is not healthy"
+else
+    nmembers=`awk 'BEG{c=0}/member/{c=c+1}END{print c}' $TMPFILE`
+    rmembers=`echo "$ETCD_INITIAL_CLUSTER" | awk -F, 'END{print NF}'`
+    if test "$nmembers" -ne "$rmembers"; then
+	ret=WARNING
+	msg=": etcd members missing"
+    fi
 fi
 rm -f $TMPFILE
 

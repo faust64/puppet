@@ -1,0 +1,158 @@
+#!/usr/bin/env python
+# check_oc_master - watch OpenShift >3.9 Master services
+#   only watches for core components such as API, Controllers
+#   or Consoles
+# 20190315 - smoro@redhat.com
+
+# python 2 & 3 capable
+# Relies on /etc/nagios/k8s.cfg querying some cluster
+# Define endpoints such as:
+#[Prod]
+#endpoint = https://openshift.example.com:8443
+#token    = abcdef
+#[Ops]
+#endpoint = https://kubernetes.demo.local:6443
+#token    = ghijkl
+
+import re
+import requests
+import sys
+
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
+if len(sys.argv) >= 2:
+    clusterid = sys.argv[1]
+else:
+    clusterid = 'OpenShift'
+
+try:
+    #python2
+    import ConfigParser
+    config = ConfigParser.ConfigParser()
+except ModuleNotFoundError:
+    #python3
+    import configparser
+    config = configparser.ConfigParser()
+
+try:
+    config.readfp(open(r'/etc/nagios/k8s.cfg'))
+    try:
+        endpoint = config.get(clusterid, 'endpoint')
+        token    = config.get(clusterid, 'token')
+    except (ConfigParser.NoOptionError, configparser.NoOptionError):
+        print("UNKNOWN: missing key in cluster " + clusterid + " in /etc/nagios/k8s.cfg")
+        quit(3)
+    except (ConfigParser.NoSectionError, configparser.NoSectionError):
+        print("UNKNOWN: could not find cluster " + clusterid + " in /etc/nagios/k8s.cfg")
+        quit(3)
+except IOError:
+    print("UNKNOWN: unitilalized endpoint - please set yours in /etc/nagios/k8s.cfg")
+    quit(3)
+
+headers = {"Authorization": "Bearer " + token}
+url     = endpoint + '/api/v1/nodes'
+req     = requests.get(url, headers=headers, verify=False)
+data    = req.json()
+masters = []
+
+try:
+    if data['code'] == 401:
+        print("UNKNOWN: failed querying OpenShift API - denied")
+        quit(3)
+    elif data['code'] != 200:
+        print("UNKNOWN: unexpected code received from OpenShift API - " + data['code'])
+        quit(3)
+except KeyError:
+    pass
+
+try:
+    if len(data['items']) <= 0:
+        print("UNKNOWN: empty response received from OpenShift API")
+        quit(3)
+except KeyError:
+    print("UNKNOWN: no items returned from OpenShift API")
+    quit(3)
+
+for i in data['items']:
+    try:
+        if i['metadata']['labels']['node-role.kubernetes.io/master']:
+            masters.append(i['metadata']['name'])
+            for j in i['status']['conditions']:
+                if j['type'] == 'Ready':
+                    if j['status'] != 'True':
+                        print("CRITICAL: node " + i['metadata']['name'] + " is down")
+                        quit(2)
+    except KeyError:
+        pass #ignoring non-master nodes
+
+url  = endpoint + '/api/v1/pods'
+req  = requests.get(url, headers=headers, verify=False)
+
+patternConsole    = re.compile('^console-([a-z0-9]+)-([a-z0-9]+)$')
+patternWebConsole = re.compile('^webconsole-([a-z0-9]+)-([a-z0-9]+)$')
+
+hasApi            = []
+hasConsole        = []
+hasControllers    = []
+hasEtcd           = []
+hasWebConsole     = []
+
+def isOK(podStatus):
+    try:
+        if podStatus['containerStatuses'][0]['ready'] == True:
+            for cond in podStatus['conditions']:
+                if cond['type'] == 'Ready':
+                    if cond['status'] == 'True':
+                        return True
+        return False
+    except KeyError:
+        return False
+    except ValueError:
+        return False
+   
+data = req.json()
+for i in data['items']:
+    try:
+        for j in masters:
+                if i['spec']['nodeName'] == j:
+                    if i['metadata']['namespace'] == 'kube-system':
+                        if i['metadata']['name'] == 'master-api-' + j:
+                            if not isOK(i['status']):
+                                hasApi.append(j)
+                        elif i['metadata']['name'] == 'master-controllers-' + j:
+                            if not isOK(i['status']):
+                                hasControllers.append(j)
+                        elif i['metadata']['name'] == 'master-etcd-' + j:
+                            if not isOK(i['status']):
+                                hasEtcd.append(j)
+                    elif i['metadata']['namespace'] == 'openshift-web-console':
+                        if patternWebConsole.match(i['metadata']['name'] ):
+                            if not isOK(i['status']):
+                                hasWebConsole.append(j)
+                    elif i['metadata']['namespace'] == 'openshift-console':
+                        if patternConsole.match(i['metadata']['name'] ):
+                            if not isOK(i['status']):
+                                hasConsole.append(j)
+    except KeyError:
+        pass
+
+code = 2
+if len(hasEtcd) > 0:
+    msg = "CRITICAL: etcd missing " + hasEtcd[0]
+elif len(hasApi) > 0:
+    msg = "CRITICAL: API missing " + hasApi[0]
+elif len(hasControllers) > 0:
+    msg = "CRITICAL: Controllers missing " + hasControllers[0]
+elif len(hasConsole) > 0:
+    msg = "WARNING: Console missing " + hasConsole[0]
+    code = 1
+elif len(hasWebConsole) > 0:
+    msg = "WARNING: WebConsole missing " + hasWebConsole[0]
+    code = 1
+else:
+    msg = "OK: OpenShift Core services are UP"
+    code = 0
+
+print(msg)
+quit(code)

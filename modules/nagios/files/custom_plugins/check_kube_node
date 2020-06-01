@@ -1,0 +1,174 @@
+#!/usr/bin/env python
+# check_kube_node - watch OpenShift >3.9 Main Node services
+#   only watches for core components: SDN and node-sync
+# 20190315 - smoro@redhat.com
+
+# python 2 & 3 capable
+# Relies on /etc/nagios/k8s.cfg querying some cluster
+# Define endpoints such as:
+#[Prod]
+#endpoint = https://openshift.example.com:8443
+#token    = abcdef
+#[Ops]
+#endpoint = https://kubernetes.demo.local:6443
+#token    = ghijkl
+
+import getopt
+import re
+import requests
+import sys
+import urllib
+
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "s:o:e:t:", [ "selector", "cluster", "endpoint", "token" ])
+except getopt.GetoptError as err:
+    print(err)
+    quit(3)
+
+clusterid = 'OpenShift'
+msg       = 'Nothing to report'
+nodesel   = False
+endpoint  = False
+token     = False
+
+for o, v in opts:
+    if o in ( '--selector', '-s' ):
+        if v in ( 'infra', 'masters', 'workers', 'compute' ):
+            nodesel = urllib.urlencode({ 'labelSelector': 'node-role.kubernetes.io/' + v + '=true' })
+        else:
+            nodesel = urllib.urlencode({ 'labelSelector': v })
+    elif o in ( '--cluster', '-o' ):
+        clusterid = v
+    elif o in ( '--endpoint', '-e' ):
+        endpoint = v
+    elif o in ( '--token', '-t' ):
+        token = v
+    else:
+        assert False, "unhandled option"
+
+try:
+    #python2
+    import ConfigParser
+    config = ConfigParser.ConfigParser()
+except ModuleNotFoundError:
+    #python3
+    import configparser
+    config = configparser.ConfigParser()
+
+try:
+    config.readfp(open(r'/etc/nagios/k8s.cfg'))
+    try:
+        if endpoint == False:
+            endpoint = config.get(clusterid, 'endpoint')
+        if token == False:
+            token    = config.get(clusterid, 'token')
+    except (ConfigParser.NoOptionError, configparser.NoOptionError):
+        if token == False or endpoint == False:
+            print("UNKNOWN: missing key in cluster " + clusterid + " in /etc/nagios/k8s.cfg")
+            quit(3)
+    except (ConfigParser.NoSectionError, configparser.NoSectionError):
+        if token == False or endpoint == False:
+            print("UNKNOWN: could not find cluster " + clusterid + " in /etc/nagios/k8s.cfg")
+            quit(3)
+except IOError:
+    if token == False or endpoint == False:
+        print("UNKNOWN: uninitialized endpoint - please set yours in /etc/nagios/k8s.cfg")
+        quit(3)
+
+if nodesel == False:
+    url  = endpoint + '/api/v1/nodes'
+else:
+    url  = endpoint + '/api/v1/nodes?' + nodesel
+headers  = { "Authorization": "Bearer " + token }
+req      = requests.get(url, headers=headers, verify=False)
+data     = req.json()
+computes = []
+
+try:
+    if data['code'] == 401:
+        print("UNKNOWN: failed querying OpenShift API - denied")
+        quit(3)
+    elif data['code'] != 200:
+        print("UNKNOWN: unexpected code received from OpenShift API - " + data['code'])
+        quit(3)
+except KeyError:
+    pass
+
+try:
+    if len(data['items']) <= 0:
+        print("UNKNOWN: empty response received from OpenShift API")
+        quit(3)
+except KeyError:
+    print("UNKNOWN: no items returned from OpenShift API")
+    quit(3)
+
+for i in data['items']:
+    try:
+        if i['metadata']['name']:
+            computes.append(i['metadata']['name'])
+            for j in i['status']['conditions']:
+                if j['type'] == 'Ready':
+                    if j['status'] != 'True':
+                        print("CRITICAL: node " + i['metadata']['name'] + " is down")
+                        quit(2)
+    except KeyError:
+        pass #ignoring nameless nodes
+
+url = endpoint + '/api/v1/pods'
+req = requests.get(url, headers=headers, verify=False)
+
+patternDns   = re.compile('^nodelocaldns-[a-z0-9]+')
+patternProxy = re.compile('^kube-proxy-[a-z0-9]+')
+patternSdn   = re.compile('^(calico-node|weave|flannel|ovn|ovs)-[a-z0-9]+')
+
+hasDns       = []
+hasProxy     = []
+hasSdnc      = []
+
+def isOK(podStatus):
+    try:
+        if podStatus['containerStatuses'][0]['ready'] == True:
+            for cond in podStatus['conditions']:
+                if cond['type'] == 'Ready':
+                    if cond['status'] == 'True':
+                        return True
+        return False
+    except KeyError:
+        return False
+    except ValueError:
+        return False
+   
+data = req.json()
+for i in data['items']:
+    try:
+        for j in computes:
+                if i['spec']['nodeName'] == j:
+                    if i['metadata']['namespace'] == 'kube-system':
+                        if patternDns.match(i['metadata']['name']):
+                            if not isOK(i['status']):
+                                hasDns.append(j)
+                        if patternProxy.match(i['metadata']['name']):
+                            if not isOK(i['status']):
+                                hasProxy.append(j)
+                        if patternSdn.match(i['metadata']['name']):
+                            if not isOK(i['status']):
+                                hasSdn.append(j)
+    except KeyError:
+        pass
+
+code = 1
+if len(hasSdn) > 0:
+    msg = "WARNING: SDN missing " + ' '.join(hasSdn)
+elif len(hasProxy) > 0:
+    msg = "WARNING: Kube-proxy missing " + ' '.join(hasProxy)
+elif len(hasDns) > 0:
+    msg = "WARNING: DNS resolver missing " + ' '.join(hasDns)
+else:
+    msg = "OK: OpenShift Node services are up"
+    code = 0
+
+print(msg)
+quit(code)

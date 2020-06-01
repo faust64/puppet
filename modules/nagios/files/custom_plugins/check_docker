@@ -1,0 +1,53 @@
+#!/bin/sh
+# check_docker - watch Docker status
+# 20180525 - smoro@redhat.com
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+ret=OK
+META_CRITICAL_THRESHOLD=12
+META_WARNING_THRESHOLD=21
+STORAGE_CRITICAL_THRESHOLD=12
+STORAGE_WARNING_THRESHOLD=21
+TMPFILE=/tmp/.$PRG.$$
+
+if ! systemctl is-active docker >/dev/null 2>&1; then
+    ret=CRITICAL
+    msg="service not running"
+else
+    docker info >$TMPFILE 2>/dev/null
+    if ! test -s $TMPFILE; then
+	ret=UNKNOWN
+	msg="failed querying Docker for disk usages"
+    else
+	META_AVAILABLE=`awk '/Metadata Space Available/ {print $4}' $TMPFILE`
+	META_TOTAL=`awk '/Metadata Space Total/ {print $4}' $TMPFILE`
+	STORAGE_AVAILABLE=`awk '/Data Space Available/ {print $4}' $TMPFILE`
+	STORAGE_TOTAL=`awk '/Data Space Total/ {print $4}' $TMPFILE`
+	META_CHECK=`echo $META_AVAILABLE '*' 100 / $META_TOTAL | bc -l`
+	STORAGE_CHECK=`echo $STORAGE_AVAILABLE '*' 100 / $STORAGE_TOTAL | bc -l`
+	if test `echo $META_CHECK '<' $META_CRITICAL_THRESHOLD | bc -l` -ne 0; then
+	    ret=CRITICAL
+	    msg="free metadata space"
+	elif test `echo $STORAGE_CHECK '<' $STORAGE_CRITICAL_THRESHOLD | bc -l` -ne 0; then
+	    ret=CRITICAL
+	    msg="free data space"
+	elif test `echo $META_CHECK '<' $META_WARNING_THRESHOLD | bc -l` -ne 0; then
+	    ret=WARNING
+	    msg="free metadata space"
+	elif test `echo $STORAGE_CHECK '<' $STORAGE_WARNING_THRESHOLD | bc -l` -ne 0; then
+	    ret=WARNING
+	    msg="free data space"
+	fi 2>/dev/null
+    fi
+    rm -f $TMPFILE
+else
+    msg="Nothing to report"
+fi
+
+echo "Docker-status $ret: $msg"
+eval ret=\$$ret
+exit $ret

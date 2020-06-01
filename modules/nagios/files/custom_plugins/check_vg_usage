@@ -1,4 +1,6 @@
 #!/bin/sh
+# check_vg_usage - watch for vg usage
+# 20180821 - smoro@redhat.com
 
 PRG=`basename $0`
 OK=0

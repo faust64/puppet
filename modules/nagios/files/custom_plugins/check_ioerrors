@@ -1,0 +1,35 @@
+#!/bin/sh
+# check_ioerrors - watch syslog messages
+# 20180626 - smoro@redhat.com
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+CRIT_THRESHOLD=2
+ret=OK
+perfdata=0
+
+if ps ax 2>/dev/null | grep rsyslog >/dev/null; then
+    MATCH=`date "+%b %d"`
+    msg=`grep 'I/O error' /var/log/messages | grep -v ' fd0, ' | sed 's|.* dev \([^ ,]*\).*|\1|' | sort -u`
+else
+    msg=`journalctl --no-pager --since "1 day ago" | awk "/.*I\/O error/" | grep -v ' fd0, ' | sed 's|.* dev \([^ ,]*\).*|\1|' | sort -u`
+fi
+
+if test "$msg"; then
+    perfdata=`echo "$msg" | awk 'END{print NR}'`
+    if test "0$perfdata" -ge $CRIT_TRESHOLD >/dev/null 2>&1; then
+	ret=CRITICAL
+    else
+	ret=WARNING
+    fi
+    msg="`echo "$msg" | tr '\n' ',' | sed 's|,$||'`"
+else
+    msg="Nothing to report"
+fi
+
+echo "IOError $ret: $msg | $perfdata"
+eval ret=\$$ret
+exit $ret

@@ -1,10 +1,6 @@
 #!/bin/sh
-
-#NOTE: the user executing this probe needs read privileges over
-# /var/log/messages - sudo, setuid, ...
-#WARNING: we could argue for checking the time, and eventually check for
-# yesterdays' logs, or even have some argument defining how long we
-# should watch ...
+# check_oom - watch syslog messages
+# 20180427 - smoro@redhat.com
 
 PRG=`basename $0`
 OK=0
@@ -14,7 +10,6 @@ UNKNOWN=3
 CRIT_THRESHOLD=5
 WARN_THRESHOLD=1
 ret=OK
-msg="Nothing to report"
 perfdata=0
 
 while test "$1"
@@ -60,9 +55,11 @@ if test "$msg"; then
     elif test "0$perfdata" -ge $WARN_THRESHOLD >/dev/null 2>&1; then
 	ret=WARNING
     fi
-    msg=": `echo "$msg" | tr '\n' ',' | sed 's|,$||'`"
+    msg="`echo "$msg" | tr '\n' ',' | sed 's|,$||'`"
+else
+    msg="Nothing to report"
 fi
 
-echo "OOM $ret$msg | $perfdata"
+echo "OOM $ret: $msg | $perfdata"
 eval ret=\$$ret
 exit $ret

@@ -1,4 +1,6 @@
 #!/bin/sh
+# check_kube_quotas - watch for Kubernetes & OpenShift quotas usage
+# 20180820 - smoro@redhat.com
 
 PRG=`basename $0`
 OK=0
@@ -8,13 +10,13 @@ UNKNOWN=3
 KUBE_ENDPOINT=
 KUBE_TOKEN=
 KUBE_CONFIG=$HOME/.kube/config
-OPENSHIFT_CLUSTER=OpenShift
+CHECK_CLUSTER=OpenShift
 TMPFILE=/tmp/$PRG.$$
 CRIT_THRESHOLD=2
 WARN_THRESHOLD=1
 ENV=all
 ZONE_SELECTOR=
-msg=": all file"
+msg="all file"
 perfdata=0
 ret=OK
 
@@ -80,24 +82,24 @@ do
 	    ;;
 	-o|--cluster)
 	    if test "$2"; then
-		OPENSHIFT_CLUSTER="$2"
+		CHECK_CLUSTER="$2"
 		shift
 	    else
 		echo Missing cluster argument >&2
 	    fi
 	    ;;
 	-s|--selector)
-	    if echo "$2" | grep -E "^(dev|stage|mgmt|prod)$" >/dev/null; then
-		ZONE_SELECTOR="--selector=environment=$2"
-	    elif test "$2"; then
+	    if echo "$2" | grep = >/dev/null; then
 		ZONE_SELECTOR="--selector=$2"
+	    elif test "$2"; then
+		ZONE_SELECTOR="--selector=$2=true"
 	    fi
 	    if test "$ZONE_SELECTOR"; then
 		ENV=$2
+		shift
 	    else
-		echo Missing project selector >&2
+		echo Missing namespaces selector >&2
 	    fi
-	    shift
 	    ;;
 	-t|--token)
 	    if test "$2"; then
@@ -125,7 +127,7 @@ done
 getClusterConfig()
 {
     awk "BEG{ pick = 0; }{
-        if (\$0 == \"[$OPENSHIFT_CLUSTER]\") {
+        if (\$0 == \"[$CHECK_CLUSTER]\") {
 	    pick = 1;
 	} else {
 	    if (\$0 ~ /^\[.*\]/) {
@@ -134,41 +136,47 @@ getClusterConfig()
 		if (pick == 1) { print \$0; }
 	    }
 	}
-    }" /etc/nagios/openshift.cfg
+    }" /etc/nagios/k8s.cfg
 }
 
-if test -s /etc/nagios/openshift.cfg -a -z "$KUBE_TOKEN"; then
+if test -s /etc/nagios/k8s.cfg -a -z "$KUBE_TOKEN"; then
     KUBE_TOKEN=$(getClusterConfig | awk '/^token/{print $3;exit;}')
     KUBE_ENDPOINT=$(getClusterConfig | awk '/^endpoint/{print $3;exit;}')
 fi
 if ! which oc >/dev/null 2>&1; then
-    echo UNKNOWN: missing oc binary
-    exit $UNKNOWN
-elif test "$KUBE_TOKEN" -a "$KUBE_ENDPOINT"; then
-    if ! oc --insecure-skip-tls-verify "--token=$KUBE_TOKEN" "--server=$KUBE_ENDPOINT" whoami >/dev/null 2>&1; then
-	echo UNKNOWN: invalid token querying OpenShift API
+    if ! which kubectl >/dev/null 2>&1; then
+	echo UNKNOWN: missing oc and kubectl binaries
+	exit $UNKNOWN
+    fi
+    KUBE_COMMAND=kubectl
+else
+    KUBE_COMMAND=oc
+fi
+if test "$KUBE_TOKEN" -a "$KUBE_ENDPOINT"; then
+    if ! $KUBE_COMMAND --insecure-skip-tls-verify "--token=$KUBE_TOKEN" "--server=$KUBE_ENDPOINT" version >/dev/null 2>&1; then
+	echo UNKNOWN: invalid token querying Kubernetes API
 	exit $UNKNOWN
     fi
     AUTH_STR="--insecure-skip-tls-verify --token=$KUBE_TOKEN --server=$KUBE_ENDPOINT"
 elif ! test -s $HOME/.kube/config; then
-    echo UNKNOWN: missing oc configuration
+    echo UNKNOWN: missing Kubernetes configuration
     exit $UNKNOWN
-elif ! oc "--config=$KUBE_CONFIG" whoami >/dev/null 2>&1; then
-    echo UNKNOWN: oc client not logged in
+elif ! $KUBE_COMMAND "--kubeconfig=$KUBE_CONFIG" version >/dev/null 2>&1; then
+    echo UNKNOWN: $KUBE_COMMAND client not logged in, nor able to log in
     exit $UNKNOWN
 else
-    AUTH_STR="--config=$KUBE_CONFIG"
+    AUTH_STR="--kubeconfig=$KUBE_CONFIG"
 fi
 if test "$CRIT_THRESHOLD" -le "$WARN_THRESHOLD"; then
     echo notice: threshold looks incoherent >&2
 fi
 
-CHECK_PROJECTS=`oc $AUTH_STR get ns $ZONE_SELECTOR 2>/dev/null | awk 'NR>1{print $1}'`
-for project in $CHECK_PROJECTS
+CHECK_NS=`$KUBE_COMMAND $AUTH_STR get ns $ZONE_SELECTOR 2>/dev/null | awk 'NR>1{print $1}'`
+for ns in $CHECK_NS
 do
-    for qname in `oc $AUTH_STR get quota -n $project 2>/dev/null | awk 'NR>1{print $1}'`
+    for qname in `$KUBE_COMMAND $AUTH_STR get quota -n $ns 2>/dev/null | awk 'NR>1{print $1}'`
     do
-	oc $AUTH_STR describe quota -n $project $qname | grep -vE '^((Name(|space)):|Resource|--)' | \
+	$KUBE_COMMAND $AUTH_STR describe quota -n $ns $qname | grep -vE '^((Name(|space)):|Resource|--)' | \
 	    while read what used total
 	    do
 		if echo "$what" | grep -E '(storage|memory)' >/dev/null; then
@@ -187,9 +195,9 @@ do
 		    fi
 		fi >/dev/null
 		if ! test "$used" -ge 0 -a "$total" -ge 0 >/dev/null 2>&1; then
-		    echo "failed to parse quota $project/$what/$used/$total" >&2
+		    echo "failed to parse quota $ns/$what/$used/$total" >&2
 		elif test `expr "$total" '*' 80 / 100` -le "$used"; then
-		    echo "$project/$qname/$what:$used/$total" >>$TMPFILE
+		    echo "$ns/$qname/$what:$used/$total" >>$TMPFILE
 		fi
 	    done
     done
@@ -197,7 +205,7 @@ done
 
 if test -s $TMPFILE; then
     perfdata=`awk 'END{print NR}' $TMPFILE`
-    msg=": projects `cat $TMPFILE | tr '\n' ',' | sed 's|,$||'`"
+    msg="namespaces `cat $TMPFILE | tr '\n' ',' | sed 's|,$||'`"
     if test "0$perfdata" -ge "0$CRIT_THRESHOLD"; then
 	ret=CRITICAL
     elif test "0$perfdata" -ge "0$WARN_THRESHOLD"; then
@@ -206,6 +214,6 @@ if test -s $TMPFILE; then
 fi
 rm -f $TMPFILE
 
-echo "OC-Quotas-$ENV $ret$msg | $perfdata"
+echo "KUBE-Quotas-$ENV $ret: $msg | $perfdata"
 eval ret=\$$ret
 exit $ret

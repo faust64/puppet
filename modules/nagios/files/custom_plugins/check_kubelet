@@ -1,0 +1,19 @@
+#!/bin/sh
+# check_kubelet - watch Kubernetes Kubelet process
+# 20200530 - smoro@redhat.com
+
+PRG=`basename $0`
+OK=0
+CRITICAL=2
+
+if ! systemctl is-active kubelet; then
+    ret=CRITICAL
+    msg="Kubernetes agent not running"
+else
+    ret=OK
+    msg="Kubernetes agent is running"
+fi >/dev/null 2>&1
+
+echo "Kubelet $ret: $msg"
+eval ret=\$$ret
+exit $ret

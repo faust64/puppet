@@ -1,0 +1,26 @@
+#!/bin/sh
+# check_origin_node - watch OpenShift Node >3.9 process
+# 20180525 - smoro@redhat.com
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+
+if ! systemctl is-active atomic-openshift-node; then
+    ret=CRITICAL
+    msg="node not running"
+elif ! /usr/lib64/nagios/plugins/check_http kubernetes.default.svc.cluster.local -u https://kubernetes.default.svc.cluster.local/healthz -S -s ok; then
+    ret=WARNING
+    msg="master-api is unhealthy"
+elif ! /usr/lib64/nagios/plugins/check_http docker-registry.default.svc.cluster.local -u https://docker-registry.default.svc.cluster.local:5000/healthz -p5000 -S -e 200; then
+    ret=WARNING
+    msg="internal registry is unavailable - brace for impact"
+else
+    ret=OK
+    msg="Nothing to report"
+fi >/dev/null 2>&1
+
+echo "Origin-node $ret: $msg"
+eval ret=\$$ret
+exit $ret

@@ -32,7 +32,7 @@ elif test $warnthreshold -ge $critthreshold; then
     msg="warning threshold can not be >= to critical threshold!"
     ret=$UNKNOWN
 else
-    running=`/bin/ps axwo 'stat' | awk 'BEGIN{c = 0;}/^R/{c = c + 1;}END{print c;}'`
+    running=`/bin/ps axwo stat | awk 'BEGIN{c = 0;}/^R/{c = c + 1;}END{print c;}'`
     if test -z "$running"; then
 	ret=UNKNOWN
 	msg="Unable to get data"
@@ -48,8 +48,6 @@ else
     fi
 fi
 
-test "$msg" && msg=" - $msg"
-
-echo "$ret$msg"
+echo "$ret: $msg"
 eval ret=\$$ret
 exit $ret

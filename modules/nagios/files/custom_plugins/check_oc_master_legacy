@@ -1,4 +1,6 @@
 #!/bin/sh
+# check_oc_master_legacy - watch OpenShift Master <3.10 processes
+# 20180525 - smoro@redhat.com
 
 PRG=`basename $0`
 OK=0

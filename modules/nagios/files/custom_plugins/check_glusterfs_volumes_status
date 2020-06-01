@@ -1,4 +1,6 @@
 #!/bin/sh
+# check_glusterfs_volumes_status - watch GlusterFS volumes status
+# 20180524 - smoro@redhat.com
 
 PRG=`basename $0`
 OK=0

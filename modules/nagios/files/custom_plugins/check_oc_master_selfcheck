@@ -1,0 +1,170 @@
+#!/usr/bin/env python
+# check_oc_master_selfcheck - watch OpenShift >3.9 Master processes
+# 20190314 - smoro@redhat.com
+
+# Relies on /etc/nagios/k8s.cfg querying some cluster
+# Define endpoints such as:
+#[Prod]
+#endpoint = https://openshift.example.com:8443
+#token    = abcdef
+#[Ops]
+#endpoint = https://kubernetes.demo.local:6443
+#token    = ghijkl
+
+import re
+import requests
+import socket
+import sys
+
+if len(sys.argv) >= 2:
+    clusterid = sys.argv[1]
+else:
+    clusterid = 'OpenShift'
+
+try:
+    #python2
+    import ConfigParser
+    config = ConfigParser.ConfigParser()
+except ModuleNotFoundError:
+    #python3
+    import configparser
+    config = configparser.ConfigParser()
+
+try:
+    config.readfp(open(r'/etc/nagios/k8s.cfg'))
+    try:
+        endpoint = config.get(clusterid, 'endpoint')
+        token    = config.get(clusterid, 'token')
+    except (ConfigParser.NoOptionError, configparser.NoOptionError):
+        print("UNKNOWN: missing key in cluster " + clusterid + " in /etc/nagios/k8s.cfg")
+        quit(3)
+    except (ConfigParser.NoSectionError, configparser.NoSectionError):
+        print("UNKNOWN: could not find cluster " + clusterid + " in /etc/nagios/k8s.cfg")
+        quit(3)
+except IOError:
+    print("UNKNOWN: unitilalized endpoint - please set yours in /etc/nagios/k8s.cfg")
+    quit(3)
+
+filter  = socket.gethostname()
+headers = {"Authorization": "Bearer " + token}
+url     = endpoint + '/api/v1/pods'
+req     = requests.get(url, headers=headers, verify=False)
+data    = req.json()
+
+try:
+    if data['code'] == 401:
+        print("UNKNOWN: failed querying OpenShift API - denied")
+        quit(3)
+    elif data['code'] != 200:
+        print("UNKNOWN: unexpected code received from OpenShift API - " + data['code'])
+        quit(3)
+except KeyError:
+    pass
+
+try:
+    if len(data['items']) <= 0:
+        print("UNKNOWN: empty response received from OpenShift API")
+        quit(3)
+except KeyError:
+    print("UNKNOWN: no items returned from OpenShift API")
+    quit(3)
+
+patternConsole      = re.compile('^console-([a-z0-9]+)-([a-z0-9]+)$')
+patternFluentd      = re.compile('^logging-fluentd-[a-z0-9]+')
+patternOvs          = re.compile('^ovs-[a-z0-9]+')
+patternPromExporter = re.compile('^node-exporter-[a-z0-9]+')
+patternSdn          = re.compile('^sdn-[a-z0-9]+')
+patternSync         = re.compile('^sync-[a-z0-9]+')
+patternWebConsole   = re.compile('^webconsole-([a-z0-9]+)-([a-z0-9]+)$')
+
+hasApi              = False
+hasConsole          = False
+hasControllers      = False
+hasEtcd             = False
+hasFluentd          = False
+hasOvs              = False
+hasPromExporter     = False
+hasSdn              = False
+hasSync             = False
+hasWebConsole       = False
+
+for i in data['items']:
+    try:
+        if i['spec']['nodeName'] == filter:
+            if i['metadata']['namespace'] == 'kube-system':
+                if i['metadata']['name'] == 'master-api-' + filter:
+                    hasApi = i['status']['containerStatuses'][0]['ready']
+                elif i['metadata']['name'] == 'master-controllers-' + filter:
+                    hasControllers = i['status']['containerStatuses'][0]['ready']
+                elif i['metadata']['name'] == 'master-etcd-' + filter:
+                    hasEtcd = i['status']['containerStatuses'][0]['ready']
+            elif i['metadata']['namespace'] == 'openshift-sdn':
+                if patternSdn.match(i['metadata']['name'] ):
+                    hasSdn = i['status']['containerStatuses'][0]['ready']
+                elif patternOvs.match(i['metadata']['name'] ):
+                    hasOvs = i['status']['containerStatuses'][0]['ready']
+            elif i['metadata']['namespace'] == 'openshift-web-console':
+                if patternWebConsole.match(i['metadata']['name'] ):
+                    hasWebConsole = i['status']['containerStatuses'][0]['ready']
+            elif i['metadata']['namespace'] == 'openshift-node':
+                if patternSync.match(i['metadata']['name'] ):
+                    hasSync = i['status']['containerStatuses'][0]['ready']
+            elif i['metadata']['namespace'] == 'openshift-console':
+                if patternConsole.match(i['metadata']['name'] ):
+                    hasConsole = i['status']['containerStatuses'][0]['ready']
+            elif i['metadata']['namespace'] == 'openshift-logging':
+                if patternFluentd.match(i['metadata']['name'] ):
+                    hasFluentd = i['status']['containerStatuses'][0]['ready']
+            elif i['metadata']['namespace'] == 'openshift-monitoring':
+                if patternPromExporter.match(i['metadata']['name'] ):
+                    hasPromExporter = i['status']['containerStatuses'][0]['ready']
+    except KeyError:
+        a = 0
+
+if hasEtcd == False:
+    ret = "CRITCAL"
+    code = 2
+    msg = "ETCD missing"
+elif hasApi == False:
+    ret = "CRITCAL"
+    code = 2
+    msg = "API missing"
+elif hasControllers == False:
+    ret = "CRITCAL"
+    code = 2
+    msg = "Controllers missing"
+elif hasOvs == False:
+    ret = "CRITCAL"
+    code = 2
+    msg = "OVS missing"
+elif hasSdn == False:
+    ret = "CRITCAL"
+    code = 2
+    msg = "SDN missing"
+elif hasSync == False:
+    ret = "CRITCAL"
+    code = 2
+    msg = "Node-Sync missing"
+elif hasConsole == False:
+    ret = "WARNING"
+    code = 1
+    msg = "Console missing"
+elif hasWebConsole == False:
+    ret = "WARNING"
+    code = 1
+    msg = "WebConsole missing"
+elif hasFluentd == False:
+    ret = "WARNING"
+    code = 1
+    msg = "Fluentd missing"
+elif hasPromExporter == False:
+    ret = "WARNING"
+    code = 1
+    msg = "Prometheus NodeExporter missing"
+else:
+    ret = "OK"
+    code = 0
+    msg = "Core services up and running"
+
+print(ret + ' - ' + msg)
+quit(code)

@@ -1,4 +1,6 @@
 #!/bin/sh
+# check_rogue_containers - watch non-k8s containers
+# 20181004 - smoro@redhat.com
 
 PRG=`basename $0`
 OK=0
@@ -6,26 +8,54 @@ WARNING=1
 CRITICAL=2
 UNKNOWN=3
 TMPFILE=/tmp/$PRG.$$
+ret=OK
 
-count=0
-if ! docker ps -a 2>/dev/null | grep -vE "(k8s_|^CONTAINER)" | awk '{print $1}' >$TMPFILE; then
-    ret=UNKNOWN
-    msg="failed listing running containers "
-elif ! test -s $TMPFILE; then
-    ret=OK
-    msg="all fine "
-else
-    count="$(awk 'END{print NR}' $TMPFILE)"
-    msg="found: $(cat $TMPFILE | tr '\n' ' ')"
-    if test "$count" -ge 3; then
-	ret=CRITICAL
-    else
-	ret=WARNING
+for CRI in crictl docker podman
+do
+    if which $CRI; then
+	case $CRI in
+	    crictl)
+		msgadd="skipping $CRI runtime"
+		#TODO?
+		# empirically, I've never seen clusters with cri-o Pods mistakenly running
+		# whereas with docker or podman, it is tempting to manually start containers
+		# troubleshooting or trying out something, ... and eventually forget about it,
+		# I have yet to meet a use case, where end user knows how to start containers
+		# exclusively using crictl/runc/containerd/...
+		;;
+	    *)
+		count=0
+		if ! $CRI ps -a 2>/dev/null | grep -vE "(k8s_|^CONTAINER)" | awk '{print $1}' >$TMPFILE; then
+		    if test "$ret" = OK; then
+		        ret=UNKNOWN
+		    fi
+		    msgadd="failed listing running $CRI containers "
+		else
+		    if test -s $TMPFILE; then
+			count="$(awk 'END{print NR}' $TMPFILE)"
+			msgadd="$CRI has: $(cat $TMPFILE | tr '\n' ' ')"
+			if test "$count" -ge 3; then
+			    ret=CRITICAL
+			elif ! test "$ret" = CRITCAL; then
+			    ret=WARNING
+			fi
+		    fi
+		    perfdata=" $count/$($CRI ps -a | awk 'END{print NR - 1}')"
+		fi
+		;;
+	esac
+	if test "$msg"; then
+	    msg="$msg,$msgadd"
+	else
+	    msg="$msgadd"
+	fi
     fi
-fi
-perfdata=" $count/$(docker ps -a | grep -v ^CONTAINER | wc -l)"
+done >/dev/null 2>&1
 
 rm -f $TMPFILE
-echo "Docker-Containers $ret - $msg|$perfdata"
+if test -z "$msg"; then
+    msg="all fine"
+fi
+echo "Rogue-Containers $ret - $msg|$perfdata"
 eval ret=\$$ret
 exit $ret

@@ -1,0 +1,137 @@
+#!/bin/sh
+# check_kube_es_status - watch Kubernetes or OpenShift ElasticSearch Cluster Status
+# 20180626 - smoro@redhat.com
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+KUBE_ENDPOINT=
+KUBE_TOKEN=
+KUBE_CONFIG=$HOME/.kube/config
+CHECK_CLUSTER=OpenShift
+ret=CRITICAL
+msg=
+LOGGING_NAMESPACE=openshift-logging
+ES_POD_NAME_PREFIX=logging-es-data-master
+
+while test "$1"
+do
+    case "$1" in
+	-e|--endpoint)
+	    if test "$2"; then
+		KUBE_ENDPOINT="$2"
+	    else
+		echo Missing endpoint argument >&2
+	    fi
+	    shift
+	    ;;
+	-k|--kubeconfig)
+	    if test -r "$2"; then
+		KUBE_CONFIG="$2"
+	    else
+		echo "Could not read kubeconfig $2" >&2
+	    fi
+	    shift
+	    ;;
+	-n|--namespace)
+	    if test "$2"; then
+		LOGGING_NAMESPACE="$2"
+		shift
+	    else
+		echo "Missing Logging Namespace" >&2
+	    fi
+	    ;;
+	-p|--podname)
+	    if test "$2"; then
+		ES_POD_NAME_PREFIX="$2"
+		shift
+	    else
+		echo "Missing Pod name prefix" >&2
+	    fi
+	    ;;
+	-o|--cluster)
+	    if test "$2"; then
+		CHECK_CLUSTER="$2"
+		shift
+	    else
+		echo Missing cluster argument >&2
+	    fi
+	    ;;
+	-t|--token)
+	    if test "$2"; then
+		KUBE_TOKEN="$2"
+		shift
+	    else
+		echo Missing token argument >&2
+	    fi
+	    ;;
+	*)
+	    echo "Invalid argument $1" >&2
+	    ;;
+    esac
+    shift
+done
+
+getClusterConfig()
+{
+    awk "BEG{ pick = 0; }{
+        if (\$0 == \"[$CHECK_CLUSTER]\") {
+	    pick = 1;
+	} else {
+	    if (\$0 ~ /^\[.*\]/) {
+		pick = 0;
+	    } else {
+		if (pick == 1) { print \$0; }
+	    }
+	}
+    }" /etc/nagios/k8s.cfg
+}
+
+if test -s /etc/nagios/k8s.cfg -a -z "$KUBE_TOKEN"; then
+    KUBE_TOKEN=$(getClusterConfig | awk '/^token/{print $3;exit;}')
+    KUBE_ENDPOINT=$(getClusterConfig | awk '/^endpoint/{print $3;exit;}')
+fi
+if ! which oc >/dev/null 2>&1; then
+    if ! which kubectl >/dev/null 2>&1; then
+	echo UNKNOWN: missing oc and kubectl binaries
+	exit $UNKNOWN
+    fi
+    KUBE_COMMAND=kubectl
+else
+    KUBE_COMMAND=oc
+fi
+if test "$KUBE_TOKEN" -a "$KUBE_ENDPOINT"; then
+    if ! $KUBE_COMMAND --insecure-skip-tls-verify "--token=$KUBE_TOKEN" "--server=$KUBE_ENDPOINT" version >/dev/null 2>&1; then
+	echo UNKNOWN: invalid token querying Kubernetes API
+	exit $UNKNOWN
+    fi
+    AUTH_STR="--insecure-skip-tls-verify --token=$KUBE_TOKEN --server=$KUBE_ENDPOINT"
+elif ! test -s $HOME/.kube/config; then
+    echo UNKNOWN: missing Kubernetes client configuration
+    exit $UNKNOWN
+elif ! $KUBE_COMMAND "--kubeconfig=$KUBE_CONFIG" version >/dev/null 2>&1; then
+    echo UNKNOWN: $KUBE_COMMAND client not logged in, nor able to log in
+    exit $UNKNOWN
+else
+    AUTH_STR="--kubeconfig=$KUBE_CONFIG"
+fi
+
+podName=`$KUBE_COMMAND $AUTH_STR get pods -n $LOGGING_NAMESPACE | awk "/$ES_POD_NAME_PREFIX/{print \$1}"`
+if test "$podName"; then
+    clusterStatus=`$KUBE_COMMAND $AUTH_STR exec -n $LOGGING_NAMESPACE -c elasticsearch $podName -- curl --cacert /etc/elasticsearch/secret/admin-ca --cert /etc/elasticsearch/secret/admin-cert --key /etc/elasticsearch/secret/admin-key https://localhost:9200/_cluster/health | sed 's|.*"status":"\([^"]*\)".*|\1|'`
+    if echo "$clusterStatus" | grep -i green; then
+	ret=OK
+    elif echo "$clusterStatus" | grep -i yellow; then
+	ret=WARNING
+    fi
+    msg="Cluster health is $clusterStatus"
+else
+    msg="Could not locate ES pod in namespace $LOGGING_NAMESPACE"
+    ret=UNKNOWN
+fi
+
+echo "OC-ES $ret: $msg"
+eval ret=\$$ret
+exit $ret

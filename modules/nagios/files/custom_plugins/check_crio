@@ -1,0 +1,19 @@
+#!/bin/sh
+# check_crio - watch Crio status
+# 20200530 - smoro@redhat.com
+
+PRG=`basename $0`
+OK=0
+CRITICAL=2
+ret=OK
+
+if ! systemctl is-active crio >/dev/null 2>&1; then
+    ret=CRITICAL
+    msg="service not running"
+else
+    msg="service is active"
+fi
+
+echo "Crio-status $ret: $msg"
+eval ret=\$$ret
+exit $ret
