@@ -3,6 +3,7 @@ class certbot::debian {
 	if (! defined(Apt::Define::Repo["backports"])) {
 	    apt::define::repo {
 		"backports":
+		    baseurl  => "http://archive.debian.org/debian",
 		    branches => "main contrib non-free",
 		    codename => "jessie-backports";
 	    }
