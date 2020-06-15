@@ -28,6 +28,8 @@ gitlab_rails['ldap_servers'] = YAML.load <<-'EOS'
     password: '<%=@ldap_password%>'
     allow_username_or_email_login: true
     base: '<%=@ldap_searchuser%>'
+    tls_options:
+      ca_file: '/etc/ssl/certs/ca-auth.crt'
     user_filter: '<%=@ldap_userfilter%>'
 EOS
 <% end -%><% if @rootpw != false -%>gitlab_rails['initial_root_password'] = "<%=@rootpw%>"
