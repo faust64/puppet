@@ -15,6 +15,24 @@ class smokeping::debian {
 	    target  => "$share_dir/www";
     }
 
+    if (defined(Exec["Reload systemd configuration"])) {
+	file {
+	    "Fixes pid dir permissions":
+		group   => lookup("gid_zero"),
+		mode    => "0644",
+		notify  => Exec["Reload systemd configuration"],
+		path    => "/usr/lib/tmpfiles.d/smokeping.conf",
+		require => Common::Define::Package["smokeping"],
+		source  => "puppet:///modules/smokeping/systemctl.conf";
+	}
+
+	File["Fixes pid dir permissions"]
+	    -> Common::Define::Service["smokeping"]
+    } else {
+	Common::Define::Package["smokeping"]
+	    -> Common::Define::Service["smokeping"]
+    }
+
     if (defined(Class["nginx"])) {
 #	common::define::package {
 #	    [ "apache2", "apache2.2-bin", "apache2.2-common", "apache2-mpm-worker", "apache2-utils" ]:
@@ -38,7 +56,4 @@ class smokeping::debian {
 	Class[Apache]
 	    -> File["Link smokeping share directory to apache server root"]
     }
-
-    Common::Define::Package["smokeping"]
-	-> Common::Define::Service["smokeping"]
 }
