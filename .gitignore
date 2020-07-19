@@ -1,4 +1,4 @@
-/hieradata/private.yaml
+/data/private.yaml
 /environment.conf
 /modules/vlist
 /modules/iptables

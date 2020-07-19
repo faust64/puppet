@@ -20,18 +20,36 @@ Should you need any help understanding what's in there, getting started, ... ple
 
 ```
 <set hostname/ip/...>
-apt-get install wget git
-wget https://apt.puppet.com/puppet<puppetrel>-release-buster.deb
-dpkg -i puppet<puppetrel>-release-buster.deb
-apt-get update
-apt-get install puppetserver
-systemctl start puppetserver
-apt-get install puppetdb puppetdb-termini
+# apt-get install wget git
+# wget https://apt.puppet.com/puppet<puppetrel>-release-buster.deb
+# dpkg -i puppet<puppetrel>-release-buster.deb
+# apt-get update
+# apt-get install puppetserver postgresql postgresql-contrib
+# su - postgres
+$ createuser -DRSP puppetdb
+$ createdb -E UTF8 -O puppetdb puppetdb
+$ psql puppetdb -c 'create extension pg_trgm'
+$ exit
+# cat <<EOF >>/etc/postgresql/11/main/pg_hba.conf
+local  all  all  md5
+EOF
+# systemctl restart postgresql
+# systemctl start puppetserver
+# apt-get install puppetdb puppetdb-termini
+# cat <<EOF >/etc/puppetlabs/puppetdb/conf.d/database.ini
+[database]
+subname = //<puppet-fqdn>:5432/puppetdb
+username = puppetdb
+password = <dbpassword>
+EOF
+# cat <<EOF >/etc/puppetlabs/puppet/puppetdb.conf
+[main]
+server_urls = https://<puppet-fqdn>:8081
+EOF
 ```
 
-Setting up a new Puppetmaster, don't forget to install and enable puppetdb &
-hiera terminus. Replace your `/etc/puppetlabs/puppet/hiera.yaml` with the
-following:
+With older hiera release, we would have replaced the content of
+`/etc/puppetlabs/puppet/hiera.yaml` with the following:
 
 ```
 ---
@@ -68,69 +86,11 @@ following:
 :logger: console
 ```
 
-In that case, hiera configurations would go in
+In that case, hiera variables would go in
 `/etc/puppetlabs/code/environments/production/hieradata`.
 
-Or, lately, we would use instead:
-
-```
----
-version: 5
-hierarchy:
-- name: Host
-  path: "%{domain}/%{hostname}.yaml"
-- name: Server Class in Domain
-  path: "%{domain}/%{srvtype}.yaml"
-- name: Domain Defaults
-  path: "%{domain}/defaults.yaml"
-- name: Domain OS/CodeName/Arch specifics
-  path: "%{domain}/%{operatingsystem}-%{lsbdistcodename}-%{architecture}.yaml"
-- name: Domain OS/Rel/Arch specifics
-  path: "%{domain}/%{operatingsystem}-%{operatingsystemrelease}-%{architecture}.yaml"
-- name: Domain OS/RejMaj/Arch specifics
-  path: "%{domain}/%{operatingsystem}-%{os.release.major}-%{architecture}.yaml"
-- name: Domain OS/CodeName specifics
-  path: "%{domain}/%{operatingsystem}-%{lsbdistcodename}.yaml"
-- name: Domain OS/Rel specifics
-  path: "%{domain}/%{operatingsystem}-%{operatingsystemrelease}.yaml"
-- name: Domain OS/RelMaj specifics
-  path: "%{domain}/%{operatingsystem}-%{os.release.major}.yaml"
-- name: Domain OS/Arch specifics
-  path: "%{domain}/%{operatingsystem}-%{architecture}.yaml"
-- name: Domain/OS specifics
-  path: "%{domain}/%{operatingsystem}.yaml"
-- name: Privates / non-git-ed
-  path: private.yaml
-- name: HostGroup
-  path: "hostgroups/%{hostname}.yaml"
-- name: ServiceClass
-  path: "serviceclasses/%{srvtype}.yaml"
-- name: Global OS/CodeName/Arch
-  path: "%{operatingsystem}-%{lsbdistcodename}-%{architecture}.yaml"
-- name: Global OS/Rel/Arch
-  path: "%{operatingsystem}-%{operatingsystemrelease}-%{architecture}.yaml"
-- name: Global OS/RelMaj/Arch
-  path: "%{operatingsystem}-%{os.release.major}-%{architecture}.yaml"
-- name: Global OS/CodeName
-  path: "%{operatingsystem}-%{lsbdistcodename}.yaml"
-- name: Global OS/Rel
-  path: "%{operatingsystem}-%{operatingsystemrelease}.yaml"
-- namt: Global OS/RelMaj
-  path: "%{operatingsystem}-%{os.release.major}.yaml"
-- name: Global OS/Arch
-  path: "%{operatingsystem}-%{architecture}.yaml"
-- name: Global OS
-  path: "%{operatingsystem}.yaml"
-- name: Networks
-  path: networks.yaml
-- name: Site Commons
-  path: common.yaml
-- name: Classes Defaults
-  path: defaults.yaml
-```
-
-Now, our hiera configuration should be placed in
-`/etc/puppetlabs/code/environments/production/data`.
+Now, our hiera configuration should be based on `./hiera.yaml`,
+and variables loaded from `/etc/puppetlabs/code/environments/production/data`.
 
 Change your working directory to `/etc/puppetlabs/code/environments/`, clone
 this repository:
@@ -139,8 +99,8 @@ this repository:
 test -d production && mv production production.orig
 git clone https://github.com/faust64/puppet production
 cd production
-#only if hiera v5:
-mv hieradata data
+#older hiera:
+mv data hieradata
 ```
 
 To avoid filling your Puppetmaster filesystem with reports, add some daily job

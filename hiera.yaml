@@ -1,0 +1,53 @@
+---
+version: 5
+hierarchy:
+- name: Host
+  path: "%{domain}/%{hostname}.yaml"
+- name: Server Class in Domain
+  path: "%{domain}/%{srvtype}.yaml"
+- name: Domain Defaults
+  path: "%{domain}/defaults.yaml"
+- name: Domain OS/CodeName/Arch specifics
+  path: "%{domain}/%{operatingsystem}-%{lsbdistcodename}-%{architecture}.yaml"
+- name: Domain OS/Rel/Arch specifics
+  path: "%{domain}/%{operatingsystem}-%{operatingsystemrelease}-%{architecture}.yaml"
+- name: Domain OS/RejMaj/Arch specifics
+  path: "%{domain}/%{operatingsystem}-%{os.release.major}-%{architecture}.yaml"
+- name: Domain OS/CodeName specifics
+  path: "%{domain}/%{operatingsystem}-%{lsbdistcodename}.yaml"
+- name: Domain OS/Rel specifics
+  path: "%{domain}/%{operatingsystem}-%{operatingsystemrelease}.yaml"
+- name: Domain OS/RelMaj specifics
+  path: "%{domain}/%{operatingsystem}-%{os.release.major}.yaml"
+- name: Domain OS/Arch specifics
+  path: "%{domain}/%{operatingsystem}-%{architecture}.yaml"
+- name: Domain/OS specifics
+  path: "%{domain}/%{operatingsystem}.yaml"
+- name: Privates / non-git-ed
+  path: private.yaml
+- name: HostGroup
+  path: "hostgroups/%{hostname}.yaml"
+- name: ServiceClass
+  path: "serviceclasses/%{srvtype}.yaml"
+- name: Global OS/CodeName/Arch
+  path: "%{operatingsystem}-%{lsbdistcodename}-%{architecture}.yaml"
+- name: Global OS/Rel/Arch
+  path: "%{operatingsystem}-%{operatingsystemrelease}-%{architecture}.yaml"
+- name: Global OS/RelMaj/Arch
+  path: "%{operatingsystem}-%{os.release.major}-%{architecture}.yaml"
+- name: Global OS/CodeName
+  path: "%{operatingsystem}-%{lsbdistcodename}.yaml"
+- name: Global OS/Rel
+  path: "%{operatingsystem}-%{operatingsystemrelease}.yaml"
+- namt: Global OS/RelMaj
+  path: "%{operatingsystem}-%{os.release.major}.yaml"
+- name: Global OS/Arch
+  path: "%{operatingsystem}-%{architecture}.yaml"
+- name: Global OS
+  path: "%{operatingsystem}.yaml"
+- name: Networks
+  path: networks.yaml
+- name: Site Commons
+  path: common.yaml
+- name: Classes Defaults
+  path: defaults.yaml
