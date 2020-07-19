@@ -18,7 +18,7 @@ class wordpress::scripts {
 	    mode    => "0750",
 	    owner   => root,
 	    path    => "/usr/local/sbin/Wordpressbackup",
-	    require => Exec["Install wp-cli"];
+	    require => Common::Define::Geturl["wp-cli"];
     }
 
     @@file {

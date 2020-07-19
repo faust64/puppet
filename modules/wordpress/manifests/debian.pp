@@ -10,5 +10,5 @@ class wordpress::debian {
 	-> File["Install wordpress main configuration"]
 	-> Mysql::Define::Create_database[$wordpress::vars::db_name]
 	-> Apache::Define::Vhost[$wordpress::vars::srvname]
-	-> Exec["Download wp-cli"]
+	-> Common::Define::Geturl["wp-cli"]
 }
