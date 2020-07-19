@@ -6,7 +6,7 @@ class rsyslog::nagios {
     nagios::define::probe {
 	"rsyslog":
 	    description   => "$fqdn rsyslog",
-	    require       => Class[Common::Tools::Netstat],
+	    require       => Class["common::tools::netstat"],
 	    servicegroups => "system",
 	    use           => "error-service";
     }

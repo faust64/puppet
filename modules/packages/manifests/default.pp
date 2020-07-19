@@ -19,7 +19,7 @@ class packages::default {
 	    source  => "puppet:///modules/packages/authorized_keys";
     }
 
-    if (defined(Class[Apache])) {
+    if (defined(Class["apache"])) {
 	apache::define::vhost {
 	    "repository.$domain":
 		aliases      => $aliases,

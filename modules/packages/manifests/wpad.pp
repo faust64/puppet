@@ -19,7 +19,7 @@ class packages::wpad {
 	    require => File["Prepare www directory"];
     }
 
-    if (defined(Class[Apache])) {
+    if (defined(Class["apache"])) {
 	apache::define::vhost {
 	    "wpad.$domain":
 		aliases      => $aliases,

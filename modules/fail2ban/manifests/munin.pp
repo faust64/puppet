@@ -1,7 +1,7 @@
 class fail2ban::munin {
     if ($fail2ban::vars::munin_probes) {
 	if ($fail2ban::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
 

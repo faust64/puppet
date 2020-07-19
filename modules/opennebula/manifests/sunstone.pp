@@ -3,7 +3,7 @@ class opennebula::sunstone {
     $runtime_group = $opennebula::vars::runtime_group
     $runtime_user  = $opennebula::vars::runtime_user
 
-    if (! defined(Class[nginx])) {
+    if (! defined(Class["nginx"])) {
 	include nginx
     }
 
@@ -102,10 +102,10 @@ class opennebula::sunstone {
 	    path    => "/usr/share/one:/usr/local/sbin:/usr/sbin:/sbin:/usr/local/bin:/usr/bin:/bin",
 	    require =>
 		[
-		    Class[Common::Libs::Curlopenssl],
-		    Class[Common::Libs::Rubydev],
-		    Class[Common::Tools::Gcc],
-		    Class[Common::Tools::Make],
+		    Class["common::libs::curlopenssl"],
+		    Class["common::libs::rubydev"],
+		    Class["common::tools::gcc"],
+		    Class["common::tools::make"],
 		    Common::Define::Package["opennebula-sunstone"]
 		];
 	"Copy local ssh key to authorized keys":

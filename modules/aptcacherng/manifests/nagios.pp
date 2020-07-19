@@ -6,7 +6,7 @@ class aptcacherng::nagios {
     nagios::define::probe {
 	"aptcacher":
 	    description   => "$fqdn aptcacher server",
-	    require       => Class[Common::Tools::Netstat],
+	    require       => Class["common::tools::netstat"],
 	    servicegroups => "netservices",
 	    use           => "critical-service";
     }

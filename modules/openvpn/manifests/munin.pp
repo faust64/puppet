@@ -1,7 +1,7 @@
 class openvpn::munin {
     if ($openvpn::vars::munin_probes) {
 	if ($openvpn::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
 

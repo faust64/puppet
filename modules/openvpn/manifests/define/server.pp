@@ -210,7 +210,7 @@ define openvpn::define::server($bridge  = "gre42",
     }
 
     if ($openvpn::vars::with_collectd) {
-	if (! defined(Class[collectd])) {
+	if (! defined(Class["collectd"])) {
 	    include collectd
 	}
 

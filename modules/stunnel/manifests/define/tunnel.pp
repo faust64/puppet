@@ -7,7 +7,7 @@ define stunnel::define::tunnel($accept     = "127.0.0.1:65535",
 			       $keyfile    = false,
 			       $options    = lookup("stunnel_options"),
 			       $sslversion = "all") {
-    if (! defined(Class[stunnel])) {
+    if (! defined(Class["stunnel"])) {
 	include stunnel
     }
 

@@ -21,7 +21,7 @@ class rkhunter::vars {
     $whitelisted = lookup("rkhunter_script_whitelist")
     if ($lwp_check) {
 	$has_lwp = true
-    } elsif (defined(Class[Common::Libs::Perlwww])) {
+    } elsif (defined(Class["common::libs::perlwww"])) {
 	$has_lwp = true
     } else {
 	$has_lwp = false

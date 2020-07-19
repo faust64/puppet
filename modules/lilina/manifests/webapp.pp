@@ -10,7 +10,7 @@ class lilina::webapp {
 	$aliases = false
     }
 
-    if (! defined(Class[Apache])) {
+    if (! defined(Class["apache"])) {
 	include apache
     }
 

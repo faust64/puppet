@@ -9,7 +9,7 @@ class subsonic::scripts {
 	    source  => "puppet:///modules/subsonic/wipe";
     }
 
-    if (defined(Class[Common::Tools::Flac])) {
+    if (defined(Class["common::tools::flac"])) {
 	file {
 	    "Install flac2mp3 script":
 		group   => lookup("gid_zero"),
@@ -18,8 +18,8 @@ class subsonic::scripts {
 		path    => "/usr/local/bin/flac2mp3",
 		require =>
 		    [
-			Class[Common::Tools::Flac],
-			Class[Common::Tools::Lame]
+			Class["common::tools::flac"],
+			Class["common::tools::lame"]
 		    ],
 		source  => "puppet:///modules/subsonic/flac2mp3";
 	}

@@ -9,7 +9,7 @@ define git::define::clone($branch          = "master",
 			  $update          = false,
 			  $usr             = false) {
     if ($repository and $local_container) {
-	if (! defined(Class[git])) {
+	if (! defined(Class["git"])) {
 	    include git
 	}
 	if ($git_username and $git_password) {

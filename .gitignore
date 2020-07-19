@@ -2,4 +2,5 @@
 /environment.conf
 /modules/vlist
 /modules/iptables
+/modules/nagios_core
 /modules/stdlib

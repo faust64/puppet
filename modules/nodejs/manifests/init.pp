@@ -23,8 +23,8 @@ class nodejs {
 	include nodejs::pm2service
 
 	Nodejs::Define::Module["pm2"]
-	    -> Class[Nodejs::Pm2config]
-	    -> Class[Nodejs::Pm2service]
+	    -> Class["nodejs::pm2config"]
+	    -> Class["nodejs::pm2service"]
     }
     if ($nodejs::vars::service_name) {
 	include nodejs::service

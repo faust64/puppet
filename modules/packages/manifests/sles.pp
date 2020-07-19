@@ -19,7 +19,7 @@ class packages::sles {
 	    require => File["Prepare www directory"];
     }
 
-    if (defined(Class[Apache])) {
+    if (defined(Class["apache"])) {
 	apache::define::vhost {
 	    "sles.$domain":
 		aliases      => $aliases,

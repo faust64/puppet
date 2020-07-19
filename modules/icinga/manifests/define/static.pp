@@ -34,7 +34,7 @@ define icinga::define::static($host_contact   = "root",
 		common::define::package {
 		    "aws-status":
 			provider => "pip",
-			require  => Class[Common::Tools::Pip];
+			require  => Class["common::tools::pip"];
 		}
 	    }
 

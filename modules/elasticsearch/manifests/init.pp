@@ -1,5 +1,5 @@
 class elasticsearch {
-    if (! defined(Class[java])) {
+    if (! defined(Class["java"])) {
 	include java
     }
     include common::tools::pip

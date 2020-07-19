@@ -4,9 +4,9 @@ class wifimgr::debian {
 	    keyid   => "C0A52C50",
 	    require =>
 		[
-		    Class[Java],
-		    Class[Curl],
-		    Class[Mongodb]
+		    Class["java"],
+		    Class["curl"],
+		    Class["mongodb"]
 		];
     }
 

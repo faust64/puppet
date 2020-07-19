@@ -1,5 +1,5 @@
 class icinga::webapp {
-    if (! defined(Class[Apache])) {
+    if (! defined(Class["apache"])) {
 	include apache
     }
 

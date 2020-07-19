@@ -6,7 +6,7 @@ class medusa::nagios {
     nagios::define::probe {
 	"medusa":
 	    description   => "$fqdn Medusa service",
-	    require       => Class[Common::Tools::Netstat],
+	    require       => Class["common::tools::netstat"],
 	    servicegroups => "webservices",
 	    use           => "jobs-service";
     }

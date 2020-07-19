@@ -1,5 +1,5 @@
 class openvz::backups {
-    if ($openvz::vars::jumeau and ! defined(Class[Vebackup])) {
+    if ($openvz::vars::jumeau and ! defined(Class["vebackup"])) {
 	class {
 	    'vebackup':
 		do_openvz => true,

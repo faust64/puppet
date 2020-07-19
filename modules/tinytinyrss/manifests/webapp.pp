@@ -10,10 +10,10 @@ class tinytinyrss::webapp {
 	$aliases = [ "ttrss.$domain" ]
     }
 
-    if (! defined(Class[Apache])) {
+    if (! defined(Class["apache"])) {
 	include apache
     }
-    if (! defined(Class[Mysql])) {
+    if (! defined(Class["mysql"])) {
 	include mysql
     }
 

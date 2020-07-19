@@ -85,7 +85,7 @@ define nginx::define::vhost($add_xff_headers = false,
 	    }
 
 	    if ($with_php_fpm != false) {
-		if (! defined(Class[Php])) {
+		if (! defined(Class["php"])) {
 		    include php
 		}
 
@@ -190,7 +190,7 @@ define nginx::define::vhost($add_xff_headers = false,
 	}
     }
 
-    if (defined(Class[Rsyslog]) and
+    if (defined(Class["rsyslog"]) and
 	! defined(File["Enable Nginx rsyslog vhost $name configuration"])) {
 	file {
 	    "Purge Nginx rsyslog vhost $name configuration":

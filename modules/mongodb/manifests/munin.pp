@@ -1,7 +1,7 @@
 class mongodb::munin {
     if ($mongodb::vars::munin_probes) {
 	if ($mongodb::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
 

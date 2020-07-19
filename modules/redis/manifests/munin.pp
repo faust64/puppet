@@ -1,7 +1,7 @@
 class redis::munin {
     if ($redis::vars::munin_probes) {
 	if ($redis::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
 	    include common::libs::perlswitch

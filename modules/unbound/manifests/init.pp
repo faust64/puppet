@@ -37,7 +37,7 @@ class unbound {
     if ($kernel == "Linux") {
 	include unbound::logrotate
     }
-    if (! defined(Class[Common::Tools::Tcpdump])) {
+    if (! defined(Class["common::tools::tcpdump"])) {
 	include common::tools::tcpdump
     }
 }

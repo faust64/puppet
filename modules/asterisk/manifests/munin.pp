@@ -1,7 +1,7 @@
 class asterisk::munin {
     if ($asterisk::vars::munin_probes) {
 	if ($asterisk::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
 

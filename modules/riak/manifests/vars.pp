@@ -56,7 +56,7 @@ class riak::vars {
     } else {
 	$listen = $check_listen
     }
-    if (defined(Class[Riakcs])) {
+    if (defined(Class["riakcs"])) {
 	$do_riakcs = true
     } else {
 	$do_riakcs = $do_riakcs_check

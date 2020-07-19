@@ -19,7 +19,7 @@ class packages::elastix {
 	    require => File["Prepare www directory"];
     }
 
-    if (defined(Class[Apache])) {
+    if (defined(Class["apache"])) {
 	apache::define::vhost {
 	    "elastix.$domain":
 		aliases      => $aliases,

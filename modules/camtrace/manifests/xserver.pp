@@ -14,21 +14,21 @@ class camtrace::xserver {
 	    mode    => "0755",
 	    owner   => $camtrace::vars::runtime_user,
 	    path    => "/usr/local/camtrace/.xinitrc",
-	    require => Class[Xorg],
+	    require => Class["xorg"],
 	    source  => "puppet:///modules/camtrace/xinitrc";
 	"Install lxpanel fr toolbar":
 	    group   => $camtrace::vars::runtime_group,
 	    mode    => "0644",
 	    owner   => $camtrace::vars::runtime_user,
 	    path    => "/usr/local/camtrace/.config/lxpanel/default/panels/locale/bottom-fr_FR",
-	    require => Class[Xorg],
+	    require => Class["xorg"],
 	    source  => "puppet:///modules/camtrace/lxpanel-toolbar-fr";
 	"Install lxpanel en toolbar":
 	    group   => $camtrace::vars::runtime_group,
 	    mode    => "0644",
 	    owner   => $camtrace::vars::runtime_user,
 	    path    => "/usr/local/camtrace/.config/lxpanel/default/panels/locale/bottom-en_US",
-	    require => Class[Xorg],
+	    require => Class["xorg"],
 	    source  => "puppet:///modules/camtrace/lxpanel-toolbar-us";
     }
 }

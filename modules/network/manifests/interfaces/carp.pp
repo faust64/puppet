@@ -10,10 +10,10 @@ define network::interfaces::carp($vhid       = 1,
 				 $root_if    = false,
 				 $routes     = false,
 				 $ualias     = false) {
-    if ! defined(Class[Network::Sysctl::Carp]) {
+    if ! defined(Class["network::sysctl::carp"]) {
 	include mysysctl::define::carp
     }
-    if (! defined(Class[Ifstated])) {
+    if (! defined(Class["ifstated"])) {
 	include ifstated
     }
 

@@ -25,7 +25,7 @@ class packages::rhel {
 	    path    => "/usr/local/sbin/update_rpms";
     }
 
-    if (defined(Class[Apache])) {
+    if (defined(Class["apache"])) {
 	apache::define::vhost {
 	    "rhel.$domain":
 		aliases      => $aliases,

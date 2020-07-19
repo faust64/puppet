@@ -5,26 +5,26 @@ class apache {
 	"Debian", "Devuan", "Ubuntu": {
 	    include apache::debian
 
-	    Class[Apache::Debian]
-		-> Class[Apache::Config]
-	    Class[Apache::Debian]
-		-> Class[Apache::Custom]
+	    Class["apache::debian"]
+		-> Class["apache::config"]
+	    Class["apache::debian"]
+		-> Class["apache::custom"]
 	}
 	"CentOS", "RedHat": {
 	    include apache::rhel
 
-	    Class[Apache::Rhel]
-		-> Class[Apache::Config]
-	    Class[Apache::Rhel]
-		-> Class[Apache::Custom]
+	    Class["apache::rhel"]
+		-> Class["apache::config"]
+	    Class["apache::rhel"]
+		-> Class["apache::custom"]
 	}
 	"FreeBSD": {
 	    include apache::freebsd
 
-	    Class[Apache::Freebsd]
-		-> Class[Apache::Config]
-	    Class[Apache::Freebsd]
-		-> Class[Apache::Custom]
+	    Class["apache::freebsd"]
+		-> Class["apache::config"]
+	    Class["apache::freebsd"]
+		-> Class["apache::custom"]
 	}
 	default: {
 	    common::define::patchneeded { "apache": }

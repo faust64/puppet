@@ -2,7 +2,7 @@ class peerio::munin {
     if ($peerio::vars::munin_probesadm and $peerio::vars::munin_probesbg
 	and $peerio::vars::munin_probesfg and $peerio::vars::munin_probesshark) {
 	if ($peerio::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
 
@@ -14,11 +14,11 @@ class peerio::munin {
 
 	    each($peerio::vars::workers) |$worker| {
 		if ($worker == "foreground" or $worker == "background") {
-		    if (! defined(Class[Common::Tools::Redis])) {
+		    if (! defined(Class["common::tools::redis"])) {
 			include common::tools::redis
 		    }
 		    if ($worker == "background") {
-			if (! defined(Class[Common::Libs::Perlswitch])) {
+			if (! defined(Class["common::libs::perlswitch"])) {
 			    include common::libs::perlswitch
 			}
 		    }
@@ -30,7 +30,7 @@ class peerio::munin {
 			    require     =>
 				[
 				    File["Install peerio munin probes configuration"],
-				    Class[Common::Libs::Perlswitch]
+				    Class["common::libs::perlswitch"]
 				];
 		    }
 		} elsif ($worker == "background") {
@@ -44,8 +44,8 @@ class peerio::munin {
 					require     =>
 					    [
 						File["Install Redis backends munin configuration"],
-						Class[Common::Libs::Perlswitch],
-						Class[Common::Tools::Redis]
+						Class["common::libs::perlswitch"],
+						Class["common::tools::redis"]
 					    ];
 				}
 			    }
@@ -69,7 +69,7 @@ class peerio::munin {
 			    require     =>
 				[
 				    File["Install peerio munin probes configuration"],
-				    Class[Common::Libs::Perlswitch]
+				    Class["common::libs::perlswitch"]
 				];
 		    }
 		} elsif ($worker == "admin") {

@@ -16,42 +16,42 @@ class ifstated::vars {
     $ifstated_peer  = lookup("ifstated_peer")
     $vlan_database  = lookup("vlan_database")
 
-    if (defined(Class[Ftpproxy])) {
+    if (defined(Class["ftpproxy"])) {
 	$has_ftpproxy = true
     } else {
 	$has_ftpproxy = false
     }
-    if (defined(Class[Tftpproxy]) and $kernelrelease =~ /5\.[3-9]/) {
+    if (defined(Class["tftpproxy"]) and $kernelrelease =~ /5\.[3-9]/) {
 	$has_tftpproxy = true
     } else {
 	$has_tftpproxy = false
     }
-    if (defined(Class[Relayd])) {
+    if (defined(Class["relayd"])) {
 	$has_relayd = true
     } else {
 	$has_relayd = false
     }
-    if (defined(Class[Pf])) {
+    if (defined(Class["pf"])) {
 	$has_pf = true
     } else {
 	$has_pf = false
     }
-    if (defined(Class[Ipsecctl])) {
+    if (defined(Class["ipsecctl"])) {
 	$has_ipsecctl = true
     } else {
 	$has_ipsecctl = false
     }
-    if (defined(Class[Ospfd])) {
+    if (defined(Class["ospfd"])) {
 	$has_ospfd = true
     } else {
 	$has_ospfd = false
     }
-    if (defined(Class[Openvpn])) {
+    if (defined(Class["openvpn"])) {
 	$has_openvpn = true
     } else {
 	$has_openvpn = false
     }
-    if (defined(Class[Unbound])) {
+    if (defined(Class["unbound"])) {
 	$has_unbound = true
     } else {
 	$has_unbound = false

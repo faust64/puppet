@@ -23,8 +23,8 @@ class common::physical::fs {
 
 
 	if ($mountpoints) {
-	    Class[Common::Fs::Rw]
-		-> Class[Common::Fs::Fstab]
+	    Class["common::fs::rw"]
+		-> Class["common::rs::fstab"]
 	}
 #    } elsif ($root_is_ro and $kernel == "FreeBSD") {
 #mdconfig/mfsroot/... un jour...

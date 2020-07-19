@@ -29,17 +29,17 @@ class network::routed {
 		$routes = false
 	    }
 	    if ($network::vars::all_networks[$nicname]['igmp'] == true) {
-		if (! defined(Class[Igmpproxy])) {
+		if (! defined(Class["igmpproxy"])) {
 		     include igmpproxy
 		}
 	    }
 	    if ($network::vars::all_networks[$nicname]['ftp'] == true) {
-		if (! defined(Class[Ftpproxy])) {
+		if (! defined(Class["ftpproxy"])) {
 		     include ftpproxy
 		}
 	    }
 	    if ($network::vars::all_networks[$nicname]['tftp'] == true) {
-		if (! defined(Class[Tftpproxy])) {
+		if (! defined(Class["tftpproxy"])) {
 		     include tftpproxy
 		}
 	    }

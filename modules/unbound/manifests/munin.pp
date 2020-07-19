@@ -1,7 +1,7 @@
 class unbound::munin {
     if ($unbound::vars::munin_probes) {
 	if ($unbound::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
 

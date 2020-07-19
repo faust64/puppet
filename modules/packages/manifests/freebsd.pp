@@ -26,7 +26,7 @@ class packages::freebsd {
 	    require => File["Install freebsd repository root"];
     }
 
-    if (defined(Class[Apache])) {
+    if (defined(Class["apache"])) {
 	apache::define::vhost {
 	    "freebsd.$domain":
 		aliases      => $aliases,

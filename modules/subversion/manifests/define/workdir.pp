@@ -9,7 +9,7 @@ define subversion::define::workdir($group_real      = lookup("gid_zero"),
     if ($local_container and $repository) {
 	$local_name_real = $local_name ? { false => $name, default => $local_name }
 
-	if (!defined(Class[Subversion])) {
+	if (!defined(Class["subversion"])) {
 	    include subversion
 	}
 

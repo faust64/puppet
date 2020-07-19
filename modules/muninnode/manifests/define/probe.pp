@@ -2,7 +2,7 @@ define muninnode::define::probe($config      = false,
 				$status      = "present",
 				$pooled      = false,
 				$plugin_name = false) {
-    if (! defined(Class[Muninnode::Vars])) {
+    if (! defined(Class["muninnode::vars"])) {
 	include muninnode::vars
     }
 

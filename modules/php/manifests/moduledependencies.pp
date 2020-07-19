@@ -182,8 +182,8 @@ class php::moduledependencies {
 				Common::Define::Package["libmcrypt-dev"],
 				Common::Define::Package["pkg-config"],
 				Common::Define::Package["php-pear"],
-				Class[Common::Tools::Gcc],
-				Class[Common::Tools::Make],
+				Class["common::tools::gcc"],
+				Class["common::tools::make"],
 				Php::Define::Module["xml"]
 			    ];
 		}

@@ -49,7 +49,7 @@ class packages::debian {
 	    source  => "puppet:///modules/packages/options";
     }
 
-    if (defined(Class[Apache])) {
+    if (defined(Class["apache"])) {
 	apache::define::vhost {
 	    "debian.$domain":
 		aliases      => $aliases,

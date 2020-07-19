@@ -10,10 +10,10 @@ class miniflux::webapp {
 	$aliases = false
     }
 
-    if (! defined(Class[Apache])) {
+    if (! defined(Class["apache"])) {
 	include apache
     }
-    if (! defined(Class[Sqlite])) {
+    if (! defined(Class["sqlite"])) {
 	include sqlite
     }
 

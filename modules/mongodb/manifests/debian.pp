@@ -27,6 +27,6 @@ class mongodb::debian {
     }
 
     Package["python-pymongo"]
-	-> Class[Mongodb::Munin]
-	-> Class[Mongodb::Nagios]
+	-> Class["mongodb::munin"]
+	-> Class["mongodb::nagios"]
 }

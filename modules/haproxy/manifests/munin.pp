@@ -1,7 +1,7 @@
 class haproxy::munin {
     if ($haproxy::vars::munin_probes) {
 	if ($haproxy::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
 

@@ -28,7 +28,7 @@ class elasticsearch::config {
     }
 
     if ($version == "5.x" or $version == "6.x" or $version == "7.x") {
-	if (! defined(Class[curl])) {
+	if (! defined(Class["curl"])) {
 	    include curl
 	}
 
@@ -39,7 +39,7 @@ class elasticsearch::config {
 		path    => "/usr/local/bin:/usr/bin:/bin",
 		require =>
 		    [
-			Class[curl],
+			Class["curl"],
 			Service["elasticsearch"]
 		    ],
 		unless  => "grep $replicas .esearch-replicas.puppet-mark";

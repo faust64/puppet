@@ -79,7 +79,7 @@ class nodejs::debian {
 		notify      => Exec["Build nodejs"],
 		path        => "/usr/bin:/bin:/usr/src/node-v$version",
 		refreshonly => true,
-		require     => Class[Common::Tools::Make];
+		require     => Class["common::tools::make"];
 	    "Build nodejs":
 		command     => "make",
 		cwd         => "/usr/src/node-v$version",

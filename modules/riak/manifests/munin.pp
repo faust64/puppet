@@ -1,7 +1,7 @@
 class riak::munin {
     if ($riak::vars::munin_probes) {
 	if ($riak::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
 	    include common::libs::pythonrequests

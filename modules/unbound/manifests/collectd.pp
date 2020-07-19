@@ -1,9 +1,9 @@
 class unbound::collectd {
     if ($unbound::vars::with_collectd) {
-	if (! defined(Class[collectd])) {
+	if (! defined(Class["collectd"])) {
 	    include collectd
 	}
-	if (! defined(Class[Apache::Status])) {
+	if (! defined(Class["apache::status"])) {
 	    include unbound::status
 	}
 

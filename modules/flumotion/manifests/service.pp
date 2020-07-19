@@ -1,5 +1,5 @@
 class flumotion::service {
-    if (defined(Class[Xorg])) {
+    if (defined(Class["xorg"])) {
 	$rcaction  = "remove"
 	$rconlyif  = "test -L /etc/rc.d/S17flumotion"
 	$rcunless  = "exit 0"

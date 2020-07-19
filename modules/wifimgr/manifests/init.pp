@@ -1,13 +1,13 @@
 class wifimgr {
     include wifimgr::vars
 
-    if (! defined(Class[Curl])) {
+    if (! defined(Class["curl"])) {
 	include curl
     }
-    if (! defined(Class[Mongodb])) {
+    if (! defined(Class["mongodb"])) {
 	include mongodb
     }
-    if (! defined(Class[Java])) {
+    if (! defined(Class["java"])) {
 	include java
     }
 

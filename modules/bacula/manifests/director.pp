@@ -37,7 +37,7 @@ class bacula::director {
 	    notify  => Service[$bacula::vars::mysql_service_name],
 	    owner   => root,
 	    path    => "$mysql_include_dir/innodb.conf",
-	    require => Class[Mysql],
+	    require => Class["mysql"],
 	    source  => "puppet:///modules/bacula/innodb.conf";
 	"Prepare Bacula custom scripts directory":
 	    ensure  => directory,

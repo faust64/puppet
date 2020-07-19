@@ -25,7 +25,7 @@ class nextcloud::install {
 	    cwd         => "/var/www",
 	    path        => "/usr/bin:/bin",
 	    refreshonly => true,
-	    require     => Class[Common::Tools::Unzip];
+	    require     => Class["common::tools::unzip"];
     }
 
     file {

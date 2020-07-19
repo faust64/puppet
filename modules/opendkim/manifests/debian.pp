@@ -9,11 +9,11 @@ class opendkim::debian {
 	}
 
 	Package["opendkim-tools"]
-	    -> Class[Opendkim::Genkeys]
+	    -> Class["opendkim::genkeys"]
     }
 
     if ($lsbdistcodename == "buster") {
-	if (! defined(Class[Common::Systemd])) {
+	if (! defined(Class["common::systemd"])) {
 	    include common::systemd
 	}
 

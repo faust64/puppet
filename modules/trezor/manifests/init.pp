@@ -7,7 +7,7 @@ class trezor {
     include trezor::github
     include trezor::webapp
 
-    Class[Common::Tools::Make]
-	-> Class[Trezor::Github]
-	-> Class[Trezor::Webapp]
+    Class["common::tools::make"]
+	-> Class["trezor::github"]
+	-> Class["trezor::webapp"]
 }

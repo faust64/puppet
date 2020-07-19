@@ -1,7 +1,7 @@
 class nsd::munin {
     if ($nsd::vars::munin_probes) {
 	if ($nsd::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
 

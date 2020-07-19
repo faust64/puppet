@@ -7,8 +7,8 @@ class selfoss::install {
 	    notify  => Exec["Extract selfoss server root"],
 	    require =>
 		[
-		    Class[Apache],
-		    Class[Common::Tools::Unzip],
+		    Class["apache"],
+		    Class["common::tools::unzip"],
 		    File["Prepare www directory"]
 		],
 	    target  => "/root/selfoss-latest.zip",

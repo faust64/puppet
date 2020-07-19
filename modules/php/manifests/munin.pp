@@ -3,7 +3,7 @@ class php::munin {
 	if ($php::vars::munin_monitored and $php::vars::with_apc
 	    and $php::vars::listen_ports['plain'] != false
 	    and ($php::vars::munin_apache or $php::vars::munin_nginx)) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
 
@@ -37,7 +37,7 @@ class php::munin {
 		    require => File["Prepare Munin-node plugin-conf directory"];
 	    }
 
-	    Class[Common::Libs::Perllwpua]
+	    Class["common::libs::perllwpua"]
 		-> File["Install php-apc munin probe configuration"]
 	} else {
 	    muninnode::define::probe {

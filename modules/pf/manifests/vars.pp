@@ -101,7 +101,7 @@ class pf::vars {
     $vpnserver_ip           = lookup("vpnserver_ip")
     $xmpp_ip                = lookup("xmpp_ip")
 
-    if (defined(Class[Tftpd])) {
+    if (defined(Class["tftpd"])) {
 	$pxe_is_here = true
     } else {
 	$pxe_is_here = false

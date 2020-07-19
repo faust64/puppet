@@ -1,7 +1,7 @@
 class elasticsearch::munin {
     if ($elasticsearch::vars::munin_probes) {
 	if ($elasticsearch::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
 
@@ -27,8 +27,8 @@ class elasticsearch::munin {
 		    require => File["Prepare Munin-node plugin-conf directory"];
 	    }
 
-	    Class[Common::Libs::Perllwpua]
-		-> Class[Common::Libs::Perljson]
+	    Class["common::libs::perllwpua"]
+		-> Class["common::libs::perljson"]
 		-> File["Install elasticsearch munin probe configuration"]
 	} else {
 	    muninnode::define::probe {

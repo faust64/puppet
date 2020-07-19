@@ -25,7 +25,7 @@ class packages::openbsd {
 	    source  => "puppet:///modules/packages/sync_openbsd";
     }
 
-    if (defined(Class[Apache])) {
+    if (defined(Class["apache"])) {
 	apache::define::vhost {
 	    "openbsd.$domain":
 		aliases      => $aliases,

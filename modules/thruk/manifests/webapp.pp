@@ -1,8 +1,8 @@
 class thruk::webapp {
-    if (! defined(Class[Apache])) {
+    if (! defined(Class["apache"])) {
 	include apache
     }
-    if (! defined(Class[Icinga::Logos])) {
+    if (! defined(Class["icinga::logos"])) {
 	include icinga::logos
     }
 

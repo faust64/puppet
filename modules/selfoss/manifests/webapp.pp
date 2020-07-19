@@ -10,11 +10,11 @@ class selfoss::webapp {
 	$aliases = [ "rss.$domain", "reader.$domain" ]
     }
 
-    if (! defined(Class[Apache])) {
+    if (! defined(Class["apache"])) {
 	include apache
     }
     if ($selfoss::vars::db_backend == "mysql") {
-	if (! defined(Class[Mysql])) {
+	if (! defined(Class["mysql"])) {
 	    include mysql
 	}
 
@@ -24,12 +24,12 @@ class selfoss::webapp {
 		dbuser  => $selfoss::vars::db_user,
 		require =>
 		    [
-			Class[Mysql],
+			Class["mysql"],
 			Exec["Extract selfoss server root"]
 		    ];
 	}
     } elsif ($selfoss::vars::db_backend == "sqlite") {
-	if (! defined(Class[Sqlite])) {
+	if (! defined(Class["sqlite"])) {
 	    include sqlite
 	}
     }

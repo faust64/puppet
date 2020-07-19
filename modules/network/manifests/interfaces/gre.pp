@@ -6,7 +6,7 @@ define network::interfaces::gre($comment     = false,
 				$loopback    = false,
 				$remote      = false,
 				$routes      = false) {
-    if ! defined(Class[Network::Sysctl::Gre]) {
+    if ! defined(Class["network::sysctl::gre"]) {
 	include mysysctl::define::gre
     }
 

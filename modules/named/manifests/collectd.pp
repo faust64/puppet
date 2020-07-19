@@ -1,9 +1,9 @@
 class named::collectd {
     if ($named::vars::with_collectd) {
-	if (! defined(Class[collectd])) {
+	if (! defined(Class["collectd"])) {
 	    include collectd
 	}
-	if (! defined(Class[Apache::Status])) {
+	if (! defined(Class["apache::status"])) {
 	    include named::status
 	}
 

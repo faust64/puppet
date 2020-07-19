@@ -76,7 +76,7 @@ class nodejs::pm2service {
 		    unless      => "test -s /etc/systemd/system/pm2-root.service -o -s /lib/systemd/system/pm2.service";
 	    }
 	} else {
-	    if (! defined(Class[sudo])) {
+	    if (! defined(Class["sudo"])) {
 		include sudo
 	    }
 

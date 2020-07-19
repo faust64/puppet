@@ -39,7 +39,7 @@ hierarchy:
   path: "%{operatingsystem}-%{lsbdistcodename}.yaml"
 - name: Global OS/Rel
   path: "%{operatingsystem}-%{operatingsystemrelease}.yaml"
-- namt: Global OS/RelMaj
+- name: Global OS/RelMaj
   path: "%{operatingsystem}-%{os.release.major}.yaml"
 - name: Global OS/Arch
   path: "%{operatingsystem}-%{architecture}.yaml"

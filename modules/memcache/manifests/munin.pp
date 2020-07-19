@@ -1,7 +1,7 @@
 class memcache::munin {
     if ($memcache::vars::munin_probes) {
 	if ($memcache::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
 

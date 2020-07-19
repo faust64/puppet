@@ -3,7 +3,7 @@ class matchbox::debian {
 	[ "matchbox-window-manager", "xwit" ]:
     }
 
-    Class[Xorg]
+    Class["xorg"]
 	-> Package["xwit"]
 	-> Package["matchbox-window-manager"]
 	-> File["Install matchbox xinitrc"]

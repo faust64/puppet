@@ -32,7 +32,7 @@ class elasticsearch::debian {
 	    path    => "/etc/default/elasticsearch";
     }
 
-    Class[Java]
+    Class["java"]
 	-> Common::Define::Package["elasticsearch"]
 	-> File["Install elasticsearch service defaults"]
 	-> Common::Define::Service["elasticsearch"]

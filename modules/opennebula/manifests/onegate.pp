@@ -12,7 +12,7 @@ class opennebula::onegate {
 	$aliases = false
     }
 
-    if (! defined(Class[nginx])) {
+    if (! defined(Class["nginx"])) {
 	include nginx
     }
 

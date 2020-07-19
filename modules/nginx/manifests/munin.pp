@@ -1,10 +1,10 @@
 class nginx::munin {
     if ($nginx::vars::munin_probes) {
 	if ($nginx::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
-	    if (! defined(Class[Nginx::Status])) {
+	    if (! defined(Class["nginx::status"])) {
 		include nginx::status
 	    }
 

@@ -1,6 +1,6 @@
 class kvm::collectd {
     if ($kvm::vars::with_collectd) {
-	if (! defined(Class[collectd])) {
+	if (! defined(Class["collectd"])) {
 	    include collectd
 	}
 

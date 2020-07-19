@@ -7,7 +7,7 @@ class lilina::install {
 	    notify  => Exec["Extract lilina server root"],
 	    require =>
 		[
-		    Class[Common::Tools::Unzip],
+		    Class["common::tools::unzip"],
 		    File["Prepare www directory"]
 		],
 	    target  => "/root/master lilina-latest.zip",

@@ -25,7 +25,7 @@ class packages::asterisk {
 	    source  => "puppet:///modules/packages/sync_asterisk";
     }
 
-    if (defined(Class[Apache])) {
+    if (defined(Class["apache"])) {
 	apache::define::vhost {
 	    "asterisk.$domain":
 		aliases      => $aliases,

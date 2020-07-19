@@ -6,7 +6,7 @@ class katello::munin {
 
     if ($katello::vars::munin_probes) {
 	if ($katello::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
 

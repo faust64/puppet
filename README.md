@@ -46,6 +46,15 @@ EOF
 [main]
 server_urls = https://<puppet-fqdn>:8081
 EOF
+# systemctl restart puppetserver
+# cat <<EOF >/etc/puppetlabs/puppet/routes.yaml
+---
+master:
+  facts:
+    terminus: puppetdb
+    cache: yaml
+EOF
+# chown -R puppet:puppet /etc/puppetlabs/puppet
 ```
 
 With older hiera release, we would have replaced the content of
@@ -99,6 +108,8 @@ this repository:
 test -d production && mv production production.orig
 git clone https://github.com/faust64/puppet production
 cd production
+puppet module install puppetlabs-stdlib --version 6.3.0
+puppet module install puppetlabs-nagios_core --version 1.0.3
 #older hiera:
 mv data hieradata
 ```

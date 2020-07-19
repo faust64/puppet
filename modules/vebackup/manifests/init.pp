@@ -3,7 +3,7 @@ class vebackup($do_kvm    = false,
 	       $do_xen    = false) {
     include vebackup::vars
 
-    if ($do_openvz == true and ! defined(Class[Rsync])) {
+    if ($do_openvz == true and ! defined(Class["rsync"])) {
 	include rsync
 	include rsync::nagios
     }

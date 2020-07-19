@@ -68,7 +68,7 @@ class peerio::vars {
     $ws_name              = lookup("peerio_ws_name")
     $zendesk              = lookup("peerio_zendesk")
 
-    if (defined(Class[Postfix])) {
+    if (defined(Class["postfix"])) {
 	$mailrelay = "127.0.0.1"
     } else {
 	$mailrelay = $relay_check

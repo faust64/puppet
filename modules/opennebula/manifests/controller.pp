@@ -4,7 +4,7 @@ class opennebula::controller {
     $nebula_vers = $opennebula::vars::version
     $onegate     = $opennebula::vars::onegate
 
-    if (! defined(Class[nginx])) {
+    if (! defined(Class["nginx"])) {
 	include nginx
     }
 

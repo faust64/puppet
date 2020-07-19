@@ -65,7 +65,7 @@ class icinga::debian {
 	    require =>
 		[
 		    Package["icinga"],
-		    Class[Apache]
+		    Class["apache"]
 		],
 	    unless  => "test `stat -c %G $lib_dir/rw` = $web_group";
     }

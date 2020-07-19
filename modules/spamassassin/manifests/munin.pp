@@ -1,7 +1,7 @@
 class spamassassin::munin {
     if ($spamassassin::vars::munin_probes) {
 	if ($spamassassin::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
 

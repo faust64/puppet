@@ -21,7 +21,7 @@ class named {
     include named::scripts
     include named::service
 
-    if (! defined(Class[Common::Tools::Tcpdump])) {
+    if (! defined(Class["common::tools::tcpdump"])) {
 	include common::tools::tcpdump
     }
 }

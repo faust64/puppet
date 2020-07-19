@@ -1,7 +1,7 @@
 class transmission::munin {
     if ($transmission::vars::munin_probes) {
 	if ($transmission::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
 

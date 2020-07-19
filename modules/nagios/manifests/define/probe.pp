@@ -56,7 +56,7 @@ define nagios::define::probe($args             = false,
     $plugindir = lookup("nagios_plugins_dir")
 
     if (lookup("with_nagios") == true) {
-	if (! defined(Class[nagios])) {
+	if (! defined(Class["nagios"])) {
 	    include nagios
 	}
 

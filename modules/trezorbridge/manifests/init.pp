@@ -5,8 +5,8 @@ class trezorbridge {
 	"Debian", "Devuan", "Ubuntu": {
 	    include trezorbridge::debian
 
-	    Class[Trezor::Debian]
-		-> Class[Trezorbridge::Github]
+	    Class["trezor::debian"]
+		-> Class["trezorbridge::github"]
 	}
 	default: {
 	    common::define::patchneeded { "trezor": }
@@ -18,6 +18,6 @@ class trezorbridge {
     include trezorbridge::user
     include trezorbridge::config
 
-    Class[Common::Tools::Make]
-	-> Class[Trezorbridge::Github]
+    Class["common::tools::make"]
+	-> Class["trezorbridge::github"]
 }

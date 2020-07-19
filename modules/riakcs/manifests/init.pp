@@ -8,7 +8,7 @@ class riakcs {
 	    or $riakcs::vars::riak_master == false))) {
 	include stanchion
     }
-    if (! defined(Class[Riak])) {
+    if (! defined(Class["riak"])) {
 	include riak
     }
 

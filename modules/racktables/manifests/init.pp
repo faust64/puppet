@@ -10,9 +10,9 @@ class racktables {
     include racktables::sourceforge
     include racktables::webapp
 
-    Class[Mysql]
-	-> Class[Apache]
-	-> Class[Racktables::Sourceforge]
-	-> Class[Racktables::Webapp]
-	-> Class[Racktables::Collect]
+    Class["mysql"]
+	-> Class["apache"]
+	-> Class["racktables::sourceforge"]
+	-> Class["racktables::webapp"]
+	-> Class["racktables::collect"]
 }

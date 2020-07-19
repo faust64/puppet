@@ -1,7 +1,7 @@
 class mysql::munin {
     if ($mysql::vars::munin_probes or $mysql::vars::munin_multi_probes) {
 	if ($mysql::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
 

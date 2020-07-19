@@ -7,7 +7,7 @@ class tinytinyrss::install {
 	    notify  => Exec["Extract tinytinyrss server root"],
 	    require =>
 		[
-		    Class[Common::Tools::Unzip],
+		    Class["common::tools::unzip"],
 		    File["Prepare www directory"]
 		],
 	    target  => "/root/tinytinyrss-latest.zip",

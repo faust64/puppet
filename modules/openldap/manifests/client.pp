@@ -6,7 +6,7 @@ class openldap::client {
     $ldap_base  = $openldap::vars::ldap_suffix
     $ldap_slave = $openldap::vars::ldap_slave
 
-    if (! defined(Class[Openldap])) {
+    if (! defined(Class["openldap"])) {
 	case $myoperatingsystem {
 	    "CentOS", "RedHat": {
 		include openldap::rhel

@@ -3,7 +3,7 @@ class patchdashboard::register {
     $upstream = lookup("patchdashboard_upstream")
 
     if ($upstream) {
-	if (! defined(Class[curl])) {
+	if (! defined(Class["curl"])) {
 	    include curl
 	}
 

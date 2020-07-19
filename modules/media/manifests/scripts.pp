@@ -15,7 +15,7 @@ class media::scripts {
 	    mode    => "0755",
 	    owner   => root,
 	    path    => "/usr/local/bin/mediainfo",
-	    require => Class[Common::Libs::Exif],
+	    require => Class["common::libs::exif"],
 	    source  => "puppet:///modules/media/mediainfo";
 	"Install media permissions setter":
 	    content => template("media/media_perm_setter.erb"),

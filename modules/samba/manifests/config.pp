@@ -61,7 +61,7 @@ class samba::config {
 	    command     => "net setdomainsid $domainsid",
 	    cwd         => "/",
 	    path        => "/usr/bin:/bin",
-	    require     => Class[Openldap::Client],
+	    require     => Class["openldap::client"],
 	    unless      => "net getdomainsid | grep 'SID for domain $domainname is: $domainsid'";
 	"Set samba admin credentials":
 	    command     => "smbpasswd -w $bindpw",
@@ -69,6 +69,6 @@ class samba::config {
 	    notify      => Service["samba"],
 	    path        => "/usr/bin:/bin",
 	    refreshonly => true,
-	    require     => Class[Openldap::Client];
+	    require     => Class["openldap::client"];
     }
 }

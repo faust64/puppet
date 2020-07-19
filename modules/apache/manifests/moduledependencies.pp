@@ -75,7 +75,7 @@ class apache::moduledependencies {
 	$phpvers = $apache::vars::phpvers
 	$phpmaj  = $phpvers.split('\.')[0]
 
-	Class[Php]
+	Class["php"]
 	    -> Common::Define::Service[$apache::vars::service_name]
 
 	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"

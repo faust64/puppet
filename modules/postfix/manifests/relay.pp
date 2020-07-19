@@ -3,11 +3,11 @@ class postfix::relay {
     include saslauthd
     include spamassassin
 
-    Class[Opendkim]
-	-> Class[Spamassassin]
+    Class["opendkim"]
+	-> Class["spamassassin"]
 	-> File["Install postfix master configuration"]
 
-    Class[Saslauthd]
+    Class["saslauthd"]
 	-> File["Install postfix main configuration"]
 
     if ($postfix::vars::bluemind_satellite) {

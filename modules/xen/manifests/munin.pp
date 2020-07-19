@@ -1,7 +1,7 @@
 class xen::munin {
     if ($xen::vars::munin_probes) {
 	if ($xen::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
 

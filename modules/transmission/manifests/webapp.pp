@@ -16,7 +16,7 @@ class transmission::webapp {
 	$dreverse = false
     }
 
-    if (defined(Class[Apache])) {
+    if (defined(Class["apache"])) {
 	apache::define::vhost {
 	    "seedbox.$domain":
 		aliases       => $aliases,

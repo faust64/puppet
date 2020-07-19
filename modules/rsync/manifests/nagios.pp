@@ -6,7 +6,7 @@ class rsync::nagios {
     nagios::define::probe {
 	"rsync":
 	    description   => "$fqdn rsync",
-	    require       => Class[Common::Tools::Netstat],
+	    require       => Class["common::tools::netstat"],
 	    servicegroups => "netservices",
 	    use           => "jobs-service";
     }

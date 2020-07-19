@@ -11,21 +11,21 @@ class asterisk::webapp {
 	    mode    => "0755",
 	    owner   => $asterisk::vars::runtime_user,
 	    path    => "$srv_root/aastra",
-	    require => Class[Nginx];
+	    require => Class["nginx"];
 	"Prepare Linksys configuration directory":
 	    ensure  => directory,
 	    group   => $asterisk::vars::runtime_group,
 	    mode    => "0755",
 	    owner   => $asterisk::vars::runtime_user,
 	    path    => "$srv_root/cisco",
-	    require => Class[Nginx];
+	    require => Class["nginx"];
 	"Prepare Polycom configuration directory":
 	    ensure  => directory,
 	    group   => $asterisk::vars::runtime_group,
 	    mode    => "0755",
 	    owner   => $asterisk::vars::runtime_user,
 	    path    => "$srv_root/polycom",
-	    require => Class[Nginx];
+	    require => Class["nginx"];
     }
 
     common::define::geturl {

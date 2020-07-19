@@ -49,11 +49,11 @@ class smokeping::debian {
 		target => "/usr/lib/cgi-bin/smokeping.cgi";
 	}
 
-	Class[Nginx]
+	Class["nginx"]
 	    -> File["Link smokeping share directory to apache server root"]
 	    -> File["Link smokeping.cgi to served directory"]
     } else {
-	Class[Apache]
+	Class["apache"]
 	    -> File["Link smokeping share directory to apache server root"]
     }
 }

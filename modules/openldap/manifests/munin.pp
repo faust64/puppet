@@ -1,7 +1,7 @@
 class openldap::munin {
     if ($openldap::vars::munin_probes) {
 	if ($openldap::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
 
@@ -28,7 +28,7 @@ class openldap::munin {
 		    require => File["Prepare Munin-node plugin-conf directory"];
 	    }
 
-	    Class[Common::Libs::Perlnetldap]
+	    Class["common::libs::perlnetldap"]
 		-> File["Install openldap munin probe configuration"]
 	} else {
 	    muninnode::define::probe {

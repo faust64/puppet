@@ -1,5 +1,5 @@
 class peerio::service {
-    if (! defined(Class[sudo])) {
+    if (! defined(Class["sudo"])) {
 	include sudo
     }
 

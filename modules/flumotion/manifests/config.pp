@@ -61,7 +61,7 @@ class flumotion::config {
 	    require => File["Prepare flumotion workers configuration directory"];
     }
 
-    if (defined(Class[Xorg])) {
+    if (defined(Class["xorg"])) {
 	file {
 	    "Prepare flumotion user configuration directory":
 		ensure   => directory,

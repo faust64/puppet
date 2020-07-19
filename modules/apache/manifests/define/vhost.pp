@@ -145,7 +145,7 @@ define apache::define::vhost($add_xff_headers = false,
 	}
     }
 
-    if (defined(Class[Rsyslog]) and
+    if (defined(Class["rsyslog"]) and
 	! defined(File["Enable Apache rsyslog vhost $name configuration"])) {
 	file {
 	    "Purge Apache rsyslog vhost $name configuration":

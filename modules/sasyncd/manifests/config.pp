@@ -13,6 +13,6 @@ class sasyncd::config {
 	    notify  => Service["sasyncd"],
 	    owner   => root,
 	    path    => "/etc/sasyncd.conf",
-	    require => Class[Ipsecctl];
+	    require => Class["ipsecctl"];
     }
 }

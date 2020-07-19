@@ -6,7 +6,7 @@ class sickbeard::nagios {
     nagios::define::probe {
 	"sickbeard":
 	    description   => "$fqdn SickBeard service",
-	    require       => Class[Common::Tools::Netstat],
+	    require       => Class["common::tools::netstat"],
 	    servicegroups => "webservices",
 	    use           => "jobs-service";
     }

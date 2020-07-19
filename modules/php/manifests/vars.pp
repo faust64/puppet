@@ -111,7 +111,7 @@ class php::vars {
 	$is_cli  = true
 	$is_fpm  = false
 	$srvname = false
-    } elsif ($check_fpm == true or defined(Class[Nginx])) {
+    } elsif ($check_fpm == true or defined(Class["nginx"])) {
 	$is_cli  = false
 	$is_fpm  = true
 	case $myoperatingsystem {

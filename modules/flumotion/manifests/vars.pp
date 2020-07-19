@@ -12,7 +12,7 @@ class flumotion::vars {
     $runtime_group   = lookup("flumotion_runtime_group")
     $xruntime_user   = lookup("generic_user")
 
-    if (defined(Class[Xorg])) {
+    if (defined(Class["xorg"])) {
 	$runtime_user = $xruntime_user
     }
     else {

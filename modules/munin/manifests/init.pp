@@ -24,7 +24,7 @@ class munin {
     if ($kernel == "Linux") {
 	include munin::logrotate
     }
-    if (! defined(Class[Muninnode])) {
+    if (! defined(Class["muninnode"])) {
 	include muninnode
     }
 }

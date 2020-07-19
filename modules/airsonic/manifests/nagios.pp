@@ -6,7 +6,7 @@ class airsonic::nagios {
     nagios::define::probe {
 	"airsonic":
 	    description   => "$fqdn AirSonic service",
-	    require       => Class[Common::Tools::Netstat],
+	    require       => Class["common::tools::netstat"],
 	    servicegroups => "webservices",
 	    use           => "jobs-service";
     }

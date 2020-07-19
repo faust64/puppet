@@ -1,8 +1,8 @@
 class logstash {
-    if (! defined(Class[java])) {
+    if (! defined(Class["java"])) {
 	include java
     }
-    if (! defined(Class[curl])) {
+    if (! defined(Class["curl"])) {
 	include curl
     }
     include logstash::vars
@@ -12,8 +12,8 @@ class logstash {
 	"Debian", "Devuan", "Ubuntu": {
 	    include logstash::debian
 
-	    Class[java]
-		-> Class[logstash::debian]
+	    Class["java"]
+		-> Class["logstash::debian"]
 	}
 	default: {
 	    common::define::patchneeded { "logstash": }

@@ -11,11 +11,11 @@ class ossec::webapp {
 
     include common::tools::unzip
 
-    if (! defined(Class[Nginx])) {
+    if (! defined(Class["nginx"])) {
 	$web_admin = $ossec::vars::web_admin
 	$web_pass  = $ossec::vars::web_pass
 
-	if (! defined(Class[Apache])) {
+	if (! defined(Class["apache"])) {
 	    include apache
 	}
 

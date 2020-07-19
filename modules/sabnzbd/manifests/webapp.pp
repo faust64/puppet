@@ -5,7 +5,7 @@ class sabnzbd::webapp {
     common::define::package {
 	"sabyenc":
 	    provider => "pip",
-	    require  => Class[Common::Tools::Pip];
+	    require  => Class["common::tools::pip"];
     }
 
     if ($domain != $rdomain) {

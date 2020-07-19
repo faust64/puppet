@@ -1,5 +1,5 @@
 class icinga::logos {
-    if (! defined(Class[Icinga::Vars])) {
+    if (! defined(Class["icinga::vars"])) {
 	include icinga::vars
     } else {
 	Package["icinga"]

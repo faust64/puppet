@@ -26,6 +26,6 @@ class sickbeard::install {
     common::define::package {
 	"Cheetah":
 	    provider => "pip",
-	    require  => Class[Common::Tools::Pip];
+	    require  => Class["common::tools::pip"];
     }
 }

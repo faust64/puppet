@@ -3,7 +3,7 @@ class haproxy::collectd {
     $stats_socket = $haproxy::vars::stats_socket
 
     if ($haproxy::vars::with_collectd) {
-	if (! defined(Class[collectd])) {
+	if (! defined(Class["collectd"])) {
 	    include collectd
 	}
 

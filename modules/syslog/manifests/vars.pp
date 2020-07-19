@@ -16,43 +16,43 @@ class syslog::vars {
     $slim_run_dir         = lookup("slim_run_dir")
     $syslog_retransmit_ip = lookup("rsyslog_hub")
 
-    if (defined(Class[Apache])) {
+    if (defined(Class["apache"])) {
 	$has_apache = true
     }
     else {
 	$has_apache = false
     }
-    if (defined(Class[Muninnode])) {
+    if (defined(Class["muninnode"])) {
 	$has_munin = true
     }
     else {
 	$has_munin = false
     }
-    if (defined(Class[Postgres])) {
+    if (defined(Class["postgres"])) {
 	$has_psql = true
     }
     else {
 	$has_psql = false
     }
-    if (defined(Class[Camtrace])) {
+    if (defined(Class["camtrace"])) {
 	$has_camtrace = true
     }
     else {
 	$has_camtrace = false
     }
-    if (defined(Class[Nginx])) {
+    if (defined(Class["nginx"])) {
 	$has_nginx = true
     }
     else {
 	$has_nginx = false
     }
-    if (defined(Class[Sendmail])) {
+    if (defined(Class["sendmail"])) {
 	$has_sendmail = true
     }
     else {
 	$has_sendmail = false
     }
-    if (defined(Class[Slim])) {
+    if (defined(Class["slim"])) {
 	$has_slim = true
     }
     else {

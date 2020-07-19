@@ -12,7 +12,7 @@ class camtrace::config {
 	    notify  => Service["scamd"],
 	    owner   => $camtrace_user,
 	    path    => "/usr/local/etc/scamd.key",
-	    require => Class[Xorg];
+	    require => Class["xorg"];
 	"Install camtrace sudoers configuration":
 	    content => template("camtrace/sudoers.erb"),
 	    group   => lookup("gid_zero"),

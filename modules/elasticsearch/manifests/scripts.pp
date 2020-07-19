@@ -33,7 +33,7 @@ class elasticsearch::scripts {
     } else {
 	$provider = "pip"
 
-	Class[Common::Tools::Pip]
+	Class["common::tools::pip"]
 	    -> Common::Define::Package["elasticsearch-curator"]
     }
 

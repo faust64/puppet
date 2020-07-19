@@ -8,7 +8,7 @@ class miniflux::install {
 	    nomv    => true,
 	    require =>
 		[
-		    Class[Common::Tools::Unzip],
+		    Class["common::tools::unzip"],
 		    File["Prepare www directory"]
 		],
 	    target  => "/root/miniflux-latest.zip",

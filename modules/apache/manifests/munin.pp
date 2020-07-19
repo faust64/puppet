@@ -1,10 +1,10 @@
 class apache::munin {
     if ($apache::vars::munin_probes) {
 	if ($apache::vars::munin_monitored) {
-	    if (! defined(Class[Muninnode])) {
+	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
-	    if (! defined(Class[Apache::Status])) {
+	    if (! defined(Class["apache::status"])) {
 		include apache::status
 	    }
 
@@ -28,7 +28,7 @@ class apache::munin {
 		    source  => "puppet:///modules/apache/munin.conf";
 	    }
 
-	    Class[Common::Libs::Perlwww]
+	    Class["common::libs::perlwww"]
 		-> File["Install apache munin probe configuration"]
 	} else {
 	    muninnode::define::probe {

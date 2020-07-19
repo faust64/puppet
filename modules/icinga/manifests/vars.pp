@@ -42,7 +42,7 @@ class icinga::vars {
     } else {
 	$alerts = $contact_alerts
     }
-    if (defined(Class[Pnp4nagios])) {
+    if (defined(Class["pnp4nagios"])) {
 	$pnp = true
     } else { $pnp = false }
 }
