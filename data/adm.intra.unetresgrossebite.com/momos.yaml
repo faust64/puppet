@@ -5,6 +5,8 @@ has_serial_io: true
 munin_node_listenaddr: 10.42.242.103
 
 # Nagios
+nagios_load_crit_threshold: "22.0,22.0,22.0"
+nagios_load_warn_threshold: "20.7,20.7,20.7"
 nagios_listenaddr: 10.42.242.103
 nagios_smart_disks:
 - sda
