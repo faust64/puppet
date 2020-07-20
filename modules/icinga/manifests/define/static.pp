@@ -163,8 +163,8 @@ define icinga::define::static($host_contact   = "root",
 	    $iconimage      = "utgb/centos.png"
 	    $src            = "servers/k8s"
 	    $statusmapimage = "utgb/centos.gd2"
-	    $checks = [ "certificates", "fdesc", "fsck", "load", "mem",
-			"ntpq", "oom", "rprocs", "temp", "uptime" ]
+	    $checks = [ "ceph_df", "ceph_health", "ceph_mon", "ceph_mgr",
+			"ceph_mds", "ceph_osd" ]
 	}
 	"ocp4": {
 	    $iconimagealt   = $srvclass
