@@ -13,3 +13,6 @@ nagios_procs_crit: 300
 nagios_procs_warn: 250
 nagios_runprocs_crit: 20
 nagios_runprocs_warn: 10
+
+# SSH
+ssh_auto_disconnect: false

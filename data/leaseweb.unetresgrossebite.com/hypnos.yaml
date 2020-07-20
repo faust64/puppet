@@ -8,10 +8,10 @@ munin_node_listenaddr: 10.43.1.254
 nagios_listenaddr: 10.43.1.254
 nagios_no_parent: true
 nagios_smart_disks:
-  - sda
-  - sdb
-  - sdc
-  - sdd
+- sda
+- sdb
+- sdc
+- sdd
 
 # OpenSSH
 ssh_port: 1022

@@ -1,5 +1,5 @@
 additional_classes:
-  - Thruk
+- Thruk
 
 # Apache
 apache_mod_headers: true
@@ -7,13 +7,13 @@ apache_mod_fcgid: true
 
 # Cron
 cron_allowed_users:
-  - root
-  - www-data
+- root
+- www-data
 
 # Icinga
 icinga_collect_domains:
-  - emma-earth.com
-  - leaseweb.unetresgrossebite.com
+- emma-earth.com
+- leaseweb.unetresgrossebite.com
 icinga_static_devices:
 # dns01.fanswifi.com:
 #   host_ipaddress: 161.202.32.212

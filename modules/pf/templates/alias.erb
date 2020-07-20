@@ -24,6 +24,7 @@ table <ossec_fwtable> persist
      dns_ip = '{ <% if @dns_ip != false -%><% @dns_ip.sort.each do |host| -%><%=host%> <% end -%><% if @ad_ip != false -%><% @ad_ip.sort.each do |host| -%><%=host%> <% end -%><% end -%><% else -%>8.8.8.8 8.8.4.4 <% end -%>}'
 <% if @emby_ip != false -%>    emby_ip = '{ <%=@emby_ip%> }'
 <% end -%><% if @git_ip != false -%>     git_ip = <%=@git_ip%>
+<% end -%><% if @k8s_ip != false -%>     k8s_ip = <%=@k8s_ip%>
 <% end -%><% if @icecast_ip != false -%> icecast_ip = <%=@icecast_ip%>
 <% end -%><% if @icmp_ip != false -%>    icmp_ip = '{ <% @icmp_ip.each do |host| -%><%=host%> <% end -%>}'
 <% end -%><% if @ldap_ip != false -%>    ldap_ip = '{ <% @ldap_ip.each do |host| -%><%=host%> <% end -%>}'

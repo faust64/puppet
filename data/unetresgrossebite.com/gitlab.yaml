@@ -1,54 +1,54 @@
 additional_classes:
-  - Bacula
-  - Fail2ban
-  - Firehol
+- Bacula
+- Fail2ban
+- Firehol
 
 # Bacula
 bacula_file_daemon_fileset:
-  - /etc/letsencrypt
-  - /media/backups
+- /etc/letsencrypt
+- /media/backups
 
 # Common
 fs_legit_suid:
-  - /bin/mount
-  - /bin/ping
-  - /bin/ping6
-  - /bin/umount
-  - /bin/fusermount
-  - /bin/su
-  - /opt/gitlab/embedded/bin/ksu
-  - /sbin/mount.nfs
-  - /usr/bin/chfn
-  - /usr/bin/chsh
-  - /usr/bin/cryptmount
-  - /usr/bin/fping
-  - /usr/bin/fping6
-  - /usr/bin/gpasswd
-  - /usr/bin/mtr
-  - /usr/bin/newgrp
-  - /usr/bin/passwd
-  - /usr/bin/sudo
-  - /usr/bin/sudoedit
-  - /usr/lib/pt_chown
-  - /usr/lib/eject/dmcrypt-get-device
-  - /usr/lib/nagios/plugins/check_dhcp
-  - /usr/lib/openssh/ssh-keysign
+- /bin/mount
+- /bin/ping
+- /bin/ping6
+- /bin/umount
+- /bin/fusermount
+- /bin/su
+- /opt/gitlab/embedded/bin/ksu
+- /sbin/mount.nfs
+- /usr/bin/chfn
+- /usr/bin/chsh
+- /usr/bin/cryptmount
+- /usr/bin/fping
+- /usr/bin/fping6
+- /usr/bin/gpasswd
+- /usr/bin/mtr
+- /usr/bin/newgrp
+- /usr/bin/passwd
+- /usr/bin/sudo
+- /usr/bin/sudoedit
+- /usr/lib/pt_chown
+- /usr/lib/eject/dmcrypt-get-device
+- /usr/lib/nagios/plugins/check_dhcp
+- /usr/lib/openssh/ssh-keysign
 
 # Firehol
 firehol_interfaces:
-  - name: eth0
-    description: WAN
-    protection: strong
-    allow:
-      - server icmp accept
-      - server custom openssh "tcp/22" default accept
-      - server http accept
-      - server https accept
-      - server custom otherssh "tcp/1022" default accept
-      - server custom munin "tcp/4949" default accept src "$office_networks"
-      - server custom nrpe "tcp/5666" default accept src "$office_networks"
-      - server custom baculadir "tcp/9102" default accept src "$office_networks"
-      - client all accept
+- name: any
+  description: WAN
+  protection: strong
+  allow:
+  - server icmp accept
+  - server custom openssh "tcp/22" default accept
+  - server http accept
+  - server https accept
+  - server custom otherssh "tcp/1022" default accept
+  - server custom munin "tcp/4949" default accept src "$office_networks"
+  - server custom nrpe "tcp/5666" default accept src "$office_networks"
+  - server custom baculadir "tcp/9102" default accept src "$office_networks"
+  - client all accept
 
 # Letsencrypt
 letsencrypt_renew_day: 20
@@ -60,8 +60,8 @@ ssh_port: 22
 
 # PF
 dns_ip:
-  - 188.165.212.140
-  - 37.59.45.201
+- 37.59.33.201
+- 37.59.33.202
 
 # WebServers
 csp_sources: false

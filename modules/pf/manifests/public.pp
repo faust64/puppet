@@ -3,6 +3,7 @@ class pf::public {
     $all_openvpns    = $pf::vars::all_openvpns
     $asterisk_ip     = $pf::vars::asterisk_ip
     $ipsec_tunnels   = $pf::vars::ipsec_tunnels
+    $k8s_ip          = $pf::vars::k8s_ip
     $local_networks  = $pf::vars::local_networks
     $mail_ip         = $pf::vars::mail_ip
     $mail_mx         = $pf::vars::mail_mx

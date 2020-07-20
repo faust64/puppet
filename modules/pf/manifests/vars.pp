@@ -30,6 +30,7 @@ class pf::vars {
     $icecast_upstream       = lookup("icecast_upstream_ip")
     $icmp_ip                = lookup("icmp_ip")
     $ipsec_tunnels          = lookup("ipsec_tunnels")
+    $k8s_ip                 = lookup("k8s_ip")
     $ldap_ip                = lookup("ldap_ip")
     $local_networks         = lookup("active_vlans")
     $mail_ip                = lookup("mail_ip")

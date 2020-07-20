@@ -1,5 +1,5 @@
 additional_classes:
-  - Mrtg
+- Mrtg
 physical_parent: oneiroi.adm.intra.unetresgrossebite.com
 root_domain: intra.unetresgrossebite.com
 
@@ -9,11 +9,11 @@ apache_mpm: prefork
 
 # Munin
 munin_collect_domains:
-  - adm.intra.unetresgrossebite.com
-  - faust.intra.unetresgrossebite.com
-  - intra.unetresgrossebite.com
-  - sip.intra.unetresgrossebite.com
-  - vms.intra.unetresgrossebite.com
+- adm.intra.unetresgrossebite.com
+- faust.intra.unetresgrossebite.com
+- intra.unetresgrossebite.com
+- sip.intra.unetresgrossebite.com
+- vms.intra.unetresgrossebite.com
 
 # PHP
 php_pear: true

@@ -3,15 +3,15 @@ modeles_nfs_opts: fstype=nfs4,ro,soft,intr
 
 # Nagios
 nagios_ip:
-  - 10.42.242.202
-  - 10.42.242.203
+- 10.42.242.202
+- 10.42.242.203
 
 # OpenSSH
 ssh_tcp_wrappers:
-  - 10.42.42.0/24
-  - 10.42.242.0/24
-  - 10.42.46.0/24
-  - 127.0.0.1/32
+- 10.42.42.0/24
+- 10.42.242.0/24
+- 10.42.46.0/24
+- 127.0.0.1/32
 
 # OpenVZ
 vz_default_bridge: br5
@@ -20,23 +20,23 @@ vz_default_netmask: 255.255.255.0
 
 # PF
 dns_ip:
-  - 10.255.255.255
-  - 10.42.253.2
-  - 10.42.253.5
+- 10.255.255.255
+- 10.42.253.2
+- 10.42.253.5
 mail_mx: 10.42.44.20
 squid_ip:
-  - 10.42.44.100
+- 10.42.44.100
 snmp_ip:
-  - 10.42.242.203
-  - 10.42.242.205
-  - 10.42.242.206
+- 10.42.242.203
+- 10.42.242.205
+- 10.42.242.206
 
 # Puppet
 puppet_apt_repo: http://repository.vms.intra.unetresgrossebite.com/debian
 
 # Rsync
 rsync_clients:
-  - 10.42.253.0/24
+- 10.42.253.0/24
 
 dns_search: friends.intra.unetresgrossebite.com openshift.intra.unetresgrossebite.com router.intra.unetresgrossebite.com
 root_domain: intra.unetresgrossebite.com

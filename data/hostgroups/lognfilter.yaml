@@ -1,29 +1,29 @@
 additional_classes:
-  - Squid
+- Squid
 
 # Squid
 squid_acl_noulldomain:
   Deezer:
-    - deezer.be
-    - deezer.co.uk
-    - deezer.com
-    - deezer.de
-    - deezer.fr
-    - deezer.nl
+  - deezer.be
+  - deezer.co.uk
+  - deezer.com
+  - deezer.de
+  - deezer.fr
+  - deezer.nl
   Spotify:
-    - spotify.be
-    - spotify.co.uk
-    - spotify.com
-    - spotify.de
-    - spotify.fr
-    - spotify.nl
+  - spotify.be
+  - spotify.co.uk
+  - spotify.com
+  - spotify.de
+  - spotify.fr
+  - spotify.nl
   Vimeo:
-    - vimeo.be
-    - vimeo.co.uk
-    - vimeo.com
-    - vimeo.de
-    - vimeo.fr
-    - vimeo.nl
+  - vimeo.be
+  - vimeo.co.uk
+  - vimeo.com
+  - vimeo.de
+  - vimeo.fr
+  - vimeo.nl
   Wat:
-    - wat.tv
+  - wat.tv
 squid_wat_do: filter

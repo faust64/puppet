@@ -25,6 +25,7 @@ class pf::config {
     $icecast_ip             = $pf::vars::icecast_ip
     $icecast_upstream       = $pf::vars::icecast_upstream
     $icmp_ip                = $pf::vars::icmp_ip
+    $k8s_ip                 = $pf::vars::k8s_ip
     $ldap_ip                = $pf::vars::ldap_ip
     $local_networks         = $pf::vars::local_networks
     $mail_ip                = $pf::vars::mail_ip

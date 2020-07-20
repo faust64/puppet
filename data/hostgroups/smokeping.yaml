@@ -1,5 +1,5 @@
 additional_classes:
-  - Smokeping
+- Smokeping
 
 # Apache
 apache_mod_cgid: true

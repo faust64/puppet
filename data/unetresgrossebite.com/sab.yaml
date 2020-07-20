@@ -1,8 +1,8 @@
 additional_classes:
-#  - Trezor
-  - Fail2ban
-#  - Firehol
-#  - Bacula
+#- Trezor
+- Fail2ban
+#- Firehol
+#- Bacula
 
 nagios_no_parent: true
 physical_parent: false
@@ -10,23 +10,23 @@ racktables_object_id: 4
 
 # Bacula
 bacula_file_daemon_fileset:
-  - /etc/letsencrypt
-  - /media/backups
+- /etc/letsencrypt
+- /media/backups
 
 # Firehol
 firehol_interfaces:
-  - name: any
-    description: WAN
-    protection: strong
-    allow:
-      - server icmp accept
-      - server http accept
-      - server https accept
-      - server custom openssh "tcp/1022" default accept
-      - server custom munin "tcp/4949" default accept src "$office_networks"
-      - server custom nrpe "tcp/5666" default accept src "$office_networks"
-      - server custom baculadir "tcp/9102" default accept src "$office_networks"
-      - client all accept
+- name: any
+  description: WAN
+  protection: strong
+  allow:
+  - server icmp accept
+  - server http accept
+  - server https accept
+  - server custom openssh "tcp/1022" default accept
+  - server custom munin "tcp/4949" default accept src "$office_networks"
+  - server custom nrpe "tcp/5666" default accept src "$office_networks"
+  - server custom baculadir "tcp/9102" default accept src "$office_networks"
+  - client all accept
 
 # Letsencrypt
 letsencrypt_renew_day: 22
@@ -38,7 +38,7 @@ nagios_partitions_watchlist:
   root: /
   music: /home
 nagios_smart_disks:
-  - sda
+- sda
 
 # OpenSSH
 ssh_tcp_wrappers: false

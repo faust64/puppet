@@ -1,5 +1,5 @@
 additional_classes:
-  - Thruk
+- Thruk
 
 # Apache
 apache_mod_headers: true

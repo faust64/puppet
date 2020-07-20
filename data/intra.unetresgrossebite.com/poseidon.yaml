@@ -17,12 +17,12 @@ munin_node_listenaddr: 10.42.242.2
 nagios_icmp_proof: 8.8.8.8
 nagios_listenaddr: 10.42.242.2
 nagios_smart_disks:
-  - sd0c
+- sd0c
 
 # Networks
 dns_ip:
-  - 10.255.255.255
-  - 10.42.242.5
+- 10.255.255.255
+- 10.42.242.5
 #gre_tunnels:
 #  "0":
 #    description: "LeaseWeb via Freebox"
@@ -38,55 +38,55 @@ dns_ip:
 #    remote: 10.43.1.1
 mtu_default: 9000
 net_ifs:
-  - name: em0
-    mtu: 9012
-  - name: em1
-    mtu: 9012
-  - name: em2
-    mtu: 9012
-  - name: em3
-    mtu: 9012
-  - name: trunk0
-    addr: 172.16.42.1
-    bcast: 172.16.42.7
-    mtu: 9008
-    netmsk: 255.255.255.248
-    pfsync: true
-    proof: 10.42.242.15
-    trunkopts: trunkport em0 trunkport em1 trunkport em2 trunkport em3
-    trunkproto: lacp
-  - name: vlan1000
-    addr: 192.168.9.150
-    asterisk: 78.193.67.92
-    bcast: 78.193.67.255
-    carpaddr: 78.193.67.92
-    carpvhid: 1
-    gw: 78.193.67.254
-    mx: 78.193.67.92
-    netmsk: 255.255.255.0
-    reverse: 78.193.67.92
-    rootif: trunk0
-    routes:
-      - net: 212.27.38.0/24
-        wat: to free
-      - net: 212.27.52.0/24
-        wat: to free
-    sipout: true
-    vid: 1000
-    vpn: 78.193.67.92
-  - name: vlan1003
-    addr: 192.168.10.150
-    bcast: 192.168.10.255
-    carpaddr: 192.168.10.254
-    carpvhid: 12
-    default: true
-    gw: 192.168.10.1
-    netmsk: 255.255.255.0
-    rootif: trunk0
-    vid: 1003
-  - name: lo1
-    addr: 10.255.255.255
-    netmsk: 255.255.255.255
+- name: em0
+  mtu: 9012
+- name: em1
+  mtu: 9012
+- name: em2
+  mtu: 9012
+- name: em3
+  mtu: 9012
+- name: trunk0
+  addr: 172.16.42.1
+  bcast: 172.16.42.7
+  mtu: 9008
+  netmsk: 255.255.255.248
+  pfsync: true
+  proof: 10.42.242.15
+  trunkopts: trunkport em0 trunkport em1 trunkport em2 trunkport em3
+  trunkproto: lacp
+- name: vlan1000
+  addr: 192.168.9.150
+  asterisk: 78.193.67.92
+  bcast: 78.193.67.255
+  carpaddr: 78.193.67.92
+  carpvhid: 1
+  gw: 78.193.67.254
+  mx: 78.193.67.92
+  netmsk: 255.255.255.0
+  reverse: 78.193.67.92
+  rootif: trunk0
+  routes:
+  - net: 212.27.38.0/24
+    wat: to free
+  - net: 212.27.52.0/24
+    wat: to free
+  sipout: true
+  vid: 1000
+  vpn: 78.193.67.92
+- name: vlan1003
+  addr: 192.168.10.150
+  bcast: 192.168.10.255
+  carpaddr: 192.168.10.254
+  carpvhid: 12
+  default: true
+  gw: 192.168.10.1
+  netmsk: 255.255.255.0
+  rootif: trunk0
+  vid: 1003
+- name: lo1
+  addr: 10.255.255.255
+  netmsk: 255.255.255.255
 
 # OSPF
 ospf_router_id: 10.42.242.2

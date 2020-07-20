@@ -6,9 +6,9 @@ modeles_path: /var/www/modeles
 # Nagios
 nagios_check_jumbo: true
 nagios_ip:
-  - 10.42.242.200
-  - 10.42.242.202
-  - 10.42.242.203
+- 10.42.242.200
+- 10.42.242.202
+- 10.42.242.203
 
 # OpenLDAP
 openldap_ldap_slave: netserv.vms.intra.unetresgrossebite.com
@@ -20,25 +20,25 @@ vz_default_netmask: 255.255.255.0
 
 # PF
 asterisk_ip:
-  - 10.42.41.254
+- 10.42.41.254
 dhcp_ip:
-  - 10.42.44.100
+- 10.42.44.100
 dns_ip:
-  - 10.255.255.255
-  - 10.42.242.2
-  - 10.42.242.5
+- 10.255.255.255
+- 10.42.242.2
+- 10.42.242.5
 mail_ip:
-  - 10.42.44.20
-  - 10.43.1.4
+- 10.42.44.20
+- 10.43.1.4
 mail_mx: 10.42.44.20
 reverse_ip:
-  - 10.42.242.50
+- 10.42.242.50
 squid_ip:
-  - 10.42.44.100
+- 10.42.44.100
 snmp_ip:
-  - 10.42.242.203
-  - 10.42.242.205
-  - 10.42.242.206
+- 10.42.242.203
+- 10.42.242.205
+- 10.42.242.206
 
 # Puppet
 puppet_apt_repo: http://repository.vms.intra.unetresgrossebite.com/debian
@@ -48,7 +48,7 @@ satellite_repo: katello.vms.intra.unetresgrossebite.com
 
 # Rsync
 rsync_clients:
-  - 10.42.242.0/24
+- 10.42.242.0/24
 
 # Xen
 virtual_default_vg: ssd

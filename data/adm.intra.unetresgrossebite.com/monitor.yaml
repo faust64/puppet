@@ -5,12 +5,12 @@ apache_mod_expires: true
 
 # Icinga
 icinga_collect_domains:
-  - adm.intra.unetresgrossebite.com
-  - ceph.intra.unetresgrossebite.com
-  - sip.intra.unetresgrossebite.com
-  - surv.intra.unetresgrossebite.com
-  - vms.intra.unetresgrossebite.com
-  - intra.unetresgrossebite.com
+- adm.intra.unetresgrossebite.com
+- ceph.intra.unetresgrossebite.com
+- sip.intra.unetresgrossebite.com
+- surv.intra.unetresgrossebite.com
+- vms.intra.unetresgrossebite.com
+- intra.unetresgrossebite.com
 icinga_static_devices:
   eros.adm.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.242.4
@@ -100,46 +100,46 @@ icinga_static_devices:
     host_parents: nikea.adm.intra.unetresgrossebite.com
     srvclass: printer
 
-#  master1.friends.intra.unetresgrossebite.com:
-#    host_ipaddress: 10.42.253.10
-#    host_parents: momos.adm.intra.unetresgrossebite.com
-#    srvclass: ocp4
-#  master2.friends.intra.unetresgrossebite.com:
-#    host_ipaddress: 10.42.253.11
-#    host_parents: moros.adm.intra.unetresgrossebite.com
-#    srvclass: ocp4
-#  master3.friends.intra.unetresgrossebite.com:
-#    host_ipaddress: 10.42.253.12
-#    host_parents: phoebe.adm.intra.unetresgrossebite.com
-#    srvclass: ocp4
-#  infra1.friends.intra.unetresgrossebite.com:
-#    host_ipaddress: 10.42.253.13
-#    host_parents: moros.adm.intra.unetresgrossebite.com
-#    srvclass: ocp4
-#  infra2.friends.intra.unetresgrossebite.com:
-#    host_ipaddress: 10.42.253.14
-#    host_parents: momos.adm.intra.unetresgrossebite.com
-#    srvclass: ocp4
-#  infra3.friends.intra.unetresgrossebite.com:
-#    host_ipaddress: 10.42.253.15
-#    host_parents: thanatos.adm.intra.unetresgrossebite.com
-#    srvclass: ocp4
-#  compute1.friends.intra.unetresgrossebite.com:
-#    host_ipaddress: 10.42.253.20
-#    host_parents: crios.adm.intra.unetresgrossebite.com
-#    srvclass: ocp4
-#  compute2.friends.intra.unetresgrossebite.com:
-#    host_ipaddress: 10.42.253.21
-#    host_parents: moros.adm.intra.unetresgrossebite.com
-#    srvclass: ocp4
-#  compute3.friends.intra.unetresgrossebite.com:
-#    host_ipaddress: 10.42.253.22
-#    host_parents: momos.adm.intra.unetresgrossebite.com
-#    srvclass: ocp4
-#  compute4.friends.intra.unetresgrossebite.com:
-#    host_ipaddress: 10.42.253.23
-#    host_parents: moros.adm.intra.unetresgrossebite.com
-#    srvclass: ocp4
+  master1.friends.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.253.10
+    host_parents: momos.adm.intra.unetresgrossebite.com
+    srvclass: amd64-k8s
+  master2.friends.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.253.11
+    host_parents: thanatos.adm.intra.unetresgrossebite.com
+    srvclass: amd64-k8s
+  master3.friends.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.253.12
+    host_parents: moros.adm.intra.unetresgrossebite.com
+    srvclass: amd64-k8s
+  infra1.friends.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.253.13
+    host_parents: momos.adm.intra.unetresgrossebite.com
+    srvclass: amd64-k8s
+  infra2.friends.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.253.14
+    host_parents: thanatos.adm.intra.unetresgrossebite.com
+    srvclass: amd64-k8s
+  infra3.friends.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.253.15
+    host_parents: moros.adm.intra.unetresgrossebite.com
+    srvclass: amd64-k8s
+  compute1.friends.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.253.20
+    host_parents: momos.adm.intra.unetresgrossebite.com
+    srvclass: amd64-k8s
+  compute2.friends.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.253.21
+    host_parents: moros.adm.intra.unetresgrossebite.com
+    srvclass: amd64-k8s
+  compute3.friends.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.253.22
+    host_parents: momos.adm.intra.unetresgrossebite.com
+    srvclass: amd64-k8s
+  compute4.friends.intra.unetresgrossebite.com:
+    host_ipaddress: 10.42.253.23
+    host_parents: moros.adm.intra.unetresgrossebite.com
+    srvclass: amd64-k8s
 #  compute5.friends.intra.unetresgrossebite.com:
 #    host_ipaddress: 10.42.253.24
 #    host_parents: momos.adm.intra.unetresgrossebite.com
@@ -201,29 +201,31 @@ icinga_static_devices:
   mon1.friends.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.253.110
     host_parents: helios.adm.intra.unetresgrossebite.com
-    srvclass: ocp4
+    srvclass: ceph
   mon2.friends.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.253.111
     host_parents: selene.adm.intra.unetresgrossebite.com
-    srvclass: ocp4
+    srvclass: ceph
   mon3.friends.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.253.112
     host_parents: hemara.adm.intra.unetresgrossebite.com
-    srvclass: ocp4
+    srvclass: ceph
 
 # Nagios
 nagios_hostgroups:
-  - ap
-  - cam
-  - centos
-  - debian
-  - devuan
-  - freebsd
-  - network
-  - ocp4
-  - openbsd
-  - phone
-  - printer
-  - pdu
-  - ubuntu
-  - rpi-k8s
+- ap
+- amd64-k8s
+- cam
+- centos
+- ceph
+- debian
+- devuan
+- freebsd
+- network
+- ocp4
+- openbsd
+- phone
+- printer
+- pdu
+- ubuntu
+- rpi-k8s

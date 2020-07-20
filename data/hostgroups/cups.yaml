@@ -1,12 +1,12 @@
 additional_classes:
-  - Cups
+- Cups
 
 # Cups
 cups_with_hplip: true
 
 # Cups
 cups_nagios_printers:
-  - poseidon
+- poseidon
 cups_permissions:
   /:
     Allow: from 10.42/15

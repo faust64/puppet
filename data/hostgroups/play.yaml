@@ -1,6 +1,6 @@
 additional_classes:
-  - Airsonic
-# - Subsonic
+- Airsonic
+#- Subsonic
 
 # Airsonic
 airsonic_allocate: 512

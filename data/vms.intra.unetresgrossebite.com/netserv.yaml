@@ -2,12 +2,12 @@ physical_parent: nemesis.adm.intra.unetresgrossebite.com
 
 # Isc-dhcp-server
 dhcpd_collect_static_leases:
-  - adm.intra.unetresgrossebite.com
-  - ceph.intra.unetresgrossebite.com
-  - sip.intra.unetresgrossebite.com
-  - surv.intra.unetresgrossebite.com
-  - vms.intra.unetresgrossebite.com
-  - intra.unetresgrossebite.com
+- adm.intra.unetresgrossebite.com
+- ceph.intra.unetresgrossebite.com
+- sip.intra.unetresgrossebite.com
+- surv.intra.unetresgrossebite.com
+- vms.intra.unetresgrossebite.com
+- intra.unetresgrossebite.com
 dns_search: intra.unetresgrossebite.com
 
 # OpenLDAP

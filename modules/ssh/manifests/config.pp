@@ -192,16 +192,6 @@ class ssh::config {
 	    match  => "^MaxAuthTries",
 	    notify => Service[$ssh::vars::ssh_service_name],
 	    path   => "/etc/ssh/sshd_config";
-	"Set sshd client alive interval":
-	    line   => "ClientAliveInterval 300",
-	    match  => "^ClientAliveInterval",
-	    notify => Service[$ssh::vars::ssh_service_name],
-	    path   => "/etc/ssh/sshd_config";
-	"Set sshd client alive max count":
-	    line   => "ClientAliveCountMax 0",
-	    match  => "^ClientAliveCountMax",
-	    notify => Service[$ssh::vars::ssh_service_name],
-	    path   => "/etc/ssh/sshd_config";
 	"Disable weak host keys (1/2)":
 	    ensure => "absent",
 	    line   => "HostKey /etc/ssh/ssh_host_dsa_key",
@@ -212,6 +202,21 @@ class ssh::config {
 	    line   => "HostKey /etc/ssh/ssh_host_ecdsa_key",
 	    notify => Service[$ssh::vars::ssh_service_name],
 	    path   => "/etc/ssh/sshd_config";
+    }
+
+    if ($ssh::vars::auto_disconnect == true) {
+	common::define::lined {
+	    "Set sshd client alive interval":
+		line   => "ClientAliveInterval 300",
+		match  => "^ClientAliveInterval",
+		notify => Service[$ssh::vars::ssh_service_name],
+		path   => "/etc/ssh/sshd_config";
+	    "Set sshd client alive max count":
+		line   => "ClientAliveCountMax 0",
+		match  => "^ClientAliveCountMax",
+		notify => Service[$ssh::vars::ssh_service_name],
+		path   => "/etc/ssh/sshd_config";
+	}
     }
 
     if ($os['release']['major'] != "7" and $lsbdistcodename != "buster"

@@ -1,22 +1,22 @@
 additional_classes:
-  - Fail2ban
-  - Firehol
+- Fail2ban
+- Firehol
 
 physical_parent: gaia.unetresgrossebite.com
 
 # Firehol
 firehol_interfaces:
-  - name: ens3
-    description: WAN
-    protection: strong
-    allow:
-      - server icmp accept
-      - server http accept
-      - server https accept
-      - server custom openssh "tcp/1022" default accept
-      - server custom munin "tcp/4949" default accept src "$office_networks"
-      - server custom nrpe "tcp/5666" default accept src "$office_networks"
-      - client all accept
+- name: any
+  description: WAN
+  protection: strong
+  allow:
+  - server icmp accept
+  - server http accept
+  - server https accept
+  - server custom openssh "tcp/1022" default accept
+  - server custom munin "tcp/4949" default accept src "$office_networks"
+  - server custom nrpe "tcp/5666" default accept src "$office_networks"
+  - client all accept
 
 # Letsencrypt
 letsencrypt_renew_day: 21
@@ -33,8 +33,8 @@ openldap_ldap_slave: repository.unetresgrossebite.com
 
 # PF
 dns_ip:
-  - 95.211.205.36
-  - 188.165.212.140
+- 95.211.205.36
+- 37.59.33.201
 
 # Subsonic
 subsonic_do_flac: true

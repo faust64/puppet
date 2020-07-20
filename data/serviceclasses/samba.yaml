@@ -1,5 +1,5 @@
 additional_classes:
-  - Samba
+- Samba
 
 # Samba
 samba_domainname: ISIS2
@@ -18,12 +18,12 @@ samba_shares:
     path: /home/cd_utils
     write: false
     writelist:
-      - greve
-      - gumai
-      - mabes
-      - olcha
-      - pacur
-      - phdeo
+    - greve
+    - gumai
+    - mabes
+    - olcha
+    - pacur
+    - phdeo
   clients:
     label: Clients
     path: /home/clients

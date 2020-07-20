@@ -1,5 +1,5 @@
 additional_classes:
-  - Common
+- Common
 
 physical_parent: false
 
@@ -40,7 +40,7 @@ airsonic_title: "Welcome to Airsonic"
 
 # Apache
 apache_allow_privates:
-  - 10.0.0.0/8
+- 10.0.0.0/8
 apache_collectd: false
 apache_conf_dir: /etc/apache2
 apache_conf_file: apache2.conf
@@ -96,9 +96,9 @@ apache_mod_xsendfile_paths: false
 apache_mpm: event
 apache_munin: false
 apache_munin_probes:
-  - apache_accesses
-  - apache_processes
-  - apache_volume
+- apache_accesses
+- apache_processes
+- apache_volume
 apache_robots_allow: false
 apache_robots_disallow: false
 apache_run_dir: /var/run
@@ -111,7 +111,7 @@ apache_serveradmin: false
 apache_service_name: apache2
 apache_ssl_ciphers_backward_compatibility: false
 apache_ssl_protos:
-  - TLSv1.2
+- TLSv1.2
 apache_timeout: 120
 apache_web_root: /var/www
 
@@ -142,20 +142,20 @@ asterisk_ami:
     allow: 127.0.0.1/255.255.255.0
 asterisk_ami_listen: 127.0.0.1
 asterisk_ami_permissions:
-  - system
-  - call
-  - log
-  - verbose
-  - command
-  - agent
-  - user
-  - config
-  - command
-  - dtmf
-  - reporting
-  - cdr
-  - dialplan
-  - originate
+- system
+- call
+- log
+- verbose
+- command
+- agent
+- user
+- config
+- command
+- dtmf
+- reporting
+- cdr
+- dialplan
+- originate
 asterisk_cisco_default_lang: French
 asterisk_common_routes: false
 asterisk_conf_dir: /etc/asterisk
@@ -177,30 +177,30 @@ asterisk_lib_dir: /usr/lib/asterisk
 asterisk_multiple_login: "no"
 asterisk_munin: false
 asterisk_munin_probes:
-  - asterisk_channels
-  - asterisk_channelstypes
-  - asterisk_meetme
-  - asterisk_meetmeusers
-  - asterisk_sippeers
-  - asterisk_voicemail
+- asterisk_channels
+- asterisk_channelstypes
+- asterisk_meetme
+- asterisk_meetmeusers
+- asterisk_sippeers
+- asterisk_voicemail
 asterisk_phones_syslog: true
 asterisk_pickup_contextes:
-  - ext-local
-  - from-did-direct
-  - from-internal
-  - from-internal-xfer
+- ext-local
+- from-did-direct
+- from-internal
+- from-internal-xfer
 asterisk_preferred_codecs:
-  - ulaw
-  - alaw
-  - gsm
+- ulaw
+- alaw
+- gsm
 asterisk_public_patterns:
-  - 15
-  - 17
-  - 18
-  - 112
-  - 115
-  - 119
-  - _0.
+- 15
+- 17
+- 18
+- 112
+- 115
+- 119
+- _0.
 asterisk_queues: false
 asterisk_register_timeout: 1800
 asterisk_ring_groups: false
@@ -329,7 +329,7 @@ camtrace_keyid: false
 clamav_contact: false
 clamav_conf_dir: /etc/clamav
 clamav_scan_dir:
-  - /var/www
+- /var/www
 clamav_slack_hook_uri: false
 
 # Collectd
@@ -368,7 +368,7 @@ with_collectd: false
 # Cron
 cron_allow: /etc/cron.allow
 cron_allowed_users:
-  - root
+- root
 cron_deny: /etc/cron.deny
 cron_service_name: cron
 
@@ -412,14 +412,14 @@ elasticsearch_is_master: true
 elasticsearch_listen_addr: false
 elasticsearch_munin: false
 elasticsearch_munin_probes:
-  - elasticsearch_cache
-  - elasticsearch_cluster_shards
-  - elasticsearch_docs
-  - elasticsearch_index_size
-  - elasticsearch_jvm_memory
-  - elasticsearch_jvm_threads
-  - elasticsearch_open_files
-  - elasticsearch_translog_size
+- elasticsearch_cache
+- elasticsearch_cluster_shards
+- elasticsearch_docs
+- elasticsearch_index_size
+- elasticsearch_jvm_memory
+- elasticsearch_jvm_threads
+- elasticsearch_open_files
+- elasticsearch_translog_size
 elasticsearch_node_name: false
 elasticsearch_number_of_replicas: 1
 elasticsearch_number_of_shards: 10
@@ -446,12 +446,12 @@ fail2ban_do_web_overflow: false
 fail2ban_do_wordpress: false
 fail2ban_do_xinetd: false
 fail2ban_ignoreips:
-  - 127.0.0.1/8
+- 127.0.0.1/8
 fail2ban_maxretry: 3
 fail2ban_munin: true
 fail2ban_munin_probes:
-  - fail2ban
-  - fail2ban_reject
+- fail2ban
+- fail2ban_reject
 fail2ban_slack_hook_uri: false
 fail2ban_ssh_ddos_filter: true
 fail2ban_version: false
@@ -464,11 +464,11 @@ filetraq_conf_include: /etc/filetraq.d
 
 # Firehol
 firehol_interfaces:
-  - name: eth0
-    description: LAN
-    protection: strong
-    allow:
-      - client all accept
+- name: eth0
+  description: LAN
+  protection: strong
+  allow:
+  - client all accept
 
 # Flumotion
 flumotion_admin_pass: test
@@ -539,8 +539,8 @@ haproxy_conf_dir: /etc/haproxy
 haproxy_default_mode: http
 haproxy_default_nooptions: false
 haproxy_default_options:
-  - httplog
-  - dontlognull
+- httplog
+- dontlognull
 haproxy_default_ssl_verify: none
 haproxy_default_sticky: true
 haproxy_dh_size: 2048
@@ -551,7 +551,7 @@ haproxy_logs_dir: /var/log
 haproxy_max_conn: 256000
 haproxy_munin: false
 haproxy_munin_probes:
-  - haproxy_ng
+- haproxy_ng
 haproxy_peers: false
 haproxy_runtime_group: haproxy
 haproxy_runtime_user: haproxy
@@ -559,21 +559,21 @@ haproxy_service_name: haproxy
 haproxy_sni_rules: false
 haproxy_spread_checks: 5
 haproxy_ssl_bind_ciphers:
-  - ECDH+AESGCM
-  - DH+AESGCM
-  - ECDH+AES256
-  - DH+AES256
-  - ECDH+AES128
-  - DH+AES
-  - RSA+AESGCM
-  - RSA+AES
-  - "!aNULL"
-  - "!MD5"
-  - "!DSS"
+- ECDH+AESGCM
+- DH+AESGCM
+- ECDH+AES256
+- DH+AES256
+- ECDH+AES128
+- DH+AES
+- RSA+AESGCM
+- RSA+AES
+- "!aNULL"
+- "!MD5"
+- "!DSS"
 haproxy_ssl_bind_options:
-  - no-sslv3
-  - no-tlsv10
-  - no-tls-tickets
+- no-sslv3
+- no-tlsv10
+- no-tls-tickets
 haproxy_stats_listen: 127.0.0.1
 haproxy_stats_passphrase: secret
 haproxy_stats_port: 1664
@@ -707,23 +707,23 @@ icinga_sslscan_warning_threshold: A
 nagios_contact_groups:
   admins:
     members:
-      - root
+    - root
 nagios_contacts:
   root:
     email: root@localhost
     alias: Root
 nagios_hostgroups:
-# - cam
-# - centos
-  - debian
-# - freebsd
-# - nas
-# - network
-# - openbsd
-# - rhel
-# - ubuntu
-# - vmware
-# - print
+#- cam
+#- centos
+- debian
+#- freebsd
+#- nas
+#- network
+#- openbsd
+#- rhel
+#- ubuntu
+#- vmware
+#- print
 nagios_hp_raid: false
 nagios_iconimage: unknown.gif
 nagios_iconimagealt: unknown
@@ -783,130 +783,130 @@ java_default_version: "7"
 
 # Jesred
 jesred_regexpr:
-  - "(.*)archive.ubuntu.com/ubuntu"
-  - "security.ubuntu.com/ubuntu"
+- "(.*)archive.ubuntu.com/ubuntu"
+- "security.ubuntu.com/ubuntu"
 jesred_rewrite_for:
-  - 0.0.0.0/0
+- 0.0.0.0/0
 
 # Katello
 foreman_fqdn: false
 katello_admin_password: false
 katello_admin_user: admin
 katello_docker_ocp_images:
-  - jboss-amq-6/amq62-openshift
-  - jboss-datagrid-6/datagrid65-openshift
-  - jboss-decisionserver-6/decisionserver62-openshift
-  - jboss-eap-6/eap64-openshift
-  - jboss-fuse-6/fis-java-openshift
-  - jboss-fuse-6/fis-karaf-openshift
-  - jboss-webserver-3/webserver30-tomcat7-openshift
-  - jboss-webserver-3/webserver30-tomcat8-openshift
-  - openshift3/container-engine
-  - openshift3/efs-provisioner
-  - openshift3/grafana
-  - openshift3/jenkins-1-rhel7
-  - openshift3/jenkins-2-rhel7
-  - openshift3/jenkins-agent-maven-35-rhel7
-  - openshift3/jenkins-agent-nodejs-8-rhel7
-  - openshift3/jenkins-slave-base-rhel7
-  - openshift3/jenkins-slave-maven-rhel7
-  - openshift3/jenkins-slave-nodejs-rhel7
-  - openshift3/logging-auth-proxy
-  - openshift3/logging-curator
-  - openshift3/logging-deployer
-  - openshift3/logging-elasticsearch
-  - openshift3/logging-fluentd
-  - openshift3/logging-kibana
-  - openshift3/metrics-cassandra
-  - openshift3/metrics-deployer
-  - openshift3/metrics-hawkular-metrics
-  - openshift3/metrics-hawkular-openshift-agent
-  - openshift3/metrics-heapster
-  - openshift3/metrics-schema-installer
-  - openshift3/mongodb-24-rhel7
-  - openshift3/mysql-55-rhel7
-  - openshift3/node
-  - openshift3/nodejs-010-rhel7
-  - openshift3/oauth-proxy
-  - openshift3/openvswitch
-  - openshift3/ose
-  - openshift3/ose-ansible
-  - openshift3/ose-ansible-service-broker
-  - openshift3/ose-cli
-  - openshift3/ose-cluster-autoscaler
-  - openshift3/ose-cluster-capacity
-  - openshift3/ose-cluster-monitoring-operator
-  - openshift3/ose-configmap-reloader
-  - openshift3/ose-console
-  - openshift3/ose-control-plane
-  - openshift3/ose-deployer
-  - openshift3/ose-descheduler
-  - openshift3/ose-docker-builder
-  - openshift3/ose-docker-registry
-  - openshift3/ose-egress-http-proxy
-  - openshift3/ose-egress-router
-  - openshift3/ose-f5-router
-  - openshift3/ose-federation
-  - openshift3/ose-haproxy-router
-  - openshift3/ose-hyperkube
-  - openshift3/ose-hypershift
-  - openshift3/ose-keepalived-ipfailover
-  - openshift3/ose-kube-rbac-proxy
-  - openshift3/ose-kube-state-metrics
-  - openshift3/ose-logging-curator5
-  - openshift3/ose-logging-elasticsearch5
-  - openshift3/ose-logging-eventrouter
-  - openshift3/ose-logging-fluentd
-  - openshift3/ose-logging-kibana5
-  - openshift3/ose-metrics-server
-  - openshift3/ose-node
-  - openshift3/ose-node-problem-detector
-  - openshift3/ose-operator-lifecycle-manager
-  - openshift3/ose-ovn-kubernetes
-  - openshift3/ose-pod
-  - openshift3/ose-prometheus-config-reloader
-  - openshift3/ose-prometheus-operator
-  - openshift3/ose-recycler
-  - openshift3/ose-service-catalog
-  - openshift3/ose-sti-builder
-  - openshift3/ose-template-service-broker
-  - openshift3/ose-web-console
-  - openshift3/perl-516-rhel7
-  - openshift3/php-55-rhel7
-  - openshift3/prometheus
-  - openshift3/prometheus-alertmanager
-  - openshift3/prometheus-alert-buffer
-  - openshift3/prometheus-node-exporter
-  - openshift3/postgresql-92-rhel7
-  - openshift3/python-33-rhel7
-  - openshift3/registry-console
-  - openshift3/ruby-20-rhel7
-  - rhel7/etcd
-  - rhgs3/rhgs-gluster-block-prov-rhel7
-  - rhgs3/rhgs-s3-server-rhel7
-  - rhgs3/rhgs-server-rhel7
-  - rhgs3/rhgs-volmanager-rhel7
-  - rhscl/httpd-24-rhel7
-  - rhscl/mariadb-101-rhel7
-  - rhscl/mongodb-26-rhel7
-  - rhscl/mongodb-32-rhel7
-  - rhscl/mysql-56-rhel7
-  - rhscl/mysql-57-rhel7
-  - rhscl/nodejs-4-rhel7
-  - rhscl/nodejs-6-rhel7
-  - rhscl/ruby-22-rhel7
-  - rhscl/perl-520-rhel7
-  - rhscl/perl-524-rhel7
-  - rhscl/php-56-rhel7
-  - rhscl/php-70-rhel7
-  - rhscl/postgresql-94-rhel7
-  - rhscl/postgresql-95-rhel7
-  - rhscl/python-27-rhel7
-  - rhscl/python-34-rhel7
-  - rhscl/python-35-rhel7
-  - rhscl/redis-32-rhel7
-  - rhscl/ruby-23-rhel7
-  - rhscl/ruby-24-rhel7
+- jboss-amq-6/amq62-openshift
+- jboss-datagrid-6/datagrid65-openshift
+- jboss-decisionserver-6/decisionserver62-openshift
+- jboss-eap-6/eap64-openshift
+- jboss-fuse-6/fis-java-openshift
+- jboss-fuse-6/fis-karaf-openshift
+- jboss-webserver-3/webserver30-tomcat7-openshift
+- jboss-webserver-3/webserver30-tomcat8-openshift
+- openshift3/container-engine
+- openshift3/efs-provisioner
+- openshift3/grafana
+- openshift3/jenkins-1-rhel7
+- openshift3/jenkins-2-rhel7
+- openshift3/jenkins-agent-maven-35-rhel7
+- openshift3/jenkins-agent-nodejs-8-rhel7
+- openshift3/jenkins-slave-base-rhel7
+- openshift3/jenkins-slave-maven-rhel7
+- openshift3/jenkins-slave-nodejs-rhel7
+- openshift3/logging-auth-proxy
+- openshift3/logging-curator
+- openshift3/logging-deployer
+- openshift3/logging-elasticsearch
+- openshift3/logging-fluentd
+- openshift3/logging-kibana
+- openshift3/metrics-cassandra
+- openshift3/metrics-deployer
+- openshift3/metrics-hawkular-metrics
+- openshift3/metrics-hawkular-openshift-agent
+- openshift3/metrics-heapster
+- openshift3/metrics-schema-installer
+- openshift3/mongodb-24-rhel7
+- openshift3/mysql-55-rhel7
+- openshift3/node
+- openshift3/nodejs-010-rhel7
+- openshift3/oauth-proxy
+- openshift3/openvswitch
+- openshift3/ose
+- openshift3/ose-ansible
+- openshift3/ose-ansible-service-broker
+- openshift3/ose-cli
+- openshift3/ose-cluster-autoscaler
+- openshift3/ose-cluster-capacity
+- openshift3/ose-cluster-monitoring-operator
+- openshift3/ose-configmap-reloader
+- openshift3/ose-console
+- openshift3/ose-control-plane
+- openshift3/ose-deployer
+- openshift3/ose-descheduler
+- openshift3/ose-docker-builder
+- openshift3/ose-docker-registry
+- openshift3/ose-egress-http-proxy
+- openshift3/ose-egress-router
+- openshift3/ose-f5-router
+- openshift3/ose-federation
+- openshift3/ose-haproxy-router
+- openshift3/ose-hyperkube
+- openshift3/ose-hypershift
+- openshift3/ose-keepalived-ipfailover
+- openshift3/ose-kube-rbac-proxy
+- openshift3/ose-kube-state-metrics
+- openshift3/ose-logging-curator5
+- openshift3/ose-logging-elasticsearch5
+- openshift3/ose-logging-eventrouter
+- openshift3/ose-logging-fluentd
+- openshift3/ose-logging-kibana5
+- openshift3/ose-metrics-server
+- openshift3/ose-node
+- openshift3/ose-node-problem-detector
+- openshift3/ose-operator-lifecycle-manager
+- openshift3/ose-ovn-kubernetes
+- openshift3/ose-pod
+- openshift3/ose-prometheus-config-reloader
+- openshift3/ose-prometheus-operator
+- openshift3/ose-recycler
+- openshift3/ose-service-catalog
+- openshift3/ose-sti-builder
+- openshift3/ose-template-service-broker
+- openshift3/ose-web-console
+- openshift3/perl-516-rhel7
+- openshift3/php-55-rhel7
+- openshift3/prometheus
+- openshift3/prometheus-alertmanager
+- openshift3/prometheus-alert-buffer
+- openshift3/prometheus-node-exporter
+- openshift3/postgresql-92-rhel7
+- openshift3/python-33-rhel7
+- openshift3/registry-console
+- openshift3/ruby-20-rhel7
+- rhel7/etcd
+- rhgs3/rhgs-gluster-block-prov-rhel7
+- rhgs3/rhgs-s3-server-rhel7
+- rhgs3/rhgs-server-rhel7
+- rhgs3/rhgs-volmanager-rhel7
+- rhscl/httpd-24-rhel7
+- rhscl/mariadb-101-rhel7
+- rhscl/mongodb-26-rhel7
+- rhscl/mongodb-32-rhel7
+- rhscl/mysql-56-rhel7
+- rhscl/mysql-57-rhel7
+- rhscl/nodejs-4-rhel7
+- rhscl/nodejs-6-rhel7
+- rhscl/ruby-22-rhel7
+- rhscl/perl-520-rhel7
+- rhscl/perl-524-rhel7
+- rhscl/php-56-rhel7
+- rhscl/php-70-rhel7
+- rhscl/postgresql-94-rhel7
+- rhscl/postgresql-95-rhel7
+- rhscl/python-27-rhel7
+- rhscl/python-34-rhel7
+- rhscl/python-35-rhel7
+- rhscl/redis-32-rhel7
+- rhscl/ruby-23-rhel7
+- rhscl/ruby-24-rhel7
 katello_ks_password: changeme-s3cre7
 katello_ldap_bind_dn: false
 katello_ldap_bind_pw: secret--warning--59-chars-max
@@ -914,7 +914,7 @@ katello_location: Default Location
 katello_manifest: false
 katello_munin_monitored: true
 katello_munin_probes:
-  - katello_hosts
+- katello_hosts
 katello_organization: Default Organization
 katello_register_with_ak: false
 katello_version: 3.15
@@ -923,41 +923,41 @@ katello_versions:
     foreman: 1.24
     pulp: 2.21
     services:
-      - rh-mongodb34-mongod
-      - postgresql
-      - qdrouterd
-      - qpidd
-      - squid
-      - pulp_celerybeat
-      - pulp_resource_manager
-      - pulp_streamer
-      - tomcat
-      - dynflowd
-      - httpd
-      - foreman-proxy
+    - rh-mongodb34-mongod
+    - postgresql
+    - qdrouterd
+    - qpidd
+    - squid
+    - pulp_celerybeat
+    - pulp_resource_manager
+    - pulp_streamer
+    - tomcat
+    - dynflowd
+    - httpd
+    - foreman-proxy
   3.15:
     foreman: 2.0
     pulp: 2.21
     services:
-      - rh-mongodb34-mongod
-      - rh-redis5-redis
-      - pulpcore-api
-      - pulpcore-content
-      - pulpcore-resource-manager
-      - postgresql
-      - qdrouterd
-      - qpidd
-      - squid
-      - pulp_celerybeat
-      - pulp_resource_manager
-      - pulp_streamer
-      - smart_proxy_dynflow_core
-      - tomcat
-      - dynflow-sidekiq@orchestrator
-      - httpd
-      - dynflow-sidekiq@worker
-      - dynflow-sidekiq@worker-hosts-queue
-      - foreman-proxy
+    - rh-mongodb34-mongod
+    - rh-redis5-redis
+    - pulpcore-api
+    - pulpcore-content
+    - pulpcore-resource-manager
+    - postgresql
+    - qdrouterd
+    - qpidd
+    - squid
+    - pulp_celerybeat
+    - pulp_resource_manager
+    - pulp_streamer
+    - smart_proxy_dynflow_core
+    - tomcat
+    - dynflow-sidekiq@orchestrator
+    - httpd
+    - dynflow-sidekiq@worker
+    - dynflow-sidekiq@worker-hosts-queue
+    - foreman-proxy
 pulp_workers_count: 2
 rhregistry_authpass: false
 rhregistry_authuser: false
@@ -973,8 +973,8 @@ kvm_do_models: true
 kvm_nested: false
 kvm_munin_monitored: true
 kvm_munin_probes:
-  - kvm_io
-  - kvm_mem
+- kvm_io
+- kvm_mem
 
 # Letsencrypt
 letsencrypt_contact: root@example.com
@@ -1067,12 +1067,12 @@ memcache_listen_addr: 127.0.0.1
 memcache_max_mem: 64
 memcache_munin: true
 memcache_munin_probes:
-  - memcached_multi_bytes
-  - memcached_multi_conns
-  - memcached_multi_commands
-  - memcached_multi_evictions
-  - memcached_multi_items
-  - memcached_multi_memory
+- memcached_multi_bytes
+- memcached_multi_conns
+- memcached_multi_commands
+- memcached_multi_evictions
+- memcached_multi_items
+- memcached_multi_memory
 memcache_runtime_user: nobody
 memcache_service_name: memcached
 
@@ -1101,12 +1101,12 @@ mongodb_log_dir: /var/log/mongodb
 mongodb_log_retention: "60"
 mongodb_munin: true
 mongodb_munin_probes:
-  - mongo_btree
-  - mongo_conn
-  - mongo_docs
-  - mongo_lock
-  - mongo_mem
-  - mongo_ops
+- mongo_btree
+- mongo_conn
+- mongo_docs
+- mongo_lock
+- mongo_mem
+- mongo_ops
 mongodb_nagios_databases: false
 mongodb_port: 27017
 mongodb_runtime_group: mongodb
@@ -1133,48 +1133,48 @@ munin_run_dir: /var/run/munin
 munin_runtime_group: root
 munin_runtime_user: root
 munin_sensors:
-  - fan
-  - temp
-  - volt
+- fan
+- temp
+- volt
 munin_smart_temp: false
 munin_timeout: false
 munin_user: munin
 munin_plugins_dir: /usr/share/munin/plugins
 munin_probes:
-  - cpu
-  - df
-  - diskstats
-  - entropy
-  - forks
-  - interrupts
-  - load
-  - memory
-  - open_files
-  - processes
-  - proc_pri
-  - threads
-  - users
-  - vmstat
+- cpu
+- df
+- diskstats
+- entropy
+- forks
+- interrupts
+- load
+- memory
+- open_files
+- processes
+- proc_pri
+- threads
+- users
+- vmstat
 munin_physical_probes:
-  - df_inode
-  - fw_conntrack
-  - fw_forwarded_local
-  - fw_packets
-  - open_inodes
-  - uptime
+- df_inode
+- fw_conntrack
+- fw_forwarded_local
+- fw_packets
+- open_inodes
+- uptime
 munin_time_probes:
-  - ntp_kernel_err
-  - ntp_kernel_pll_freq
-  - ntp_kernel_pll_off
-  - ntp_offset
+- ntp_kernel_err
+- ntp_kernel_pll_freq
+- ntp_kernel_pll_off
+- ntp_offset
 munin_purge_probes:
-  - bind9_rndc
-  - munin_stats
-  - nfs_client
-  - unbound_by_class
-  - unbound_by_flags
-  - unbound_by_opcode
-  - unbound_by_type
+- bind9_rndc
+- munin_stats
+- nfs_client
+- unbound_by_class
+- unbound_by_flags
+- unbound_by_opcode
+- unbound_by_type
 vps_with_munin: false
 with_munin: true
 
@@ -1193,40 +1193,40 @@ mysql_max_allowed_packet: 1M
 mysql_max_binlog_size: 100M
 mysql_max_connections: 100
 #general-innodb:
-# - innodb
+#- innodb
 mysql_innodb_munin_probes:
-  - mysql_innodb_bpool
-  - mysql_innodb_bpool_act
-# - mysql_innodb_insert_buf
-  - mysql_innodb_io
-# - mysql_innodb_io_pend
-  - mysql_innodb_log
-  - mysql_innodb_rows
-  - mysql_innodb_semaphores
-  - mysql_innodb_tnx
+- mysql_innodb_bpool
+- mysql_innodb_bpool_act
+#- mysql_innodb_insert_buf
+- mysql_innodb_io
+#- mysql_innodb_io_pend
+- mysql_innodb_log
+- mysql_innodb_rows
+- mysql_innodb_semaphores
+- mysql_innodb_tnx
 mysql_multi_munin_probes:
-  - mysql_bin_relay_log
-  - mysql_commands
-  - mysql_connections
-  - mysql_files_tables
-  - mysql_network_traffic
-  - mysql_qcache
-  - mysql_qcache_mem
-# - mysql_replication
-  - mysql_select_types
-  - mysql_slow
-  - mysql_sorts
-  - mysql_table_locks
-  - mysql_tmp_tables
+- mysql_bin_relay_log
+- mysql_commands
+- mysql_connections
+- mysql_files_tables
+- mysql_network_traffic
+- mysql_qcache
+- mysql_qcache_mem
+#- mysql_replication
+- mysql_select_types
+- mysql_slow
+- mysql_sorts
+- mysql_table_locks
+- mysql_tmp_tables
 mysql_munin: false
 mysql_munin_myisam_databases: false
 mysql_munin_probes:
-  - mysql_bytes
-  - mysql_queries
-  - mysql_slowqueries
-  - mysql_threads
+- mysql_bytes
+- mysql_queries
+- mysql_slowqueries
+- mysql_threads
 mysql_myisam_munin_probes:
-  - mysql_myisam_indexes
+- mysql_myisam_indexes
 mysql_pid_file: mysqld.pid
 mysql_provider: oracle
 mysql_query_cache_limit: 1M
@@ -1287,23 +1287,23 @@ with_nagios: true
 
 # Named
 named_channels:
-  - client
-  - config
-  - database
-  - default
-  - dispatch
-  - dnssec
-  - general
-  - lame-servers
-  - network
-  - notify
-  - queries
-  - resolver
-  - security
-  - unmatched
-  - update
-  - xfer-in
-  - xfer-out
+- client
+- config
+- database
+- default
+- dispatch
+- dnssec
+- general
+- lame-servers
+- network
+- notify
+- queries
+- resolver
+- security
+- unmatched
+- update
+- xfer-in
+- xfer-out
 named_conf_dir: /etc/bind
 named_contact: false
 named_collectd: false
@@ -1312,7 +1312,7 @@ named_log_dir: /var/log/named
 named_master: false
 named_munin: true
 named_munin_probes:
-  - bind9
+- bind9
 named_notify: false
 named_runtime_conf_dir: /etc/bind
 named_runtime_group: bind
@@ -1323,7 +1323,7 @@ named_service_name: bind9
 named_sshfp_domains: false
 named_zone_dir: /etc/bind
 named_zones_check:
-  - example.com
+- example.com
 
 # Network
 can_set_tos: true
@@ -1428,8 +1428,8 @@ nginx_listen_ports:
 nginx_log_dir: /var/log/nginx
 nginx_munin: false
 nginx_munin_probes:
-  - nginx_request
-  - nginx_status
+- nginx_request
+- nginx_status
 nginx_names_hash_bucket_size: 64
 nginx_run_dir: /var/run
 nginx_runtime_group: root
@@ -1463,15 +1463,15 @@ nsd_listen_port: 53
 nsd_log_dir: /var/log
 nsd_munin: true
 nsd_munin_probes:
-  - nsd_by_rcode
-  - nsd_by_type
-  - nsd_hits
+- nsd_by_rcode
+- nsd_by_type
+- nsd_hits
 nsd_run_dir: /run/nsd
 nsd_runtime_group: nsd
 nsd_runtime_user: nsd
 nsd_serve_domains:
-  - example.com
-  - 10.in-addr.arpa
+- example.com
+- 10.in-addr.arpa
 nsd_zones_dir: /etc/nsd/zones.d
 
 # NTP
@@ -1489,7 +1489,7 @@ opendkim_conf_dir: /etc
 opendkim_runtime_group: opendkim
 opendkim_runtime_user: opendkim
 opendkim_sign_domains:
-  - example.com
+- example.com
 opendkim_trusted_hosts: false
 
 # OpenLDAP
@@ -1504,14 +1504,14 @@ openldap_ldap_suffix: false
 openldap_munin: true
 openldap_munin_passphrase: false
 openldap_munin_probes:
-  - slapd_statistics_bytes
-  - slapd_statistics_pdu
-  - slapd_statistics_referrals
-  - slapd_statistics_entries
-  - slapd_connections
-  - slapd_waiters
-  - slapd_operations
-  - slapd_operations_diff
+- slapd_statistics_bytes
+- slapd_statistics_pdu
+- slapd_statistics_referrals
+- slapd_statistics_entries
+- slapd_connections
+- slapd_waiters
+- slapd_operations
+- slapd_operations_diff
 openldap_munin_user: cn=munin,ou=services,dc=example,dc=com
 openldap_repl_passphrase: false
 openldap_run_dir: /var/run/slapd
@@ -1558,7 +1558,7 @@ pki_key_org: example PKI
 pki_key_province: NL
 pki_key_size: 2048
 pki_domains_lookup:
-  - example.com
+- example.com
 pki_master: false
 pki_nocontact: noreply@example.com
 pki_public: false
@@ -1575,7 +1575,7 @@ openvpn_keepalive: 15 120
 openvpn_munin: true
 openvpn_ldap_passphrase: false
 openvpn_munin_probes:
-  - openvpn
+- openvpn
 openvpn_mute: 5
 openvpn_push_default: false
 openvpn_push_networks: false
@@ -1594,31 +1594,31 @@ openvz_and_xen: false
 openvz_contact: admin@example.com
 openvz_munin: true
 openvz_munin_probes:
-  - openvz_loadavg
+- openvz_loadavg
 openvz_modules:
-  - autofs4
-  - ipt_LOG
-  - ipt_REDIRECT
-  - ipt_REJECT
-  - ipt_conntrack
-  - ipt_helper
-  - ipt_length
-  - ipt_limit
-  - ipt_multiport
-  - ipt_state
-  - ipt_tcpmss
-  - ipt_ttl
-  - ipt_tos
-  - iptable_mangle
-  - iptable_nat
-  - nf_conntrack
-  - nf_conntrack_ftp
-  - nf_conntrack_irc
-  - nf_nat
-  - nfsd
-  - xt_comment
-  - xt_state
-  - xt_tcpudp
+- autofs4
+- ipt_LOG
+- ipt_REDIRECT
+- ipt_REJECT
+- ipt_conntrack
+- ipt_helper
+- ipt_length
+- ipt_limit
+- ipt_multiport
+- ipt_state
+- ipt_tcpmss
+- ipt_ttl
+- ipt_tos
+- iptable_mangle
+- iptable_nat
+- nf_conntrack
+- nf_conntrack_ftp
+- nf_conntrack_irc
+- nf_nat
+- nfsd
+- xt_comment
+- xt_state
+- xt_tcpudp
 openvz_nas_host: nas.example.com
 openvz_nas_root: /volume1
 virtual_default_vg: data
@@ -1648,78 +1648,78 @@ ospf_stub_router: false
 ossec_accept_new_agents: false
 ossec_app_directories: false
 ossec_check_directories:
-  - /etc
-  - /usr/bin
-  - /usr/sbin
-  - /bin
-  - /sbin
+- /etc
+- /usr/bin
+- /usr/sbin
+- /bin
+- /sbin
 ossec_check_frequency: 7200
 ossec_conf_dir: /var/ossec
 ossec_contact: false
 ossec_ignore:
-  - /etc/mtab
-  - /etc/hosts.deny
-  - /etc/random-seed
-  - /etc/adjtime
+- /etc/mtab
+- /etc/hosts.deny
+- /etc/random-seed
+- /etc/adjtime
 ossec_include_rules:
-  - rules_config
-  - pam_rules
-  - sshd_rules
-  - telnetd_rules
-  - syslog_rules
-  - arpwatch_rules
-  - symantec-av_rules
-  - symantec-ws_rules
-  - pix_rules
-  - named_rules
-  - smbd_rules
-  - vsftpd_rules
-  - pure-ftpd_rules
-  - proftpd_rules
-  - ms_ftpd_rules
-  - ftpd_rules
-  - hordeimp_rules
-  - roundcube_rules
-  - wordpress_rules
-  - cimserver_rules
-  - vpopmail_rules
-  - vmpop3d_rules
-  - courier_rules
-  - web_rules
-  - web_appsec_rules
-  - apache_rules
-  - nginx_rules
-  - php_rules
-  - mysql_rules
-  - postgresql_rules
-  - ids_rules
-  - squid_rules
-  - firewall_rules
-  - cisco-ios_rules
-  - netscreenfw_rules
-  - sonicwall_rules
-  - postfix_rules
-  - sendmail_rules
-  - imapd_rules
-  - mailscanner_rules
-  - dovecot_rules
-  - ms-exchange_rules
-  - racoon_rules
-  - vpn_concentrator_rules
-  - spamd_rules
-  - msauth_rules
-  - mcafee_av_rules
-  - trend-osce_rules
-  - ms-se_rules
-# - policy_rules
-  - zeus_rules
-  - solaris_bsm_rules
-  - vmware_rules
-  - ms_dhcp_rules
-  - asterisk_rules
-  - ossec_rules
-  - attack_rules
-  - local_rules
+- rules_config
+- pam_rules
+- sshd_rules
+- telnetd_rules
+- syslog_rules
+- arpwatch_rules
+- symantec-av_rules
+- symantec-ws_rules
+- pix_rules
+- named_rules
+- smbd_rules
+- vsftpd_rules
+- pure-ftpd_rules
+- proftpd_rules
+- ms_ftpd_rules
+- ftpd_rules
+- hordeimp_rules
+- roundcube_rules
+- wordpress_rules
+- cimserver_rules
+- vpopmail_rules
+- vmpop3d_rules
+- courier_rules
+- web_rules
+- web_appsec_rules
+- apache_rules
+- nginx_rules
+- php_rules
+- mysql_rules
+- postgresql_rules
+- ids_rules
+- squid_rules
+- firewall_rules
+- cisco-ios_rules
+- netscreenfw_rules
+- sonicwall_rules
+- postfix_rules
+- sendmail_rules
+- imapd_rules
+- mailscanner_rules
+- dovecot_rules
+- ms-exchange_rules
+- racoon_rules
+- vpn_concentrator_rules
+- spamd_rules
+- msauth_rules
+- mcafee_av_rules
+- trend-osce_rules
+- ms-se_rules
+#- policy_rules
+- zeus_rules
+- solaris_bsm_rules
+- vmware_rules
+- ms_dhcp_rules
+- asterisk_rules
+- ossec_rules
+- attack_rules
+- local_rules
 ossec_mail_from: noreply@example.com
 ossec_manager: 127.0.0.1
 ossec_realtime: false
@@ -1727,32 +1727,33 @@ ossec_report_changes: false
 ossec_service_name: ossec
 ossec_slack_hook_uri: false
 ossec_whitelist:
-  - 127.0.0.1
+- 127.0.0.1
 
 # OpenSSH
+ssh_auto_disconnect: true
 ssh_ciphers:
-  - chacha20-poly1305@openssh.com
-  - aes256-gcm@openssh.com
-  - aes128-gcm@openssh.com
-  - aes256-ctr
-  - aes192-ctr
-  - aes128-ctr
+- chacha20-poly1305@openssh.com
+- aes256-gcm@openssh.com
+- aes128-gcm@openssh.com
+- aes256-ctr
+- aes192-ctr
+- aes128-ctr
 ssh_host_keys:
-  - ssh-rsa
-  - ssh-rsa-cert-v01@openssh.com
-  - ssh-ed25519
-  - ssh-ed25519-cert-v01@openssh.com
+- ssh-rsa
+- ssh-rsa-cert-v01@openssh.com
+- ssh-ed25519
+- ssh-ed25519-cert-v01@openssh.com
 ssh_kex_algorithms:
-  - curve25519-sha256@libssh.org
-  - diffie-hellman-group-exchange-sha256
+- curve25519-sha256@libssh.org
+- diffie-hellman-group-exchange-sha256
 ssh_keys_database: false
 ssh_mac_algorithms:
-  - hmac-sha2-256-etm@openssh.com
-  - hmac-sha2-512-etm@openssh.com
-  - hmac-sha2-256                                      
-  - hmac-sha2-512
-  - umac-128@openssh.com
-  - umac-128-etm@openssh.com
+- hmac-sha2-256-etm@openssh.com
+- hmac-sha2-512-etm@openssh.com
+- hmac-sha2-256
+- hmac-sha2-512
+- umac-128@openssh.com
+- umac-128-etm@openssh.com
 ssh_moduli_dir: /etc/ssh
 ssh_password_authentication: false
 ssh_permit_rootlogin: without-password
@@ -1830,17 +1831,17 @@ peerio_mailfrom: peerio@example.com
 peerio_mailreplyto: noreply@example.com
 peerio_munin: false
 peerio_munin_admin_probes:
-  - peerio_active
-  - peerio_closed
-  - peerio_lwactive
-  - peerio_users
+- peerio_active
+- peerio_closed
+- peerio_lwactive
+- peerio_users
 peerio_munin_background_probes:
-  - peerio_sumconnected
+- peerio_sumconnected
 peerio_munin_foreground_probes:
-  - peerio_connected
+- peerio_connected
 peerio_munin_shark_probes:
-  - shark_invoices
-  - shark_ppw
+- shark_invoices
+- shark_ppw
 peerio_nuts_name: nuts.example.com
 peerio_nuts_repository: false
 # PeerioTechnologies/peerio-desktop:
@@ -1849,11 +1850,11 @@ peerio_nuts_repository: false
 #   apisecret: independentfromyourgithubaccount
 #   apiuser: username
 peerio_redis_backends:
-  - 127.0.0.1
+- 127.0.0.1
 peerio_redis_elasticache: false
 peerio_redis_limit: false
 peerio_riak_backends:
-  - 127.0.0.1
+- 127.0.0.1
 peerio_riak_health_auth:
 peerio_riak_is_balanced: false
 peerio_riak_max_connections_per_node: 4096
@@ -1862,14 +1863,14 @@ peerio_riak_ssl: false
 peerio_riak_user: peerio
 peerio_runtime_group: peerioadmin
 peerio_runtime_processes:
-  - nuts
-  - filemgr
-  - schedule
-  - foreground
-  - background
-  - inferno
-  - shark
-  - admin
+- nuts
+- filemgr
+- schedule
+- foreground
+- background
+- inferno
+- shark
+- admin
 peerio_runtime_user: peerioadmin
 peerio_shark_dbhost: 127.0.0.1
 peerio_shark_dbmaxcon: 10
@@ -1947,6 +1948,7 @@ git_ip: false
 icecast_ip: false
 icecast_upstream_ip: 91.216.209.231
 icmp_ip: false
+k8s_ip: false
 ldap_masters: false
 ldap_ip: false
 mail_ip: false
@@ -1959,9 +1961,9 @@ pf_frags_limit: 2000
 pf_max_mss: 1440
 pf_munin: true
 pf_munin_probes:
-  - pf_changes
-  - pf_searches
-  - pf_states
+- pf_changes
+- pf_searches
+- pf_states
 pf_skip_gre: false
 pf_state_limit: 50000
 pf_state_policy: if-bound
@@ -1990,26 +1992,26 @@ xmpp_ip: false
 php_apc: false
 php_conf_dir: /etc/php5
 php_disabled_functions:
-  - pcntl_alarm
-  - pcntl_fork
-  - pcntl_waitpid
-  - pcntl_wait
-  - pcntl_wifexited
-  - pcntl_wifstopped
-  - pcntl_wifsignaled
-  - pcntl_wexitstatus
-  - pcntl_wtermsig
-  - pcntl_wstopsig
-  - pcntl_signal
-  - pcntl_signal_dispatch
-  - pcntl_get_last_error
-  - pcntl_strerror
-  - pcntl_sigprocmask
-  - pcntl_sigwaitinfo
-  - pcntl_sigtimedwait
-  - pcntl_exec
-  - pcntl_getpriority
-  - pcntl_setpriority
+- pcntl_alarm
+- pcntl_fork
+- pcntl_waitpid
+- pcntl_wait
+- pcntl_wifexited
+- pcntl_wifstopped
+- pcntl_wifsignaled
+- pcntl_wexitstatus
+- pcntl_wtermsig
+- pcntl_wstopsig
+- pcntl_signal
+- pcntl_signal_dispatch
+- pcntl_get_last_error
+- pcntl_strerror
+- pcntl_sigprocmask
+- pcntl_sigwaitinfo
+- pcntl_sigtimedwait
+- pcntl_exec
+- pcntl_getpriority
+- pcntl_setpriority
 php_error_report: E_ALL & ~E_DEPRECATED & ~E_STRICT
 php_explicit_sessions: false
 php_gc_probability: 0
@@ -2053,12 +2055,12 @@ php_mod_zip: false
 php_mod_zlib: false
 php_munin: false
 php_munin_probes:
-  - php_apc_fragmentation
-  - php_apc_files
-  - php_apc_hit_miss
-  - php_apc_purge
-  - php_apc_rates
-  - php_apc_usage
+- php_apc_fragmentation
+- php_apc_files
+- php_apc_hit_miss
+- php_apc_purge
+- php_apc_rates
+- php_apc_usage
 php_pear: false
 php_post_max_size: 8M
 php_serialize_precision: 17
@@ -2088,19 +2090,19 @@ postfix_letsencrypt: false
 postfix_local_domains: false
 postfix_munin: false
 postfix_munin_probes:
-  - postfix_mailqueue
-  - postfix_mailstats
-  - postfix_mailvolume
+- postfix_mailqueue
+- postfix_mailstats
+- postfix_mailvolume
 postfix_myhostname: false
 postfix_networks: false
 postfix_rbls:
-  - pbl.spamhaus.org
-  - bl.spamcop.net
-  - opm.blitzed.org
-  - rbl.mail-abuse.org
-  - spamsources.fabel.dk
-  - zen.spamhaus.org
-  - zombie.dnsbl.sorbs.net
+- pbl.spamhaus.org
+- bl.spamcop.net
+- opm.blitzed.org
+- rbl.mail-abuse.org
+- spamsources.fabel.dk
+- zen.spamhaus.org
+- zombie.dnsbl.sorbs.net
 postfix_routeto: false
 postfix_runtime_user: postfix
 postfix_runtime_group: postfix
@@ -2127,10 +2129,10 @@ ks_host_hashed_password: false
 ps_host_hashed_password: false
 ui_host_clear_password: false
 ui_openbsd_nics:
-  - em0
-  - em1
-  - em2
-  - em3
+- em0
+- em1
+- em2
+- em3
 pxe_root_dir: /srv/tftpboot
 satellite_ksroot: false
 satellite_register_activationkey: false
@@ -2145,7 +2147,7 @@ qemu_has_kvm: false
 # Racktables
 do_racktables: false
 munin_vhost_name:
-  - munin.example.com
+- munin.example.com
 racktables_auth_backend: local
 racktables_database_password: false
 racktables_database_user: false
@@ -2168,12 +2170,12 @@ redis_max_lag: 10
 redis_min_slave_to_write: 1
 redis_munin: false
 redis_munin_probes:
-  - redis_connected_clients
-  - redis_key_ratio
-  - redis_keys_per_sec
-  - redis_per_sec
-  - redis_used_keys
-  - redis_used_memory
+- redis_connected_clients
+- redis_key_ratio
+- redis_keys_per_sec
+- redis_per_sec
+- redis_used_keys
+- redis_used_memory
 redis_output_buffer_limits:
   normal: 0 0 0
   slave: 256mb 64mb 60
@@ -2183,9 +2185,9 @@ redis_repl_pass: false
 redis_runtime_group: redis
 redis_runtime_user: redis
 redis_save:
-  - "900 1"
-  - "300 10"
-  - "60 10000"
+- "900 1"
+- "300 10"
+- "60 10000"
 redis_sentinel_name: redismasterslave
 redis_sentinel_port: 26379
 redis_sentinel_quorum: 2
@@ -2242,13 +2244,13 @@ riak_max_memory_percent: 70
 riak_munin: false
 riak_munin_basic: false
 riak_munin_probes:
-  - riak_coord_redirs
-  - riak_erlang_memory
-  - riak_erlang_processes
-  - riak_node_get_put
-  - riak_pbc_connection
-  - riak_read_repairs
-  - riak_vnode_get_put
+- riak_coord_redirs
+- riak_erlang_memory
+- riak_erlang_processes
+- riak_node_get_put
+- riak_pbc_connection
+- riak_read_repairs
+- riak_vnode_get_put
 riak_nagios_local_passphrase: false
 riak_nagios_local_username: false
 riak_nagios_remote_fqdn: false
@@ -2292,39 +2294,39 @@ rkhunter_conf_dir: /etc
 rkhunter_contact: false
 rkhunter_db_dir: /var/lib/rkhunter/db
 rkhunter_dev_whitelist:
-  - /dev/.udev/rules.d/root.rules
+- /dev/.udev/rules.d/root.rules
 rkhunter_disabled_tests:
-  - apps
-  - deleted_files
-  - hidden_procs
-  - packet_cap_apps
-  - suspscan
+- apps
+- deleted_files
+- hidden_procs
+- packet_cap_apps
+- suspscan
 rkhunter_enabled_tests:
-  - all
+- all
 rkhunter_has_lwp: false
 rkhunter_hiddendir_whitelist:
-  - /dev/.udev
+- /dev/.udev
 rkhunter_hiddenfile_whitelist:
-  - /dev/.blkid.tab
-  - /dev/.blkid.tab.old
-  - /dev/.initramfs
+- /dev/.blkid.tab
+- /dev/.blkid.tab.old
+- /dev/.initramfs
 rkhunter_hook_uri: false
 rkhunter_install_dir: /usr
 rkhunter_log_dir: /var/log
 rkhunter_pwdless_whitelist: false
 rkhunter_procdel_whitelist:
-  - /sbin/init
+- /sbin/init
 rkhunter_proclisten_whitelist:
-  - /sbin/dhclient
+- /sbin/dhclient
 rkhunter_scan_temp: /dev/shm
 rkhunter_script_dir: /usr/share/rkhunter/scripts
 rkhunter_script_whitelist:
-  - /bin/grep
-  - /bin/fgrep
-  - /bin/which
-  - /usr/bin/groups
-  - /usr/bin/ldd
-  - /usr/sbin/adduser
+- /bin/grep
+- /bin/fgrep
+- /bin/which
+- /usr/bin/groups
+- /usr/bin/ldd
+- /usr/sbin/adduser
 rkhunter_tmp_dir: /var/lib/rkhunter/tmp
 
 # RRDcached
@@ -2387,7 +2389,7 @@ samba_bind_dn: false
 samba_bind_passphrase: false
 samba_contact: false
 samba_directory_setperms:
-  - /home/formation:1000:10000:2774:0744
+- /home/formation:1000:10000:2774:0744
 samba_domainname: WORKGROUP
 samba_domainsid: false
 samba_ldap_suffix: dc=example,dc=com
@@ -2396,12 +2398,12 @@ samba_nfs_path: /volume1/samba
 samba_over_nfs: false
 samba_shares: false
 samba_veto_files:
-  - .DS_Store
-  - .TemporaryItems
-  - Thumbs.db
-  - crack
-  - lost+found
-  - serial
+- .DS_Store
+- .TemporaryItems
+- Thumbs.db
+- crack
+- lost+found
+- serial
 samba_user_suffix: ou=users
 
 # Saslauthd
@@ -2409,10 +2411,10 @@ saslauthd_conf_dir: /etc
 saslauthd_ldap_passphrase: false
 saslauthd_ldap_user: false
 saslauthd_mech_list:
-  - PLAIN
-  - LOGIN
-  - CRAM-MD5
-  - DIGEST-MD5
+- PLAIN
+- LOGIN
+- CRAM-MD5
+- DIGEST-MD5
 saslauthd_run_dir: /var/run/saslauthd
 saslauthd_search_base: dc=example,dc=com
 saslauthd_search_filter: "(|(cn=%u)(|(mail=%u)(mail=%u@example.com)))"
@@ -2424,7 +2426,7 @@ sasyncd_sharedkey: false
 
 # Sendmail
 sendmail_accept_domains:
-  - example.com
+- example.com
 
 # Shells
 prompt_color: false
@@ -2495,8 +2497,8 @@ sonarr_runtime_user: sonarr
 
 # Spamassassin
 spamassassin_bayes_ignore_headers:
-  - X-Spam-Status
-  - X-Spam-Flag
+- X-Spam-Status
+- X-Spam-Flag
 spamassassin_blacklist_from: false
 spamassassin_blacklist_subject: false
 spamassassin_conf_dir: /etc/spamassassin
@@ -2505,8 +2507,8 @@ spamassassin_cyrus_domain_root: /var/spool/cyrus/mail
 spamassassin_cyrus_ipurge: /usr/sbin/ipurge
 spamassassin_munin: true
 spamassassin_munin_probes:
-  - spamassassin_score
-  - spamassassin_stats
+- spamassassin_score
+- spamassassin_stats
 spamassassin_require_score: "2.0"
 spamassassin_rewrite_subject: "[ SPAM _SCORE_ ]"
 spamassassin_rsyslog: true
@@ -2528,7 +2530,7 @@ squid_command: squid
 squid_conf_dir: /etc/squid
 squid_error_dir: false
 squid_exceptions:
-  - localhost
+- localhost
 squid_log_dir: /var/log/squid
 squid_rotate: 4
 squid_runtime_group: proxy
@@ -2543,37 +2545,37 @@ stanchion_name_prefix: stanchion
 
 # Stunnel
 stunnel_ciphers:
-  - ECDHE-RSA-AES128-GCM-SHA256
-  - ECDHE-ECDSA-AES128-GCM-SHA256
-  - ECDHE-RSA-AES256-GCM-SHA384
-  - ECDHE-ECDSA-AES256-GCM-SHA384
-  - DHE-RSA-AES128-GCM-SHA256
-  - DHE-DSS-AES128-GCM-SHA256
-  - kEDH+AESGCM
-  - ECDHE-RSA-AES128-SHA256
-  - ECDHE-ECDSA-AES128-SHA256
-  - ECDHE-RSA-AES128-SHA
-  - ECDHE-ECDSA-AES128-SHA
-  - ECDHE-RSA-AES256-SHA384
-  - ECDHE-ECDSA-AES256-SHA384
-  - ECDHE-RSA-AES256-SHA
-  - ECDHE-ECDSA-AES256-SHA
-  - DHE-RSA-AES128-SHA256
-  - DHE-RSA-AES128-SHA
-  - DHE-DSS-AES128-SHA256
-  - DHE-RSA-AES256-SHA256
-  - DHE-DSS-AES256-SHA
-  - DHE-RSA-AES256-SHA
-  - '!aNULL'
-  - '!eNULL'
-  - '!EXPORT'
-  - '!DES'
-  - '!RC4'
-  - '!3DES'
-  - '!MD5'
-  - '!PS'
+- ECDHE-RSA-AES128-GCM-SHA256
+- ECDHE-ECDSA-AES128-GCM-SHA256
+- ECDHE-RSA-AES256-GCM-SHA384
+- ECDHE-ECDSA-AES256-GCM-SHA384
+- DHE-RSA-AES128-GCM-SHA256
+- DHE-DSS-AES128-GCM-SHA256
+- kEDH+AESGCM
+- ECDHE-RSA-AES128-SHA256
+- ECDHE-ECDSA-AES128-SHA256
+- ECDHE-RSA-AES128-SHA
+- ECDHE-ECDSA-AES128-SHA
+- ECDHE-RSA-AES256-SHA384
+- ECDHE-ECDSA-AES256-SHA384
+- ECDHE-RSA-AES256-SHA
+- ECDHE-ECDSA-AES256-SHA
+- DHE-RSA-AES128-SHA256
+- DHE-RSA-AES128-SHA
+- DHE-DSS-AES128-SHA256
+- DHE-RSA-AES256-SHA256
+- DHE-DSS-AES256-SHA
+- DHE-RSA-AES256-SHA
+- '!aNULL'
+- '!eNULL'
+- '!EXPORT'
+- '!DES'
+- '!RC4'
+- '!3DES'
+- '!MD5'
+- '!PS'
 stunnel_options:
-  - CIPHER_SERVER_PREFERENCE
+- CIPHER_SERVER_PREFERENCE
 stunnel_service_name: stunnel
 
 # Subsonic
@@ -2628,16 +2630,16 @@ thruk_backends:
 thruk_base_dir: /usr/share/thruk
 thruk_conf_dir: /etc/thruk
 thruk_drop_plugins:
-  - minemap
-  - panorama
-  - shinken_features
-  - statusmap
+- minemap
+- panorama
+- shinken_features
+- statusmap
 thruk_home_link: http://www.example.com
 thruk_plugins:
-  - business_process
-  - conf
-  - mobile
-  - reports2
+- business_process
+- conf
+- mobile
+- reports2
 thruk_start_timeout: 15
 thruk_with_icinga: false
 thruk_with_shinken: false
@@ -2660,8 +2662,8 @@ transmission_forwarding: false
 transmission_lib_dir: /var/lib/transmission-daemon
 transmission_munin: false
 transmission_munin_probes:
-  - transmission_status
-  - transmission_traffic
+- transmission_status
+- transmission_traffic
 transmission_peer_port_default: 51413
 transmission_peer_port_high: false
 transmission_peer_port_low: false
@@ -2686,11 +2688,11 @@ unbound_do_public: false
 unbound_conf_dir: /etc/unbound
 unbound_munin: true
 unbound_munin_probes:
-  - unbound_by_rcode
-  - unbound_histogram
-  - unbound_hits
-  - unbound_memory
-  - unbound_queue
+- unbound_by_rcode
+- unbound_histogram
+- unbound_hits
+- unbound_memory
+- unbound_queue
 unbound_forwarders: false
 unbound_pixel_address: false
 unbound_recurse_networks: false
@@ -2715,11 +2717,11 @@ esx_version: 5.1
 vmwares_esx_hosts: false
 vmwares_esx_passphrase: false
 vmwares_esx_probes:
-  - cpu
-  - df
-  - gmem
-  - hmem
-  - mem
+- cpu
+- df
+- gmem
+- hmem
+- mem
 vmwares_esx_username: root
 
 #WebServers
@@ -2772,7 +2774,7 @@ wordpress_db_pass: false
 wordpress_db_user: wordpress
 wordpress_do_network: false
 wordpress_network_aliases:
-  - portal
+- portal
 wordpress_key_auth: false
 wordpress_key_secure_auth: false
 wordpress_key_logged_in: false
@@ -2806,7 +2808,7 @@ xen_mem_max: 1536
 xen_mem_reserved: 1216
 xen_munin: true
 xen_munin_probes:
-  - xen-multi
+- xen-multi
 
 # Xinetd
 xinetd_umask: "002"
@@ -2821,49 +2823,49 @@ xorg_xauth: /usr/bin/xauth
 # ZFS
 zfs_munin: true
 zfs_munin_fs_probes:
-  - zfs_fs_store
+- zfs_fs_store
 zfs_munin_stats_probe:
-  - zfs_stats_cachehitdtype
-  - zfs_stats_cachehitlist
-  - zfs_stats_dumprefetch
-  - zfs_stats_efficiency
-  - zfs_stats_l2efficiency
-  - zfs_stats_l2utilization
-  - zfs_stats_utilization
+- zfs_stats_cachehitdtype
+- zfs_stats_cachehitlist
+- zfs_stats_dumprefetch
+- zfs_stats_efficiency
+- zfs_stats_l2efficiency
+- zfs_stats_l2utilization
+- zfs_stats_utilization
 zfs_munin_probes:
-  - zfs_iostat
+- zfs_iostat
 
 dns_search: false
 fs_legit_suid:
-  - /bin/mount
-  - /bin/ping
-  - /bin/ping6
-  - /bin/umount
-  - /bin/fusermount
-  - /bin/su
-  - /sbin/mount.nfs
-  - /usr/bin/chfn
-  - /usr/bin/chsh
-  - /usr/bin/cryptmount
-  - /usr/bin/fping
-  - /usr/bin/fping6
-  - /usr/bin/gpasswd
-  - /usr/bin/mtr
-  - /usr/bin/newgrp
-  - /usr/bin/passwd
-  - /usr/bin/pkexec
-  - /usr/bin/sudo
-  - /usr/bin/sudoedit
-  - /usr/lib/dbus-1.0/dbus-daemon-launch-helper
-  - /usr/lib/eject/dmcrypt-get-device
-  - /usr/lib/landscape/apt-update
-  - /usr/lib/nagios/plugins/check_dhcp
-  - /usr/lib/openssh/ssh-keysign
-  - /usr/lib/policykit-1/polkit-agent-helper-1
-  - /usr/lib/pt_chown
-  - /usr/lib/spice-gtk/spice-client-glib-usb-acl-helper
-  - /usr/lib/squid3/pinger
-  - /var/lib/docker/aufs/diff/.*
+- /bin/mount
+- /bin/ping
+- /bin/ping6
+- /bin/umount
+- /bin/fusermount
+- /bin/su
+- /sbin/mount.nfs
+- /usr/bin/chfn
+- /usr/bin/chsh
+- /usr/bin/cryptmount
+- /usr/bin/fping
+- /usr/bin/fping6
+- /usr/bin/gpasswd
+- /usr/bin/mtr
+- /usr/bin/newgrp
+- /usr/bin/passwd
+- /usr/bin/pkexec
+- /usr/bin/sudo
+- /usr/bin/sudoedit
+- /usr/lib/dbus-1.0/dbus-daemon-launch-helper
+- /usr/lib/eject/dmcrypt-get-device
+- /usr/lib/landscape/apt-update
+- /usr/lib/nagios/plugins/check_dhcp
+- /usr/lib/openssh/ssh-keysign
+- /usr/lib/policykit-1/polkit-agent-helper-1
+- /usr/lib/pt_chown
+- /usr/lib/spice-gtk/spice-client-glib-usb-acl-helper
+- /usr/lib/squid3/pinger
+- /var/lib/docker/aufs/diff/.*
 no_linprocfs: false
 random_source: /dev/urandom
 root_domain: false

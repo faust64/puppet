@@ -7,6 +7,6 @@ nagios_partitions_watchlist:
 
 # Rsyslog / syslog
 rsyslog_collect:
-  - 10.42.0.0/15
+- 10.42.0.0/15
 #rsyslog_to_ossec: true
 rsyslog_hub: false

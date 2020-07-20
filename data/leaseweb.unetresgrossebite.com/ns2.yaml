@@ -1,5 +1,5 @@
 additional_classes:
-  - Fail2ban
+- Fail2ban
 
 # Fail2ban
 fail2ban_do_named: true

@@ -1,29 +1,29 @@
 additional_classes:
-  - Muninnode
+- Muninnode
 
 # OpenSSH
 ssh_tcp_wrappers:
-  - 10.42.42.0/24
-  - 51.254.93.64/32
-  - 10.42.242.0/24
-  - 127.0.0.1/32
+- 10.42.42.0/24
+- 51.254.93.64/32
+- 10.42.242.0/24
+- 127.0.0.1/32
 
 # Postfix
 postfix_munin: true
 postfix_routeto: deepthroat.unetresgrossebite.com
 postfix_smtp_generic_maps:
   root@unetresgrossebite.com:
-    - \.unetresgrossebite\.com
+  - \.unetresgrossebite\.com
   "$1@unetresgrossebite.com":
-    - (.*)@undomaine.42
+  - (.*)@undomaine.42
   "$1@emma-earth.fr":
-    - (.*)@emma-earth\.com
-    - (.*)@emma-earth\.net
-    - (.*)@emma-earth\.org
+  - (.*)@emma-earth\.com
+  - (.*)@emma-earth\.net
+  - (.*)@emma-earth\.org
 
 # Saslauthd
 saslauthd_run_dir: /var/spool/postfix/var/run/saslauthd
 
 # Spamassassin
 spamassassin_trusted_networks:
-  - 10.42/15
+- 10.42/15

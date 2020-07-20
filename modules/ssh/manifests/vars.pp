@@ -1,5 +1,6 @@
 class ssh::vars {
     $access_class      = lookup("access_class")
+    $auto_disconnect   = lookup("ssh_auto_disconnect")
     $ciphers           = lookup("ssh_ciphers")
     $host_keys         = lookup("ssh_host_keys")
     $moduli_dir        = lookup("ssh_moduli_dir")

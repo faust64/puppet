@@ -2,5 +2,5 @@ auditd_conf_dir: /etc/audit
 snmp_uptodate_new: true
 rsyslog_version: 8
 stunnel_options:
-  - NO_SSLv2
-  - CIPHER_SERVER_PREFERENCE
+- NO_SSLv2
+- CIPHER_SERVER_PREFERENCE

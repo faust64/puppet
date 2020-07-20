@@ -1,14 +1,14 @@
 additional_classes:
-  - Camtrace
-  - Ipfw
+- Camtrace
+- Ipfw
 
 deported_ports: /disk1
 
 # Accounts
 generic_group: camtrace
 generic_groups:
-  - camtrace
-  - wheel
+- camtrace
+- wheel
 generic_home_dir: /usr/local
 generic_user: camtrace
 
@@ -52,7 +52,7 @@ php_mod_zlib: true
 php_post_max_size: 128M
 php_serialize_precision: 100
 php_zend_extensions:
-  - /usr/local/lib/php/20090626/ioncube/ioncube_loader.so
+- /usr/local/lib/php/20090626/ioncube/ioncube_loader.so
 
 # PostgreSQL
 postgres_data_dir: /disk/dbdata

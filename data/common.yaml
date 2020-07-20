@@ -13,7 +13,7 @@ airsonic_sync_bwlimit: 100
 
 # Apache
 apache_allow_privates:
-  - 10.42.0.0/15
+- 10.42.0.0/15
 apache_searchgroup: ou=groups,dc=unetresgrossebite,dc=com
 apache_searchuser: ou=users,dc=unetresgrossebite,dc=com
 apache_serveradmin: admin@unetresgrossebite.com
@@ -58,28 +58,28 @@ clamav_contact: samuel@unetresgrossebite.com
 # Fail2ban
 fail2ban_contact: samuel@unetresgrossebite.com
 fail2ban_ignoreips:
-  - 10.42.42.0/24
-  - 5.79.79.159
-  - 5.135.4.208/29
-  - 10.42.44.20
-  - 37.48.71.168
-  - 37.59.33.201/32
-  - 37.59.33.202/32
-  - 37.59.45.201
-  - 37.187.122.201/32
-  - 51.254.93.64/29
-  - 54.36.76.176/29
-  - 62.210.188.140
-  - 78.193.67.92
-  - 87.98.218.22/32
-  - 91.121.2.215/32
-  - 95.211.136.210/31
-  - 95.211.136.212
-  - 95.211.205.36
-  - 151.80.43.230/32
-  - 176.31.250.180/32
-  - 188.165.212.140
-  - 127.0.0.1/8
+- 10.42.42.0/24
+- 5.79.79.159
+- 5.135.4.208/29
+- 10.42.44.20
+- 37.48.71.168
+- 37.59.33.201/32
+- 37.59.33.202/32
+- 37.59.45.201
+- 37.187.122.201/32
+- 51.254.93.64/29
+- 54.36.76.176/29
+- 62.210.188.140
+- 78.193.67.92
+- 87.98.218.22/32
+- 91.121.2.215/32
+- 95.211.136.210/31
+- 95.211.136.212
+- 95.211.205.36
+- 151.80.43.230/32
+- 176.31.250.180/32
+- 188.165.212.140
+- 127.0.0.1/8
 
 # Git
 git_gitmaster_mail: samuel@unetresgrossebite.com
@@ -101,14 +101,14 @@ contact_alerts_ipsecctl: alertes-firewalls@unetresgrossebite.com
 
 # Jesred
 jesred_regexpr:
-  - "(.*)archive.ubuntu.com/ubuntu"
-  - "security.ubuntu.com/ubuntu"
-  - "ftp.debian.org/debian"
-  - "security.debian.org/debian"
-  - "repository.unetresgrossebite.com/debian"
-  - "debian.unetresgrossebite.com/debian"
+- "(.*)archive.ubuntu.com/ubuntu"
+- "security.ubuntu.com/ubuntu"
+- "ftp.debian.org/debian"
+- "security.debian.org/debian"
+- "repository.unetresgrossebite.com/debian"
+- "debian.unetresgrossebite.com/debian"
 jesred_rewrite_for:
-  - 10.42.0.0/15
+- 10.42.0.0/15
 
 # Katello
 foreman_fqdn: katello.vms.intra.unetresgrossebite.com
@@ -129,7 +129,7 @@ mrtg_monitor: unetresgrossebite.com
 
 # Munin-node
 munin_sensors:
-  - temp
+- temp
 
 # Nagios
 nagios_contact_escalate: admins
@@ -156,24 +156,24 @@ nagios_contacts:
 named_contact: admin@unetresgrossebite.com
 #named_master: 10.42.44.100
 named_zones_check:
-  - emma-earth.com
-  - emma-earth.fr
-  - emma-earth.net
-  - emma-earth.org
-  - undomaine.42
-  - unetresgrossebite.com
-  - intra.unetresgrossebite.com
-  - leaseweb.unetresgrossebite.com
-  - adm.intra.unetresgrossebite.com
-  - ceph.intra.unetresgrossebite.com
-  - faust.intra.unetresgrossebite.com
-  - friends.intra.unetresgrossebite.com
-  - plaristote.intra.unetresgrossebite.com
-  - sip.intra.unetresgrossebite.com
-  - surv.intra.unetresgrossebite.com
-  - users.intra.unetresgrossebite.com
-  - vms.intra.unetresgrossebite.com
-  - wifi.intra.unetresgrossebite.com
+- emma-earth.com
+- emma-earth.fr
+- emma-earth.net
+- emma-earth.org
+- undomaine.42
+- unetresgrossebite.com
+- intra.unetresgrossebite.com
+- leaseweb.unetresgrossebite.com
+- adm.intra.unetresgrossebite.com
+- ceph.intra.unetresgrossebite.com
+- faust.intra.unetresgrossebite.com
+- friends.intra.unetresgrossebite.com
+- plaristote.intra.unetresgrossebite.com
+- sip.intra.unetresgrossebite.com
+- surv.intra.unetresgrossebite.com
+- users.intra.unetresgrossebite.com
+- vms.intra.unetresgrossebite.com
+- wifi.intra.unetresgrossebite.com
 
 # NextCloud
 nextcloud_domains:
@@ -190,14 +190,15 @@ ntp_method: DCF
 
 # OpenDKIM
 opendkim_sign_domains:
-  - emma-earth.fr
-  - undomaine.42
-  - unetresgrossebite.com
+- emma-earth.fr
+- undomaine.42
+- unetresgrossebite.com
 opendkim_trusted_hosts:
-  - 5.135.4.214/32
-  - 10.42.0.0/15
-  - 37.48.71.168/32
-  - 78.193.67.92/32
+- 5.135.4.214/32
+- 54.36.76.182/32
+- 10.42.0.0/15
+- 37.48.71.168/32
+- 78.193.67.92/32
 
 # OpenLDAP
 openldap_contact: admin@unetresgrossebite.com
@@ -241,9 +242,9 @@ ssh_keys_database:
     pentagram: syn2
     type: ssh-rsa
 ssh_tcp_wrappers:
-  - 10.42.42.0/24
-  - 10.42.242.0/24
-  - 127.0.0.1/32
+- 10.42.42.0/24
+- 10.42.242.0/24
+- 127.0.0.1/32
 
 # OpenSSL
 pki_contact: samuel@unetresgrossebite.com
@@ -268,8 +269,8 @@ ossec_mail_from: noreply@unetresgrossebite.com
 #ossec_manager: 10.42.242.156 / was destroyed and never re-created
 ossec_manager: false
 ossec_whitelist:
-  - 127.0.0.1
-  - 10.42.42.42
+- 127.0.0.1
+- 10.42.42.42
 
 # OwnCloud
 owncloud_domains:
@@ -280,7 +281,7 @@ owncloud_mail_domain: unetresgrossebite.com
 
 # Pakiti
 pakiti_admins:
-  - faust
+- faust
 pakiti_upstream: pakiti.vms.intra.unetresgrossebite.com
 
 # Patchdashboard
@@ -294,13 +295,13 @@ peerio_apt_repo_key_author: samuel@peerio.com
 # PF
 contact_alerts_pf: alertes-firewalls@unetresgrossebite.com
 munin_ip:
-  - 10.42.242.203
-  - 10.42.242.206
+- 10.42.242.203
+- 10.42.242.206
 sip_providers:
-  - 83.136.160.0/21
-  - 84.14.241.0/24
-  - 91.121.129.0/24
-  - 212.27.52.0/24
+- 83.136.160.0/21
+- 84.14.241.0/24
+- 91.121.129.0/24
+- 212.27.52.0/24
 
 # Puppet
 puppet_apt_repo: https://repository.unetresgrossebite.com/debian
@@ -311,31 +312,31 @@ puppetmaster: puppet.unetresgrossebite.com
 # Racktables
 do_racktables: true
 munin_vhost_name:
-  - munin.unetresgrossebite.com
+- munin.unetresgrossebite.com
 racktables_ldap_suffix: ou=user,dc=unetresgrossebite,dc=com
 
 # Riak
 riak_ciphers:
-  - ECDHE-RSA-AES128-GCM-SHA256
-  - ECDHE-ECDSA-AES128-GCM-SHA256
-  - ECDHE-RSA-AES256-GCM-SHA384
-  - ECDHE-ECDSA-AES256-GCM-SHA384
-  - DHE-RSA-AES128-GCM-SHA256
-  - DHE-DSS-AES128-GCM-SHA256
-  - DHE-DSS-AES256-GCM-SHA384
-  - DHE-RSA-AES256-GCM-SHA384
-  - ECDHE-RSA-AES128-SHA256
-  - ECDHE-ECDSA-AES128-SHA256
-  - ECDHE-RSA-AES128-SHA
-  - ECDHE-ECDSA-AES128-SHA
-  - ECDHE-RSA-AES256-SHA384
-  - ECDHE-ECDSA-AES256-SHA384
-  - ECDHE-RSA-AES256-SHA
-  - ECDHE-ECDSA-AES256-SHA
-  - DHE-RSA-AES128-SHA256
-  - DHE-RSA-AES128-SHA
-  - DHE-DSS-AES128-SHA256
-  - DHE-RSA-AES256-SHA256
+- ECDHE-RSA-AES128-GCM-SHA256
+- ECDHE-ECDSA-AES128-GCM-SHA256
+- ECDHE-RSA-AES256-GCM-SHA384
+- ECDHE-ECDSA-AES256-GCM-SHA384
+- DHE-RSA-AES128-GCM-SHA256
+- DHE-DSS-AES128-GCM-SHA256
+- DHE-DSS-AES256-GCM-SHA384
+- DHE-RSA-AES256-GCM-SHA384
+- ECDHE-RSA-AES128-SHA256
+- ECDHE-ECDSA-AES128-SHA256
+- ECDHE-RSA-AES128-SHA
+- ECDHE-ECDSA-AES128-SHA
+- ECDHE-RSA-AES256-SHA384
+- ECDHE-ECDSA-AES256-SHA384
+- ECDHE-RSA-AES256-SHA
+- ECDHE-ECDSA-AES256-SHA
+- DHE-RSA-AES128-SHA256
+- DHE-RSA-AES128-SHA
+- DHE-DSS-AES128-SHA256
+- DHE-RSA-AES256-SHA256
 riak_contact: samuel@unetresgrossebite.com
 riak_munin: true
 
@@ -362,24 +363,24 @@ selfoss_db_backend: mysql
 
 # Sendmail
 sendmail_accept_domains:
-  - emma-earth.com
-  - emma-earth.fr
-  - emma-earth.net
-  - emma-earth.org
-  - undomaine.42
-  - unetresgrossebite.com
-  - intra.unetresgrossebite.com
-  - leaseweb.unetresgrossebite.com
-  - adm.intra.unetresgrossebite.com
-  - ceph.intra.unetresgrossebite.com
-  - faust.intra.unetresgrossebite.com
-  - friends.intra.unetresgrossebite.com
-  - plaristote.intra.unetresgrossebite.com
-  - sip.intra.unetresgrossebite.com
-  - surv.intra.unetresgrossebite.com
-  - users.intra.unetresgrossebite.com
-  - vms.intra.unetresgrossebite.com
-  - wifi.intra.unetresgrossebite.com
+- emma-earth.com
+- emma-earth.fr
+- emma-earth.net
+- emma-earth.org
+- undomaine.42
+- unetresgrossebite.com
+- intra.unetresgrossebite.com
+- leaseweb.unetresgrossebite.com
+- adm.intra.unetresgrossebite.com
+- ceph.intra.unetresgrossebite.com
+- faust.intra.unetresgrossebite.com
+- friends.intra.unetresgrossebite.com
+- plaristote.intra.unetresgrossebite.com
+- sip.intra.unetresgrossebite.com
+- surv.intra.unetresgrossebite.com
+- users.intra.unetresgrossebite.com
+- vms.intra.unetresgrossebite.com
+- wifi.intra.unetresgrossebite.com
 
 # SickBeard
 sickbeard_contact: samuel@unetresgrossebite.com
@@ -389,13 +390,13 @@ spamassassin_contact: root@unetresgrossebite.com
 
 # Squid
 squid_exceptions:
-  - .emma-earth.com
-  - .emma-earth.fr
-  - .emma-earth.net
-  - .emma-earth.org
-  - .undomaine.42
-  - .unetresgrossebite.com
-  - localhost
+- .emma-earth.com
+- .emma-earth.fr
+- .emma-earth.net
+- .emma-earth.org
+- .undomaine.42
+- .unetresgrossebite.com
+- localhost
 
 # Subsonic
 subsonic_alerts: root@unetresgrossebite.com
@@ -425,8 +426,8 @@ transmission_contact: samuel@unetresgrossebite.com
 
 # Unbound
 unbound_recurse_networks:
-  - 10.42.0.0/16
-  - 10.43.0.0/23
+- 10.42.0.0/16
+- 10.43.0.0/23
 
 # Vlist
 vlist_contact: admin@unetresgrossebite.com
@@ -443,9 +444,9 @@ x11vnc_contact: admin@unetresgrossebite.com
 csp_report: https://peerio.report-uri.io/r/default/csp/enforce
 #csp_report: https://unetresgrossebite.report-uri.io/r/default/csp/enforce
 csp_sources:
-  - unetresgrossebite.com
-  - intra.unetresgrossebite.com
-  - leaseweb.unetresgrossebite.com
+- unetresgrossebite.com
+- intra.unetresgrossebite.com
+- leaseweb.unetresgrossebite.com
 hpkp_report: false
 public_key_pins: false
 

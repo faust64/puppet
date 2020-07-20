@@ -1,5 +1,5 @@
 additional_classes:
-  - vlist
+- vlist
 
 # Apache
 apache_mod_authldap: true

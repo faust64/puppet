@@ -1,6 +1,6 @@
 additional_classes:
-  - Munin
-  - Mrtg
+- Munin
+- Mrtg
 
 # Apache
 apache_mod_cgid: true
@@ -9,8 +9,8 @@ apache_mod_php: true
 
 # Cron
 cron_allowed_users:
-  - munin
-  - root
+- munin
+- root
 
 # Nagios
 nagios_load_crit_threshold: "12.0,12.0,12.0"

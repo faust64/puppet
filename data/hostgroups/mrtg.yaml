@@ -1,5 +1,5 @@
 additional_classes:
-  - Mrtg
+- Mrtg
 
 # Apache
 apache_mod_php: true

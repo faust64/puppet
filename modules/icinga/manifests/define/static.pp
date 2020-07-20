@@ -143,6 +143,29 @@ define icinga::define::static($host_contact   = "root",
 		}
 	    }
     	}
+	"amd64-k8s": {
+	    $iconimagealt   = $srvclass
+	    $iconimage      = "utgb/kubernetes.png"
+	    $src            = "servers/k8s"
+	    $statusmapimage = "utgb/debian.gd2"
+	    if ($name == "master1.friends.intra.unetresgrossebite.com"
+		    or $name == "master2.friends.intra.unetresgrossebite.com"
+		    or $name == "master3.friends.intra.unetresgrossebite.com") {
+		$checks = [ "certificates", "crio", "kubelet", "ioerrors",
+			    "oom", "pvs_usage", "rogue_containers", "etcd" ]
+	    } else {
+		$checks = [ "certificates", "crio", "kubelet", "ioerrors",
+			    "oom", "pvs_usage", "rogue_containers" ]
+	    }
+	}
+	"ceph": {
+	    $iconimagealt   = $srvclass
+	    $iconimage      = "utgb/centos.png"
+	    $src            = "servers/k8s"
+	    $statusmapimage = "utgb/centos.gd2"
+	    $checks = [ "certificates", "fdesc", "fsck", "load", "mem",
+			"ntpq", "oom", "rprocs", "temp", "uptime" ]
+	}
 	"ocp4": {
 	    $iconimagealt   = $srvclass
 	    $iconimage      = "utgb/centos.png"
@@ -164,7 +187,7 @@ define icinga::define::static($host_contact   = "root",
 	"rpi-k8s": {
 	    $iconimagealt   = $srvclass
 	    $iconimage      = "utgb/kubernetes.png"
-	    $src            = "servers/rpi-k8s"
+	    $src            = "servers/k8s"
 	    $statusmapimage = "utgb/debian.gd2"
 	    if ($name == "hellenes.friends.intra.unetresgrossebite.com") {
 		$checks = [ "certificates", "fdesc", "fsck", "load", "mem",

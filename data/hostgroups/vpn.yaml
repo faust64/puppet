@@ -1,7 +1,7 @@
 additional_classes:
-  - Unbound
-  - Openvpn
-  - Fail2ban
+- Unbound
+- Openvpn
+- Fail2ban
 
 # Apache
 apache_listen_ports:

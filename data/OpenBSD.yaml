@@ -38,15 +38,15 @@ munin_log_dir: /var/log/munin
 munin_node_service_name: munin_node
 munin_plugins_dir: /usr/local/libexec/munin/plugins
 munin_probes:
-  - cpu
-  - df
-  - intr
-  - load
-  - open_files
-  - processes
-  - vmstat
+- cpu
+- df
+- intr
+- load
+- open_files
+- processes
+- vmstat
 munin_physical_probes:
-  - uptime
+- uptime
 munin_runtime_group: wheel
 munin_user: _munin
 
@@ -146,32 +146,32 @@ unbound_runtime_user: _unbound
 unbound_var_dir: /var/unbound
 
 fs_legit_suid:
-  - /sbin/ping
-  - /sbin/ping6
-  - /sbin/shutdown
-  - /usr/bin/chfn
-  - /usr/bin/chpass
-  - /usr/bin/chsh
-  - /usr/bin/doas
-  - /usr/bin/passwd
-  - /usr/bin/rsh
-  - /usr/bin/su
-  - /usr/bin/sudo
-  - /usr/bin/sudoedit
-  - /usr/X11R6/bin/Xorg
-  - /usr/libexec/auth/login_chpass
-  - /usr/libexec/auth/login_krb5
-  - /usr/libexec/auth/login_krb5-or-pwd
-  - /usr/libexec/auth/login_lchpass
-  - /usr/libexec/auth/login_passwd
-  - /usr/libexec/auth/login_tis
-  - /usr/libexec/lockspool
-  - /usr/libexec/ssh-keysign
-  - /usr/local/sbin/fping
-  - /usr/local/sbin/fping6
-  - /usr/sbin/ppp
-  - /usr/sbin/pppd
-  - /usr/sbin/sliplogin
-  - /usr/sbin/traceroute
-  - /usr/sbin/traceroute6
+- /sbin/ping
+- /sbin/ping6
+- /sbin/shutdown
+- /usr/bin/chfn
+- /usr/bin/chpass
+- /usr/bin/chsh
+- /usr/bin/doas
+- /usr/bin/passwd
+- /usr/bin/rsh
+- /usr/bin/su
+- /usr/bin/sudo
+- /usr/bin/sudoedit
+- /usr/X11R6/bin/Xorg
+- /usr/libexec/auth/login_chpass
+- /usr/libexec/auth/login_krb5
+- /usr/libexec/auth/login_krb5-or-pwd
+- /usr/libexec/auth/login_lchpass
+- /usr/libexec/auth/login_passwd
+- /usr/libexec/auth/login_tis
+- /usr/libexec/lockspool
+- /usr/libexec/ssh-keysign
+- /usr/local/sbin/fping
+- /usr/local/sbin/fping6
+- /usr/sbin/ppp
+- /usr/sbin/pppd
+- /usr/sbin/sliplogin
+- /usr/sbin/traceroute
+- /usr/sbin/traceroute6
 random_source: /dev/arandom

@@ -9,7 +9,7 @@ munin_node_listenaddr: 10.42.242.107
 
 # Nagios
 nagios_hp_raid:
-  - sda
+- sda
 nagios_listenaddr: 10.42.242.107
 nagios_smart_disks: False
 

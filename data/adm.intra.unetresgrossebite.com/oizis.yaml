@@ -7,17 +7,17 @@ munin_node_listenaddr: 10.42.242.105
 #has_lm_sensors: true
 nagios_listenaddr: 10.42.242.105
 nagios_md_raid:
-#  - md0
-#  - md1
-  - md2
-  - md127
+#- md0
+#- md1
+- md2
+- md127
 nagios_smart_disks:
-  - sda
-  - sdb
-  - sdc
-  - sdd
-  - sde
-  - sdf
+- sda
+- sdb
+- sdc
+- sdd
+- sde
+- sdf
 
 # SNMP
 snmp_listenaddr: 10.42.242.105

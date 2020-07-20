@@ -11,16 +11,16 @@ asterisk_common_routes:
   bordeaux:
     intra: true
     patterns:
-      - "_3XXXX"
+    - "_3XXXX"
     remote: bdx
     routes:
-      - bdx_pub
-      - bdx
+    - bdx_pub
+    - bdx
 asterisk_dahdi_chans:
   "1,1,0,css,hdb3":
     channels:
-      - "1-15"
-      - "17-31"
+    - "1-15"
+    - "17-31"
     control: "16"
     group: 0-11
     context: from-external
@@ -57,7 +57,7 @@ asterisk_queues:
       description: Accueil
       fallback: ext-group,601
       members:
-        - "11100"
+      - "11100"
 asterisk_sip_trunks:
   sip.intra.unetresgrossebite.com:
     free:
@@ -74,18 +74,18 @@ asterisk_time_conditions:
   sip.intra.unetresgrossebite.com:
     NightAndWeekends:
       conditions:
-        -
-          startday: fri
-          starthour: "18:30"
-          startmday: "1"
-          startmonth: jan
-          stopday: mon
-          stophour: "08:30"
-          stopmday: "31"
-          stopmonth: dec
-        -
-          starthour: "19:00"
-          stophour: "08:30"
+      -
+        startday: fri
+        starthour: "18:30"
+        startmday: "1"
+        startmonth: jan
+        stopday: mon
+        stophour: "08:30"
+        stopmday: "31"
+        stopmonth: dec
+      -
+        starthour: "19:00"
+        stophour: "08:30"
       destif: ext-local,vmu99999
       destunless: ext-queues,107
       did: "141401100"

@@ -1,5 +1,5 @@
 additional_classes:
-  - Racktables
+- Racktables
 
 # Apache
 apache_mod_action: true

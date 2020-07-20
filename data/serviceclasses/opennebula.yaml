@@ -1,9 +1,9 @@
 additional_classes:
-  - Iscsiinitiator
-  - Kvm
-  - Qemu
-  - Libvirt
-  - Opennebula
+- Iscsiinitiator
+- Kvm
+- Qemu
+- Libvirt
+- Opennebula
 
 # Collectd
 collectd_default_plugins:
@@ -11,20 +11,20 @@ collectd_default_plugins:
   disk: false
   df:
     MountPoint:
-      - /
+    - /
     FSType:
-      - rootfs
-      - tmpfs
+    - rootfs
+    - tmpfs
     IgnoreSelected: true
   interface:
     Interface:
-      - br0
-      - br4
-      - br7
-      - br8
-      - br11
-      - br10
-      - br42
+    - br0
+    - br4
+    - br7
+    - br8
+    - br11
+    - br10
+    - br42
   load: false
   memory: false
   processes: false
@@ -56,10 +56,10 @@ ntp_update_minute: 23
 
 # OpenSSH
 ssh_tcp_wrappers:
-  - 10.42.42.0/24
-  - 10.42.242.0/24
-  - 10.42.46.0/24
-  - 127.0.0.1/32
+- 10.42.42.0/24
+- 10.42.242.0/24
+- 10.42.46.0/24
+- 127.0.0.1/32
 
 # Qemu
 qemu_has_kvm: true

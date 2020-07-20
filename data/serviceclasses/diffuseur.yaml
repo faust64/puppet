@@ -1,11 +1,11 @@
 additional_classes:
-  - Openbox
-  - Flumotion
+- Openbox
+- Flumotion
 
 # Accounts
 generic_groups:
-  - users
-  - flumotion
+- users
+- flumotion
 
 # Flumotion
 flumotion_forwarder_host: icecast.unetresgrossebite.com

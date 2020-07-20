@@ -1,5 +1,5 @@
 additional_classes:
-  - Media
+- Media
 
 # Apache
 apache_keepalive: "On"

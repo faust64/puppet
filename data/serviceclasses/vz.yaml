@@ -1,7 +1,7 @@
 additional_classes:
-  - Openvz
-# - Vlist
-  - Bacula
+- Openvz
+#- Vlist
+- Bacula
 
 # Apache
 apache_mod_authldap: true
@@ -13,7 +13,7 @@ apache_rsyslog: true
 
 # Bacula
 bacula_file_daemon_fileset:
-  - /etc/vz
+- /etc/vz
 
 # Nagios
 nagios_load_crit_threshold: "8.0,8.0,8.0"
@@ -31,15 +31,15 @@ nagios_procs_warn: 2500
 nagios_runprocs_crit: 800
 nagios_runprocs_warn: 600
 nagios_smart_disks:
-  - sda
+- sda
 
 # Racktables
 racktables_object_id: 4
 
 # Rsync
 rsync_shares:
-  - { name: vz, path: /vz/private, user: root, group: root }
-  - { name: vzconf, path: /etc/vz, user: root, group: root }
+- { name: vz, path: /vz/private, user: root, group: root }
+- { name: vzconf, path: /etc/vz, user: root, group: root }
 
 # SNMP
 snmp_sysservices: 68

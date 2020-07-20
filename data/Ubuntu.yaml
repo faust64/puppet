@@ -26,11 +26,11 @@ ssh_service_name: ssh
 
 # OSSEC
 ossec_ignore:
-  - /dev/.blkid.tab
-  - /etc/mtab
-  - /etc/hosts.deny
-  - /etc/random-seed
-  - /etc/adjtime
+- /dev/.blkid.tab
+- /etc/mtab
+- /etc/hosts.deny
+- /etc/random-seed
+- /etc/adjtime
 
 # PHP - usual suspects
 #php_mod_pdo: true

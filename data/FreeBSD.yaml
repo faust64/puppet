@@ -50,18 +50,18 @@ mail_alias_dir: /etc/mail
 munin_conf_dir: /usr/local/etc/munin
 munin_plugins_dir: /usr/local/share/munin/plugins
 munin_probes:
-  - cpu
-  - df
-  - load
-  - memory
-  - netstat
-  - open_files
-  - processes
-  - users
-  - vmstat
+- cpu
+- df
+- load
+- memory
+- netstat
+- open_files
+- processes
+- users
+- vmstat
 munin_physical_probes:
-  - df_inode
-  - uptime
+- df_inode
+- uptime
 munin_runtime_group: wheel
 munin_sensors: false
 
@@ -137,45 +137,45 @@ xorg_bin: /usr/local/bin/X
 xorg_xauth: /usr/local/bin/xauth
 
 fs_legit_suid:
-  - /bin/rcp
-  - /sbin/mksnap_ffs
-  - /sbin/ping
-  - /sbin/ping6
-  - /sbin/poweroff
-  - /sbin/shutdown
-  - /usr/bin/at
-  - /usr/bin/atq
-  - /usr/bin/atrm
-  - /usr/bin/batch
-  - /usr/bin/chfn
-  - /usr/bin/chpass
-  - /usr/bin/chsh
-  - /usr/bin/crontab
-  - /usr/bin/lock
-  - /usr/bin/login
-  - /usr/bin/opieinfo
-  - /usr/bin/opiepasswd
-  - /usr/bin/passwd
-  - /usr/bin/quota
-  - /usr/bin/rlogin
-  - /usr/bin/rsh
-  - /usr/bin/su
-  - /usr/bin/ypchfn
-  - /usr/bin/ypchpass
-  - /usr/bin/ypchsh
-  - /usr/bin/yppasswd
-  - /usr/libexec/ulog-helper
-  - /usr/libexec/ssh-keysign
-  - /usr/local/bin/pkexec
-  - /usr/local/bin/sudo
-  - /usr/local/libexec/dbus-daemon-launch-helper
-  - /usr/local/libexec/nagios/check_dhcp
-  - /usr/local/libexec/nagios/check_icmp
-  - /usr/local/libexec/polkit-agent-helper-1
-  - /usr/local/libexec/polkit-grant-helper-pam
-  - /usr/local/libexec/polkit-resolve-exe-helper
-  - /usr/local/libexec/polkit-set-default-helper
-  - /usr/sbin/ppp
-  - /usr/sbin/timedc
-  - /usr/sbin/traceroute
-  - /usr/sbin/traceroute6
+- /bin/rcp
+- /sbin/mksnap_ffs
+- /sbin/ping
+- /sbin/ping6
+- /sbin/poweroff
+- /sbin/shutdown
+- /usr/bin/at
+- /usr/bin/atq
+- /usr/bin/atrm
+- /usr/bin/batch
+- /usr/bin/chfn
+- /usr/bin/chpass
+- /usr/bin/chsh
+- /usr/bin/crontab
+- /usr/bin/lock
+- /usr/bin/login
+- /usr/bin/opieinfo
+- /usr/bin/opiepasswd
+- /usr/bin/passwd
+- /usr/bin/quota
+- /usr/bin/rlogin
+- /usr/bin/rsh
+- /usr/bin/su
+- /usr/bin/ypchfn
+- /usr/bin/ypchpass
+- /usr/bin/ypchsh
+- /usr/bin/yppasswd
+- /usr/libexec/ulog-helper
+- /usr/libexec/ssh-keysign
+- /usr/local/bin/pkexec
+- /usr/local/bin/sudo
+- /usr/local/libexec/dbus-daemon-launch-helper
+- /usr/local/libexec/nagios/check_dhcp
+- /usr/local/libexec/nagios/check_icmp
+- /usr/local/libexec/polkit-agent-helper-1
+- /usr/local/libexec/polkit-grant-helper-pam
+- /usr/local/libexec/polkit-resolve-exe-helper
+- /usr/local/libexec/polkit-set-default-helper
+- /usr/sbin/ppp
+- /usr/sbin/timedc
+- /usr/sbin/traceroute
+- /usr/sbin/traceroute6

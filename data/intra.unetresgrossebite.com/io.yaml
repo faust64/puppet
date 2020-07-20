@@ -31,48 +31,48 @@ nagios_listenaddr: 10.42.242.3
 #    local: 10.42.242.3
 #    remote: 10.43.1.1
 net_ifs:
-  - name: em1
-    mtu: 9008
-  - name: em2
-    mtu: 9008
-  - name: em3
-    mtu: 9008
-  - name: vlan1000
-    asterisk: 78.193.67.92
-    bcast: 78.193.67.255
-    carpaddr: 78.193.67.92
-    carpvhid: 1
-    gw: 78.193.67.254
-    mx: 78.193.67.92
-    netmsk: 255.255.255.0
-    reverse: 78.193.67.92
-    rootif: em0
-    routes:
-      - net: 212.27.38.0/24
-        wat: to free
-      - net: 212.27.52.0/24
-        wat: to free
-    sipout: true
-    vid: 1000
-    vpn: 78.193.67.92
-  - name: vlan1003
-    addr: 192.168.10.200
-    bcast: 192.168.10.255
-    carpaddr: 192.168.10.254
-    carpvhid: 12
-    default: true
-    gw: 192.168.10.1
-    netmsk: 255.255.255.0
-    rootif: em0
-    vid: 1003
-  - name: trunk0
-    addr: 172.16.42.2
-    bcast: 172.16.42.7
-    netmsk: 255.255.255.248
-    pfsync: true
-    proof: 10.42.242.9
-    trunkopts: trunkport em1 trunkport em2 trunkport em3
-    trunkproto: lacp
+- name: em1
+  mtu: 9008
+- name: em2
+  mtu: 9008
+- name: em3
+  mtu: 9008
+- name: vlan1000
+  asterisk: 78.193.67.92
+  bcast: 78.193.67.255
+  carpaddr: 78.193.67.92
+  carpvhid: 1
+  gw: 78.193.67.254
+  mx: 78.193.67.92
+  netmsk: 255.255.255.0
+  reverse: 78.193.67.92
+  rootif: em0
+  routes:
+  - net: 212.27.38.0/24
+    wat: to free
+  - net: 212.27.52.0/24
+    wat: to free
+  sipout: true
+  vid: 1000
+  vpn: 78.193.67.92
+- name: vlan1003
+  addr: 192.168.10.200
+  bcast: 192.168.10.255
+  carpaddr: 192.168.10.254
+  carpvhid: 12
+  default: true
+  gw: 192.168.10.1
+  netmsk: 255.255.255.0
+  rootif: em0
+  vid: 1003
+- name: trunk0
+  addr: 172.16.42.2
+  bcast: 172.16.42.7
+  netmsk: 255.255.255.248
+  pfsync: true
+  proof: 10.42.242.9
+  trunkopts: trunkport em1 trunkport em2 trunkport em3
+  trunkproto: lacp
 
 # OSPF
 ospf_router_id: 10.42.242.3

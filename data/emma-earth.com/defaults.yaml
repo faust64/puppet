@@ -1,5 +1,5 @@
 additional_classes:
-  - Firehol
+- Firehol
 
 physical_parent: geras.unetresgrossebite.com
 apt_cacher: false
@@ -14,25 +14,27 @@ modeles_nfs_opts: fstype=nfs4,ro,soft,intr
 
 # Firehol
 firehol_interfaces:
-  - name: eth0
-    description: WAN
-    protection: strong
-    allow:
-      - server icmp accept
-      - server http accept
-      - server https accept
-      - server custom openssh "tcp/1022" default accept
-      - server custom munin "tcp/4949" default accept src "$office_networks"
-      - server custom nrpe "tcp/5666" default accept src "$office_networks"
-      - client all accept
+- name: any
+  description: WAN
+  protection: strong
+  allow:
+  - server icmp accept
+  - server http accept
+  - server https accept
+  - server custom openssh "tcp/1022" default accept
+  - server custom munin "tcp/4949" default accept src "$office_networks"
+  - server custom nrpe "tcp/5666" default accept src "$office_networks"
+  - client all accept
 
 # Munin
 munin_ip:
-  - 51.254.93.69
+- 51.254.93.69
+- 5.135.4.213
 
 # Nagios
 nagios_ip:
-  - 5.135.4.213
+- 5.135.4.213
+- 54.36.76.177
 
 # OpenLDAP
 openldap_ldap_slave: sso.unetresgrossebite.com
@@ -72,12 +74,13 @@ pakiti_site_id: 3
 
 # PF
 dns_ip:
-  - 8.8.8.8
+- 8.8.8.8
 mail_ip:
-  - 78.193.67.92
-mail_mx: 5.135.4.214
+- 78.193.67.92
+mail_mx: 54.36.76.182
 snmp_ip:
-  - 5.135.4.213
+- 5.135.4.213
+- 54.36.76.177
 dns_search: emma-earth.com
 
 # PKI

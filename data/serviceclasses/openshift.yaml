@@ -1,7 +1,7 @@
 additional_classes:
-  - Kvm
-  - Qemu
-  - Libvirt
+- Kvm
+- Qemu
+- Libvirt
 
 # Apache
 apache_mod_authldap: true
@@ -22,7 +22,7 @@ nagios_procs_warn: 2500
 nagios_runprocs_crit: 600
 nagios_runprocs_warn: 500
 nagios_smart_disks:
-  - sda
+- sda
 
 # KVM
 kvm_do_models: false

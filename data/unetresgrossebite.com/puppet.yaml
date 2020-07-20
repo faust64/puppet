@@ -1,25 +1,28 @@
 additional_classes:
-  - Fail2ban
-  - Firehol
+- Fail2ban
+- Firehol
 
 # Firehol
 firehol_interfaces:
-  - name: eth0
-    description: WAN
-    protection: strong
-    allow:
-      - server icmp accept
-      - server custom openssh "tcp/1022" default accept
-      - server custom munin "tcp/4949" default accept src "$office_networks"
-      - server custom nrpe "tcp/5666" default accept src "$office_networks"
-      - server custom puppetdb "tcp/8081" default accept src "$office_networks"
-      - server custom puppet "tcp/8140" default accept src "$office_networks"
-      - client all accept
+- name: any
+  description: WAN
+  protection: strong
+  allow:
+  - server icmp accept
+  - server custom openssh "tcp/1022" default accept
+  - server custom munin "tcp/4949" default accept src "$office_networks"
+  - server custom nrpe "tcp/5666" default accept src "$office_networks"
+  - server custom puppetdb "tcp/8081" default accept src "$office_networks"
+  - server custom puppet "tcp/8140" default accept src "$office_networks"
+  - client all accept
 
 # PF
 dns_ip:
-  - 188.165.212.140
-  - 37.59.45.201
+- 37.59.33.201
+- 37.59.33.202
+
+# SSH
+ssh_auto_disconnect: false
 
 # WANs
 office_networks:

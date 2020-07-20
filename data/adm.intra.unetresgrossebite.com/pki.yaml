@@ -9,12 +9,12 @@ pki_key_org: E.M.M.A. Earth
 pki_key_province: IDF
 pki_key_size: 8192
 pki_domains_lookup:
-  - emma-earth.fr
-  - emma-earth.net
-  - emma-earth.org
-  - emma-earth.com
-  - undomaine.42
-  - unetresgrossebite.com
+- emma-earth.fr
+- emma-earth.net
+- emma-earth.org
+- emma-earth.com
+- undomaine.42
+- unetresgrossebite.com
 
 # OSSEC
 ossec_app_directories:

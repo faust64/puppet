@@ -9,12 +9,12 @@ pki_public: pki.adm.intra.unetresgrossebite.com
 
 # Reverses
 reverse_domains:
-  - intra.unetresgrossebite.com
-  - adm.intra.unetresgrossebite.com
-  - ceph.intra.unetresgrossebite.com
-  - faust.intra.unetresgrossebite.com
-  - friends.intra.unetresgrossebite.com
-  - plaristote.intra.unetresgrossebite.com
-  - sip.intra.unetresgrossebite.com
-  - surv.intra.unetresgrossebite.com
-  - vms.intra.unetresgrossebite.com
+- intra.unetresgrossebite.com
+- adm.intra.unetresgrossebite.com
+- ceph.intra.unetresgrossebite.com
+- faust.intra.unetresgrossebite.com
+- friends.intra.unetresgrossebite.com
+- plaristote.intra.unetresgrossebite.com
+- sip.intra.unetresgrossebite.com
+- surv.intra.unetresgrossebite.com
+- vms.intra.unetresgrossebite.com

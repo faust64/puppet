@@ -1,13 +1,13 @@
 puppet modules and disclosable hiera configurations, running unetresgrossebite.com domain services
 ==================================================================================================
 
-Home-grown Puppet4 modules set, with defaults and custom configurations - excluding active secrets from `hieradata/private.yaml`, and a couple modules including code that's not mine, nor open sourced.
+Home-grown Puppet6 modules set, with defaults and custom configurations - excluding active secrets from `data/private.yaml`, and a couple modules including code that's not mine, nor open sourced.
 Most of these modules are currently used by my own services (about 30 physicals and 50 VMs), and occasionally hosting customers setup.
-With lots of patience and a few changes to `hieradata/` yamls, deploying your own services shouldn't be much complicated.
+With lots of patience and a few changes to `data/` yamls, deploying your own services shouldn't be much complicated.
 
 # Fair Warning
 
-These modules were re-written from scratch for Puppet 3, based on previous Puppet 2 modules. Some of which have not been deployed in a while, and may require patching.
+These modules were re-written from scratch for Puppet 3, based on previous Puppet 2 modules, then upgraded from Puppet 4 to 6. Some of which have not been deployed in a while, and may require additional patching.
 
 Some headers may be missing, especially on nagios probes or munin plugins.
 
@@ -57,52 +57,8 @@ EOF
 # chown -R puppet:puppet /etc/puppetlabs/puppet
 ```
 
-With older hiera release, we would have replaced the content of
-`/etc/puppetlabs/puppet/hiera.yaml` with the following:
-
-```
----
-:hierarchy:
-  - "%{domain}/%{hostname}"
-  - "%{domain}/%{srvtype}"
-  - "%{domain}/defaults"
-  - "%{domain}/%{operatingsystem}-%{lsbdistcodename}-%{architecture}"
-  - "%{domain}/%{operatingsystem}-%{os.release.major}-%{architecture}"
-  - "%{domain}/%{operatingsystem}-%{operatingsystemrelease}-%{architecture}"
-  - "%{domain}/%{operatingsystem}-%{lsbdistcodename}"
-  - "%{domain}/%{operatingsystem}-%{os.release.major}"
-  - "%{domain}/%{operatingsystem}-%{operatingsystemrelease}"
-  - "%{domain}/%{operatingsystem}-%{architecture}"
-  - "%{domain}/%{operatingsystem}"
-  - private
-  - "hostgroups/%{hostname}"
-  - "serviceclasses/%{srvtype}"
-  - "%{operatingsystem}-%{lsbdistcodename}-%{architecture}"
-  - "%{operatingsystem}-%{operatingsystemrelease}-%{architecture}"
-  - "%{operatingsystem}-%{os.release.major}-%{architecture}"
-  - "%{operatingsystem}-%{lsbdistcodename}"
-  - "%{operatingsystem}-%{operatingsystemrelease}"
-  - "%{operatingsystem}-%{os.release.major}"
-  - "%{operatingsystem}-%{architecture}"
-  - "%{operatingsystem}"
-  - networks
-  - common
-  - defaults
-:backends:
-  - yaml
-:yaml:
-  :datadir: '/etc/puppetlabs/code/environments/%{environment}/hieradata'
-:logger: console
-```
-
-In that case, hiera variables would go in
-`/etc/puppetlabs/code/environments/production/hieradata`.
-
-Now, our hiera configuration should be based on `./hiera.yaml`,
-and variables loaded from `/etc/puppetlabs/code/environments/production/data`.
-
-Change your working directory to `/etc/puppetlabs/code/environments/`, clone
-this repository:
+Next, change your working directory to `/etc/puppetlabs/code/environments/`,
+and clone this repository:
 
 ```
 test -d production && mv production production.orig
@@ -110,8 +66,6 @@ git clone https://github.com/faust64/puppet production
 cd production
 puppet module install puppetlabs-stdlib --version 6.3.0
 puppet module install puppetlabs-nagios_core --version 1.0.3
-#older hiera:
-mv data hieradata
 ```
 
 To avoid filling your Puppetmaster filesystem with reports, add some daily job
@@ -145,7 +99,7 @@ fi
 cat <<EOF >/etc/puppet/puppet.conf
 [main]
 certname = $FQDN
-server = puppet.unetresgrossebite.com
+server = <puppet-fqdn>
 ssldir = /var/lib/puppet/ssl
 environment = production
 runinterval = 1h

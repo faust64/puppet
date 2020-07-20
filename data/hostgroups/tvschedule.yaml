@@ -1,7 +1,7 @@
 additional_classes:
-  - Medusa
-  - Sickbeard
-# - Sonarr
+- Medusa
+- Sickbeard
+#- Sonarr
 
 # Apache
 apache_mod_proxy_http: true

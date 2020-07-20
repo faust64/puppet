@@ -5,9 +5,9 @@ airsonic_do_flac: true
 airsonic_music_root: /goinfre/media/Music
 airsonic_sync_bwlimit: 5000
 airsonic_sync_directories:
-  - Lossless
-  - Main
-  - Videos
+- Lossless
+- Main
+- Videos
 
 # Munin-Node
 vps_with_munin: true
@@ -26,6 +26,6 @@ subsonic_do_flac: true
 subsonic_music_root: /goinfre/media/Music
 subsonic_sync_bwlimit: 5000
 subsonic_sync_directories:
-  - Lossless
-  - Main
-  - Videos
+- Lossless
+- Main
+- Videos

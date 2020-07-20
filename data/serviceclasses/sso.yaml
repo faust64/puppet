@@ -1,6 +1,6 @@
 additional_classes:
-  - Openldap
-  - Apache
+- Openldap
+- Apache
 
 # Apache
 apache_listen_ports:

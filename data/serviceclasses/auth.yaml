@@ -4,18 +4,18 @@ freeradius_ldap_base: ou=users,dc=unetresgrossebite,dc=com
 
 # OpenLDAP
 ldap_modules:
-  - back_hdb
-  - memberof
-  - ppolicy
-  - auditlog
-  - dynlist
+- back_hdb
+- memberof
+- ppolicy
+- auditlog
+- dynlist
 ldap_schemas:
-  - core.shcma
-  - cosine.schema
-  - nis.schema
-  - inetorgperson.schema
-  - samba.schema
-  - ppolicy.schema
-  - openssh-lpk.schema
-  - kerberos.schema
-  - dyngroup.schema
+- core.shcma
+- cosine.schema
+- nis.schema
+- inetorgperson.schema
+- samba.schema
+- ppolicy.schema
+- openssh-lpk.schema
+- kerberos.schema
+- dyngroup.schema

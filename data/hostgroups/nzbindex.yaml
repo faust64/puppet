@@ -1,5 +1,5 @@
 additional_classes:
-  - Newznab
+- Newznab
 
 # Apache
 apache_listen_ports:

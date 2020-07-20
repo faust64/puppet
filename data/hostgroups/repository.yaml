@@ -1,5 +1,5 @@
 additional_classes:
-  - Packages
+- Packages
 
 # Apache
 mod_autoindex: true

@@ -1,8 +1,8 @@
 additional_classes:
-  - Iscsiinitiator
-  - Xen
-  - Qemu
-  - Libvirt
+- Iscsiinitiator
+- Xen
+- Qemu
+- Libvirt
 
 # Apache
 apache_mod_authldap: true
@@ -23,7 +23,7 @@ nagios_procs_warn: 600
 nagios_runprocs_crit: 100
 nagios_runprocs_warn: 80
 nagios_smart_disks:
-  - sda
+- sda
 
 # Qemu
 qemu_has_kvm: true
@@ -33,7 +33,7 @@ racktables_object_id: 4
 
 # Rsync
 rsync_shares:
-  - { name: kvmconf, path: /etc/libvirt, user: root, group: root }
+- { name: kvmconf, path: /etc/libvirt, user: root, group: root }
 
 # SNMP
 snmp_sysservices: 68

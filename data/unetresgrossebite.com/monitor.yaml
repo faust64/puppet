@@ -1,20 +1,20 @@
 additional_classes:
-  - Fail2ban
-  - Firehol
+- Fail2ban
+- Firehol
 
 # Firehol
 firehol_interfaces:
-  - name: eth0
-    description: WAN
-    protection: strong
-    allow:
-      - server icmp accept
-      - server http accept
-      - server https accept
-      - server custom openssh "tcp/1022" default accept
-      - server custom munin "tcp/4949" default accept src "$office_networks"
-      - server custom nrpe "tcp/5666" default accept src "$office_networks"
-      - client all accept
+- name: any
+  description: WAN
+  protection: strong
+  allow:
+  - server icmp accept
+  - server http accept
+  - server https accept
+  - server custom openssh "tcp/1022" default accept
+  - server custom munin "tcp/4949" default accept src "$office_networks"
+  - server custom nrpe "tcp/5666" default accept src "$office_networks"
+  - client all accept
 
 # Letsencrypt
 letsencrypt_renew_day: 20
@@ -23,19 +23,22 @@ letsencrypt_renew_min: 44
 
 # Icinga
 icinga_check_domains:
-  - unetresgrossebite.com
+- unetresgrossebite.com
 icinga_check_ssl:
-  - bacula.unetresgrossebite.com
-  - blog.unetresgrossebite.com
-  - cloud.unetresgrossebite.com
-  - gitlab.unetresgrossebite.com
-  - play.unetresgrossebite.com
-  - racktables.unetresgrossebite.com
-  - repository.unetresgrossebite.com
-  - smokeping.unetresgrossebite.com
-  - sso.unetresgrossebite.com
-  - tvschedule.unetresgrossebite.com
-  - wiki.unetresgrossebite.com
+- bacula.unetresgrossebite.com
+- blog.unetresgrossebite.com
+- cloud.unetresgrossebite.com
+- gitlab.unetresgrossebite.com
+- play.unetresgrossebite.com
+- racktables.unetresgrossebite.com
+- repository.unetresgrossebite.com
+- smokeping.unetresgrossebite.com
+- sso.unetresgrossebite.com
+- tvschedule.unetresgrossebite.com
+- wiki.unetresgrossebite.com
+icinga_collect_domains:
+- emma-earth.com
+- unetresgrossebite.com
 icinga_static_devices:
 # ipbx.geneopedia.com:
 #   host_ipaddress: 162.251.155.1
@@ -79,12 +82,7 @@ icinga_static_devices:
 #   host_parents: nebula.surfscriptpro.com
 #   srvclass: cpanel
 
-# Icinga
-icinga_collect_domains:
-  - emma-earth.com
-  - unetresgrossebite.com
-
 # PF
 dns_ip:
-  - 188.165.212.140
-  - 37.59.45.201
+- 37.59.33.201
+- 37.59.33.202

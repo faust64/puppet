@@ -1,5 +1,5 @@
 additional_classes:
-  - Wifimgr
+- Wifimgr
 
 # MongoDB
 mongodb_do_service: false

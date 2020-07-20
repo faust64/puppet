@@ -1,5 +1,5 @@
 additional_classes:
-  - Ceph
+- Ceph
 
 # Apache
 apache_mod_headers: true
@@ -15,10 +15,10 @@ nagios_runprocs_warn: 50
 
 # OpenSSH
 ssh_tcp_wrappers:
-  - 10.42.42.0/24
-  - 10.42.46.0/24
-  - 10.42.242.0/24
-  - 127.0.0.1/32
+- 10.42.42.0/24
+- 10.42.46.0/24
+- 10.42.242.0/24
+- 127.0.0.1/32
 
 # Racktables
 racktables_object_id: 4

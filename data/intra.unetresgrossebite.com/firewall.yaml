@@ -1,7 +1,7 @@
 additional_classes:
-  - Nsd
-  - Unbound
-  - Pf
+- Nsd
+- Unbound
+- Pf
 
 # Ifstated
 ifstated_alt_gateway: 10.42.242.1
@@ -44,7 +44,7 @@ ipsec_tunnels: []
 
 # Isakmpd
 isakmpd_listen:
-  - 78.193.67.92
+- 78.193.67.92
 
 # Nagios
 nagios_check_jumbo: trunk0
@@ -74,43 +74,43 @@ nagios_partitions_watchlist:
 nsd_control_enable: true
 nsd_listen_port: 8053
 nsd_serve_domains:
-  - 0.43.10.in-addr.arpa
-  - 1.43.10.in-addr.arpa
-  - 242.42.10.in-addr.arpa
-  - 252.42.10.in-addr.arpa
-  - 253.42.10.in-addr.arpa
-  - 254.42.10.in-addr.arpa
-  - 255.255.10.in-addr.arpa
-  - 40.42.10.in-addr.arpa
-  - 41.42.10.in-addr.arpa
-  - 42.42.10.in-addr.arpa
-  - 43.42.10.in-addr.arpa
-  - 44.42.10.in-addr.arpa
-  - 45.42.10.in-addr.arpa
-  - 46.42.10.in-addr.arpa
+- 0.43.10.in-addr.arpa
+- 1.43.10.in-addr.arpa
+- 242.42.10.in-addr.arpa
+- 252.42.10.in-addr.arpa
+- 253.42.10.in-addr.arpa
+- 254.42.10.in-addr.arpa
+- 255.255.10.in-addr.arpa
+- 40.42.10.in-addr.arpa
+- 41.42.10.in-addr.arpa
+- 42.42.10.in-addr.arpa
+- 43.42.10.in-addr.arpa
+- 44.42.10.in-addr.arpa
+- 45.42.10.in-addr.arpa
+- 46.42.10.in-addr.arpa
 # - undomaine.42
-  - adm.intra.unetresgrossebite.com
-  - ceph.intra.unetresgrossebite.com
-  - faust.intra.unetresgrossebite.com
-  - friends.intra.unetresgrossebite.com
-  - guests.intra.unetresgrossebite.com
-  - intra.unetresgrossebite.com
-  - leaseweb.unetresgrossebite.com
-  - plaristote.intra.unetresgrossebite.com
-  - sip.intra.unetresgrossebite.com
-  - surv.intra.unetresgrossebite.com
-  - users.intra.unetresgrossebite.com
-  - vms.intra.unetresgrossebite.com
-  - wifi.intra.unetresgrossebite.com
-# - unetresgrossebite.ovh
-# - emma-earth.fr
-# - emma-earth.org
-# - emma-earth.net
-# - emma-earth.com
+- adm.intra.unetresgrossebite.com
+- ceph.intra.unetresgrossebite.com
+- faust.intra.unetresgrossebite.com
+- friends.intra.unetresgrossebite.com
+- guests.intra.unetresgrossebite.com
+- intra.unetresgrossebite.com
+- leaseweb.unetresgrossebite.com
+- plaristote.intra.unetresgrossebite.com
+- sip.intra.unetresgrossebite.com
+- surv.intra.unetresgrossebite.com
+- users.intra.unetresgrossebite.com
+- vms.intra.unetresgrossebite.com
+- wifi.intra.unetresgrossebite.com
+#- unetresgrossebite.ovh
+#- emma-earth.fr
+#- emma-earth.org
+#- emma-earth.net
+#- emma-earth.com
 
 # OSPFD
 ospf_database: false
-#  - 0.0.0.0
+#- 0.0.0.0
 ospf_map: false
 #  0.0.0.0:
 #   carp2: passive
@@ -133,7 +133,7 @@ ospf_map: false
 emby_ip: 10.42.42.210
 pf_custom_rules:
   "avivavdi":
-    closedate: 2021/01/01
+    closedate: 2020/15/07
     glpi: 9995
     host:
       vdi.aviva.fr: 146.162.243.106/32
@@ -141,7 +141,7 @@ pf_custom_rules:
       ssh: 8443
     proto: "$t"
     vlans:
-      - vlan42
+    - vlan42
   "rhvpn":
     closedate: 2021/01/01
     glpi: 9996
@@ -151,7 +151,7 @@ pf_custom_rules:
       ssh: 443
     proto: "$u"
     vlans:
-      - vlan42
+    - vlan42
   "txbot":
     closedate: 2020/20/02
     glpi: 9997
@@ -161,7 +161,7 @@ pf_custom_rules:
       ssh: 10666
     proto: "$t"
     vlans:
-      - vlan42
+    - vlan42
   "website":
     closedate: 2020/20/02
     glpi: 9998
@@ -171,7 +171,7 @@ pf_custom_rules:
       ssh: 17777
     proto: "$t"
     vlans:
-      - vlan42
+    - vlan42
 #  "Steam TCP":
 #    closedate: 2099/31/12
 #    glpi: 9999
@@ -181,8 +181,8 @@ pf_custom_rules:
 #      steam: 27014:27050
 #    proto: "$t"
 #    vlans:
-#      - vlan7
-#      - vlan42
+#    - vlan7
+#    - vlan42
 #  "Steam UDP":
 #    closedate: 2099/31/12
 #    glpi: 9999
@@ -197,8 +197,8 @@ pf_custom_rules:
 #      steam6: 27000:28999
 #    proto: "$u"
 #    vlans:
-#      - vlan7
-#      - vlan42
+#    - vlan7
+#    - vlan42
   "Circle.ci":
     closedate: 2099/31/12
     glpi: 9999
@@ -531,7 +531,7 @@ pf_custom_rules:
       ssh: 64000:65000
     proto: "$t"
     vlans:
-      - vlan42
+    - vlan42
 # listing AWS IPs, pro-tip:
 # curl https://ip-ranges.amazonaws.com/ip-ranges.json | grep -E '(ip_prefix|service)' | grep -EB1 '(EC2|AMAZON)' | awk '/ip_prefix/{print $2}' | cut -d'"' -f2 | sort -u | awk '{print "      aws" NR ": " $0}'
 plex_ip: 10.42.42.211
@@ -552,53 +552,53 @@ unbound_do_dnssec: true
 unbound_do_public: true
 unbound_forwarders:
   0.43.10.in-addr.arpa:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   1.43.10.in-addr.arpa:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   242.42.10.in-addr.arpa:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   253.42.10.in-addr.arpa:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   254.42.10.in-addr.arpa:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   255.255.10.in-addr.arpa:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   40.42.10.in-addr.arpa:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   41.42.10.in-addr.arpa:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   42.42.10.in-addr.arpa:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   43.42.10.in-addr.arpa:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   44.42.10.in-addr.arpa:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   45.42.10.in-addr.arpa:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   46.42.10.in-addr.arpa:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   adm.intra.unetresgrossebite.com:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   ceph.intra.unetresgrossebite.com:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   faust.intra.unetresgrossebite.com:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   friends.intra.unetresgrossebite.com:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   intra.unetresgrossebite.com:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   leaseweb.unetresgrossebite.com:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   plaristote.intra.unetresgrossebite.com:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   sip.intra.unetresgrossebite.com:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   surv.intra.unetresgrossebite.com:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   users.intra.unetresgrossebite.com:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   vms.intra.unetresgrossebite.com:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
   wifi.intra.unetresgrossebite.com:
-    - 10.255.255.255@8053
+  - 10.255.255.255@8053
 unbound_pixel_address: 10.255.255.255

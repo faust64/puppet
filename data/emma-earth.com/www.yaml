@@ -1,29 +1,29 @@
 additional_classes:
-  - Clamav
-  - Fail2ban
-  - Firehol
-  - Muninnode
-  - Mysql
-  - Nodejs
+- Clamav
+- Fail2ban
+- Firehol
+- Muninnode
+- Mysql
+- Nodejs
 
 # ClamAV
 clamav_scan_dir:
-  - /opt
-  - /etc/node
+- /opt
+- /etc/node
 
 # Firehol
 firehol_interfaces:
-  - name: eth0
-    description: WAN
-    protection: strong
-    allow:
-      - server icmp accept
-      - server http accept
-      - server https accept
-      - server custom openssh "tcp/1022" default accept
-      - server custom munin "tcp/4949" default accept src "$office_networks"
-      - server custom nrpe "tcp/5666" default accept src "$office_networks"
-      - client all accept
+- name: any
+  description: WAN
+  protection: strong
+  allow:
+  - server icmp accept
+  - server http accept
+  - server https accept
+  - server custom openssh "tcp/1022" default accept
+  - server custom munin "tcp/4949" default accept src "$office_networks"
+  - server custom nrpe "tcp/5666" default accept src "$office_networks"
+  - client all accept
 
 # Letsencrypt
 letsencrypt_renew_day: 21
@@ -32,5 +32,5 @@ letsencrypt_renew_min: 54
 
 # PF
 dns_ip:
-  - 37.59.45.201
-  - 188.165.212.140
+- 37.59.33.202
+- 37.59.33.201

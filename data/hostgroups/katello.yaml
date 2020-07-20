@@ -1,5 +1,5 @@
 additional_classes:
-  - Katello
+- Katello
 
 # Apache
 apache_rsyslog: true

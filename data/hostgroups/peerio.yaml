@@ -1,5 +1,5 @@
 additional_classes:
-  - Peerio
+- Peerio
 
 # Apache
 apache_listen_ports:

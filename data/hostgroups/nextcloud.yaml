@@ -1,6 +1,6 @@
 additional_classes:
-  - Memcache
-  - Nextcloud
+- Memcache
+- Nextcloud
 
 # Apache
 apache_keepalive: "On"
@@ -13,7 +13,7 @@ apache_mod_http2: true
 apache_mod_php: true
 apache_mod_xsendfile: true
 apache_mod_xsendfile_paths:
-  - /tmp/oc-noclean
+- /tmp/oc-noclean
 apache_mpm: prefork
 apache_munin: true
 apache_rsyslog: true
@@ -33,11 +33,11 @@ nginx_rsyslog: true
 ossec_app_directories:
   /var/www/nextcloud: false
 ossec_ignore:
-  - /etc/mtab
-  - /etc/hosts.deny
-  - /etc/random-seed
-  - /etc/adjtime
-  - /var/www/nextcloud/data/nextcloud.log
+- /etc/mtab
+- /etc/hosts.deny
+- /etc/random-seed
+- /etc/adjtime
+- /var/www/nextcloud/data/nextcloud.log
 
 # PHP
 php_apc: true

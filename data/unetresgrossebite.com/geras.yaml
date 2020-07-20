@@ -1,28 +1,28 @@
 additional_classes:
-  - Fail2ban
+- Fail2ban
 
 # Munin-Node
-munin_node_listenaddr: 37.59.45.201
+munin_node_listenaddr: 37.59.33.202
 
 # Nagios
-nagios_listenaddr: 37.59.45.201
+nagios_listenaddr: 37.59.33.202
 nagios_md_raid:
-  - md1
-  - md2
+- md2
+- md4
 nagios_no_parent: true
 nagios_partitions_watchlist:
   root: /
 nagios_smart_disks:
-  - sda
-  - sdb
+- sda
+- sdb
 
 # OpenVZ/Xen/KVM
-vz_default_gateway: 37.59.45.201
+vz_default_gateway: 37.59.33.202
 
 # PF
 dns_ip:
-  - 127.0.0.1
-  - 188.165.212.140
+- 127.0.0.1
+- 37.59.33.201
 
 # SNMP
-snmp_listenaddr: 37.59.45.201
+snmp_listenaddr: 37.59.33.202

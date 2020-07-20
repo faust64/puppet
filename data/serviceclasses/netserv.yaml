@@ -1,10 +1,10 @@
 additional_classes:
-  - Aptcacherng
-  - Openldap
-  - Iscdhcpserver
-  - Squid
-  - Tftpd
-  - Tor
+- Aptcacherng
+- Openldap
+- Iscdhcpserver
+- Squid
+- Tftpd
+- Tor
 
 # Bind
 rndc_conf_dir: /etc/bind

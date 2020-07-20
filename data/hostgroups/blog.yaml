@@ -1,7 +1,7 @@
 additional_classes:
-  - Clamav
-  - Fail2ban
-  - Wordpress
+- Clamav
+- Fail2ban
+- Wordpress
 
 # Apache
 apache_listen_ports:
@@ -13,15 +13,15 @@ apache_mod_status: true
 apache_mpm: prefork
 apache_munin: true
 apache_robots_allow:
-  - '*'
+- '*'
 apache_robots_disallow:
-  - /wp-admin/
+- /wp-admin/
 apache_rsyslog: true
 
 # ClamAV
 clamav_scan_dir:
-  - /usr/share/wordpress
-  - /var/lib/wordpress
+- /usr/share/wordpress
+- /var/lib/wordpress
 
 # Fail2ban
 fail2ban_do_badbots: true
@@ -43,7 +43,12 @@ ossec_app_directories:
     restrict: ".php|.js|.py|.sh|.html"
 
 # Php
+php_mod_curl: true
+php_mod_fileinfo: true
 php_mod_gd: true
-php_mod_ldap: true
-php_mod_mysqli: true
+php_mod_iconv: true
 php_mod_json: true
+php_mod_ldap: true
+php_mod_mbstring: true
+php_mod_mysqli: true
+php_mod_zip: true

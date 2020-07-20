@@ -1,5 +1,5 @@
 additional_classes:
-  - Bacula
+- Bacula
 
 # Apache
 apache_listen_ports:

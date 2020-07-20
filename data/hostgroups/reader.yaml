@@ -1,8 +1,8 @@
 additional_classes:
-# - lilina
-# - miniflux
-  - selfoss
-  - tinytinyrss
+#- lilina
+#- miniflux
+- selfoss
+- tinytinyrss
 
 # Apache
 apache_listen_ports:

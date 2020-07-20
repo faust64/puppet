@@ -1,7 +1,7 @@
 additional_classes:
-  - Clamav
-  - Fail2ban
-  - Apache
+- Clamav
+- Fail2ban
+- Apache
 
 # Apache
 apache_listen_ports:
@@ -20,4 +20,4 @@ nginx_rsyslog: true
 
 # ClamAV
 clamav_scan_dir:
-  - /var/www
+- /var/www
