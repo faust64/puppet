@@ -8,8 +8,12 @@ CRITICAL=2
 ret=OK
 
 if ! systemctl is-active crio >/dev/null 2>&1; then
-    ret=CRITICAL
-    msg="service not running"
+    if ! systemctl is-active containerd >/dev/null 2>&1; then
+	ret=CRITICAL
+	msg="service not running"
+    else
+	msg="service is active"
+    fi
 else
     msg="service is active"
 fi
