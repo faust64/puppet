@@ -28,6 +28,7 @@ if test -s $TMPFILE; then
     else
 	ret=WARNING
     fi
+    msg=$(cat $TMPFILE | tr '\n' ',' | sed 's|,$||')
 fi
 rm -f $TMPFILE
 
