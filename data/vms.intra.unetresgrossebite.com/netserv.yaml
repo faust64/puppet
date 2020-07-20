@@ -15,7 +15,7 @@ ldap_id: 41
 openldap_ldap_slave: sso.unetresgrossebite.com
 
 # PXE
-satellite_ksroot: /pulp/repos/UneTresGrosseBite/Library/content/dist/rhel
+satellite_ksroot: /pulp/repos/UTGB/Library/content/dist/rhel
 satellite_repo: katello.vms.intra.unetresgrossebite.com
 
 # TFTPD

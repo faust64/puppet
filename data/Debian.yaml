@@ -32,6 +32,9 @@ ssh_service_name: ssh
 #php_mod_pdo: true
 #php_mod_mysqli: true
 
+# Puppet
+puppet_conf_dir: /etc/puppet
+
 # SNMP
 snmp_conf_dir: /etc/snmp
 

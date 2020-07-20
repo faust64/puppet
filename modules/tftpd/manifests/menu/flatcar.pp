@@ -1,5 +1,5 @@
 class tftpd::menu::flatcar {
-    $distribs = [ "2303.4.0", "2247.7.0", "2191.5.0" ]
+    $distribs = [ "2512.2.1", "2303.4.0" ]
     $keys     = $tftpd::vars::ssh_keys
     $password = $tftpd::vars::default_pass
     $root_dir = $tftpd::vars::root_dir

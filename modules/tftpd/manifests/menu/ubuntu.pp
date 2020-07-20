@@ -1,6 +1,5 @@
 class tftpd::menu::ubuntu {
-    $distribs    = [ "bionic", "xenial", "trusty" ]
-#   $distribs    = [ "focal", "bionic", "xenial", "trusty" ]
+    $distribs    = [ "focal", "bionic", "xenial" ]
     $locale      = $tftpd::vars::locale
     $locale_long = $tftpd::vars::locale_long
     $root_dir    = $tftpd::vars::root_dir

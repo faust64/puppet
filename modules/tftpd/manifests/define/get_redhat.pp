@@ -29,14 +29,14 @@ define tftpd::define::get_redhat($arch = [ "x86_64" ]) {
 	    "RedHat$name $archi vmlinuz":
 		require => File["Prepare RedHat$name $archi directory"],
 		target  => "$root_dir/installers/redhat${name}/$archi/linux",
-	        url     => "$rhrepo/server/$sdist/$name/$archi/kickstart/images/pxeboot/vmlinuz",
+	        url     => "$rhrepo$rhroot/server/$sdist/$name/$archi/kickstart/images/pxeboot/vmlinuz",
 		wd      => "$root_dir/installers/redhat${name}/$archi";
 	    "RedHat$name $archi initrd.img":
 		nomv    => true,
 		require => File["Prepare RedHat$name $archi directory"],
 		target  => "$root_dir/installers/redhat${name}/$archi/initrd.img",
 		tmout   => 600,
-	        url     => "$rhrepo/server/$sdist/$name/$archi/kickstart/images/pxeboot/initrd.img",
+	        url     => "$rhrepo$rhroot/server/$sdist/$name/$archi/kickstart/images/pxeboot/initrd.img",
 		wd      => "$root_dir/installers/redhat${name}/$archi";
 	}
 

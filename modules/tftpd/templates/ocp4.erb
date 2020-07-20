@@ -8,31 +8,7 @@ menu title OCP4 RH-CoreOS Systems
     menu title OCP4 RH-CoreOS Systems
 	menu label OCP4 RH-CoreOS Systems
 	menu exit
-<% @distribs.each do |dist| -%><% [ "x86_64" ].each do |arch| -%><% if dist == "4.2.0" or dist == "4.1.0" -%>    label -
-	menu label Bootstrap <%=dist%> <%=arch%> - bios
-	kernel installers/ocp4-rhcos-<%=dist%>/<%=arch%>/linux
-	append initrd=installers/ocp4-rhcos-<%=dist%>/<%=arch%>/initrd ip=dhcp rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://<%=@ipaddress%>/ocp4/rhcos-<%=dist%>-<%=arch%>-metal-bios.raw.gz coreos.inst.ignition_url=http://<%=@ipaddress%>/ocp4/bootstrap.ign
-    label -
-	menu label Bootstrap <%=dist%> <%=arch%> - uefi
-	kernel installers/ocp4-rhcos-<%=dist%>/<%=arch%>/linux
-	append initrd=installers/ocp4-rhcos-<%=dist%>/<%=arch%>/initrd ip=dhcp rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://<%=@ipaddress%>/ocp4/rhcos-<%=dist%>-<%=arch%>-metal-uefi.raw.gz coreos.inst.ignition_url=http://<%=@ipaddress%>/ocp4/bootstrap.ign
-    label -
-	menu label Master <%=dist%> <%=arch%> - bios
-	kernel installers/ocp4-rhcos-<%=dist%>/<%=arch%>/linux
-	append initrd=installers/ocp4-rhcos-<%=dist%>/<%=arch%>/initrd ip=dhcp rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://<%=@ipaddress%>/ocp4/rhcos-<%=dist%>-<%=arch%>-metal-bios.raw.gz coreos.inst.ignition_url=http://<%=@ipaddress%>/ocp4/master.ign
-    label -
-	menu label Master <%=dist%> <%=arch%> - uefi
-	kernel installers/ocp4-rhcos-<%=dist%>/<%=arch%>/linux
-	append initrd=installers/ocp4-rhcos-<%=dist%>/<%=arch%>/initrd ip=dhcp rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://<%=@ipaddress%>/ocp4/rhcos-<%=dist%>-<%=arch%>-metal-uefi.raw.gz coreos.inst.ignition_url=http://<%=@ipaddress%>/ocp4/master.ign
-    label -
-	menu label Worker <%=dist%> <%=arch%> - bios
-	kernel installers/ocp4-rhcos-<%=dist%>/<%=arch%>/linux
-	append initrd=installers/ocp4-rhcos-<%=dist%>/<%=arch%>/initrd ip=dhcp rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://<%=@ipaddress%>/ocp4/rhcos-<%=dist%>-<%=arch%>-metal-bios.raw.gz coreos.inst.ignition_url=http://<%=@ipaddress%>/ocp4/worker.ign
-    label -
-	menu label Worker <%=dist%> <%=arch%> - uefi
-	kernel installers/ocp4-rhcos-<%=dist%>/<%=arch%>/linux
-	append initrd=installers/ocp4-rhcos-<%=dist%>/<%=arch%>/initrd ip=dhcp rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://<%=@ipaddress%>/ocp4/rhcos-<%=dist%>-<%=arch%>-metal-uefi.raw.gz coreos.inst.ignition_url=http://<%=@ipaddress%>/ocp4/worker.ign
-<% else -%>    label -
+<% @distribs.each do |dist| -%><% [ "x86_64" ].each do |arch| -%>label -
 	menu label Bootstrap <%=dist%> <%=arch%>
 	kernel installers/ocp4-rhcos-<%=dist%>/<%=arch%>/linux
 	append initrd=installers/ocp4-rhcos-<%=dist%>/<%=arch%>/initrd ip=dhcp rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://<%=@ipaddress%>/ocp4/rhcos-<%=dist%>-<%=arch%>-metal.raw.gz coreos.inst.ignition_url=http://<%=@ipaddress%>/ocp4/bootstrap.ign
@@ -44,5 +20,5 @@ menu title OCP4 RH-CoreOS Systems
 	menu label Worker <%=dist%> <%=arch%>
 	kernel installers/ocp4-rhcos-<%=dist%>/<%=arch%>/linux
 	append initrd=installers/ocp4-rhcos-<%=dist%>/<%=arch%>/initrd ip=dhcp rd.neednet=1 coreos.inst=yes coreos.inst.install_dev=sda coreos.inst.image_url=http://<%=@ipaddress%>/ocp4/rhcos-<%=dist%>-<%=arch%>-metal.raw.gz coreos.inst.ignition_url=http://<%=@ipaddress%>/ocp4/worker.ign
-<% end -%><% end -%><% end -%>
+<% end -%><% end -%>
 menu end

@@ -1,4 +1,4 @@
-define tftpd::define::get_ubuntu($arch = [ "i386", "amd64" ]) {
+define tftpd::define::get_ubuntu($arch = [ "amd64" ]) {
     $root_dir = $tftpd::vars::root_dir
 
     file {
@@ -27,14 +27,14 @@ define tftpd::define::get_ubuntu($arch = [ "i386", "amd64" ]) {
 		nomv    => true,
 		require => File["Prepare Ubuntu $name $archi directory"],
 		target  => "$root_dir/installers/$name/$archi/linux",
-		url     => "http://archive.ubuntu.com/ubuntu/dists/$name/main/installer-$archi/current/images/netboot/ubuntu-installer/$archi/linux",
+		url     => "http://archive.ubuntu.com/ubuntu/dists/$name/main/installer-$archi/current/legacy-images/netboot/ubuntu-installer/$archi/linux",
 		wd      => "$root_dir/installers/$name/$archi";
 	    "Ubuntu $name $archi initrd.img":
 		nomv    => true,
 		require => File["Prepare Ubuntu $name $archi directory"],
 		target  => "$root_dir/installers/$name/$archi/initrd.gz",
 		tmout   => 600,
-		url     => "http://archive.ubuntu.com/ubuntu/dists/$name/main/installer-$archi/current/images/netboot/ubuntu-installer/$archi/initrd.gz",
+		url     => "http://archive.ubuntu.com/ubuntu/dists/$name/main/installer-$archi/current/legacy-images/netboot/ubuntu-installer/$archi/initrd.gz",
 		wd      => "$root_dir/installers/$name/$archi";
 	}
 

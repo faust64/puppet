@@ -8,7 +8,7 @@ menu title Ubuntu Systems
     menu title Ubuntu Systems
 	menu label Ubuntu Systems
 	menu exit
-<% @distribs.each do |dist| -%><% [ "amd64", "i386" ].each do |arch| -%>    label -
+<% @distribs.each do |dist| -%><% [ "amd64" ].each do |arch| -%>    label -
 	menu label <%=dist%> <%=arch%> (KVM auto part.)
 	kernel installers/<%=dist%>/<%=arch%>/linux
 	append vga=normal auto=true priority=critical<% if dist == "lucid" or dist == "precise" -%> netcfg/wireless_essid= netcfg/wireless_wep=<% end -%> preseed/locale=<%=@locale_long%> interface=auto kbd-chooser/method=<%=@locale%> preseed/url=http://pxe.<%=@domain%>/preseed/<%=dist%>_server-kvm-auto.preseed console-setup/ask_detect=false console-keymaps-at/keymap=<%=@locale%> debian-installer/keymap=<%=@locale%> initrd=installers/<%=dist%>/<%=arch%>/initrd.gz --

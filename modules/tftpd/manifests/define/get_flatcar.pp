@@ -26,13 +26,13 @@ define tftpd::define::get_flatcar($arch = [ "amd64" ]) {
 	    "FlatCar $name $archi linux":
 		require => File["Prepare FlatCar $name $archi directory"],
 		target  => "$root_dir/installers/flatcar-$name/$archi/linux",
-		url     => "http://stable.release.flatcar-linux.net/${archi}-usr/$name/flatcar_production_pxe.vmlinuz && mv flatcar_production_pxe.vmlinuz",
+		url     => "http://stable.release.flatcar-linux.net/${archi}-usr/$name/flatcar_production_pxe.vmlinuz",
 		wd      => "$root_dir/installers/flatcar-$name/$archi";
 	    "FlatCar $name $archi initrd.img":
 		require => File["Prepare FlatCar $name $archi directory"],
 		target  => "$root_dir/installers/flatcar-$name/$archi/initrd.gz",
 		tmout   => 900,
-		url     => "http://stable.release.flatcar-linux.net/${archi}-usr/$name/flatcar_production_pxe_image.cpio.gz && mv flatcar_production_pxe_image.cpio.gz",
+		url     => "http://stable.release.flatcar-linux.net/${archi}-usr/$name/flatcar_production_pxe_image.cpio.gz",
 		wd      => "$root_dir/installers/flatcar-$name/$archi";
 	}
 
