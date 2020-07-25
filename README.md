@@ -72,7 +72,8 @@ To avoid filling your Puppetmaster filesystem with reports, add some daily job
 running the following:
 
 ```
-find /var/lib/puppet/reports/ -type f -ctime +7 2>/dev/null | xargs -P 4 -n 20 rm -f
+find /opt/puppetlabs/server/data/puppetserver/reports \
+    -type f -ctime +7 2>/dev/null | xargs -P 4 -n 20 rm -f
 ```
 
 # Bootstrap Puppet Agent
