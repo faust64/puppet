@@ -62,6 +62,7 @@ class nagios::probe {
 
     nagios::define::probe {
 	"alive":
+	    alias          => "check-host-alive",
 	    command        => "check-host-alive",
 	    dependency     => false,
 	    description    => "$fqdn alive",

@@ -59,3 +59,6 @@ postfix_networks:
 - 95.211.205.36/32
 - 176.31.250.180/32
 - 188.165.212.140/32
+
+# SSH
+ssh_auto_disconnect: false

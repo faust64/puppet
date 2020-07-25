@@ -10,6 +10,7 @@ class postfix::config {
     $rbls              = $postfix::vars::rbls
     $routeto           = $postfix::vars::routeto
     $spamassassin_user = $postfix::vars::spamassassin_user
+    $tls_protos        = $postfix::vars::tls_protos
 
     if ($masquerade) {
 	file {

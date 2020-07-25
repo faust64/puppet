@@ -1,0 +1,11 @@
+#!/bin/bash
+
+chgrp -R telegraf /var/spool/postfix/{active,hold,incoming,deferred}
+chmod -R g+rXs /var/spool/postfix/{active,hold,incoming,deferred}
+if grep postdrop /etc/group | grep telegraf >/dev/null; then
+    usermod -a -G postdrop telegraf
+fi
+chmod g+r /var/spool/postfix/maildrop
+if which setfacl >/dev/null 2>&1; then
+    setfacl -Rdm u:telegraf:rX /var/spool/postfix/{active,hold,incoming,deferred,maildrop}
+fi

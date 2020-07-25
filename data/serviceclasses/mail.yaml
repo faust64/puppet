@@ -20,6 +20,9 @@ postfix_smtp_generic_maps:
   - (.*)@emma-earth\.com
   - (.*)@emma-earth\.net
   - (.*)@emma-earth\.org
+postfix_tls_mandatory_protocols:
+- '!SSLv2'
+- '!SSLv3'
 
 # Saslauthd
 saslauthd_run_dir: /var/spool/postfix/var/run/saslauthd

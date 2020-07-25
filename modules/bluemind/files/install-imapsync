@@ -1,0 +1,255 @@
+#!/bin/cat 
+# https://imapsync.lamiral.info/INSTALL.d/INSTALL.Debian.txt 20200721
+# $Id: INSTALL.Debian.txt,v 1.30 2019/11/28 14:36:18 gilles Exp gilles $
+
+This documentation is also located online at 
+https://imapsync.lamiral.info/INSTALL.d/
+https://imapsync.lamiral.info/INSTALL.d/INSTALL.Debian.txt
+
+
+There is three install sections in this document,
+one for Debian 9 Stretch and Debian 10 Buster
+one for Debian 8 Jessie
+one for Debian 7 Wheezy
+
+First a call to Debian packagers
+Why imapsync is not in Debian as a package?
+Imapsync used to be in Debian from 2005-04-25 (release 1.125) to 2011-01-25 (release 1.315).
+It could be in Debian nowadays, as always, my last words on this discussion were 
+"Do what you want, I promise I won't complain anymore about the fact imapsync is on Debian or not."
+https://lists.debian.org/debian-legal/2011/01/msg00058.html
+The license is now "No limits to do anything with this work and this license".
+Feel free.
+See also a more detailed story at
+https://lists.debian.org/debian-user/2016/11/msg00849.html
+
+
+=======================================================================
+     Installing imapsync on Debian 9 Stretch or Debian 10 Buster
+=======================================================================
+
+How to install imapsync dependencies on a Debian system?
+
+The repositories are the classical ones, ie, a
+/etc/apt/sources.list file with:
+
+# Debian 9 Stretch
+deb http://deb.debian.org/debian stretch main contrib
+
+or
+
+# Debian 10 Buster
+deb http://deb.debian.org/debian buster main contrib
+
+
+You need root privilege to run it, be root or use sudo.
+
+apt install -y            \
+  libauthen-ntlm-perl     \
+  libcgi-pm-perl          \
+  libcrypt-openssl-rsa-perl   \
+  libdata-uniqid-perl         \
+  libencode-imaputf7-perl     \
+  libfile-copy-recursive-perl \
+  libfile-tail-perl        \
+  libio-socket-inet6-perl  \
+  libio-socket-ssl-perl    \
+  libio-tee-perl           \
+  libhtml-parser-perl      \
+  libjson-webtoken-perl    \
+  libmail-imapclient-perl  \
+  libparse-recdescent-perl \
+  libmodule-scandeps-perl  \
+  libreadonly-perl         \
+  libregexp-common-perl    \
+  libsys-meminfo-perl      \
+  libterm-readkey-perl     \
+  libtest-mockobject-perl  \
+  libtest-pod-perl         \
+  libunicode-string-perl   \
+  liburi-perl              \
+  libwww-perl              \
+  libtest-nowarnings-perl  \
+  libtest-deep-perl        \
+  libtest-warn-perl        \
+  make                     \
+  cpanminus
+
+
+After installing the dependencies, imapsync should be working,
+go to the section "After installing the dependencies" below.
+
+
+=======================================================================
+             Installing imapsync on Debian 8 Jessie 
+=======================================================================
+
+How to install imapsync dependencies on a Debian system?
+
+You need root priviledge.
+
+The first command installs standard Debian packages:
+apt install           \
+  libauthen-ntlm-perl \
+  libcgi-pm-perl      \
+  libcrypt-openssl-rsa-perl   \
+  libdata-uniqid-perl         \
+  libencode-imaputf7-perl     \
+  libfile-copy-recursive-perl \
+  libfile-tail-perl        \
+  libio-socket-inet6-perl  \
+  libio-socket-ssl-perl    \
+  libio-tee-perl           \
+  libhtml-parser-perl      \
+  libmail-imapclient-perl  \
+  libparse-recdescent-perl \
+  libmodule-scandeps-perl  \
+  libreadonly-perl         \
+  libterm-readkey-perl     \
+  libtest-mockobject-perl  \
+  libtest-pod-perl         \
+  libunicode-string-perl   \
+  liburi-perl              \
+  libwww-perl              \
+  libregexp-common-perl    \
+  libtest-nowarnings-perl  \
+  libtest-deep-perl        \
+  libtest-warn-perl        \
+  make                     \
+  cpanminus
+
+The package libdata-uniqid-perl is in the jessie-backports repository
+https://packages.debian.org/fr/jessie-backports/libdata-uniqid-perl
+
+Here is how to add jessie-backports repository in /etc/apt/sources.list
+
+https://backports.debian.org/Instructions/
+
+If you can't add the jessie-backports repository in /etc/apt/sources.list you
+have to install Perl module Data::Uniqid with cpanm:
+
+  cpanm  Data::Uniqid
+
+The following second command installs "manually" the Perl module Sys::MemInfo
+because Debian 8 Jessie doesn't have this Perl module available via a package 
+(but Debian 9 Stretch does):
+
+  cpanm Sys::MemInfo 
+
+The following optional cpanm command updates Perl module Mail::IMAPClient
+because it is good to be up to date with that imapsync dependency,
+but it is not mandatory since Mail::IMAPClient is installed by
+the Debian package libmail-imapclient-perl:
+
+  cpanm Mail::IMAPClient
+
+Last, in case you need to use XOAUTH2 authentication you have to install   
+the module JSON::WebToken with the command:
+
+  cpanm JSON::WebToken
+
+After installing the dependencies, imapsync should be working,
+go to the section "After installing the dependencies" below.
+
+
+=======================================================================
+               Installing imapsync on Debian 7 Wheezy 
+=======================================================================
+
+How to install imapsync dependencies on a Debian system?
+
+You need root priviledge to run the commands.
+
+The first command installs standard Debian packages:
+
+apt-get install    \
+  libauthen-ntlm-perl  \
+  libclass-load-perl   \
+  libcrypt-openssl-rsa-perl \
+  libdigest-hmac-perl  \
+  libencode-imaputf7-perl     \
+  libfile-copy-recursive-perl \
+  libfile-tail-perl        \
+  libio-compress-perl     \
+  libio-socket-inet6-perl \
+  libio-socket-ssl-perl   \
+  libio-tee-perl          \
+  libmail-imapclient-perl \
+  libmodule-implementation-perl \
+  libmodule-runtime-perl  \
+  libmodule-scandeps-perl \
+  libpackage-stash-perl   \
+  libpackage-stash-xs-perl \
+  libpar-packer-perl      \
+  libreadonly-perl        \
+  libterm-readkey-perl    \
+  libtest-fatal-perl      \
+  libtest-pod-perl        \
+  libtest-requires-perl   \
+  libtest-simple-perl     \
+  libunicode-string-perl  \
+  liburi-perl             \
+  make                    \
+  cpanminus
+
+
+The following second command installs "manually" the Perl modules 
+Data::Uniqid
+Sys::MemInfo
+because Debian hasn't made them available via a package yet.
+This cpanm command  also installs manually Perl module Mail::IMAPClient
+because it is good to be up to date with that imapsync dependency,
+but it is not mandatory since Mail::IMAPClient is installed by
+the Debian package libmail-imapclient-perl:
+
+  cpanm Data::Uniqid  Sys::MemInfo
+  
+In case you want to update the Perl module Mail::IMAPClient,
+a major module for imapsync, but an old March 2012 release 3.31 in Wheezy, 
+the following command updates it "manually":
+
+  cpanm Mail::IMAPClient
+
+Last, in case you need to use XOAUTH2 authentication you have to install   
+the module JSON::WebToken with the command:
+
+  cpanm JSON::WebToken
+
+
+After installing the dependencies, imapsync should be working.
+
+=======================================================================
+                 After installing the dependencies
+=======================================================================
+
+You don't have to be root to test and use imapsync.
+
+Take imapsync either on github or at the upstream site.
+
+Add execution permission to the downloaded script:
+
+  chmod +x imapsync
+  
+Check the dependencies and print also the basic example:
+
+  ./imapsync
+
+Perform a live test showing imapsync job:
+
+  ./imapsync --testslive
+
+Now install imapsync on the system (need root priviledges again):
+
+  cp imapsync /usr/bin/
+
+That's finished for the installation part.
+You can now use imapsync without knowing where it is located
+on the system:
+
+  imapsync 
+
+Now go to read http://imapsync.lamiral.info/#doc
+start with the tutorial.
+
+=======================================================================
+=======================================================================

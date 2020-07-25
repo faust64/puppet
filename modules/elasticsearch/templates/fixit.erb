@@ -1,0 +1,9 @@
+#!/bin/sh
+
+curl http://<%=@listen%>:9200/_cat/shards 2>/dev/null \
+    | awk '/UNAS/{print $1}' | while read idx; \
+        do
+            curl -H 'Content-Type: application/json' \
+                -XPUT "http://<%=@listen%>:9200/$idx/_settings" \
+                -d '{ "index": {"number_of_replicas": 0 } }'
+        done

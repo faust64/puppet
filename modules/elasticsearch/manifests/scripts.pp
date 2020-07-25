@@ -28,17 +28,23 @@ class elasticsearch::scripts {
 	    require => Common::Define::Package["elasticsearch-curator"];
     }
 
-    if ($elasticsearch::vars::version == "7.x") {
-	$provider = "apt"
-    } else {
-	$provider = "pip"
-
-	Class["common::tools::pip"]
-	    -> Common::Define::Package["elasticsearch-curator"]
+    if ($elasticsearch::vars::replicas == 0) {
+	file {
+	    "Install elasticsearch unassigned replicas fix script":
+		content => template("elasticsearch/fixit.erb"),
+		group   => lookup("gid_zero"),
+		mode    => "0750",
+		owner   => root,
+		path    => "/usr/local/sbin/elasticsearch_fix_missing_replicas",
+		require => Common::Define::Service["elasticsearch"];
+	}
     }
+
+    Class["common::tools::pip"]
+	-> Common::Define::Package["elasticsearch-curator"]
 
     common::define::package {
 	"elasticsearch-curator":
-	    provider => $provider;
+	    provider => "pip";
     }
 }

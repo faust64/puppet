@@ -1,4 +1,5 @@
-define nagios::define::probe($args             = false,
+define nagios::define::probe($alias            = "check_$name",
+			     $args             = false,
 			     $command          = "check_$name",
 			     $contact_escalate = lookup("nagios_contact_escalate"),
 			     $description      = "$fqdn $name",
@@ -23,33 +24,33 @@ define nagios::define::probe($args             = false,
 	$realport = lookup("nagios_nrpe_port")
 	if ($natport) {
 	    if ($operatingsystem == "OpenBSD" and $kernelversion == "6.6") {
-		$cmdhead = "check_nrpe_port_plain!$natport!$command"
+		$cmdhead = "check_nrpe_port_plain!$natport!$alias"
 	    } else {
-		$cmdhead = "check_nrpe_port!$natport!$command"
+		$cmdhead = "check_nrpe_port!$natport!$alias"
 	    }
 	} elsif ($realport != 5666 and $realport != "5666") {
 	    if ($operatingsystem == "OpenBSD" and $kernelversion == "6.6") {
-		$cmdhead = "check_nrpe_port_plain!$realport!$command"
+		$cmdhead = "check_nrpe_port_plain!$realport!$alias"
 	    } else {
-		$cmdhead = "check_nrpe_port!$realport!$command"
+		$cmdhead = "check_nrpe_port!$realport!$alias"
 	    }
 	} else {
 	    if ($operatingsystem == "OpenBSD" and $kernelversion == "6.6") {
-		$cmdhead = "check_nrpe_plain!$command"
+		$cmdhead = "check_nrpe_plain!$alias"
 	    } else {
-		$cmdhead = "check_nrpe!$command"
+		$cmdhead = "check_nrpe!$alias"
 	    }
 	}
-    } else { $cmdhead = $command }
+    } else { $cmdhead = $alias }
     if ($args) {
-	$cmdtail = join($args, '!')
-	$cmd     = "$cmdhead!$cmdtail"
-    } else { $cmd     = $cmdhead }
+	$cmdtail  = join($args, '!')
+	$cmd      = "$cmdhead!$cmdtail"
+    } else { $cmd = $cmdhead }
     $http_listen = lookup("apache_listen_ports")
 
     if ($pluginargs != false) {
-	$preargs   = join($pluginargs, ' ')
-	$pluginarg = " $preargs"
+	$preargs        = join($pluginargs, ' ')
+	$pluginarg      = " $preargs"
     } else { $pluginarg = "" }
 
     $conf_dir  = lookup("nagios_conf_dir")

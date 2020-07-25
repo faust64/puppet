@@ -1,10 +1,22 @@
 !WARNING!
 
-I don't see a way to properly deploy a bluemind from scratch
-- especially due to a few user inputs while running bm setup script
-Moreover, the administration interface allowing you to customize various
-settings related to postfix, nginx, cyrus or java: I would avoid overriding
-any of these with my modules.
+I don't see a way to properly deploy a bluemind from scratch - especially
+due to a few user inputs while running bm setup script. Moreover, the
+administration interface allowing you to customize various settings related
+to postfix, nginx, cyrus or java: I would avoid overriding any of these with
+my modules.
 Thus, this module assumes you've already installed and configured bm on
-your system (in my case, 3.5.2). We would stick to monitoring/supervision
+your system (in my case, 4.2.7). We would stick to monitoring/supervision
 and logs management.
+
+For the record, this module would read postfix virtual alias/mailbox maps,
+to duplicate them on all other public SMTPs. Once synced those relays may
+start refusing messages for addresses that do not exist on the new instance.
+Before first applying puppet, it would be recommended to ensure LDAP import
+was properly configured, a first global sync did succeed, and all shared
+mailboxes were re-created (ansible, freebsd, frnog, openbsd, ...) including
+their aliases, main domain aliases (abuse, info, contact, root, ...) were
+added to bluemind admin mailbox, and domain aliases were set (intra.xxx,
+vms.intra.xxx, ...).
+Eventually, for each account we would grant roles, for users to access mails,
+in some cases enable activesync, manage their own filters, ...

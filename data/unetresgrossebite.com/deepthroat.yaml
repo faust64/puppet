@@ -1,6 +1,7 @@
 additional_classes:
-  - Fail2ban
-  - Firehol
+- Fail2ban
+- Firehol
+- Openldap
 
 physical_parent: geras.unetresgrossebite.com
 
@@ -11,22 +12,24 @@ fail2ban_do_web_abuses: true
 
 # Firehol
 firehol_interfaces:
-  - name: eth0
-    description: WAN
-    protection: strong
-    allow:
-      - server icmp accept
-      - server smtp accept
-      - server http accept
-      - server imap accept
-      - server https accept
-      - server smtps accept
-      - server submission accept
-      - server imaps accept
-      - server custom openssh "tcp/1022" default accept
-      - server custom munin "tcp/4949" default accept src "$office_networks"
-      - server custom nrpe "tcp/5666" default accept src "$office_networks"
-      - client all accept
+- name: any
+  description: WAN
+  protection: strong
+  allow:
+  - server icmp accept
+  - server smtp accept
+  - server http accept
+  - server ldap accept
+  - server imap accept
+  - server https accept
+  - server smtps accept
+  - server ldaps accept
+  - server submission accept
+  - server imaps accept
+  - server custom openssh "tcp/1022" default accept
+  - server custom munin "tcp/4949" default accept src "$office_networks"
+  - server custom nrpe "tcp/5666" default accept src "$office_networks"
+  - client all accept
 
 # Letsencrypt
 letsencrypt_renew_day: 19
@@ -45,35 +48,41 @@ nagios_procs_warn: 600
 nagios_runprocs_crit: 100
 nagios_runprocs_warn: 80
 
+# OpenLDAP
+ldap_id: 36
+
 # PF
 dns_ip:
-  - 37.59.45.201
-  - 188.165.212.140
+- 37.59.33.202
+- 37.59.33.201
 
 # Postfix
 postfix_myhostname: deepthroat.unetresgrossebite.com
 postfix_networks:
-  - 5.135.4.208/29
-  - 151.80.43.230/32
-  - 37.59.33.201/32
-  - 37.59.33.202/32
-  - 37.59.45.201/32
-  - 37.187.122.201/32
-  - 51.254.93.64/29
-  - 54.36.76.176/29
-  - 87.98.218.22/32
-  - 91.121.2.215/32
-  - 95.211.136.210/31
-  - 95.211.136.212/32
-  - 95.211.205.36/32
-  - 176.31.250.180/32
-  - 188.165.212.140/32
+- 5.135.4.208/29
+- 151.80.43.230/32
+- 37.59.33.201/32
+- 37.59.33.202/32
+- 37.59.45.201/32
+- 37.187.122.201/32
+- 51.254.93.64/29
+- 54.36.76.176/29
+- 87.98.218.22/32
+- 91.121.2.215/32
+- 95.211.136.210/31
+- 95.211.136.212/32
+- 95.211.205.36/32
+- 176.31.250.180/32
+- 188.165.212.140/32
 
 # Saslauthd
 saslauthd_mech_list:
-  - PLAIN
-  - LOGIN
+- PLAIN
+- LOGIN
+
+# SSH
+ssh_auto_disconnect: false
 
 # Spamassassin
-spamassassin_cyrus_domain_root: /var/spool/cyrus/unetresgrossebite_com/domain/u/unetresgrossebite.com
-spamassassin_cyrus_ipurge: /usr/lib/cyrus/bin/ipurge
+spamassassin_cyrus_domain_root: /var/spool/cyrus/data/bm-master__unetresgrossebite_com/domain/u/unetresgrossebite.com
+spamassassin_cyrus_ipurge: /usr/sbin/ipurge

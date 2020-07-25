@@ -2108,6 +2108,7 @@ postfix_runtime_user: postfix
 postfix_runtime_group: postfix
 postfix_smtp_generic_maps: false
 postfix_spool_dir: /var/spool/postfix
+postfix_tls_mandatory_protocols: false
 
 # Puppet
 puppet_apt_repo: http://www.example.com

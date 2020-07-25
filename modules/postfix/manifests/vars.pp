@@ -21,6 +21,7 @@ class postfix::vars {
     $rsyslog_service_name = lookup("rsyslog_service_name")
     $spamassassin_user    = lookup("spamassassin_runtime_user")
     $spool_dir            = lookup("postfix_spool_dir")
+    $tls_protos           = lookup("postfix_tls_mandatory_protocols")
 
     if ($check_myhostname) {
 	$myhostname = $check_myhostname

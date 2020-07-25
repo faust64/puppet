@@ -17,4 +17,12 @@ class logrotate::config {
 	    path    => "/etc/logrotate.conf",
 	    require => File["Prepare Logrotate for further configuration"];
     }
+
+    each([ "btmp", "wtmp" ]) |$f| {
+	file {
+	    "Purges spurious $f logrotate configuration":
+		ensure => absent,
+		path   => "/etc/logrotate.d/$f";
+	}
+    }
 }

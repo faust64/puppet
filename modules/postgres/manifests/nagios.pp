@@ -1,0 +1,3 @@
+class postgres::nagios {
+#TODO
+}

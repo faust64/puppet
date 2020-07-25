@@ -23,5 +23,6 @@ class postgres {
 
     include postgres::config
     include postgres::profile
+    #include postgres::nagios
     include postgres::service
 }
