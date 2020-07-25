@@ -18,6 +18,7 @@ class bluemind {
 
     include bluemind::collect
     include bluemind::logrotate
+    include bluemind::munin
     include bluemind::nagios
     include bluemind::rsyslog
 }

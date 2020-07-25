@@ -1,6 +1,10 @@
 additional_classes:
 - Muninnode
 
+# Munin
+elasticsearch_munin: true
+nginx_munin: true
+
 # OpenSSH
 ssh_tcp_wrappers:
 - 10.42.42.0/24

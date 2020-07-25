@@ -4,8 +4,10 @@ class nginx::munin {
 	    if (! defined(Class["muninnode"])) {
 		include muninnode
 	    }
-	    if (! defined(Class["nginx::status"])) {
-		include nginx::status
+	    if (! defined(Class["bluemind::munin"])) {
+		if (! defined(Class["nginx::status"])) {
+		    include nginx::status
+		}
 	    }
 
 	    include common::libs::perlwww

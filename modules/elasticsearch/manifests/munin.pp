@@ -9,7 +9,7 @@ class elasticsearch::munin {
 	    include common::libs::perljson
 
 	    $conf_dir    = $elasticsearch::vars::munin_conf_dir
-	    $listen_addr = $elasticsearch::vars::listen_addr
+	    $listen_addr = $elasticsearch::vars::listen
 
 	    muninnode::define::probe {
 		$elasticsearch::vars::munin_probes:
