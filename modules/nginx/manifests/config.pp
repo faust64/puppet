@@ -10,6 +10,8 @@ class nginx::config {
     $office_networks    = $nginx::vars::office_networks
     $run_dir            = $nginx::vars::nginx_run_dir
     $runtime_user       = $nginx::vars::runtime_user
+    $tlsciphers         = $nginx::vars::tlsciphers
+    $tlsprotos          = $nginx::vars::tlsprotos
     $web_root           = $nginx::vars::web_root
     $worker_connections = $nginx::vars::worker_connections
     $worker_processes   = $nginx::vars::worker_processes
@@ -78,6 +80,14 @@ class nginx::config {
 	    notify  => Service["nginx"],
 	    owner   => root,
 	    path    => "$conf_dir/nginx.conf",
+	    require => File["Prepare Nginx for further configuration"];
+	"Install nginx SSL configuration":
+	    content => template("nginx/ssl.erb"),
+	    group   => lookup("gid_zero"),
+	    mode    => "0644",
+	    notify  => Service["nginx"],
+	    owner   => root,
+	    path    => "$conf_dir/ssl.conf",
 	    require => File["Prepare Nginx for further configuration"];
 	"Install nginx admin allow filter configuration":
 	    content => template("nginx/admin.erb"),

@@ -1435,6 +1435,12 @@ nginx_run_dir: /var/run
 nginx_runtime_group: root
 nginx_runtime_user: root
 nginx_rsyslog: false
+nginx_ssl_ciphers:
+- EECDH+AESGCM
+- EDH+AESGCM
+nginx_ssl_protos:
+- TLSv1.3
+- TLSv1.2
 nginx_with_cgi: false
 nginx_worker_processes: 4
 nginx_worker_connections: 768

@@ -1,0 +1,13 @@
+ssl on;
+ssl_certificate <%=@conf_dir%>/ssl/server-full.crt;
+ssl_certificate_key <%=@conf_dir%>/ssl/server.key;
+ssl_ciphers <%=@tlsciphers.join(":")%>;
+ssl_dhparam <%=@conf_dir%>/ssl/dh.pem;
+<% if @lsbdistcodename != "trusty" and @lsbdistcodename != "wheezy" -%>ssl_ecdh_curve secp384r1;
+<% end -%>ssl_prefer_server_ciphers on;
+ssl_protocols <%=@tlsprotos.join(" ")%>;
+ssl_session_cache shared:SSL:10m;
+<% if @lsbdistcodename != "trusty" and @lsbdistcodename != "wheezy" -%>ssl_session_tickets off;
+<% end -%>ssl_session_timeout 10m;
+ssl_stapling on;
+ssl_stapling_verify on;

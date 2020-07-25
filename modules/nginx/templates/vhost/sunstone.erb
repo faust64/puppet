@@ -25,21 +25,13 @@ server {
     server_tokens off;
     error_log <%=@log_dir%>/ssl-error-<%=@name%>.log;
     access_log <%=@log_dir%>/ssl-access-<%=@name%>.log main;
-    ssl on;
-    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
-    ssl_protocols <%=@tlsprotos.join(" ") %>;
-    ssl_prefer_server_ciphers on;
-    ssl_session_cache shared:SSL:10m;
+    include <%=@conf_dir%>/ssl.conf;
 <% if @stricttransport != false -%>    add_header Strict-Transport-Security "<%=@stricttransport%>";
 <% end -%><% if @referrerpolicy != false -%>    add_header Referrer-Policy "<%=@referrerpolicy%>";
 <% end -%><% if @deny_frames == true -%>    add_header X-Frame-Options DENY;
 <% end -%><% if @nosniff == true -%>    add_header X-Content-Type-Options nosniff;
 <% end -%><% if @xss_protection == true -%>    add_header X-XSS-Protection "1; mode=block";
-<% end -%><% if @lsbdistcodename != "trusty" and @lsbdistcodename != "wheezy" -%>    ssl_session_tickets off;
-<% end -%>    ssl_certificate <%=@conf_dir%>/ssl/server-full.crt;
-    ssl_certificate_key <%=@conf_dir%>/ssl/server.key;
-    ssl_dhparam /etc/nginx/ssl/dh.pem;
-<% end -%>    root <%=@app_root%>;
+<% end -%><% end -%>    root <%=@app_root%>;
     try_files $uri/index.html $uri.html $uri @sunstone;
     location ~* \.(ico|css|js|gif|jpe?g|png)(\?[0-9]+)?$ {
 	expires 1y;

@@ -67,15 +67,7 @@ server {
     proxy_hide_header X-Powered-By;
     error_log <%=@log_dir%>/ssl-error-<%=@name%>.log;
     access_log <%=@log_dir%>/ssl-access-<%=@name%>.log main;
-    ssl on;
-    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
-    ssl_protocols <%=@tlsprotos.join(" ") %>;
-    ssl_prefer_server_ciphers on;
-    ssl_session_cache shared:SSL:10m;
-<% if @lsbdistcodename != "trusty" and @lsbdistcodename != "wheezy" -%>    ssl_session_tickets off;
-<% end -%>    ssl_certificate <%=@conf_dir%>/ssl/server-full.crt;
-    ssl_certificate_key <%=@conf_dir%>/ssl/server.key;
-    ssl_dhparam /etc/nginx/ssl/dh.pem;
+    include <%=@conf_dir%>/ssl.conf;
     root /var/www;
     location ~ /dashboard {
 	if ($not_admin) {

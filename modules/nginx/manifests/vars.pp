@@ -37,6 +37,8 @@ class nginx::vars {
     $rsyslog_conf_dir     = lookup("rsyslog_conf_dir")
     $rsyslog_service_name = lookup("rsyslog_service_name")
     $rsyslog_version      = lookup("rsyslog_version")
+    $tlsciphers           = lookup("nginx_ssl_ciphers")
+    $tlsprotos            = lookup("nginx_ssl_protos")
     $web_root             = lookup("apache_web_root")
     $with_cgi             = lookup("nginx_with_cgi")
     $with_collectd        = lookup("nginx_collectd")
