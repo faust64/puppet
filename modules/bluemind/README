@@ -18,5 +18,7 @@ mailboxes were re-created (ansible, freebsd, frnog, openbsd, ...) including
 their aliases, main domain aliases (abuse, info, contact, root, ...) were
 added to bluemind admin mailbox, and domain aliases were set (intra.xxx,
 vms.intra.xxx, ...).
-Eventually, for each account we would grant roles, for users to access mails,
-in some cases enable activesync, manage their own filters, ...
+
+Eventually, edit the "all" group synced from LDAP, grant it with privileges
+accessing mails, contacts, calendars, activesync, outlook/thunderbird plugins,
+view domain filters, manage their own filters, identities, ...
