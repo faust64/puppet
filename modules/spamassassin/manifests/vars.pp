@@ -7,7 +7,7 @@ class spamassassin::vars {
     $ignore_headers       = lookup("spamassassin_bayes_ignore_headers")
     $munin_monitored      = lookup("spamassassin_munin")
     $munin_probes         = lookup("spamassassin_munin_probes")
-    $nagios_runtime_user  = lookup("nagios_runtime_user")
+#    $nagios_runtime_user  = lookup("nagios_runtime_user")
     $require_score        = lookup("spamassassin_require_score")
     $rewrite_subject      = lookup("spamassassin_rewrite_subject")
     $routeto              = lookup("postfix_routeto")
@@ -16,7 +16,7 @@ class spamassassin::vars {
     $rsyslog_version      = lookup("rsyslog_version")
     $runtime_user         = lookup("spamassassin_runtime_user")
     $spamassassin_rsyslog = lookup("spamassassin_rsyslog")
-    $sudo_conf_dir        = lookup("sudo_conf_dir")
+#    $sudo_conf_dir        = lookup("sudo_conf_dir")
     $trusted_networks     = lookup("spamassassin_trusted_networks")
     $whitelist_from       = lookup("spamassassin_whitelist_from")
 }

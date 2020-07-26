@@ -1,4 +1,8 @@
 class postfix::jobs {
+    if (! defined(Class["postfix::vars"])) {
+	include postfix::vars
+    }
+
     if ($postfix::vars::mail_mx or $postfix::vars::mail_ip) {
 	$jobstate = "present"
     } else { $jobstate = "absent" }

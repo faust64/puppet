@@ -1,0 +1,4 @@
+#!/bin/sh
+
+find /var/spool/bm-cyrus-replication -type f \
+    -ctime +2 -exec rm -f {} \;

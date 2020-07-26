@@ -1,4 +1,8 @@
 class bluemind::nagios {
+    if (! defined(Class["postfix::nagios"])) {
+	include postfix::nagios
+    }
+
     nagios::define::probe {
 	"bm-core":
             alias         => "core",
@@ -9,7 +13,6 @@ class bluemind::nagios {
 		    '-C', 'java', '-a',
 		    'bm-core.log.xml'
 		],
-	    pluginconf    => "default",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
 	"bm-cyrus-imapd":
@@ -22,7 +25,6 @@ class bluemind::nagios {
 		    '-p', '24',
 		    '-e', "$hostname"
 		],
-	    pluginconf    => "default",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
 	"bm-eas":
@@ -35,7 +37,6 @@ class bluemind::nagios {
 		    '-p', '8082',
 		    '-e', '400'
 		],
-	    pluginconf    => "default",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
 	"bm-elasticsearch":
@@ -49,7 +50,12 @@ class bluemind::nagios {
 		    '"/_cluster/health?wait_for_status=green&timeout=10s"',
 		    '-s', 'green'
 		],
-	    pluginconf    => "default",
+	    servicegroups => "netservices",
+	    use           => "warning-service";
+	"bm-elasticsearch-logs":
+            alias         => "elasticsearch_logs",
+            command       => "check_elasticsearch_logs",
+	    description   => "$fqdn ElasticSearch logs",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
 	"bm-hps":
@@ -61,7 +67,6 @@ class bluemind::nagios {
 		    '-I', '127.0.0.1',
 		    '-p', '8079'
 		],
-	    pluginconf    => "default",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
 	"bm-locator":
@@ -74,7 +79,6 @@ class bluemind::nagios {
 		    '-p', '8084',
 		    '-e', '404'
 		],
-	    pluginconf    => "default",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
 	"bm-lmtpd":
@@ -87,7 +91,6 @@ class bluemind::nagios {
 		    '-p', '2400',
 		    '-e', "$hostname"
 		],
-	    pluginconf    => "default",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
 	"bm-milter":
@@ -99,7 +102,6 @@ class bluemind::nagios {
 		    '-C', 'java', '-a',
 		    'bm-milter.log.xml'
 		],
-	    pluginconf    => "default",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
 	"bm-nginx":
@@ -111,7 +113,6 @@ class bluemind::nagios {
 		    '-H', "$fqdn",
 		    '-p', '443', '-S'
 		],
-	    pluginconf    => "default",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
 	"bm-node":
@@ -123,7 +124,6 @@ class bluemind::nagios {
 		    '-C', 'java', '-a',
 		    'bm-node.log.xml'
 		],
-	    pluginconf    => "default",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
 	"bm-php-fpm":
@@ -136,7 +136,6 @@ class bluemind::nagios {
 		    '-c', '10:15',
 		    '-w', '8:20'
 		],
-	    pluginconf    => "default",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
 	"bm-postgresql":
@@ -149,7 +148,6 @@ class bluemind::nagios {
 		    '-d', 'bj',
 		    '-l', 'bj', '-p', 'bj'
 		],
-	    pluginconf    => "default",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
 	"bm-sds-proxy":
@@ -162,7 +160,6 @@ class bluemind::nagios {
 		    '-p', '8091',
 		    '-e', '400'
 		],
-	    pluginconf    => "default",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
 	"bm-tika":
@@ -175,7 +172,6 @@ class bluemind::nagios {
 		    '-p', '8087',
 		    '-e', '404'
 		],
-	    pluginconf    => "default",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
 	"bm-webserver":
@@ -188,7 +184,6 @@ class bluemind::nagios {
 		    '-p', '8080', '-s',
 		    "\"window.location.replace('/settings/')\""
 		],
-	    pluginconf    => "default",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
 	"bm-xmpp":
@@ -200,7 +195,6 @@ class bluemind::nagios {
 		    '-C', 'java', '-a',
 		    'bm-xmpp.log.xml'
 		],
-	    pluginconf    => "default",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
 	"bm-ysnp":
@@ -212,7 +206,6 @@ class bluemind::nagios {
 		    '-C', 'java', '-a',
 		    'bm-ysnp.log.xml'
 		],
-	    pluginconf    => "default",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
 	"chronograf":
@@ -225,7 +218,6 @@ class bluemind::nagios {
 		    '-p', '8888',
 		    '-e', '404'
 		],
-	    pluginconf    => "default",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
 	"kapacitor":
@@ -238,7 +230,6 @@ class bluemind::nagios {
 		    '-p', '9092',
 		    '-e', '404'
 		],
-	    pluginconf    => "default",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
 	"memcached":
@@ -250,7 +241,6 @@ class bluemind::nagios {
 		    '-H', '127.0.0.1',
 		    '-p', '11211'
 		],
-	    pluginconf    => "default",
 	    servicegroups => "netservices",
 	    use           => "warning-service";
     }

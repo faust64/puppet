@@ -18,9 +18,9 @@ elif ! netstat -lant | grep ':3142.*LISTEN' >/dev/null; then
     msg=" - apt-cacher-ng not listening on :3142"
     res=$WARNING
 else
-    perfdata="| 1"
+    perfdata=1
 fi
 
-echo "$res$msg$perfdata"
+echo "$res$msg | $perfdata"
 eval res=\$$res
 exit $res

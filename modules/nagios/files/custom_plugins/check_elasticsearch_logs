@@ -1,0 +1,44 @@
+#!/bin/sh
+
+PRG=`basename $0`
+OK=0
+WARNING=1
+CRITICAL=2
+UNKNOWN=3
+cluster=
+logdir=
+perfdata=0
+res=OK
+
+for d in /etc/elasticsearch /usr/share/elasticsearch/config \
+	/usr/share/bm-elasticsearch/config
+do
+    if test -s $d/elasticsearch.yml; then
+	cluster=`awk '/^cluster\.name:/{print $2}' $d/elasticsearch.yml`
+	logdir=`awk '/^path\.logs:/{print $2}' $d/elasticsearch.yml`
+	if test "$cluster" -a "$logdir"; then
+	    break
+	fi
+    fi
+done
+
+if test -z "$cluster"; then
+    msg=" - failed discovering ElasticSearch cluster name"
+    res=$UNKNOWN
+elif test -z "$logdir"; then
+    msg=" - failed discovering ElasticSearch logs directory"
+    res=$UNKNOWN
+elif ! test -s "$logdir/$cluster.log"; then
+    msg=" - could not read ElasticSearch logs"
+    res=$UNKNOWN
+elif tail -50 "$logdir/$cluster.log" 2>/dev/null \
+	| grep "low disk watermark" >/dev/null; then
+    res=$CRITICAL
+    msg=" - found low disk watermark messages in recent logs"
+else
+    perfdata=1
+fi
+
+echo "$res$msg | $perfdata"
+eval res=\$$res
+exit $res
