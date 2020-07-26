@@ -1,5 +1,26 @@
 #!/bin/sh
 
+curl -XPUT localhost:9200/_cluster/settings?pretty \
+    -H 'Content-Type: application/json' -d '{
+      "persistent" : {
+	"cluster" : {
+	  "blocks" : {
+	    "read_only" : "false"
+	  }
+	}
+      }
+    },
+    {
+      "acknowledged" : true,
+      "persistent" : {
+	"cluster" : {
+	  "blocks" : {
+	    "read_only" : "false"
+	  }
+	}
+      },
+      "transient" : { }
+    }'
 curl -XPUT localhost:9200/_all/_settings?pretty \
     -H 'Content-Type: application/json' \
     -d '{ "index.blocks.read_only_allow_delete": null }'

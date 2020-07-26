@@ -1,0 +1,8 @@
+#!/bin/sh
+
+find /var/log/bm* -mtime +14 \
+    \( -name '*[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]*\.gz' \
+	-o -name '*\.log\.[0-9]*\.gz' \) \
+    -exec rm -f {} \;
+
+exit 0
