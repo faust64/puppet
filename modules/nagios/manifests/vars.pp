@@ -1,5 +1,7 @@
 class nagios::vars {
     $contact_escalate    = lookup("nagios_contact_escalate")
+    $disk_crit_threshold = lookup("nagios_partition_critical")
+    $disk_warn_threshold = lookup("nagios_partition_warning")
     $dmidecode_bin       = lookup("dmidecode_bin")
     $dns_proof           = lookup("nagios_dns_proof")
     $icmp_proof          = lookup("nagios_icmp_proof")

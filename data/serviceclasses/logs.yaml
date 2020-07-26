@@ -31,6 +31,8 @@ kibana_prefix: bigbrother
 # Nagios
 nagios_load_crit_threshold: "3.2,3.2,3.2"
 nagios_load_warn_threshold: "2.8,2.8,2.8"
+nagios_partition_critical: 16%
+nagios_partition_warning: 20%
 nagios_procs_crit: 300
 nagios_procs_warn: 250
 nagios_runprocs_crit: 20

@@ -1,8 +1,4 @@
 class bluemind::nagios {
-    if (! defined(Class["postfix::nagios"])) {
-	include postfix::nagios
-    }
-
     nagios::define::probe {
 	"bm-core":
             alias         => "core",
@@ -243,6 +239,20 @@ class bluemind::nagios {
 		],
 	    servicegroups => "netservices",
 	    use           => "warning-service";
+	"postfix":
+	    description   => "$fqdn postfix",
+	    servicegroups => "netservices",
+	    use           => "jobs-service";
+	"submission":
+	    description   => "$fqdn submission",
+	    pluginargs    =>
+		[
+		    "-H 127.0.0.1",
+		    "-F $fqdn",
+		    "-p 587"
+		],
+	    pluginconf    => "smtp",
+	    servicegroups => "netservices";
     }
 ## TODO:
 # * bm-pimp ??

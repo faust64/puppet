@@ -1272,6 +1272,8 @@ nagios_nrpe_nat_port: false
 nagios_nrpe_port: 5666
 nagios_nrpe_service_name: nrpe
 nagios_nrpe_timeout: 60
+nagios_partition_critical: 6%
+nagios_partition_warning: 10%
 nagios_partitions_watchlist: false
 nagios_plugins_dir: /usr/lib/nagios/plugins
 nagios_procs_crit: 160

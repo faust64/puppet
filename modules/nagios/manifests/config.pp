@@ -1,6 +1,8 @@
 class nagios::config {
     $conn_timeout        = $nagios::vars::conn_timeout
     $conf_dir            = $nagios::vars::nagios_conf_dir
+    $disk_crit_threshold = $nagios::vars::disk_crit_threshold
+    $disk_warn_threshold = $nagios::vars::disk_warn_threshold
     $hpraid              = $nagios::vars::watch_hpraid
     $mdraid              = $nagios::vars::watch_mdraid
     $listen              = $nagios::vars::listen

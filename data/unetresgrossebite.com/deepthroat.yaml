@@ -39,9 +39,12 @@ letsencrypt_renew_min: 54
 # Nagios
 nagios_load_crit_threshold: "8.0,8.0,8.0"
 nagios_load_warn_threshold: "7.7,7.7,7.7"
+nagios_partition_critical: 16%
+nagios_partition_warning: 20%
 nagios_partitions_watchlist:
   root: /
   mails: /var/spool/cyrus
+  mails: /var/spool/bm-elasticsearch
   backups: /var/backups/bluemind
 nagios_procs_crit: 800
 nagios_procs_warn: 600
