@@ -216,6 +216,18 @@ class bluemind::nagios {
 		],
 	    servicegroups => "netservices",
 	    use           => "warning-service";
+	"influxdb":
+            alias         => "influxdb",
+            command       => "check_http",
+	    description   => "$fqdn influxdb service",
+	    pluginargs    =>
+		[
+		    '-I', '127.0.0.1',
+		    '-p', '8086',
+		    '-e', '404'
+		],
+	    servicegroups => "netservices",
+	    use           => "warning-service";
 	"kapacitor":
             alias         => "kapacitor",
             command       => "check_http",
@@ -253,6 +265,17 @@ class bluemind::nagios {
 		],
 	    pluginconf    => "smtp",
 	    servicegroups => "netservices";
+	"telegraf":
+            alias         => "telegraf",
+            command       => "check_procs",
+	    description   => "$fqdn telegraf service",
+	    pluginargs    =>
+		[
+		    '-C', 'telegraf', '-a',
+		    '/etc/telegraf/telegraf.conf'
+		],
+	    servicegroups => "netservices",
+	    use           => "warning-service";
     }
 ## TODO:
 # * bm-pimp ??

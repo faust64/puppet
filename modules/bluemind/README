@@ -22,3 +22,9 @@ vms.intra.xxx, ...).
 Eventually, edit the "all" group synced from LDAP, grant it with privileges
 accessing mails, contacts, calendars, activesync, outlook/thunderbird plugins,
 view domain filters, manage their own filters, identities, ...
+
+In the domain settings, we would also setup at least one filter, matching
+`SPAM` in the mail subject - which would be added by spamassassin - and
+moving those to the Junk folder. Migrating an existing server, we should
+also duplicate filters for each mailbox - which is painful and error-prone,
+to script eventually/ideally.
