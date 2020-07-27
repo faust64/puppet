@@ -29,7 +29,8 @@ if test "$match"; then
 fi
 
 <% if @sickbeard != false -%>grep '<td class="tvShow">' $IDXFILE | sed 's|.*displayShow?show=\([0-9]*\)">\([^<]*\)<.*|showid=\1 showtitle="\2"|' | while read line
-<% else -%>grep 'show-container' $IDXFILE | sed 's|.*id="show\([^"]*\)" data-name="\([^"]*\)" .*|showid=\1 showtitle="\2"|' | while read line
+<% else -%>#grep 'show-container' $IDXFILE | sed 's|.*id="show\([^"]*\)" data-name="\([^"]*\)" .*|showid=\1 showtitle="\2"|' | while read line
+grep 'class="tvShow ' $IDXFILE | sed 's|.*indexername=\([^&]*\)&seriesid=\([^"]*\)">\([^<]*\)</app.*|idxname=\1 showid=\2 showtitle="\3"|' | while read line
 <% end -%>    do
 	eval $line
 	showtitle=`echo "$showtitle" | sed -e "s|&#39;|'|g" -e "s|&amp;|\&|g"`
@@ -43,7 +44,7 @@ fi
 
 	if test -d "$SERIES_ROOT/$showtitle"; then
 <% if @sickbeard != false -%>	    if ! $WGET "$baseurl/home/displayShow?show=$showid" -O $TMPFILE >/dev/null 2>&1; then
-<% else -%>	    idxname=$(grep -E "indexername=.*&seriesid=$showid" $IDXFILE | sed 's|.*indexername=\([^&]*\)&.*|\1|')
+<% else -%>	    #idxname=$(grep -E "indexername=.*&seriesid=$showid" $IDXFILE | sed 's|.*indexername=\([^&]*\)&.*|\1|')
 	    if ! $WGET --header "X-Api-Key: <%=@medusa_apikey%>" "$baseurl/api/v2/series/$idxname$showid/episodes?limit=1000" -O $TMPFILE >/dev/null 2>&1; then
 <% end -%>		echo "Failed getting $showtitle index" >&2
 		continue
