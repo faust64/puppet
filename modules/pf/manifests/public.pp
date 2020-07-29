@@ -25,61 +25,47 @@ class pf::public {
 	    $nicname = $nic['name']
 	    if ($nic['carpaddr']) {
 		$nicaddr = $nic['carpaddr']
-	    }
-	    else {
-		$nicaddr = $nic['addr']
-	    }
+	    } else { $nicaddr = $nic['addr'] }
 	    if ($nic['gatessh']) {
 		$gatessh = $nic['gatessh']
-	    }
-	    else {
-		$gatessh = false
-	    }
+	    } else { $gatessh = false }
 	    if ($nic['reverse']) {
 		$pubreverse = $nic['reverse']
-	    }
-	    else {
-		$pubreverse = $nicaddr
-	    }
+	    } else { $pubreverse = $nicaddr }
 	    if ($nic['pubreverse']) {
 		$altreverse = $nic['pubreverse']
-	    }
-	    else {
-		$altreverse = false
-	    }
+	    } else { $altreverse = false }
 	    if ($nic['vpn']) {
 		$pubvpn = $nic['vpn']
-	    }
-	    else {
-		$pubvpn = $nicaddr
-	    }
+	    } else { $pubvpn = $nicaddr }
 	    if ($nic['asterisk']) {
 		$pubasterisk = $nic['asterisk']
-	    }
-	    else {
-		$pubasterisk = false
-	    }
+	    } else { $pubasterisk = false }
 	    if ($nic['mx']) {
 		$pubmx = $nic['mx']
-	    }
-	    else {
-		$pubmx = false
-	    }
+	    } else { $pubmx = false }
+	    if ($k8s_ip != false) {
+		if ($nic['k8s']) {
+		    $pubk8s = $nic['k8s']
+		} else {
+		    if ($pubreverse) {
+			$pubk8s = $pubreverse
+		    } else {
+			if ($altreverse) {
+			    $pubk8s = $altreverse
+			} else { $pubk8s = $pubreverse_ip }
+		    }
+		}
+	    } else { $pubk8s = false }
 	    if ($nic['visio']) {
 		$pubvisio = $nic['visio']
-	    }
-	    else {
-		$pubvisio = false
-	    }
+	    } else { $pubvisio = false }
 	    $nicgw = $nic['gw']
 
 	    if ($nic['carpvhid'] != undef and $nic['carpaddr'] != undef) {
 		$vhid    = $nic['carpvhid']
 		$alsonic = "carp$vhid"
-	    }
-	    else {
-		$alsonic = false
-	    }
+	    } else { $alsonic = false }
 
 	    if (! defined(File["Pf WAN $nicname configuration"])) {
 		file {
