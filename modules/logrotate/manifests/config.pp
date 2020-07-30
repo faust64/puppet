@@ -18,7 +18,7 @@ class logrotate::config {
 	    require => File["Prepare Logrotate for further configuration"];
     }
 
-    each([ "alternatives", "btmp", "wtmp" ]) |$f| {
+    each([ "alternatives", "btmp", "noderig", "wtmp" ]) |$f| {
 	file {
 	    "Purges spurious $f logrotate configuration":
 		ensure => absent,
