@@ -1,6 +1,6 @@
 additional_classes:
 - Medusa
-- Sickbeard
+#- Sickbeard
 #- Sonarr
 
 # Apache
