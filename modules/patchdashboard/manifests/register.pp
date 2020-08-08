@@ -46,7 +46,7 @@ class patchdashboard::register {
 
 	    cron {
 		"Check-in with PatchDashboard":
-		    command => "/opt/patch_manager/check-in.sh",
+		    command => "/opt/patch_manager/check-in.sh >/dev/null 2>&1",
 		    hour    => "*",
 		    minute  => "*/2",
 		    require => Exec["Install PatchDashboard client"],
