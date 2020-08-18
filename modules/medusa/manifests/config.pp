@@ -9,6 +9,7 @@ class medusa::config {
     $sab_host       = $medusa::vars::sab_host
     $slack_hook     = $medusa::vars::slack_hook
     $slack_notify   = $medusa::vars::slack_notify
+    $thedate        = Timestamp.new().strftime('%Y-%m-%d')
     $web_dir        = $medusa::vars::web_dir
 
     file {
