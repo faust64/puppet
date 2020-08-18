@@ -20,6 +20,7 @@ class bluemind {
     include bluemind::logrotate
     include bluemind::munin
     include bluemind::nagios
+    include bluemind::prometheus
     include bluemind::rsyslog
     include bluemind::scripts
     include bluemind::jobs

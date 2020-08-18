@@ -310,6 +310,7 @@ bgp_service_name: bgpd
 # BlueMind
 bluemind_letsencrypt: false
 bluemind_satellite: false
+bluemind_prometheus: false
 
 # Browser
 preferred_browser: midori

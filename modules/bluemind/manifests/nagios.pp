@@ -65,6 +65,7 @@ class bluemind::nagios {
 		],
 	    servicegroups => "netservices",
 	    use           => "warning-service";
+## warning: removed in 4.3
 	"bm-locator":
             alias         => "locator",
             command       => "check_http",
@@ -77,6 +78,7 @@ class bluemind::nagios {
 		],
 	    servicegroups => "netservices",
 	    use           => "warning-service";
+## //
 	"bm-lmtpd":
             alias         => "lmtpd",
             command       => "check_imap",

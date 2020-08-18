@@ -5,6 +5,9 @@ additional_classes:
 
 physical_parent: geras.unetresgrossebite.com
 
+# BlueMind
+bluemind_prometheus: true
+
 # Fail2ban
 fail2ban_do_badbots: true
 fail2ban_do_mails: true
@@ -29,6 +32,7 @@ firehol_interfaces:
   - server custom openssh "tcp/1022" default accept
   - server custom munin "tcp/4949" default accept src "$office_networks"
   - server custom nrpe "tcp/5666" default accept src "$office_networks"
+  - server custom nrpe "tcp/9273" default accept src "$office_networks"
   - client all accept
 
 # Letsencrypt
