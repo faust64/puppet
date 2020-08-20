@@ -33,6 +33,26 @@ class xen::debian {
 	    source  => "puppet:///modules/xen/toolstack";
     }
 
+    if ($lsbdistcodename == "buster") {
+	if (! defined(Exec["Reload systemd configuration"])) {
+	    include common::systemd
+	}
+
+	file {
+	    "Install XenConsoled Unit":
+		content => template("xen/consoled.erb"),
+		group   => lookup("gid_zero"),
+		mode    => "0644",
+		notify  => Exec["Reload systemd configuration"],
+		owner   => root,
+		path    => "/etc/systemd/system/xenconsoled.service";
+	}
+
+	File["Install XenConsoled Unit"]
+	    -> Exec["Reload systemd configuration"]
+	    -> Common::Define::Service["xenconsoled"]
+    }
+
     common::define::lined {
 	"Set Dom0 mem reservation":
 	    line    => "GRUB_CMDLINE_XEN_DEFAULT='dom0_mem=${mem_reserved}M,max:${mem_max}M loglvl=all guest_loglvl=all'",

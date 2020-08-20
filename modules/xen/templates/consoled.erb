@@ -1,0 +1,12 @@
+[Unit]
+Description=Xen Console Daemon service
+
+[Service]
+Type=forking
+ExecStart=/usr/lib/xen<%=@xenvers%>/bin/xenconsoled --pid-file=/var/run/xenconsoled.pid
+ExecStop=/usr/bin/killall xenconsoled
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

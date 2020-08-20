@@ -17,4 +17,5 @@ class xen {
     include xen::modeles
     include xen::munin
     include xen::scripts
+    include xen::service
 }
