@@ -14,7 +14,14 @@ if ! $WGET $baseurl/home/ -O $IDXFILE >/dev/null 2>&1; then
     exit 2
 fi
 
-while test "$1"
+<% if @sickbeard == false -%>APIKEY=`grep api-key "$IDXFILE"  | sed 's|.* api-key="\([^"]*\)".*|\1|'`
+if test -z "$APIKEY" >/dev/null; then
+    echo "Failed resolving API Key" >&2
+    rm -f $IDXFILE
+    exit 2
+fi
+
+<% end -%>while test "$1"
 do
     cleaned=`echo "$1" | sed -e 's|(|\\(|g' -e 's|)|\\)|g'`
     if test -z "$match"; then
@@ -29,9 +36,7 @@ if test "$match"; then
 fi
 
 <% if @sickbeard != false -%>grep '<td class="tvShow">' $IDXFILE | sed 's|.*displayShow?show=\([0-9]*\)">\([^<]*\)<.*|showid=\1 showtitle="\2"|' | while read line
-<% else -%>#grep 'show-container' $IDXFILE | sed 's|.*id="show\([^"]*\)" data-name="\([^"]*\)" .*|showid=\1 showtitle="\2"|' | while read line
-grep 'class="tvShow ' $IDXFILE | sed 's|.*indexername=\([^&]*\)&seriesid=\([^"]*\)">\([^<]*\)</app.*|idxname=\1 showid=\2 showtitle="\3"|' | while read line
-<% end -%>    do
+    do
 	eval $line
 	showtitle=`echo "$showtitle" | sed -e "s|&#39;|'|g" -e "s|&amp;|\&|g"`
 	if test -z "$showid" -o -z "$showtitle"; then
@@ -43,13 +48,59 @@ grep 'class="tvShow ' $IDXFILE | sed 's|.*indexername=\([^&]*\)&seriesid=\([^"]*
 	fi >/dev/null
 
 	if test -d "$SERIES_ROOT/$showtitle"; then
-<% if @sickbeard != false -%>	    if ! $WGET "$baseurl/home/displayShow?show=$showid" -O $TMPFILE >/dev/null 2>&1; then
-<% else -%>	    #idxname=$(grep -E "indexername=.*&seriesid=$showid" $IDXFILE | sed 's|.*indexername=\([^&]*\)&.*|\1|')
-	    if ! $WGET --header "X-Api-Key: <%=@medusa_apikey%>" "$baseurl/api/v2/series/$idxname$showid/episodes?limit=1000" -O $TMPFILE >/dev/null 2>&1; then
-<% end -%>		echo "Failed getting $showtitle index" >&2
+	    if ! $WGET "$baseurl/home/displayShow?show=$showid" -O $TMPFILE >/dev/null 2>&1; then
+		echo "Failed getting $showtitle index" >&2
 		continue
 	    fi
-	    cd "$SERIES_ROOT/$showtitle"
+<% else -%>get_next_page()
+{
+    $WGET --header "x-api-key: $APIKEY" "$baseurl/api/v2/series?page=$idxpage" -O "$IDXFILE" 2>/dev/null
+    if grep -E '^\[\]$' "$IDXFILE" >/dev/null; then
+	return 1
+    fi
+    #echo got page $idxpage
+    idxpage=`expr $idxpage + 1`
+    return 0
+}
+
+idxpage=1
+while get_next_page
+do
+    #echo page `expr $idxpage - 1` has:
+    #cat "$IDXFILE" | jq '.[] | { title: .title, idxname: .indexer , showidtvdb: .id.tvdb, showidimdb: .id.imdb, showidslug: .id.slug, showidtrackt: .id.trackt }'
+    cat "$IDXFILE" | jq -r '.[] | .id.slug' | while read idxcomp
+	do
+	    if echo "$idxcomp" | grep ^tvdb; then
+		idxname=tvdb
+	    elif echo "$idxcomp" | grep ^tmdb; then
+		idxname=tmdb
+	    elif echo "$idxcomp" | grep ^imdb; then
+		idxname=imdb
+	    elif echo "$idxcomp" | grep ^tvmaze; then
+		idxname=tvmaze
+	    else
+		echo "WARNING: unrecognized indexer in $idxcomp" >&2
+		continue
+	    fi >/dev/null
+	    showid=`echo "$idxcomp" | sed "s|^$idxname||"`
+	    showtitle=`cat $IDXFILE | jq -r ".[] | select(.id.slug == \"$idxcomp\") | .title" | sed -e "s|&#39;|'|g" -e "s|&amp;|\&|g"`
+	    if test -z "$showid" -o -z "$showtitle"; then
+		continue
+	    elif test "$match"; then
+		if ! echo "$showtitle" | grep -E "$match"; then
+		    continue
+		fi >/dev/null
+	    fi
+	    if test ! -d "$SERIES_ROOT/$showtitle"; then
+		echo "WARNING: $showtitle not found locally - could be purged from medusa?" >&2
+		continue
+	    elif ! $WGET --header "x-api-key: $APIKEY" "$baseurl/api/v2/series/$idxname$showid/episodes?limit=1000" -O $TMPFILE 2>/dev/null; then
+		#WARNING: as of season 31, there are less than 700 The Simpsons episodes ...
+		# but this won't hold forever ...
+		echo "Failed getting $showtitle index" >&2
+		continue
+	    fi >/dev/null
+<% end -%>      cd "$SERIES_ROOT/$showtitle"
 <% if @emby != false -%>	    laste=0 lasts=0
 <% end -%>	    ls | while read episode
 	    do
@@ -129,9 +180,11 @@ grep 'class="tvShow ' $IDXFILE | sed 's|.*indexername=\([^&]*\)&seriesid=\([^"]*
 		fi
 	    done
 	    rm -f $TMPFILE
-	fi
+<% if @sickbeard != false -%>	fi
     done
-
+<% else -%>	done
+done
+<% end -%>
 rm -f $IDXFILE
 
 exit 0
