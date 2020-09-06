@@ -2039,6 +2039,7 @@ php_mod_gd: false
 php_mod_gettext: false
 php_mod_gmp: false
 php_mod_iconv: false
+php_mod_imagick: false
 php_mod_intl: false
 php_mod_json: false
 php_mod_ldap: false

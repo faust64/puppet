@@ -44,9 +44,11 @@ ossec_app_directories:
 
 # Php
 php_mod_curl: true
+php_mod_dom: true
 php_mod_fileinfo: true
 php_mod_gd: true
 php_mod_iconv: true
+php_mod_imagick: true
 php_mod_json: true
 php_mod_ldap: true
 php_mod_mbstring: true

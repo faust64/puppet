@@ -88,6 +88,14 @@ class php::moduledependencies {
 	    }
 	}
     }
+    if ($php::vars::mod_imagick == true) {
+	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
+	    or $operatingsystem == "Ubuntu") {
+	    common::define::package {
+		"php-imagick":
+	    }
+	}
+    }
     if ($php::vars::mod_intl == true) {
 	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu") {

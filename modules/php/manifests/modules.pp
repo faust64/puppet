@@ -65,8 +65,10 @@ class php::modules {
 	    modstatus   => $php::vars::mod_gettext;
 	"gmp":
 	    modstatus   => $php::vars::mod_gmp;
-#	"impl":
-#	    modstatus   => $php::vars::mod_impl;
+	"imagick":
+	    modstatus   => $php::vars::mod_imagick;
+#	"intl":
+#	    modstatus   => $php::vars::mod_intl;
 	"json":
 	    modstatus   => $php::vars::mod_json;
 	"ldap":

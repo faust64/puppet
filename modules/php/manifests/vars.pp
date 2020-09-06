@@ -27,6 +27,7 @@ class php::vars {
     $mod_gmp              = lookup("php_mod_gmp")
     $mod_fileinfo         = lookup("php_mod_fileinfo")
     $mod_iconv            = lookup("php_mod_iconv")
+    $mod_imagick          = lookup("php_mod_imagick")
     $mod_intl             = lookup("php_mod_intl")
     $mod_json             = lookup("php_mod_json")
     $mod_ldap             = lookup("php_mod_ldap")
