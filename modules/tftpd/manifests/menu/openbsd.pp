@@ -1,5 +1,5 @@
 class tftpd::menu::openbsd {
-    $distribs = [ "6.7", "6.6", "6.5", "6.4" ]
+    $distribs = [ "6.8", "6.7", "6.6", "6.5", "6.4" ]
     $root_dir = $tftpd::vars::root_dir
 
     tftpd::define::get_openbsd {

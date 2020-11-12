@@ -1,5 +1,5 @@
 class tftpd::menu::fedora {
-    $distribs = [ "32", "31" ]
+    $distribs = [ "33", "32" ]
     $root_dir = $tftpd::vars::root_dir
 
     tftpd::define::get_fedora {

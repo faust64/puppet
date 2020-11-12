@@ -36,17 +36,24 @@ define tftpd::define::get_ocp4($arch = [ "x86_64" ]) {
 		require => File["Prepare OCP4 RH-CoreOS $name $archi directory"],
 		target  => "$root_dir/installers/ocp4-rhcos-$name/$archi/initrd",
 		tmout   => 600,
-		url     => "http://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/$ocp_version_short/$name/rhcos-${name}-${archi}-installer-initramfs.${archi}.img",
+		url     => "http://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/$ocp_version_short/$name/rhcos-${name}-${archi}-live-initramfs.${archi}.img",
+		wd      => "$root_dir/installers/ocp4-rhcos-$name/$archi";
+	    "rhcos $name $archi rootfs.img":
+		require => File["Prepare OCP4 RH-CoreOS $name $archi directory"],
+		target  => "$root_dir/installers/ocp4-rhcos-$name/$archi/rootfs.img",
+		tmout   => 600,
+		url     => "http://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/$ocp_version_short/$name/rhcos-${name}-${archi}-live-rootfs.${archi}.img",
 		wd      => "$root_dir/installers/ocp4-rhcos-$name/$archi";
 	    "rhcos $name $archi linux":
 		require => File["Prepare OCP4 RH-CoreOS $name $archi directory"],
 		target  => "$root_dir/installers/ocp4-rhcos-$name/$archi/linux",
-		url     => "http://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/$ocp_version_short/$name/rhcos-${name}-${archi}-installer-kernel-${archi}",
+		url     => "http://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/$ocp_version_short/$name/rhcos-${name}-${archi}-live-kernel-${archi}",
 		wd      => "$root_dir/installers/ocp4-rhcos-$name/$archi";
 	}
 
 	Common::Define::Geturl["rhcos $name $archi bare-metal"]
 	    -> Common::Define::Geturl["rhcos $name $archi initrd.img"]
+	    -> Common::Define::Geturl["rhcos $name $archi rootfs.img"]
 	    -> Common::Define::Geturl["rhcos $name $archi linux"]
 	    -> File["Install pxe ocp4 boot-screen"]
     }
