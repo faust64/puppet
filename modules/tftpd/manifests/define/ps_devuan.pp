@@ -1,5 +1,5 @@
 define tftpd::define::ps_devuan($autopart = false,
-				$debvers  = "jessie",
+				$debvers  = "beowulf",
 				$server   = false) {
     $apt_proxy    = $tftpd::vars::apt_proxy
     $charset      = $tftpd::vars::charset

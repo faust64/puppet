@@ -1,5 +1,58 @@
 class tftpd::automate::preseed {
     tftpd::define::ps_devuan {
+	"kvm1-auto":
+	    autopart => true,
+	    debvers  => "jessie",
+	    server   => "kvm";
+	"kvm1-man":
+	    debvers  => "jessie",
+	    server   => "kvm";
+	"xen1-auto":
+	    autopart => true,
+	    debvers  => "jessie",
+	    server   => "xen";
+	"xen1-man":
+	    debvers  => "jessie",
+	    server   => "xen";
+	"server1-auto":
+	    autopart => true,
+	    debvers  => "jessie",
+	    server   => true;
+	"server1-man":
+	    debvers  => "jessie",
+	    server   => true;
+	"desktop1-auto":
+	    autopart => true,
+	    debvers  => "jessie";
+	"desktop1-man":
+	    debvers  => "jessie";
+	"kvm2-auto":
+	    autopart => true,
+	    debvers  => "ascii",
+	    server   => "kvm";
+	"kvm2-man":
+	    debvers  => "ascii",
+	    server   => "kvm";
+	"xen2-auto":
+	    autopart => true,
+	    debvers  => "ascii",
+	    server   => "xen";
+	"xen2-man":
+	    debvers  => "ascii",
+	    server   => "xen";
+	"server2-auto":
+	    autopart => true,
+	    debvers  => "ascii",
+	    server   => true;
+	"server2-man":
+	    debvers  => "ascii",
+	    server   => true;
+	"desktop2-auto":
+	    autopart => true,
+	    debvers  => "ascii";
+	"desktop2-man":
+	    debvers  => "ascii";
+
 	"kvm-auto":
 	    autopart => true,
 	    server   => "kvm";
@@ -54,32 +107,6 @@ class tftpd::automate::preseed {
 	    debvers  => "squeeze";
 	"squeeze-desktop-man":
 	    debvers  => "squeeze";
-	"wheezy-kvm-auto":
-	    autopart => true,
-	    debvers  => "wheezy",
-	    server   => "kvm";
-	"wheezy-kvm-man":
-	    debvers  => "wheezy",
-	    server   => "kvm";
-	"wheezy-xen-auto":
-	    autopart => true,
-	    debvers  => "wheezy",
-	    server   => "xen";
-	"wheezy-xen-man":
-	    debvers  => "wheezy",
-	    server   => "xen";
-	"wheezy-server-auto":
-	    autopart => true,
-	    debvers  => "wheezy",
-	    server   => true;
-	"wheezy-server-man":
-	    debvers  => "wheezy",
-	    server   => true;
-	"wheezy-desktop-auto":
-	    autopart => true,
-	    debvers  => "wheezy";
-	"wheezy-desktop-man":
-	    debvers  => "wheezy";
 	"jessie-kvm-auto":
 	    autopart => true,
 	    debvers  => "jessie",
@@ -106,6 +133,32 @@ class tftpd::automate::preseed {
 	    debvers  => "jessie";
 	"jessie-desktop-man":
 	    debvers  => "jessie";
+	"stretch-kvm-auto":
+	    autopart => true,
+	    debvers  => "stretch",
+	    server   => "kvm";
+	"stretch-kvm-man":
+	    debvers  => "stretch",
+	    server   => "kvm";
+	"stretch-xen-auto":
+	    autopart => true,
+	    debvers  => "stretch",
+	    server   => "xen";
+	"stretch-xen-man":
+	    debvers  => "stretch",
+	    server   => "xen";
+	"stretch-server-auto":
+	    autopart => true,
+	    debvers  => "stretch",
+	    server   => true;
+	"stretch-server-man":
+	    debvers  => "stretch",
+	    server   => true;
+	"stretch-desktop-auto":
+	    autopart => true,
+	    debvers  => "stretch";
+	"stretch-desktop-man":
+	    debvers  => "stretch";
 	"kvm-auto":
 	    autopart => true,
 	    server   => "kvm";
@@ -127,58 +180,6 @@ class tftpd::automate::preseed {
     }
 
     tftpd::define::ps_ubuntu {
-	"precise-kvm-auto":
-	    autopart => true,
-	    server   => "kvm",
-	    ubvers   => "precise";
-	"precise-kvm-man":
-	    server   => "kvm",
-	    ubvers   => "precise";
-	"precise-xen-auto":
-	    autopart => true,
-	    server   => "xen",
-	    ubvers   => "precise";
-	"precise-xen-man":
-	    server   => "xen",
-	    ubvers   => "precise";
-	"precise-server-auto":
-	    autopart => true,
-	    server   => true,
-	    ubvers   => "precise";
-	"precise-server-man":
-	    server   => true,
-	    ubvers   => "precise";
-	"precise-desktop-auto":
-	    autopart => true,
-	    ubvers   => "precise";
-	"precise-desktop-man":
-	    ubvers   => "precise";
-	"trusty-kvm-auto":
-	    autopart => true,
-	    ubvers   => "trusty",
-	    server   => "kvm";
-	"trusty-kvm-man":
-	    ubvers   => "trusty",
-	    server   => "kvm";
-	"trusty-xen-auto":
-	    autopart => true,
-	    ubvers   => "trusty",
-	    server   => "xen";
-	"trusty-xen-man":
-	    ubvers   => "trusty",
-	    server   => "xen";
-	"trusty-server-auto":
-	    autopart => true,
-	    ubvers   => "trusty",
-	    server   => true;
-	"trusty-server-man":
-	    ubvers   => "trusty",
-	    server   => true;
-	"trusty-desktop-auto":
-	    autopart => true,
-	    ubvers   => "trusty";
-	"trusty-desktop-man":
-	    ubvers   => "trusty";
 	"xenial-kvm-auto":
 	    autopart => true,
 	    ubvers   => "xenial",

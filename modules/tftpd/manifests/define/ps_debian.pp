@@ -1,5 +1,5 @@
 define tftpd::define::ps_debian($autopart = false,
-				$debvers  = "stretch",
+				$debvers  = "buster",
 				$server   = false) {
     $apt_proxy    = $tftpd::vars::apt_proxy
     $charset      = $tftpd::vars::charset

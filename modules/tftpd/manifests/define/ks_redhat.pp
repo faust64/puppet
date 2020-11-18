@@ -1,6 +1,6 @@
 define tftpd::define::ks_redhat($autopart = false,
 				$rhelarch = "x86_64",
-				$rhelvers = "7.4",
+				$rhelvers = "8.3",
 				$server   = false) {
     $charset      = $tftpd::vars::charset
     $password     = $tftpd::vars::default_pass
