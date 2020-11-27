@@ -541,7 +541,8 @@ qos_bw_interactive: 1000M
 qos_bw_voip: 10M
 qos_root_bandwidth: 3942Mb
 qos_root_if: trunk0
-transmission_ip: 10.42.42.42
+#transmission_ip: 10.42.42.42
+transmission_ip: 172.21.0.102
 #vpnserver_ip: 10.42.44.38
 
 # Snort

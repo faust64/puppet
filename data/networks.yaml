@@ -28,15 +28,15 @@ office_netids:
 # OpenVPN
 active_openvpns:
   leaseweb.unetresgrossebite.com:
-    - { name: leaseweb, rootif: tun0 }
+  - { name: leaseweb, rootif: tun0 }
 # dedibox.unetresgrossebite.com:
-#   - { name: dedibox, rootif: tun0 }
+# - { name: dedibox, rootif: tun0 }
   friends.intra.unetresgrossebite.com:
-    - { name: friends, rootif: tun0 }
+  - { name: friends, rootif: tun0 }
 # intra.unetresgrossebite.com:
-#   - { name: intra, rootif: tun1 }
+# - { name: intra, rootif: tun1 }
 # vms.intra.unetresgrossebite.com:
-#   - { name: intra, rootif: tun1 }
+# - { name: intra, rootif: tun1 }
 openvpn_database:
   dedibox:
     mapto: vlan3
@@ -78,41 +78,45 @@ icmp_ip:
 # VLANs
 active_vlans:
   intra.unetresgrossebite.com:
-    - { name: vlan2, rootif: trunk0 }
-    - { name: vlan3, rootif: trunk0 }
-    - { name: vlan4, rootif: trunk0 }
-    - { name: vlan5, rootif: trunk0 }
-    - { name: vlan6, rootif: trunk0 }
-    - { name: vlan7, rootif: trunk0 }
-    - { name: vlan8, rootif: trunk0 }
-    - { name: vlan10, rootif: trunk0 }
-    - { name: vlan11, rootif: trunk0 }
-    - { name: vlan42, rootif: trunk0 }
-    - { name: vlan100, rootif: trunk0 }
+  - { name: vlan2, rootif: trunk0 }
+  - { name: vlan3, rootif: trunk0 }
+  - { name: vlan4, rootif: trunk0 }
+  - name: vlan5
+    rootif: trunk0
+    routes:
+    - gw: 10.42.253.10
+      net: 172.21.0.0/24
+  - { name: vlan6, rootif: trunk0 }
+  - { name: vlan7, rootif: trunk0 }
+  - { name: vlan8, rootif: trunk0 }
+  - { name: vlan10, rootif: trunk0 }
+  - { name: vlan11, rootif: trunk0 }
+  - { name: vlan42, rootif: trunk0 }
+  - { name: vlan100, rootif: trunk0 }
   dedibox.unetresgrossebite.com:
-    - { name: vlan4, ospfif: eth0, netid: 10.43.0 }
+  - { name: vlan4, ospfif: eth0, netid: 10.43.0 }
   leaseweb.unetresgrossebite.com:
-    - { name: vlan4, ospfif: eth0, netid: 10.43.1 }
+  - { name: vlan4, ospfif: eth0, netid: 10.43.1 }
 vlan_database:
   vlan2:
     name: Management
     dns: "adm"
     dnsip:
-      - 10.255.255.255
-      - 10.42.242.2
-      - 10.42.242.5
+    - 10.255.255.255
+    - 10.42.242.2
+    - 10.42.242.5
     netid: "242"
     netmsk: 24
     acl:
-      - vlan3
-      - vlan4
-      - vlan5
-      - vlan6
-      - vlan7
-      - vlan8
-      - vlan10
-      - vlan11
-      - vlan100
+    - vlan3
+    - vlan4
+    - vlan5
+    - vlan6
+    - vlan7
+    - vlan8
+    - vlan10
+    - vlan11
+    - vlan100
     dhcp: true
     ftp: true
     forceproxy: false
@@ -127,15 +131,15 @@ vlan_database:
     name: Users
     dns: "users"
     dnsip:
-      - 10.255.255.255
-      - 10.42.45.2
-      - 10.42.45.5
+    - 10.255.255.255
+    - 10.42.45.2
+    - 10.42.45.5
     netid: "45"
     netmsk: 24
     acl:
-      - vlan4
-      - vlan6
-      - vlan8
+    - vlan4
+    - vlan6
+    - vlan8
     dhcp: true
     ftp: true
     forceproxy: false
@@ -150,14 +154,14 @@ vlan_database:
     name: VirtServices
     dns: "vms"
     dnsip:
-      - 10.255.255.255
-      - 10.42.44.2
-      - 10.42.44.5
+    - 10.255.255.255
+    - 10.42.44.2
+    - 10.42.44.5
     netid: "44"
     netmsk: 24
     acl:
-      - vlan6
-      - vlan8
+    - vlan6
+    - vlan8
     dhcp: true
     ftp: true
     forceproxy: false
@@ -172,16 +176,16 @@ vlan_database:
     name: Friends
     dns: "friends"
     dnsip:
-      - 10.255.255.255
-      - 10.42.253.2
-      - 10.42.253.5
+    - 10.255.255.255
+    - 10.42.253.2
+    - 10.42.253.5
     netid: "253"
     netmsk: 24
     acl:
-      - vlan3
-      - vlan4
-      - vlan6
-      - vlan8
+    - vlan3
+    - vlan4
+    - vlan6
+    - vlan8
     dedicatedpxepool: false
     dhcp: true
     ftp: true
@@ -197,15 +201,15 @@ vlan_database:
     name: WiFi
     dns: "wifi"
     dnsip:
-      - 10.255.255.255
-      - 10.42.254.2
-      - 10.42.254.5
+    - 10.255.255.255
+    - 10.42.254.2
+    - 10.42.254.5
     netid: "254"
     netmsk: 24
     acl:
-      - vlan3
-      - vlan4
-      - vlan8
+    - vlan3
+    - vlan4
+    - vlan8
     dhcp: true
     ftp: true
     forceproxy: false
@@ -220,18 +224,18 @@ vlan_database:
     name: Plaristote
     dns: "plaristote"
     dnsip:
-      - 10.255.255.255
-      - 10.42.43.2
-      - 10.42.43.5
+    - 10.255.255.255
+    - 10.42.43.2
+    - 10.42.43.5
     netid: "43"
     netmsk: 24
     acl:
-      - vlan3
-      - vlan4
-      - vlan5
-      - vlan6
-      - vlan8
-      - vlan100
+    - vlan3
+    - vlan4
+    - vlan5
+    - vlan6
+    - vlan8
+    - vlan100
     dhcp: true
     ftp: true
     forceproxy: false
@@ -246,17 +250,17 @@ vlan_database:
     name: VoIP
     dns: "sip"
     dnsip:
-      - 10.255.255.255
-      - 10.42.41.2
-      - 10.42.41.5
+    - 10.255.255.255
+    - 10.42.41.2
+    - 10.42.41.5
     netid: "41"
     netmsk: 24
     acl:
-      - vlan3
-      - vlan4
-      - vlan5
-      - vlan6
-      - vlan7
+    - vlan3
+    - vlan4
+    - vlan5
+    - vlan6
+    - vlan7
     dhcp: true
     ftp: true
     forceproxy: false
@@ -271,13 +275,13 @@ vlan_database:
     name: Ceph
     dns: "ceph"
     dnsip:
-      - 10.255.255.255
-      - 10.42.46.2
-      - 10.42.46.5
+    - 10.255.255.255
+    - 10.42.46.2
+    - 10.42.46.5
     netid: "46"
     netmsk: 24
     acl:
-      - vlan4
+    - vlan4
     dhcp: true
     ftp: true
     forceproxy: false
@@ -292,13 +296,13 @@ vlan_database:
     name: VideoSurveillance
     dns: "surv"
     dnsip:
-      - 10.255.255.255
-      - 10.42.40.2
-      - 10.42.40.5
+    - 10.255.255.255
+    - 10.42.40.2
+    - 10.42.40.5
     netid: "40"
     netmsk: 24
     acl:
-      - vlan4
+    - vlan4
     dhcp: true
     ftp: true
     forceproxy: false
@@ -313,25 +317,25 @@ vlan_database:
     name: Faust
     dns: "faust"
     dnsip:
-      - 10.255.255.255
-      - 10.42.42.2
-      - 10.42.42.5
+    - 10.255.255.255
+    - 10.42.42.2
+    - 10.42.42.5
     admin: true
     netid: "42"
     netmsk: 24
 #   pxeip: 10.42.44.50
 #   pxesatellite: true
     acl:
-      - vlan2
-      - vlan3
-      - vlan4
-      - vlan5
-      - vlan6
-      - vlan7
-      - vlan8
-      - vlan10
-      - vlan11
-      - vlan100
+    - vlan2
+    - vlan3
+    - vlan4
+    - vlan5
+    - vlan6
+    - vlan7
+    - vlan8
+    - vlan10
+    - vlan11
+    - vlan100
     dhcp: true
     ftp: true
     forceproxy: false
@@ -346,9 +350,9 @@ vlan_database:
     name: Guests
     dns: "guests"
     dnsip:
-      - 10.255.255.255
-      - 10.42.252.2
-      - 10.42.252.5
+    - 10.255.255.255
+    - 10.42.252.2
+    - 10.42.252.5
     netid: "252"
     netmsk: 24
     acl: false
