@@ -19,6 +19,7 @@ pass in quick inet proto $tui from <% if @visio_clients == false -%>any<% else -
 <% end -%><% if @named_ip != false -%>pass in quick on <%=@nicname%> inet proto $tu from <office_net> to <%=@pubreverse%> port domain rdr-to $named_ip port domain reply-to ( <%=@nicname%> <%=@nicgw%> )
 <% end -%><% if @plex_ip != false -%>pass in quick on <%=@nicname%> inet proto $t from any to any port 32400 rdr-to $plex_ip port 32400 reply-to ( <%=@nicname%> <%=@nicgw%> )
 <% end -%><% if @transmission_ip != false -%>pass in quick on <%=@nicname%> inet proto $tu from any to any port 51413 rdr-to $torrent_ip port 51413 reply-to ( <%=@nicname%> <%=@nicgw%> )
+<% end -%><% if @transmission_alt_ip != false -%>pass in quick on <%=@nicname%> inet proto $tu from any to any port 51414 rdr-to $torrentb_ip port 51414 reply-to ( <%=@nicname%> <%=@nicgw%> )
 <% end -%><% if @pubmx != false and @mail_mx != false -%>pass in quick on <%=@nicname%> inet proto $t from any to <%=@pubmx%> port smtp rdr-to $mail_ip port smtp reply-to ( <%=@nicname%> <%=@nicgw%> )
 pass in quick on <%=@nicname%> inet proto $t from any to <%=@pubmx%> port smtps rdr-to $mail_ip port smtps reply-to ( <%=@nicname%> <%=@nicgw%> )
 pass in quick on <%=@nicname%> inet proto $t from any to <%=@pubmx%> port imaps rdr-to $mail_ip port imaps reply-to ( <%=@nicname%> <%=@nicgw%> )

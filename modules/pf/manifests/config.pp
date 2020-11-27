@@ -67,6 +67,7 @@ class pf::config {
     $sip_providers          = $pf::vars::sip_providers
     $ssh_ip                 = $pf::vars::ssh_ip
     $syslog_ip              = $pf::vars::syslog_ip
+    $transmission_alt_ip    = $pf::vars::transmission_alt_ip
     $transmission_ip        = $pf::vars::transmission_ip
     $visio_clients          = $pf::vars::visio_clients
     $visio_ip               = $pf::vars::visio_ip

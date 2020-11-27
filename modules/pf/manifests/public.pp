@@ -1,24 +1,25 @@
 class pf::public {
-    $all_networks    = $pf::vars::all_networks
-    $all_openvpns    = $pf::vars::all_openvpns
-    $asterisk_ip     = $pf::vars::asterisk_ip
-    $ipsec_tunnels   = $pf::vars::ipsec_tunnels
-    $k8s_ip          = $pf::vars::k8s_ip
-    $local_networks  = $pf::vars::local_networks
-    $mail_ip         = $pf::vars::mail_ip
-    $mail_mx         = $pf::vars::mail_mx
-    $main_networks   = $pf::vars::main_networks
-    $named_ip        = $pf::vars::named_ip
-    $ovpn_networks   = $pf::vars::ovpn_networks
-    $plex_ip         = $pf::vars::plex_ip
-    $pubreverse_ip   = $pf::vars::pubreverse_ip
-    $reverse_ip      = $pf::vars::reverse_ip
-    $ssh_ip          = $pf::vars::ssh_ip
-    $ssh_port        = $pf::vars::ssh_port
-    $syslog_ip       = $pf::vars::syslog_ip
-    $transmission_ip = $pf::vars::transmission_ip
-    $visio_clients   = $pf::vars::visio_clients
-    $visio_ip        = $pf::vars::visio_ip
+    $all_networks        = $pf::vars::all_networks
+    $all_openvpns        = $pf::vars::all_openvpns
+    $asterisk_ip         = $pf::vars::asterisk_ip
+    $ipsec_tunnels       = $pf::vars::ipsec_tunnels
+    $k8s_ip              = $pf::vars::k8s_ip
+    $local_networks      = $pf::vars::local_networks
+    $mail_ip             = $pf::vars::mail_ip
+    $mail_mx             = $pf::vars::mail_mx
+    $main_networks       = $pf::vars::main_networks
+    $named_ip            = $pf::vars::named_ip
+    $ovpn_networks       = $pf::vars::ovpn_networks
+    $plex_ip             = $pf::vars::plex_ip
+    $pubreverse_ip       = $pf::vars::pubreverse_ip
+    $reverse_ip          = $pf::vars::reverse_ip
+    $ssh_ip              = $pf::vars::ssh_ip
+    $ssh_port            = $pf::vars::ssh_port
+    $syslog_ip           = $pf::vars::syslog_ip
+    $transmission_alt_ip = $pf::vars::transmission_alt_ip
+    $transmission_ip     = $pf::vars::transmission_ip
+    $visio_clients       = $pf::vars::visio_clients
+    $visio_ip            = $pf::vars::visio_ip
 
     each($main_networks) |$nic| {
 	if ($nic['gw']) {

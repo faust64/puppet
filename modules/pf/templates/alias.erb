@@ -45,6 +45,7 @@ table <ossec_fwtable> persist
 <% end -%><% if @ssh_ip != false -%>     ssh_ip = '{ <% @ssh_ip.sort.each do |host| -%><%=host%> <% end -%>}'
 <% end -%><% if @syslog_ip != false -%>  syslog_ip = '{ <%=@syslog_ip%> }'
 <% end -%><% if @transmission_ip != false -%> torrent_ip = '{ <%=@transmission_ip%> }'
+<% end -%><% if @transmission_alt_ip != false -%>torrentb_ip = '{ <%=@transmission_alt_ip%> }'
 <% end -%><% if @visio_clients != false -%>visioclt_ip = '{ <% @visio_clients.sort.each do |host| -%><%=host%> <% end -%>}'
 <% end -%>  vpnsrv_ip = <%=@vpnserver_ip%>
 <% if @vmwaremgr_ip != false -%>  vmwmgr_ip = '{ <% @vmwaremgr_ip.sort.each do |host| -%><%=host%> <% end -%>}'

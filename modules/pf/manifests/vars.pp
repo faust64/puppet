@@ -93,6 +93,7 @@ class pf::vars {
     $sudo_conf_dir          = lookup("sudo_conf_dir")
     $syslog_ip              = lookup("rsyslog_hub")
     $tftpproxy_port         = lookup("tftpproxy_local_port")
+    $transmission_alt_ip    = lookup("transmission_alt_ip")
     $transmission_ip        = lookup("transmission_ip")
     $visio_clients          = lookup("visio_clients")
     $visio_ip               = lookup("visio_ip")
