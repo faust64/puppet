@@ -132,13 +132,23 @@ ospf_map: false
 # PF
 emby_ip: 10.42.42.210
 pf_custom_rules:
+  "avemvpn":
+    closedate: 2021/31/01
+    glpi: 9994
+    host:
+      avem: 90.80.177.173/32
+    port:
+      wtf: 4501
+    proto: "$u"
+    vlans:
+    - vlan42
   "avivavdi":
     closedate: 2020/15/07
     glpi: 9995
     host:
       vdi.aviva.fr: 146.162.243.106/32
     port:
-      ssh: 8443
+      vdi: 8443
     proto: "$t"
     vlans:
     - vlan42
