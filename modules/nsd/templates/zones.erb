@@ -1,6 +1,6 @@
 <% @zones.sort.each do |zone| -%>zone:
     name: "<%=zone%>"
     zonefile: "db.<%=zone%>"
-<% if @rndc_keys != false -%><% @rndc_keys.each do |k| -%><% if k['allow_notify'] and k['allow_notify'] == true -%>    allow-notify: <%=k['host']%> <%=k['name']%>
-<% end -%><% if k['request_xfr'] and k['request_xfr'] == true -%>    request-xfr: AXFR <%=k['host']%>@<%=@listen_port%> <%=k['name']%>
+<% if @rndc_keys != false -%><% @rndc_keys.each do |k| -%><% if k['allow_notify'] and k['allow_notify'] == true -%>    allow-notify: <%=k['host']%> NOKEY
+<% end -%><% if k['request_xfr'] and k['request_xfr'] == true -%>    request-xfr: AXFR <%=k['host']%>@<%=@listen_port%> NOKEY
 <% end -%><% end -%><% end -%><% end -%>
