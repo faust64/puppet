@@ -1,26 +1,28 @@
 physical_parent: eros.adm.intra.unetresgrossebite.com
 
 # Munin-Node
-munin_node_listenaddr: 10.42.242.105
+#munin_node_listenaddr: 10.42.242.105
+munin_node_listenaddr: 10.42.242.107
 
 # Nagios
 #has_lm_sensors: true
-nagios_listenaddr: 10.42.242.105
-nagios_md_raid:
-#- md0
-#- md1
-- md2
-- md127
+#nagios_listenaddr: 10.42.242.105
+nagios_listenaddr: 10.42.242.107
+#nagios_md_raid:
+#- md2
+#- md127
 nagios_smart_disks:
-- sda
-- sdb
-- sdc
-- sdd
-- sde
-- sdf
+#- sda
+#- sdb
+#- sdc
+#- sdd
+#- sde
+#- sdf
+- nvme0n1
 
 # SNMP
-snmp_listenaddr: 10.42.242.105
+#snmp_listenaddr: 10.42.242.105
+snmp_listenaddr: 10.42.242.107
 
 # Xen
 xen_mem_max: 4096
