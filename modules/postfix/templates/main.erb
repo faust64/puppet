@@ -47,8 +47,8 @@ smtpd_sasl_security_options = noanonymous
 smtpd_sasl_tls_security_options = noanonymous
 smtpd_tls_loglevel = 1
 smtpd_tls_received_header = yes
-smtpd_tls_wrappermode = yes
-smtpd_recipient_restrictions = reject_non_fqdn_recipient, permit_sasl_authenticated, permit_mynetworks, reject_unknown_sender_domain, reject_unknown_recipient_domain, reject_unlisted_recipient, reject_invalid_hostname, reject_non_fqdn_sender,<% if @rbls != false -%><% @rbls.each do |rbl| -%> reject_rbl_client <%=rbl%>,<% end -%><% end -%> check_policy_service unix:private/spfcheck, reject_unauth_destination
+#smtpd_tls_wrappermode = yes ?? wrong version number errors
+smtpd_recipient_restrictions = reject_non_fqdn_recipient, permit_mynetworks, permit_sasl_authenticated, reject_unknown_sender_domain, reject_unknown_recipient_domain, reject_unlisted_recipient, reject_invalid_hostname, reject_non_fqdn_sender,<% if @rbls != false -%><% @rbls.each do |rbl| -%> reject_rbl_client <%=rbl%>,<% end -%><% end -%> check_policy_service unix:private/spfcheck, reject_unauth_destination
 <% else -%><% if @lsbdistcodename == "buster" -%>smtpd_relay_restrictions = permit_mynetworks, permit_sasl_authenticated, defer_unauth_destination
 <% end -%>relayhost = <% if @mail_mx != false -%><%=@mail_mx%>
 <% elsif @mail_ip != false -%><% @mail_ip.each do |host| -%><%=host%>
