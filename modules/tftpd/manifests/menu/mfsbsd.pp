@@ -1,5 +1,5 @@
 class tftpd::menu::mfsbsd {
-    $distribs = [ "12.1", "12.0", "11.2" ]
+    $distribs = [ "12.2", "11.2" ]
     $root_dir = $tftpd::vars::root_dir
 
     tftpd::define::get_mfsbsd {
