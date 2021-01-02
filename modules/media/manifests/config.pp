@@ -18,13 +18,13 @@ class media::config {
 		path    => "/opt/emby-server/system/dashboard-ui/modules/appheader/appheader.js",
 		require => Common::Define::Package["emby-server"],
 		source  => "puppet:///modules/media/appheader.js";
-	    "Install patched emby homesections":
-		group   => lookup("gid_zero"),
-		mode    => "0644",
-		owner   => "root",
-		path    => "/opt/emby-server/system/dashboard-ui/modules/homesections/homesections.js",
-		require => Common::Define::Package["emby-server"],
-		source  => "puppet:///modules/media/homesections.js";
+#	    "Install patched emby homesections":
+#		group   => lookup("gid_zero"),
+#		mode    => "0644",
+#		owner   => "root",
+#		path    => "/opt/emby-server/system/dashboard-ui/modules/homesections/homesections.js",
+#		require => Common::Define::Package["emby-server"],
+#		source  => "puppet:///modules/media/homesections.js";
 	}
 
 	if ($media::vars::plex != false) {
