@@ -414,7 +414,7 @@ LINK sw1lagg5
     BANDWIDTH 2000M
     BWLABEL none
     NODES sw1:S vs6:E
-    TARGET /var/www/mrtg/sw1/10.42.242.4_1004.rrd:ds0:ds1
+    TARGET /var/www/mrtg/sw1/10.42.242.4_1010.rrd:ds0:ds1
     WIDTH 2
 
 LINK sw1lagg6
@@ -526,7 +526,7 @@ LINK sw2lagg5
     BANDWIDTH 2000M
     BWLABEL none
     NODES sw2:S vs6:W
-    TARGET /var/www/mrtg/sw2/10.42.242.15_1004.rrd:ds0:ds1
+    TARGET /var/www/mrtg/sw2/10.42.242.15_1010.rrd:ds0:ds1
     WIDTH 2
 
 LINK sw2lagg6
