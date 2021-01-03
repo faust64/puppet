@@ -5,11 +5,17 @@ class media::debian {
 
     if ($media::vars::plex != false) {
 	common::define::package {
-	    "plexmediaserver":
+	    [ "ocl-icd-libopencl1", "beignet-opencl-icd" ]:
 		require =>
 		    [
 			Apt::Define::Repo["UTGB"],
 			Exec["Update APT local cache"]
+		    ];
+	    "plexmediaserver":
+		require =>
+		    [
+		       Common::Define::Package["ocl-icd-libopencl1"],
+		       Common::Define::Package["beignet-opencl-icd"]
 		    ];
 	}
 
