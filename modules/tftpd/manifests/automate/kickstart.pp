@@ -65,16 +65,16 @@ class tftpd::automate::kickstart {
 	    rhelvers => 6.9;
 	"auto7-64b":
 	    autopart => true,
-	    rhelvers => 7.8,
+	    rhelvers => 7.9,
 	    server   => true;
 	"manual7-64b":
-	    rhelvers => 7.8,
+	    rhelvers => 7.9,
 	    server   => true;
 	"desktop7-auto-64b":
 	    autopart => true,
-	    rhelvers => 7.8;
+	    rhelvers => 7.9;
 	"desktop7-manual-64b":
-	    rhelvers => 7.8;
+	    rhelvers => 7.9;
 	"auto-64b":
 	    autopart => true,
 	    server   => true;

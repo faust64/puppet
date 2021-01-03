@@ -1,5 +1,5 @@
 class tftpd::menu::redhat {
-    $distribs = [ "7.8" ]
+    $distribs = [ "7.9" ]
     $rhrepo   = $tftpd::vars::rhrepo
     $rhroot   = $tftpd::vars::rhroot
     $root_dir = $tftpd::vars::root_dir

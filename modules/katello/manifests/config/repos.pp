@@ -1,5 +1,6 @@
 class katello::config::repos {
     $ktlvers = $katello::vars::katello_version
+    $plcvers = $katello::vars::pulpcore_version
     $plpvers = $katello::vars::pulp_version
     $tfmvers = $katello::vars::theforeman_version
 
@@ -313,14 +314,14 @@ class katello::config::repos {
 	}
     } else {
 	katello::define::repository {
-	    "EL7 Katello $ktlvers Pulpcore":
+	    "EL7 Katello $plcvers Pulpcore":
 		product   => "Katello",
-		shortname => "el7 x86_64 Katello $ktlvers Pulpcore",
-		url       => "https://fedorapeople.org/groups/katello/releases/yum/$ktlvers/pulpcore/el7/x86_64/";
-#	    "EL8 Katello $ktlvers Pulpcore":
+		shortname => "el7 x86_64 Katello $plcvers Pulpcore",
+		url       => "https://fedorapeople.org/groups/katello/releases/yum/$plcvers/pulpcore/el7/x86_64/";
+#	    "EL8 Katello $plcvers Pulpcore":
 #		product   => "Katello",
-#		shortname => "el8 x86_64 Katello $ktlvers Pulpcore",
-#		url       => "https://fedorapeople.org/groups/katello/releases/yum/$ktlvers/pulpcore/el8/x86_64/";
+#		shortname => "el8 x86_64 Katello $plcvers Pulpcore",
+#		url       => "https://fedorapeople.org/groups/katello/releases/yum/$plcvers/pulpcore/el8/x86_64/";
 	}
     }
 }

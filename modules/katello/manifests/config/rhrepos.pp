@@ -179,7 +179,7 @@ class katello::config::rhrepos {
 	    url       => "rhsm";
 	"Red Hat Enterprise Linux 7 Server (Kickstart)":
 	    product   => "Red Hat Enterprise Linux Server",
-	    shortname => "Red Hat Enterprise Linux 7 Server Kickstart x86_64 7.8",
+	    shortname => "Red Hat Enterprise Linux 7 Server Kickstart x86_64 7.9",
 	    url       => "rhsm";
 	"Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)":
 	    product   => "Red Hat Enterprise Linux for x86_64",

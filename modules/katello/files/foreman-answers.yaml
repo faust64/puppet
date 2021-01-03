@@ -25,6 +25,7 @@ foreman::plugin::ansible: true
 foreman::plugin::azure: false
 foreman::plugin::bootdisk: true
 foreman::plugin::chef: false
+foreman::plugin::column_view: false
 foreman::plugin::default_hostgroup: false
 foreman::plugin::dhcp_browser: false
 foreman::plugin::digitalocean: false
@@ -32,12 +33,12 @@ foreman::plugin::discovery: true
 foreman::plugin::expire_hosts: false
 foreman::plugin::kubevirt: true
 foreman::plugin::host_extra_validator: false
+foreman::plugin::leapp: false
 foreman::plugin::memcache: false
 foreman::plugin::monitoring: false
 foreman::plugin::omaha: false
 foreman::plugin::openscap: true
 foreman::plugin::ovirt_provision: false
-foreman::plugin::tasks: false
 foreman::plugin::hooks: false
 foreman::plugin::puppetdb: false
 foreman::plugin::remote_execution: false
@@ -45,13 +46,14 @@ foreman::plugin::remote_execution::cockpit: false
 foreman::plugin::salt: false
 foreman::plugin::setup: false
 foreman::plugin::snapshot_management: false
+foreman::plugin::statistics: false
+foreman::plugin::tasks: false
 foreman::plugin::templates: false
 foreman::compute::ec2: false
 foreman::compute::gce: false
 foreman::compute::libvirt: false
 foreman::compute::openstack: false
 foreman::compute::ovirt: false
-foreman::compute::rackspace: false
 foreman::compute::vmware: false
 foreman_proxy::plugin::ansible: true
 foreman_proxy::plugin::chef: false

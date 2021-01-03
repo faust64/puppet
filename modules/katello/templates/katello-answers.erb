@@ -9,7 +9,8 @@
 ---
 certs:
   group: foreman
-katello: true
+katello:
+  use_pulp_2_for_yum: false
 foreman:
 <% if @admpw != false -%>  initial_admin_password: <%=@admpw%>
 <% end -%><% if @admusr != false -%>  initial_admin_username: <%=@admusr%>
@@ -30,7 +31,7 @@ foreman:
   websockets_ssl_cert: /etc/pki/katello/certs/katello-apache.crt
   user_groups: []
 foreman_proxy_content:
-  pulp_master: true
+  proxy_pulp_yum_to_pulpcore: true
 puppet:
   server: false
   server_environments_owner: apache
@@ -48,24 +49,27 @@ foreman_proxy:
   foreman_ssl_cert: /etc/foreman-proxy/foreman_ssl_cert.pem
   foreman_ssl_key: /etc/foreman-proxy/foreman_ssl_key.pem
   manage_puppet_group: false
-foreman_proxy::plugin::pulp: true
+foreman_proxy::plugin::pulp:
+  pulpcore_enabled: true
 foreman::plugin::ansible: true
 foreman::plugin::azure: false
 foreman::plugin::bootdisk: true
 foreman::plugin::chef: false
+foreman::plugin::column_view: false
 foreman::plugin::default_hostgroup: false
 foreman::plugin::digitalocean: false
 foreman::plugin::discovery: true
 foreman::plugin::expire_hosts: false
 foreman::plugin::hooks: false
-foreman::plugin::inventory_upload: false
 foreman::plugin::kubevirt: true
+foreman::plugin::leapp: false
 foreman::plugin::memcache: false
 foreman::plugin::monitoring: false
 foreman::plugin::openscap: true
 foreman::plugin::puppetdb: false
 foreman::plugin::remote_execution: true
 foreman::plugin::remote_execution::cockpit: false
+foreman::plugin::rh_cloud: false
 foreman::plugin::salt: false
 foreman::plugin::setup: false
 foreman::plugin::snapshot_management: false
