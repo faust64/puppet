@@ -23,11 +23,6 @@ class common::physical::syspackages {
 	}
     }
 
-    if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan") {
-	common::define::package {
-	    "locales-all":
-	}
-    }
     if (lookup("has_serial_io")) {
 	common::define::package {
 	    "minicom":
