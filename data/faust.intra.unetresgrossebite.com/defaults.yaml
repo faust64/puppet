@@ -42,3 +42,4 @@ puppet_apt_repo: http://repository.vms.intra.unetresgrossebite.com/debian
 
 dns_search: faust.intra.unetresgrossebite.com intra.unetresgrossebite.com unetresgrossebite.com
 root_domain: intra.unetresgrossebite.com
+pki_public: pki.adm.intra.unetresgrossebite.com
