@@ -1,4 +1,5 @@
 class apt::vars {
+    $apt_tls_verify = lookup("apt_do_tls_verify")
     $apt_repo       = lookup("puppet_apt_repo")
     $apt_repo_key   = lookup("puppet_apt_repo_key_author")
     $apt_proxy      = lookup("apt_cacher")

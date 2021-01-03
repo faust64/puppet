@@ -1,3 +1,6 @@
+# Apt
+apt_do_tls_verify: false
+
 # Autofs
 modeles_nfs_opts: fstype=nfs4,ro,soft,intr
 

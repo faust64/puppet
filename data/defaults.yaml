@@ -117,6 +117,7 @@ apache_web_root: /var/www
 
 # Apt
 apt_contact: false
+apt_do_tls_verify: true
 apt_slack_hook_uri: false
 
 # Apt-cacher
