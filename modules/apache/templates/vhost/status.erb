@@ -1,6 +1,6 @@
 <IfModule mod_status.c>
     ExtendedStatus On
-    <VirtualHost *:<%=@listen_ports['plain']%>>
+    <VirtualHost 127.0.0.1:<%=@listen_ports['plain']%>>
 	ServerName <%=@name%>
 	<Location /server-status>
 <% if @version == "2.2" -%>	    Allow from 127.0.0.1

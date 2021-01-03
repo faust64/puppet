@@ -5,6 +5,10 @@ class common::debian {
     $iface = lookup("ifplugd_iface")
 
     common::define::package {
+	[ "avahi-daemon", "inetutils-inetd", "nis", "prelink", "rsh-client", "rsh-redone-client", "talk" ]:
+	    ensure => absent;
+	[ "locales", "locales-all" ]:
+	    notify => Exec["Refresh Locales"];
 	[ "bc", "bsd-mailx", "coreutils", "dnsutils", "expect", "file", "less",
 	  "libpam-cracklib", "logtail", "lsb-release", "pwgen", "sysstat",
 	  "tcpd", "unattended-upgrades", "util-linux", "whois" ]:
@@ -26,9 +30,12 @@ class common::debian {
 	    path    => "/etc/default/ifplugd";
     }
 
-    common::define::package {
-	[ "avahi-daemon", "inetutils-inetd", "nis", "prelink", "rsh-client", "rsh-redone-client", "talk" ]:
-	    ensure => absent;
+    exec {
+	"Refresh Locales":
+	    command     => "locale-gen",
+	    cwd         => "/",
+	    path        => "/sbin:/bin:/usr/sbin:/usr/bin",
+	    refreshonly => true;
     }
 
     if ($lsbdistcodename == "jessie" or $lsbdistcodename == "xenial") {

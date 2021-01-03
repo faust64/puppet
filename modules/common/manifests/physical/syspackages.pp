@@ -11,7 +11,7 @@ class common::physical::syspackages {
 
     if ($kernel == "Linux") {
 	common::define::package {
-	    [ "iotop", "pv", "screen", "tmux" ]:
+	    [ "iotop", "lshw", "pv", "screen", "tmux" ]:
 	}
     } elsif ($operatingsystem == "OpenBSD" and versioncmp($kernelversion, '5.7') <= 0) {
 	common::define::package {

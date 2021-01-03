@@ -10,6 +10,7 @@ class xen {
 	}
     }
 
+    include common::tools::xfs
     include xen::backups
     include xen::collectd
     include xen::config

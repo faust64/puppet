@@ -1,5 +1,6 @@
 class kvm {
     include kvm::vars
+    include common::tools::xfs
     include common::tools::kpartx
     include common::tools::uuid
 
