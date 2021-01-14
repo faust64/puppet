@@ -68,6 +68,15 @@ class apache::moduledependencies {
 		require => File["Prepare Apache for further configuration"],
 		source  => "puppet:///modules/apache/magic";
 	}
+
+	common::define::lined {
+	    "Ensures MIME type includes text/yaml":
+		line    => "text/yaml					yaml yml",
+		match   => "[ \t]y(a|)ml[ \t$]",
+		notify  => Service[$apache::vars::service_name],
+		path    => "/etc/mime.types",
+		require => File["Install apache MIME magic configuration"];
+	}
     }
     if ($apache::vars::mod_php == true) {
 	include php
