@@ -1,7 +1,6 @@
 class katello::rhel {
     include apache::rhel
 
-# yum module install pki-core
     $ktlvers = $katello::vars::katello_version
     $plpvers = $katello::vars::pulp_version
     $pptvers = $katello::vars::puppet_version
@@ -15,6 +14,7 @@ class katello::rhel {
 	    "epel-release"
 	]:
     }
+    yum::define::module { "pki-core": }
     yum::define::repo {
 	"ansible-runner":
 	    baseurl => "https://releases.ansible.com/ansible-runner/rpm/epel-${operatingsystemmajrelease}-\$basearch/",
@@ -28,6 +28,9 @@ class katello::rhel {
 
     common::define::package {
 	"katello":
-	    require => Exec["Update System prior Katello deployment"];
+	    require => [
+		    Exec["Update System prior Katello deployment"],
+		    Yum::Define::Module["pki-core"]
+		];
     }
 }
