@@ -15,6 +15,10 @@ class katello::config::views {
 	    content   => [ { product    => "Ansible",
 			     rname      => "EL7 Ansible",
 			     repository => "el7 x86_64 Ansible" } ];
+	"CV-Ansible-el8":
+	    content   => [ { product    => "Ansible",
+			     rname      => "EL8 Ansible",
+			     repository => "el8 x86_64 Ansible" } ];
 	"CV-Ceph-el7":
 	    content   => [ { product    => "Ceph",
 			     rname      => "EL7 Octopus x86_64",
@@ -40,7 +44,11 @@ class katello::config::views {
 	"CV-EPEL-el8":
 	    content   => [ { product    => "EPEL",
 			     rname      => "EPEL8 x86_64",
-			     repository => "EPEL8 x86_64" } ];
+			     repository => "EPEL8 x86_64" },
+			   { product    => "EPEL",
+			     rname      => "EPEL8 Modular x86_64",
+			     repository => "EPEL8 Modular x86_64" }
+			 ];
 	"CV-OKD-el7":
 	    content   => [ { product    => "OCP",
 			     rname      => "EL7 OKD 3.11",
@@ -72,7 +80,10 @@ class katello::config::views {
 		      repository => "el8 x86_64 Extras" },
 		    { product    => "CentOS",
 		      rname      => "CentOS8 AppStream x86_64",
-		      repository => "el8 x86_64 AppStream" }
+		      repository => "el8 x86_64 AppStream" },
+		    { product    => "CentOS",
+		      rname      => "CentOS8 PowerTools x86_64",
+		      repository => "el8 x86_64 PowerTools" }
 		];
 	"CV-base-debian10":
 	    content   =>
