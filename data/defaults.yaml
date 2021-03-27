@@ -921,78 +921,10 @@ katello_organization: Default Organization
 katello_register_with_ak: false
 katello_version: 3.18
 katello_versions:
-  3.14:
-    foreman: 1.24
-    pulp: 2.21
-    pulpcore: False
-    puppet: 5
-    services:
-    - rh-mongodb34-mongod
-    - postgresql
-    - qdrouterd
-    - qpidd
-    - squid
-    - pulp_celerybeat
-    - pulp_resource_manager
-    - pulp_streamer
-    - tomcat
-    - dynflowd
-    - httpd
-    - foreman-proxy
-  3.15:
-    foreman: 2.0
-    pulp: 2.21
-    pulpcore: 3.15
-    puppet: 5
-    services:
-    - rh-mongodb34-mongod
-    - rh-redis5-redis
-    - pulpcore-api
-    - pulpcore-content
-    - pulpcore-resource-manager
-    - postgresql
-    - qdrouterd
-    - qpidd
-    - squid
-    - pulp_celerybeat
-    - pulp_resource_manager
-    - pulp_streamer
-    - smart_proxy_dynflow_core
-    - tomcat
-    - dynflow-sidekiq@orchestrator
-    - httpd
-    - dynflow-sidekiq@worker
-    - dynflow-sidekiq@worker-hosts-queue
-    - foreman-proxy
-  3.16:
-    foreman: 2.1
-    pulp: 2.21
-    pulpcore: 3.16
-    puppet: 5
-    services:
-    - rh-mongodb34-mongod
-    - rh-redis5-redis
-    - postgresql
-    - pulpcore-api
-    - pulpcore-content
-    - pulpcore-resource-manager
-    - qdrouterd
-    - qpidd
-    - squid
-    - pulp_celerybeat
-    - pulp_resource_manager
-    - pulp_streamer
-    - smart_proxy_dynflow_core
-    - tomcat
-    - dynflow-sidekiq@orchestrator
-    - httpd
-    - dynflow-sidekiq@worker
-    - dynflow-sidekiq@worker-hosts-queue
-    - foreman-proxy
   3.17:
     foreman: 2.2
     pulp: 2.21
-    pulpcore: 3.17
+    pulpcore: 3.6
     puppet: 5
     services:
     - rh-mongodb34-mongod
