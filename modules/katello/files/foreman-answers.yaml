@@ -7,20 +7,22 @@
 # See params.pp in each class for what options are available
 
 ---
-foreman:
-  configure_epel_repo: false
-foreman_proxy: {}
-puppet:
-  server: false
+foreman: {}
 foreman::cli: true
 foreman::cli::ansible: true
 foreman::cli::azure: false
 foreman::cli::discovery: true
+foreman::cli::kubevirt: false
 foreman::cli::openscap: true
 foreman::cli::remote_execution: true
-foreman::cli::tasks: true
+foreman::cli::tasks: false
 foreman::cli::templates: false
-foreman::cli::kubevirt: true
+foreman::compute::ec2: false
+foreman::compute::gce: false
+foreman::compute::libvirt: true
+foreman::compute::openstack: false
+foreman::compute::ovirt: false
+foreman::compute::vmware: false
 foreman::plugin::ansible: true
 foreman::plugin::azure: false
 foreman::plugin::bootdisk: true
@@ -31,30 +33,25 @@ foreman::plugin::dhcp_browser: false
 foreman::plugin::digitalocean: false
 foreman::plugin::discovery: true
 foreman::plugin::expire_hosts: false
-foreman::plugin::kubevirt: true
+foreman::plugin::hooks: false
 foreman::plugin::host_extra_validator: false
+foreman::plugin::kubevirt: false
 foreman::plugin::leapp: false
 foreman::plugin::memcache: false
 foreman::plugin::monitoring: false
 foreman::plugin::omaha: false
 foreman::plugin::openscap: true
 foreman::plugin::ovirt_provision: false
-foreman::plugin::hooks: false
 foreman::plugin::puppetdb: false
-foreman::plugin::remote_execution: false
-foreman::plugin::remote_execution::cockpit: false
+foreman::plugin::remote_execution: true
+foreman::plugin::remote_execution::cockpit: true
 foreman::plugin::salt: false
 foreman::plugin::setup: false
 foreman::plugin::snapshot_management: false
 foreman::plugin::statistics: false
 foreman::plugin::tasks: false
 foreman::plugin::templates: false
-foreman::compute::ec2: false
-foreman::compute::gce: false
-foreman::compute::libvirt: false
-foreman::compute::openstack: false
-foreman::compute::ovirt: false
-foreman::compute::vmware: false
+foreman_proxy: {}
 foreman_proxy::plugin::ansible: true
 foreman_proxy::plugin::chef: false
 foreman_proxy::plugin::dhcp::infoblox: false
@@ -66,6 +63,8 @@ foreman_proxy::plugin::dynflow: false
 foreman_proxy::plugin::monitoring: false
 foreman_proxy::plugin::omaha: false
 foreman_proxy::plugin::openscap: true
-foreman_proxy::plugin::pulp: true
-foreman_proxy::plugin::remote_execution::ssh: true
+foreman_proxy::plugin::pulp: false
+foreman_proxy::plugin::remote_execution::ssh: false
 foreman_proxy::plugin::salt: false
+puppet:
+  server: true
