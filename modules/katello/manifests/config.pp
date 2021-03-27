@@ -25,12 +25,14 @@ class katello::config {
 	    mode    => "0600",
 	    owner   => "root",
 	    path    => "/etc/foreman-installer/scenarios.d/katello-answers.yaml",
+	    replace => "no", # requires manual removal of packaged copy ...
 	    require => Common::Define::Package["katello"];
 	"Install Foreman Answers":
 	    group   => lookup("gid_zero"),
 	    mode    => "0600",
 	    owner   => "root",
 	    path    => "/etc/foreman-installer/scenarios.d/foreman-answers.yaml",
+	    replace => "no", # requires manual removal of packaged copy ...
 	    require => Common::Define::Package["katello"],
 	    source  => "puppet:///modules/katello/foreman-answers.yaml";
 	"Install ldap client configuration":
@@ -85,19 +87,7 @@ class katello::config {
 	    command     => "yum -y update",
 	    path        => "/usr/sbin:/usr/bin:/sbin:/bin",
 	    refreshonly => true,
-#	    require     => Common::Define::Package["foreman-release-scl"],
-	    require     => [
-		    Yum::Define::Repo["ansible-runner"],
-		    Yum::Define::Repo["epel"],
-		    Yum::Define::Repo["foreman"],
-		    Yum::Define::Repo["foreman-client"],
-		    Yum::Define::Repo["foreman-plugins"],
-		    Yum::Define::Repo["foreman-rails"],
-		    Yum::Define::Repo["katello"],
-		    Yum::Define::Repo["katello-candlepin"],
-		    Yum::Define::Repo["katello-pulp"],
-		    Yum::Define::Repo["puppet$pptvers"]
-		],
+	    require     => Common::Define::Package["epel-release"],
 	    timeout     => 600;
 	"Initializes Katello":
 	    command     => "foreman-installer --scenario katello >foreman-installer.out 2>&1",

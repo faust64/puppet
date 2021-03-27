@@ -7,7 +7,7 @@ class katello::config::basics {
 	"Import OpenSCAP Contents":
 	    command     => "foreman-rake foreman_openscap:bulk_upload:default",
 	    environment => [ 'HOME=/root' ],
-	    path        => "/usr/bin:/bin",
+	    path        => "/sbin:/usr/sbin:/usr/bin:/bin",
 	    require     => File["Install hammer cli configuration"],
 	    unless      => "hammer scap-content list | grep -i firefox",
     }

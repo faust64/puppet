@@ -1,6 +1,6 @@
 class katello::config::rhrepos {
     $last7    = 8
-    $last8    = 2
+    $last8    = 3
     $orgname  = $katello::vars::katello_org
     $sat_vers = $katello::vars::sat_vers
 

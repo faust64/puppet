@@ -4,8 +4,8 @@ class katello::hammer {
     $foreman_url = $katello::vars::foreman_url
 
     common::define::package {
-	"tfm-rubygem-hammer_cli":
-	    require => Yum::Define::Repo["foreman"];
+	"rubygem-hammer_cli":
+	    require => Common::Define::Package["katello"];
     }
 
     file {

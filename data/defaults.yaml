@@ -1020,25 +1020,20 @@ katello_versions:
     pulpcore: 3.7
     puppet: 6
     services:
-    - rh-mongodb34-mongod
-    - rh-redis5-redis
+    - dynflow-sidekiq@worker
+    - dynflow-sidekiq@worker-hosts-queue
+    - foreman
+    - foreman-proxy
+    - httpd
+    - puppetserver
     - postgresql
     - pulpcore-api
     - pulpcore-content
     - pulpcore-resource-manager
-    - qdrouterd
-    - qpidd
-    - squid
-    - pulp_celerybeat
-    - pulp_resource_manager
-    - pulp_streamer
-    - smart_proxy_dynflow_core
+    - pulpcore-worker@1
+    - redis
     - tomcat
     - dynflow-sidekiq@orchestrator
-    - httpd
-    - dynflow-sidekiq@worker
-    - dynflow-sidekiq@worker-hosts-queue
-    - foreman-proxy
 pulp_workers_count: 2
 rhregistry_authpass: false
 rhregistry_authuser: false
