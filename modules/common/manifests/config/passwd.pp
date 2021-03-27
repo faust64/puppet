@@ -17,7 +17,7 @@ class common::config::passwd {
     }
 
     if ($kernel == "Linux") {
-	if ($os['release']['major'] != "7") {
+	if ($os['release']['major'] == "6" or $os['release']['major'] == 6) {
 	    file {
 		"Set /etc/shadow permissions":
 		    ensure  => present,
