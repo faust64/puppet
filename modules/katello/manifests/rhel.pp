@@ -67,25 +67,25 @@ class katello::rhel {
 	}
 
 	Yum::Define::Repo["katello-pulpcore"]
-	    -> Common::Define::Package["foreman-release-scl"]
+#	    -> Common::Define::Package["foreman-release-scl"]
     }
 
     common::define::package {
 	"katello":
 	    require => Exec["Update System prior Katello deployment"];
-	"foreman-release-scl":
-	    require =>
-		[
-		    Yum::Define::Repo["ansible-runner"],
-		    Yum::Define::Repo["epel"],
-		    Yum::Define::Repo["foreman"],
-		    Yum::Define::Repo["foreman-client"],
-		    Yum::Define::Repo["foreman-plugins"],
-		    Yum::Define::Repo["foreman-rails"],
-		    Yum::Define::Repo["katello"],
-		    Yum::Define::Repo["katello-candlepin"],
-		    Yum::Define::Repo["katello-pulp"],
-		    Yum::Define::Repo["puppet5"]
-		];
+#	"foreman-release-scl":
+#	    require =>
+#		[
+#		    Yum::Define::Repo["ansible-runner"],
+#		    Yum::Define::Repo["epel"],
+#		    Yum::Define::Repo["foreman"],
+#		    Yum::Define::Repo["foreman-client"],
+#		    Yum::Define::Repo["foreman-plugins"],
+#		    Yum::Define::Repo["foreman-rails"],
+#		    Yum::Define::Repo["katello"],
+#		    Yum::Define::Repo["katello-candlepin"],
+#		    Yum::Define::Repo["katello-pulp"],
+#		    Yum::Define::Repo["puppet$pptvers"]
+#		];
     }
 }

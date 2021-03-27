@@ -1,5 +1,6 @@
 class katello::config::views {
     $ktlvers = $katello::vars::katello_version
+    $pptvers = $katello::vars::puppet_version
     $tfmvers = $katello::vars::theforeman_version
 
     katello::define::lifecycleenvironment {
@@ -10,7 +11,11 @@ class katello::config::views {
 
     if ($tfmvers == "1.24" or $tfmvers == 1.24) {
 	$pulprepo = "Pulp"
-    } else { $pulprepo = "Pulpcore" }
+	$pulpvers = $ktlvers
+    } else {
+	$pulprepo = "Pulpcore"
+	$pulpvers = $katello::vars::pulpcore_version
+    }
 
     katello::define::contentview {
 	"CV-Ansible-el7":
@@ -114,11 +119,11 @@ class katello::config::views {
 		      rname      => "EL7 TheForeman $tfmvers Plugins",
 		      repository => "el7 x86_64 TheForeman $tfmvers Plugins" },
 		    { product    => "Katello",
-		      rname      => "EL7 Katello $ktlvers $pulprepo",
-		      repository => "el7 x86_64 Katello $ktlvers $pulprepo" },
+		      rname      => "EL7 Katello $pulpvers $pulprepo",
+		      repository => "el7 x86_64 Katello $pulpvers $pulprepo" },
 		    { product    => "Puppet",
-		      rname      => "EL7 Puppet5",
-		      repository => "el7 x86_64 Puppet5" }
+		      rname      => "EL7 Puppet$pptvers",
+		      repository => "el7 x86_64 Puppet$pptvers" }
 		];
 	"CV-katello-client-el8":
 	    content   =>
@@ -127,14 +132,14 @@ class katello::config::views {
 		      rname      => "EL8 TheForeman $tfmvers Client",
 		      repository => "el8 x86_64 TheForeman $tfmvers Client" },
 		    { product    => "Foreman",
-		      rname      => "EL7 TheForeman $tfmvers Plugins",
-		      repository => "el7 x86_64 TheForeman $tfmvers Plugins" },
+		      rname      => "EL8 TheForeman $tfmvers Plugins",
+		      repository => "el8 x86_64 TheForeman $tfmvers Plugins" },
 		    { product    => "Katello",
-		      rname      => "EL7 Katello $ktlvers $pulprepo",
-		      repository => "el7 x86_64 Katello $ktlvers $pulprepo" },
+		      rname      => "EL8 Katello $pulpvers $pulprepo",
+		      repository => "el8 x86_64 Katello $pulpvers $pulprepo" },
 		    { product    => "Puppet",
-		      rname      => "EL8 Puppet5",
-		      repository => "el8 x86_64 Puppet5" }
+		      rname      => "EL8 Puppet$pptvers",
+		      repository => "el8 x86_64 Puppet$pptvers" }
 		];
 
 	"CCV-Ceph-el7":

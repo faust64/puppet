@@ -86,6 +86,11 @@ class katello::config::repos {
 	    product   => "Ansible",
 	    shortname => "el7 x86_64 Ansible",
 	    url       => "https://releases.ansible.com/ansible-runner/rpm/epel-7-x86_64/";
+	"EL8 Ansible":
+	    gpgkey    => "Ansible",
+	    product   => "Ansible",
+	    shortname => "el8 x86_64 Ansible",
+	    url       => "https://releases.ansible.com/ansible-runner/rpm/epel-8-x86_64/";
 
 ## CentOS ##
 	"CentOS7 Base x86_64":
@@ -242,6 +247,11 @@ class katello::config::repos {
 	    product   => "EPEL",
 	    shortname => "EPEL8 x86_64",
 	    url       => "http://mirrors.ircam.fr/pub/fedora/epel/8/Everything/x86_64/";
+	"EPEL8 Modular x86_64":
+	    gpgkey    => "EPEL8",
+	    product   => "EPEL",
+	    shortname => "EPEL8 Modular x86_64",
+	    url       => "http://mirrors.ircam.fr/pub/fedora/epel/8/Modular/x86_64/";
 
 ## Foreman ##
 	"EL7 TheForeman $tfmvers":
@@ -263,10 +273,10 @@ class katello::config::repos {
 	    product   => "Foreman",
 	    shortname => "el8 x86_64 TheForeman $tfmvers Client",
 	    url       => "https://yum.theforeman.org/client/$tfmvers/el8/x86_64/";
-#	"EL8 TheForeman $tfmvers Plugins":
-#	    product   => "Foreman",
-#	    shortname => "el8 x86_64 TheForeman $tfmvers Plugins",
-#	    url       => "https://yum.theforeman.org/plugins/$tfmvers/el8/x86_64/";
+	"EL8 TheForeman $tfmvers Plugins":
+	    product   => "Foreman",
+	    shortname => "el8 x86_64 TheForeman $tfmvers Plugins",
+	    url       => "https://yum.theforeman.org/plugins/$tfmvers/el8/x86_64/";
 
 ## Katello ##
 	"EL7 Katello $ktlvers":
@@ -279,6 +289,16 @@ class katello::config::repos {
 	    product   => "Katello",
 	    shortname => "el7 x86_64 Katello $ktlvers Candlepin",
 	    url       => "https://fedorapeople.org/groups/katello/releases/yum/$ktlvers/candlepin/el7/x86_64/";
+	"EL8 Katello $ktlvers":
+	    gpgkey    => "TheForeman",
+	    product   => "Katello",
+	    shortname => "el8 x86_64 Katello $ktlvers",
+	    url       => "https://fedorapeople.org/groups/katello/releases/yum/$ktlvers/katello/el8/x86_64/";
+	"EL8 Katello $ktlvers Candlepin":
+	    gpgkey    => "TheForeman",
+	    product   => "Katello",
+	    shortname => "el8 x86_64 Katello $ktlvers Candlepin",
+	    url       => "https://fedorapeople.org/groups/katello/releases/yum/$ktlvers/candlepin/el8/x86_64/";
 
 ## OKD3 ##
 	"EL7 OKD 3.11":
@@ -298,6 +318,16 @@ class katello::config::repos {
 	    product   => "Puppet",
 	    shortname => "el8 x86_64 Puppet5",
 	    url       => "https://yum.puppetlabs.com/puppet5/el/8/x86_64/";
+	"EL7 Puppet6":
+	    gpgkey    => "Puppet",
+	    product   => "Puppet",
+	    shortname => "el7 x86_64 Puppet6",
+	    url       => "https://yum.puppetlabs.com/puppet6/el/7/x86_64/";
+	"EL8 Puppet6":
+	    gpgkey    => "Puppet",
+	    product   => "Puppet",
+	    shortname => "el8 x86_64 Puppet6",
+	    url       => "https://yum.puppetlabs.com/puppet6/el/8/x86_64/";
     }
 
     if ($tfmvers == "1.24" or $tfmvers == 1.24) {
@@ -318,10 +348,10 @@ class katello::config::repos {
 		product   => "Katello",
 		shortname => "el7 x86_64 Katello $plcvers Pulpcore",
 		url       => "https://fedorapeople.org/groups/katello/releases/yum/$plcvers/pulpcore/el7/x86_64/";
-#	    "EL8 Katello $plcvers Pulpcore":
-#		product   => "Katello",
-#		shortname => "el8 x86_64 Katello $plcvers Pulpcore",
-#		url       => "https://fedorapeople.org/groups/katello/releases/yum/$plcvers/pulpcore/el8/x86_64/";
+	    "EL8 Katello $plcvers Pulpcore":
+		product   => "Katello",
+		shortname => "el8 x86_64 Katello $plcvers Pulpcore",
+		url       => "https://fedorapeople.org/groups/katello/releases/yum/$plcvers/pulpcore/el8/x86_64/";
 	}
     }
 }

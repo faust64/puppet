@@ -6,6 +6,7 @@ class katello::config {
     $ldap_slave = $openldap::vars::ldap_slave
     $loc        = $katello::vars::katello_loc
     $org        = $katello::vars::katello_org
+    $pptvers    = $katello::vars::puppet_version
     $wrkcnt     = $katello::vars::pulp_workers_count
 
     common::define::lined {
@@ -84,12 +85,24 @@ class katello::config {
 	    command     => "yum -y update",
 	    path        => "/usr/sbin:/usr/bin:/sbin:/bin",
 	    refreshonly => true,
-	    require     => Common::Define::Package["foreman-release-scl"],
+#	    require     => Common::Define::Package["foreman-release-scl"],
+	    require     => [
+		    Yum::Define::Repo["ansible-runner"],
+		    Yum::Define::Repo["epel"],
+		    Yum::Define::Repo["foreman"],
+		    Yum::Define::Repo["foreman-client"],
+		    Yum::Define::Repo["foreman-plugins"],
+		    Yum::Define::Repo["foreman-rails"],
+		    Yum::Define::Repo["katello"],
+		    Yum::Define::Repo["katello-candlepin"],
+		    Yum::Define::Repo["katello-pulp"],
+		    Yum::Define::Repo["puppet$pptvers"]
+		],
 	    timeout     => 600;
 	"Initializes Katello":
 	    command     => "foreman-installer --scenario katello >foreman-installer.out 2>&1",
 	    cwd         => "/root",
-	    creates     => "/root/foreman-installer.out",
+	    creates     => "/var/log/foreman-installer/katello.log",
 	    path        => "/opt/puppetlabs/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
 	    require     =>
 		[
