@@ -334,10 +334,10 @@ class katello::config::repos {
 	"EL7 Katello $plcvers Pulpcore":
 	    product   => "Katello",
 	    shortname => "el7 x86_64 Katello $plcvers Pulpcore",
-	    url       => "https://yum.theforeman.org/pulpcore/$plcvers/el7/";
+	    url       => "https://yum.theforeman.org/pulpcore/$plcvers/el7/x86_64/";
 	"EL8 Katello $plcvers Pulpcore":
 	    product   => "Katello",
 	    shortname => "el8 x86_64 Katello $plcvers Pulpcore",
-	    url       => "https://yum.theforeman.org/pulpcore/$plcvers/el8/";
+	    url       => "https://yum.theforeman.org/pulpcore/$plcvers/el8/x86_64/";
     }
 }
