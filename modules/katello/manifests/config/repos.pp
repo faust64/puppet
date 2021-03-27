@@ -338,6 +338,6 @@ class katello::config::repos {
 	"EL8 Katello $plcvers Pulpcore":
 	    product   => "Katello",
 	    shortname => "el8 x86_64 Katello $plcvers Pulpcore",
-	    url       => "https://yum.theforeman.org/pulpcore/$plcvers3.7/el8/";
+	    url       => "https://yum.theforeman.org/pulpcore/$plcvers/el8/";
     }
 }
