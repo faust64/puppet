@@ -1,7 +1,7 @@
 class yum::config {
     exec {
 	"Set YUM installonly_limit":
-	    command => "sed -i -e 's|installonly_limit=5|installonly_limit=2|' yum.conf",
+	    command => "sed -i -e 's|installonly_limit=.*|installonly_limit=2|' yum.conf",
 	    cwd     => "/etc",
 	    path    => "/usr/bin:/bin",
 	    unless  => "grep installonly_limit=2 yum.conf";
