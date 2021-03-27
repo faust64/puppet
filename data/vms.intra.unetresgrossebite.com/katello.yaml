@@ -16,3 +16,6 @@ nagios_runprocs_warn: 10
 
 # SSH
 ssh_auto_disconnect: false
+
+# Puppet / alongside Katello own Puppet
+puppet_conf_dir: /etc/puppetlabs/infra
