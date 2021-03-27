@@ -15,11 +15,20 @@ class postfix::rhel {
     }
 
     exec {
-	"Prepare postfix chroot setup script":
+	"Prepare postfix chroot setup script (legacy)":
 	    command     => "cp -p /usr/share/doc/postfix-*/examples/chroot-setup/LINUX2 /usr/src/postfix-chroot-setup && chmod +x /usr/src/postfix-chroot-setup",
 	    creates     => "/usr/src/postfix-chroot-setup",
 	    cwd         => "/",
 	    notify      => Exec["Setup Postfix chroot"],
+	    onlyif      => "ls /usr/share/doc/postfix-*/examples/chroot-setup/LINUX2",
+	    path        => "/usr/bin:/bin",
+	    require     => Common::Define::Package["postfix"];
+	"Prepare postfix chroot setup script":
+	    command     => "cp -p /usr/share/doc/postfix/examples/chroot-setup/LINUX2 /usr/src/postfix-chroot-setup && chmod +x /usr/src/postfix-chroot-setup",
+	    creates     => "/usr/src/postfix-chroot-setup",
+	    cwd         => "/",
+	    notify      => Exec["Setup Postfix chroot"],
+	    onlyif      => "ls /usr/share/doc/postfix/examples/chroot-setup/LINUX2",
 	    path        => "/usr/bin:/bin",
 	    require     => Common::Define::Package["postfix"];
 	"Setup Postfix chroot":
