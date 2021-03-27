@@ -925,6 +925,7 @@ katello_versions:
     foreman: 1.24
     pulp: 2.21
     pulpcore: False
+    puppet: 5
     services:
     - rh-mongodb34-mongod
     - postgresql
@@ -942,6 +943,7 @@ katello_versions:
     foreman: 2.0
     pulp: 2.21
     pulpcore: 3.15
+    puppet: 5
     services:
     - rh-mongodb34-mongod
     - rh-redis5-redis
@@ -966,6 +968,7 @@ katello_versions:
     foreman: 2.1
     pulp: 2.21
     pulpcore: 3.16
+    puppet: 5
     services:
     - rh-mongodb34-mongod
     - rh-redis5-redis
@@ -990,6 +993,7 @@ katello_versions:
     foreman: 2.2
     pulp: 2.21
     pulpcore: 3.17
+    puppet: 5
     services:
     - rh-mongodb34-mongod
     - rh-redis5-redis
@@ -1013,7 +1017,8 @@ katello_versions:
   3.18:
     foreman: 2.3
     pulp: 2.21
-    pulpcore: 3.18
+    pulpcore: 3.7
+    puppet: 6
     services:
     - rh-mongodb34-mongod
     - rh-redis5-redis

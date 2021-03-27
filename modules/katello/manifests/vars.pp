@@ -21,6 +21,7 @@ class katello::vars {
 
     $foreman_url        = "https://$foreman_fqdn"
     $katello_services   = $katello_versions[$katello_version]['services']
+    $puppet_version     = $katello_versions[$katello_version]['puppet']
     $pulp_version       = $katello_versions[$katello_version]['pulp']
     $pulpcore_version   = $katello_versions[$katello_version]['pulpcore']
     $theforeman_version = $katello_versions[$katello_version]['foreman']
