@@ -17,10 +17,9 @@ class katello::rhel {
     }
     yum::define::repo {
 	"ansible-runner":
-	    baseurl => "https://releases.ansible.com/ansible-runner/rpm/epel-${operatingsystemmajrelease}-x86_64/",
-	    descr   => "Ansible runner el$operatingsystemmajrelease",
-	    gpgkey  => "https://releases.ansible.com/keys/RPM-GPG-KEY-ansible-release.pub",
-	    notify  => Exec["Update System prior Katello deployment"];
+	    baseurl => "https://releases.ansible.com/ansible-runner/rpm/epel-${operatingsystemmajrelease}-\$basearch/",
+	    descr   => "Ansible runner",
+	    gpgkey  => "https://releases.ansible.com/keys/RPM-GPG-KEY-ansible-release.pub";
 #	"foreman-client":
 #	    baseurl => "https://yum.theforeman.org/client/$tfmvers/el$operatingsystemmajrelease/x86_64/",
 #	    descr   => "TheForeman Client $tfmvers - el$operatingsystemmajrelease",

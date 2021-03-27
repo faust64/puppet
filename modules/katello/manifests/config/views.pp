@@ -1,5 +1,6 @@
 class katello::config::views {
     $ktlvers = $katello::vars::katello_version
+    $plpvers = $katello::vars::pulpcore_version
     $pptvers = $katello::vars::puppet_version
     $tfmvers = $katello::vars::theforeman_version
 
@@ -7,14 +8,6 @@ class katello::config::views {
 	"Prod":
 	    parent => "Dev";
 	"Dev":
-    }
-
-    if ($tfmvers == "1.24" or $tfmvers == 1.24) {
-	$pulprepo = "Pulp"
-	$pulpvers = $ktlvers
-    } else {
-	$pulprepo = "Pulpcore"
-	$pulpvers = $katello::vars::pulpcore_version
     }
 
     katello::define::contentview {
@@ -119,8 +112,8 @@ class katello::config::views {
 		      rname      => "EL7 TheForeman $tfmvers Plugins",
 		      repository => "el7 x86_64 TheForeman $tfmvers Plugins" },
 		    { product    => "Katello",
-		      rname      => "EL7 Katello $pulpvers $pulprepo",
-		      repository => "el7 x86_64 Katello $pulpvers $pulprepo" },
+		      rname      => "EL7 Katello $plpvers Pulpcore",
+		      repository => "el7 x86_64 Katello $plpvers Pulpcore" },
 		    { product    => "Puppet",
 		      rname      => "EL7 Puppet$pptvers",
 		      repository => "el7 x86_64 Puppet$pptvers" }
@@ -135,8 +128,8 @@ class katello::config::views {
 		      rname      => "EL8 TheForeman $tfmvers Plugins",
 		      repository => "el8 x86_64 TheForeman $tfmvers Plugins" },
 		    { product    => "Katello",
-		      rname      => "EL8 Katello $pulpvers $pulprepo",
-		      repository => "el8 x86_64 Katello $pulpvers $pulprepo" },
+		      rname      => "EL8 Katello $plpvers Pulpcore",
+		      repository => "el8 x86_64 Katello $plpvers Pulpcore" },
 		    { product    => "Puppet",
 		      rname      => "EL8 Puppet$pptvers",
 		      repository => "el8 x86_64 Puppet$pptvers" }

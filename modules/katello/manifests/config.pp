@@ -9,14 +9,14 @@ class katello::config {
     $pptvers    = $katello::vars::puppet_version
     $wrkcnt     = $katello::vars::pulp_workers_count
 
-    common::define::lined {
-	"Sets Pulp Workers Count":
-	    line    => "PULP_CONCURRENCY=$wrkcnt",
-	    match   => "^PULP_CONCURRENCY",
-	    notify  => Exec["Reload Katello Services"],
-	    path    => "/etc/default/pulp_workers",
-	    require => Exec["Initializes Katello"];
-    }
+#    common::define::lined {
+#	"Sets Pulp Workers Count":
+#	    line    => "PULP_CONCURRENCY=$wrkcnt",
+#	    match   => "^PULP_CONCURRENCY",
+#	    notify  => Exec["Reload Katello Services"],
+#	    path    => "/etc/default/pulp_workers",
+#	    require => Exec["Initializes Katello"];
+#    }
 
     file {
 	"Install Katello Answers":

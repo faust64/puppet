@@ -29,13 +29,10 @@ class katello::config::basics {
 	    var   => "subscription_manager";
     }
 
-    if (! ($tfmvers == "1.24" or $tfmvers == 1.24)) {
-# Foreman >= 2, katello being deprecated, ...
-	katello::define::settings {
-	    "Use Remote Execution for Content Management":
-		setting => "remote_execution_by_default",
-		value   => "true";
-	}
+    katello::define::settings {
+	"Use Remote Execution for Content Management":
+	    setting => "remote_execution_by_default",
+	    value   => "true";
     }
 
     katello::define::settings {

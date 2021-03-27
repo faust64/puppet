@@ -330,28 +330,14 @@ class katello::config::repos {
 	    url       => "https://yum.puppetlabs.com/puppet6/el/8/x86_64/";
     }
 
-    if ($tfmvers == "1.24" or $tfmvers == 1.24) {
-	katello::define::repository {
-	    "EL7 TheForeman $tfmvers Rails":
-		gpgkey    => "TheForeman",
-		product   => "Foreman",
-		shortname => "el7 x86_64 TheForeman $tfmvers Rails",
-		url       => "https://yum.theforeman.org/rails/foreman-$tfmvers/el7/x86_64/";
-	    "EL7 Katello $ktlvers Pulp":
-		product   => "Katello",
-		shortname => "el7 x86_64 Katello $ktlvers Pulp",
-		url       => "https://repos.fedorapeople.org/repos/pulp/pulp/stable/$plpvers/7/x86_64/";
-	}
-    } else {
-	katello::define::repository {
-	    "EL7 Katello $plcvers Pulpcore":
-		product   => "Katello",
-		shortname => "el7 x86_64 Katello $plcvers Pulpcore",
-		url       => "https://fedorapeople.org/groups/katello/releases/yum/$plcvers/pulpcore/el7/x86_64/";
-	    "EL8 Katello $plcvers Pulpcore":
-		product   => "Katello",
-		shortname => "el8 x86_64 Katello $plcvers Pulpcore",
-		url       => "https://fedorapeople.org/groups/katello/releases/yum/$plcvers/pulpcore/el8/x86_64/";
-	}
+    katello::define::repository {
+	"EL7 Katello $plcvers Pulpcore":
+	    product   => "Katello",
+	    shortname => "el7 x86_64 Katello $plcvers Pulpcore",
+	    url       => "https://yum.theforeman.org/pulpcore/$plcvers/el7/";
+	"EL8 Katello $plcvers Pulpcore":
+	    product   => "Katello",
+	    shortname => "el8 x86_64 Katello $plcvers Pulpcore",
+	    url       => "https://yum.theforeman.org/pulpcore/$plcvers3.7/el8/";
     }
 }

@@ -18,10 +18,6 @@ class katello::config::subs {
 	    subnet       => "Friends";
     }
 
-    if ($tfmvers == "1.24" or $tfmvers == 1.24) {
-	$pulprepo = "Pulp"
-    } else { $pulprepo = "Pulpcore" }
-
     katello::define::activationkey {
 	"AK-Ceph-Prod":
 	    collections => [ "Infra" ],
@@ -39,7 +35,7 @@ class katello::config::subs {
 		    "${org}_EPEL_EPEL8_x86_64",
 		    "${org}_Foreman_el8_x86_64_TheForeman_${tfmvers}_Client",
 		    "${org}_Foreman_el7_x86_64_TheForeman_${tfmvers}_Plugins",
-		    "${org}_Katello_el7_x86_64_Katello_${ktlvers}_$pulprepo",
+		    "${org}_Katello_el7_x86_64_Katello_${ktlvers}_Pulpcore",
 		    "${org}_Puppet_el8_x86_64_Puppet5"
 		],
 	    lce         => "Prod";
@@ -62,7 +58,7 @@ class katello::config::subs {
 		    "${org}_EPEL_EPEL7_x86_64",
 		    "${org}_Foreman_el7_x86_64_TheForeman_${tfmvers}_Client",
 		    "${org}_Foreman_el7_x86_64_TheForeman_${tfmvers}_Plugins",
-		    "${org}_Katello_el7_x86_64_Katello_${ktlvers}_$pulprepo",
+		    "${org}_Katello_el7_x86_64_Katello_${ktlvers}_Pulpcore",
 		    "${org}_Puppet_el7_x86_64_Puppet5"
 		],
 	    lce         => "Prod";
