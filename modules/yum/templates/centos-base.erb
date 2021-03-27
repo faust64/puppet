@@ -1,6 +1,6 @@
 [base]
 name=CentOS-$releasever - Base
-<% if @major == "8" -%>baseurl=http://mirror.centos.org/centos/$releasever/BaseOS/$basearch/os/
+<% if @shortvers == "8" or @shortvers == 8 -%>baseurl=http://mirror.centos.org/centos/$releasever/BaseOS/$basearch/os/
 <% else -%>mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os
 #baseurl=http://mirror.centos.org/centos/$releasever/os/$basearch/
 <% end -%>gpgcheck=1
@@ -8,7 +8,7 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-<%=@shortvers%>
 <% if @srvtype != "kvmvz" and @srvtype != "vz" -%>exclude=kernel
 <% end -%>
 
-<% if @major != "8" -%>
+<% if @shortvers != "8" and @shortvers != 8 -%>
 [updates]
 name=CentOS-$releasever - Updates
 mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=updates
@@ -21,7 +21,7 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-<%=@shortvers%>
 <% end -%>#additional packages that may be useful
 [extras]
 name=CentOS-$releasever - Extras
-<% if @major == "8" -%>baseurl=http://mirror.centos.org/centos/$releasever/extras/$basearch/os/
+<% if @shortvers == "8" or @shortvers == 8 -%>baseurl=http://mirror.centos.org/centos/$releasever/extras/$basearch/os/
 <% else -%>mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=extras
 #baseurl=http://mirror.centos.org/centos/$releasever/extras/$basearch/
 <% end -%>gpgcheck=1
@@ -29,14 +29,14 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-<%=@shortvers%>
 
 [centosplus]
 name=CentOS-$releasever - Plus
-<% if @major == "8" -%>baseurl=http://mirror.centos.org/centos/$releasever/centosplus/$basearch/os/
+<% if @shortvers == "8" or @shortvers == 8 -%>baseurl=http://mirror.centos.org/centos/$releasever/centosplus/$basearch/os/
 <% else -%>mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=centosplus
 #baseurl=http://mirror.centos.org/centos/$releasever/centosplus/$basearch/
 <% end -%>gpgcheck=1
 enabled=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-<%=@shortvers%>
 
-<% if @major != "8" -%>[contrib]
+<% if @shortvers != "8" and @shortvers != 8 -%>[contrib]
 name=CentOS-$releasever - Contrib
 mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=contrib
 #baseurl=http://mirror.centos.org/centos/$releasever/contrib/$basearch/

@@ -1,6 +1,5 @@
 class yum::centos {
-    $arrayvers = split($operatingsystemrelease, '\.')
-    $shortvers = $arrayvers[0]
+    $shortvers = $operatingsystemmajrelease
 
     file {
 	"Install CentOS Base repository":
