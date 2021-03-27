@@ -5,3 +5,4 @@
 /modules/nagios_core
 /modules/stdlib
 *.[0-9]
+.*.sw[a-z]

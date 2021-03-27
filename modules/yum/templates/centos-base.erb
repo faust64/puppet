@@ -1,10 +1,11 @@
 [base]
 name=CentOS-$releasever - Base
 <% if @shortvers == "8" or @shortvers == 8 -%>baseurl=http://mirror.centos.org/centos/$releasever/BaseOS/$basearch/os/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
 <% else -%>mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os
 #baseurl=http://mirror.centos.org/centos/$releasever/os/$basearch/
-<% end -%>gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-<%=@shortvers%>
+<% end -%>gpgcheck=1
 <% if @srvtype != "kvmvz" and @srvtype != "vz" -%>exclude=kernel
 <% end -%>
 
@@ -22,19 +23,21 @@ gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-<%=@shortvers%>
 [extras]
 name=CentOS-$releasever - Extras
 <% if @shortvers == "8" or @shortvers == 8 -%>baseurl=http://mirror.centos.org/centos/$releasever/extras/$basearch/os/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
 <% else -%>mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=extras
 #baseurl=http://mirror.centos.org/centos/$releasever/extras/$basearch/
-<% end -%>gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-<%=@shortvers%>
+<% end -%>gpgcheck=1
 
 [centosplus]
 name=CentOS-$releasever - Plus
 <% if @shortvers == "8" or @shortvers == 8 -%>baseurl=http://mirror.centos.org/centos/$releasever/centosplus/$basearch/os/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
 <% else -%>mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=centosplus
 #baseurl=http://mirror.centos.org/centos/$releasever/centosplus/$basearch/
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-<%=@shortvers%>
 <% end -%>gpgcheck=1
 enabled=0
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-<%=@shortvers%>
 
 <% if @shortvers != "8" and @shortvers != 8 -%>[contrib]
 name=CentOS-$releasever - Contrib
@@ -42,7 +45,7 @@ mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo
 #baseurl=http://mirror.centos.org/centos/$releasever/contrib/$basearch/
 gpgcheck=1
 enabled=0
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-<%=@shortvers%>
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
 <% else -%>[AppStream]
 name=CentOS-$releasever - AppStream
 baseurl=http://mirror.centos.org/centos/$releasever/AppStream/$basearch/os/
