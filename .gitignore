@@ -4,3 +4,4 @@
 /modules/iptables
 /modules/nagios_core
 /modules/stdlib
+*.[0-9]

@@ -46,6 +46,7 @@ cadir  = /var/lib/puppet/ssl/ca
 dns_alt_names = puppet
 <% elsif (@operatingsystem == "CentOS" or @operatingsystem == "RedHat") and (@operatingsystemmajrelease == "8" or @operatingsystemmajrelease == 8) -%>cachedir = /var/lib/puppet/cache
 ssldir = /var/lib/puppet/ssl
+vardir = /var/lib/puppet
 
 [master]
 vardir = /var/lib/puppet

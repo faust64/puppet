@@ -6,7 +6,7 @@ class common::config::grub {
 # one of my oldest XEN PV had no grub:
 # /etc/grub.d from grub-common
 # /usr/sbin/update-grub from grub2-common
-	    if ($os['release']['major'] != "7") {
+	    if ($operatingsystemmajrelease == "6" or $operatingsystemmajrelease == 6) {
 		common::define::package {
 		    "grub-common":
 		}
@@ -21,7 +21,8 @@ class common::config::grub {
 	}
     }
 
-    if ($os['release']['major'] == "7") {
+    if ($operatingsystemmajrelease == "8" or operatingsystemmajrelease == 8
+	or $operatingsystemmajrelease == "7" or operatingsystemmajrelease == 7) {
 	exec {
 	    "Re-generate grub configuration":
 		command     => "grub2-mkconfig -o /boot/grub2/grub.cfg",
