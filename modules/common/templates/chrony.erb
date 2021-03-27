@@ -1,0 +1,8 @@
+#driftfile <%=@driftfile%>
+driftfile /var/lib/chrony/drift
+pool <%=@upstream%> iburst
+makestep 1.0 3
+rtcsync
+keyfile /etc/chrony.keys
+leapsectz right/UTC
+logdir /var/log/chrony
