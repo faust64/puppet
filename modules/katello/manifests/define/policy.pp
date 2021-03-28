@@ -50,6 +50,11 @@ define katello::define::policy($ensure     = "present",
 		    ],
 		unless      => "hammer policy info --name '$name'";
 	}
+
+	if (defined(Katello::Define::Scapcontent[$policy])) {
+	    Katello::Define::Scapcontent[$policy]
+		-> Exec["Install Policy $name"]
+	}
     } else {
 	exec {
 	    "Drop Policy $name":

@@ -51,16 +51,16 @@ class katello::config::rhsubs {
 	    policy     => "Red Hat rhel8 default content",
 	    profile    => "xccdf_org.ssgproject.content_profile_pci-dss";
 	"ANSSI RHEL8 Minimal":
-	    policy     => "RedHat 8.2 DS 1.2",
+	    policy     => "RedHat 8 DS 1.2",
 	    profile    => "xccdf_org.ssgproject.content_profile_anssi_bp28_minimal";
 	"ANSSI RHEL8 Intermediary":
-	    policy     => "RedHat 8.2 DS 1.2",
+	    policy     => "RedHat 8 DS 1.2",
 	    profile    => "xccdf_org.ssgproject.content_profile_anssi_bp28_intermediary";
 	"ANSSI RHEL8 High":
-	    policy     => "RedHat 8.2 DS 1.2",
+	    policy     => "RedHat 8 DS 1.2",
 	    profile    => "xccdf_org.ssgproject.content_profile_anssi_bp28_high";
 	"ANSSI RHEL8 Enhanced":
-	    policy     => "RedHat 8.2 DS 1.2",
+	    policy     => "RedHat 8 DS 1.2",
 	    profile    => "xccdf_org.ssgproject.content_profile_anssi_bp28_enhanced";
     }
 }
