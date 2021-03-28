@@ -125,13 +125,13 @@ class katello::config::rhviews {
 	    tolce     => [ "Dev", "Prod" ];
     }
 
-    if ($katello::vars::rhregistry_pass and $katello::vars::rhregistry_user) {
-	$ocpimages = $katello::vars::ocpimages
-	$dkr       = $ocpimages.map |$img| { { product => "OCP", rname => "OCP $img", repository => $img } }
-
-	katello::define::contentview {
-	    "CV-ocp3-docker":
-		content   => $dkr;
-	}
-    }
+#    if ($katello::vars::rhregistry_pass and $katello::vars::rhregistry_user) {
+#	$ocpimages = $katello::vars::ocpimages
+#	$dkr       = $ocpimages.map |$img| { { product => "OCP", rname => "OCP $img", repository => $img } }
+#
+#	katello::define::contentview {
+#	    "CV-ocp3-docker":
+#		content   => $dkr;
+#	}
+#    }
 }

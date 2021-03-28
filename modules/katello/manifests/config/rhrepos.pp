@@ -257,18 +257,18 @@ class katello::config::rhrepos {
     }
 
 ## OCP/docker ##
-    if ($katello::vars::rhregistry_pass and $katello::vars::rhregistry_user) {
-	each($katello::vars::ocpimages) |$img| {
-	    katello::define::repository {
-		"OCP $img":
-		    authpass  => $katello::vars::rhregistry_pass,
-		    authuser  => $katello::vars::rhregistry_user,
-		    dkrname   => $img,
-		    product   => "OCP",
-		    shortname => $img,
-		    type      => "docker",
-		    url       => "https://registry.redhat.io/";
-	    }
-	}
-    }
+#    if ($katello::vars::rhregistry_pass and $katello::vars::rhregistry_user) {
+#	each($katello::vars::ocpimages) |$img| {
+#	    katello::define::repository {
+#		"OCP $img":
+#		    authpass  => $katello::vars::rhregistry_pass,
+#		    authuser  => $katello::vars::rhregistry_user,
+#		    dkrname   => $img,
+#		    product   => "OCP",
+#		    shortname => $img,
+#		    type      => "docker",
+#		    url       => "https://registry.redhat.io/";
+#	    }
+#	}
+#    }
 }
