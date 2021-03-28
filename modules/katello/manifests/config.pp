@@ -46,7 +46,7 @@ class katello::config {
 	    group   => lookup("gid_zero"),
 	    mode    => "0755",
 	    owner   => "root",
-	    path    => "/etc/profile.d/foreman-rake.sh",
+	    path    => "/etc/profile.d/foreman.sh",
 	    require => Common::Define::Package["katello"],
 	    source  => "puppet:///modules/katello/profile.sh";
 	"Link Puppet CA to trust store":
