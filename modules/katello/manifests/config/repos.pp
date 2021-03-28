@@ -139,14 +139,6 @@ class katello::config::repos {
 	    url       => "http://mirror.ircam.fr/pub/CentOS/8/PowerTools/x86_64/os/";
 
 ## Ceph ##
-	"Bionic Nautilus":
-	    debcomps  => [ "main" ],
-	    debrels   => [ "bionic" ],
-	    gpgkey    => "CephRelease",
-	    product   => "Ceph",
-	    shortname => "Bionic amd64 Ceph Nautilus",
-	    type      => "deb",
-	    url       => "http://download.ceph.com/debian-nautilus/";
 	"Buster Octopus":
 	    debcomps  => [ "main" ],
 	    debrels   => [ "buster" ],
@@ -155,11 +147,6 @@ class katello::config::repos {
 	    shortname => "Buster amd64 Ceph Octopus",
 	    type      => "deb",
 	    url       => "http://download.ceph.com/debian-octopus/";
-	"EL7 Nautilus":
-	    gpgkey    => "CephRelease",
-	    product   => "Ceph",
-	    shortname => "el7 x86_64 Ceph Nautilus",
-	    url       => "http://download.ceph.com/rpm-nautilus/el7/x86_64/";
 	"EL7 Octopus noarch":
 	    gpgkey    => "CephRelease",
 	    product   => "Ceph",
@@ -180,14 +167,6 @@ class katello::config::repos {
 	    product   => "Ceph",
 	    shortname => "el8 x86_64 Ceph Octopus",
 	    url       => "http://download.ceph.com/rpm-octopus/el8/x86_64/";
-	"Xenial Nautilus":
-	    debcomps  => [ "main" ],
-	    debrels   => [ "xenial" ],
-	    gpgkey    => "CephRelease",
-	    product   => "Ceph",
-	    shortname => "Xenial amd64 Ceph Nautilus",
-	    type      => "deb",
-	    url       => "http://download.ceph.com/debian-nautilus/";
 
 ## Debian ##
 	"Debian Stretch":
