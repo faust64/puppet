@@ -7,7 +7,7 @@ class katello::config::rhsubs {
 	    cv           => "CCV-capsule6",
 	    domain       => "vms.intra.unetresgrossebite.com",
 	    lifecycleenv => "Prod",
-	    medium       => RedHat Enterprise Linux Server 7.$last7",
+	    medium       => "RedHat Enterprise Linux Server 7.$last7",
 	    subnet       => "VMs";
 #	"OCP":
 #	    ak           => "AK-OCP-Prod",
