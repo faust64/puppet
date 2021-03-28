@@ -21,7 +21,7 @@ class katello::config::patches {
 #		owner   => "root",
 #		path    => "/usr/share/gems/gems/katello-3.18.2.1/app/services/katello/pulp3/repository.rb.patched",
 #		require => Exec["Initializes Katello"],
-#		source  => "puppet:///katello/usr-share-gems-gems-katello-3.18.2.1-app-services-katello-pulp3-repository.rb.patched";
+#		source  => "puppet:///modules/katello/repository.rb.patched";
 #	}
 #    }
 
