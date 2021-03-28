@@ -73,9 +73,16 @@ class katello::config::subs {
     katello::define::policy {
 	"Default CentOS7":
 	    hostgroups => [ "Ceph", "OKD" ],
-	    policy     => "Red Hat centos7 default content";
+	    policy     => "CentOS 7 DS 1.2";
+	    profile    => "xccdf_org.ssgproject.content_profile_standard";
+	"Default CentOS8":
+	    policy     => "CentOS 8 DS 1.2";
+	    profile    => "xccdf_org.ssgproject.content_profile_standard";
 	"PCI-DSS CentOS7":
-	    policy     => "Red Hat centos7 default content",
+	    policy     => "CentOS 7 DS 1.2",
+	    profile    => "xccdf_org.ssgproject.content_profile_pci-dss";
+	"PCI-DSS CentOS8":
+	    policy     => "CentOS 8 DS 1.2",
 	    profile    => "xccdf_org.ssgproject.content_profile_pci-dss";
     }
 }

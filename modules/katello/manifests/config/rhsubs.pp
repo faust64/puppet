@@ -42,12 +42,25 @@ class katello::config::rhsubs {
 	"Default RHEL7":
 	    policy     => "Red Hat rhel7 default content";
 	"Default RHEL8":
-	    policy     => "Red Hat rhel8 default content";
+	    policy     => "Red Hat rhel8 default content",
+	    profile    => "xccdf_org.ssgproject.content_profile_ospp";
 	"PCI-DSS RHEL7":
 	    policy     => "Red Hat rhel7 default content",
 	    profile    => "xccdf_org.ssgproject.content_profile_pci-dss";
 	"PCI-DSS RHEL8":
 	    policy     => "Red Hat rhel8 default content",
 	    profile    => "xccdf_org.ssgproject.content_profile_pci-dss";
+	"ANSSI RHEL8 Minimal":
+	    policy     => "RedHat 8.2 DS 1.2",
+	    profile    => "xccdf_org.ssgproject.content_profile_anssi_bp28_minimal";
+	"ANSSI RHEL8 Intermediary":
+	    policy     => "RedHat 8.2 DS 1.2",
+	    profile    => "xccdf_org.ssgproject.content_profile_anssi_bp28_intermediary";
+	"ANSSI RHEL8 High":
+	    policy     => "RedHat 8.2 DS 1.2",
+	    profile    => "xccdf_org.ssgproject.content_profile_anssi_bp28_high";
+	"ANSSI RHEL8 Enhanced":
+	    policy     => "RedHat 8.2 DS 1.2",
+	    profile    => "xccdf_org.ssgproject.content_profile_anssi_bp28_enhanced";
     }
 }
