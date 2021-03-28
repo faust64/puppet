@@ -169,92 +169,92 @@ class katello::config::repos {
 	    url       => "http://download.ceph.com/rpm-octopus/el8/x86_64/";
 
 ## Debian ##
-	"Debian Stretch":
-	    debrels   => [ "stretch" ],
-	    gpgkey    => "Debian9",
-	    product   => "Debian",
-	    shortname => "Debian9",
-	    type      => "deb",
-	    url       => "http://ftp.debian.org/debian/";
-	"Debian Stretch Updates":
-	    debrels   => [ "stretch-updates" ],
-	    gpgkey    => "Debian9",
-	    product   => "Debian",
-	    shortname => "Debian9 Updates",
-	    type      => "deb",
-	    url       => "http://ftp.debian.org/debian/";
-	"Debian Stretch Backports":
-	    debrels   => [ "stretch-backports" ],
-	    product   => "Debian",
-	    shortname => "Debian9 Backports",
-	    type      => "deb",
-	    url       => "http://ftp.debian.org/debian/";
-	"Debian Stretch Security":
-	    debrels   => [ "stretch/updates" ],
-	    gpgkey    => "Debian9-Security",
-	    product   => "Debian",
-	    shortname => "Debian9 Security",
-	    type      => "deb",
-	    url       => "http://security.debian.org/";
-	"Debian Buster":
-	    debrels   => [ "buster" ],
-	    gpgkey    => "Debian10",
-	    product   => "Debian",
-	    shortname => "Debian10",
-	    type      => "deb",
-	    url       => "http://ftp.debian.org/debian/";
-	"Debian Buster Updates":
-	    debrels   => [ "buster-updates" ],
-	    gpgkey    => "Debian10",
-	    product   => "Debian",
-	    shortname => "Debian10 Updates",
-	    type      => "deb",
-	    url       => "http://ftp.debian.org/debian/";
-	"Debian Buster Backports":
-	    debrels   => [ "buster-backports" ],
-	    product   => "Debian",
-	    shortname => "Debian10 Backports",
-	    type      => "deb",
-	    url       => "http://ftp.debian.org/debian/";
-	"Debian Buster Security":
-	    debrels   => [ "buster/updates" ],
-	    gpgkey    => "Debian10-Security",
-	    product   => "Debian",
-	    shortname => "Debian10 Security",
-	    type      => "deb",
-	    url       => "http://security.debian.org/";
+#	"Debian Stretch":
+#	    debrels   => [ "stretch" ],
+#	    gpgkey    => "Debian9",
+#	    product   => "Debian",
+#	    shortname => "Debian9",
+#	    type      => "deb",
+#	    url       => "http://ftp.debian.org/debian/";
+#	"Debian Stretch Updates":
+#	    debrels   => [ "stretch-updates" ],
+#	    gpgkey    => "Debian9",
+#	    product   => "Debian",
+#	    shortname => "Debian9 Updates",
+#	    type      => "deb",
+#	    url       => "http://ftp.debian.org/debian/";
+#	"Debian Stretch Backports":
+#	    debrels   => [ "stretch-backports" ],
+#	    product   => "Debian",
+#	    shortname => "Debian9 Backports",
+#	    type      => "deb",
+#	    url       => "http://ftp.debian.org/debian/";
+#	"Debian Stretch Security":
+#	    debrels   => [ "stretch/updates" ],
+#	    gpgkey    => "Debian9-Security",
+#	    product   => "Debian",
+#	    shortname => "Debian9 Security",
+#	    type      => "deb",
+#	    url       => "http://security.debian.org/";
+#	"Debian Buster":
+#	    debrels   => [ "buster" ],
+#	    gpgkey    => "Debian10",
+#	    product   => "Debian",
+#	    shortname => "Debian10",
+#	    type      => "deb",
+#	    url       => "http://ftp.debian.org/debian/";
+#	"Debian Buster Updates":
+#	    debrels   => [ "buster-updates" ],
+#	    gpgkey    => "Debian10",
+#	    product   => "Debian",
+#	    shortname => "Debian10 Updates",
+#	    type      => "deb",
+#	    url       => "http://ftp.debian.org/debian/";
+#	"Debian Buster Backports":
+#	    debrels   => [ "buster-backports" ],
+#	    product   => "Debian",
+#	    shortname => "Debian10 Backports",
+#	    type      => "deb",
+#	    url       => "http://ftp.debian.org/debian/";
+#	"Debian Buster Security":
+#	    debrels   => [ "buster/updates" ],
+#	    gpgkey    => "Debian10-Security",
+#	    product   => "Debian",
+#	    shortname => "Debian10 Security",
+#	    type      => "deb",
+#	    url       => "http://security.debian.org/";
 
 ## Devuan ##
-	"Devuan Jessie":
-	    debrels   => [ "jessie" ],
-	    product   => "Devuan",
-	    shortname => "Devuan Jessie",
-	    type      => "deb",
-	    url       => "http://deb.devuan.org/merged/";
-	"Devuan Jessie Security":
-	    debrels   => [ "jessie-security" ],
-	    product   => "Devuan",
-	    shortname => "Devuan Jessie Security",
-	    type      => "deb",
-	    url       => "http://deb.devuan.org/merged/";
-	"Devuan Ascii":
-	    debrels   => [ "ascii" ],
-	    product   => "Devuan",
-	    shortname => "Devuan Ascii",
-	    type      => "deb",
-	    url       => "http://deb.devuan.org/merged/";
-	"Devuan Ascii Security":
-	    debrels   => [ "ascii-security" ],
-	    product   => "Devuan",
-	    shortname => "Devuan Ascii Security",
-	    type      => "deb",
-	    url       => "http://deb.devuan.org/merged/";
-	"Devuan Ascii Updates":
-	    debrels   => [ "ascii-updates" ],
-	    product   => "Devuan",
-	    shortname => "Devuan Ascii Updates",
-	    type      => "deb",
-	    url       => "http://deb.devuan.org/merged/";
+#	"Devuan Jessie":
+#	    debrels   => [ "jessie" ],
+#	    product   => "Devuan",
+#	    shortname => "Devuan Jessie",
+#	    type      => "deb",
+#	    url       => "http://deb.devuan.org/merged/";
+#	"Devuan Jessie Security":
+#	    debrels   => [ "jessie-security" ],
+#	    product   => "Devuan",
+#	    shortname => "Devuan Jessie Security",
+#	    type      => "deb",
+#	    url       => "http://deb.devuan.org/merged/";
+#	"Devuan Ascii":
+#	    debrels   => [ "ascii" ],
+#	    product   => "Devuan",
+#	    shortname => "Devuan Ascii",
+#	    type      => "deb",
+#	    url       => "http://deb.devuan.org/merged/";
+#	"Devuan Ascii Security":
+#	    debrels   => [ "ascii-security" ],
+#	    product   => "Devuan",
+#	    shortname => "Devuan Ascii Security",
+#	    type      => "deb",
+#	    url       => "http://deb.devuan.org/merged/";
+#	"Devuan Ascii Updates":
+#	    debrels   => [ "ascii-updates" ],
+#	    product   => "Devuan",
+#	    shortname => "Devuan Ascii Updates",
+#	    type      => "deb",
+#	    url       => "http://deb.devuan.org/merged/";
 
 ## EPEL ##
 	"EPEL7 x86_64":

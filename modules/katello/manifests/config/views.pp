@@ -85,40 +85,40 @@ class katello::config::views {
 		      rname      => "CentOS8 PowerTools x86_64",
 		      repository => "el8 x86_64 PowerTools" }
 		];
-	"CV-base-debian10":
-	    content   =>
-		[
-		    { product    => "Debian",
-		      rname      => "Debian Buster",
-		      repository => "Debian10" },
-		    { product    => "Debian",
-		      rname      => "Debian Buster Updates",
-		      repository => "Debian10" },
-		    { product    => "Debian",
-		      rname      => "Debian Buster Backports",
-		      repository => "Debian10 Backports" } ,
-		    { product    => "Debian",
-		      rname      => "Debian Buster Security",
-		      repository => "Debian10 Security" }
-		],
-	    dopublish => false;
-	"CV-base-debian9":
-	    content   =>
-		[
-		    { product    => "Debian",
-		      rname      => "Debian Stretch",
-		      repository => "Debian9" },
-		    { product    => "Debian",
-		      rname      => "Debian Stretch Updates",
-		      repository => "Debian9" },
-		    { product    => "Debian",
-		      rname      => "Debian Stretch Backports",
-		      repository => "Debian9 Backports" } ,
-		    { product    => "Debian",
-		      rname      => "Debian Stretch Security",
-		      repository => "Debian9 Security" }
-		],
-	    dopublish => false;
+#	"CV-base-debian10":
+#	    content   =>
+#		[
+#		    { product    => "Debian",
+#		      rname      => "Debian Buster",
+#		      repository => "Debian10" },
+#		    { product    => "Debian",
+#		      rname      => "Debian Buster Updates",
+#		      repository => "Debian10" },
+#		    { product    => "Debian",
+#		      rname      => "Debian Buster Backports",
+#		      repository => "Debian10 Backports" } ,
+#		    { product    => "Debian",
+#		      rname      => "Debian Buster Security",
+#		      repository => "Debian10 Security" }
+#		],
+#	    dopublish => false;
+#	"CV-base-debian9":
+#	    content   =>
+#		[
+#		    { product    => "Debian",
+#		      rname      => "Debian Stretch",
+#		      repository => "Debian9" },
+#		    { product    => "Debian",
+#		      rname      => "Debian Stretch Updates",
+#		      repository => "Debian9" },
+#		    { product    => "Debian",
+#		      rname      => "Debian Stretch Backports",
+#		      repository => "Debian9 Backports" } ,
+#		    { product    => "Debian",
+#		      rname      => "Debian Stretch Security",
+#		      repository => "Debian9 Security" }
+#		],
+#	    dopublish => false;
 	"CV-katello-client-el7":
 	    content   =>
 		[
@@ -168,10 +168,10 @@ class katello::config::views {
 		    "CV-base-centos8", "CV-katello-client-el8"
 		],
 	    tolce     => [ "Dev", "Prod" ];
-	"CCV-Ceph-deb10":
-	    composite => true,
-	    content   => [ "CV-Ceph-deb10", "CV-base-debian10" ],
-	    tolce     => [ "Dev", "Prod" ];
+#	"CCV-Ceph-deb10":
+#	    composite => true,
+#	    content   => [ "CV-Ceph-deb10", "CV-base-debian10" ],
+#	    tolce     => [ "Dev", "Prod" ];
 	"CCV-OKD-el7":
 	    composite => true,
 	    content   =>
