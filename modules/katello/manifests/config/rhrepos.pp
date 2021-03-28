@@ -54,7 +54,6 @@ class katello::config::rhrepos {
 	]:
 	    releasever => "8.$last8";
 	[
-	    "Red Hat Ansible Engine 2.4 RPMs for Red Hat Enterprise Linux 7 Server",
 	    "Red Hat Ansible Engine 2.6 RPMs for Red Hat Enterprise Linux 7 Server",
 	    "Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server",
 	    "Red Hat Ansible Engine 2.9 RPMs for Red Hat Enterprise Linux 7 Server",
@@ -83,7 +82,6 @@ class katello::config::rhrepos {
 	"Red Hat Ansible Engine":
 	    require  =>
 		[
-		    Katello::Define::Repositoryset["Red Hat Ansible Engine 2.4 RPMs for Red Hat Enterprise Linux 7 Server"],
 		    Katello::Define::Repositoryset["Red Hat Ansible Engine 2.6 RPMs for Red Hat Enterprise Linux 7 Server"],
 		    Katello::Define::Repositoryset["Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server"],
 		    Katello::Define::Repositoryset["Red Hat Ansible Engine 2.9 RPMs for Red Hat Enterprise Linux 7 Server"]
@@ -144,13 +142,9 @@ class katello::config::rhrepos {
 
     katello::define::repository {
 ## Ansible ##
-	"Red Hat Ansible Engine 2.4 RPMs for Red Hat Enterprise Linux 7 Server":
-	    product   => "Red Hat Ansible Engine",
-	    shortname => "Red Hat Ansible Engine 2.4 RPMs for Red Hat Enterprise Linux 7 Server x86_64 7Server",
-	    url       => "rhsm";
 	"Red Hat Ansible Engine 2.6 RPMs for Red Hat Enterprise Linux 7 Server":
 	    product   => "Red Hat Ansible Engine",
-	    shortname => "Red Hat Ansible Engine 2.6 RPMs for Red Hat Enterprise Linux 7 Server x86_64 7Server",
+	    shortname => "Red Hat Ansible Engine 2.6 RPMs for Red Hat Enterprise Linux 7 Server x86_64",
 	    url       => "rhsm";
 	"Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server":
 	    product   => "Red Hat Ansible Engine",
