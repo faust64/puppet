@@ -191,10 +191,17 @@ class katello::config::repos {
 
 ## Debian ##
 	"Debian Stretch":
-	    debrels   => [ "stretch", "stretch-updates" ],
+	    debrels   => [ "stretch" ],
 	    gpgkey    => "Debian9",
 	    product   => "Debian",
 	    shortname => "Debian9",
+	    type      => "deb",
+	    url       => "http://ftp.debian.org/debian/";
+	"Debian Stretch Updates":
+	    debrels   => [ "stretch-updates" ],
+	    gpgkey    => "Debian9",
+	    product   => "Debian",
+	    shortname => "Debian9 Updates",
 	    type      => "deb",
 	    url       => "http://ftp.debian.org/debian/";
 	"Debian Stretch Backports":
@@ -211,10 +218,17 @@ class katello::config::repos {
 	    type      => "deb",
 	    url       => "http://security.debian.org/";
 	"Debian Buster":
-	    debrels   => [ "buster", "buster-updates" ],
+	    debrels   => [ "buster" ],
 	    gpgkey    => "Debian10",
 	    product   => "Debian",
 	    shortname => "Debian10",
+	    type      => "deb",
+	    url       => "http://ftp.debian.org/debian/";
+	"Debian Buster Updates":
+	    debrels   => [ "buster-updates" ],
+	    gpgkey    => "Debian10",
+	    product   => "Debian",
+	    shortname => "Debian10 Updates",
 	    type      => "deb",
 	    url       => "http://ftp.debian.org/debian/";
 	"Debian Buster Backports":
@@ -233,15 +247,33 @@ class katello::config::repos {
 
 ## Devuan ##
 	"Devuan Jessie":
-	    debrels   => [ "jessie", "jessie-security" ],
+	    debrels   => [ "jessie" ],
 	    product   => "Devuan",
 	    shortname => "Devuan Jessie",
 	    type      => "deb",
 	    url       => "http://deb.devuan.org/merged/";
+	"Devuan Jessie Security":
+	    debrels   => [ "jessie-security" ],
+	    product   => "Devuan",
+	    shortname => "Devuan Jessie Security",
+	    type      => "deb",
+	    url       => "http://deb.devuan.org/merged/";
 	"Devuan Ascii":
-	    debrels   => [ "ascii", "ascii-security", "ascii-updates" ],
+	    debrels   => [ "ascii" ],
 	    product   => "Devuan",
 	    shortname => "Devuan Ascii",
+	    type      => "deb",
+	    url       => "http://deb.devuan.org/merged/";
+	"Devuan Ascii Security":
+	    debrels   => [ "ascii-security" ],
+	    product   => "Devuan",
+	    shortname => "Devuan Ascii Security",
+	    type      => "deb",
+	    url       => "http://deb.devuan.org/merged/";
+	"Devuan Ascii Updates":
+	    debrels   => [ "ascii-updates" ],
+	    product   => "Devuan",
+	    shortname => "Devuan Ascii Updates",
 	    type      => "deb",
 	    url       => "http://deb.devuan.org/merged/";
 
