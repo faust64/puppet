@@ -4,7 +4,7 @@ class katello {
     include openldap::client
 
     include katello::rhel
-    include katello::client
+    #include katello::client
     include katello::config
     include katello::hammer
     include katello::profile
@@ -19,13 +19,14 @@ class katello {
     include katello::config::network
     include katello::config::patches
     include katello::config::repos
-    include katello::config::subs
+    include katello::config::scap
     include katello::config::views
+    include katello::config::subs
 
     if ($katello::vars::manifest) {
 	include katello::config::rhrepos
-	include katello::config::rhsubs
 	include katello::config::rhviews
+	include katello::config::rhsubs
     }
 
     include katello::munin

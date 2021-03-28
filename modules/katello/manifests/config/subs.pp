@@ -2,6 +2,7 @@ class katello::config::subs {
     $ktlvers = $katello::vars::katello_version
     $org     = $katello::vars::katello_org
     $plcvers = $katello::vars::pulpcore_version
+    $pptvers = $katello::vars::puppet_version
     $tfmvers = $katello::vars::theforeman_version
 
     katello::define::hostgroup {
@@ -40,7 +41,7 @@ class katello::config::subs {
 		    "${org}_Foreman_el8_x86_64_TheForeman_${tfmvers}_Client",
 		    "${org}_Foreman_el8_x86_64_TheForeman_${tfmvers}_Plugins",
 		    "${org}_Katello_el8_x86_64_Katello_${plcvers}_Pulpcore",
-		    "${org}_Puppet_el8_x86_64_Puppet5"
+		    "${org}_Puppet_el8_x86_64_Puppet$pptvers"
 		],
 	    lce         => "Prod";
 	"AK-OKD-Prod":
@@ -63,7 +64,7 @@ class katello::config::subs {
 		    "${org}_Foreman_el7_x86_64_TheForeman_${tfmvers}_Client",
 		    "${org}_Foreman_el7_x86_64_TheForeman_${tfmvers}_Plugins",
 		    "${org}_Katello_el7_x86_64_Katello_${plcvers}_Pulpcore",
-		    "${org}_Puppet_el7_x86_64_Puppet5"
+		    "${org}_Puppet_el7_x86_64_Puppet$pptvers"
 		],
 	    lce         => "Prod";
     }

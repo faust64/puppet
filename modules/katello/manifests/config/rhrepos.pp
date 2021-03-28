@@ -18,7 +18,7 @@ class katello::config::rhrepos {
     }
 
     katello::define::os {
-	"RedHat-7.$last7":
+	"RedHat 7.$last7":
 	    major   => 7,
 	    mediums => [ "RedHat Enterprise Linux Server 7.$last7" ],
 	    minor   => $last7,
@@ -27,7 +27,7 @@ class katello::config::rhrepos {
 		    "Custom kickstart",
 		    "Kickstart default",
 		];
-	"RedHat-8.$last8":
+	"RedHat 8.$last8":
 	    major   => 8,
 	    mediums => [ "RedHat Enterprise Linux Server 8.$last8" ],
 	    minor   => $last8,
