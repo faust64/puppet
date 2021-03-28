@@ -15,6 +15,7 @@ class katello {
     include katello::config::basics
     include katello::config::custrepos
     include katello::config::firewalld
+    include katello::config::lce
     include katello::config::network
     include katello::config::patches
     include katello::config::repos

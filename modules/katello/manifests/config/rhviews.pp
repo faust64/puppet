@@ -10,7 +10,7 @@ class katello::config::rhviews {
 		      repository => "Red Hat Enterprise Linux 7 Server RPMs x86_64 7Server" },
 		    { product    => "Red Hat Enterprise Linux Server",
 		      rname      => "Red Hat Enterprise Linux 7 Server - Extras (RPMs)",
-		      repository => "Red Hat Enterprise Linux 7 Server - Extras RPMs x86_64 7Server" },
+		      repository => "Red Hat Enterprise Linux 7 Server - Extras RPMs x86_64" },
 		    { product    => "Red Hat Enterprise Linux Server",
 		      rname      => "Red Hat Enterprise Linux 7 Server - Optional (RPMs)",
 		      repository => "Red Hat Enterprise Linux 7 Server - Optional RPMs x86_64 7Server" },
@@ -29,10 +29,10 @@ class katello::config::rhviews {
 		[
 		    { product    => "Red Hat Enterprise Linux for x86_64",
 		      rname      => "Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)",
-		      repository => "Red Hat Enterprise Linux 8 for x86_64 - BaseOS RPMs x86_64 8" },
+		      repository => "Red Hat Enterprise Linux 8 for x86_64 - BaseOS RPMs 8" },
 		    { product    => "Red Hat Enterprise Linux for x86_64",
 		      rname      => "Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)",
-		      repository => "Red Hat Enterprise Linux 8 for x86_64 - AppStream RPMs x86_64 8" }
+		      repository => "Red Hat Enterprise Linux 8 for x86_64 - AppStream RPMs 8" }
 		];
 	"CV-capsule6-el7":
 	    content   =>
@@ -42,7 +42,7 @@ class katello::config::rhviews {
 		      repository => "Red Hat Satellite Capsule $sat_vers for RHEL 7 Server RPMs x86_64" },
 		    { product    => "Red Hat Enterprise Linux Server",
 		      rname      => "Red Hat Satellite Maintenance 6 (for RHEL 7 Server) (RPMs)",
-		      repository => "Red Hat Satellite Maintenance 6 for RHEL 7 Server RPMs x86_64 7Server" },
+		      repository => "Red Hat Satellite Maintenance 6 for RHEL 7 Server RPMs x86_64" },
 		    { product    => "Red Hat Ansible Engine",
 		      rname      => "Red Hat Ansible Engine 2.9 RPMs for Red Hat Enterprise Linux 7 Server",
 		      repository => "Red Hat Ansible Engine 2.9 RPMs for Red Hat Enterprise Linux 7 Server x86_64" }
@@ -81,7 +81,7 @@ class katello::config::rhviews {
 		      repository => "Red Hat Satellite $sat_vers for RHEL 7 Server RPMs x86_64" },
 		    { product    => "Red Hat Enterprise Linux Server",
 		      rname      => "Red Hat Satellite Maintenance 6 (for RHEL 7 Server) (RPMs)",
-		      repository => "Red Hat Satellite Maintenance 6 for RHEL 7 Server RPMs x86_64 7Server" },
+		      repository => "Red Hat Satellite Maintenance 6 for RHEL 7 Server RPMs x86_64" },
 		    { product    => "Red Hat Ansible Engine",
 		      rname      => "Red Hat Ansible Engine 2.9 RPMs for Red Hat Enterprise Linux 7 Server",
 		      repository => "Red Hat Ansible Engine 2.9 RPMs for Red Hat Enterprise Linux 7 Server x86_64" }
@@ -93,7 +93,7 @@ class katello::config::rhviews {
 	"CV-satellite-tools-el8":
 	    content   => [ { product    => "Red Hat Enterprise Linux for x86_64",
 			     rname      => "Red Hat Satellite Tools $sat_vers for RHEL 8 x86_64 (RPMs)",
-			     repository => "Red Hat Satellite Tools $sat_vers for RHEL 8 x86_64 RPMs x86_64" } ];
+			     repository => "Red Hat Satellite Tools $sat_vers for RHEL 8 x86_64 RPMs" } ];
 
 	"CCV-capsule6":
 	    composite => true,

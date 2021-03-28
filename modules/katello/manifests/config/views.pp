@@ -4,12 +4,6 @@ class katello::config::views {
     $pptvers = $katello::vars::puppet_version
     $tfmvers = $katello::vars::theforeman_version
 
-    katello::define::lifecycleenvironment {
-	"Prod":
-	    parent => "Dev";
-	"Dev":
-    }
-
     katello::define::contentview {
 	"CV-Ansible-el7":
 	    content   => [ { product    => "Ansible",

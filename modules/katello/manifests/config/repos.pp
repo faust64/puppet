@@ -52,7 +52,7 @@ class katello::config::repos {
 	"TFM-ROR":
 	    source => "https://copr-be.cloud.fedoraproject.org/results/@theforeman/tfm-ror51/pubkey.gpg";
 	"TheForeman":
-	    source => "https://yum.theforeman.org/rails/foreman-$tfmvers/RPM-GPG-KEY-foreman";
+	    source => "https://theforeman.org/static/keys/1CC363863DD64AF30638DB79C101586BE0745924.pub";
     }
 
 # although I did define an OCP sync plan, the OCP product only includes

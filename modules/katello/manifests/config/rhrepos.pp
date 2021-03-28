@@ -18,7 +18,7 @@ class katello::config::rhrepos {
     }
 
     katello::define::os {
-	"RedHat 7.$last7":
+	"RedHat-7.$last7":
 	    major   => 7,
 	    mediums => [ "RedHat Enterprise Linux Server 7.$last7" ],
 	    minor   => $last7,
@@ -27,7 +27,7 @@ class katello::config::rhrepos {
 		    "Custom kickstart",
 		    "Kickstart default",
 		];
-	"RedHat 8.$last8":
+	"RedHat-8.$last8":
 	    major   => 8,
 	    mediums => [ "RedHat Enterprise Linux Server 8.$last8" ],
 	    minor   => $last8,
@@ -168,7 +168,7 @@ class katello::config::rhrepos {
 	    url       => "rhsm";
 	"Red Hat Enterprise Linux 7 Server - Extras (RPMs)":
 	    product   => "Red Hat Enterprise Linux Server",
-	    shortname => "Red Hat Enterprise Linux 7 Server - Extras RPMs x86_64 7Server",
+	    shortname => "Red Hat Enterprise Linux 7 Server - Extras RPMs x86_64",
 	    url       => "rhsm";
 	"Red Hat Enterprise Linux 7 Server - Optional (RPMs)":
 	    product   => "Red Hat Enterprise Linux Server",
@@ -188,19 +188,19 @@ class katello::config::rhrepos {
 	    url       => "rhsm";
 	"Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)":
 	    product   => "Red Hat Enterprise Linux for x86_64",
-	    shortname => "Red Hat Enterprise Linux 8 for x86_64 - AppStream RPMs x86_64 8",
+	    shortname => "Red Hat Enterprise Linux 8 for x86_64 - AppStream RPMs 8",
 	    url       => "rhsm";
 	"Red Hat Enterprise Linux 8 for x86_64 - AppStream (Kickstart)":
 	    product   => "Red Hat Enterprise Linux for x86_64",
-	    shortname => "Red Hat Enterprise Linux 8 for x86_64 - AppStream (Kickstart)",
+	    shortname => "Red Hat Enterprise Linux 8 for x86_64 - AppStream Kickstart 8.$last8",
 	    url       => "rhsm";
 	"Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)":
 	    product   => "Red Hat Enterprise Linux for x86_64",
-	    shortname => "Red Hat Enterprise Linux 8 for x86_64 - BaseOS RPMs x86_64 8",
+	    shortname => "Red Hat Enterprise Linux 8 for x86_64 - BaseOS RPMs 8",
 	    url       => "rhsm";
 	"Red Hat Enterprise Linux 8 for x86_64 - BaseOS (Kickstart)":
 	    product   => "Red Hat Enterprise Linux for x86_64",
-	    shortname => "Red Hat Enterprise Linux 8 for x86_64 - BaseOS (Kickstart)",
+	    shortname => "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart 8.$last8",
 	    url       => "rhsm";
 	"Red Hat Software Collections RPMs for Red Hat Enterprise Linux 7 Server":
 	    product   => "Red Hat Software Collections (for RHEL Server)",
@@ -218,7 +218,7 @@ class katello::config::rhrepos {
 	    url       => "rhsm";
 	"Red Hat Satellite Maintenance 6 (for RHEL 7 Server) (RPMs)":
 	    product   => "Red Hat Enterprise Linux Server",
-	    shortname => "Red Hat Satellite Maintenance 6 for RHEL 7 Server RPMs x86_64 7Server",
+	    shortname => "Red Hat Satellite Maintenance 6 for RHEL 7 Server RPMs x86_64",
 	    url       => "rhsm";
 	"Red Hat Satellite Tools $sat_vers (for RHEL 7 Server) (RPMs)":
 	    product   => "Red Hat Enterprise Linux Server",
@@ -226,7 +226,7 @@ class katello::config::rhrepos {
 	    url       => "rhsm";
 	"Red Hat Satellite Tools $sat_vers for RHEL 8 x86_64 (RPMs)":
 	    product   => "Red Hat Enterprise Linux for x86_64",
-	    shortname => "Red Hat Satellite Tools $sat_vers for RHEL 8 x86_64 RPMs x86_64",
+	    shortname => "Red Hat Satellite Tools $sat_vers for RHEL 8 x86_64 RPMs",
 	    url       => "rhsm";
 
 ## Ceph ##
