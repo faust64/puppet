@@ -27,10 +27,10 @@ class katello::config::views {
 			   { product    => "Ceph",
 			     rname      => "EL8 Octopus noarch",
 			     repository => "el8 noarch Ceph Octopus" } ];
-	"CV-Ceph-deb10":
-	    content   => [ { product    => "Ceph",
-			     rname      => "Buster Octopus",
-			     repository => "Buster amd64 Ceph Octopus" } ];
+#	"CV-Ceph-deb10":
+#	    content   => [ { product    => "Ceph",
+#			     rname      => "Buster Octopus",
+#			     repository => "Buster amd64 Ceph Octopus" } ];
 	"CV-EPEL-el7":
 	    content   => [ { product    => "EPEL",
 			     rname      => "EPEL7 x86_64",
