@@ -42,6 +42,13 @@ class katello::config {
 	    owner   => "root",
 	    path    => "/etc/openldap/ldap.conf",
 	    require => Class["openldap::client"];
+	"Install Foreman Profile":
+	    group   => lookup("gid_zero"),
+	    mode    => "0755",
+	    owner   => "root",
+	    path    => "/etc/profile.d/foreman-rake.sh",
+	    require => Common::Define::Package["katello"],
+	    source  => "puppet:///modules/katello/profile.sh";
 	"Link Puppet CA to trust store":
 	    ensure  => link,
 	    notify  =>
