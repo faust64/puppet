@@ -8,22 +8,22 @@ class katello::config::patches {
 	    path   => "/root/katello-patches";
     }
 
-    if ($katello::vars::katello_version == 3.18) {
-	# see:
-	# https://projects.theforeman.org/issues/31322
-	# https://projects.theforeman.org/projects/katello/repository/revisions/62a79f9ca909c073d285f5775a4f3c97c44cbb00/diff
-
-	file {
-	    "Installs Katello Pulp3 Patch":
-		group   => lookup("gid_zero"),
-		mode    => "0644",
-		notify  => Exec["Reload Katello Services"],
-		owner   => "root",
-		path    => "/usr/share/gems/gems/katello-3.18.2.1/app/services/katello/pulp3/repository.rb.patched",
-		require => Exec["Initializes Katello"],
-		source  => "puppet:///katello/usr-share-gems-gems-katello-3.18.2.1-app-services-katello-pulp3-repository.rb.patched";
-	}
-    }
+#    if ($katello::vars::katello_version == 3.18) {
+#	# see:
+#	# https://projects.theforeman.org/issues/31322
+#	# https://projects.theforeman.org/projects/katello/repository/revisions/62a79f9ca909c073d285f5775a4f3c97c44cbb00/diff
+#
+#	file {
+#	    "Installs Katello Pulp3 Patch":
+#		group   => lookup("gid_zero"),
+#		mode    => "0644",
+#		notify  => Exec["Reload Katello Services"],
+#		owner   => "root",
+#		path    => "/usr/share/gems/gems/katello-3.18.2.1/app/services/katello/pulp3/repository.rb.patched",
+#		require => Exec["Initializes Katello"],
+#		source  => "puppet:///katello/usr-share-gems-gems-katello-3.18.2.1-app-services-katello-pulp3-repository.rb.patched";
+#	}
+#    }
 
     each($katello::vars::patches) |$asset| {
 	$f = $asset['file']

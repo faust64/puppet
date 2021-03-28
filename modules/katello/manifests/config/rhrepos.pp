@@ -40,15 +40,18 @@ class katello::config::rhrepos {
 
     katello::define::repositoryset {
 	[
-	    "Red Hat Ceph Storage 4 Text-Only Advisories for RHEL 8 x86_64 (RPMs)",
-	    "Red Hat Ceph Storage MON 4 for RHEL 8 x86_64 (RPMs)",
-	    "Red Hat Ceph Storage OSD 4 for RHEL 8 x86_64 (RPMs)",
-	    "Red Hat Ceph Storage Tools 4 for RHEL 8 x86_64 (RPMs)",
+#	    "Red Hat Ceph Storage 4 Text-Only Advisories for RHEL 8 x86_64 (RPMs)",
+#	    "Red Hat Ceph Storage MON 4 for RHEL 8 x86_64 (RPMs)",
+#	    "Red Hat Ceph Storage OSD 4 for RHEL 8 x86_64 (RPMs)",
+#	    "Red Hat Ceph Storage Tools 4 for RHEL 8 x86_64 (RPMs)",
 	    "Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)",
 	    "Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)"
 	]:
 	    releasever => 8;
-	"Red Hat Enterprise Linux 8 for x86_64 - BaseOS (Kickstart)":
+	[
+	    "Red Hat Enterprise Linux 8 for x86_64 - AppStream (Kickstart)",
+	    "Red Hat Enterprise Linux 8 for x86_64 - BaseOS (Kickstart)"
+	]:
 	    releasever => "8.$last8";
 	[
 	    "Red Hat Ansible Engine 2.4 RPMs for Red Hat Enterprise Linux 7 Server",
@@ -59,8 +62,8 @@ class katello::config::rhrepos {
 	    "Red Hat Enterprise Linux 7 Server - Optional (RPMs)",
 	    "Red Hat Enterprise Linux 7 Server - Supplementary (RPMs)",
 	    "Red Hat Enterprise Linux 7 Server (RPMs)",
-	    "Red Hat OpenShift Container Platform 3.11 (RPMs)",
-	    "Red Hat OpenStack Platform 13 for RHEL 7 (RPMs)",
+#	    "Red Hat OpenShift Container Platform 3.11 (RPMs)",
+#	    "Red Hat OpenStack Platform 13 for RHEL 7 (RPMs)",
 	    "Red Hat Satellite $sat_vers (for RHEL 7 Server) (RPMs)",
 	    "Red Hat Satellite Capsule $sat_vers (for RHEL 7 Server) (RPMs)",
 	    "Red Hat Satellite Maintenance 6 (for RHEL 7 Server) (RPMs)",
@@ -86,25 +89,25 @@ class katello::config::rhrepos {
 		    Katello::Define::Repositoryset["Red Hat Ansible Engine 2.9 RPMs for Red Hat Enterprise Linux 7 Server"]
 		],
 	    syncplan => "Ansible";
-	"Red Hat Ceph Storage":
-	    require  => Katello::Define::Repositoryset["Red Hat Ceph Storage Tools 4 for RHEL 8 x86_64 (RPMs)"],
-	    syncplan => "Ceph";
-	"Red Hat Ceph Storage MON":
-	    require  =>
-		[
-		    Katello::Define::Repositoryset["Red Hat Ceph Storage 4 Text-Only Advisories for RHEL 8 x86_64 (RPMs)"],
-		    Katello::Define::Repositoryset["Red Hat Ceph Storage MON 4 for RHEL 8 x86_64 (RPMs)"],
-		],
-	    syncplan => "Ceph";
-	"Red Hat Ceph Storage OSD":
-	    require  => Katello::Define::Repositoryset["Red Hat Ceph Storage OSD 4 for RHEL 8 x86_64 (RPMs)"],
-	    syncplan => "Ceph";
-	"Red Hat OpenShift Container Platform":
-	    require  => Katello::Define::Repositoryset["Red Hat OpenShift Container Platform 3.11 (RPMs)"],
-	    syncplan => "OCP";
-	"Red Hat OpenStack":
-	    require  => Katello::Define::Repositoryset["Red Hat OpenStack Platform 13 for RHEL 7 (RPMs)"],
-	    syncplan => "OSP";
+#	"Red Hat Ceph Storage":
+#	    require  => Katello::Define::Repositoryset["Red Hat Ceph Storage Tools 4 for RHEL 8 x86_64 (RPMs)"],
+#	    syncplan => "Ceph";
+#	"Red Hat Ceph Storage MON":
+#	    require  =>
+#		[
+#		    Katello::Define::Repositoryset["Red Hat Ceph Storage 4 Text-Only Advisories for RHEL 8 x86_64 (RPMs)"],
+#		    Katello::Define::Repositoryset["Red Hat Ceph Storage MON 4 for RHEL 8 x86_64 (RPMs)"],
+#		],
+#	    syncplan => "Ceph";
+#	"Red Hat Ceph Storage OSD":
+#	    require  => Katello::Define::Repositoryset["Red Hat Ceph Storage OSD 4 for RHEL 8 x86_64 (RPMs)"],
+#	    syncplan => "Ceph";
+#	"Red Hat OpenShift Container Platform":
+#	    require  => Katello::Define::Repositoryset["Red Hat OpenShift Container Platform 3.11 (RPMs)"],
+#	    syncplan => "OCP";
+#	"Red Hat OpenStack":
+#	    require  => Katello::Define::Repositoryset["Red Hat OpenStack Platform 13 for RHEL 7 (RPMs)"],
+#	    syncplan => "OSP";
 	[ "Red Hat Satellite", "Red Hat Satellite Capsule" ]:
 	    require  =>
 		[
@@ -118,6 +121,7 @@ class katello::config::rhrepos {
 	    require  =>
 		[
 		    Katello::Define::Repositoryset["Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)"],
+		    Katello::Define::Repositoryset["Red Hat Enterprise Linux 8 for x86_64 - AppStream (Kickstart)"],
 		    Katello::Define::Repositoryset["Red Hat Enterprise Linux 8 for x86_64 - BaseOS (Kickstart)"],
 		    Katello::Define::Repositoryset["Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)"]
 		],
@@ -186,16 +190,17 @@ class katello::config::rhrepos {
 	    product   => "Red Hat Enterprise Linux for x86_64",
 	    shortname => "Red Hat Enterprise Linux 8 for x86_64 - AppStream RPMs x86_64 8",
 	    url       => "rhsm";
-	"Red Hat Enterprise Linux 8 for x86_64 - BaseOS (Kickstart)":
+	"Red Hat Enterprise Linux 8 for x86_64 - AppStream (Kickstart)":
 	    product   => "Red Hat Enterprise Linux for x86_64",
-	    shortname => "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart x86_64 8.$last8",
-	"Red Hat Enterprise Linux 8 for x86_64 - BaseOS (Kickstart)":
-	    product   => "Red Hat Enterprise Linux for x86_64",
-	    shortname => "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart x86_64 8.$last8",
+	    shortname => "Red Hat Enterprise Linux 8 for x86_64 - AppStream (Kickstart)",
 	    url       => "rhsm";
 	"Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)":
 	    product   => "Red Hat Enterprise Linux for x86_64",
 	    shortname => "Red Hat Enterprise Linux 8 for x86_64 - BaseOS RPMs x86_64 8",
+	    url       => "rhsm";
+	"Red Hat Enterprise Linux 8 for x86_64 - BaseOS (Kickstart)":
+	    product   => "Red Hat Enterprise Linux for x86_64",
+	    shortname => "Red Hat Enterprise Linux 8 for x86_64 - BaseOS (Kickstart)",
 	    url       => "rhsm";
 	"Red Hat Software Collections RPMs for Red Hat Enterprise Linux 7 Server":
 	    product   => "Red Hat Software Collections (for RHEL Server)",
@@ -225,35 +230,35 @@ class katello::config::rhrepos {
 	    url       => "rhsm";
 
 ## Ceph ##
-	"Red Hat Ceph Storage Tools 4 for RHEL 8 x86_64 (RPMs)":
-	    product   => "Red Hat Ceph Storage",
-	    shortname => "Red Hat Ceph Storage Tools 4 for RHEL 8 x86_64 RPMs",
-	    url       => "rhsm";
+#	"Red Hat Ceph Storage Tools 4 for RHEL 8 x86_64 (RPMs)":
+#	    product   => "Red Hat Ceph Storage",
+#	    shortname => "Red Hat Ceph Storage Tools 4 for RHEL 8 x86_64 RPMs",
+#	    url       => "rhsm";
 
-	"Red Hat Ceph Storage 4 Text-Only Advisories for RHEL 8 x86_64 (RPMs)":
-	    product   => "Red Hat Ceph Storage MON",
-	    shortname => "Red Hat Ceph Storage 4 Text-Only Advisories for RHEL 8 x86_64 RPMs",
-	    url       => "rhsm";
-	"Red Hat Ceph Storage MON 4 for RHEL 8 x86_64 (RPMs)":
-	    product   => "Red Hat Ceph Storage MON",
-	    shortname => "Red Hat Ceph Storage MON 4 for RHEL 8 x86_64 RPMs",
-	    url       => "rhsm";
-	"Red Hat Ceph Storage OSD 4 for RHEL 8 x86_64 (RPMs)":
-	    product   => "Red Hat Ceph Storage OSD",
-	    shortname => "Red Hat Ceph Storage OSD 4 for RHEL 8 x86_64 RPMs",
-	    url       => "rhsm";
+#	"Red Hat Ceph Storage 4 Text-Only Advisories for RHEL 8 x86_64 (RPMs)":
+#	    product   => "Red Hat Ceph Storage MON",
+#	    shortname => "Red Hat Ceph Storage 4 Text-Only Advisories for RHEL 8 x86_64 RPMs",
+#	    url       => "rhsm";
+#	"Red Hat Ceph Storage MON 4 for RHEL 8 x86_64 (RPMs)":
+#	    product   => "Red Hat Ceph Storage MON",
+#	    shortname => "Red Hat Ceph Storage MON 4 for RHEL 8 x86_64 RPMs",
+#	    url       => "rhsm";
+#	"Red Hat Ceph Storage OSD 4 for RHEL 8 x86_64 (RPMs)":
+#	    product   => "Red Hat Ceph Storage OSD",
+#	    shortname => "Red Hat Ceph Storage OSD 4 for RHEL 8 x86_64 RPMs",
+#	    url       => "rhsm";
 
 ## OCP ##
-	"Red Hat OpenShift Container Platform 3.11 (RPMs)":
-	    product   => "Red Hat OpenShift Container Platform",
-	    shortname => "Red Hat OpenShift Container Platform 3.11 RPMs x86_64 7Server",
-	    url       => "rhsm";
+#	"Red Hat OpenShift Container Platform 3.11 (RPMs)":
+#	    product   => "Red Hat OpenShift Container Platform",
+#	    shortname => "Red Hat OpenShift Container Platform 3.11 RPMs x86_64 7Server",
+#	    url       => "rhsm";
 
 ## OSP ##
-	"Red Hat OpenStack Platform 13 for RHEL 7 (RPMs)":
-	    product   => "Red Hat OpenStack",
-	    shortname => "Red Hat OpenStack Platform 13 for RHEL 7 RPMs x86_64 7Server",
-	    url       => "rhsm";
+#	"Red Hat OpenStack Platform 13 for RHEL 7 (RPMs)":
+#	    product   => "Red Hat OpenStack",
+#	    shortname => "Red Hat OpenStack Platform 13 for RHEL 7 RPMs x86_64 7Server",
+#	    url       => "rhsm";
     }
 
 ## OCP/docker ##
