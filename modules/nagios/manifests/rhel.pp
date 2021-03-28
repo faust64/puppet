@@ -6,7 +6,7 @@ class nagios::rhel {
 	[ "nrpe", "nagios-common" ]:
     }
 
-    if ($os['release']['major'] == "7") {
+    if ($os['release']['major'] != "6" and $os['release']['major'] != 6) {
 	common::define::package {
 	    [
 		"nagios-plugins-disk", "nagios-plugins-dns",
