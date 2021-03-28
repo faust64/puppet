@@ -17,6 +17,7 @@ class katello::config::subs {
 	    cv           => "CCV-OKD-el7",
 	    domain       => "friends.intra.unetresgrossebite.com",
 	    lifecycleenv => "Prod",
+	    mirror       => "CentOS 7 mirror",
 	    subnet       => "Friends";
     }
 

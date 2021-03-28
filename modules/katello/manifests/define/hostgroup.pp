@@ -8,7 +8,7 @@ define katello::define::hostgroup($ak           = false,
 				  $os           = false,
 				  $ks           = "Kickstart default",
 				  $lifecycleenv = false,
-				  $medium       = "CentOS mirror",
+				  $medium       = "CentOS 8 mirror",
 				  $subnet       = false,
 				  $org          = $katello::vars::katello_org,
 				  $scap_capsule = false) {
@@ -51,7 +51,7 @@ define katello::define::hostgroup($ak           = false,
 	    }
 
 	    $pw     = $katello::vars::ks_password
-	    $ptable = " --partition-table '$ks' --medium '$medium' --root-pass '$pw'"
+	    $ptable = " --partition-table '$ks' --medium '$medium' --root-password '$pw'"
 	} else { $ptable = "" }
 	if ($arch != false) {
 	    $march = " --architecture $arch"
