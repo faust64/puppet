@@ -2456,6 +2456,9 @@ selfoss_db_backend: sqlite
 selfoss_mysql_passphrase: false
 selfoss_mysql_user: selfoss
 
+# SELinux
+selinux_enabled: true
+
 # SickBeard
 sickbeard_api_key: false
 sickbeard_backup_dir: /media/backups

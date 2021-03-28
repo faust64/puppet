@@ -4,11 +4,15 @@ class katello::config::repos {
     $plpvers = $katello::vars::pulp_version
     $tfmvers = $katello::vars::theforeman_version
 
+# sync plan would all start multiple sync jobs at once, crashing my qnap
+# this is most likely due to PULP_CONCURRENCY and /etc/default/pulp_workers no
+# longer being used (file used to ship after katello deployment. it's no longer
+# there. creating it doesn't seem to have any effect). As such, we'll keep
+# sync plans disabled for now...
     katello::define::syncplan {
 	[ "Ansible", "CentOS", "Ceph", "Devuan", "OCP", "Products" ]:
-	    interval => "weekly";
-# debian sync likely to crash my Qnap
-# would proceed manually ...
+	    interval => "weekly",
+	    status   => "disabled";
 	[ "Debian" ]:
 	    interval => "weekly",
 	    status   => "disabled";

@@ -9,26 +9,28 @@ class common::rhel {
 
     if ($os['release']['major'] == 6) {
 	$spath = "/etc/sysconfig/selinux"
-    } else {
-	$spath = "/etc/selinux/config"
-    }
+    } else { $spath = "/etc/selinux/config" }
+
+    $doselinux = lookup("selinux_enabled")
+    if ($doselinux) {
+	$setenforce = 1
+    } else { $setenforce = 0 }
 
     file {
 	"Enable SElinux":
-	    group  => lookup("gid_zero"),
-	    mode   => "0644",
-	    notify => Exec["Enable SElinux"],
-	    owner  => root,
-	    path   => $spath,
-	    source => "puppet:///modules/common/selinux";
+	    content => template("common/selinux.erb"),
+	    group   => lookup("gid_zero"),
+	    mode    => "0644",
+	    notify  => Exec["Enable SElinux"],
+	    owner   => root,
+	    path    => $spath;
     }
 
     exec {
 	"Enable SElinux":
-	    command     => "setenforce 1",
+	    command     => "setenforce $setenforce",
 	    onlyif      => "getenforce",
 	    path        => "/sbin:/bin",
-	    refreshonly => true,
-	    unless      => "getenforce | grep Enforcing";
+	    refreshonly => true;
     }
 }

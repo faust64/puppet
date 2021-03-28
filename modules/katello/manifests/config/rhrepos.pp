@@ -1,12 +1,13 @@
 class katello::config::rhrepos {
-    $last7    = 8
+    $last7    = 9
     $last8    = 3
     $orgname  = $katello::vars::katello_org
     $sat_vers = $katello::vars::sat_vers
 
     katello::define::syncplan {
 	[ "OSP", "RedHat" ]:
-	    interval => "weekly";
+	    interval => "weekly",
+	    status   => "disabled";
     }
 
     katello::define::medium {
@@ -179,7 +180,7 @@ class katello::config::rhrepos {
 	    url       => "rhsm";
 	"Red Hat Enterprise Linux 7 Server (Kickstart)":
 	    product   => "Red Hat Enterprise Linux Server",
-	    shortname => "Red Hat Enterprise Linux 7 Server Kickstart x86_64 7.9",
+	    shortname => "Red Hat Enterprise Linux 7 Server Kickstart x86_64 7.$last7",
 	    url       => "rhsm";
 	"Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)":
 	    product   => "Red Hat Enterprise Linux for x86_64",
@@ -187,7 +188,10 @@ class katello::config::rhrepos {
 	    url       => "rhsm";
 	"Red Hat Enterprise Linux 8 for x86_64 - BaseOS (Kickstart)":
 	    product   => "Red Hat Enterprise Linux for x86_64",
-	    shortname => "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart x86_64 8",
+	    shortname => "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart x86_64 8.$last8",
+	"Red Hat Enterprise Linux 8 for x86_64 - BaseOS (Kickstart)":
+	    product   => "Red Hat Enterprise Linux for x86_64",
+	    shortname => "Red Hat Enterprise Linux 8 for x86_64 - BaseOS Kickstart x86_64 8.$last8",
 	    url       => "rhsm";
 	"Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)":
 	    product   => "Red Hat Enterprise Linux for x86_64",
