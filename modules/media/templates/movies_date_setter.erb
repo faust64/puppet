@@ -76,6 +76,11 @@ getMatch()
 		    _found=`cat $TMPFILE | jq -r ".results[$_c].release_date"`
 		elif echo "$_m2" | grep -i "$_r" >/dev/null; then
 		    _found=`cat $TMPFILE | jq -r ".results[$_c].release_date"`
+		# less tested / matching Split
+		elif echo "$_r" | grep -i "$_m1" >/dev/null; then
+		    _found=`cat $TMPFILE | jq -r ".results[$_c].release_date"`
+		elif echo "$_r" | grep -i "$_m2" >/dev/null; then
+		    _found=`cat $TMPFILE | jq -r ".results[$_c].release_date"`
 		fi
 		if test "$_found"; then
 		    if ! test "$_found" = null; then
