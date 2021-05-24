@@ -1446,8 +1446,9 @@ nginx_runtime_group: root
 nginx_runtime_user: root
 nginx_rsyslog: false
 nginx_ssl_ciphers:
-- EECDH+AESGCM
-- EDH+AESGCM
+- ECDHE+AESGCM
+- DHE+AESGCM
+- ECDHE+ECDSA+AES+SHA256
 nginx_ssl_protos:
 - TLSv1.3
 - TLSv1.2

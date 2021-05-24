@@ -21,7 +21,7 @@ class airsonic::webapp {
 		noerrors        => true,
 		require         => Common::Define::Service["airsonic"],
 		sslredirecthttp => true,
-		stricttransport => false,
+		stricttransport => "max-age=31536000; includeSubDomains; preload",
 		vhostldapauth   => "applicative",
 		vhostsource     => "app_proxy",
 		with_reverse    => $reverse;
@@ -41,7 +41,7 @@ class airsonic::webapp {
 		noerrors        => true,
 		require         => Common::Define::Service["airsonic"],
 		sslredirecthttp => true,
-		stricttransport => false,
+		stricttransport => "max-age=31536000; includeSubDomains; preload",
 		vhostldapauth   => "applicative",
 		vhostsource     => "app_proxy",
 		with_reverse    => $reverse;

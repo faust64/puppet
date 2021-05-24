@@ -3,7 +3,7 @@ ssl_certificate <%=@conf_dir%>/ssl/server-full.crt;
 ssl_certificate_key <%=@conf_dir%>/ssl/server.key;
 ssl_ciphers <%=@tlsciphers.join(":")%>;
 ssl_dhparam <%=@conf_dir%>/ssl/dh.pem;
-<% if @lsbdistcodename != "trusty" and @lsbdistcodename != "wheezy" -%>ssl_ecdh_curve secp384r1;
+<% if @lsbdistcodename != "trusty" and @lsbdistcodename != "wheezy" -%>ssl_ecdh_curve secp521r1:X448:secp384r1:secp256k1;
 <% end -%>ssl_prefer_server_ciphers on;
 ssl_protocols <%=@tlsprotos.join(" ")%>;
 ssl_session_cache shared:SSL:10m;
