@@ -13,10 +13,14 @@ class katello::config::firewalld {
 	    proto => udp;
 	"docker":
 	    port  => 5000;
+	"qpid0":
+	    port  => 5646;
 	"qpid":
 	    port  => 5647;
 	"ks":
 	    port  => 8000;
+	"http-alt":
+	    port  => 8080;
 	"puppet":
 	    port  => 8140;
 	"scap":
@@ -25,7 +29,7 @@ class katello::config::firewalld {
 
     $deps =
 	[
-	    "tcpdns", "udpdns", "dhcp", "tftp", "apache-http",
+	    "tcpdns", "udpdns", "dhcp", "tftp", "apache-http", "http-alt",
 	    "apache-https", "docker", "qpid", "ks", "puppet", "scap"
 	]
 
