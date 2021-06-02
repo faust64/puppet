@@ -32,7 +32,8 @@ firehol_interfaces:
   - server custom openssh "tcp/1022" default accept
   - server custom munin "tcp/4949" default accept src "$office_networks"
   - server custom nrpe "tcp/5666" default accept src "$office_networks"
-  - server custom nrpe "tcp/9273" default accept src "$office_networks"
+  - server custom prompostfix "tcp/9154" default accept src "$office_networks"
+  - server custom promtelegraf "tcp/9273" default accept src "$office_networks"
   - client all accept
 
 # Letsencrypt
