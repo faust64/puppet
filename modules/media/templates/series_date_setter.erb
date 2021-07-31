@@ -170,7 +170,7 @@ do
 		    if test -d "$episode"; then
 			find "$episode" -exec touch -mhd $datestr {} \;
 		    else
-			matchep=`echo "$episode" | sed 's|^\(.*\[[0-9exs]*\]\).*|\1|'`
+			matchep=`echo "$episode" | sed 's|^\(.*\[[0-9exs]*\).*|\1|'`
 			touch -mhd $datestr "$matchep"*
 		    fi
 		    touch -md $datestr .
