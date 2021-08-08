@@ -164,14 +164,29 @@ do
 		    if test -s ./tvshow.nfo; then
 			touch -md $datestr ./tvshow.nfo
 		    fi
-<% end -%>		    if test "$DEBUG" = verbose; then
-			echo "[$showtitle/$epstr] $datestr $episode"
-		    fi
-		    if test -d "$episode"; then
-			find "$episode" -exec touch -mhd $datestr {} \;
+<% end -%>		    if test -d "$episode"; then
+			find "$episode" | while read c
+			    do
+				cur=`date -d @$(stat --format %Y "$c") +%Y%m%d`
+				if test "$datestr" != "$cur"; then
+				    if test "$DEBUG" = verbose; then
+					echo "[$showtitle/$epstr] $datestr $c"
+				    fi
+				    touch -mhd $datestr "$c"
+				fi
+			    done
 		    else
 			matchep=`echo "$episode" | sed 's|^\(.*\[[0-9exs]*\).*|\1|'`
-			touch -mhd $datestr "$matchep"*
+			find "$matchep"* | while read c
+			    do
+				cur=`date -d @$(stat --format %Y "$c") +%Y%m%d`
+				if test "$datestr" != "$cur"; then
+				    if test "$DEBUG" = verbose; then
+					echo "[$showtitle/$epstr] $datestr $c"
+				    fi
+				    touch -mhd $datestr "$c"
+				fi
+			    done
 		    fi
 		    touch -md $datestr .
 		    laste=$e lasts=$s
