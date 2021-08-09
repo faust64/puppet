@@ -167,8 +167,8 @@ do
 <% end -%>		    if test -d "$episode"; then
 			find "$episode" | while read c
 			    do
-				cur=`date -d @$(stat --format %Y "$c") +%Y%m%d`
-				if test "$datestr" != "$cur"; then
+				cur=`date -d @$(stat --format %Y "$c") +%Y%m%d%S`
+                                if ! test "${datestr}00" = "$cur"; then
 				    if test "$DEBUG" = verbose; then
 					echo "[$showtitle/$epstr] $datestr $c"
 				    fi
@@ -179,8 +179,8 @@ do
 			matchep=`echo "$episode" | sed 's|^\(.*\[[0-9exs]*\).*|\1|'`
 			find "$matchep"* | while read c
 			    do
-				cur=`date -d @$(stat --format %Y "$c") +%Y%m%d`
-				if test "$datestr" != "$cur"; then
+				cur=`date -d @$(stat --format %Y "$c") +%Y%m%d%S`
+                                if ! test "${datestr}00" = "$cur"; then
 				    if test "$DEBUG" = verbose; then
 					echo "[$showtitle/$epstr] $datestr $c"
 				    fi
