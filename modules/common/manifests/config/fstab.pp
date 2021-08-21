@@ -60,7 +60,7 @@ class common::config::fstab {
 	}
 	if ($dev == "tmpfs") {
 	    $generic = true
-	    if ($srvtype != "opennebula" and $hostname != "nebula"
+	    if ($srvtype != "opennebula" and $hostname != "nebula" and $hostname != "katello"
 		and $hostname != "puppet" and $hostname != "puppetserver"
 		and $hostname != "wifimgr" and $hostname != "monitor"
 		and $hostname != "deepthroat" and $hostname != "logmaster") {
@@ -73,7 +73,7 @@ class common::config::fstab {
 	    }
 	} else {
 	    $generic = false
-	    if ($srvtype != "opennebula" and $hostname != "nebula"
+	    if ($srvtype != "opennebula" and $hostname != "nebula" and $hostname != "katello"
 		and $hostname != "puppet" and $hostname != "puppetserver"
 		and $hostname != "wifimgr" and $hostname != "monitor"
 		and $hostname != "deepthroat" and $hostname != "logmaster") {

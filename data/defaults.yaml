@@ -919,36 +919,10 @@ katello_munin_probes:
 - katello_hosts
 katello_organization: Default Organization
 katello_register_with_ak: false
-katello_version: 3.18
+katello_version: 4.0
 katello_versions:
-  3.17:
-    foreman: 2.2
-    pulp: 2.21
-    pulpcore: 3.6
-    puppet: 5
-    services:
-    - rh-mongodb34-mongod
-    - rh-redis5-redis
-    - postgresql
-    - pulpcore-api
-    - pulpcore-content
-    - pulpcore-resource-manager
-    - qdrouterd
-    - qpidd
-    - squid
-    - pulp_celerybeat
-    - pulp_resource_manager
-    - pulp_streamer
-    - smart_proxy_dynflow_core
-    - tomcat
-    - dynflow-sidekiq@orchestrator
-    - httpd
-    - dynflow-sidekiq@worker
-    - dynflow-sidekiq@worker-hosts-queue
-    - foreman-proxy
   3.18:
     foreman: 2.3
-    pulp: 2.21
     pulpcore: 3.7
     puppet: 6
     services:
@@ -963,6 +937,26 @@ katello_versions:
     - pulpcore-content
     - pulpcore-resource-manager
     - pulpcore-worker@1
+    - redis
+    - tomcat
+    - dynflow-sidekiq@orchestrator
+  4.0:
+    foreman: 2.4
+    pulpcore: 3.9
+    puppet: 6
+    services:
+    - dynflow-sidekiq@worker
+    - dynflow-sidekiq@worker-hosts-queue
+    - foreman
+    - foreman-proxy
+    - httpd
+    - puppetserver
+    - postgresql
+    - pulpcore-api
+    - pulpcore-content
+    - pulpcore-resource-manager
+    - pulpcore-worker@1
+    - qpidd
     - redis
     - tomcat
     - dynflow-sidekiq@orchestrator

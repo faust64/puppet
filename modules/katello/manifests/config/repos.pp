@@ -1,7 +1,6 @@
 class katello::config::repos {
     $ktlvers = $katello::vars::katello_version
     $plcvers = $katello::vars::pulpcore_version
-    $plpvers = $katello::vars::pulp_version
     $tfmvers = $katello::vars::theforeman_version
 
 # sync plan would all start multiple sync jobs at once, crashing my qnap

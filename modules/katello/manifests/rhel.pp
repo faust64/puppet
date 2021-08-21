@@ -2,7 +2,6 @@ class katello::rhel {
     include apache::rhel
 
     $ktlvers = $katello::vars::katello_version
-    $plpvers = $katello::vars::pulp_version
     $pptvers = $katello::vars::puppet_version
     $tfmvers = $katello::vars::theforeman_version
 
@@ -15,6 +14,14 @@ class katello::rhel {
 	]:
     }
     yum::define::module { "pki-core": }
+
+    exec {
+	"Enables PowerTool":
+	    command => "dnf config-manager --set-enabled powertools",
+	    path    => "/usr/sbin:/usr/bin:/sbin:/bin",
+	    unless  => "grep ^enabled=1 /etc/yum.repos.d/CentOS-Linux-PowerTools.repo";
+    }
+
     yum::define::repo {
 	"ansible-runner":
 	    baseurl => "https://releases.ansible.com/ansible-runner/rpm/epel-${operatingsystemmajrelease}-\$basearch/",
@@ -30,6 +37,7 @@ class katello::rhel {
 	"katello":
 	    require => [
 		    Exec["Update System prior Katello deployment"],
+		    Exec["Enables PowerTool"],
 		    Yum::Define::Module["pki-core"]
 		];
     }

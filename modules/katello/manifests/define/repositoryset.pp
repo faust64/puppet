@@ -18,14 +18,14 @@ define katello::define::repositoryset($archi      = "x86_64",
 			Exec["Import Katello Manifest"],
 			Katello::Define::Downloadpolicy["main"]
 		    ],
-		unless      => "hammer repository-set info --name '$name' --organization '$org' | grep -A5 'Enabled Repositories:' | grep ID:";
+		unless      => "hammer repository-set info --name '$name' --organization '$org' | grep -A5 'Enabled Repositories:' | grep -i ID:";
 	}
     } else {
 	exec {
 	    "Disable Repository-Set $name":
 		command     => "hammer repository-set disable --name '$rset' --organization '$org'$rv --basearch '$archi'",
 		environment => [ 'HOME=/root' ],
-		onlyif      => "hammer repository-set info --name '$name' --organization '$org' | grep -A5 'Enabled Repositories:' | grep ID:",
+		onlyif      => "hammer repository-set info --name '$name' --organization '$org' | grep -A5 'Enabled Repositories:' | grep -i ID:",
 		path        => "/usr/bin:/bin",
 		require     => Exec["Import Katello Manifest"];
 	}

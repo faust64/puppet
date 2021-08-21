@@ -24,7 +24,7 @@ define katello::define::gpgkey($ensure = 'present',
 
 	    exec {
 		"Import $name GPG key":
-		    command     => "hammer gpg create --name '$name' --key './$name.pub' --organization '$org'",
+		    command     => "hammer content-credentials create --content-type gpg --name '$name' --key './$name.pub' --organization '$org'",
 		    cwd         => "/root/katello-gpg-import",
 		    environment => [ 'HOME=/root' ],
 		    path        => "/usr/bin:/bin",
@@ -33,15 +33,15 @@ define katello::define::gpgkey($ensure = 'present',
 			    Common::Define::Geturl["$name GPG key"],
 			    File["Install hammer cli configuration"]
 			],
-		    unless      => "hammer gpg info --name '$name' --organization '$org'";
+		    unless      => "hammer content-credentials info --name '$name' --organization '$org'";
 	    }
 	}
     } else {
 	exec {
 	    "Drop $name GPG key":
-		command     => "hammer gpg delete --name '$name' --organization '$org'",
+		command     => "hammer content-credentials delete --name '$name' --organization '$org'",
 		environment => [ 'HOME=/root' ],
-		onlyif      => "hammer gpg info --name '$name' --organization '$org'",
+		onlyif      => "hammer content-credentials info --name '$name' --organization '$org'",
 		path        => "/usr/bin:/bin",
 		require     => File["Install hammer cli configuration"];
 	}
