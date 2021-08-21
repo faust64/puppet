@@ -15,7 +15,7 @@ class common::config::fstab {
 	    path    => '/usr/bin:/bin';
     }
 
-    if ($srvtype != "opennebula" and $hostname != "nebula"
+    if ($srvtype != "opennebula" and $hostname != "nebula" and $hostname != "katello"
 	and $hostname != "puppetserver" and $hostname != "puppet"
 	and $hostname != "wifimgr" and $hostname != "monitor"
 	and $hostname != "deepthroat" and $hostname != "logmaster") {
