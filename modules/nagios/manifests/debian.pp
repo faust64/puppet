@@ -3,7 +3,8 @@ class nagios::debian {
 	"nagios-nrpe-server":
     }
 
-    if ($lsbdistcodename == "jessie" or $lsbdistcodename == "buster") {
+    if ($lsbdistcodename == "jessie" or $lsbdistcodename == "buster"
+	or $lsbdistcodename == "bullseye") {
 	common::define::package {
 	    "monitoring-plugins-standard":
 		options => [ "--no-install-recommends" ];
@@ -21,7 +22,7 @@ class nagios::debian {
 	    -> Package["nagios-nrpe-server"]
     }
 
-    if ($lsbdistcodename == "buster") {
+    if ($lsbdistcodename == "buster" or $lsbdistcodename == "bullseye") {
 	common::define::lined {
 	    "Nagios should not use dedicated temporary directory":
 		line    => "PrivateTmp=false",
@@ -52,7 +53,8 @@ class nagios::debian {
 
 	}
 
-	if ($lsbdistcodename == "buster" or $lsbdistcodename == "stretch") {
+	if ($lsbdistcodename == "buster" or $lsbdistcodename == "stretch"
+	    or $lsbdistcodename == "bullseye") {
 	    $fetch = "jessie"
 	} else { $fetch = $lsbdistcodename }
 	apt::define::repo {

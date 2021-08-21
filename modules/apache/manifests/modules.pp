@@ -32,7 +32,8 @@ class apache::modules {
 	}
     }
     if (($operatingsystem == "Debian" and
-	($lsbdistcodename == "buster" or $lsbdistcodename == "stretch"))
+	($lsbdistcodename == "buster" or $lsbdistcodename == "bullseye"
+	 or $lsbdistcodename == "stretch"))
         or ($myoperatingsystem == "Devuan" and
 	($lsbdistcodename == "beowulf" or $lsbdistcodename == "ascii"))) {
 	if ($apache::vars::mod_cgid == true) {
@@ -45,7 +46,8 @@ class apache::modules {
     }
 
     if (($operatingsystem == "Debian" and
-	($lsbdistcodename == "buster" or $lsbdistcodename == "stretch"))
+	($lsbdistcodename == "buster" or $lsbdistcodename == "bullseye"
+	 or $lsbdistcodename == "stretch"))
         or ($myoperatingsystem == "Devuan" and
 	($lsbdistcodename == "beowulf" or $lsbdistcodename == "ascii"))) {
 	apache::define::module {

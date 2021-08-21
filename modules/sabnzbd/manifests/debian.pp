@@ -12,7 +12,7 @@ class sabnzbd::debian {
 	$codename = $lsbdistcodename
     }
 
-    if ($codename != "buster") {
+    if ($codename != "buster" and $codename != "bullseye") {
 	apt::define::aptkey {
 	    "jcfp":
 		keyid     => "4BB9F05F",

@@ -3,7 +3,7 @@ define java::define::certificate_authority($java_dir = "java-${java::vars::defau
 					   $password = "changeit",
 					   $source   = "/etc/ssl/certs/ca.crt",
 					   $store    = "cacerts") {
-    if ($lsbdistcodename == "buster") {
+    if ($lsbdistcodename == "buster" or $lsbdistcodename == "bullseye") {
 	$pfx = ""
     } else { $pfx = "jre/" }
     exec {

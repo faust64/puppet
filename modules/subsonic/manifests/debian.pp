@@ -31,7 +31,8 @@ class subsonic::debian {
 	Apt::Define::Repo["debian-multimedia"]
 	    -> Exec["FIXME: install deb-multimedia-keyring"]
 	    -> Package["ffmpeg"]
-    } elsif ($lsbdistcodename == "beowulf" or $lsbdistcodename == "buster") {
+    } elsif ($lsbdistcodename == "beowulf" or $lsbdistcodename == "buster"
+	     or $lsbdistcodename == "bullseye") {
 	notice {
 	    "WARNING: Subsonic will not work with Java 11. Consider switching to Airsonic.":
 	}

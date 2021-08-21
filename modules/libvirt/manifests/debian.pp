@@ -1,5 +1,5 @@
 class libvirt::debian {
-    if ($lsbdistcodename == "buster") {
+    if ($lsbdistcodename == "buster" or $lsbdistcodename == "bullseye") {
 	$virtpkg = "libvirt-clients"
 
 	common::define::package {

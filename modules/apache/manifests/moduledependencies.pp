@@ -29,7 +29,8 @@ class apache::moduledependencies {
 	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu") {
 	    if ($lsbdistcodename == "buster" or $lsbdistcodename == "stretch"
-		or $lsbdistcodename == "beowulf" or $lsbdistcodename == "ascii") {
+		or $lsbdistcodename == "beowulf" or $lsbdistcodename == "beowulf"
+		or $lsbdistcodename == "ascii") {
 		notify { "fastcgi no longer available as of stretch": }
 		if (! defined(Common::Define::Package["libapache2-mod-fcgid"])) {
 		    common::define::package {

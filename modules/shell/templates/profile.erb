@@ -33,7 +33,7 @@ if test -z "$PWD"; then
     PWD=$HOME
     export PWD
 fi
-<% if @lsbdistcodename != "buster" %>if tty >/dev/null; then
+<% if @lsbdistcodename != "buster" and @lsbdistcodename != "bullseye" %>if tty >/dev/null; then
     if test -f $HOME/<%=@whichconf%> -a -r $HOME/<%=@whichconf%>; then
 	ENV=$HOME
 	export ENV

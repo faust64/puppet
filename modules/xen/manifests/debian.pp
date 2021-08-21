@@ -1,7 +1,9 @@
 class xen::debian {
     $mem_max      = $xen::vars::mem_max
     $mem_reserved = $xen::vars::mem_reserved
-    if ($lsbdistcodename == "buster") {
+    if ($lsbdistcodename == "bullseye") {
+	$xenvers = "-4.14"
+    } elsif ($lsbdistcodename == "buster") {
 	$xenvers = "-4.11"
     } elsif ($lsbdistcodename == "stretch") {
 	$xenvers = "-4.8"
@@ -33,7 +35,7 @@ class xen::debian {
 	    source  => "puppet:///modules/xen/toolstack";
     }
 
-    if ($lsbdistcodename == "buster") {
+    if ($lsbdistcodename == "buster" or $lsbdistcodename == "bullseye") {
 	if (! defined(Exec["Reload systemd configuration"])) {
 	    include common::systemd
 	}

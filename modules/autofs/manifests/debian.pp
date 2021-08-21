@@ -1,7 +1,7 @@
 class autofs::debian {
     if ($lsbdistcodename == "jessie" or $lsbdistcodename == "wheezy" or $lsbdistcodename == "trusty" or $lsbdistcodename == "stretch" or $lsbdistcodename == "ascii") {
 	$pkgname = "autofs5"
-    } elsif ($lsbdistcodename == "buster" or $lsbdistcodename == "beowulf") {
+    } elsif ($lsbdistcodename == "buster" or $lsbdistcodename == "beowulf" or $lsbdistcodename == "bullseye") {
 	$pkgname = "autofs"
     } else { $pkgname = "autofs4" }
 

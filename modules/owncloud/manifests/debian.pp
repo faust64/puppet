@@ -3,7 +3,7 @@ class owncloud::debian {
 	$repopath = "http://download.opensuse.org/repositories/isv:ownCloud:community/Debian_$lsbmajdistrelease.0/"
     } elsif ($lsbdistcodename == "stretch") {
 	$repopath = "http://download.owncloud.org/download/repositories/stable/Debian_$lsbmajdistrelease.0/"
-    } elsif ($lsbdistcodename == "buster") {
+    } elsif ($lsbdistcodename == "buster" or $lsbdistcodename == "bullseye") {
 	$repopath = "http://download.owncloud.org/download/repositories/stable/Debian_$lsbmajdistrelease/"
     } elsif ($lsbdistcodename == "xenial" or $lsbdistcodename == "trusty") {
 	$repopath = "http://download.owncloud.org/download/repositories/stable/Ubuntu_$operatingsystemrelease/"

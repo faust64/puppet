@@ -29,7 +29,7 @@ class nginx::debian {
 	    -> Common::Define::Service["nginx"]
     }
 
-    if ($lsbdistcodename == "buster") {
+    if ($lsbdistcodename == "buster" or $lsbdistcodename == "bullseye") {
 	if (! defined(Exec["Reload systemd configuration"])) {
 	    include common::systemd
 	}

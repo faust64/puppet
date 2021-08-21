@@ -8,7 +8,11 @@ class common::physical::perf {
 	    ]:
 	}
     } elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan") {
-	if ($lsbdistcodename == "buster") {
+	if ($lsbdistcodename == "bullseye") {
+	    common::define::package {
+		[ "linux-perf-5.10" ]:
+	    }
+	} elsif ($lsbdistcodename == "buster") {
 	    common::define::package {
 		[ "linux-perf-4.19" ]:
 	    }

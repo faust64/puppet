@@ -67,6 +67,8 @@ class php::vars {
 
     if (($operatingsystem == "Debian" and $lsbdistcodename == "stretch") or ($operatingsystem == "Ubuntu" and $lsbdistcodename == "xenial")) {
 	$phpvers = "7.0"
+    } elsif ($operatingsystem == "Debian" and $lsbdistcodename == "bullseye") {
+	$phpvers = "7.4"
     } elsif ($operatingsystem == "Debian" and $lsbdistcodename == "buster") {
 	$phpvers = "7.3"
     } else {
@@ -132,7 +134,8 @@ class php::vars {
 	if ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    if ($lsbdistcodename == "buster" or $lsbdistcodename == "stretch"
-		or $lsbdistcodename == "ascii" or $lsbdistcodename == "beowulf") {
+		or $lsbdistcodename == "ascii" or $lsbdistcodename == "beowulf"
+		or $lsbdistcodename == "bullseye") {
 		$php_pear = true
 		$with_dev = true
 	    } else {

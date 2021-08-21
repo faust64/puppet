@@ -87,14 +87,22 @@ class apache::vars {
     $with_collectd        = lookup("apache_collectd")
     $web_root             = lookup("apache_web_root")
 
-    if ($lsbdistcodename == "buster" or $lsbdistcodename == "stretch" or $lsbdistcodename == "ascii" or $lsbdistcodename == "beowulf" or $lsbdistcodename == "jessie" or $lsbdistcodename == "trusty" or $lsbdistcodename == "xenial") {
+    if ($lsbdistcodename == "buster" or $lsbdistcodename == "bullseye"
+	or $lsbdistcodename == "stretch" or $lsbdistcodename == "ascii"
+	or $lsbdistcodename == "beowulf" or $lsbdistcodename == "jessie"
+	or $lsbdistcodename == "trusty" or $lsbdistcodename == "xenial") {
 	$version = "2.4"
     } else {
 	$version = "2.2"
     }
-    if (($operatingsystem == "Debian" and $lsbdistcodename == "stretch") or ($myoperatingsystem == "Devuan" and $lsbdistcodename == "ascii") or ($operatingsystem == "Ubuntu" and $lsbdistcodename == "xenial")) {
+    if (($operatingsystem == "Debian" and $lsbdistcodename == "stretch")
+	or ($myoperatingsystem == "Devuan" and $lsbdistcodename == "ascii")
+	or ($operatingsystem == "Ubuntu" and $lsbdistcodename == "xenial")) {
 	$phpvers = "7.0"
-    } elsif (($operatingsystem == "Debian" and $lsbdistcodename == "buster") or ($myoperatingsystem == "Devuan" and $lsbdistcodename == "beowulf")) {
+    } elsif ($operatingsystem == "Debian" and $lsbdistcodename == "bullseye") {
+	$phpvers = "7.4"
+    } elsif (($operatingsystem == "Debian" and $lsbdistcodename == "buster")
+	     or ($myoperatingsystem == "Devuan" and $lsbdistcodename == "beowulf")) {
 	$phpvers = "7.3"
     } else {
 	$phpvers = "5"

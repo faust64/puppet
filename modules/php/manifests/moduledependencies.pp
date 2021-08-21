@@ -110,7 +110,8 @@ class php::moduledependencies {
 		"php-jsonlint":
 	    }
 	} elsif ($operatingsystem == "FreeBSD" or
-	    ($operatingsystem == "Debian" and $lsbdistcodename == "buster")
+	    ($operatingsystem == "Debian"
+	     and ($lsbdistcodename == "buster" or $lsbdistcodename == "bullseye"))
 	    or ($operatingsystem == "Devuan" and $lsbdistcodename == "beowulf")) {
 	    common::define::package {
 		"php${phpvers}-json":
@@ -162,11 +163,13 @@ class php::moduledependencies {
 	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    if ($lsbdistcodename == "buster" or $lsbdistcodename == "stretch"
-		or $lsbdistcodename == "ascii" or $lsbdistcodename == "beowulf") {
+		or $lsbdistcodename == "ascii" or $lsbdistcodename == "beowulf"
+		or $lsbdistcodename == "bullseye") {
 		include common::tools::gcc
 		include common::tools::make
 
-		if ($lsbdistcodename == "buster" or $lsbdistcodename == "beowulf") {
+		if ($lsbdistcodename == "buster" or $lsbdistcodename == "beowulf"
+		    or $lsbdistcodename == "bullseye") {
 		    $lcd = "libc-dev-bin"
 		} else {
 		    $lcd = "libc-dev"
@@ -207,7 +210,8 @@ class php::moduledependencies {
     }
     if ($php::vars::mod_memcache == true) {
 	if ($operatingsystem == "CentOS" or $operatingsystem == "RedHat"
-	    or ($operatingsystem == "Debian" and $lsbdistcodename == "buster")
+	    or ($operatingsystem == "Debian"
+		and ($lsbdistcodename == "buster" or $lsbdistcodename == "bullseye"))
 	    or ($operatingsystem == "Devuan" and $lsbdistcodename == "beowulf")) {
 	    common::define::package {
 		"php-memcache":
@@ -220,7 +224,8 @@ class php::moduledependencies {
 	}
     }
     if ($php::vars::mod_mysqlnd == true) {
-	if (($operatingsystem == "Debian" and $lsbdistcodename == "buster")
+	if (($operatingsystem == "Debian"
+	     and ($lsbdistcodename == "buster" or $lsbdistcodename == "bullseye"))
 	    or ($operatingsystem == "Devuan" and $lsbdistcodename == "beowulf")) {
 	    common::define::package {
 		"php${phpvers}-mysql":
@@ -233,7 +238,8 @@ class php::moduledependencies {
 	}
     } elsif ($php::vars::mod_mysql == true or $php::vars::mod_mysqli) {
 	if ($operatingsystem == "CentOS" or $operatingsystem == "RedHat"
-	    or ($operatingsystem == "Debian" and $lsbdistcodename == "buster")
+	    or ($operatingsystem == "Debian"
+		and ($lsbdistcodename == "buster" or $lsbdistcodename == "bullseye"))
 	    or ($operatingsystem == "Devuan" and $lsbdistcodename == "beowulf")) {
 	    common::define::package {
 		"php-mysql":
@@ -301,7 +307,8 @@ class php::moduledependencies {
 		    "php-xml-serializer":
 		}
 	    } elsif ($lsbdistcodename == "stretch" or $lsbdistcodename == "buster"
-		    or $lsbdistcodename == "ascii" or $lsbdistcodename == "beowulf") {
+		    or $lsbdistcodename == "ascii" or $lsbdistcodename == "beowulf"
+		    or $lsbdistcodename == "bullseye") {
 		common::define::package {
 		    "php-xml":
 		}
@@ -320,7 +327,8 @@ class php::moduledependencies {
 	} elsif ($operatingsystem == "Debian" or $myoperatingsystem == "Devuan"
 	    or $operatingsystem == "Ubuntu" or $operatingsystem == "FreeBSD") {
 	    if ($lsbdistcodename == "stretch" or $lsbdistcodename == "buster"
-		or $lsbdistcodename == "ascii" or $lsbdistcodename == "beowulf") {
+		or $lsbdistcodename == "ascii" or $lsbdistcodename == "beowulf"
+		or $lsbdistcodename == "bullseye") {
 		common::define::package {
 		    "php-xmlrpc":
 		}
@@ -344,7 +352,8 @@ class php::moduledependencies {
     if ($php::vars::mod_zip == true and $operatingsystem == "Debian") {
 	if ($operatingsystem == "Debian" or $operatingsystem == "Devuan") {
 	    if ($lsbdistcodename == "stretch" or $lsbdistcodename == "buster"
-		or $lsbdistcodename == "ascii" or $lsbdistcodename == "beowulf") {
+		or $lsbdistcodename == "ascii" or $lsbdistcodename == "beowulf"
+		or $lsbdistcodename == "bullseye") {
 		common::define::package {
 		    "php-zip":
 		}

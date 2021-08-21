@@ -4,8 +4,9 @@ deb http://deb.devuan.org/merged <%=@lsbdistcodename%>-security main contrib non
 deb http://deb.devuan.org/merged <%=@lsbdistcodename%>-updates main contrib non-free
 <% elsif @operatingsystem == "Debian" -%>deb http://ftp.debian.org/debian <%=@lsbdistcodename%> main contrib non-free
 <% if @lsbdistcodename != "sid" -%>deb http://ftp.debian.org/debian <%=@lsbdistcodename%>-updates main contrib non-free
-deb http://security.debian.org <%=@lsbdistcodename%>/updates main contrib non-free
-<% end -%><% elsif @operatingsystem == "Ubuntu" -%>deb http://archive.ubuntu.com/ubuntu <%=@lsbdistcodename%> main restricted universe multiverse
+<% if @lsbdistcodename != "bullseye" -%>deb http://security.debian.org <%=@lsbdistcodename%>/updates main contrib non-free
+<% else -%>deb http://security.debian.org/debian-security <%=@lsbdistcodename %>-security main contrib non-free
+<% end -%><% end -%><% elsif @operatingsystem == "Ubuntu" -%>deb http://archive.ubuntu.com/ubuntu <%=@lsbdistcodename%> main restricted universe multiverse
 deb http://archive.ubuntu.com/ubuntu <%=@lsbdistcodename%>-updates main restricted universe multiverse
 deb http://security.ubuntu.com/ubuntu <%=@lsbdistcodename%>-security main restricted universe multiverse
 deb http://archive.ubuntu.com/ubuntu/ <%=@lsbdistcodename%>-backports main restricted universe multiverse

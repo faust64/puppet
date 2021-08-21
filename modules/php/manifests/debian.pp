@@ -25,7 +25,7 @@ class php::debian {
     if ($php::vars::with_apc) {
 	if ($lsbdistcodename == "jessie") {
 	    $apc = "php${phpvers}-apcu"
-	} elsif ($lsbdistcodename == "buster") {
+	} elsif ($lsbdistcodename == "buster" or $lsbdistcodename == "bullseye") {
 	    $apc = "php-apcu"
 	} else {
 	    $apc = "php-apc"

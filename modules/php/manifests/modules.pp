@@ -11,7 +11,7 @@ class php::modules {
 		modstatus => "purge";
 	}
     } else {
-	if ($lsbdistcodename == "buster") {
+	if ($lsbdistcodename == "buster" or $lsbdistcodename == "bullseye") {
 	    php::define::module {
 		"apcu":
 		    modstatus => $php::vars::with_apc;

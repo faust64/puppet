@@ -12,7 +12,7 @@ class opendkim::debian {
 	    -> Class["opendkim::genkeys"]
     }
 
-    if ($lsbdistcodename == "buster") {
+    if ($lsbdistcodename == "buster" or $lsbdistcodename == "bullseye") {
 	if (! defined(Class["common::systemd"])) {
 	    include common::systemd
 	}

@@ -463,6 +463,8 @@ EOF
 	    version=beowulf
 	elif grep -q 10.[0-9] etc/debian_version; then
 	    version=buster
+	elif grep -q 11.[0-9] etc/debian_version; then
+	    version=bullseye
 	fi
 
 	if test "$version"; then
@@ -476,6 +478,11 @@ EOF
 		cat <<EOF
 deb http://archive.debian.org/debian $version main contrib non-free
 deb http://archive.debian.org/debian-security $version/updates main contrib non-free
+EOF
+	    elif test "$version" = bullseye; then
+		cat <<EOF
+deb http://ftp.debian.org/debian $version main contrib non-free
+deb http://security.debian.org/debian-security $version-security main contrib non-free
 EOF
 	    else
 		cat <<EOF
@@ -496,7 +503,7 @@ iface $BRCHILD_IF inet static
     netmask $BRCHILD_NETMASK
 EOF
 	    if test "$BRCHILD_NETMASK" = 255.255.255.255; then
-		if test "$version" = buster; then
+		if test "$version" = buster -o "$version" = bullseye; then
 		    cat <<EOF >>etc/network/interfaces
     post-up /usr/sbin/ip route add $BRCHILD_GATEWAY dev $BRCHILD_IF
     post-up /usr/sbin/ip route add default via $BRCHILD_GATEWAY

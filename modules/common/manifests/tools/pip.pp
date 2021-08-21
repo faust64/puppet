@@ -1,7 +1,9 @@
 class common::tools::pip {
     case $myoperatingsystem {
 	"CentOS", "Debian", "Devuan", "RedHat", "Ubuntu": {
-	    if ($lsbdistcodename == "buster") {
+	    if ($lsbdistcodename == "bullseye") {
+		$what = "python3-pip"
+	    } elsif ($lsbdistcodename == "buster") {
 		$what = [ "python3-pip", "python-pip" ]
 	    } else { $what = "python-pip" }
 	}
