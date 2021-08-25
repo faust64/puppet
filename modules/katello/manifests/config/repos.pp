@@ -42,6 +42,10 @@ class katello::config::repos {
 	    source => "https://ftp-master.debian.org/keys/archive-key-10.asc";
 	"Debian10-Security":
 	    source => "https://ftp-master.debian.org/keys/archive-key-10-security.asc";
+	"Debian11":
+	    source => "https://ftp-master.debian.org/keys/archive-key-11.asc";
+	"Debian11-Security":
+	    source => "https://ftp-master.debian.org/keys/archive-key-11-security.asc";
 	"EPEL7":
 	    source => "http://mirrors.ircam.fr/pub/fedora/epel/RPM-GPG-KEY-EPEL-7";
 	"EPEL8":
@@ -222,6 +226,33 @@ class katello::config::repos {
 #	    shortname => "Debian10 Security",
 #	    type      => "deb",
 #	    url       => "http://security.debian.org/";
+	"Debian Bullseye":
+	    debrels   => [ "bullseye" ],
+	    gpgkey    => "Debian11",
+	    product   => "Debian",
+	    shortname => "Debian11",
+	    type      => "deb",
+	    url       => "http://ftp.debian.org/debian/";
+	"Debian Bullseye Updates":
+	    debrels   => [ "bullseye-updates" ],
+	    gpgkey    => "Debian11",
+	    product   => "Debian",
+	    shortname => "Debian11 Updates",
+	    type      => "deb",
+	    url       => "http://ftp.debian.org/debian/";
+	"Debian Bullseye Backports":
+	    debrels   => [ "bullseye-backports" ],
+	    product   => "Debian",
+	    shortname => "Debian11 Backports",
+	    type      => "deb",
+	    url       => "http://ftp.debian.org/debian/";
+	"Debian Bullseye Security":
+	    debrels   => [ "bullseye-security" ],
+	    gpgkey    => "Debian11-Security",
+	    product   => "Debian",
+	    shortname => "Debian11 Security",
+	    type      => "deb",
+	    url       => "http://security.debian.org/";
 
 ## Devuan ##
 #	"Devuan Jessie":
