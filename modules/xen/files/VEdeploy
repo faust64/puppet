@@ -432,6 +432,7 @@ EOF
 		echo NS2 ns.$DOMAIN
 	    ) >>etc/wwwacct.conf
 	fi
+	touch .autorelabel
     fi
 }
 
