@@ -5,6 +5,7 @@ tmp_target_device: /dev/mapper/data-tmp
 
 # KVM
 kvm_nested: true
+kvm_cpu_family: IvyBridge
 
 # Munin-Node
 munin_node_listenaddr: 10.42.242.100
