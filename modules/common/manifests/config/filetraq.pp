@@ -12,7 +12,7 @@ class common::config::filetraq {
 		mode    => "0755",
 		owner   => root,
 		path    => "/etc/rc.local",
-		replace => "no";
+		replace => no;
 	}
     } else {
 	$list = [ "/etc/passwd", "/etc/group" ]

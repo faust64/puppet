@@ -1,5 +1,5 @@
-<% if @kernel == "Linux" -%>auth		required	pam_tally2.so onerr=fail audit silent deny=5 unlock_time=900
-<% if @operatingsystem == "Debian" or @myoperatingsystem == "Devuan" or @operatingsystem == "Ubuntu" -%>auth		optional	pam_faildelay.so delay=3000000
+<% if @kernel == "Linux" -%><% if @lsbdistcodename != "bullseye" -%>auth		required	pam_tally2.so onerr=fail audit silent deny=5 unlock_time=900
+<% end -%><% if @operatingsystem == "Debian" or @myoperatingsystem == "Devuan" or @operatingsystem == "Ubuntu" -%>auth		optional	pam_faildelay.so delay=3000000
 auth		[success=ok new_authtok_reqd=ok ignore=ignore user_unknown=bad default=die] pam_securetty.so
 auth		requisite	pam_nologin.so
 session		[success=ok ignore=ignore module_unknown=ignore default=bad] pam_selinux.so close
