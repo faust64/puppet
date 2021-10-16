@@ -16,7 +16,7 @@ class xen::debian {
     } else { $xenvers = "" }
 
     common::define::package {
-	[ "xen-utils$xenvers" , "xen-system-$architecture" ]:
+	[ "bridge-utils", "vlan", "xen-utils$xenvers" , "xen-system-$architecture" ]:
     }
 
     file {

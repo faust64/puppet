@@ -1,6 +1,6 @@
 class kvm::debian {
     common::define::package {
-	"qemu-kvm":
+	[ "bridge-utils", "qemu-kvm", "vlan" ]:
     }
 
     file {

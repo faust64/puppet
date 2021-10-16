@@ -1,6 +1,6 @@
 class openvz::common {
     common::define::package {
-	[ "bridge-utils", "vzctl", "vzquota" ]:
+	[ "bridge-utils", "vlan", "vzctl", "vzquota" ]:
     }
 
     common::define::insertmodule { $openvz::vars::openvz_modules: }
