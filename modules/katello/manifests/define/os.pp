@@ -1,6 +1,6 @@
 define katello::define::os($archs       = [ "x86_64" ],
 			   $ensure      = 'present',
-			   $family      = "RedHat",
+			   $family      = "Redhat",
 			   $major       = 7,
 			   $mediums     = false,
 			   $minor       = 8,
