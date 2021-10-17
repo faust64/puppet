@@ -12,8 +12,16 @@ class libvirt::debian {
 	$virtpkg = "libvirt-bin"
     }
 
+    if ($lsbdistcodename != "bullseye") {
+	# virt-top isn't part of bullseye, see:
+	# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=987481#10
+	common::define::package {
+	    "virt-top":
+	}
+    }
+
     common::define::package {
-	[ $virtpkg, "virtinst", "virt-top" ]:
+	[ $virtpkg, "virtinst" ]:
     }
 
     Package[$virtpkg]
