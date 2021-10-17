@@ -4,6 +4,7 @@ define katello::define::os($archs       = [ "x86_64" ],
 			   $major       = 7,
 			   $mediums     = false,
 			   $minor       = 8,
+			   $osname      = "RedHat",
 			   $relname     = false,
 			   $parts       = [ "Kickstart default" ],
 			   $provs       = [ "Kickstart default" ]) {
@@ -13,11 +14,11 @@ define katello::define::os($archs       = [ "x86_64" ],
 	$joinedprovs = $provs.join(',')
 
 	if ($relname == false) {
-	    $addcmd = [ "hammer os create --name '$name'",
+	    $addcmd = [ "hammer os create --name '$osname'",
 			"--family $family --architectures $archstr",
 			"--major $major --minor $minor" ]
 	} else {
-	    $addcmd = [ "hammer os create --name '$name'",
+	    $addcmd = [ "hammer os create --name '$osname'",
 			"--family $family --architectures $archstr",
 			"--release-name '$relname'" ]
 	}
