@@ -8,6 +8,7 @@ define katello::define::repository($authpass  = false,
 				   $ensure    = 'present',
 				   $gpgkey    = false,
 				   $httppub   = true,
+				   $mirror    = true,
 				   $org       = $katello::vars::katello_org,
 				   $product   = false,
 				   $shortname = $name,
@@ -22,7 +23,9 @@ define katello::define::repository($authpass  = false,
 	    Katello::Define::Gpgkey[$gpgkey]
 		-> Exec["Install Repository [$product/$shortname] $name"]
 
-	    $gpgarg = " --gpg-key '$gpgkey'"
+	    # used to work before katello 4.2/foreman 3.0
+	    # $gpgarg = " --gpg-key '$gpgkey'"
+	    $gpgarg = " --gpg-key-id \$(hammer content-credentials info --name '$gpgkey' --organization '$org' | awk '/^Id:/{print \$2;exit 0;}')"
 	} else { $gpgarg = "" }
 	if ($httppub) {
 	    $pubarg = " --publish-via-http yes"
@@ -30,6 +33,9 @@ define katello::define::repository($authpass  = false,
 	if ($sslverify) {
 	    $sslarg = " --verify-ssl-on-sync yes"
 	} else { $sslarg = " --verify-ssl-on-sync no" }
+	if ($mirror) {
+	    $mrrarg = " --mirror-on-sync yes"
+	} else { $mrrarg = " --mirror-on-sync no" }
 
 	if ($url == "rhsm") {
 	    Katello::Define::Repositoryset[$name]
@@ -48,7 +54,7 @@ define katello::define::repository($authpass  = false,
 		$cmdargs = [ "hammer repository create --name '$shortname'",
 			     "--content-type yum --download-policy immediate",
 			     "--url $url$autharg$gpgarg --product '$product'",
-			     "--http-proxy-policy none$pubarg$sslarg",
+			     "--http-proxy-policy none$pubarg$sslarg$mrrarg",
 			     "--organization '$org'" ]
 	    } elsif ($type == 'deb') {
 		$cmdargs = [ "hammer repository create --name '$shortname'",

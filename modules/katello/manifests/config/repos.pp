@@ -27,7 +27,7 @@ class katello::config::repos {
 	"CentOS7-SCL":
 	    source => "https://raw.githubusercontent.com/sclorg/centos-release-scl/master/centos-release-scl/RPM-GPG-KEY-CentOS-SIG-SCLo";
 	"CentOS8":
-	    source => "http://mirror.oss.ou.edu/centos/RPM-GPG-KEY-CentOS-Official";
+	    source => "https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official";
 	"CephRelease":
 	    source => "http://download.ceph.com/keys/release.asc";
 	"Debian8":
@@ -150,6 +150,23 @@ class katello::config::repos {
 	    shortname => "Buster amd64 Ceph Octopus",
 	    type      => "deb",
 	    url       => "http://download.ceph.com/debian-octopus/";
+	"Buster Pacific":
+	    debcomps  => [ "main" ],
+	    debrels   => [ "buster" ],
+	    gpgkey    => "CephRelease",
+	    product   => "Ceph",
+	    shortname => "Buster amd64 Ceph Pacific",
+	    type      => "deb",
+	    url       => "http://download.ceph.com/debian-pacific/";
+	"Bullseye Pacific":
+	    debcomps  => [ "main" ],
+	    debrels   => [ "bullseye" ],
+	    gpgkey    => "CephRelease",
+	    product   => "Ceph",
+	    shortname => "Bullseye amd64 Ceph Pacific",
+	    type      => "deb",
+	    url       => "http://download.ceph.com/debian-pacific/";
+
 	"EL7 Octopus noarch":
 	    gpgkey    => "CephRelease",
 	    product   => "Ceph",
@@ -170,6 +187,16 @@ class katello::config::repos {
 	    product   => "Ceph",
 	    shortname => "el8 x86_64 Ceph Octopus",
 	    url       => "http://download.ceph.com/rpm-octopus/el8/x86_64/";
+	"EL8 Pacific noarch":
+	    gpgkey    => "CephRelease",
+	    product   => "Ceph",
+	    shortname => "el8 noarch Ceph Pacific",
+	    url       => "http://download.ceph.com/rpm-pacific/el8/noarch/";
+	"EL8 Pacific x86_64":
+	    gpgkey    => "CephRelease",
+	    product   => "Ceph",
+	    shortname => "el8 x86_64 Ceph Pacific",
+	    url       => "http://download.ceph.com/rpm-pacific/el8/x86_64/";
 
 ## Debian ##
 #	"Debian Stretch":
@@ -289,11 +316,13 @@ class katello::config::repos {
 ## EPEL ##
 	"EPEL7 x86_64":
 	    gpgkey    => "EPEL7",
+	    mirror    => false,
 	    product   => "EPEL",
 	    shortname => "EPEL7 x86_64",
 	    url       => "http://mirrors.ircam.fr/pub/fedora/epel/7/x86_64/";
 	"EPEL8 x86_64":
 	    gpgkey    => "EPEL8",
+	    mirror    => false,
 	    product   => "EPEL",
 	    shortname => "EPEL8 x86_64",
 	    url       => "http://mirrors.ircam.fr/pub/fedora/epel/8/Everything/x86_64/";
@@ -333,22 +362,22 @@ class katello::config::repos {
 	    gpgkey    => "TheForeman",
 	    product   => "Katello",
 	    shortname => "el7 x86_64 Katello $ktlvers",
-	    url       => "https://fedorapeople.org/groups/katello/releases/yum/$ktlvers/katello/el7/x86_64/";
+	    url       => "https://yum.theforeman.org/katello/$ktlvers/katello/el7/x86_64/";
 	"EL7 Katello $ktlvers Candlepin":
 	    gpgkey    => "TheForeman",
 	    product   => "Katello",
 	    shortname => "el7 x86_64 Katello $ktlvers Candlepin",
-	    url       => "https://fedorapeople.org/groups/katello/releases/yum/$ktlvers/candlepin/el7/x86_64/";
+	    url       => "https://yum.theforeman.org/katello/$ktlvers/candlepin/el7/x86_64/";
 	"EL8 Katello $ktlvers":
 	    gpgkey    => "TheForeman",
 	    product   => "Katello",
 	    shortname => "el8 x86_64 Katello $ktlvers",
-	    url       => "https://fedorapeople.org/groups/katello/releases/yum/$ktlvers/katello/el8/x86_64/";
+	    url       => "https://yum.theforeman.org/katello/$ktlvers/katello/el8/x86_64/";
 	"EL8 Katello $ktlvers Candlepin":
 	    gpgkey    => "TheForeman",
 	    product   => "Katello",
 	    shortname => "el8 x86_64 Katello $ktlvers Candlepin",
-	    url       => "https://fedorapeople.org/groups/katello/releases/yum/$ktlvers/candlepin/el8/x86_64/";
+	    url       => "https://yum.theforeman.org/katello/$ktlvers/candlepin/el8/x86_64/";
 
 ## OKD3 ##
 	"EL7 OKD 3.11":
@@ -363,11 +392,6 @@ class katello::config::repos {
 	    product   => "Puppet",
 	    shortname => "el7 x86_64 Puppet5",
 	    url       => "https://yum.puppetlabs.com/puppet5/el/7/x86_64/";
-	"EL8 Puppet5":
-	    gpgkey    => "Puppet",
-	    product   => "Puppet",
-	    shortname => "el8 x86_64 Puppet5",
-	    url       => "https://yum.puppetlabs.com/puppet5/el/8/x86_64/";
 	"EL7 Puppet6":
 	    gpgkey    => "Puppet",
 	    product   => "Puppet",

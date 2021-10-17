@@ -5,7 +5,6 @@ class katello::vars {
     $foreman_fqdn       = lookup("foreman_fqdn")
     $katello_loc        = lookup("katello_location")
     $katello_org        = lookup("katello_organization")
-    $katello_org_orig   = "Default_Organization"
     $katello_version    = lookup("katello_version")
     $katello_versions   = lookup("katello_versions")
     $ks_password        = lookup("katello_ks_password")

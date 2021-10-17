@@ -1,7 +1,11 @@
 class common::tools::policycoreutils {
     case $myoperatingsystem {
 	"CentOS", "RedHat": {
-	    $what = [ "policycoreutils", "policycoreutils-python" ]
+	    if ($os['release']['major'] == '6' or $os['release']['major'] == '7') {
+		$what = [ "policycoreutils", "policycoreutils-python" ]
+	    } else {
+		$what = [ "policycoreutils", "policycoreutils-python-utils" ]
+	    }
 	}
     }
 

@@ -1,6 +1,9 @@
 class common::config::pam {
+    $do_tally = lookup("pam_do_tally2")
     if ($kernel == "Linux") {
-	if ($lsbdistcodename == "bullseye") {
+	if ($lsbdistcodename == "bullseye"
+		or ($operatingsystem == "CentOS" and $os['release']['major'] == '8')
+		or ($operatingsystem == "RedHat" and $os['release']['major'] == '8')) {
 	    file {
 		"Install securetty":
 		    group   => lookup("gid_zero"),

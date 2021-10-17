@@ -24,7 +24,9 @@ define katello::define::gpgkey($ensure = 'present',
 
 	    exec {
 		"Import $name GPG key":
-		    command     => "hammer content-credentials create --content-type gpg --name '$name' --key './$name.pub' --organization '$org'",
+		    # used to work before katello 4.2/foreman 3.0
+		    # command     => "hammer content-credentials create --content-type gpg --name '$name' --key './$name.pub' --organization '$org'",
+		    command     => "hammer content-credentials create --content-type gpg_key --name '$name' --path './$name.pub' --organization '$org'",
 		    cwd         => "/root/katello-gpg-import",
 		    environment => [ 'HOME=/root' ],
 		    path        => "/usr/bin:/bin",

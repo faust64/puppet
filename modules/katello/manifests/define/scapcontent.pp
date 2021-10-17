@@ -5,11 +5,11 @@ define katello::define::scapcontent($ensure = "present",
     if ($ensure == 'present') {
 	file {
 	    "Installs SCAP Content $name Source":
-		content => "puppet:///modules/katello/$src",
 		group   => lookup("gid_zero"),
 		mode    => "0644",
 		owner   => "root",
-		path    => "/usr/src/$src";
+		path    => "/usr/src/$src",
+		source  => "puppet:///modules/katello/$src";
 	}
 
 	$createcmd = [ "hammer scap-content create --location '$loc'",

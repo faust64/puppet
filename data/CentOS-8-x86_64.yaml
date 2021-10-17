@@ -1,1 +1,2 @@
+pam_do_tally2: false
 ntp_driftfile: /var/lib/chrony/drift

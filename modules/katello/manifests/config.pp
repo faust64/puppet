@@ -19,14 +19,6 @@ class katello::config {
 #    }
 
     file {
-	"Install Katello Answers":
-	    content => template("katello/katello-answers.erb"),
-	    group   => lookup("gid_zero"),
-	    mode    => "0600",
-	    owner   => "root",
-	    path    => "/etc/foreman-installer/scenarios.d/katello-answers.yaml",
-	    replace => "no", # requires manual removal of packaged copy ...
-	    require => Common::Define::Package["katello"];
 	"Install Foreman Answers":
 	    group   => lookup("gid_zero"),
 	    mode    => "0600",
@@ -89,6 +81,17 @@ class katello::config {
 	}
     }
 
+    $installcmd = [
+	    "foreman-installer --scenario katello",
+	    "--foreman-initial-admin-username '$admusr'",
+	    "--foreman-initial-admin-password '$admpw'",
+	    "--foreman-initial-organization '$org'",
+	    "--foreman-initial-location '$loc'",
+	    "--enable-foreman-plugin-openscap",
+	    "--enable-foreman-proxy-plugin-openscap",
+	    ">foreman-installer.out 2>&1"
+	]
+
     exec {
 	"Update System prior Katello deployment":
 	    command     => "yum -y update",
@@ -97,15 +100,11 @@ class katello::config {
 	    require     => Common::Define::Package["epel-release"],
 	    timeout     => 600;
 	"Initializes Katello":
-	    command     => "foreman-installer --scenario katello >foreman-installer.out 2>&1",
+	    command     => $installcmd.join(' '),
 	    cwd         => "/root",
 	    creates     => "/var/log/foreman-installer/katello.log",
 	    path        => "/opt/puppetlabs/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-	    require     =>
-		[
-		    File["Install Katello Answers"],
-		    File["Install Foreman Answers"]
-		],
+	    require     => File["Install Foreman Answers"],
 	    timeout     => 3600;
 	"Reload Katello Services":
 	    command     => "katello-service restart",

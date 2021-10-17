@@ -5,7 +5,9 @@ define katello::define::hostcollection($ensure = 'present',
 	if ($limit != false) {
 	    $hostlimit = " --max-hosts $limit"
 	} else {
-	    $hostlimit = " --unlimited-hosts yes"
+	    # used to work before katello 4.2/foreman 3.0
+	    # $hostlimit = " --unlimited-hosts yes"
+	    $hostlimit = " --unlimited-hosts"
 	}
 
 	exec {

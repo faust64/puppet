@@ -919,27 +919,8 @@ katello_munin_probes:
 - katello_hosts
 katello_organization: Default Organization
 katello_register_with_ak: false
-katello_version: 4.0
+katello_version: 4.2
 katello_versions:
-  3.18:
-    foreman: 2.3
-    pulpcore: 3.7
-    puppet: 6
-    services:
-    - dynflow-sidekiq@worker
-    - dynflow-sidekiq@worker-hosts-queue
-    - foreman
-    - foreman-proxy
-    - httpd
-    - puppetserver
-    - postgresql
-    - pulpcore-api
-    - pulpcore-content
-    - pulpcore-resource-manager
-    - pulpcore-worker@1
-    - redis
-    - tomcat
-    - dynflow-sidekiq@orchestrator
   4.0:
     foreman: 2.4
     pulpcore: 3.9
@@ -960,6 +941,43 @@ katello_versions:
     - redis
     - tomcat
     - dynflow-sidekiq@orchestrator
+  4.1:
+    foreman: 2.5
+    pulpcore: 3.14
+    puppet: 6
+    services:
+    - dynflow-sidekiq@worker
+    - dynflow-sidekiq@worker-hosts-queue
+    - foreman
+    - foreman-proxy
+    - httpd
+    - puppetserver
+    - postgresql
+    - pulpcore-api
+    - pulpcore-content
+    - pulpcore-resource-manager
+    - pulpcore-worker@1
+    - qpidd
+    - redis
+    - tomcat
+    - dynflow-sidekiq@orchestrator
+  4.2:
+    foreman: 3.0
+    pulpcore: 3.14
+    puppet: 6
+    services:
+    - foreman
+    - foreman-proxy
+    - httpd
+    - puppetserver
+    - postgresql
+    - pulpcore-api
+    - pulpcore-content
+    - pulpcore-worker@1
+    - redis
+    - tomcat
+    - dynflow-sidekiq@orchestrator
+
 pulp_workers_count: 2
 rhregistry_authpass: false
 rhregistry_authuser: false
@@ -2633,6 +2651,9 @@ tftpproxy_local_port: 6969
 # TFTPD
 pxe_packages_repository: false
 pxe_reference_repository: false
+
+# PAM
+pam_do_tally2: true
 
 # Python
 python_version: 2

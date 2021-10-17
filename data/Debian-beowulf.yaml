@@ -1,2 +1,3 @@
-snmp_uptodate_new: true
+pam_do_tally2: false
 rsyslog_version: 8
+snmp_uptodate_new: true

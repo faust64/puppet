@@ -19,8 +19,20 @@ define katello::define::policy($ensure     = "present",
 	if ($hostgroups) {
 	    $hg = $hostgroups.join(',')
 	    $hgroups = " --hostgroups $hg"
+
+	    each($hostgroups) |$thegroup| {
+		if (defined(Katello::Define::Hostgroup[$thegroup])) {
+		    Katello::Define::Hostgroup[$thegroup]
+			-> Exec["Install Policy $name"]
+		}
+	    }
 	} elsif ($hostgroup) {
 	    $hgroups = " --hostgroups $hostgroup"
+
+	    if (defined(Katello::Define::Hostgroup[$hostgroup])) {
+		Katello::Define::Hostgroup[$hostgroup]
+		    -> Exec["Install Policy $name"]
+	    }
 	} else { $hgroups = "" }
 	if ($period == "weekly") {
 	    $popts = " --weekday '$when'"
