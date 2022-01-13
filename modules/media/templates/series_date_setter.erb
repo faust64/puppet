@@ -150,7 +150,7 @@ do
 				touch -mhd $datestr ./season-specials*
 			    fi
 			else
-			    if test "$s" -le 10; then
+			    if test "$s" -lt 10; then
 				ds=0$s
 			    else
 				ds=$s
