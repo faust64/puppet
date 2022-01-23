@@ -1,5 +1,4 @@
 additional_classes:
-#- Trezor
 - Fail2ban
 #- Firehol
 #- Bacula
