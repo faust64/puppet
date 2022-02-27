@@ -7,7 +7,6 @@ apache_rsyslog: true
 # Nagios
 nagios_partitions_watchlist:
   root: /
-  mongo: /var/lib/mongodb
   postgres: /var/lib/pgsql
   pulp: /var/lib/pulp
 
