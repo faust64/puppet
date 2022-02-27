@@ -29,7 +29,7 @@ class common::physical::nagios {
 	}
 
 	each($smart_disks) |Integer $index, String $disk| {
-	    if (defined('$disks') and defined('$disks[$disk]')) {
+	    if (has_key($facts, 'disks') and has_key($facts['disks'], "$disk")) {
 		if ($disks[$disk]['model'] == "LOGICAL VOLUME"
 		and $disks[$disk]['vendor'] == "HP") {
 		    nagios::define::probe {
