@@ -74,10 +74,12 @@ icinga_static_devices:
 #   host_parents: nikea.adm.intra.unetresgrossebite.com
 #   srvclass: phone
 #
-  asteros.adm.intra.unetresgrossebite.com:
-    host_ipaddress: 10.42.242.11
-    host_parents: gaia.adm.intra.unetresgrossebite.com
-    srvclass: ap
+# Asteros died (2022-02). won't boot, after last power outage
+# usrobotics, vlan-capable, mac filtering. lasted ~16 years.
+# asteros.adm.intra.unetresgrossebite.com:
+#   host_ipaddress: 10.42.242.11
+#   host_parents: gaia.adm.intra.unetresgrossebite.com
+#   srvclass: ap
   cerberus.adm.intra.unetresgrossebite.com:
     host_ipaddress: 10.42.242.26
     host_parents: ponos.adm.intra.unetresgrossebite.com
