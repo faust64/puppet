@@ -14,34 +14,36 @@ TMPFILE=/tmp/.$PRG.$$
 
 if test -f /etc/etcd/etcd.conf; then
     . /etc/etcd/etcd.conf
-    CLIENT_CA="$ETCD_PEER_TRUSTED_CA_FILE"
-    CLIENT_CERT="$ETCD_PEER_CERT_FILE"
-    CLIENT_KEY="$ETCD_PEER_KEY_FILE"
 elif test -f /etc/etcd.env; then
     . /etc/etcd.env
-    CLIENT_CA="$ETCDCTL_CA_FILE"
-    CLIENT_CERT="$ETCDCTL_CERT_FILE"
-    CLIENT_KEY="$ETCDCTL_KEY_FILE"
 fi
+CLIENT_CA="$ETCD_PEER_TRUSTED_CA_FILE"
+CLIENT_CERT="$ETCD_PEER_CERT_FILE"
+CLIENT_KEY="$ETCD_PEER_KEY_FILE"
+ETCD_ENDPOINTS=$(echo $ETCD_INITIAL_CLUSTER | sed -e 's|^[^=]*=||' -e 's|,[^=]*=|,|g' | sed 's|:2380|:2379|g')
 
-if test -z "$ETCD_ADVERTISE_CLIENT_URLS"; then
+if test -z "$ETCD_ENDPOINTS"; then
     ret=UNKNOWN
     msg=": failed identifying advertise URL"
-elif ! etcdctl -C "$ETCD_ADVERTISE_CLIENT_URLS" \
-    "--ca-file=$CLIENT_CA" \
-    "--cert-file=$CLIENT_CERT" \
-    "--key-file=$CLIENT_KEY" cluster-health >$TMPFILE 2>&1; then
+elif ! etcdctl --endpoints "$ETCD_ENDPOINTS" \
+    "--cacert=$CLIENT_CA" \
+    "--cert=$CLIENT_CERT" \
+    "--key=$CLIENT_KEY" endpoint health >$TMPFILE 2>&1; then
     ret=UNKNOWN
     msg=": failed querying etcd"
-elif ! grep -i '^cluster is healthy' $TMPFILE >/dev/null 2>&1; then
+elif ! grep -i ' is healthy' $TMPFILE >/dev/null 2>&1; then
     ret=CRITICAL
     msg=": cluster is not healthy"
 else
     nmembers=`awk 'BEG{c=0}/member/{c=c+1}END{print c}' $TMPFILE`
+    nunhealthy=`awk 'BEG{c=0}/is unhealthy/{c=c+1}END{print c}' $TMPFILE`
     rmembers=`echo "$ETCD_INITIAL_CLUSTER" | awk -F, 'END{print NF}'`
     if test "$nmembers" -ne "$rmembers"; then
 	ret=WARNING
 	msg=": etcd members missing"
+    elif test "$nunhealthy" -gt 0; then
+	ret=WARNING
+	msg=": has unhealthy members"
     fi
 fi
 rm -f $TMPFILE
