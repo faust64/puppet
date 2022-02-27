@@ -11,9 +11,9 @@ nagios_check_jumbo: false
 nagios_listenaddr: 10.42.242.19
 nagios_smart_disks:
 - sda
-#- sdb
+- sdb
 #- sdc
-- sdd
+#- sdd
 
 # SNMP
 snmp_listenaddr: 10.42.242.19
