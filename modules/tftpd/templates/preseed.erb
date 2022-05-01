@@ -29,7 +29,7 @@ d-i debian-installer/country string FR
 <% if @server == false -%>d-i tasksel/desktop multiselect xfce
 d-i pkgsel/include string vim openssh-server lsb-release virtualbox ntp
 <% else -%>tasksel tasksel/first multiselect minimal
-d-i pkgsel/include string vim openssh-server lsb-release puppet <% if @server == "kvm" %>qemu-kvm libvirt-bin <% elsif @server == "xen" -%>xen-system xen-utils xen-hypervisor <% end -%>bridge-utils ifenslave vlan ntp ntpdate rsync
+  d-i pkgsel/include string vim openssh-server lsb-release puppet <% if @server == "kvm" %><% if @lsbdistcodename == "bullseye" -%>qemu-system-x86<% else -%>qemu-kvm<% end -%> libvirt-bin <% elsif @server == "xen" -%>xen-system xen-utils xen-hypervisor <% end -%>bridge-utils ifenslave vlan ntp ntpdate rsync
 <% end -%>d-i pkgsel/install-language-support boolean false
 <% if @autopart == true -%>d-i partman-auto/purge_lvm_from_device boolean true
 d-i partman-lvm/confirm boolean true
