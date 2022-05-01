@@ -1,6 +1,12 @@
 class kvm::debian {
-    common::define::package {
-	[ "bridge-utils", "qemu-kvm", "vlan" ]:
+    if ($lsbdistcodename == "bullseye") {
+	common::define::package {
+	    [ "bridge-utils", "qemu-system-x86", "vlan" ]:
+	}
+    } else {
+	common::define::package {
+	    [ "bridge-utils", "qemu-kvm", "vlan" ]:
+	}
     }
 
     file {
