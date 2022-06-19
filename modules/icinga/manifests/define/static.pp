@@ -160,9 +160,9 @@ define icinga::define::static($host_contact   = "root",
 	}
 	"ceph": {
 	    $iconimagealt   = $srvclass
-	    $iconimage      = "utgb/centos.png"
+	    $iconimage      = "utgb/debian.png"
 	    $src            = "servers/k8s"
-	    $statusmapimage = "utgb/centos.gd2"
+	    $statusmapimage = "utgb/debian.gd2"
 	    $checks = [ "ceph_df", "ceph_health", "ceph_mon", "ceph_mgr",
 			"ceph_mds", "ceph_osd" ]
 	}
