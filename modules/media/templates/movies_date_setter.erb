@@ -14,7 +14,7 @@ if ! curl -sL "$baseurl?$apikey" -o $TMPFILE >/dev/null 2>&1; then
     echo "Failed to retrieve series index" >&2
     rm -f $TMPFILE
     exit 2
-elif ! grep '{"errors":\["query must be provided"\]}' $TMPFILE >/dev/null 2>&1; then
+elif ! grep '{"errors":[["query must be provided"]],"success":false}' $TMPFILE >/dev/null 2>&1; then
     echo "Failed authenticating against API" >&2
     rm -f $TMPFILE
     exit 2
