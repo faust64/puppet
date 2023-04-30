@@ -11,10 +11,10 @@ else
     DEBUG=true
 fi
 if ! curl -sL "$baseurl?$apikey" -o $TMPFILE >/dev/null 2>&1; then
-    echo "Failed to retrieve series index" >&2
+    echo "Failed to query themoviedb" >&2
     rm -f $TMPFILE
     exit 2
-elif ! grep '{"page":1,"results":[],"total_pages":1,"total_results":0}' $TMPFILE >/dev/null 2>&1; then
+elif ! grep '{"page":1,' $TMPFILE >/dev/null 2>&1; then
     echo "Failed authenticating against API" >&2
     rm -f $TMPFILE
     exit 2
